@@ -1,0 +1,7 @@
+Import('env')
+
+script_files = [ 'common-functions.sh' ]
+	
+map(lambda s: env.Install('$script_dir', s), script_files)
+
+env.InstallAs('$bin_dir/spoofax', 'spoofax.sh')

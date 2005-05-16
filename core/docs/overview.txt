@@ -1,0 +1,49 @@
+- Tree representation
+ - load/parse on demand
+ - store as xml
+ - store as aterm
+ - annotations
+ - traversals
+
+- attribute grammars on top
+- strategies on top, (w/stratego)
+
+- source
+ - java - from jdt, from javafront
+ - c/c++ - from codeboost
+ - python - from jython
+ - ml - from mlj? aml?
+
+- projections
+ - using xpath
+
+
+Program Tree
+ - node api
+ - traversal api
+ - annotations api
+ - change api
+  - mutators
+  - transactions
+  - well-formedness checking
+
+Schema
+ - matched to a projection
+ - schema checker
+  - syntactic checking
+  - semantic checking
+
+
+Philosophy:
+ - Computer programs should be represented and thought of as highly structured documents which 
+   should easily be amenable to programmatic manipulation.
+ - Specically, source code is not text!
+ - The documents may have problem-specific structuring rules. Such rules are more easily expressed
+   on graphs than on unstructured text.
+ - Example: Relating formal specifications to program code.
+ - Example: Relating optimisation rules to program code.
+ - Presentation as text may very often be suitable, but for navigational purposes, graphical views
+   are also very handy.
+ - Example: Presenting Java as s-exp
+ - Example: Presenting Java class hierarchy graphically, clickable
+ 

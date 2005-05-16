@@ -1,0 +1,38 @@
+1) scripts
+ - java2ast
+ - cxx2ast
+2) Java AST library
+ - ASTReader("foo.java")
+ - ASTReader("foo.ast")
+3) Java xform library
+ - sc = new StrategoScript("foo.str")
+   ast.xform(sc)
+4) Eclipse plugin
+ - ASTView
+ - ASTScript
+5) scripts
+ - python2ast
+ - sml2ast
+
+7) Project site
+ - Overview
+  - Mission statement
+  - Graphical picture
+  - References
+  - Articles?
+ - SVN repo
+ - (mailing list, irc channel, bug repo, forums, news)
+ - Journal (filtered view of journal.boblycat.org/karltk)
+
+8) hacks
+ - ast-grep, ast-sed
+ - multiple java syntaxes
+ - lint for some convoluted Java library 
+ - C# -> Java src-to-src transformer (Gtk#, MonoDevelop)
+ - interface tracker: is the new interface backwards-compatible?
+ - type-safe, generative, active collections library with compile-time
+   specialisation; remove runtime type-checking (dynamic -> static typing)
+   - spoofax -> spoofax-runtime that bundles with the library. tiny stratego
+     runtime for jvm?
+
+9) licensing

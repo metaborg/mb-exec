@@ -1,0 +1,4 @@
+Import('env')
+
+SConscript(['scripts/SConscript'],
+	exports='env')

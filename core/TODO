@@ -1,0 +1,16 @@
+
+Language-independent view:
+
+spoofax -t <trafo-name> filename.{c,cpp,java}
+
+
+Domain-specific refactoring:
+
+spoofax -t <refactor-name> filename.java
+
+
+Language-independent view:
+
+spoofax -p <projection> filename.{c,cpp,java}
+
+
