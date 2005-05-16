@@ -1,0 +1,17 @@
+- Unified framework for source-code manipulation that scales through
+  * inspection, as exemplified by source code documentation;
+  * generation, as exemplified by generative programming and active libraries;
+  * manipulation, as exemplified by source code refactoring
+
+- Source code refactoring and compiler optimisations must be behaviourally
+  preserving within the strictest interpretation of the language. This precludes
+  many high-yield domain-specific optimisations and refactorings.
+  This short-coming has been attempted rectified by the construction of active
+  libraries. Spoofax is a tool develop active libraries.
+
+- A vehicle for grafting DSL capabilities onto existing languages
+- Lisp allows for in-syntax, in-language meta-programming, spoofax allows for
+  out-syntax, out-language meta-programming, that may be language-independent
+
+- Spoofax is a research vehicle for exploring fundamental properties of
+  programming languages (not programming and software engineering).
