@@ -1,0 +1,71 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl(
+              "Cons"
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
+              , ConstType(Sort("List", [SortVar("a")]))
+              )
+            )
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl(
+              "Cons"
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
+              , ConstType(Sort("List", [SortVar("a")]))
+              )
+            )
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Scope(
+            ["a_0", "c_0", "e_0", "d_0"]
+          , Seq(
+              Match(Var("d_0"){"unbound"})
+            , Seq(
+                Match(Var("a_0"){"unbound"})
+              , Seq(
+                  Build(Var("d_0"){"bound"})
+                , Seq(
+                    Match(Var("e_0"){"unbound"})
+                  , Seq(
+                      Match(Var("c_0"){"unbound"})
+                    , Seq(
+                        Build(Var("e_0"){"bound"})
+                      , Build(
+                          Anno(
+                            Op(
+                              "Cons"
+                            , [ Var("a_0"){"bound"}
+                              , Anno(
+                                  Op(
+                                    "Cons"
+                                  , [Var("c_0"){"bound"}, Anno(Op("Nil", []), Op("Nil", []))]
+                                  )
+                                , Op("Nil", [])
+                                )
+                              ]
+                            )
+                          , Op("Nil", [])
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      ]
+    )
+  ]
+)

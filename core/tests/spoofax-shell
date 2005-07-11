@@ -1,0 +1,23 @@
+#! /bin/sh
+#
+# Further reading unconditionally incurs a 4D10 sanity loss.
+#
+
+
+echo $1 $2 "|$3|"
+(
+	echo "module foo-test-test"
+	echo "imports liblib"
+	echo "strategies"
+	echo "main = "
+) > /tmp/foo-test-test.str
+
+sed "s/;;//" < $1 >> /tmp/foo-test-test.str
+
+~/.nix-profile/bin/strc --keep 10 -i /tmp/foo-test-test.str
+
+pp-aterm -i /tmp/foo-test-test.sci.opt17 > /tmp/final.rtree
+
+
+cat
+

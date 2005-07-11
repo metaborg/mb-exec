@@ -1,0 +1,52 @@
+module ssh-test
+imports sunit xtc-lib 
+
+strategies 
+
+  ssh-apply-test(|s, input, sscript, output) =
+    xtc-temp-files(
+      apply-test(!s,
+          where(<print-to> [sscript] => FILE(file))
+        ; write-to => FILE(f2)
+        ; <call> ("spoofax-shell-gen", [file, f2, s])
+        ; <read-from> FILE(f2)
+        ; !output
+      , !input
+      , !output
+      )
+    )
+
+  ssh-apply-and-show(|s, input, sscript) =
+    xtc-temp-files(
+      apply-and-show(!s,
+          where(<print-to> [sscript] => FILE(file))
+        ; write-to
+        ; <call> ("spoofax-shell", file)
+        ; read-from
+      , !input
+      )
+    )
+
+
+  ssh-apply-and-fail(|s, input, sscript) =
+    xtc-temp-files(
+      apply-and-fail(!s,
+          where(<print-to> [sscript] => FILE(file))
+        ; write-to => FILE(f2)
+        ; <call> ("spoofax-shell-gen", [file, f2, s])
+        ; <read-from> FILE(f2)
+      , !input
+      )
+    )
+
+  ssh-apply-prg(|msg, input, prg, output) =
+    xtc-temp-files(
+      apply-test(!msg,
+          where(<print-to> [prg] => FILE(file))
+        ; write-to
+        ; xtc-transform(!"stratego-shell", !["--prg", <conc-strings> ("main@", prg)])
+        ; read-from
+      , !input
+      , !output
+      )
+    )

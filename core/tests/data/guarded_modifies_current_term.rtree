@@ -1,0 +1,27 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "main_0_0"
+        , []
+        , []
+        , GuardedLChoice(
+            Build(Anno(Int("1"), Op("Nil", [])))
+          , Seq(
+              Match(Anno(Int("1"), Wld))
+            , Build(Anno(Int("3"), Op("Nil", [])))
+            )
+          , Build(Anno(Int("2"), Op("Nil", [])))
+          )
+        )
+      ]
+    )
+  ]
+)

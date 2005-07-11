@@ -1,0 +1,56 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl(
+              "Cons"
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
+              , ConstType(Sort("List", [SortVar("a")]))
+              )
+            )
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl(
+              "Cons"
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
+              , ConstType(Sort("List", [SortVar("a")]))
+              )
+            )
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Scope(
+            ["a_0", "c_0"]
+          , Seq(
+              Match(
+                Anno(
+                  Op(
+                    "Cons"
+                  , [ Var("a_0"){"unbound"}
+                    , Anno(
+                        Op(
+                          "Cons"
+                        , [Var("c_0"){"unbound"}, Anno(Op("Nil", []), Wld)]
+                        )
+                      , Wld
+                      )
+                    ]
+                  )
+                , Wld
+                )
+              )
+            , Build(Var("c_0"){"bound"})
+            )
+          )
+        )
+      ]
+    )
+  ]
+)

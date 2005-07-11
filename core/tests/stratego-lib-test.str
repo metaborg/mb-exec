@@ -1,0 +1,71 @@
+module stratego-lib-test
+imports ssh-test
+
+strategies 
+
+  main-stratego-lib-test = 
+    xtc-temp-files(
+      test-suite(!"
+               ************ stratego-shell stratego-lib tests **********",
+        stratego-lib-test
+      )
+    )
+
+  stratego-lib-test = id
+//    ; stratego-lib-test(|"annotation-props") 
+//    ; stratego-lib-test(|"annotations")      
+    ; stratego-lib-test(|"apply")
+//    ; stratego-lib-test(|"char")
+    ; stratego-lib-test(|"collect")
+//    ; stratego-lib-test(|"dir")
+//    ; stratego-lib-test(|"env-traversal")
+    ; stratego-lib-test(|"file")
+    ; stratego-lib-test(|"integers")
+    ; stratego-lib-test(|"int-list")
+    ; stratego-lib-test(|"io")
+    ; stratego-lib-test(|"iteration")
+    ; stratego-lib-test(|"list-basic")
+    ; stratego-lib-test(|"list-filter")
+    ; stratego-lib-test(|"list-index")
+    ; stratego-lib-test(|"list-misc")
+    ; stratego-lib-test(|"list-set")
+//    ; stratego-lib-test(|"list-sort")     
+    ; stratego-lib-test(|"list-zip")
+    ; stratego-lib-test(|"parallel")
+    ; stratego-lib-test(|"parenthesize")
+    ; stratego-lib-test(|"parse-options")
+    ; stratego-lib-test(|"posix-error")
+    ; stratego-lib-test(|"posix-file")
+    ; stratego-lib-test(|"posix-process")
+    ; stratego-lib-test(|"reals")
+    ; stratego-lib-test(|"rename")
+    ; stratego-lib-test(|"sets")
+    ; stratego-lib-test(|"scoped-finite-map")
+    ; stratego-lib-test(|"share") 
+    ; stratego-lib-test(|"simple-traversal")
+    ; stratego-lib-test(|"strcmp")
+    ; stratego-lib-test(|"string-misc")
+    ; stratego-lib-test(|"string")
+    ; stratego-lib-test(|"substitution")
+    ; stratego-lib-test(|"tables")
+    ; stratego-lib-test(|"template")
+    ; stratego-lib-test(|"term-zip")
+    ; stratego-lib-test(|"time")
+    ; stratego-lib-test(|"tuple")
+    ; stratego-lib-test(|"unification")
+    ; where(
+        say(!"-----------------------------------------------------------------------------")
+      ; say(!"                                total results                                ")
+      ; say(!"-----------------------------------------------------------------------------")
+      )
+
+
+  stratego-lib-test(|modname) =
+      where(<debug(!"--------------------------------------------------------------------------------------- ")> modname);
+      ssh-apply-and-show(|modname,  (), <concat-strings> [" import ", <stratego-lib-testdir>, modname, "-test.str ;; main ;; "])
+
+  stratego-lib-testdir =
+    <xtc-find-silent> "lib.rtree"
+    ; dirname
+    ; <conc-strings> (<id>, "/tests/")
+    ; debug

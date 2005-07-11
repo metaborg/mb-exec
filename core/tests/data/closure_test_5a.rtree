@@ -1,0 +1,89 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ ExtSDef(
+          "Cons_2_0"
+        , [ VarDec(
+              "b_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "c_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        )
+      , ExtSDef("Nil_0_0", [], [])
+      , SDefT(
+          "e_0"
+        , []
+        , []
+        , Build(Anno(Int("1"), Op("Nil", [])))
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Let(
+            [ SDefT(
+                "a_0"
+              , [ VarDec(
+                    "c_0"
+                  , FunType(
+                      [ConstType(Sort("ATerm", []))]
+                    , ConstType(Sort("ATerm", []))
+                    )
+                  )
+                ]
+              , []
+              , GuardedLChoice(
+                  CallT(SVar("Nil_0_0"), [], [])
+                , Id
+                , Let(
+                    [ SDefT(
+                        "d_0"
+                      , []
+                      , []
+                      , CallT(
+                          SVar("a_0")
+                        , [CallT(SVar("c_0"), [], [])]
+                        , []
+                        )
+                      )
+                    ]
+                  , CallT(
+                      SVar("Cons_2_0")
+                    , [ CallT(SVar("c_0"), [], [])
+                      , CallT(SVar("d_0"), [], [])
+                      ]
+                    , []
+                    )
+                  )
+                )
+              )
+            ]
+          , CallT(
+              SVar("a_0")
+            , [CallT(SVar("e_0"), [], [])]
+            , []
+            )
+          )
+        )
+      ]
+    )
+  ]
+)

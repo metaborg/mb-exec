@@ -1,0 +1,53 @@
+Specification(
+  [ Signature([Constructors([])])
+  , Strategies(
+      [ ExtSDef(
+          "Cons_2_0"
+        , [ VarDec(
+              "b_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "c_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        )
+      , SDefT(
+          "c_0"
+        , []
+        , []
+        , Match(Anno(Int("1"), Wld))
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Scope(
+            ["a_0"]
+          , Seq(
+              Let(
+                [SDefT("d_0", [], [], Match(Var("a_0"){"(un)bound"}))]
+              , CallT(
+                  SVar("Cons_2_0")
+                , [ CallT(SVar("c_0"), [], [])
+                  , CallT(SVar("d_0"), [], [])
+                  ]
+                , []
+                )
+              )
+            , Build(Var("a_0"){"(un)bound"})
+            )
+          )
+        )
+      ]
+    )
+  ]
+)

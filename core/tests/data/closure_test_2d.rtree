@@ -1,0 +1,82 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ ExtSDef("_0_0", [], [])
+      , ExtSDef(
+          "_2_0"
+        , [ VarDec(
+              "q_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "r_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        )
+      , SDefT(
+          "a_0"
+        , [ VarDec(
+              "d_0"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , CallT(
+            SVar("_2_0")
+          , [ CallT(SVar("e_0"), [], [])
+            , CallT(SVar("d_0"), [], [])
+            ]
+          , []
+          )
+        )
+      , SDefT(
+          "e_0"
+        , []
+        , []
+        , Build(Anno(Int("3"), Op("Nil", [])))
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Let(
+            [ SDefT(
+                "c_0"
+              , []
+              , []
+              , GuardedLChoice(
+                  CallT(
+                    SVar("a_0")
+                  , [CallT(SVar("c_0"), [], [])]
+                  , []
+                  )
+                , Id
+                , CallT(SVar("_0_0"), [], [])
+                )
+              )
+            ]
+          , CallT(SVar("c_0"), [], [])
+          )
+        )
+      ]
+    )
+  ]
+)

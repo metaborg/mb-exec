@@ -1,0 +1,20 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Build(Anno(Int("5"), Op("Nil", [])))
+        )
+      ]
+    )
+  ]
+)

@@ -1,0 +1,82 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl(
+              "Cons"
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
+              , ConstType(Sort("List", [SortVar("a")]))
+              )
+            )
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl(
+              "Cons"
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
+              , ConstType(Sort("List", [SortVar("a")]))
+              )
+            )
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ ExtSDef(
+          "Cons_2_0"
+        , [ VarDec(
+              "b_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "c_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Scope(
+            ["a_0"]
+          , Seq(
+              Let(
+                [ SDefT(
+                    "c_0"
+                  , []
+                  , []
+                  , Match(
+                      Anno(
+                        Op(
+                          "Cons"
+                        , [Var("a_0"){"(un)bound"}, Anno(Op("Nil", []), Wld)]
+                        )
+                      , Wld
+                      )
+                    )
+                  )
+                ]
+              , CallT(
+                  SVar("Cons_2_0")
+                , [ CallT(SVar("_id"), [], [])
+                  , CallT(SVar("c_0"), [], [])
+                  ]
+                , []
+                )
+              )
+            , Build(Var("a_0"){"(un)bound"})
+            )
+          )
+        )
+      ]
+    )
+  ]
+)

@@ -1,0 +1,39 @@
+Specification(
+  [ Signature([Constructors([])])
+  , Strategies(
+      [ ExtSDef("Nil_0_0", [], [])
+      , ExtSDef(
+          "Cons_2_0"
+        , [ VarDec(
+              "b_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "c_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , CallT(
+            SVar("Cons_2_0")
+          , [ CallT(SVar("_fail"), [], [])
+            , CallT(SVar("Nil_0_0"), [], [])
+            ]
+          , []
+          )
+        )
+      ]
+    )
+  ]
+)

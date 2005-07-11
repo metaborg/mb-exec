@@ -1,0 +1,22 @@
+Specification(
+  [ Signature([Constructors([])])
+  , Strategies(
+      [ SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Scope(
+            ["a_0"]
+          , Seq(
+              Match(Var("a_0"){"unbound"})
+            , Seq(
+                Match(Anno(Int("2"), Wld))
+              , Build(Var("a_0"){"bound"})
+              )
+            )
+          )
+        )
+      ]
+    )
+  ]
+)

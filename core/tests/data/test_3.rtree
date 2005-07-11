@@ -1,0 +1,38 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Scope(
+            ["a_0", "c_0"]
+          , Seq(
+              Match(Var("c_0"){"unbound"})
+            , Seq(
+                Build(Anno(Int("2"), Op("Nil", [])))
+              , Seq(
+                  Match(Var("a_0"){"unbound"})
+                , Seq(
+                    Build(Var("c_0"){"bound"})
+                  , Seq(
+                      Build(Anno(Int("3"), Op("Nil", [])))
+                    , Match(Var("a_0"){"bound"})
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      ]
+    )
+  ]
+)

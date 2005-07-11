@@ -1,0 +1,57 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ ExtSDef(
+          "_2_0"
+        , [ VarDec(
+              "q_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "r_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        )
+      , SDefT(
+          "a_0"
+        , []
+        , []
+        , Match(Anno(Int("3"), Wld))
+        )
+      , SDefT(
+          "c_0"
+        , []
+        , []
+        , Build(Anno(Int("5"), Op("Nil", [])))
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , CallT(
+            SVar("_2_0")
+          , [ CallT(SVar("a_0"), [], [])
+            , CallT(SVar("c_0"), [], [])
+            ]
+          , []
+          )
+        )
+      ]
+    )
+  ]
+)

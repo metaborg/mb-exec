@@ -1,0 +1,30 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Scope(
+            ["a_0"]
+          , GuardedLChoice(
+              Seq(Match(Var("a_0"){"unbound"}), Fail)
+            , Id
+            , Seq(
+                Build(Anno(Int("3"), Op("Nil", [])))
+              , Match(Var("a_0"){"unbound"})
+              )
+            )
+          )
+        )
+      ]
+    )
+  ]
+)

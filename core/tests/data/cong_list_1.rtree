@@ -1,0 +1,14 @@
+Specification(
+  [ Signature([Constructors([])])
+  , Strategies(
+      [ ExtSDef("Nil_0_0", [], [])
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , CallT(SVar("Nil_0_0"), [], [])
+        )
+      ]
+    )
+  ]
+)
