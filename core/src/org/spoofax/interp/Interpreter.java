@@ -170,57 +170,33 @@ public class Interpreter {
 
     private boolean evalMatch(ATermAppl t) throws FatalError {
         debug("evalMatch");
-        ATerm p = buildPattern((ATermAppl) t.getChildAt(0), null);
+
+        ATermAppl p = (ATermAppl) t.getChildAt(0);
+        List<Pair<String, ATerm>> r = Tools.match(current, p);
+        
         debug("!" + current + " ; ?" + p);
         debug("" + current.getType() + " " + t.getType());
         debug("" + current.getAnnotations() + " " + t.getAnnotations());
-        List r = current.match(p);
+
         if (r != null) {
-            debug("match!" + r);
-            if (r.size() == 0)
-                return true;
+            debug("" + r);
 
-            ATermList l = factory.makeList();
-            for (Object o : r) {
-                l.append((ATerm) o);
-            }
-            current = l;
-
-            return true;
+            return bindVars(r);
         }
         debug("no match");
         return false;
     }
 
-    private ATerm buildPattern(ATermAppl t, ATerm anno) throws FatalError {
-        debug("pattern : " + t);
-        if (t.getName().equals("Anno")) {
-            return buildPattern((ATermAppl) t.getChildAt(0), (ATerm) t
-                    .getChildAt(1));
-        } else if (t.getName().equals("Op")) {
-            String ctr = ((ATermAppl) t.getChildAt(0)).getName();
-            ATermList children = (ATermList) t.getChildAt(1);
-
-            AFun afun = factory.makeAFun(ctr, children.getLength(), false);
-            ATermList kids = factory.makeList();
-
-            for (int i = 0; i < children.getLength(); i++) {
-                kids = kids.append(buildPattern((ATermAppl) children
-                        .elementAt(i), null));
+    private boolean bindVars(List<Pair<String,ATerm>> r) {
+        for(Pair<String,ATerm> x : r) {
+            if(scope.hasVarInLocalScope(x.first)) {
+                debug("Failed to bind var! " + x.first + " " + scope.lookup(x.first));
+                return false;
             }
-            return factory.makeApplList(afun, kids);
-        } else if (t.getName().equals("Int")) {
-            ATermAppl x = (ATermAppl) t.getChildAt(0);
-            return factory.makeInt(new Integer(x.getName()));
-        } else if (t.getName().equals("Str")) {
-            return (ATerm) t.getChildAt(0);
-            // return makeTerm("\"" + ((ATermAppl) t.getChildAt(0)).getName() +
-            // "\"");
-        } else if (t.getName().equals("Var")) {
-            return makeTerm("<x>");
-        }
 
-        throw new FatalError("Unknown build constituent '" + t.getName() + "'");
+            scope.add(x.first, x.second);            
+        }
+        return true;
     }
 
     private boolean evalOne(ATermAppl t) {
@@ -276,7 +252,7 @@ public class Interpreter {
         debug("evalScope");
         enterScope(); 
         ATermList vars = (ATermList)t.getChildAt(0);
-        scope.addVars(vars);
+        scope.addUndeclaredVars(vars);
         boolean r = eval((ATerm)t.getChildAt(1));
         exitScope();
         return r;
@@ -316,9 +292,24 @@ public class Interpreter {
         } else if (t.getName().equals("Str")) {
             ATermAppl x = (ATermAppl) t.getChildAt(0);
             return x;
+        } else if(t.getName().equals("Var")) {
+            String n = stringAt(t, 0);
+            debug("Lookup : " + n);
+            ATerm x = lookup(n);
+            debug("Found :" + x);
+            return x;
         }
 
         throw new FatalError("Unknown build constituent '" + t.getName() + "'");
+    }
+
+    private ATerm lookup(String var) {
+        return scope.lookup(var);
+    }
+
+    private String stringAt(ATermAppl t, int i) {
+        debug(" " + t + " " + i);
+        return ((ATermAppl)t.getChildAt(i)).getName();
     }
 
     private void debug(String s) {

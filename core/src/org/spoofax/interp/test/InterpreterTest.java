@@ -137,7 +137,7 @@ public class InterpreterTest extends TestCase {
     private boolean runInterp(String test, ATerm input) {
         itp.reset();
         try {
-            itp.load("/home/karltk/source/oss/spoofax/core/tests/data/" + test
+            itp.load("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/" + test
                     + ".rtree");
         } catch (IOException e) {
             e.printStackTrace();

@@ -11,7 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import aterm.ATerm;
+import aterm.ATermAppl;
 import aterm.ATermList;
+import aterm.pure.ATermApplImpl;
 
 public class Scope {
 
@@ -25,6 +27,7 @@ public class Scope {
         this.parent = parent;
         vars = new HashMap<String, ATerm>();
         svars = new HashMap<String, String>();
+        
     }
 
     public ATerm lookup(String name) {
@@ -49,10 +52,15 @@ public class Scope {
         vars.put(var, t);
     }
 
-    public void addVars(ATermList vars) {
-        for(int i=0;i<vars.getLength();i++) {
-            vars.append((ATerm)vars.getChildAt(i));
+    public boolean hasVarInLocalScope(String first) {
+        return vars.containsKey(first) && vars.get(first) != null;
+    }
+
+    public void addUndeclaredVars(ATermList newVars) {
+        for(int i=0;i<newVars.getLength();i++) {
+            add(((ATermAppl)newVars.getChildAt(i)).getName(), null);
         }
+        
         
     }
 }
