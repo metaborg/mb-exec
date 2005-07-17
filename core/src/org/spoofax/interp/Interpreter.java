@@ -54,7 +54,7 @@ public class Interpreter {
         return factory.parse(s);
     }
 
-    public void load(String path) throws IOException {
+    public void load(String path) throws IOException, FatalError {
         load(factory.readFromFile(path));
     }
 
@@ -102,8 +102,8 @@ public class Interpreter {
         return r;
     }
 
-    public void load(ATerm prg) {
-        System.out.println("Loading new module");
+    public void load(ATerm prg) throws FatalError {
+        System.out.println("load()");
         System.out.println(prg.toString());
 
         ATermList constr = (ATermList) collect("Constructors(<term>)", prg)
@@ -116,7 +116,7 @@ public class Interpreter {
         ATermList strat = (ATermList) collect("Strategies(<term>)", prg)
                 .getFirst();
         for (int i = 0; i < strat.getLength(); i++) {
-            Strategy s = new Strategy((ATerm) strat.getChildAt(i));
+            Strategy s = StrategyFactory.create((ATermAppl) strat.elementAt(i));
             strategies.put(s.getName(), s);
             System.out.println(s.getName() + " / "
                     + strategies.containsKey(s.getName()));
@@ -173,28 +173,31 @@ public class Interpreter {
 
         ATermAppl p = (ATermAppl) t.getChildAt(0);
         List<Pair<String, ATerm>> r = Tools.match(current, p);
-        
+
         debug("!" + current + " ; ?" + p);
         debug("" + current.getType() + " " + t.getType());
         debug("" + current.getAnnotations() + " " + t.getAnnotations());
 
         if (r != null) {
             debug("" + r);
-
+            
             return bindVars(r);
         }
         debug("no match");
         return false;
     }
 
-    private boolean bindVars(List<Pair<String,ATerm>> r) {
-        for(Pair<String,ATerm> x : r) {
-            if(scope.hasVarInLocalScope(x.first)) {
-                debug("Failed to bind var! " + x.first + " " + scope.lookup(x.first));
-                return false;
+    private boolean bindVars(List<Pair<String, ATerm>> r) {
+        for (Pair<String, ATerm> x : r) {
+            if (scope.hasVarInLocalScope(x.first)) {
+                ATerm t = scope.lookup(x.first);
+                boolean eq = t.match(x.second) != null;
+                if(!eq)
+                    debug(x.first + " already bound to " + t + ", new: " + x.second);
+                return eq;
             }
 
-            scope.add(x.first, x.second);            
+            scope.add(x.first, x.second);
         }
         return true;
     }
@@ -250,10 +253,10 @@ public class Interpreter {
 
     private boolean evalScope(ATermAppl t) throws FatalError {
         debug("evalScope");
-        enterScope(); 
-        ATermList vars = (ATermList)t.getChildAt(0);
+        enterScope();
+        ATermList vars = (ATermList) t.getChildAt(0);
         scope.addUndeclaredVars(vars);
-        boolean r = eval((ATerm)t.getChildAt(1));
+        boolean r = eval((ATerm) t.getChildAt(1));
         exitScope();
         return r;
     }
@@ -266,24 +269,19 @@ public class Interpreter {
         return true;
     }
 
-    private ATerm buildTerm(ATermAppl t) throws FatalError {
-        return buildTerm(t, null);
-    }
-
-    private ATerm buildTerm(ATermAppl t, ATerm anno) throws FatalError {
+    public ATerm buildTerm(ATermAppl t) throws FatalError {
         if (t.getName().equals("Anno")) {
-            return buildTerm((ATermAppl) t.getChildAt(0), (ATerm) t
-                    .getChildAt(1));
+            return buildTerm(Tools.applAt(t, 0));
         } else if (t.getName().equals("Op")) {
-            String ctr = ((ATermAppl) t.getChildAt(0)).getName();
+            String ctr = Tools.stringAt(t, 0);
             ATermList children = (ATermList) t.getChildAt(1);
 
             AFun afun = factory.makeAFun(ctr, children.getLength(), false);
             ATermList kids = factory.makeList();
 
             for (int i = 0; i < children.getLength(); i++) {
-                kids = kids.append(buildTerm((ATermAppl) children.elementAt(i),
-                                             null));
+                kids = kids.append(buildTerm((ATermAppl) children
+                        .elementAt(i)));
             }
             return factory.makeApplList(afun, kids);
         } else if (t.getName().equals("Int")) {
@@ -292,8 +290,8 @@ public class Interpreter {
         } else if (t.getName().equals("Str")) {
             ATermAppl x = (ATermAppl) t.getChildAt(0);
             return x;
-        } else if(t.getName().equals("Var")) {
-            String n = stringAt(t, 0);
+        } else if (t.getName().equals("Var")) {
+            String n = Tools.stringAt(t, 0);
             debug("Lookup : " + n);
             ATerm x = lookup(n);
             debug("Found :" + x);
@@ -305,11 +303,6 @@ public class Interpreter {
 
     private ATerm lookup(String var) {
         return scope.lookup(var);
-    }
-
-    private String stringAt(ATermAppl t, int i) {
-        debug(" " + t + " " + i);
-        return ((ATermAppl)t.getChildAt(i)).getName();
     }
 
     private void debug(String s) {
@@ -338,6 +331,13 @@ public class Interpreter {
         List<String> formalStratArgs = s.getStrategyParams();
 
         enterScope();
+        if(formalStratArgs.size() != actualStratArgs.getChildCount()) {
+            System.out.println("Takes " + formalStratArgs.size());
+            System.out.println("Have  " + actualStratArgs.getChildCount());
+            
+            throw new FatalError("Parameter length mismatch!");
+        }
+        
         for (int i = 0; i < actualStratArgs.getChildCount(); i++)
             scope.addSVar(formalStratArgs.get(i), ((ATermAppl) actualStratArgs
                     .getChildAt(i)).getName());
@@ -346,7 +346,13 @@ public class Interpreter {
             scope.add(formalTermArgs.get(i), (ATerm) actualTermArgs
                     .getChildAt(i));
 
-        boolean r = eval(s.getBody());
+        boolean r;
+        if(s instanceof IntStrategy) {
+            r = eval(((IntStrategy)s).getBody());
+        } else {
+            throw new FatalError("External strategies not implemented yet, cannot call " + s.getName());
+        }
+          
         exitScope();
         return r;
     }
@@ -372,7 +378,8 @@ public class Interpreter {
         if (t.getType() == ATerm.APPL)
             return eval((ATermAppl) t);
 
-        throw new FatalError("Internal error: Invalid term type " + t.getType() + " / " + t);
+        throw new FatalError("Internal error: Invalid term type " + t.getType()
+                + " / " + t);
     }
 
     private Scope enterScope() {
@@ -407,5 +414,10 @@ public class Interpreter {
 
         AFun f = factory.makeAFun("", t2.length, false);
         return factory.makeAppl(f, t2);
+    }
+
+    public ATermAppl makeTerm(String op, ATerm a0, ATerm a1) {
+        AFun fun = factory.makeAFun(op, 2, false);
+        return factory.makeAppl(fun, a0, a1);
     }
 }

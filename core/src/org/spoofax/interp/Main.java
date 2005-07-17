@@ -12,7 +12,15 @@ public class Main {
 
         Interpreter itp = new Interpreter();
 
-        itp.load(args[0]);
+        try {
+            itp.load(args[0]);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (FatalError e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         ATerm r = itp.makeList("[1,2,3]");
         System.out.println(r);

@@ -142,6 +142,9 @@ public class InterpreterTest extends TestCase {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        } catch (FatalError e) {
+            e.printStackTrace();
+            return false;
         }
 
         itp.setCurrent(input);
