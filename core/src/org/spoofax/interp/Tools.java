@@ -136,6 +136,10 @@ public class Tools {
         return (ATermList)((ATermAppl)t).getChildAt(i);
     }
 
+    public static ATermList listAt(ATermList t, int i) {
+        return (ATermList)t.getChildAt(i);
+    }
+
     public static SVar svarAt(ATermList l, int i) {
         return (SVar)l.getChildAt(i);
     }

@@ -23,11 +23,11 @@ public class InterpreterTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-
-        itp = new Interpreter();
         super.setUp();
+        itp = new Interpreter();
+//      itp.load("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/spoofaxlib.core.tree");
     }
-
+    
     public void testBuildInt() {
         interpTest("build_int", "1", "5");
     }
@@ -124,10 +124,10 @@ public class InterpreterTest extends TestCase {
         ATermImpl x = (ATermImpl) output;
         ATermImpl y = (ATermImpl) itp.getCurrent();
         assertTrue(x.getFactory() == y.getFactory());
-        System.out.println(y + " / " + y.getType() + " / " + y.getClass()
-                + " / " + y.getChildCount() + " / " + y.getFactory());
-        System.out.println(x + " / " + x.getType() + " / " + x.getClass()
-                + " / " + x.getChildCount() + " / " + x.getFactory());
+        System.out.println("Want : " + x + " / " + x.getType() + " / " + x.getClass()
+                + " / " + x.getChildCount());
+        System.out.println("Got  : " + y + " / " + y.getType() + " / " + y.getClass()
+                           + " / " + y.getChildCount());
         System.out.println(itp.getCurrent().match(output));
         assertTrue(itp.getCurrent().match(output) != null);
     }

@@ -109,22 +109,24 @@ public class Interpreter {
 
     public void load(ATerm prg) throws FatalError {
         System.out.println("load()");
-        System.out.println(prg.toString());
 
-        ATermList constr = (ATermList) collect("Constructors(<term>)", prg)
-                .getFirst();
+        ATermList x = collect("Constructors(<term>)", prg);
+        ATermList constr = Tools.listAt(x, 0);
         for (int i = 0; i < constr.getLength(); i++) {
-            ATerm t = (ATerm) constr.getChildAt(i);
-            Constructor c = new Constructor(t);
-            constructors.put(c.getName(), c);
+            ATermAppl t = Tools.applAt(constr, i);
+            if(t.getName().equals("OpDecl")) {
+                Constructor c = new Constructor(t);
+                constructors.put(c.getName(), c);
+            } else if(t.getName().equals("OpDeclInj")) {
+                
+            } else 
+                throw new FatalError("Unknown constructor type '" + t.getName() + "'");
         }
-        ATermList strat = (ATermList) collect("Strategies(<term>)", prg)
-                .getFirst();
+
+        ATermList strat = Tools.listAt(collect("Strategies(<term>)", prg), 0);
         for (int i = 0; i < strat.getLength(); i++) {
-            Strategy s = StrategyFactory.create((ATermAppl) strat.elementAt(i));
+            Strategy s = StrategyFactory.create(Tools.applAt(strat, i));
             strategies.put(s.getName(), s);
-            System.out.println(s.getName() + " / "
-                    + strategies.containsKey(s.getName()));
         }
         System.out.println("constructors : " + constructors);
         System.out.println("strategies : " + strategies);
