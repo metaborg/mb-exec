@@ -20,12 +20,12 @@ public class Scope {
 
     private Map<String, ATerm> vars;
 
-    private Map<String, String> svars;
+    private Map<String, Strategy> svars;
 
     public Scope(Scope parent) {
         this.parent = parent;
         vars = new HashMap<String, ATerm>();
-        svars = new HashMap<String, String>();
+        svars = new HashMap<String, Strategy>();
         
     }
 
@@ -36,14 +36,14 @@ public class Scope {
         return t;
     }
 
-    public String lookupSVar(String name) {
-        String t = svars.get(name);
+    public Strategy lookupSVar(String name) {
+        Strategy t = svars.get(name);
         if(t == null && parent != null)
             return parent.lookupSVar(name);
         return t;
     }
 
-    public void addSVar(String svar, String strat) {
+    public void addSVar(String svar, Strategy strat) {
         svars.put(svar, strat);
     }    
 

@@ -98,6 +98,10 @@ public class Tools {
         return (ATermAppl)((ATermAppl)t).getChildAt(i);
     }
 
+    public static ATermAppl applAt(ATermList t, int i) {
+        return (ATermAppl)t.getChildAt(i);
+    }
+
     private static ATermInt intAt(ATerm t, int i) {
         return (ATermInt)((ATermAppl)t).getChildAt(i);
     }

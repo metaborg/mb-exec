@@ -131,7 +131,14 @@ public class Interpreter {
     }
 
     public void reset() {
+        factory.cleanup();
+        scopes.clear();
+        constructors.clear();
+        strategies.clear();
+        
         current = makeTerm("[]");
+
+        enterScope();
     }
 
     private boolean eval(ATermAppl t) throws FatalError {
@@ -327,6 +334,7 @@ public class Interpreter {
 
     private boolean evalCall(ATermAppl t) throws FatalError {
         System.out.println("evalCall");
+        debug("" + t);
         ATermAppl sname = (ATermAppl) t.getArgument(0).getChildAt(0);
         ATermList actualStratArgs = (ATermList) t.getArgument(1);
         ATermList actualTermArgs = (ATermList) t.getArgument(2);
@@ -343,10 +351,11 @@ public class Interpreter {
             throw new FatalError("Parameter length mismatch!");
         }
         
-        for (int i = 0; i < actualStratArgs.getChildCount(); i++)
-            scope.addSVar(formalStratArgs.get(i), ((ATermAppl) actualStratArgs
-                    .getChildAt(i)).getName());
-
+        for (int i = 0; i < actualStratArgs.getChildCount(); i++) {
+            String varName = Tools.stringAt(Tools.applAt(Tools.applAt(actualStratArgs, i), 0), 0);
+            scope.addSVar(formalStratArgs.get(i), getStrategy(varName));
+        }
+        
         for (int i = 0; i < actualTermArgs.getChildCount(); i++)
             scope.add(formalTermArgs.get(i), (ATerm) actualTermArgs
                     .getChildAt(i));
@@ -367,8 +376,16 @@ public class Interpreter {
         scopes.pop();
     }
 
-    private Strategy getStrategy(String name) {
-        return strategies.get(name);
+    private Strategy getStrategy(String name) throws FatalError {
+        Strategy s = scope.lookupSVar(name);
+        if(s != null)
+            return s;
+        
+        s = strategies.get(name);
+        if(s != null)
+            return s;
+        
+        throw new FatalError("Lookup of strategy '" + name + "' failed");
     }
 
     private Constructor getConstructor(String name) {
