@@ -13,7 +13,6 @@ import java.util.Map;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
-import aterm.pure.ATermApplImpl;
 
 public class Scope {
 

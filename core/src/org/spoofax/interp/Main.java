@@ -1,10 +1,8 @@
 package org.spoofax.interp;
 
 import java.io.IOException;
-import java.util.List;
 
 import aterm.ATerm;
-import aterm.pure.PureFactory;
 
 public class Main {
 
@@ -22,22 +20,14 @@ public class Main {
             e.printStackTrace();
         }
 
-        ATerm r = itp.makeList("[1,2,3]");
-        System.out.println(r);
-        ATerm s = itp.makeTuple("[1,2,3]");
-        System.out.println(s);
-        
-        /*
-        itp.load(prg);
+        ATerm inp = itp.makeList("[]");
         try {
-            if (itp.eval(itp.makeTerm("CallT(SVar(\"main_0_0\"), [], [])"))) {
-                System.out.println("result : " + itp.getCurrent());
-            } else {
-                System.out.println("result : evaluation failed!");
-            }
+            itp.setCurrent(inp);
+            itp.invoke(new SVar("main_0_0"), null, null);
+            System.out.println("" + itp.getCurrent());
         } catch (FatalError e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        */
     }
 }

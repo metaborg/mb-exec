@@ -8,6 +8,8 @@
 package org.spoofax.interp;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +38,10 @@ public class Interpreter {
     private Stack<Scope> scopes;
 
     private Scope scope;
-
+    
+    private static final Class[] defaultSignature = 
+            new Class[] { Interpreter.class, ATermList.class, ATermList.class };
+    
     public Interpreter() {
         factory = new PureFactory();
         constructors = new HashMap<String, Constructor>();
@@ -53,7 +58,7 @@ public class Interpreter {
     ATerm makePattern(String s) {
         return factory.parse(s);
     }
-
+    
     public void load(String path) throws IOException, FatalError {
         load(factory.readFromFile(path));
     }
@@ -129,7 +134,7 @@ public class Interpreter {
         current = makeTerm("[]");
     }
 
-    public boolean eval(ATermAppl t) throws FatalError {
+    private boolean eval(ATermAppl t) throws FatalError {
         System.out.println("Next : " + t.getName());
         String type = t.getName();
         if (type.equals("All"))
@@ -349,10 +354,11 @@ public class Interpreter {
         boolean r;
         if(s instanceof IntStrategy) {
             r = eval(((IntStrategy)s).getBody());
+        } else if(s instanceof ExtStrategy){
+            r = invokeExternal(new SVar(s.getName()), actualStratArgs, actualTermArgs);
         } else {
-            throw new FatalError("External strategies not implemented yet, cannot call " + s.getName());
+            throw new FatalError("Unknown kind of strategy  " + s.getClass().getName());
         }
-          
         exitScope();
         return r;
     }
@@ -419,5 +425,38 @@ public class Interpreter {
     public ATermAppl makeTerm(String op, ATerm a0, ATerm a1) {
         AFun fun = factory.makeAFun(op, 2, false);
         return factory.makeAppl(fun, a0, a1);
+    }
+
+    public boolean invoke(SVar strat, ATermList svars, ATermList tvars) throws FatalError {
+        
+        debug("Calling " + strat.getName() + " with " + svars.toString() + " / " + tvars.toString());
+        
+        if(strategies.containsKey(strat.getName()))
+            return eval(makeTerm(("CallT(SVar(\"" + strat.getName() + "\"), [], [])")));
+        else
+            return invokeExternal(strat, svars, tvars);
+    }
+    
+    private boolean invokeExternal(SVar a, ATermList svars, ATermList tvars) throws FatalError {
+        try {
+            Method m = Library.class.getMethod(a.getName(), defaultSignature);
+            m.invoke(null, new Object[] { this, svars, tvars });
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            return false;
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return false;
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

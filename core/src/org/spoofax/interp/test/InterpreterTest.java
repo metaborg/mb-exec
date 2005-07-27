@@ -9,15 +9,13 @@ package org.spoofax.interp.test;
 
 import java.io.IOException;
 
+import junit.framework.TestCase;
+
 import org.spoofax.interp.FatalError;
 import org.spoofax.interp.Interpreter;
-import org.spoofax.interp.Tools;
 
 import aterm.ATerm;
 import aterm.pure.ATermImpl;
-
-import junit.framework.TestCase;
-import junit.framework.TestResult;
 
 public class InterpreterTest extends TestCase {
 
@@ -136,26 +134,21 @@ public class InterpreterTest extends TestCase {
 
     private boolean runInterp(String test, ATerm input) {
         itp.reset();
+
         try {
-            itp.load("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/" + test
-                    + ".rtree");
+        itp.load("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/"
+                + test + ".rtree");
+
+        itp.setCurrent(input);
+        return itp.eval(itp.makeTerm("CallT(SVar(\"main_0_0\"), [], [])"));
+        } catch(FatalError e) {
+            e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
-        } catch (FatalError e) {
-            e.printStackTrace();
-            return false;
         }
 
-        itp.setCurrent(input);
-        try {
-            return itp.eval(itp.makeTerm("CallT(SVar(\"main_0_0\"), [], [])"));
-
-        } catch (FatalError e) {
-            e.printStackTrace();
-            assertTrue("Exception occured", false);
-        }
-        return false;
     }
 
     public void testScopeOutOfScope1() {
@@ -185,19 +178,21 @@ public class InterpreterTest extends TestCase {
     public static void main(String[] args) {
         junit.textui.TestRunner.run(InterpreterTest.class);
     }
-    
-    public void testChoiceUnbinding() { 
-        interpTest("unbinding_in_lchoice",  "2", "3");
+
+    public void testChoiceUnbinding() {
+        interpTest("unbinding_in_lchoice", "2", "3");
     }
-    
+
     public void testChoiceDoNotUnbinding() {
-       interpTest("do_not_unbinding_lhs_of_lchoice_if_it_succeeds", itp.makeTuple("[]"), itp.makeTerm("1"));
+        interpTest("do_not_unbinding_lhs_of_lchoice_if_it_succeeds", itp
+                .makeTuple("[]"), itp.makeTerm("1"));
     }
 
     public void testLeftChoiceGuard() {
-        interpTest("guarded_modifies_current_term", itp.makeTuple("[]"), itp.makeTerm("3"));
+        interpTest("guarded_modifies_current_term", itp.makeTuple("[]"), itp
+                .makeTerm("3"));
     }
-    
+
     public void testLeftChoiceUnbind() {
         interpTestFail("unbinding_of_guard_in_guarded_lchoice", "1");
     }
@@ -205,35 +200,38 @@ public class InterpreterTest extends TestCase {
     public void testCongInt1() {
         interpTest("cong_int_1", "2", "2");
     }
-    
+
     public void testCongInt2() {
         interpTestFail("cong_int_2", "3");
     }
-    
+
     public void testCongString1() {
         interpTest("cong_string_1", "\"foo\"", "\"foo\"");
     }
-    
+
     public void testCongString2() {
         interpTestFail("cong_string_2", "\"foo\"");
     }
-    
+
     public void testCongTuple1() {
-        interpTest("cong_tuple_1", itp.makeTuple("[3, 4]"), itp.makeTuple("[3, 4]"));
+        interpTest("cong_tuple_1", itp.makeTuple("[3, 4]"), itp
+                .makeTuple("[3, 4]"));
     }
 
     public void testCongTuple2() {
-        interpTest("cong_tuple_2", itp.makeTuple("[3, 4]"), itp.makeTuple("[4, 5]"));
+        interpTest("cong_tuple_2", itp.makeTuple("[3, 4]"), itp
+                .makeTuple("[4, 5]"));
     }
-    
+
     public void testCongTuple3() {
         interpTestFail("cong_tuple_3", itp.makeTuple("[3, 4]"));
     }
-    
+
     public void testCongTuple4() {
-        interpTest("cong_tuple_4", itp.makeTuple("[3, 4]"), itp.makeTuple("[3,5]"));
+        interpTest("cong_tuple_4", itp.makeTuple("[3, 4]"), itp
+                .makeTuple("[3,5]"));
     }
-    
+
     public void testCongTuple5() {
         interpTestFail("cong_tuple_5", itp.makeTuple("[3, 5]"));
     }
@@ -241,7 +239,7 @@ public class InterpreterTest extends TestCase {
     public void testCongList1() {
         interpTest("cong_list_1", itp.makeList("[]"), itp.makeList("[]"));
     }
-    
+
     public void testCongList2() {
         interpTest("cong_list_2", itp.makeList("[1]"), itp.makeList("[2]"));
     }
@@ -286,19 +284,13 @@ public class InterpreterTest extends TestCase {
     }
 
     /*
-  ; ssh-apply-test(|"distributing congruence  1", ([1,2], 3), 
-      " rec x(Cons^D(id,  x) + Nil^D) ;; 
-      ", [(1,3), (2,3)])
-  ; ssh-apply-test(|"distributing congruence  2", ([1,2], 3), 
-      " import integers;;
-        rec x(Cons^D(add, x) + Nil^D) ;; 
-      ", [4, 5])
-  ; ssh-apply-test(|"threading congruence  1", ([1,2, 3], 0),
-      " rec x(Cons^T(id,  x) + Nil^T) ;; 
-      ", ([1, 2, 3], 0))
-  ; ssh-apply-test(|"threading congruence  2", ([1,2,3], 0), 
-      " import integers;;
-        rec x(Cons^T((id, inc), x) + Nil^T) ;; 
-      ", ([1, 2, 3], 3))
-*/
+     * ; ssh-apply-test(|"distributing congruence 1", ([1,2], 3), " rec
+     * x(Cons^D(id, x) + Nil^D) ;; ", [(1,3), (2,3)]) ;
+     * ssh-apply-test(|"distributing congruence 2", ([1,2], 3), " import
+     * integers;; rec x(Cons^D(add, x) + Nil^D) ;; ", [4, 5]) ;
+     * ssh-apply-test(|"threading congruence 1", ([1,2, 3], 0), " rec
+     * x(Cons^T(id, x) + Nil^T) ;; ", ([1, 2, 3], 0)) ;
+     * ssh-apply-test(|"threading congruence 2", ([1,2,3], 0), " import
+     * integers;; rec x(Cons^T((id, inc), x) + Nil^T) ;; ", ([1, 2, 3], 3))
+     */
 }
