@@ -1,9 +1,7 @@
 Specification(
   [ Signature(
       [ Constructors(
-          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
-          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
-          ]
+          [OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))]
         )
       ]
     )

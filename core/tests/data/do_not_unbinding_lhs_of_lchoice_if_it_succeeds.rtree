@@ -1,9 +1,7 @@
 Specification(
   [ Signature(
       [ Constructors(
-          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
-          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
-          ]
+          [OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))]
         )
       ]
     )
@@ -13,20 +11,20 @@ Specification(
         , []
         , []
         , Scope(
-            ["a_0"]
+            ["e_14"]
           , Seq(
               GuardedLChoice(
                 Seq(
                   Build(Anno(Int("1"), Op("Nil", [])))
-                , Match(Var("a_0"){"unbound"})
+                , Match(Var("e_14"))
                 )
               , Id
               , Seq(
                   Build(Anno(Int("2"), Op("Nil", [])))
-                , Match(Var("a_0"){"unbound"})
+                , Match(Var("e_14"))
                 )
               )
-            , Build(Var("a_0"){"bound"})
+            , Build(Var("e_14"))
             )
           )
         )

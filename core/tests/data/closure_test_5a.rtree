@@ -2,13 +2,19 @@ Specification(
   [ Signature(
       [ Constructors(
           [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
-          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl(
+              "Cons"
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
+              , ConstType(Sort("List", [SortVar("a")]))
+              )
+            )
           ]
         )
       ]
     )
   , Strategies(
-      [ ExtSDef(
+      [ SDefT(
           "Cons_2_0"
         , [ VarDec(
               "b_95"
@@ -26,10 +32,50 @@ Specification(
             )
           ]
         , []
+        , Scope(
+            ["d_0", "a_0", "c_0", "e_0", "f_0"]
+          , Seq(
+              Match(
+                Anno(
+                  Op("Cons", [Var("a_0"), Var("c_0")])
+                , Var("d_0")
+                )
+              )
+            , Seq(
+                Build(Var("a_0"))
+              , Seq(
+                  CallT(SVar("b_95"), [], [])
+                , Seq(
+                    Match(Var("e_0"))
+                  , Seq(
+                      Build(Var("c_0"))
+                    , Seq(
+                        CallT(SVar("c_95"), [], [])
+                      , Seq(
+                          Match(Var("f_0"))
+                        , Build(
+                            Anno(
+                              Op("Cons", [Var("e_0"), Var("f_0")])
+                            , Var("d_0")
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
         )
-      , ExtSDef("Nil_0_0", [], [])
       , SDefT(
-          "e_0"
+          "Nil_0_0"
+        , []
+        , []
+        , Match(Anno(Op("Nil", []), Wld))
+        )
+      , SDefT(
+          "h_0"
         , []
         , []
         , Build(Anno(Int("1"), Op("Nil", [])))
@@ -40,9 +86,9 @@ Specification(
         , []
         , Let(
             [ SDefT(
-                "a_0"
+                "j_103"
               , [ VarDec(
-                    "c_0"
+                    "k_103"
                   , FunType(
                       [ConstType(Sort("ATerm", []))]
                     , ConstType(Sort("ATerm", []))
@@ -55,20 +101,20 @@ Specification(
                 , Id
                 , Let(
                     [ SDefT(
-                        "d_0"
+                        "g_0"
                       , []
                       , []
                       , CallT(
-                          SVar("a_0")
-                        , [CallT(SVar("c_0"), [], [])]
+                          SVar("j_103")
+                        , [CallT(SVar("k_103"), [], [])]
                         , []
                         )
                       )
                     ]
                   , CallT(
                       SVar("Cons_2_0")
-                    , [ CallT(SVar("c_0"), [], [])
-                      , CallT(SVar("d_0"), [], [])
+                    , [ CallT(SVar("k_103"), [], [])
+                      , CallT(SVar("g_0"), [], [])
                       ]
                     , []
                     )
@@ -77,8 +123,8 @@ Specification(
               )
             ]
           , CallT(
-              SVar("a_0")
-            , [CallT(SVar("e_0"), [], [])]
+              SVar("j_103")
+            , [CallT(SVar("h_0"), [], [])]
             , []
             )
           )

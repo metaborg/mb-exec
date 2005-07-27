@@ -1,9 +1,7 @@
 Specification(
   [ Signature(
       [ Constructors(
-          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
-          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
-          ]
+          [OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))]
         )
       ]
     )
@@ -13,12 +11,12 @@ Specification(
         , []
         , []
         , Scope(
-            ["a_0", "c_0"]
+            ["e_14", "f_14"]
           , Seq(
-              Match(Var("a_0"){"unbound"})
+              Match(Var("e_14"))
             , Seq(
                 Build(Anno(Int("3"), Op("Nil", [])))
-              , Seq(Match(Var("c_0"){"unbound"}), Build(Var("a_0"){"bound"}))
+              , Seq(Match(Var("f_14")), Build(Var("e_14")))
               )
             )
           )

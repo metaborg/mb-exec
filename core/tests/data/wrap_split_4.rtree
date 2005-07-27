@@ -9,14 +9,6 @@ Specification(
               , ConstType(Sort("List", [SortVar("a")]))
               )
             )
-          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
-          , OpDecl(
-              "Cons"
-            , FunType(
-                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
-              , ConstType(Sort("List", [SortVar("a")]))
-              )
-            )
           ]
         )
       ]
@@ -27,28 +19,28 @@ Specification(
         , []
         , []
         , Scope(
-            ["a_0", "c_0", "e_0", "d_0"]
+            ["c_0", "e_0", "d_0", "a_0"]
           , Seq(
-              Match(Var("d_0"){"unbound"})
+              Match(Var("a_0"))
             , Seq(
-                Match(Var("a_0"){"unbound"})
+                Match(Var("c_0"))
               , Seq(
-                  Build(Var("d_0"){"bound"})
+                  Build(Var("a_0"))
                 , Seq(
-                    Match(Var("e_0"){"unbound"})
+                    Match(Var("d_0"))
                   , Seq(
-                      Match(Var("c_0"){"unbound"})
+                      Match(Var("e_0"))
                     , Seq(
-                        Build(Var("e_0"){"bound"})
+                        Build(Var("d_0"))
                       , Build(
                           Anno(
                             Op(
                               "Cons"
-                            , [ Var("a_0"){"bound"}
+                            , [ Var("c_0")
                               , Anno(
                                   Op(
                                     "Cons"
-                                  , [Var("c_0"){"bound"}, Anno(Op("Nil", []), Op("Nil", []))]
+                                  , [Var("e_0"), Anno(Op("Nil", []), Op("Nil", []))]
                                   )
                                 , Op("Nil", [])
                                 )

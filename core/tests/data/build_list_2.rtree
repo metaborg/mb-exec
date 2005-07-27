@@ -9,14 +9,6 @@ Specification(
               , ConstType(Sort("List", [SortVar("a")]))
               )
             )
-          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
-          , OpDecl(
-              "Cons"
-            , FunType(
-                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
-              , ConstType(Sort("List", [SortVar("a")]))
-              )
-            )
           ]
         )
       ]

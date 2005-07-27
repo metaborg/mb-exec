@@ -1,7 +1,17 @@
 Specification(
-  [ Signature([Constructors([])])
+  [ Signature(
+      [ Constructors(
+          [OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))]
+        )
+      ]
+    )
   , Strategies(
-      [ ExtSDef("Nil_0_0", [], [])
+      [ SDefT(
+          "Nil_0_0"
+        , []
+        , []
+        , Match(Anno(Op("Nil", []), Wld))
+        )
       , SDefT(
           "main_0_0"
         , []

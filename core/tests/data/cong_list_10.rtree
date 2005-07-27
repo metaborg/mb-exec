@@ -9,55 +9,82 @@ Specification(
               , ConstType(Sort("List", [SortVar("a")]))
               )
             )
-          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
-          , OpDecl(
-              "Cons"
-            , FunType(
-                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
-              , ConstType(Sort("List", [SortVar("a")]))
-              )
-            )
           ]
         )
       ]
     )
   , Strategies(
-      [ ExtSDef(
+      [ SDefT(
           "Cons_2_0"
         , [ VarDec(
-              "b_95"
-            , FunType(
-                [ConstType(Sort("ATerm", []))]
-              , ConstType(Sort("ATerm", []))
-              )
-            )
-          , VarDec(
               "c_95"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
+          , VarDec(
+              "d_95"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
           ]
         , []
+        , Scope(
+            ["d_0", "a_0", "c_0", "e_0", "f_0"]
+          , Seq(
+              Match(
+                Anno(
+                  Op("Cons", [Var("a_0"), Var("c_0")])
+                , Var("d_0")
+                )
+              )
+            , Seq(
+                Build(Var("a_0"))
+              , Seq(
+                  CallT(SVar("c_95"), [], [])
+                , Seq(
+                    Match(Var("e_0"))
+                  , Seq(
+                      Build(Var("c_0"))
+                    , Seq(
+                        CallT(SVar("d_95"), [], [])
+                      , Seq(
+                          Match(Var("f_0"))
+                        , Build(
+                            Anno(
+                              Op("Cons", [Var("e_0"), Var("f_0")])
+                            , Var("d_0")
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
         )
       , SDefT(
           "main_0_0"
         , []
         , []
         , Scope(
-            ["a_0"]
+            ["e_14"]
           , Seq(
               Let(
                 [ SDefT(
-                    "c_0"
+                    "g_0"
                   , []
                   , []
                   , Match(
                       Anno(
                         Op(
                           "Cons"
-                        , [Var("a_0"){"(un)bound"}, Anno(Op("Nil", []), Wld)]
+                        , [Var("e_14"), Anno(Op("Nil", []), Wld)]
                         )
                       , Wld
                       )
@@ -67,12 +94,12 @@ Specification(
               , CallT(
                   SVar("Cons_2_0")
                 , [ CallT(SVar("_id"), [], [])
-                  , CallT(SVar("c_0"), [], [])
+                  , CallT(SVar("g_0"), [], [])
                   ]
                 , []
                 )
               )
-            , Build(Var("a_0"){"(un)bound"})
+            , Build(Var("e_14"))
             )
           )
         )

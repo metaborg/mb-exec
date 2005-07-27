@@ -8,10 +8,10 @@ Specification(
         , Scope(
             ["a_0"]
           , Seq(
-              Match(Var("a_0"){"unbound"})
+              Match(Var("a_0"))
             , Seq(
                 Match(Anno(Int("2"), Wld))
-              , Build(Var("a_0"){"bound"})
+              , Build(Var("a_0"))
               )
             )
           )
