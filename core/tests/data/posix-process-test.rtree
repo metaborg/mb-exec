@@ -1,0 +1,2799 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("stderr", ConstType(Sort("FileLoc", [])))
+          , OpDecl(
+              "WaitStatus"
+            , FunType(
+                [ ConstType(Sort("Int", []))
+                , ConstType(Sort("Int", []))
+                , ConstType(Sort("Int", []))
+                ]
+              , ConstType(Sort("WaitStatus", []))
+              )
+            )
+          , OpDecl(
+              "Signal"
+            , FunType(
+                [ ConstType(Sort("String", []))
+                , ConstType(Sort("Int", []))
+                , ConstType(Sort("String", []))
+                ]
+              , ConstType(Sort("Signal", []))
+              )
+            )
+          , OpDecl(
+              "UnknownSignal"
+            , FunType(
+                [ConstType(Sort("Int", []))]
+              , ConstType(Sort("Signal", []))
+              )
+            )
+          , OpDecl(
+              ""
+            , ConstType(Sort("Tuple", [Sort("Nil", [])]))
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ConstType(SortVar("a"))]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [Sort("Cons", [SortVar("a"), Sort("Nil", [])])]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(SortVar("b"))]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort("Cons", [SortVar("b"), Sort("Nil", [])])
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(SortVar("b")), ConstType(SortVar("c"))]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort("Cons", [SortVar("c"), Sort("Nil", [])])
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort("Cons", [SortVar("d"), Sort("Nil", [])])
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort("Cons", [SortVar("e"), Sort("Nil", [])])
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort("Cons", [SortVar("f"), Sort("Nil", [])])
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort("Cons", [SortVar("g"), Sort("Nil", [])])
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                , ConstType(SortVar("h"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort(
+                                                "Cons"
+                                              , [ SortVar("g")
+                                                , Sort("Cons", [SortVar("h"), Sort("Nil", [])])
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                , ConstType(SortVar("h"))
+                , ConstType(SortVar("i"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort(
+                                                "Cons"
+                                              , [ SortVar("g")
+                                                , Sort(
+                                                    "Cons"
+                                                  , [ SortVar("h")
+                                                    , Sort("Cons", [SortVar("i"), Sort("Nil", [])])
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                , ConstType(SortVar("h"))
+                , ConstType(SortVar("i"))
+                , ConstType(SortVar("j"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort(
+                                                "Cons"
+                                              , [ SortVar("g")
+                                                , Sort(
+                                                    "Cons"
+                                                  , [ SortVar("h")
+                                                    , Sort(
+                                                        "Cons"
+                                                      , [ SortVar("i")
+                                                        , Sort("Cons", [SortVar("j"), Sort("Nil", [])])
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                , ConstType(SortVar("h"))
+                , ConstType(SortVar("i"))
+                , ConstType(SortVar("j"))
+                , ConstType(SortVar("k"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort(
+                                                "Cons"
+                                              , [ SortVar("g")
+                                                , Sort(
+                                                    "Cons"
+                                                  , [ SortVar("h")
+                                                    , Sort(
+                                                        "Cons"
+                                                      , [ SortVar("i")
+                                                        , Sort(
+                                                            "Cons"
+                                                          , [ SortVar("j")
+                                                            , Sort("Cons", [SortVar("k"), Sort("Nil", [])])
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                , ConstType(SortVar("h"))
+                , ConstType(SortVar("i"))
+                , ConstType(SortVar("j"))
+                , ConstType(SortVar("k"))
+                , ConstType(SortVar("l"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort(
+                                                "Cons"
+                                              , [ SortVar("g")
+                                                , Sort(
+                                                    "Cons"
+                                                  , [ SortVar("h")
+                                                    , Sort(
+                                                        "Cons"
+                                                      , [ SortVar("i")
+                                                        , Sort(
+                                                            "Cons"
+                                                          , [ SortVar("j")
+                                                            , Sort(
+                                                                "Cons"
+                                                              , [ SortVar("k")
+                                                                , Sort("Cons", [SortVar("l"), Sort("Nil", [])])
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                , ConstType(SortVar("h"))
+                , ConstType(SortVar("i"))
+                , ConstType(SortVar("j"))
+                , ConstType(SortVar("k"))
+                , ConstType(SortVar("l"))
+                , ConstType(SortVar("m"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort(
+                                                "Cons"
+                                              , [ SortVar("g")
+                                                , Sort(
+                                                    "Cons"
+                                                  , [ SortVar("h")
+                                                    , Sort(
+                                                        "Cons"
+                                                      , [ SortVar("i")
+                                                        , Sort(
+                                                            "Cons"
+                                                          , [ SortVar("j")
+                                                            , Sort(
+                                                                "Cons"
+                                                              , [ SortVar("k")
+                                                                , Sort(
+                                                                    "Cons"
+                                                                  , [ SortVar("l")
+                                                                    , Sort("Cons", [SortVar("m"), Sort("Nil", [])])
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                , ConstType(SortVar("h"))
+                , ConstType(SortVar("i"))
+                , ConstType(SortVar("j"))
+                , ConstType(SortVar("k"))
+                , ConstType(SortVar("l"))
+                , ConstType(SortVar("m"))
+                , ConstType(SortVar("n"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort(
+                                                "Cons"
+                                              , [ SortVar("g")
+                                                , Sort(
+                                                    "Cons"
+                                                  , [ SortVar("h")
+                                                    , Sort(
+                                                        "Cons"
+                                                      , [ SortVar("i")
+                                                        , Sort(
+                                                            "Cons"
+                                                          , [ SortVar("j")
+                                                            , Sort(
+                                                                "Cons"
+                                                              , [ SortVar("k")
+                                                                , Sort(
+                                                                    "Cons"
+                                                                  , [ SortVar("l")
+                                                                    , Sort(
+                                                                        "Cons"
+                                                                      , [ SortVar("m")
+                                                                        , Sort("Cons", [SortVar("n"), Sort("Nil", [])])
+                                                                        ]
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                , ConstType(SortVar("h"))
+                , ConstType(SortVar("i"))
+                , ConstType(SortVar("j"))
+                , ConstType(SortVar("k"))
+                , ConstType(SortVar("l"))
+                , ConstType(SortVar("m"))
+                , ConstType(SortVar("n"))
+                , ConstType(SortVar("o"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort(
+                                                "Cons"
+                                              , [ SortVar("g")
+                                                , Sort(
+                                                    "Cons"
+                                                  , [ SortVar("h")
+                                                    , Sort(
+                                                        "Cons"
+                                                      , [ SortVar("i")
+                                                        , Sort(
+                                                            "Cons"
+                                                          , [ SortVar("j")
+                                                            , Sort(
+                                                                "Cons"
+                                                              , [ SortVar("k")
+                                                                , Sort(
+                                                                    "Cons"
+                                                                  , [ SortVar("l")
+                                                                    , Sort(
+                                                                        "Cons"
+                                                                      , [ SortVar("m")
+                                                                        , Sort(
+                                                                            "Cons"
+                                                                          , [ SortVar("n")
+                                                                            , Sort("Cons", [SortVar("o"), Sort("Nil", [])])
+                                                                            ]
+                                                                          )
+                                                                        ]
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                , ConstType(SortVar("h"))
+                , ConstType(SortVar("i"))
+                , ConstType(SortVar("j"))
+                , ConstType(SortVar("k"))
+                , ConstType(SortVar("l"))
+                , ConstType(SortVar("m"))
+                , ConstType(SortVar("n"))
+                , ConstType(SortVar("o"))
+                , ConstType(SortVar("p"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort(
+                                                "Cons"
+                                              , [ SortVar("g")
+                                                , Sort(
+                                                    "Cons"
+                                                  , [ SortVar("h")
+                                                    , Sort(
+                                                        "Cons"
+                                                      , [ SortVar("i")
+                                                        , Sort(
+                                                            "Cons"
+                                                          , [ SortVar("j")
+                                                            , Sort(
+                                                                "Cons"
+                                                              , [ SortVar("k")
+                                                                , Sort(
+                                                                    "Cons"
+                                                                  , [ SortVar("l")
+                                                                    , Sort(
+                                                                        "Cons"
+                                                                      , [ SortVar("m")
+                                                                        , Sort(
+                                                                            "Cons"
+                                                                          , [ SortVar("n")
+                                                                            , Sort(
+                                                                                "Cons"
+                                                                              , [ SortVar("o")
+                                                                                , Sort("Cons", [SortVar("p"), Sort("Nil", [])])
+                                                                                ]
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        ]
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                , ConstType(SortVar("h"))
+                , ConstType(SortVar("i"))
+                , ConstType(SortVar("j"))
+                , ConstType(SortVar("k"))
+                , ConstType(SortVar("l"))
+                , ConstType(SortVar("m"))
+                , ConstType(SortVar("n"))
+                , ConstType(SortVar("o"))
+                , ConstType(SortVar("p"))
+                , ConstType(SortVar("q"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort(
+                                                "Cons"
+                                              , [ SortVar("g")
+                                                , Sort(
+                                                    "Cons"
+                                                  , [ SortVar("h")
+                                                    , Sort(
+                                                        "Cons"
+                                                      , [ SortVar("i")
+                                                        , Sort(
+                                                            "Cons"
+                                                          , [ SortVar("j")
+                                                            , Sort(
+                                                                "Cons"
+                                                              , [ SortVar("k")
+                                                                , Sort(
+                                                                    "Cons"
+                                                                  , [ SortVar("l")
+                                                                    , Sort(
+                                                                        "Cons"
+                                                                      , [ SortVar("m")
+                                                                        , Sort(
+                                                                            "Cons"
+                                                                          , [ SortVar("n")
+                                                                            , Sort(
+                                                                                "Cons"
+                                                                              , [ SortVar("o")
+                                                                                , Sort(
+                                                                                    "Cons"
+                                                                                  , [ SortVar("p")
+                                                                                    , Sort("Cons", [SortVar("q"), Sort("Nil", [])])
+                                                                                    ]
+                                                                                  )
+                                                                                ]
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        ]
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl(
+              ""
+            , FunType(
+                [ ConstType(SortVar("a"))
+                , ConstType(SortVar("b"))
+                , ConstType(SortVar("c"))
+                , ConstType(SortVar("d"))
+                , ConstType(SortVar("e"))
+                , ConstType(SortVar("f"))
+                , ConstType(SortVar("g"))
+                , ConstType(SortVar("h"))
+                , ConstType(SortVar("i"))
+                , ConstType(SortVar("j"))
+                , ConstType(SortVar("k"))
+                , ConstType(SortVar("l"))
+                , ConstType(SortVar("m"))
+                , ConstType(SortVar("n"))
+                , ConstType(SortVar("o"))
+                , ConstType(SortVar("p"))
+                , ConstType(SortVar("q"))
+                , ConstType(SortVar("r"))
+                ]
+              , ConstType(
+                  Sort(
+                    "Tuple"
+                  , [ Sort(
+                        "Cons"
+                      , [ SortVar("a")
+                        , Sort(
+                            "Cons"
+                          , [ SortVar("b")
+                            , Sort(
+                                "Cons"
+                              , [ SortVar("c")
+                                , Sort(
+                                    "Cons"
+                                  , [ SortVar("d")
+                                    , Sort(
+                                        "Cons"
+                                      , [ SortVar("e")
+                                        , Sort(
+                                            "Cons"
+                                          , [ SortVar("f")
+                                            , Sort(
+                                                "Cons"
+                                              , [ SortVar("g")
+                                                , Sort(
+                                                    "Cons"
+                                                  , [ SortVar("h")
+                                                    , Sort(
+                                                        "Cons"
+                                                      , [ SortVar("i")
+                                                        , Sort(
+                                                            "Cons"
+                                                          , [ SortVar("j")
+                                                            , Sort(
+                                                                "Cons"
+                                                              , [ SortVar("k")
+                                                                , Sort(
+                                                                    "Cons"
+                                                                  , [ SortVar("l")
+                                                                    , Sort(
+                                                                        "Cons"
+                                                                      , [ SortVar("m")
+                                                                        , Sort(
+                                                                            "Cons"
+                                                                          , [ SortVar("n")
+                                                                            , Sort(
+                                                                                "Cons"
+                                                                              , [ SortVar("o")
+                                                                                , Sort(
+                                                                                    "Cons"
+                                                                                  , [ SortVar("p")
+                                                                                    , Sort(
+                                                                                        "Cons"
+                                                                                      , [ SortVar("q")
+                                                                                        , Sort("Cons", [SortVar("r"), Sort("Nil", [])])
+                                                                                        ]
+                                                                                      )
+                                                                                    ]
+                                                                                  )
+                                                                                ]
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        ]
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                )
+              )
+            )
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl(
+              "Cons"
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
+              , ConstType(Sort("List", [SortVar("a")]))
+              )
+            )
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "number_from_signal_0_0"
+        , []
+        , []
+        , GuardedLChoice(
+            Scope(
+              ["s_23"]
+            , Seq(
+                Match(Anno(Op("UnknownSignal", [Var("s_23")]), Wld))
+              , Build(Var("s_23"))
+              )
+            )
+          , Id
+          , Scope(
+              ["r_23"]
+            , Seq(
+                Match(
+                  Anno(
+                    Op("Signal", [Wld, Var("r_23"), Wld])
+                  , Wld
+                  )
+                )
+              , Build(Var("r_23"))
+              )
+            )
+          )
+        )
+      , SDefT(
+          "kill_0_0"
+        , []
+        , []
+        , Scope(
+            ["o_17", "p_17", "a_0", "d_3"]
+          , Seq(
+              Match(Var("a_0"))
+            , Seq(
+                Match(
+                  Anno(
+                    Op("", [Var("o_17"), Var("d_3")])
+                  , Wld
+                  )
+                )
+              , Seq(
+                  Build(Var("d_3"))
+                , Seq(
+                    CallT(SVar("number_from_signal_0_0"), [], [])
+                  , Seq(
+                      Match(Var("p_17"))
+                    , Seq(
+                        PrimT("SSL_kill", [], [Var("o_17"), Var("p_17")])
+                      , Build(Var("a_0"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT("get_pid_0_0", [], [], PrimT("SSL_get_pid", [], []))
+      , SDefT(
+          "kill_myself_0_0"
+        , []
+        , []
+        , Scope(
+            ["c_0", "d_0"]
+          , Seq(
+              Match(Var("d_0"))
+            , Seq(
+                CallT(SVar("get_pid_0_0"), [], [])
+              , Seq(
+                  Match(Var("c_0"))
+                , Seq(
+                    Build(Var("d_0"))
+                  , Seq(
+                      Build(
+                        Anno(
+                          Op(
+                            ""
+                          , [ Var("c_0")
+                            , Anno(
+                                Op(
+                                  "Signal"
+                                , [ Anno(Str("KILL"), Op("Nil", []))
+                                  , Anno(Int("9"), Op("Nil", []))
+                                  , Anno(Str("Kill"), Op("Nil", []))
+                                  ]
+                                )
+                              , Op("Nil", [])
+                              )
+                            ]
+                          )
+                        , Op("Nil", [])
+                        )
+                      )
+                    , CallT(SVar("kill_0_0"), [], [])
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "Cons_2_0"
+        , [ VarDec(
+              "k_102"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "l_102"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Scope(
+            ["u_0", "r_0", "t_0", "v_0", "w_0"]
+          , Seq(
+              Match(
+                Anno(
+                  Op("Cons", [Var("r_0"), Var("t_0")])
+                , Var("u_0")
+                )
+              )
+            , Seq(
+                Build(Var("r_0"))
+              , Seq(
+                  CallT(SVar("k_102"), [], [])
+                , Seq(
+                    Match(Var("v_0"))
+                  , Seq(
+                      Build(Var("t_0"))
+                    , Seq(
+                        CallT(SVar("l_102"), [], [])
+                      , Seq(
+                          Match(Var("w_0"))
+                        , Build(
+                            Anno(
+                              Op("Cons", [Var("v_0"), Var("w_0")])
+                            , Var("u_0")
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "fetch_1_0"
+        , [ VarDec(
+              "s_114"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Let(
+            [ SDefT(
+                "t_114"
+              , []
+              , []
+              , GuardedLChoice(
+                  CallT(
+                    SVar("Cons_2_0")
+                  , [ CallT(SVar("s_114"), [], [])
+                    , CallT(SVar("_id"), [], [])
+                    ]
+                  , []
+                  )
+                , Id
+                , CallT(
+                    SVar("Cons_2_0")
+                  , [ CallT(SVar("_id"), [], [])
+                    , CallT(SVar("t_114"), [], [])
+                    ]
+                  , []
+                  )
+                )
+              )
+            ]
+          , CallT(SVar("t_114"), [], [])
+          )
+        )
+      , SDefT(
+          "fetch_elem_1_0"
+        , [ VarDec(
+              "u_114"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Scope(
+            ["s_29"]
+          , Seq(
+              Let(
+                [ SDefT(
+                    "d_1"
+                  , []
+                  , []
+                  , Seq(
+                      CallT(SVar("u_114"), [], [])
+                    , Match(Var("s_29"))
+                    )
+                  )
+                ]
+              , CallT(
+                  SVar("fetch_1_0")
+                , [CallT(SVar("d_1"), [], [])]
+                , []
+                )
+              )
+            , Build(Var("s_29"))
+            )
+          )
+        )
+      , SDefT(
+          "signal_from_number_0_0"
+        , []
+        , []
+        , Scope(
+            ["q_23"]
+          , Seq(
+              Match(Var("q_23"))
+            , GuardedLChoice(
+                Let(
+                  [ SDefT(
+                      "e_1"
+                    , []
+                    , []
+                    , Match(
+                        Anno(
+                          Op("Signal", [Wld, Var("q_23"), Wld])
+                        , Wld
+                        )
+                      )
+                    )
+                  ]
+                , Seq(
+                    Build(
+                      Anno(
+                        Op(
+                          "Cons"
+                        , [ Anno(
+                              Op(
+                                "Signal"
+                              , [ Anno(Str("HUP"), Op("Nil", []))
+                                , Anno(Int("1"), Op("Nil", []))
+                                , Anno(Str("Hangup"), Op("Nil", []))
+                                ]
+                              )
+                            , Op("Nil", [])
+                            )
+                          , Anno(
+                              Op(
+                                "Cons"
+                              , [ Anno(
+                                    Op(
+                                      "Signal"
+                                    , [ Anno(Str("INT"), Op("Nil", []))
+                                      , Anno(Int("2"), Op("Nil", []))
+                                      , Anno(Str("Terminal interrupt"), Op("Nil", []))
+                                      ]
+                                    )
+                                  , Op("Nil", [])
+                                  )
+                                , Anno(
+                                    Op(
+                                      "Cons"
+                                    , [ Anno(
+                                          Op(
+                                            "Signal"
+                                          , [ Anno(Str("QUIT"), Op("Nil", []))
+                                            , Anno(Int("3"), Op("Nil", []))
+                                            , Anno(Str("Terminal quit"), Op("Nil", []))
+                                            ]
+                                          )
+                                        , Op("Nil", [])
+                                        )
+                                      , Anno(
+                                          Op(
+                                            "Cons"
+                                          , [ Anno(
+                                                Op(
+                                                  "Signal"
+                                                , [ Anno(Str("ABRT"), Op("Nil", []))
+                                                  , Anno(Int("6"), Op("Nil", []))
+                                                  , Anno(Str("Process abort"), Op("Nil", []))
+                                                  ]
+                                                )
+                                              , Op("Nil", [])
+                                              )
+                                            , Anno(
+                                                Op(
+                                                  "Cons"
+                                                , [ Anno(
+                                                      Op(
+                                                        "Signal"
+                                                      , [ Anno(Str("KILL"), Op("Nil", []))
+                                                        , Anno(Int("9"), Op("Nil", []))
+                                                        , Anno(Str("Kill"), Op("Nil", []))
+                                                        ]
+                                                      )
+                                                    , Op("Nil", [])
+                                                    )
+                                                  , Anno(
+                                                      Op(
+                                                        "Cons"
+                                                      , [ Anno(
+                                                            Op(
+                                                              "Signal"
+                                                            , [ Anno(Str("ALRM"), Op("Nil", []))
+                                                              , Anno(Int("14"), Op("Nil", []))
+                                                              , Anno(Str("Alarm Clock"), Op("Nil", []))
+                                                              ]
+                                                            )
+                                                          , Op("Nil", [])
+                                                          )
+                                                        , Anno(
+                                                            Op(
+                                                              "Cons"
+                                                            , [ Anno(
+                                                                  Op(
+                                                                    "Signal"
+                                                                  , [ Anno(Str("TERM"), Op("Nil", []))
+                                                                    , Anno(Int("15"), Op("Nil", []))
+                                                                    , Anno(Str("Termination"), Op("Nil", []))
+                                                                    ]
+                                                                  )
+                                                                , Op("Nil", [])
+                                                                )
+                                                              , Anno(
+                                                                  Op(
+                                                                    "Cons"
+                                                                  , [ Anno(
+                                                                        Op(
+                                                                          "Signal"
+                                                                        , [ Anno(Str("BUS"), Op("Nil", []))
+                                                                          , Anno(Int("7"), Op("Nil", []))
+                                                                          , Anno(Str("Access to an undefined portion of a memory object"), Op("Nil", []))
+                                                                          ]
+                                                                        )
+                                                                      , Op("Nil", [])
+                                                                      )
+                                                                    , Anno(
+                                                                        Op(
+                                                                          "Cons"
+                                                                        , [ Anno(
+                                                                              Op(
+                                                                                "Signal"
+                                                                              , [ Anno(Str("CHLD"), Op("Nil", []))
+                                                                                , Anno(Int("17"), Op("Nil", []))
+                                                                                , Anno(Str("Child process terminated, stopped, or continued"), Op("Nil", []))
+                                                                                ]
+                                                                              )
+                                                                            , Op("Nil", [])
+                                                                            )
+                                                                          , Anno(
+                                                                              Op(
+                                                                                "Cons"
+                                                                              , [ Anno(
+                                                                                    Op(
+                                                                                      "Signal"
+                                                                                    , [ Anno(Str("CONT"), Op("Nil", []))
+                                                                                      , Anno(Int("18"), Op("Nil", []))
+                                                                                      , Anno(Str("Continue executing, if stopped"), Op("Nil", []))
+                                                                                      ]
+                                                                                    )
+                                                                                  , Op("Nil", [])
+                                                                                  )
+                                                                                , Anno(
+                                                                                    Op(
+                                                                                      "Cons"
+                                                                                    , [ Anno(
+                                                                                          Op(
+                                                                                            "Signal"
+                                                                                          , [ Anno(Str("FPE"), Op("Nil", []))
+                                                                                            , Anno(Int("8"), Op("Nil", []))
+                                                                                            , Anno(Str("Erroneous arithmetic operation"), Op("Nil", []))
+                                                                                            ]
+                                                                                          )
+                                                                                        , Op("Nil", [])
+                                                                                        )
+                                                                                      , Anno(
+                                                                                          Op(
+                                                                                            "Cons"
+                                                                                          , [ Anno(
+                                                                                                Op(
+                                                                                                  "Signal"
+                                                                                                , [ Anno(Str("ILL"), Op("Nil", []))
+                                                                                                  , Anno(Int("4"), Op("Nil", []))
+                                                                                                  , Anno(Str("Illegal Instruction"), Op("Nil", []))
+                                                                                                  ]
+                                                                                                )
+                                                                                              , Op("Nil", [])
+                                                                                              )
+                                                                                            , Anno(
+                                                                                                Op(
+                                                                                                  "Cons"
+                                                                                                , [ Anno(
+                                                                                                      Op(
+                                                                                                        "Signal"
+                                                                                                      , [ Anno(Str("PIPE"), Op("Nil", []))
+                                                                                                        , Anno(Int("13"), Op("Nil", []))
+                                                                                                        , Anno(Str("Write on a pipe with no one to read it"), Op("Nil", []))
+                                                                                                        ]
+                                                                                                      )
+                                                                                                    , Op("Nil", [])
+                                                                                                    )
+                                                                                                  , Anno(
+                                                                                                      Op(
+                                                                                                        "Cons"
+                                                                                                      , [ Anno(
+                                                                                                            Op(
+                                                                                                              "Signal"
+                                                                                                            , [ Anno(Str("SEGV"), Op("Nil", []))
+                                                                                                              , Anno(Int("11"), Op("Nil", []))
+                                                                                                              , Anno(Str("Invalid memory reference"), Op("Nil", []))
+                                                                                                              ]
+                                                                                                            )
+                                                                                                          , Op("Nil", [])
+                                                                                                          )
+                                                                                                        , Anno(
+                                                                                                            Op(
+                                                                                                              "Cons"
+                                                                                                            , [ Anno(
+                                                                                                                  Op(
+                                                                                                                    "Signal"
+                                                                                                                  , [ Anno(Str("STOP"), Op("Nil", []))
+                                                                                                                    , Anno(Int("19"), Op("Nil", []))
+                                                                                                                    , Anno(Str("Stop executing"), Op("Nil", []))
+                                                                                                                    ]
+                                                                                                                  )
+                                                                                                                , Op("Nil", [])
+                                                                                                                )
+                                                                                                              , Anno(
+                                                                                                                  Op(
+                                                                                                                    "Cons"
+                                                                                                                  , [ Anno(
+                                                                                                                        Op(
+                                                                                                                          "Signal"
+                                                                                                                        , [ Anno(Str("TSTP"), Op("Nil", []))
+                                                                                                                          , Anno(Int("20"), Op("Nil", []))
+                                                                                                                          , Anno(Str("Terminal stop"), Op("Nil", []))
+                                                                                                                          ]
+                                                                                                                        )
+                                                                                                                      , Op("Nil", [])
+                                                                                                                      )
+                                                                                                                    , Anno(
+                                                                                                                        Op(
+                                                                                                                          "Cons"
+                                                                                                                        , [ Anno(
+                                                                                                                              Op(
+                                                                                                                                "Signal"
+                                                                                                                              , [ Anno(Str("TTIN"), Op("Nil", []))
+                                                                                                                                , Anno(Int("21"), Op("Nil", []))
+                                                                                                                                , Anno(Str("Background process attempting read"), Op("Nil", []))
+                                                                                                                                ]
+                                                                                                                              )
+                                                                                                                            , Op("Nil", [])
+                                                                                                                            )
+                                                                                                                          , Anno(
+                                                                                                                              Op(
+                                                                                                                                "Cons"
+                                                                                                                              , [ Anno(
+                                                                                                                                    Op(
+                                                                                                                                      "Signal"
+                                                                                                                                    , [ Anno(Str("TTOU"), Op("Nil", []))
+                                                                                                                                      , Anno(Int("22"), Op("Nil", []))
+                                                                                                                                      , Anno(Str("Background process attempting write"), Op("Nil", []))
+                                                                                                                                      ]
+                                                                                                                                    )
+                                                                                                                                  , Op("Nil", [])
+                                                                                                                                  )
+                                                                                                                                , Anno(
+                                                                                                                                    Op(
+                                                                                                                                      "Cons"
+                                                                                                                                    , [ Anno(
+                                                                                                                                          Op(
+                                                                                                                                            "Signal"
+                                                                                                                                          , [ Anno(Str("URG"), Op("Nil", []))
+                                                                                                                                            , Anno(Int("23"), Op("Nil", []))
+                                                                                                                                            , Anno(Str("High bandwidth data is available at a socket"), Op("Nil", []))
+                                                                                                                                            ]
+                                                                                                                                          )
+                                                                                                                                        , Op("Nil", [])
+                                                                                                                                        )
+                                                                                                                                      , Anno(
+                                                                                                                                          Op(
+                                                                                                                                            "Cons"
+                                                                                                                                          , [ Anno(
+                                                                                                                                                Op(
+                                                                                                                                                  "Signal"
+                                                                                                                                                , [ Anno(Str("USR1"), Op("Nil", []))
+                                                                                                                                                  , Anno(Int("10"), Op("Nil", []))
+                                                                                                                                                  , Anno(Str("User-defined signal 1"), Op("Nil", []))
+                                                                                                                                                  ]
+                                                                                                                                                )
+                                                                                                                                              , Op("Nil", [])
+                                                                                                                                              )
+                                                                                                                                            , Anno(
+                                                                                                                                                Op(
+                                                                                                                                                  "Cons"
+                                                                                                                                                , [ Anno(
+                                                                                                                                                      Op(
+                                                                                                                                                        "Signal"
+                                                                                                                                                      , [ Anno(Str("USR2"), Op("Nil", []))
+                                                                                                                                                        , Anno(Int("12"), Op("Nil", []))
+                                                                                                                                                        , Anno(Str("User-defined signal 2"), Op("Nil", []))
+                                                                                                                                                        ]
+                                                                                                                                                      )
+                                                                                                                                                    , Op("Nil", [])
+                                                                                                                                                    )
+                                                                                                                                                  , Anno(
+                                                                                                                                                      Op(
+                                                                                                                                                        "Cons"
+                                                                                                                                                      , [ Anno(
+                                                                                                                                                            Op(
+                                                                                                                                                              "Signal"
+                                                                                                                                                            , [ Anno(Str("POLL"), Op("Nil", []))
+                                                                                                                                                              , Anno(Int("29"), Op("Nil", []))
+                                                                                                                                                              , Anno(Str("Pollable event"), Op("Nil", []))
+                                                                                                                                                              ]
+                                                                                                                                                            )
+                                                                                                                                                          , Op("Nil", [])
+                                                                                                                                                          )
+                                                                                                                                                        , Anno(
+                                                                                                                                                            Op(
+                                                                                                                                                              "Cons"
+                                                                                                                                                            , [ Anno(
+                                                                                                                                                                  Op(
+                                                                                                                                                                    "Signal"
+                                                                                                                                                                  , [ Anno(Str("PROF"), Op("Nil", []))
+                                                                                                                                                                    , Anno(Int("27"), Op("Nil", []))
+                                                                                                                                                                    , Anno(Str("Profiling timer expired"), Op("Nil", []))
+                                                                                                                                                                    ]
+                                                                                                                                                                  )
+                                                                                                                                                                , Op("Nil", [])
+                                                                                                                                                                )
+                                                                                                                                                              , Anno(
+                                                                                                                                                                  Op(
+                                                                                                                                                                    "Cons"
+                                                                                                                                                                  , [ Anno(
+                                                                                                                                                                        Op(
+                                                                                                                                                                          "Signal"
+                                                                                                                                                                        , [ Anno(Str("SYS"), Op("Nil", []))
+                                                                                                                                                                          , Anno(Int("31"), Op("Nil", []))
+                                                                                                                                                                          , Anno(Str("Bad system call"), Op("Nil", []))
+                                                                                                                                                                          ]
+                                                                                                                                                                        )
+                                                                                                                                                                      , Op("Nil", [])
+                                                                                                                                                                      )
+                                                                                                                                                                    , Anno(
+                                                                                                                                                                        Op(
+                                                                                                                                                                          "Cons"
+                                                                                                                                                                        , [ Anno(
+                                                                                                                                                                              Op(
+                                                                                                                                                                                "Signal"
+                                                                                                                                                                              , [ Anno(Str("TRAP"), Op("Nil", []))
+                                                                                                                                                                                , Anno(Int("5"), Op("Nil", []))
+                                                                                                                                                                                , Anno(Str("Trace/breakpoint trap"), Op("Nil", []))
+                                                                                                                                                                                ]
+                                                                                                                                                                              )
+                                                                                                                                                                            , Op("Nil", [])
+                                                                                                                                                                            )
+                                                                                                                                                                          , Anno(
+                                                                                                                                                                              Op(
+                                                                                                                                                                                "Cons"
+                                                                                                                                                                              , [ Anno(
+                                                                                                                                                                                    Op(
+                                                                                                                                                                                      "Signal"
+                                                                                                                                                                                    , [ Anno(Str("VTALRM"), Op("Nil", []))
+                                                                                                                                                                                      , Anno(Int("26"), Op("Nil", []))
+                                                                                                                                                                                      , Anno(Str("Virtual timer expired"), Op("Nil", []))
+                                                                                                                                                                                      ]
+                                                                                                                                                                                    )
+                                                                                                                                                                                  , Op("Nil", [])
+                                                                                                                                                                                  )
+                                                                                                                                                                                , Anno(
+                                                                                                                                                                                    Op(
+                                                                                                                                                                                      "Cons"
+                                                                                                                                                                                    , [ Anno(
+                                                                                                                                                                                          Op(
+                                                                                                                                                                                            "Signal"
+                                                                                                                                                                                          , [ Anno(Str("XCPU"), Op("Nil", []))
+                                                                                                                                                                                            , Anno(Int("24"), Op("Nil", []))
+                                                                                                                                                                                            , Anno(Str("CPU time limit exceeded"), Op("Nil", []))
+                                                                                                                                                                                            ]
+                                                                                                                                                                                          )
+                                                                                                                                                                                        , Op("Nil", [])
+                                                                                                                                                                                        )
+                                                                                                                                                                                      , Anno(
+                                                                                                                                                                                          Op(
+                                                                                                                                                                                            "Cons"
+                                                                                                                                                                                          , [ Anno(
+                                                                                                                                                                                                Op(
+                                                                                                                                                                                                  "Signal"
+                                                                                                                                                                                                , [ Anno(Str("XFSZ"), Op("Nil", []))
+                                                                                                                                                                                                  , Anno(Int("25"), Op("Nil", []))
+                                                                                                                                                                                                  , Anno(Str("File size limit exceeded"), Op("Nil", []))
+                                                                                                                                                                                                  ]
+                                                                                                                                                                                                )
+                                                                                                                                                                                              , Op("Nil", [])
+                                                                                                                                                                                              )
+                                                                                                                                                                                            , Anno(Op("Nil", []), Op("Nil", []))
+                                                                                                                                                                                            ]
+                                                                                                                                                                                          )
+                                                                                                                                                                                        , Op("Nil", [])
+                                                                                                                                                                                        )
+                                                                                                                                                                                      ]
+                                                                                                                                                                                    )
+                                                                                                                                                                                  , Op("Nil", [])
+                                                                                                                                                                                  )
+                                                                                                                                                                                ]
+                                                                                                                                                                              )
+                                                                                                                                                                            , Op("Nil", [])
+                                                                                                                                                                            )
+                                                                                                                                                                          ]
+                                                                                                                                                                        )
+                                                                                                                                                                      , Op("Nil", [])
+                                                                                                                                                                      )
+                                                                                                                                                                    ]
+                                                                                                                                                                  )
+                                                                                                                                                                , Op("Nil", [])
+                                                                                                                                                                )
+                                                                                                                                                              ]
+                                                                                                                                                            )
+                                                                                                                                                          , Op("Nil", [])
+                                                                                                                                                          )
+                                                                                                                                                        ]
+                                                                                                                                                      )
+                                                                                                                                                    , Op("Nil", [])
+                                                                                                                                                    )
+                                                                                                                                                  ]
+                                                                                                                                                )
+                                                                                                                                              , Op("Nil", [])
+                                                                                                                                              )
+                                                                                                                                            ]
+                                                                                                                                          )
+                                                                                                                                        , Op("Nil", [])
+                                                                                                                                        )
+                                                                                                                                      ]
+                                                                                                                                    )
+                                                                                                                                  , Op("Nil", [])
+                                                                                                                                  )
+                                                                                                                                ]
+                                                                                                                              )
+                                                                                                                            , Op("Nil", [])
+                                                                                                                            )
+                                                                                                                          ]
+                                                                                                                        )
+                                                                                                                      , Op("Nil", [])
+                                                                                                                      )
+                                                                                                                    ]
+                                                                                                                  )
+                                                                                                                , Op("Nil", [])
+                                                                                                                )
+                                                                                                              ]
+                                                                                                            )
+                                                                                                          , Op("Nil", [])
+                                                                                                          )
+                                                                                                        ]
+                                                                                                      )
+                                                                                                    , Op("Nil", [])
+                                                                                                    )
+                                                                                                  ]
+                                                                                                )
+                                                                                              , Op("Nil", [])
+                                                                                              )
+                                                                                            ]
+                                                                                          )
+                                                                                        , Op("Nil", [])
+                                                                                        )
+                                                                                      ]
+                                                                                    )
+                                                                                  , Op("Nil", [])
+                                                                                  )
+                                                                                ]
+                                                                              )
+                                                                            , Op("Nil", [])
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      , Op("Nil", [])
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                , Op("Nil", [])
+                                                                )
+                                                              ]
+                                                            )
+                                                          , Op("Nil", [])
+                                                          )
+                                                        ]
+                                                      )
+                                                    , Op("Nil", [])
+                                                    )
+                                                  ]
+                                                )
+                                              , Op("Nil", [])
+                                              )
+                                            ]
+                                          )
+                                        , Op("Nil", [])
+                                        )
+                                      ]
+                                    )
+                                  , Op("Nil", [])
+                                  )
+                                ]
+                              )
+                            , Op("Nil", [])
+                            )
+                          ]
+                        )
+                      , Op("Nil", [])
+                      )
+                    )
+                  , CallT(
+                      SVar("fetch_elem_1_0")
+                    , [CallT(SVar("e_1"), [], [])]
+                    , []
+                    )
+                  )
+                )
+              , Id
+              , Build(
+                  Anno(
+                    Op("UnknownSignal", [Var("q_23")])
+                  , Op("Nil", [])
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "waitpid_0_0"
+        , []
+        , []
+        , Scope(
+            ["r_17"]
+          , Seq(
+              Match(Var("r_17"))
+            , PrimT("SSL_waitpid", [], [Var("r_17")])
+            )
+          )
+        )
+      , SDefT("fork_0_0", [], [], PrimT("SSL_fork", [], []))
+      , SDefT(
+          "fork_2_0"
+        , [ VarDec(
+              "j_105"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "k_105"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Scope(
+            ["l_17", "m_17"]
+          , Seq(
+              Match(Var("m_17"))
+            , Seq(
+                CallT(SVar("fork_0_0"), [], [])
+              , Seq(
+                  Match(Var("l_17"))
+                , GuardedLChoice(
+                    Seq(
+                      Match(Anno(Int("0"), Wld))
+                    , Seq(
+                        Build(Var("m_17"))
+                      , CallT(SVar("j_105"), [], [])
+                      )
+                    )
+                  , Id
+                  , Seq(
+                      Build(
+                        Anno(
+                          Op("", [Var("l_17"), Var("m_17")])
+                        , Op("Nil", [])
+                        )
+                      )
+                    , CallT(SVar("k_105"), [], [])
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "fork_wait_test_1_0"
+        , [ VarDec(
+              "k_103"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Scope(
+            ["e_14"]
+          , Let(
+              [ SDefT(
+                  "f_1"
+                , []
+                , []
+                , Scope(
+                    ["g_0", "e_0"]
+                  , Seq(
+                      Match(
+                        Anno(
+                          Op("", [Var("e_0"), Var("e_14")])
+                        , Wld
+                        )
+                      )
+                    , Seq(
+                        Build(Var("e_0"))
+                      , Seq(
+                          CallT(SVar("waitpid_0_0"), [], [])
+                        , Seq(
+                            Match(
+                              Anno(
+                                Op("WaitStatus", [Wld, Var("g_0"), Wld])
+                              , Wld
+                              )
+                            )
+                          , Seq(
+                              Build(Var("g_0"))
+                            , CallT(SVar("signal_from_number_0_0"), [], [])
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            , CallT(
+                SVar("fork_2_0")
+              , [ CallT(SVar("k_103"), [], [])
+                , CallT(SVar("f_1"), [], [])
+                ]
+              , []
+              )
+            )
+          )
+        )
+      , SDefT(
+          "h_1"
+        , []
+        , []
+        , Build(Anno(Str("error: output strategy for this test failed"), Op("Nil", [])))
+        )
+      , SDefT(
+          "sunit_create_output_1_0"
+        , [ VarDec(
+              "m_103"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , GuardedLChoice(
+            CallT(SVar("m_103"), [], [])
+          , Id
+          , Seq(
+              CallT(
+                SVar("say_1_0")
+              , [CallT(SVar("h_1"), [], [])]
+              , []
+              )
+            , Fail
+            )
+          )
+        )
+      , SDefT(
+          "debug_0_0"
+        , []
+        , []
+        , Scope(
+            ["h_0", "n_151", "f_0"]
+          , Seq(
+              Match(Var("h_0"))
+            , Seq(
+                Match(Var("f_0"))
+              , Seq(
+                  Match(Var("n_151"))
+                , Seq(
+                    Build(Var("f_0"))
+                  , Seq(
+                      Build(
+                        Anno(
+                          Op(
+                            ""
+                          , [ Anno(Op("stderr", []), Op("Nil", []))
+                            , Anno(
+                                Op(
+                                  "Cons"
+                                , [Var("n_151"), Anno(Op("Nil", []), Op("Nil", []))]
+                                )
+                              , Op("Nil", [])
+                              )
+                            ]
+                          )
+                        , Op("Nil", [])
+                        )
+                      )
+                    , Seq(
+                        CallT(SVar("printnl_0_0"), [], [])
+                      , Build(Var("h_0"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "say_1_0"
+        , [ VarDec(
+              "m_127"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Scope(
+            ["j_0"]
+          , Seq(
+              Match(Var("j_0"))
+            , Seq(
+                CallT(SVar("m_127"), [], [])
+              , Seq(
+                  CallT(SVar("debug_0_0"), [], [])
+                , Build(Var("j_0"))
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "i_1"
+        , []
+        , []
+        , Build(Anno(Str("error: input strategy for this test failed"), Op("Nil", [])))
+        )
+      , SDefT(
+          "sunit_create_input_1_0"
+        , [ VarDec(
+              "l_103"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , GuardedLChoice(
+            CallT(SVar("l_103"), [], [])
+          , Id
+          , Seq(
+              CallT(
+                SVar("say_1_0")
+              , [CallT(SVar("i_1"), [], [])]
+              , []
+              )
+            , Fail
+            )
+          )
+        )
+      , SDefT(
+          "record_failure_0_0"
+        , []
+        , []
+        , CallT(
+            SVar("_2_0")
+          , [ CallT(SVar("_id"), [], [])
+            , CallT(SVar("inc_0_0"), [], [])
+            ]
+          , []
+          )
+        )
+      , SDefT(
+          "add_0_0"
+        , []
+        , []
+        , Scope(
+            ["y_33", "z_33"]
+          , Seq(
+              Match(
+                Anno(
+                  Op("", [Var("y_33"), Var("z_33")])
+                , Wld
+                )
+              )
+            , GuardedLChoice(
+                PrimT("SSL_addi", [], [Var("y_33"), Var("z_33")])
+              , Id
+              , PrimT("SSL_addr", [], [Var("y_33"), Var("z_33")])
+              )
+            )
+          )
+        )
+      , SDefT(
+          "inc_0_0"
+        , []
+        , []
+        , Scope(
+            ["k_12", "k_0"]
+          , Seq(
+              Match(Var("k_0"))
+            , Seq(
+                Match(Var("k_12"))
+              , Seq(
+                  Build(Var("k_0"))
+                , Seq(
+                    Build(
+                      Anno(
+                        Op(
+                          ""
+                        , [Var("k_12"), Anno(Int("1"), Op("Nil", []))]
+                        )
+                      , Op("Nil", [])
+                      )
+                    )
+                  , CallT(SVar("add_0_0"), [], [])
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "record_success_0_0"
+        , []
+        , []
+        , CallT(
+            SVar("_2_0")
+          , [ CallT(SVar("inc_0_0"), [], [])
+            , CallT(SVar("_id"), [], [])
+            ]
+          , []
+          )
+        )
+      , SDefT(
+          "do_test_2_0"
+        , [ VarDec(
+              "n_103"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "o_103"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Scope(
+            ["l_0"]
+          , Seq(
+              Match(Var("l_0"))
+            , Seq(
+                CallT(SVar("n_103"), [], [])
+              , Seq(
+                  CallT(SVar("debug_0_0"), [], [])
+                , Seq(
+                    Build(Var("l_0"))
+                  , GuardedLChoice(
+                      Scope(
+                        ["m_0"]
+                      , Seq(
+                          Match(Var("m_0"))
+                        , Seq(
+                            CallT(SVar("o_103"), [], [])
+                          , Seq(
+                              Build(Var("m_0"))
+                            , CallT(SVar("record_success_0_0"), [], [])
+                            )
+                          )
+                        )
+                      )
+                    , Id
+                    , CallT(SVar("record_failure_0_0"), [], [])
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "k_1"
+        , []
+        , []
+        , Build(Anno(Str("  result not equal : "), Op("Nil", [])))
+        )
+      , SDefT(
+          "l_1"
+        , []
+        , []
+        , Build(Anno(Str("  expected         : "), Op("Nil", [])))
+        )
+      , SDefT(
+          "apply_test_4_0"
+        , [ VarDec(
+              "a_104"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "b_104"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "c_104"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "d_104"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Scope(
+            ["v_14", "w_14"]
+          , Let(
+              [ SDefT(
+                  "j_1"
+                , []
+                , []
+                , Seq(
+                    GuardedLChoice(
+                      Seq(
+                        CallT(
+                          SVar("sunit_create_input_1_0")
+                        , [CallT(SVar("c_104"), [], [])]
+                        , []
+                        )
+                      , CallT(SVar("b_104"), [], [])
+                      )
+                    , Id
+                    , Seq(
+                        Build(Anno(Str("  strategy failed"), Op("Nil", [])))
+                      , Seq(CallT(SVar("debug_0_0"), [], []), Fail)
+                      )
+                    )
+                  , Seq(
+                      Match(Var("v_14"))
+                    , Seq(
+                        CallT(
+                          SVar("sunit_create_output_1_0")
+                        , [CallT(SVar("d_104"), [], [])]
+                        , []
+                        )
+                      , Seq(
+                          Match(Var("w_14"))
+                        , GuardedLChoice(
+                            Seq(Build(Var("w_14")), Match(Var("v_14")))
+                          , Id
+                          , Seq(
+                              Build(Var("v_14"))
+                            , Seq(
+                                CallT(
+                                  SVar("debug_1_0")
+                                , [CallT(SVar("k_1"), [], [])]
+                                , []
+                                )
+                              , Seq(
+                                  Build(Var("w_14"))
+                                , Seq(
+                                    CallT(
+                                      SVar("debug_1_0")
+                                    , [CallT(SVar("l_1"), [], [])]
+                                    , []
+                                    )
+                                  , Fail
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            , CallT(
+                SVar("do_test_2_0")
+              , [ CallT(SVar("a_104"), [], [])
+                , CallT(SVar("j_1"), [], [])
+                ]
+              , []
+              )
+            )
+          )
+        )
+      , SDefT(
+          "m_1"
+        , []
+        , []
+        , Build(Anno(Str("kill own process"), Op("Nil", [])))
+        )
+      , SDefT(
+          "n_1"
+        , []
+        , []
+        , CallT(
+            SVar("fork_wait_test_1_0")
+          , [CallT(SVar("kill_myself_0_0"), [], [])]
+          , []
+          )
+        )
+      , SDefT(
+          "o_1"
+        , []
+        , []
+        , Build(Anno(Op("", []), Op("Nil", [])))
+        )
+      , SDefT(
+          "p_1"
+        , []
+        , []
+        , Build(
+            Anno(
+              Op(
+                "Signal"
+              , [ Anno(Str("KILL"), Op("Nil", []))
+                , Anno(Int("9"), Op("Nil", []))
+                , Anno(Str("Kill"), Op("Nil", []))
+                ]
+              )
+            , Op("Nil", [])
+            )
+          )
+        )
+      , SDefT(
+          "kill_tests_0_0"
+        , []
+        , []
+        , CallT(
+            SVar("apply_test_4_0")
+          , [ CallT(SVar("m_1"), [], [])
+            , CallT(SVar("n_1"), [], [])
+            , CallT(SVar("o_1"), [], [])
+            , CallT(SVar("p_1"), [], [])
+            ]
+          , []
+          )
+        )
+      , SDefT(
+          "q_1"
+        , []
+        , []
+        , Match(Anno(Int("0"), Wld))
+        )
+      , SDefT(
+          "check_for_failures_0_0"
+        , []
+        , []
+        , CallT(
+            SVar("_2_0")
+          , [ CallT(SVar("_id"), [], [])
+            , CallT(SVar("q_1"), [], [])
+            ]
+          , []
+          )
+        )
+      , SDefT(
+          "_2_0"
+        , [ VarDec(
+              "j_91"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "k_91"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Scope(
+            ["a_1", "x_0", "y_0", "b_1", "c_1"]
+          , Seq(
+              Match(
+                Anno(
+                  Op("", [Var("x_0"), Var("y_0")])
+                , Var("a_1")
+                )
+              )
+            , Seq(
+                Build(Var("x_0"))
+              , Seq(
+                  CallT(SVar("j_91"), [], [])
+                , Seq(
+                    Match(Var("b_1"))
+                  , Seq(
+                      Build(Var("y_0"))
+                    , Seq(
+                        CallT(SVar("k_91"), [], [])
+                      , Seq(
+                          Match(Var("c_1"))
+                        , Build(
+                            Anno(
+                              Op("", [Var("b_1"), Var("c_1")])
+                            , Var("a_1")
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "r_1"
+        , []
+        , []
+        , CallT(
+            SVar("debug_1_0")
+          , [CallT(SVar("t_1"), [], [])]
+          , []
+          )
+        )
+      , SDefT(
+          "s_1"
+        , []
+        , []
+        , CallT(
+            SVar("debug_1_0")
+          , [CallT(SVar("u_1"), [], [])]
+          , []
+          )
+        )
+      , SDefT(
+          "t_1"
+        , []
+        , []
+        , Build(Anno(Str("successes: "), Op("Nil", [])))
+        )
+      , SDefT(
+          "u_1"
+        , []
+        , []
+        , Build(Anno(Str("failures: "), Op("Nil", [])))
+        )
+      , SDefT(
+          "report_test_0_0"
+        , []
+        , []
+        , CallT(
+            SVar("_2_0")
+          , [ CallT(SVar("r_1"), [], [])
+            , CallT(SVar("s_1"), [], [])
+            ]
+          , []
+          )
+        )
+      , SDefT(
+          "init_record_0_0"
+        , []
+        , []
+        , Build(
+            Anno(
+              Op(
+                ""
+              , [ Anno(Int("0"), Op("Nil", []))
+                , Anno(Int("0"), Op("Nil", []))
+                ]
+              )
+            , Op("Nil", [])
+            )
+          )
+        )
+      , SDefT(
+          "printnl_0_0"
+        , []
+        , []
+        , Scope(
+            ["b_67", "c_67", "n_0"]
+          , Seq(
+              Match(
+                Anno(
+                  Op("", [Var("b_67"), Var("c_67")])
+                , Wld
+                )
+              )
+            , Seq(
+                Match(Var("n_0"))
+              , Seq(
+                  PrimT("SSL_printnl", [], [Var("b_67"), Var("c_67")])
+                , Build(Var("n_0"))
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "debug_1_0"
+        , [ VarDec(
+              "v_127"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Scope(
+            ["q_0", "o_151", "p_151", "p_0", "o_0"]
+          , Seq(
+              Match(Var("q_0"))
+            , Seq(
+                Match(Var("o_0"))
+              , Seq(
+                  CallT(SVar("v_127"), [], [])
+                , Seq(
+                    Match(Var("o_151"))
+                  , Seq(
+                      Build(Var("o_0"))
+                    , Seq(
+                        Match(Var("p_0"))
+                      , Seq(
+                          Match(Var("p_151"))
+                        , Seq(
+                            Build(Var("p_0"))
+                          , Seq(
+                              Build(
+                                Anno(
+                                  Op(
+                                    ""
+                                  , [ Anno(Op("stderr", []), Op("Nil", []))
+                                    , Anno(
+                                        Op(
+                                          "Cons"
+                                        , [ Var("o_151")
+                                          , Anno(
+                                              Op(
+                                                "Cons"
+                                              , [Var("p_151"), Anno(Op("Nil", []), Op("Nil", []))]
+                                              )
+                                            , Op("Nil", [])
+                                            )
+                                          ]
+                                        )
+                                      , Op("Nil", [])
+                                      )
+                                    ]
+                                  )
+                                , Op("Nil", [])
+                                )
+                              )
+                            , Seq(
+                                CallT(SVar("printnl_0_0"), [], [])
+                              , Build(Var("q_0"))
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "v_1"
+        , []
+        , []
+        , Build(Anno(Str("test suite: "), Op("Nil", [])))
+        )
+      , SDefT(
+          "test_suite_2_0"
+        , [ VarDec(
+              "y_103"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "z_103"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Seq(
+            CallT(SVar("y_103"), [], [])
+          , Seq(
+              CallT(
+                SVar("debug_1_0")
+              , [CallT(SVar("v_1"), [], [])]
+              , []
+              )
+            , Seq(
+                CallT(SVar("init_record_0_0"), [], [])
+              , Seq(
+                  CallT(SVar("z_103"), [], [])
+                , Seq(
+                    CallT(SVar("report_test_0_0"), [], [])
+                  , CallT(SVar("check_for_failures_0_0"), [], [])
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "w_1"
+        , []
+        , []
+        , Build(Anno(Str("posix-process-test"), Op("Nil", [])))
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , CallT(
+            SVar("test_suite_2_0")
+          , [ CallT(SVar("w_1"), [], [])
+            , CallT(SVar("kill_tests_0_0"), [], [])
+            ]
+          , []
+          )
+        )
+      ]
+    )
+  ]
+)
