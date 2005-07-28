@@ -93,7 +93,7 @@ public class Tools {
     public static String stringAt(ATerm t, int i) {
         return ((ATermAppl)t.getChildAt(i)).getName();
     }
-    
+
     public static ATermAppl applAt(ATerm t, int i) {
         return (ATermAppl)((ATermAppl)t).getChildAt(i);
     }
@@ -102,8 +102,12 @@ public class Tools {
         return (ATermAppl)t.getChildAt(i);
     }
 
-    private static ATermInt intAt(ATerm t, int i) {
+    public static ATermInt intAt(ATerm t, int i) {
         return (ATermInt)((ATermAppl)t).getChildAt(i);
+    }
+
+    public static ATermInt intAt(ATermList t, int i) {
+        return (ATermInt)t.getChildAt(i);
     }
 
 
@@ -142,6 +146,10 @@ public class Tools {
 
     public static SVar svarAt(ATermList l, int i) {
         return (SVar)l.getChildAt(i);
+    }
+
+    public static ATerm termAt(ATermAppl t, int i) {
+        return (ATerm)t.getChildAt(i);
     }
 
 }

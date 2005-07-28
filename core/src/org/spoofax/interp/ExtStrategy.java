@@ -7,6 +7,8 @@
  */
 package org.spoofax.interp;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,26 +17,36 @@ import aterm.ATermAppl;
 import aterm.ATermList;
 
 public class ExtStrategy extends Strategy {
+
+    private String name;
+    private Method methodPointer;
     
-    public ExtStrategy(ATerm t) {
-        List x = t.match("ExtSDef(<term>,<term>,<term>)");
-        if(x == null)
-            System.out.println("" + t);
-        
-        setName(((ATermAppl)x.get(0)).getName());
-        
-        stratParams = new ArrayList<String>();
-        termParams = new ArrayList<String>();
+    public ExtStrategy(String name, int svarArity, int tvarArity, Method method) {
+        this.name = name;
+        termParams = new ArrayList<String>(tvarArity);
+        stratParams = new ArrayList<String>(svarArity);
 
-        ATermList strats = (ATermList) x.get(1);
-        for(int i=0;i<strats.getChildCount();i++)
-            stratParams.add(((ATermAppl)strats.getChildAt(i)).getName());
-
-        ATermList terms = (ATermList) x.get(2);
-        for(int i=0;i<terms.getChildCount();i++)
-            termParams.add(((ATermAppl)terms.getChildAt(i)).getName());
-        
-        System.out.println("Added strat " + getName());
+        methodPointer = method;
     }
 
+    public String getName() { return name; }
+    
+    public boolean invoke(Interpreter itp, ATermList svars, ATermList tvars) throws FatalError {
+        try {
+            methodPointer.invoke(null, new Object[] { itp, svars, tvars });
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return false;
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

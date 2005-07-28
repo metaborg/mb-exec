@@ -7,7 +7,6 @@
 echo $1 $2 "|$3|"
 (
 	echo "module foo-test-test"
-	echo "imports liblib"
 	echo "strategies"
 	echo "main = "
 ) > /tmp/foo-test-test.str

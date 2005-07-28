@@ -15,7 +15,7 @@ public class StrategyFactory {
         if(t.getName().equals("SDefT"))
             return new IntStrategy(t);
         else if(t.getName().equals("ExtSDef"))
-            return new ExtStrategy(t);
+            throw new FatalError("Cannot work with external SDefs");
         
         throw new FatalError("Unknown strategy type " + t.getName());
     }

@@ -9,7 +9,7 @@ rm -f /tmp/foo-test-test*
 echo $1 $2 "|$3|"
 (
 	echo "module foo-test-test"
-	echo "imports liblib"
+	echo "imports lib"       
 	echo "strategies"
 	echo "main = "
 ) > /tmp/foo-test-test.str
@@ -19,10 +19,9 @@ sed \
 	-e 's/; *$//' \
 	< $1 >> /tmp/foo-test-test.str
 
-~/.nix-profile/bin/strc --keep 10 -i /tmp/foo-test-test.str
-
-
 tafname="$(echo $3 | sed 's/ /_/g')"
 
-pp-aterm -i /tmp/foo-test-test.sci.opt17 > data/${tafname}.rtree
+~/.nix-profile/bin/strc \
+	--keep 2 -i /tmp/foo-test-test.str \
+	&& pp-aterm -i /tmp/foo-test-test.sci.opt16 > data/${tafname}.rtree
 

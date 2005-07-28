@@ -30,6 +30,7 @@ public class Interpreter {
     private Map<String, Constructor> constructors;
 
     private Map<String, Strategy> strategies;
+    private Map<String, ExtStrategy> externalStrategies;
 
     private ATerm current;
 
@@ -39,15 +40,16 @@ public class Interpreter {
 
     private Scope scope;
     
-    private static final Class[] defaultSignature = 
-            new Class[] { Interpreter.class, ATermList.class, ATermList.class };
-    
     public Interpreter() {
         factory = new PureFactory();
         constructors = new HashMap<String, Constructor>();
         strategies = new HashMap<String, Strategy>();
+        externalStrategies  = new HashMap<String, ExtStrategy>();
         scopes = new Stack<Scope>();
 
+        for(ExtStrategy s : Library.getStrategies())
+            externalStrategies.put(s.getName(), s);
+        
         reset();
     }
 
@@ -136,8 +138,12 @@ public class Interpreter {
         factory.cleanup();
         scopes.clear();
         constructors.clear();
+
         strategies.clear();
-        
+
+        for(Strategy s : externalStrategies.values())
+            strategies.put(s.getName(), s);
+
         current = makeTerm("[]");
 
         enterScope();
@@ -178,7 +184,9 @@ public class Interpreter {
             return evalLet(t);
         else if (type.equals("Match"))
             return evalMatch(t);
-
+        else if (type.equals("PrimT"))
+            return evalPrim(t);
+        
         throw new FatalError("Unknown construct '" + type + "'");
     }
 
@@ -231,9 +239,32 @@ public class Interpreter {
         return false;
     }
 
-    private boolean evalPrim(ATermAppl t) {
-        // TODO Auto-generated method stub
-        return false;
+    private boolean evalPrim(ATermAppl t) throws FatalError {
+        debug("evalPrim");
+        debug("" + t);
+        // Check if we have the external strategy on record
+
+        String n = Tools.stringAt(t, 0);
+        ExtStrategy s = externalStrategies.get(n);
+        if(s == null)
+            throw new FatalError("Calling non-existent primitive :" + n);
+
+        ATermList actualSVars = Tools.listAt(t, 1);
+        ATermList actualTVars = Tools.listAt(t, 2);
+
+        // Lookup variables in the argument lest
+        
+        ATermList realTVars = factory.makeList();
+        for(int i=0;i<actualTVars.getLength();i++) {
+            ATermAppl appl = Tools.applAt(actualTVars, i);
+            if(appl.getName().equals("Var")) {
+                realTVars = realTVars.append(scope.lookup(Tools.stringAt(appl, 0))); 
+            } else {
+                realTVars = realTVars.append(appl);
+            }
+        }
+        debug("" + realTVars);
+        return s.invoke(this, actualSVars, realTVars);
     }
 
     private boolean evalBagof(ATermAppl t) {
@@ -243,10 +274,18 @@ public class Interpreter {
 
     private boolean evalGuardedLChoice(ATermAppl t) throws FatalError {
         System.out.println("evalGuardedLChoice");
-        if (eval((ATerm) t.getChildAt(0)))
-            return eval((ATerm) t.getChildAt(1));
-        else
-            return eval((ATerm) t.getChildAt(2));
+        if (eval(Tools.termAt(t, 0))) {
+            enterScope();
+            boolean r = eval(Tools.applAt(t, 1));
+            exitScope();
+            return r;
+        }
+        else {
+            enterScope();
+            boolean r = eval(Tools.termAt(t, 2));
+            exitScope();
+            return r;
+        }
     }
 
     private boolean evalLGChoice(ATermAppl t) {
@@ -337,36 +376,39 @@ public class Interpreter {
     private boolean evalCall(ATermAppl t) throws FatalError {
         System.out.println("evalCall");
         debug("" + t);
-        ATermAppl sname = (ATermAppl) t.getArgument(0).getChildAt(0);
-        ATermList actualStratArgs = (ATermList) t.getArgument(1);
-        ATermList actualTermArgs = (ATermList) t.getArgument(2);
+        ATermAppl sname = Tools.applAt(Tools.applAt(t, 0), 0);
+        ATermList actualSVars = Tools.listAt(t, 1);
+        ATermList actualTVars = Tools.listAt(t, 2);
         Strategy s = getStrategy(sname.getName());
         System.out.println("Calling :" + s.getName());
-        List<String> formalTermArgs = s.getTermParams();
-        List<String> formalStratArgs = s.getStrategyParams();
+        List<String> formalTVars = s.getTermParams();
+        List<String> formalSVars = s.getStrategyParams();
 
+        debug("" + actualSVars);
+        
         enterScope();
-        if(formalStratArgs.size() != actualStratArgs.getChildCount()) {
-            System.out.println("Takes " + formalStratArgs.size());
-            System.out.println("Have  " + actualStratArgs.getChildCount());
+        if(formalSVars.size() != actualSVars.getChildCount()) {
+            System.out.println("Takes " + formalSVars.size());
+            System.out.println("Have  " + actualSVars.getChildCount());
             
             throw new FatalError("Parameter length mismatch!");
         }
         
-        for (int i = 0; i < actualStratArgs.getChildCount(); i++) {
-            String varName = Tools.stringAt(Tools.applAt(Tools.applAt(actualStratArgs, i), 0), 0);
-            scope.addSVar(formalStratArgs.get(i), getStrategy(varName));
+        for (int i = 0; i < actualSVars.getChildCount(); i++) {
+            String varName = Tools.stringAt(Tools.applAt(Tools.applAt(actualSVars, i), 0), 0);
+            debug("" + formalSVars.get(i) + " points to " + varName);
+            scope.addSVar(formalSVars.get(i), getStrategy(varName));
         }
         
-        for (int i = 0; i < actualTermArgs.getChildCount(); i++)
-            scope.add(formalTermArgs.get(i), (ATerm) actualTermArgs
+        for (int i = 0; i < actualTVars.getChildCount(); i++)
+            scope.add(formalTVars.get(i), (ATerm) actualTVars
                     .getChildAt(i));
 
         boolean r;
         if(s instanceof IntStrategy) {
             r = eval(((IntStrategy)s).getBody());
         } else if(s instanceof ExtStrategy){
-            r = invokeExternal(new SVar(s.getName()), actualStratArgs, actualTermArgs);
+            r = ((ExtStrategy)s).invoke(this, actualSVars, actualTVars);
         } else {
             throw new FatalError("Unknown kind of strategy  " + s.getClass().getName());
         }
@@ -446,36 +488,14 @@ public class Interpreter {
         return factory.makeAppl(fun, a0, a1);
     }
 
-    public boolean invoke(SVar strat, ATermList svars, ATermList tvars) throws FatalError {
+    public boolean invoke(String name, ATermList svars, ATermList tvars) throws FatalError {
+        debug("Calling " + name + " with " + svars.toString() + " / " + tvars.toString());
         
-        debug("Calling " + strat.getName() + " with " + svars.toString() + " / " + tvars.toString());
-        
-        if(strategies.containsKey(strat.getName()))
-            return eval(makeTerm(("CallT(SVar(\"" + strat.getName() + "\"), [], [])")));
-        else
-            return invokeExternal(strat, svars, tvars);
+        return eval(makeTerm(("CallT(SVar(\"" + name + "\"), [], [])")));
     }
-    
-    private boolean invokeExternal(SVar a, ATermList svars, ATermList tvars) throws FatalError {
-        try {
-            Method m = Library.class.getMethod(a.getName(), defaultSignature);
-            m.invoke(null, new Object[] { this, svars, tvars });
-        } catch (SecurityException e) {
-            e.printStackTrace();
-            return false;
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            return false;
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+
+    public ATerm makeTerm(int i) {
+        return factory.makeInt(i);
     }
+
 }

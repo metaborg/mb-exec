@@ -17,27 +17,30 @@ import aterm.ATermList;
 public class IntStrategy extends Strategy {
 
     private ATerm body;
-    
+
     public IntStrategy(ATerm t) {
         List x = t.match("SDefT(<term>,<term>,<term>,<term>)");
-        if(x == null)
+        if (x == null)
             System.out.println("" + t);
-        
-        setName(((ATermAppl)x.get(0)).getName());
-        
+
+        setName(((ATermAppl) x.get(0)).getName());
+
         stratParams = new ArrayList<String>();
         termParams = new ArrayList<String>();
 
-        ATermList strats = (ATermList) x.get(1);
-        for(int i=0;i<strats.getChildCount();i++)
-            stratParams.add(((ATermAppl)strats.getChildAt(i)).getName());
+        ATermList strats = (ATermList)x.get(1);
+        for (int i = 0; i < strats.getChildCount(); i++) {
+            stratParams.add(Tools.stringAt(Tools.applAt(strats, i), 0));
+        }
 
         ATermList terms = (ATermList) x.get(2);
-        for(int i=0;i<terms.getChildCount();i++)
-            termParams.add(((ATermAppl)terms.getChildAt(i)).getName());
-        
+        for (int i = 0; i < terms.getChildCount(); i++)
+            termParams.add(Tools.stringAt(Tools.applAt(terms, i), 0));
+
         body = (ATerm) x.get(3);
     }
-    
-    ATerm getBody() { return body; }
+
+    ATerm getBody() {
+        return body;
+    }
 }
