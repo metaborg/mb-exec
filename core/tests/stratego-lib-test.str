@@ -61,11 +61,14 @@ strategies
 
 
   stratego-lib-test(|modname) =
-      where(<debug(!"--------------------------------------------------------------------------------------- ")> modname);
-      ssh-apply-and-show(|modname,  (), <concat-strings> [" import ", <stratego-lib-testdir>, modname, "-test.str ;; main ;; "])
+      where(<debug(!"--------------------------------------------------------------------------------------- ")> modname)
+    ; ssh-apply-and-show(|modname,  (), <concat-strings> [" import ", <stratego-lib-testdir>, modname, "-test.str ;; main ;; "])
 
   stratego-lib-testdir =
-    <xtc-find-silent> "lib.rtree"
+    !"/home/karltk/.nix-profile/share/stratego-lib/tests/"
+/*    <xtc-find-silent> "lib.rtree"
     ; dirname
+    ; debug
     ; <conc-strings> (<id>, "/tests/")
     ; debug
+*/

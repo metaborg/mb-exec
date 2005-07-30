@@ -25,7 +25,6 @@ public class InterpreterTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         itp = new Interpreter();
-//      itp.load("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/spoofaxlib.core.tree");
     }
     
     public void testBuildInt() {

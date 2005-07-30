@@ -21,46 +21,32 @@ import jjtraveler.VisitFailure;
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
+import aterm.ATermInt;
 import aterm.ATermList;
 import aterm.Visitor;
 import aterm.pure.PureFactory;
 
-public class Interpreter {
+public class Interpreter extends ATermed {
 
-    private Map<String, Constructor> constructors;
-
-    private Map<String, Strategy> strategies;
-    private Map<String, ExtStrategy> externalStrategies;
+    HashMap<String, ExtStrategy> externalStrategies;
 
     private ATerm current;
 
-    private PureFactory factory;
+    private VarScope varScope;
 
-    private Stack<Scope> scopes;
+    private DefScope defScope;
 
-    private Scope scope;
-    
     public Interpreter() {
         factory = new PureFactory();
-        constructors = new HashMap<String, Constructor>();
-        strategies = new HashMap<String, Strategy>();
-        externalStrategies  = new HashMap<String, ExtStrategy>();
-        scopes = new Stack<Scope>();
 
-        for(ExtStrategy s : Library.getStrategies())
+        externalStrategies = new HashMap<String, ExtStrategy>();
+
+        for (ExtStrategy s : Library.getStrategies())
             externalStrategies.put(s.getName(), s);
-        
+
         reset();
     }
 
-    public ATerm makeTerm(String s) {
-        return factory.parse(s);
-    }
-
-    ATerm makePattern(String s) {
-        return factory.parse(s);
-    }
-    
     public void load(String path) throws IOException, FatalError {
         load(factory.readFromFile(path));
     }
@@ -110,47 +96,44 @@ public class Interpreter {
     }
 
     public void load(ATerm prg) throws FatalError {
-        System.out.println("load()");
+        debug("load()");
 
         ATermList x = collect("Constructors(<term>)", prg);
         ATermList constr = Tools.listAt(x, 0);
         for (int i = 0; i < constr.getLength(); i++) {
             ATermAppl t = Tools.applAt(constr, i);
-            if(t.getName().equals("OpDecl")) {
+            if (t.getName().equals("OpDecl")) {
                 Constructor c = new Constructor(t);
-                constructors.put(c.getName(), c);
-            } else if(t.getName().equals("OpDeclInj")) {
-                
-            } else 
-                throw new FatalError("Unknown constructor type '" + t.getName() + "'");
+                defScope.addConstructor(c);
+            } else if (t.getName().equals("OpDeclInj")) {
+
+            } else
+                throw new FatalError("Unknown constructor type '" + t.getName()
+                        + "'");
         }
 
         ATermList strat = Tools.listAt(collect("Strategies(<term>)", prg), 0);
         for (int i = 0; i < strat.getLength(); i++) {
-            Strategy s = StrategyFactory.create(Tools.applAt(strat, i));
-            strategies.put(s.getName(), s);
+            Strategy s = StrategyFactory.create(Tools.applAt(strat, i),
+                                                defScope, varScope);
+            defScope.addStrategy(s);
         }
-        System.out.println("constructors : " + constructors);
-        System.out.println("strategies : " + strategies);
     }
 
     public void reset() {
         factory.cleanup();
-        scopes.clear();
-        constructors.clear();
 
-        strategies.clear();
+        varScope = new VarScope(null);
+        defScope = new DefScope(null);
 
-        for(Strategy s : externalStrategies.values())
-            strategies.put(s.getName(), s);
+        for (Strategy s : externalStrategies.values())
+            defScope.addStrategy(s);
 
         current = makeTerm("[]");
 
-        enterScope();
     }
 
     private boolean eval(ATermAppl t) throws FatalError {
-        System.out.println("Next : " + t.getName());
         String type = t.getName();
         if (type.equals("All"))
             return evalAll(t);
@@ -186,118 +169,132 @@ public class Interpreter {
             return evalMatch(t);
         else if (type.equals("PrimT"))
             return evalPrim(t);
-        
+
         throw new FatalError("Unknown construct '" + type + "'");
     }
 
     private boolean evalMatch(ATermAppl t) throws FatalError {
         debug("evalMatch");
+        debug(" term : " + t);
 
         ATermAppl p = (ATermAppl) t.getChildAt(0);
-        List<Pair<String, ATerm>> r = Tools.match(current, p);
+        List<Pair<String, ATerm>> r = match(current, p);
 
-        debug("!" + current + " ; ?" + p);
-        debug("" + current.getType() + " " + t.getType());
-        debug("" + current.getAnnotations() + " " + t.getAnnotations());
+        debug(" !" + current + " ; ?" + p);
+        debug(" types : " + current.getType() + " " + t.getType());
+        debug(" annos : " + current.getAnnotations() + " " + t.getAnnotations());
 
         if (r != null) {
-            debug("" + r);
-            
-            return bindVars(r);
+            debug(" results : " + r);
+
+            boolean b = bindVars(r);
+            varScope.dumpScope();
+            return b;
         }
-        debug("no match");
+        debug(" no match!");
         return false;
     }
 
     private boolean bindVars(List<Pair<String, ATerm>> r) {
+        varScope.dumpScope();
         for (Pair<String, ATerm> x : r) {
-            if (scope.hasVarInLocalScope(x.first)) {
-                ATerm t = scope.lookup(x.first);
+            VarScope s = varScope.scopeOf(x.first);
+            if (s == null) {
+                varScope.add(x.first, x.second);
+            } else if (s.hasVarInLocalScope(x.first)) {
+                ATerm t = s.lookup(x.first);
                 boolean eq = t.match(x.second) != null;
-                if(!eq)
-                    debug(x.first + " already bound to " + t + ", new: " + x.second);
-                return eq;
+                if (!eq) {
+                    debug(x.first + " already bound to " + t + ", new: "
+                            + x.second);
+                    return eq;
+                }
+            } else {
+                s.add(x.first, x.second);
             }
-
-            scope.add(x.first, x.second);
         }
         return true;
     }
 
-    private boolean evalOne(ATermAppl t) {
-        // TODO Auto-generated method stub
-        return false;
+    private boolean evalOne(ATermAppl t) throws FatalError {
+        debug("evalOne()");
+        throw new FatalError("Not implemented!");
     }
 
-    private boolean evalAll(ATermAppl t) {
-        // TODO Auto-generated method stub
-        return false;
+    private boolean evalAll(ATermAppl t) throws FatalError {
+        debug("evalAll()");
+        throw new FatalError("Not implemented!");
     }
 
-    private boolean evalSome(ATermAppl t) {
-        // TODO Auto-generated method stub
-        return false;
+    private boolean evalSome(ATermAppl t) throws FatalError {
+        debug("evalSome()");
+        throw new FatalError("Not implemented!");
     }
 
     private boolean evalPrim(ATermAppl t) throws FatalError {
         debug("evalPrim");
-        debug("" + t);
+        debug(" term : " + t);
         // Check if we have the external strategy on record
 
         String n = Tools.stringAt(t, 0);
         ExtStrategy s = externalStrategies.get(n);
-        if(s == null)
+        if (s == null)
             throw new FatalError("Calling non-existent primitive :" + n);
 
         ATermList actualSVars = Tools.listAt(t, 1);
         ATermList actualTVars = Tools.listAt(t, 2);
 
         // Lookup variables in the argument lest
-        
+
         ATermList realTVars = factory.makeList();
-        for(int i=0;i<actualTVars.getLength();i++) {
+        for (int i = 0; i < actualTVars.getLength(); i++) {
             ATermAppl appl = Tools.applAt(actualTVars, i);
-            if(appl.getName().equals("Var")) {
-                realTVars = realTVars.append(scope.lookup(Tools.stringAt(appl, 0))); 
+            if (appl.getName().equals("Var")) {
+                realTVars = realTVars.append(varScope.lookup(Tools
+                        .stringAt(appl, 0)));
             } else {
                 realTVars = realTVars.append(appl);
             }
         }
-        debug("" + realTVars);
-        return s.invoke(this, actualSVars, realTVars);
+        debug(" args : " + realTVars);
+        for (int i = 0; i < realTVars.getLength(); i++)
+            debug("  " + realTVars.getChildAt(i).getClass());
+
+        boolean r = s.invoke(this, actualSVars, realTVars);
+        if (!r)
+            debug("failed");
+        return r;
     }
 
-    private boolean evalBagof(ATermAppl t) {
-        // TODO Auto-generated method stub
-        return false;
+    private boolean evalBagof(ATermAppl t) throws FatalError {
+        debug("evalBagof()");
+        throw new FatalError("Not implemented!");
     }
 
     private boolean evalGuardedLChoice(ATermAppl t) throws FatalError {
-        System.out.println("evalGuardedLChoice");
-        if (eval(Tools.termAt(t, 0))) {
-            enterScope();
-            boolean r = eval(Tools.applAt(t, 1));
-            exitScope();
-            return r;
-        }
-        else {
-            enterScope();
-            boolean r = eval(Tools.termAt(t, 2));
-            exitScope();
-            return r;
+        debug("evalGuardedLChoice()");
+        debug(" " + t);
+        BindingInfo bi = varScope.saveUnboundVars();
+        boolean cond = eval(Tools.applAt(t, 0));
+        if(cond) {
+            return eval(Tools.applAt(t, 1));
+        } else {
+            varScope.restoreUnboundVars(bi);
+            return eval(Tools.applAt(t, 2));
         }
     }
 
-    private boolean evalLGChoice(ATermAppl t) {
-        // TODO Auto-generated method stub
-        return false;
+    private boolean evalLGChoice(ATermAppl t) throws FatalError {
+        debug("evalLGChoice()");
+        throw new FatalError("Not implemented");
 
     }
 
     private boolean evalSeq(ATermAppl t) throws FatalError {
-        System.out.println("evalSeq");
+        debug("evalSeq()");
         for (int i = 0; i < t.getChildCount(); i++) {
-            if (!eval((ATerm) t.getChildAt(i))) {
+            if (!eval(Tools.applAt(t, i))) {
+                debug("Failed");
                 return false;
             }
         }
@@ -305,20 +302,35 @@ public class Interpreter {
     }
 
     private boolean evalScope(ATermAppl t) throws FatalError {
-        debug("evalScope");
-        enterScope();
+        debug("evalScope()");
+        enterVarScope();
         ATermList vars = (ATermList) t.getChildAt(0);
-        scope.addUndeclaredVars(vars);
-        boolean r = eval((ATerm) t.getChildAt(1));
+        debug(" " + vars);
+        varScope.addUndeclaredVars(vars);
+        boolean r = eval(Tools.applAt(t, 1));
         exitScope();
         return r;
     }
 
+    private void enterDefScope() {
+        defScope = new DefScope(defScope);
+    }
+
+    private void enterDefScope(DefScope parent) {
+        defScope = new DefScope(parent);
+    }
+
+    private void exitDefScope() {
+        defScope = defScope.getParent();
+    }
+
     private boolean evalBuild(ATermAppl t) throws FatalError {
-        debug("evalBuild");
-        debug(t.toString());
+        debug("evalBuild()");
+        debug(" term : " + t.toString());
         current = buildTerm((ATermAppl) t.getChildAt(0));
-        debug("built : " + current);
+        if (current == null)
+            throw new FatalError("build failed badly!");
+        debug(" res  : " + current);
         return true;
     }
 
@@ -333,8 +345,8 @@ public class Interpreter {
             ATermList kids = factory.makeList();
 
             for (int i = 0; i < children.getLength(); i++) {
-                kids = kids.append(buildTerm((ATermAppl) children
-                        .elementAt(i)));
+                kids = kids
+                        .append(buildTerm((ATermAppl) children.elementAt(i)));
             }
             return factory.makeApplList(afun, kids);
         } else if (t.getName().equals("Int")) {
@@ -345,9 +357,8 @@ public class Interpreter {
             return x;
         } else if (t.getName().equals("Var")) {
             String n = Tools.stringAt(t, 0);
-            debug("Lookup : " + n);
             ATerm x = lookup(n);
-            debug("Found :" + x);
+            debug(" lookup : " + n + " (= " + x + ")");
             return x;
         }
 
@@ -355,7 +366,7 @@ public class Interpreter {
     }
 
     private ATerm lookup(String var) {
-        return scope.lookup(var);
+        return varScope.lookup(var);
     }
 
     private void debug(String s) {
@@ -363,9 +374,8 @@ public class Interpreter {
     }
 
     private boolean evalId(ATermAppl t) {
-        System.out.println("evalId");
+        debug("evalId");
         return true;
-
     }
 
     private boolean evalFail(ATermAppl t) {
@@ -375,70 +385,92 @@ public class Interpreter {
 
     private boolean evalCall(ATermAppl t) throws FatalError {
         System.out.println("evalCall");
-        debug("" + t);
+        debug(" term : " + t);
         ATermAppl sname = Tools.applAt(Tools.applAt(t, 0), 0);
         ATermList actualSVars = Tools.listAt(t, 1);
         ATermList actualTVars = Tools.listAt(t, 2);
         Strategy s = getStrategy(sname.getName());
-        System.out.println("Calling :" + s.getName());
+        debug(" call : " + s.getName());
         List<String> formalTVars = s.getTermParams();
         List<String> formalSVars = s.getStrategyParams();
 
-        debug("" + actualSVars);
-        
-        enterScope();
-        if(formalSVars.size() != actualSVars.getChildCount()) {
-            System.out.println("Takes " + formalSVars.size());
-            System.out.println("Have  " + actualSVars.getChildCount());
-            
+        debug(" args : " + actualSVars);
+
+        VarScope newVarScope = new VarScope(s.getVarScope());
+        DefScope newDefScope = new DefScope(s.getDefScope());
+
+        if (formalSVars.size() != actualSVars.getChildCount()) {
+            System.out.println(" takes : " + formalSVars.size());
+            System.out.println(" have  : " + actualSVars.getChildCount());
+
             throw new FatalError("Parameter length mismatch!");
         }
-        
+
         for (int i = 0; i < actualSVars.getChildCount(); i++) {
-            String varName = Tools.stringAt(Tools.applAt(Tools.applAt(actualSVars, i), 0), 0);
-            debug("" + formalSVars.get(i) + " points to " + varName);
-            scope.addSVar(formalSVars.get(i), getStrategy(varName));
+            String varName = Tools.stringAt(Tools.applAt(Tools
+                    .applAt(actualSVars, i), 0), 0);
+            debug("  " + formalSVars.get(i) + " points to " + varName);
+            newVarScope.addSVar(formalSVars.get(i), getStrategy(varName));
         }
-        
+
         for (int i = 0; i < actualTVars.getChildCount(); i++)
-            scope.add(formalTVars.get(i), (ATerm) actualTVars
+            newVarScope.add(formalTVars.get(i), (ATerm) actualTVars
                     .getChildAt(i));
 
+        VarScope oldVarScope = varScope;
+        DefScope oldDefScope = defScope;
+        varScope = newVarScope;
+        defScope = newDefScope;
+
         boolean r;
-        if(s instanceof IntStrategy) {
-            r = eval(((IntStrategy)s).getBody());
-        } else if(s instanceof ExtStrategy){
-            r = ((ExtStrategy)s).invoke(this, actualSVars, actualTVars);
+        if (s instanceof IntStrategy) {
+            r = eval(((IntStrategy) s).getBody());
+        } else if (s instanceof ExtStrategy) {
+            r = ((ExtStrategy) s).invoke(this, actualSVars, actualTVars);
         } else {
-            throw new FatalError("Unknown kind of strategy  " + s.getClass().getName());
+            throw new FatalError("Unknown kind of strategy  "
+                    + s.getClass().getName());
         }
-        exitScope();
+        varScope = oldVarScope;
+        defScope = oldDefScope;
         return r;
     }
 
     private void exitScope() {
-        scopes.pop();
+        varScope = varScope.getParent();
     }
 
     private Strategy getStrategy(String name) throws FatalError {
-        Strategy s = scope.lookupSVar(name);
-        if(s != null)
+        Strategy s = varScope.lookupSVar(name);
+        if (s != null)
             return s;
-        
-        s = strategies.get(name);
-        if(s != null)
+
+        s = defScope.lookupStrategy(name);
+        if (s != null)
             return s;
-        
+
         throw new FatalError("Lookup of strategy '" + name + "' failed");
     }
 
     private Constructor getConstructor(String name) {
-        return constructors.get(name);
+        return defScope.lookupConstructor(name);
     }
 
-    private boolean evalLet(ATermAppl t) {
-        // TODO Auto-generated method stub
-        return false;
+    private boolean evalLet(ATermAppl t) throws FatalError {
+        debug("evalLet()");
+        enterDefScope();
+        varScope.dumpScope();
+        ATermList sdefs = Tools.listAt(t, 0);
+        for (int i = 0; i < sdefs.getLength(); i++) {
+            IntStrategy s = new IntStrategy(Tools.termAt(sdefs, 0), defScope,
+                                            varScope);
+            debug(" adding : " + s.getName());
+            defScope.addStrategy(s);
+        }
+        ATermAppl body = Tools.applAt(t, 1);
+        boolean r = eval(body);
+        exitDefScope();
+        return r;
     }
 
     public boolean eval(ATerm t) throws FatalError {
@@ -449,11 +481,12 @@ public class Interpreter {
                 + " / " + t);
     }
 
-    private Scope enterScope() {
-        Scope n = new Scope(scope);
-        scopes.push(n);
-        scope = n;
-        return n;
+    private void enterVarScope() {
+        varScope = new VarScope(varScope);
+    }
+
+    private void enterVarScope(VarScope parent) {
+        varScope = new VarScope(parent);
     }
 
     public ATerm getCurrent() {
@@ -464,38 +497,95 @@ public class Interpreter {
         current = term;
     }
 
-    public ATerm makeList(String s) {
-        ATermList t = (ATermList) makeTerm(s);
-        ATerm l = makeTerm("Nil");
-        AFun f = factory.makeAFun("Cons", 2, false);
-        for (int i = t.getLength() - 1; i >= 0; i--)
-            l = factory.makeAppl(f, (ATerm) t.getChildAt(i), l);
-        return l;
-    }
+    public boolean invoke(String name, ATermList svars, ATermList tvars)
+            throws FatalError {
+        debug("Calling " + name + " with " + svars.toString() + " / "
+                + tvars.toString());
 
-    public ATerm makeTuple(String s) {
-        ATermList t = (ATermList) makeTerm(s);
-        ATerm[] t2 = new ATerm[t.getLength()];
-        for (int i = 0; i < t.getLength(); i++)
-            t2[i] = (ATerm) t.getChildAt(i);
-
-        AFun f = factory.makeAFun("", t2.length, false);
-        return factory.makeAppl(f, t2);
-    }
-
-    public ATermAppl makeTerm(String op, ATerm a0, ATerm a1) {
-        AFun fun = factory.makeAFun(op, 2, false);
-        return factory.makeAppl(fun, a0, a1);
-    }
-
-    public boolean invoke(String name, ATermList svars, ATermList tvars) throws FatalError {
-        debug("Calling " + name + " with " + svars.toString() + " / " + tvars.toString());
-        
         return eval(makeTerm(("CallT(SVar(\"" + name + "\"), [], [])")));
     }
 
-    public ATerm makeTerm(int i) {
-        return factory.makeInt(i);
+    private List<Pair<String, ATerm>> emptyList = new ArrayList<Pair<String, ATerm>>();
+
+    public List<Pair<String, ATerm>> match(ATermAppl t, ATermAppl p)
+            throws FatalError {
+        debug(" ?: " + t.getName() + " / " + p.getName());
+
+        if (p.getName().equals("Anno"))
+            return match(t, (ATermAppl) p.getChildAt(0));
+        else if (p.getName().equals("Op")) {
+
+            ATermList l = (ATermList) p.getChildAt(1);
+            if (l.getChildCount() != t.getChildCount())
+                return null;
+
+            ATermAppl c = (ATermAppl) p.getChildAt(0);
+            if (!t.getName().equals(c.getName()))
+                return null;
+
+            List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+            for (int i = 0; i < t.getChildCount(); i++) {
+                List<Pair<String, ATerm>> m = match((ATerm) t.getChildAt(i),
+                                                    (ATermAppl) l.getChildAt(i));
+                if (m != null)
+                    r.addAll(m);
+                else
+                    return null;
+            }
+            return r;
+        } else if (p.getName().equals("Int")) {
+            if (t.getType() == ATerm.INT)
+                return match(Tools.intAt(t, 0), Tools.applAt(p, 0));
+            return null;
+        } else if (p.getName().equals("Str")) {
+            debug(" !" + t + " ?" + p);
+            if (t.getName().equals(Tools.stringAt(p, 0)))
+                return emptyList;
+            return null;
+        } else if (Tools.termType(p, "Var")) {
+            List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+            r.add(new Pair<String, ATerm>(Tools.stringAt(p, 0), t));
+            return r;
+        }
+
+        throw new FatalError("What?" + p);
+    }
+
+    public List<Pair<String, ATerm>> match(ATermInt t, ATermAppl p)
+            throws FatalError {
+        debug(" !" + t + " ?" + p);
+
+        if (p.getName().equals("Anno")) {
+            return match(t, Tools.applAt(p, 0));
+        }
+
+        if (p.getName().equals("Int")) {
+            Integer i = new Integer(Tools.stringAt(p, 0));
+            if (i == t.getInt())
+                return emptyList;
+            return null;
+        }
+
+        if (p.getName().equals("Var")) {
+            List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+            r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0))
+                    .getName(), t));
+            return r;
+        }
+
+        throw new FatalError("Unknown type '" + p.getName());
+    }
+
+    public List<Pair<String, ATerm>> match(ATerm t, ATermAppl p)
+            throws FatalError {
+        if (t.getType() == ATerm.APPL)
+            return match((ATermAppl) t, p);
+        else if (t.getType() == ATerm.INT)
+            return match((ATermInt) t, p);
+
+        throw new FatalError("Current term is not an ATermAppl term ["
+                + t.getClass().toString() + " " + ATerm.APPL + " "
+                + t.getType() + "]");
     }
 
 }

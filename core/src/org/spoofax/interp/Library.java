@@ -15,6 +15,7 @@ import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermInt;
 import aterm.ATermList;
+import aterm.ATermReal;
 
 public class Library {
 
@@ -38,7 +39,8 @@ public class Library {
     private static final MethodEntry[] library = new MethodEntry[] {
             new MethodEntry("_id", 0, 0), 
             new MethodEntry("_fail", 0, 0),
-            new MethodEntry("SSL_addi", 0, 2)
+            new MethodEntry("SSL_addi", 0, 2),
+            new MethodEntry("SSL_addr", 0, 2),
     };
 
     public static List<ExtStrategy> getStrategies() {
@@ -81,9 +83,27 @@ public class Library {
     }
 
     public static boolean SSL_addi(Interpreter itp, ATermList svars, ATermList tvars) {
+        if(Tools.termAt(tvars, 0).getType() != ATerm.INT)
+            return false;
+        if(Tools.termAt(tvars, 1).getType() != ATerm.INT)
+            return false;
+
         ATermInt a = Tools.intAt(tvars, 0);
         ATermInt b = Tools.intAt(tvars, 1);
         itp.setCurrent(itp.makeTerm(a.getInt() + b.getInt()));
-        return false;
+        return true;
     }
+
+    public static boolean SSL_addr(Interpreter itp, ATermList svars, ATermList tvars) {
+        if(Tools.termAt(tvars, 0).getType() != ATerm.REAL)
+            return false;
+        if(Tools.termAt(tvars, 1).getType() != ATerm.REAL)
+            return false;
+        
+        ATermReal a = Tools.realAt(tvars, 0);
+        ATermReal b = Tools.realAt(tvars, 1);
+        itp.setCurrent(itp.makeTerm(a.getReal() + b.getReal()));
+        return true;
+    }
+
 }

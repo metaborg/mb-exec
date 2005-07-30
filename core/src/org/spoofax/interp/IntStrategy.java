@@ -16,9 +16,11 @@ import aterm.ATermList;
 
 public class IntStrategy extends Strategy {
 
-    private ATerm body;
+    private ATermAppl body;
 
-    public IntStrategy(ATerm t) {
+    public IntStrategy(ATerm t, DefScope defScope, VarScope varScope) {
+        super(defScope, varScope);
+        
         List x = t.match("SDefT(<term>,<term>,<term>,<term>)");
         if (x == null)
             System.out.println("" + t);
@@ -37,10 +39,10 @@ public class IntStrategy extends Strategy {
         for (int i = 0; i < terms.getChildCount(); i++)
             termParams.add(Tools.stringAt(Tools.applAt(terms, i), 0));
 
-        body = (ATerm) x.get(3);
+        body = (ATermAppl) x.get(3);
     }
 
-    ATerm getBody() {
+    ATermAppl getBody() {
         return body;
     }
 }

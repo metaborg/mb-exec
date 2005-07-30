@@ -33,20 +33,20 @@ public class ExtStrategy extends Strategy {
     
     public boolean invoke(Interpreter itp, ATermList svars, ATermList tvars) throws FatalError {
         try {
-            methodPointer.invoke(null, new Object[] { itp, svars, tvars });
+            Object ob = methodPointer.invoke(null, new Object[] { itp, svars, tvars });
+            return ((Boolean)ob).booleanValue();
         } catch (SecurityException e) {
             e.printStackTrace();
-            return false;
+            throw new FatalError("SecurityException");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            return false;
+            throw new FatalError("IllegalArgumentException");
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            return false;
+            throw new FatalError("IllegalAccessException");
         } catch (InvocationTargetException e) {
             e.printStackTrace();
-            return false;
+            throw new FatalError("InvocationTargetException");
         }
-        return true;
     }
 }
