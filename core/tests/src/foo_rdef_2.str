@@ -1,0 +1,6 @@
+module foo_rdef_2
+imports lib
+strategies
+
+  Swap: (x, y) -> (y, x)
+  main = <Swap> (1, 2)
