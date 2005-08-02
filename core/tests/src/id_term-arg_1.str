@@ -1,0 +1,6 @@
+module id_term-arg_1
+imports lib
+strategies
+
+  foo(|x) = !x
+  main = foo(|3)

@@ -1,0 +1,6 @@
+module foo_sdef_2
+imports lib
+strategies
+
+  foo(s) = s
+  main = foo(!3)
