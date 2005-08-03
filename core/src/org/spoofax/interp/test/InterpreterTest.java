@@ -445,7 +445,32 @@ public class InterpreterTest extends TestCase {
     public void testWrapProject1() {
         interpTest("wrap_project_1", itp.makeTuple("[2,3]"), itp.makeTerm("2"));
     }
+
     public void testWrapProject2() {
         interpTest("wrap_split_4", itp.makeTuple("[2,3]"), itp.makeTerm("3"));
     }
+    
+    public void testTest1() {
+        interpTest("test_1", itp.makeTerm("2"), itp.makeTerm("2"));
+    }
+
+    public void testTest2() {
+        interpTestFail("test_2", itp.makeTerm("3"));
+    }
+
+    public void testTest3() {
+        interpTest("test_3", itp.makeTuple("[]"), itp.makeTerm("3"));
+    }
+
+    public void testAs1() {
+        interpTest("as_1", itp.makeTuple("[1,2]"), itp.makeTuple(itp.makeTuple("[1,2]"), itp.makeTuple("[1,2]")));
+    }
+
+    public void testAs2() {
+        interpTest("test_3", itp.makeTuple("[1,2]"), itp.makeTuple("[1,1]"));
+    }
 }
+
+/*
+
+*/
