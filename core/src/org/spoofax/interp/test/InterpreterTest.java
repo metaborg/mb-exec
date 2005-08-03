@@ -469,8 +469,14 @@ public class InterpreterTest extends TestCase {
     public void testAs2() {
         interpTest("test_3", itp.makeTuple("[1,2]"), itp.makeTuple("[1,1]"));
     }
+
+    public void testDynruleCounter1() {
+        interpTest("dynrule_counter_1", itp.makeTuple("[]"), itp.makeTerm("2"));
+    }
+
 }
 
 /*
+
 
 */

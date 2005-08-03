@@ -1,0 +1,14 @@
+module dynrule_counter_1
+imports integers
+signature
+  constructors
+    Foo: Foo
+strategies
+
+  main =
+      new-counter => c
+    ; <next-counter> c
+    ; <next-counter> c
+    ; !Foo()
+    ; <get-counter> c
+
