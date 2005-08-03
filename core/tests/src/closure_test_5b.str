@@ -1,0 +1,5 @@
+module closure_test_5b
+imports lib
+strategies
+
+  main = map(!1)

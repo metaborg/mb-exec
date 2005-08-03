@@ -1,0 +1,9 @@
+module closure_test_12
+imports lib
+strategies
+
+  bar(s) = let x = [] + [inc | s] in x end
+  foo    = rec x([] + [dec | bar(x)])
+
+  main = foo
+

@@ -1,0 +1,7 @@
+module closure_test_2f
+imports lib
+strategies
+
+  cons(s) = (!3, s)
+
+  main = let foo = cons(foo) + () in foo end

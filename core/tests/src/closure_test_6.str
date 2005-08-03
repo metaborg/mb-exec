@@ -1,0 +1,7 @@
+module closure_test_6
+imports lib
+strategies
+
+  foo(s) = let x = !2 in s end
+
+  main = let x = !1 in foo(x) end

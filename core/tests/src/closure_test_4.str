@@ -1,0 +1,7 @@
+module closure_test_4
+imports lib
+strategies
+
+  foo(s) = rec x(!2; s)
+ 
+  main = rec x(?2 <+ foo(x); !3)

@@ -1,0 +1,9 @@
+module closure_test_7
+imports lib
+strategies
+
+  bar(s) = rec x([] + [inc | s])
+  foo    = rec x([] + [dec | bar(x)])
+
+  main = foo
+

@@ -1,0 +1,7 @@
+module closure_test_1
+imports lib
+strategies
+
+  foo (s) = ?y ; s
+
+  main = !1 ; ?y ; !2 ; foo(!y)

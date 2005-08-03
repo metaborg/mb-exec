@@ -1,0 +1,7 @@
+module closure_test_2c
+imports lib
+strategies
+
+  bar = rec foo ([!3 | foo] + [])
+
+  main = bar

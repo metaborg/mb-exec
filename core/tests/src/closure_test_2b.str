@@ -1,0 +1,7 @@
+module closure_test_2b
+imports lib
+strategies
+
+  foo = [!3 | foo] + []
+
+  main = foo
