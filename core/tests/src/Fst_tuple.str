@@ -1,0 +1,5 @@
+module Fst_tuple
+imports tuple
+strategies
+
+  main = Fst

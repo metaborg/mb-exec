@@ -1,0 +1,5 @@
+module collect-om_1
+imports collect
+strategies
+
+  main = collect-om(is-int)

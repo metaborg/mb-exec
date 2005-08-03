@@ -1,0 +1,5 @@
+module gt_int_1
+imports integers
+strategies
+
+  main = <gt> (2, 1)

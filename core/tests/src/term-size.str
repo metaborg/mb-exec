@@ -1,0 +1,5 @@
+module term-size
+imports term
+strategies
+
+  main = term-size

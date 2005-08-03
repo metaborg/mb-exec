@@ -1,0 +1,5 @@
+module Snd_tuple
+imports tuple
+strategies
+
+  main = Snd

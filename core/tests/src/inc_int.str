@@ -1,0 +1,5 @@
+module inc_int
+imports integers
+strategies
+
+  main = inc

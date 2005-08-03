@@ -1,0 +1,5 @@
+module inc_int_list_2
+imports integers
+strategies
+
+  main = map(inc)

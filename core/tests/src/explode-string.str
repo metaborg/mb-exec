@@ -1,0 +1,5 @@
+module explode-string
+imports string
+strategies
+
+  main = explode-string

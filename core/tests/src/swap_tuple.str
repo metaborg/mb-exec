@@ -1,0 +1,5 @@
+module swap_tuple
+imports tuple
+strategies
+
+  main = Swap

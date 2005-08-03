@@ -1,0 +1,5 @@
+module int-to-string
+imports string
+strategies
+
+  main = int-to-string

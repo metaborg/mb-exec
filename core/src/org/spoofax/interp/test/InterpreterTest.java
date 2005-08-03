@@ -323,9 +323,96 @@ public class InterpreterTest extends TestCase {
         interpTest("overloading_3", itp.makeTuple("[]"), itp.makeTerm("2"));
     }
 
-/*
+    public void testIncInt() {
+        interpTest("inc_int", itp.makeTerm("1"), itp.makeTerm("2"));
+    }
 
+    public void testAddInt1() {
+        interpTest("add_int_1", itp.makeTuple("[1,2]"), itp.makeTerm("3"));
+    }
 
- */
- 
+    public void testAddInt2() {
+        interpTest("add_int_2", itp.makeTuple("[]"), itp.makeTerm("3"));
+    }
+
+    public void testGtInt1() {
+        interpTest("gt_int_1", itp.makeTuple("[]"), itp.makeTuple("[2, 1]"));
+    }
+
+    public void testGtInt2() {
+        interpTestFail("gt_int_2", itp.makeTuple("[]"));
+    }
+
+    public void testMulInt() {
+        interpTest("mul_int", itp.makeTuple("[2,3]"), itp.makeTerm("6"));
+    }
+
+    public void testSwapTuple() {
+        interpTest("swap_tuple", itp.makeTuple("[1,2]"), itp.makeTuple("[2,1]"));
+    }
+
+    public void testIntToString() {
+        interpTest("int_to_string", itp.makeTerm("14"), itp.makeTerm("\"14\""));
+    }
+
+    public void testExplodeString() {
+        interpTest("explode_string", itp.makeTerm("\"ab\""), itp.makeList("[97,98]"));
+    }
+
+    public void testFstTuple() {
+        interpTest("Fst_tuple", itp.makeTuple("[1,2]"), itp.makeTerm("1"));
+    }
+
+    public void testSndTuple() {
+        interpTest("Snd_tuple", itp.makeTuple("[1,2]"), itp.makeTerm("2"));
+    }
+
+    public void testSumOfIntList1() {
+        interpTest("sum_of_int_list", itp.makeList("[1,2,3]"), itp.makeTerm("6"));
+    }
+
+    public void testSumOfIntList2() {
+        interpTest("sum_of_int_list", itp.makeList("[1,1,1,1,1,1,1,1,1,1]"), itp.makeTerm("10"));
+    }
+
+    public void testIncIntList2() {
+        interpTest("inc_int_list_2", itp.makeList("[1,2,3]"), itp.makeList("[2,3,4]"));
+    }
+
+    public void testFetchElem1() {
+        interpTest("fetch_elem_1", itp.makeList("[1,2,3]"), itp.makeTerm("2"));
+    }
+
+    public void testFetch1() {
+        interpTest("fetch_1", itp.makeList("[1,2,3]"), itp.makeTerm("2"));
+    }
+
+    public void testFetch2() {
+        interpTestFail("fetch_1", itp.makeList("[1,2,3]"));
+    }
+
+    public void testConc() {
+        // FIXME: Make outer tuple, not list
+        interpTest("conc", itp.makeTerm("", itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
+                   itp.makeList("[1,2,3,3,4,5]"));
+    }
+
+    public void testConcat() {
+        interpTest("concat", itp.makeTuple(itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
+                   itp.makeList("[1,2,3,3,4,5]"));
+    }
+
+    public void testUnion() {
+        interpTest("union", itp.makeList(itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
+                   itp.makeList("[1,2,3,3,4,5]"));
+    }
+
+    public void testTermSize() {
+        interpTest("term-size", itp.makeTerm("2"), itp.makeTerm("1"));
+    }
+
+    public void testCollectOm1() {
+        interpTest("collect-om_1", itp.makeList(itp.makeTerm("1"), itp.makeTuple("[2,3]"), itp.makeTerm("3")),
+                   itp.makeList("[1,2,3]"));
+    }
 }

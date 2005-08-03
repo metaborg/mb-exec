@@ -1,0 +1,5 @@
+module sum_of_int_list
+imports int-list
+strategies
+
+  main = sum

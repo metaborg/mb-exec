@@ -1,0 +1,5 @@
+module fetch_elem_1
+imports list
+strategies
+
+  main = fetch-elem(?2)

@@ -1,0 +1,5 @@
+module add_int_2
+imports integers
+strategies
+
+  main = <add> (1, 2)
