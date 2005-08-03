@@ -192,12 +192,6 @@ public class InterpreterTest extends TestCase {
                 .makeTerm("3"));
     }
 
-    public void testLeftChoiceUnbind() {
-        // FIXME: Can't compile this to a core program, since
-        // the frontend won't allow it.
-        // interpTestFail("unbinding_of_guard_in_guarded_lchoice", "1");
-    }
-
     public void testCongInt1() {
         interpTest("cong_int_1", "2", "2");
     }
@@ -281,17 +275,57 @@ public class InterpreterTest extends TestCase {
         interpTestFail("cong_list_11", itp.makeList("[1]"));
     }
 
-    public void testCongDistribute1() {
+    public void testTermArg1() {
+        interpTest("id_term-arg_1", itp.makeTuple("[]"), itp.makeTerm("3"));
     }
 
-    /*
-     * ; ssh-apply-test(|"distributing congruence 1", ([1,2], 3), " rec
-     * x(Cons^D(id, x) + Nil^D) ;; ", [(1,3), (2,3)]) ;
-     * ssh-apply-test(|"distributing congruence 2", ([1,2], 3), " import
-     * integers;; rec x(Cons^D(add, x) + Nil^D) ;; ", [4, 5]) ;
-     * ssh-apply-test(|"threading congruence 1", ([1,2, 3], 0), " rec
-     * x(Cons^T(id, x) + Nil^T) ;; ", ([1, 2, 3], 0)) ;
-     * ssh-apply-test(|"threading congruence 2", ([1,2,3], 0), " import
-     * integers;; rec x(Cons^T((id, inc), x) + Nil^T) ;; ", ([1, 2, 3], 3))
-     */
+    public void testSDef1() {
+        interpTest("foo_sdef_1", itp.makeTuple("[]"), itp.makeTerm("3"));
+    }
+
+    public void testSDef2() {
+        interpTest("foo_sdef_2", itp.makeTuple("[]"), itp.makeTerm("3"));
+    }
+
+    public void testSDef3() {
+        interpTest("foo_sdef_3", itp.makeTuple("[]"), itp.makeTerm("3"));
+    }
+
+    public void testRDef1() {
+        interpTest("foo_rdef_1", itp.makeTuple("[]"), itp.makeTerm("3"));
+    }
+
+    public void testRDef2() {
+        interpTest("foo_rdef_2", itp.makeTuple("[]"), itp.makeTerm("3"));
+    }
+
+    public void testRDef3() {
+        interpTest("foo_rdef_3", itp.makeTuple("[]"), itp.makeTerm("3"));
+    }
+
+    public void testRDef4() {
+        interpTestFail("foo_rdef_4", itp.makeTuple("[]"));
+    }
+
+    public void testOverloading1() {
+        interpTest("overloading_1", itp.makeTuple("[]"), itp.makeTerm("1"));
+    }
+
+    public void testOverloading2() {
+        interpTest("overloading_2", itp.makeTuple("[]"), itp.makeTerm("2"));
+    }
+
+    public void testOverloading3() {
+        interpTest("overloading_3", itp.makeTuple("[]"), itp.makeTerm("1"));
+    }
+
+    public void testOverloading4() {
+        interpTest("overloading_3", itp.makeTuple("[]"), itp.makeTerm("2"));
+    }
+
+/*
+
+
+ */
+ 
 }

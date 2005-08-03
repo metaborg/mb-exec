@@ -9,6 +9,7 @@ package org.spoofax.interp;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import aterm.ATerm;
@@ -41,10 +42,12 @@ public class Library {
             new MethodEntry("_fail", 0, 0),
             new MethodEntry("SSL_addi", 0, 2),
             new MethodEntry("SSL_addr", 0, 2),
+            new MethodEntry("SSL_printnl", 0, 2)
     };
+    private static Object hashtable;
 
     public static List<ExtStrategy> getStrategies() {
-        List<ExtStrategy> r = new ArrayList(library.length);
+        List<ExtStrategy> r = new ArrayList<ExtStrategy>(library.length);
         for (int i = 0; i < library.length; i++) {
             r.add(new ExtStrategy(library[i].name, library[i].svarArity,
                                   library[i].tvarArity, 
@@ -66,12 +69,6 @@ public class Library {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static boolean match_cons(ATermAppl t, String s) {
-        // FIXME:
-        return false;
-
     }
 
     public static boolean _id(Interpreter itp, ATermList svars, ATermList tvars) {
@@ -106,4 +103,20 @@ public class Library {
         return true;
     }
 
+    public static boolean SSL_printnl(Interpreter itp, ATermList svars, ATermList tvars) {
+        ATerm file = Tools.termAt(tvars, 0);
+        ATerm term = Tools.termAt(tvars, 1);
+        
+        // FIXME: Use different files (stdout, stderr, ...)
+        System.out.println("" + term);
+        return true;
+    }
+    
+    public static boolean SSL_table_hastable(Interpreter itp, ATermList svars, ATermList tvars) {
+        if(hashtable == null) {
+            hashtable = new HashMap(); 
+        }
+        itp.setCurrent(itp.makeTerm(10000000));
+        return true;
+    }
 }

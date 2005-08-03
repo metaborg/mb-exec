@@ -1,0 +1,6 @@
+module foo_rdef_4
+imports string
+strategies
+
+  Foo : x -> 2 where <gt> (x, 4)
+  main = <Foo> 3

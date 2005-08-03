@@ -1,0 +1,8 @@
+module overloading_2
+imports lib
+strategies
+
+  foo(s1) = s1 ; ?1
+  foo(s2) = s2 ; ?2
+
+  main = foo(!2)

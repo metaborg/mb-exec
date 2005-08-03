@@ -1,0 +1,8 @@
+module overloading_4
+imports lib
+strategies
+
+  foo(|t1) = !t1 ; ?1
+  foo(|t2) = !t2 ; ?2
+
+  main = foo(|2)
