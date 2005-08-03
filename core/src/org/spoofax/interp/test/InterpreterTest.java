@@ -392,13 +392,12 @@ public class InterpreterTest extends TestCase {
     }
 
     public void testConc() {
-        // FIXME: Make outer tuple, not list
-        interpTest("conc", itp.makeTerm("", itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
+        interpTest("conc", itp.makeTuple(itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
                    itp.makeList("[1,2,3,3,4,5]"));
     }
 
     public void testConcat() {
-        interpTest("concat", itp.makeTuple(itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
+        interpTest("concat", itp.makeList(itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
                    itp.makeList("[1,2,3,3,4,5]"));
     }
 
@@ -414,5 +413,39 @@ public class InterpreterTest extends TestCase {
     public void testCollectOm1() {
         interpTest("collect-om_1", itp.makeList(itp.makeTerm("1"), itp.makeTuple("[2,3]"), itp.makeTerm("3")),
                    itp.makeList("[1,2,3]"));
+    }
+    
+    public void testTopdownTry() {
+        interpTest("topdown_try", 
+                   itp.makeTuple(
+                                 itp.makeTerm("1"),
+                                 itp.makeTerm("2"),
+                                 itp.makeTuple("[3,4]")),
+                                 itp.makeTuple(itp.makeTerm("1"),
+                                               itp.makeTerm("2"),
+                                               itp.makeTuple("[4,4]")));
+    }
+    
+    public void testWrapSplit1() {
+        interpTest("wrap_split_1", itp.makeTerm("2"), itp.makeTuple("[2,2]"));
+    }
+
+    public void testWrapSplit2() {
+        interpTest("wrap_split_2", itp.makeTerm("2"), itp.makeTuple("[2,3]"));
+    }
+
+    public void testWrapSplit3() {
+        interpTest("wrap_split_3", itp.makeTerm("2"), itp.makeTuple("[3,3]"));
+    }
+
+    public void testWrapSplit4() {
+        interpTest("wrap_split_4", itp.makeTerm("2"), itp.makeTuple("[2,2]"));
+    }
+
+    public void testWrapProject1() {
+        interpTest("wrap_project_1", itp.makeTuple("[2,3]"), itp.makeTerm("2"));
+    }
+    public void testWrapProject2() {
+        interpTest("wrap_split_4", itp.makeTuple("[2,3]"), itp.makeTerm("3"));
     }
 }

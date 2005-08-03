@@ -1,0 +1,5 @@
+module topdown_try
+imports lib
+strategies
+
+  main = topdown(try((3 -> 4)))

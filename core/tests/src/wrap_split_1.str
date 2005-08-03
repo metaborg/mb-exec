@@ -1,0 +1,5 @@
+module wrap_split_1
+imports lib
+strategies
+
+  main = !(<id>, <id>)
