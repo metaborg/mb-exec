@@ -73,16 +73,21 @@ public class VarScope {
         return null;
     }
     
-    public void dumpScope() {
+    public String dumpScope(String prefix) {
+        String pre = prefix;
+        if(parent != null)
+            pre = parent.dumpScope(prefix);
+
         for(String t : vars.keySet()) {
-            System.out.println("  [v] " + t + "   " + vars.get(t));
+            System.out.println(pre + "[v] " + t + "   " + vars.get(t));
         }
         for(String t : svars.keySet()) {
-            System.out.println("  [v] " + t + "   " + svars.get(t));
+            System.out.println(pre + "[s] " + t + "   " + svars.get(t));
         }
-        System.out.println("---------------------");
-        if(parent != null)
-            parent.dumpScope();
+        if(svars.size() == 0 && vars.size() == 0)
+            System.out.println(pre + "<empty>");
+        
+        return pre + "  ";
     }
 
     public BindingInfo saveUnboundVars() {

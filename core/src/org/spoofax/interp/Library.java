@@ -41,8 +41,10 @@ public class Library {
             new MethodEntry("_fail", 0, 0),
             new MethodEntry("SSL_addi", 0, 2),
             new MethodEntry("SSL_addr", 0, 2),
+            new MethodEntry("SSL_subti", 0, 2),
             new MethodEntry("SSL_printnl", 0, 2),
             new MethodEntry("SSL_gti", 0, 2),
+            new MethodEntry("SSL_gtr", 0, 2),
             new MethodEntry("SSL_muli", 0, 2),
             new MethodEntry("SSL_int_to_string", 0, 1),
             new MethodEntry("SSL_explode_string", 0, 1),
@@ -135,6 +137,18 @@ public class Library {
         
         return a.getInt() >  b.getInt();
     }
+
+    public static boolean SSL_gtr(Interpreter itp, ATermList svars, ATermList tvars) {
+        if(Tools.termAt(tvars, 0).getType() != ATerm.REAL)
+            return false;
+        if(Tools.termAt(tvars, 1).getType() != ATerm.REAL)
+            return false;
+        
+        ATermReal a = Tools.realAt(tvars, 0);
+        ATermReal b = Tools.realAt(tvars, 1);
+        
+        return a.getReal() >  b.getReal();
+    }
     
     public static boolean SSL_muli(Interpreter itp, ATermList svars, ATermList tvars) {
         if(Tools.termAt(tvars, 0).getType() != ATerm.INT)
@@ -146,6 +160,19 @@ public class Library {
         ATermInt b = Tools.intAt(tvars, 1);
         
         itp.setCurrent(itp.makeTerm(a.getInt()*b.getInt()));
+        return true;
+    }
+
+    public static boolean SSL_subti(Interpreter itp, ATermList svars, ATermList tvars) {
+        if(Tools.termAt(tvars, 0).getType() != ATerm.INT)
+            return false;
+        if(Tools.termAt(tvars, 1).getType() != ATerm.INT)
+            return false;
+        
+        ATermInt a = Tools.intAt(tvars, 0);
+        ATermInt b = Tools.intAt(tvars, 1);
+        
+        itp.setCurrent(itp.makeTerm(a.getInt()-b.getInt()));
         return true;
     }
 

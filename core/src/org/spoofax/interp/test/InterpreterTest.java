@@ -139,7 +139,7 @@ public class InterpreterTest extends TestCase {
                 + test + ".rtree");
 
         itp.setCurrent(input);
-        System.out.print("Input : " + input);
+        System.out.println("Input : " + input);
         return itp.eval(itp.makeTerm("CallT(SVar(\"main_0_0\"), [], [])"));
         } catch(FatalError e) {
             e.printStackTrace();
@@ -403,8 +403,8 @@ public class InterpreterTest extends TestCase {
     }
 
     public void testUnion() {
-        interpTest("union", itp.makeList(itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
-                   itp.makeList("[1,2,3,3,4,5]"));
+        interpTest("union", itp.makeTuple(itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
+                   itp.makeList("[1,2,3,4,5]"));
     }
 
     public void testTermSize() {
@@ -443,11 +443,11 @@ public class InterpreterTest extends TestCase {
         interpTest("wrap_split_4", itp.makeTerm("2"), itp.makeTuple("[2,2]"));
     }
 
-    public void testWrapProject1() {
+    public void testProject1() {
         interpTest("project_1", itp.makeTuple("[2,3]"), itp.makeTerm("2"));
     }
 
-    public void testWrapProject2() {
+    public void testProject2() {
         interpTest("project_2", itp.makeTuple("[2,3]"), itp.makeTerm("3"));
     }
     
@@ -484,10 +484,10 @@ public class InterpreterTest extends TestCase {
     }
 
     public void testLet1() {
-        interpTest("let_test_1", itp.makeTuple("[]"), itp.makeTerm("1"));
+        interpTest("let_test_1", itp.makeTerm("1"), itp.makeTerm("2"));
     }
     public void testLet2() {
-        interpTest("let_test_1", itp.makeTuple("1"), itp.makeTerm("2"));
+        interpTest("let_test_2", itp.makeTerm("1"), itp.makeTerm("2"));
     }
 
     public void testClosure2b() {
@@ -516,8 +516,12 @@ public class InterpreterTest extends TestCase {
         interpTest("closure_test_4", itp.makeTerm("1"), itp.makeTerm("3"));
     }
 
+    public void testClosure5a() {
+        interpTest("closure_test_5a", itp.makeList("[1,2,3]"), itp.makeList("[1,1,1]"));
+    }
+
     public void testClosure5b() {
-        interpTest("closure_test_5", itp.makeList("[1,2,3]"), itp.makeList("[1,1,1]"));
+        interpTest("closure_test_5b", itp.makeList("[1,2,3]"), itp.makeList("[1,1,1]"));
     }
 
     public void testClosure6() {
@@ -561,9 +565,9 @@ public class InterpreterTest extends TestCase {
    }
 
    public void testClosure13() {
-       interpTest("closure_test_8", 
+       interpTest("closure_test_13", 
                   itp.makeTerm("1"), 
-                  itp.makeList("4"));
+                  itp.makeTerm("4"));
    }
 
 }

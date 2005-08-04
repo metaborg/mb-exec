@@ -185,7 +185,7 @@ public class Interpreter extends ATermed {
             debug(" results : " + r);
 
             boolean b = bindVars(r);
-            varScope.dumpScope();
+            varScope.dumpScope(" ");
             return b;
         }
         debug(" no match!");
@@ -193,7 +193,7 @@ public class Interpreter extends ATermed {
     }
 
     private boolean bindVars(List<Pair<String, ATerm>> r) {
-        varScope.dumpScope();
+        varScope.dumpScope("  ");
         for (Pair<String, ATerm> x : r) {
             VarScope s = varScope.scopeOf(x.first);
             if (s == null) {
@@ -456,7 +456,7 @@ public class Interpreter extends ATermed {
     private boolean evalLet(ATermAppl t) throws FatalError {
         debug("evalLet()");
         enterDefScope();
-        varScope.dumpScope();
+        varScope.dumpScope("  ");
         ATermList sdefs = Tools.listAt(t, 0);
         for (int i = 0; i < sdefs.getLength(); i++) {
             IntStrategy s = new IntStrategy(Tools.termAt(sdefs, 0), defScope,
@@ -502,7 +502,7 @@ public class Interpreter extends ATermed {
 
     public List<Pair<String, ATerm>> match(ATermAppl t, ATermAppl p)
             throws FatalError {
-        debug(" ?: " + t.getName() + " / " + p.getName());
+        debug(" ?: '" + t.getName() + "' / " + p.getName());
 
         if (p.getName().equals("Anno"))
             return match(t, (ATermAppl) p.getChildAt(0));
@@ -554,6 +554,14 @@ public class Interpreter extends ATermed {
             
             r.addAll(match(makeList(args), appl_p));
             return r;
+        } else if(Tools.termType(p, "As")) {
+            List<Pair<String, ATerm>> r = match(t, Tools.applAt(p, 1));
+            if(r == null)
+                return null;
+            debug("" + p);
+            String varName = Tools.stringAt(Tools.applAt(p, 0),0);
+            r.add(new Pair<String, ATerm>(varName, t));
+            return r;
         }
 
         throw new FatalError("What?" + p);
@@ -577,6 +585,10 @@ public class Interpreter extends ATermed {
             return r;
         } else if(p.getName().equals("Op")) {
             return null;
+        } else if(p.getName().equals("Explode")) {
+            return null;
+        } else if(p.getName().equals("Wld")) {
+            return emptyList;
         }
 
         throw new FatalError("Unknown type '" + p.getName());
