@@ -1,5 +1,5 @@
 module topdown_try
-imports lib
+imports list-cons tuple-cons
 strategies
 
   main = topdown(try((3 -> 4)))

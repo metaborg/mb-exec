@@ -1,5 +1,5 @@
 module foo_rdef_2
-imports lib
+imports list-cons tuple-cons
 strategies
 
   Swap: (x, y) -> (y, x)

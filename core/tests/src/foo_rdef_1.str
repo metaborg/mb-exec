@@ -1,5 +1,5 @@
 module foo_rdef_1
-imports lib
+imports list-cons tuple-cons
 strategies
 
   Foo: 1 -> 2

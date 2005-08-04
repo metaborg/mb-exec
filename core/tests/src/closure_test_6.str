@@ -1,5 +1,5 @@
 module closure_test_6
-imports lib
+imports list-cons tuple-cons
 strategies
 
   foo(s) = let x = !2 in s end

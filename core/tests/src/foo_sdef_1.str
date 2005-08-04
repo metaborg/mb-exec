@@ -1,5 +1,5 @@
 module foo_sdef_1
-imports lib
+imports list-cons tuple-cons
 strategies
 
   foo = !3
