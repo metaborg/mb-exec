@@ -1,0 +1,16 @@
+/**
+ * Part of the Stratego Language Interpreter Test-Suite
+ *
+ *
+ * @author Martin Bravenboer <martin@cs.uu.nl>
+ * @author Karl Trygve Kalleberg <karltk@cs.uu.nl>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
+module closure_test_3c
+imports list-cons tuple-cons
+strategies
+
+  foo(s1, s2) = s2
+  
+  main = foo(!2, !3) ; s1
