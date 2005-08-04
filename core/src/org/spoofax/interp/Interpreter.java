@@ -567,6 +567,8 @@ public class Interpreter extends ATermed {
             String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
             r.add(new Pair<String, ATerm>(varName, t));
             return r;
+        } else if(Tools.termType(p, "Wld")) {
+            return emptyList;
         }
 
         throw new FatalError("What?" + p);
