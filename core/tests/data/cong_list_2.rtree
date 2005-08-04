@@ -75,12 +75,18 @@ Specification(
           )
         )
       , SDefT(
+          "h_0"
+        , []
+        , []
+        , Build(Anno(Int("2"), Op("Nil", [])))
+        )
+      , SDefT(
           "main_0_0"
         , []
         , []
         , CallT(
             SVar("Cons_2_0")
-          , [ Build(Anno(Int("2"), Op("Nil", [])))
+          , [ CallT(SVar("h_0"), [], [])
             , CallT(SVar("Nil_0_0"), [], [])
             ]
           , []

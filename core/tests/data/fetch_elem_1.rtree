@@ -86,13 +86,17 @@ Specification(
               , GuardedLChoice(
                   CallT(
                     SVar("Cons_2_0")
-                  , [CallT(SVar("k_116"), [], []), Id]
+                  , [ CallT(SVar("k_116"), [], [])
+                    , CallT(SVar("_id"), [], [])
+                    ]
                   , []
                   )
                 , Id
                 , CallT(
                     SVar("Cons_2_0")
-                  , [Id, CallT(SVar("l_116"), [], [])]
+                  , [ CallT(SVar("_id"), [], [])
+                    , CallT(SVar("l_116"), [], [])
+                    ]
                   , []
                   )
                 )
@@ -115,17 +119,32 @@ Specification(
         , Scope(
             ["h_71"]
           , Seq(
-              CallT(
-                SVar("fetch_1_0")
-              , [Seq(
-                   CallT(SVar("m_116"), [], [])
-                 , Match(Var("h_71"))
-                 )]
-              , []
+              Let(
+                [ SDefT(
+                    "h_0"
+                  , []
+                  , []
+                  , Seq(
+                      CallT(SVar("m_116"), [], [])
+                    , Match(Var("h_71"))
+                    )
+                  )
+                ]
+              , CallT(
+                  SVar("fetch_1_0")
+                , [CallT(SVar("h_0"), [], [])]
+                , []
+                )
               )
             , Build(Var("h_71"))
             )
           )
+        )
+      , SDefT(
+          "i_0"
+        , []
+        , []
+        , Match(Anno(Int("2"), Wld))
         )
       , SDefT(
           "main_0_0"
@@ -133,7 +152,7 @@ Specification(
         , []
         , CallT(
             SVar("fetch_elem_1_0")
-          , [Match(Anno(Int("2"), Wld))]
+          , [CallT(SVar("i_0"), [], [])]
           , []
           )
         )

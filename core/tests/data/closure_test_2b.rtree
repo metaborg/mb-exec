@@ -75,13 +75,19 @@ Specification(
           )
         )
       , SDefT(
+          "h_0"
+        , []
+        , []
+        , Build(Anno(Int("3"), Op("Nil", [])))
+        )
+      , SDefT(
           "foo_0_0"
         , []
         , []
         , GuardedLChoice(
             CallT(
               SVar("Cons_2_0")
-            , [ Build(Anno(Int("3"), Op("Nil", [])))
+            , [ CallT(SVar("h_0"), [], [])
               , CallT(SVar("foo_0_0"), [], [])
               ]
             , []

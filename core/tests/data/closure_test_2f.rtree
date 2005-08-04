@@ -1235,6 +1235,12 @@ Specification(
           )
         )
       , SDefT(
+          "h_0"
+        , []
+        , []
+        , Build(Anno(Int("3"), Op("Nil", [])))
+        )
+      , SDefT(
           "cons_1_0"
         , [ VarDec(
               "h_14"
@@ -1247,7 +1253,7 @@ Specification(
         , []
         , CallT(
             SVar("_2_0")
-          , [ Build(Anno(Int("3"), Op("Nil", [])))
+          , [ CallT(SVar("h_0"), [], [])
             , CallT(SVar("h_14"), [], [])
             ]
           , []

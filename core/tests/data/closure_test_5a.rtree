@@ -75,6 +75,12 @@ Specification(
         , Match(Anno(Op("Nil", []), Wld))
         )
       , SDefT(
+          "i_0"
+        , []
+        , []
+        , Build(Anno(Int("1"), Op("Nil", [])))
+        )
+      , SDefT(
           "main_0_0"
         , []
         , []
@@ -93,23 +99,32 @@ Specification(
               , GuardedLChoice(
                   CallT(SVar("Nil_0_0"), [], [])
                 , Id
-                , CallT(
-                    SVar("Cons_2_0")
-                  , [ CallT(SVar("l_85"), [], [])
-                    , CallT(
-                        SVar("k_85")
-                      , [CallT(SVar("l_85"), [], [])]
+                , Let(
+                    [ SDefT(
+                        "h_0"
                       , []
+                      , []
+                      , CallT(
+                          SVar("k_85")
+                        , [CallT(SVar("l_85"), [], [])]
+                        , []
+                        )
                       )
                     ]
-                  , []
+                  , CallT(
+                      SVar("Cons_2_0")
+                    , [ CallT(SVar("l_85"), [], [])
+                      , CallT(SVar("h_0"), [], [])
+                      ]
+                    , []
+                    )
                   )
                 )
               )
             ]
           , CallT(
               SVar("k_85")
-            , [Build(Anno(Int("1"), Op("Nil", [])))]
+            , [CallT(SVar("i_0"), [], [])]
             , []
             )
           )

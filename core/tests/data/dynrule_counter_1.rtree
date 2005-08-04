@@ -1372,7 +1372,11 @@ Specification(
           "dr_lookup_rule_0_1"
         , []
         , [VarDec("p_22", ConstType(Sort("ATerm", [])))]
-        , CallT(SVar("dr_lookup_rule_1_1"), [Fail], [Var("p_22")])
+        , CallT(
+            SVar("dr_lookup_rule_1_1")
+          , [CallT(SVar("_fail"), [], [])]
+          , [Var("p_22")]
+          )
         )
       , SDefT(
           "dr_lookup_rule_0_2"
@@ -1418,14 +1422,23 @@ Specification(
                               , Seq(
                                   Build(Var("t_10"))
                                 , Seq(
-                                    CallT(
-                                      SVar("fetch_elem_1_0")
-                                    , [CallT(
-                                         SVar("aux_Counter_0_2")
-                                       , []
-                                       , [Var("r_10"), Var("s_10")]
-                                       )]
-                                    , []
+                                    Let(
+                                      [ SDefT(
+                                          "k_2"
+                                        , []
+                                        , []
+                                        , CallT(
+                                            SVar("aux_Counter_0_2")
+                                          , []
+                                          , [Var("r_10"), Var("s_10")]
+                                          )
+                                        )
+                                      ]
+                                    , CallT(
+                                        SVar("fetch_elem_1_0")
+                                      , [CallT(SVar("k_2"), [], [])]
+                                      , []
+                                      )
                                     )
                                   , Seq(
                                       Match(Var("p_1"))
@@ -1750,13 +1763,17 @@ Specification(
               , GuardedLChoice(
                   CallT(
                     SVar("Cons_2_0")
-                  , [CallT(SVar("v_92"), [], []), Id]
+                  , [ CallT(SVar("v_92"), [], [])
+                    , CallT(SVar("_id"), [], [])
+                    ]
                   , []
                   )
                 , Id
                 , CallT(
                     SVar("Cons_2_0")
-                  , [Id, CallT(SVar("w_92"), [], [])]
+                  , [ CallT(SVar("_id"), [], [])
+                    , CallT(SVar("w_92"), [], [])
+                    ]
                   , []
                   )
                 )
@@ -1779,13 +1796,22 @@ Specification(
         , Scope(
             ["d_37"]
           , Seq(
-              CallT(
-                SVar("fetch_1_0")
-              , [Seq(
-                   CallT(SVar("x_92"), [], [])
-                 , Match(Var("d_37"))
-                 )]
-              , []
+              Let(
+                [ SDefT(
+                    "l_2"
+                  , []
+                  , []
+                  , Seq(
+                      CallT(SVar("x_92"), [], [])
+                    , Match(Var("d_37"))
+                    )
+                  )
+                ]
+              , CallT(
+                  SVar("fetch_1_0")
+                , [CallT(SVar("l_2"), [], [])]
+                , []
+                )
               )
             , Build(Var("d_37"))
             )
@@ -1963,24 +1989,32 @@ Specification(
                       , Seq(
                           Build(Var("f_21"))
                         , Seq(
-                            CallT(
-                              SVar("fetch_elem_1_0")
-                            , [ Match(
-                                  Anno(
-                                    Op(
-                                      "RuleScope"
-                                    , [ Wld
-                                      , As(
-                                          Var("e_21")
-                                        , Anno(Op("Hashtable", [Var("d_21")]), Wld)
-                                        )
-                                      ]
+                            Let(
+                              [ SDefT(
+                                  "m_2"
+                                , []
+                                , []
+                                , Match(
+                                    Anno(
+                                      Op(
+                                        "RuleScope"
+                                      , [ Wld
+                                        , As(
+                                            Var("e_21")
+                                          , Anno(Op("Hashtable", [Var("d_21")]), Wld)
+                                          )
+                                        ]
+                                      )
+                                    , Wld
                                     )
-                                  , Wld
                                   )
                                 )
                               ]
-                            , []
+                            , CallT(
+                                SVar("fetch_elem_1_0")
+                              , [CallT(SVar("m_2"), [], [])]
+                              , []
+                              )
                             )
                           , CallT(
                               SVar("n_87")
@@ -2151,7 +2185,11 @@ Specification(
           , Seq(
               Match(Var("s_44"))
             , Seq(
-                CallT(SVar("iset_add_1_1"), [Id], [Var("r_44")])
+                CallT(
+                  SVar("iset_add_1_1")
+                , [CallT(SVar("_id"), [], [])]
+                , [Var("r_44")]
+                )
               , Build(Var("s_44"))
               )
             )

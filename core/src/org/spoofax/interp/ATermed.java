@@ -37,7 +37,7 @@ public class ATermed {
     public ATerm makeList(ATerm... terms) {
         ATermList l = factory.makeList();
         for(ATerm t : terms)
-            l.append(t);
+            l = l.append(t);
         return makeList(l);
     }
 
@@ -58,7 +58,7 @@ public class ATermed {
     public ATerm makeTuple(ATerm... terms) {
         ATermList l = factory.makeList();
         for(ATerm t : terms)
-            l.append(t);
+            l = l.append(t);
         return makeTuple(l);
     }
 

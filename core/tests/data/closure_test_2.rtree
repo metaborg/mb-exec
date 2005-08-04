@@ -32,7 +32,14 @@ Specification(
         , Scope(
             ["j_7"]
           , Seq(
-              CallT(SVar("foo_1_0"), [Match(Var("j_7"))], [])
+              Let(
+                [SDefT("a_0", [], [], Match(Var("j_7")))]
+              , CallT(
+                  SVar("foo_1_0")
+                , [CallT(SVar("a_0"), [], [])]
+                , []
+                )
+              )
             , Build(Var("j_7"))
             )
           )

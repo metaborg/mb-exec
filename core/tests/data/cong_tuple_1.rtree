@@ -1231,7 +1231,13 @@ Specification(
           "main_0_0"
         , []
         , []
-        , CallT(SVar("_2_0"), [Id, Id], [])
+        , CallT(
+            SVar("_2_0")
+          , [ CallT(SVar("_id"), [], [])
+            , CallT(SVar("_id"), [], [])
+            ]
+          , []
+          )
         )
       ]
     )

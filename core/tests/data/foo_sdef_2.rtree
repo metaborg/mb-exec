@@ -20,12 +20,18 @@ Specification(
         , CallT(SVar("h_14"), [], [])
         )
       , SDefT(
+          "a_0"
+        , []
+        , []
+        , Build(Anno(Int("3"), Op("Nil", [])))
+        )
+      , SDefT(
           "main_0_0"
         , []
         , []
         , CallT(
             SVar("foo_1_0")
-          , [Build(Anno(Int("3"), Op("Nil", [])))]
+          , [CallT(SVar("a_0"), [], [])]
           , []
           )
         )

@@ -8,13 +8,9 @@
 package org.spoofax.interp;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Stack;
 
 import jjtraveler.TopDown;
 import jjtraveler.VisitFailure;
@@ -68,7 +64,7 @@ public class Interpreter extends ATermed {
         @Override
         public void visitATerm(ATerm t) throws VisitFailure {
 
-            List<ATerm> ats = t.match(needle);
+            List<ATerm> ats = (List<ATerm>)t.match(needle);
             if (ats != null) {
                 coll.addAll(ats);
             }
@@ -175,8 +171,9 @@ public class Interpreter extends ATermed {
 
     private boolean evalMatch(ATermAppl t) throws FatalError {
         debug("evalMatch");
-        debug(" term : " + t);
-
+        debug(" term   : " + t);
+        debug(" current: " + current);
+        
         ATermAppl p = (ATermAppl) t.getChildAt(0);
         List<Pair<String, ATerm>> r = match(current, p);
 
@@ -414,8 +411,8 @@ public class Interpreter extends ATermed {
         }
 
         for (int i = 0; i < actualTVars.getChildCount(); i++)
-            newVarScope.add(formalTVars.get(i), (ATerm) actualTVars
-                    .getChildAt(i));
+            newVarScope.add(formalTVars.get(i), 
+                            varScope.lookup(Tools.stringAt(Tools.applAt(actualTVars, i), 0)));
 
         VarScope oldVarScope = varScope;
         DefScope oldDefScope = defScope;
@@ -485,10 +482,6 @@ public class Interpreter extends ATermed {
         varScope = new VarScope(varScope);
     }
 
-    private void enterVarScope(VarScope parent) {
-        varScope = new VarScope(parent);
-    }
-
     public ATerm getCurrent() {
         return current;
     }
@@ -546,6 +539,21 @@ public class Interpreter extends ATermed {
             List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
             r.add(new Pair<String, ATerm>(Tools.stringAt(p, 0), t));
             return r;
+        } else if(Tools.termType(p, "Explode")) {
+            AFun ctor = t.getAFun();
+            ATermList args = t.getArguments();
+            
+            ATermAppl ctor_p = Tools.applAt(p, 0);
+            ATerm ctor_t = makeTerm("\"" + ctor.getName() + "\"");
+            
+            List<Pair<String, ATerm>> r = match(ctor_t, ctor_p);
+            if(r == null)
+                return null;
+            
+            ATermAppl appl_p = Tools.applAt(p, 1);
+            
+            r.addAll(match(makeList(args), appl_p));
+            return r;
         }
 
         throw new FatalError("What?" + p);
@@ -557,20 +565,18 @@ public class Interpreter extends ATermed {
 
         if (p.getName().equals("Anno")) {
             return match(t, Tools.applAt(p, 0));
-        }
-
-        if (p.getName().equals("Int")) {
+        } else if (p.getName().equals("Int")) {
             Integer i = new Integer(Tools.stringAt(p, 0));
             if (i == t.getInt())
                 return emptyList;
             return null;
-        }
-
-        if (p.getName().equals("Var")) {
+        } else if (p.getName().equals("Var")) {
             List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
             r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0))
                     .getName(), t));
             return r;
+        } else if(p.getName().equals("Op")) {
+            return null;
         }
 
         throw new FatalError("Unknown type '" + p.getName());

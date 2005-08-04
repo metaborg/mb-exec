@@ -87,7 +87,9 @@ Specification(
               , GuardedLChoice(
                   CallT(
                     SVar("Cons_2_0")
-                  , [Id, CallT(SVar("x_87"), [], [])]
+                  , [ CallT(SVar("_id"), [], [])
+                    , CallT(SVar("x_87"), [], [])
+                    ]
                   , []
                   )
                 , Id
@@ -133,13 +135,22 @@ Specification(
                       , Seq(
                           Build(Var("k_12"))
                         , Seq(
-                            CallT(
-                              SVar("at_end_1_0")
-                            , [Seq(
-                                 Build(Var("l_12"))
-                               , CallT(SVar("t_87"), [], [])
-                               )]
-                            , []
+                            Let(
+                              [ SDefT(
+                                  "i_0"
+                                , []
+                                , []
+                                , Seq(
+                                    Build(Var("l_12"))
+                                  , CallT(SVar("t_87"), [], [])
+                                  )
+                                )
+                              ]
+                            , CallT(
+                                SVar("at_end_1_0")
+                              , [CallT(SVar("i_0"), [], [])]
+                              , []
+                              )
                             )
                           , Seq(
                               Match(Var("h_2"))

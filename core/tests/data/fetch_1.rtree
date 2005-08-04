@@ -86,13 +86,17 @@ Specification(
               , GuardedLChoice(
                   CallT(
                     SVar("Cons_2_0")
-                  , [CallT(SVar("l_116"), [], []), Id]
+                  , [ CallT(SVar("l_116"), [], [])
+                    , CallT(SVar("_id"), [], [])
+                    ]
                   , []
                   )
                 , Id
                 , CallT(
                     SVar("Cons_2_0")
-                  , [Id, CallT(SVar("m_116"), [], [])]
+                  , [ CallT(SVar("_id"), [], [])
+                    , CallT(SVar("m_116"), [], [])
+                    ]
                   , []
                   )
                 )
@@ -108,13 +112,22 @@ Specification(
         , Scope(
             ["o_9"]
           , Seq(
-              CallT(
-                SVar("fetch_1_0")
-              , [Seq(
-                   Match(Anno(Int("2"), Wld))
-                 , Match(Var("o_9"))
-                 )]
-              , []
+              Let(
+                [ SDefT(
+                    "h_0"
+                  , []
+                  , []
+                  , Seq(
+                      Match(Anno(Int("2"), Wld))
+                    , Match(Var("o_9"))
+                    )
+                  )
+                ]
+              , CallT(
+                  SVar("fetch_1_0")
+                , [CallT(SVar("h_0"), [], [])]
+                , []
+                )
               )
             , Build(Var("o_9"))
             )

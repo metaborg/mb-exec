@@ -16,7 +16,7 @@ import aterm.ATermList;
 
 public class IntStrategy extends Strategy {
 
-    private ATermAppl body;
+    protected ATermAppl body;
 
     public IntStrategy(ATerm t, DefScope defScope, VarScope varScope) {
         super(defScope, varScope);
@@ -41,8 +41,18 @@ public class IntStrategy extends Strategy {
 
         body = (ATermAppl) x.get(3);
     }
+    
+    protected IntStrategy(ATermAppl body, DefScope defScope, VarScope varScope, boolean bull) {
+        super(defScope, varScope);
+        this.body = body;
+    }
 
     ATermAppl getBody() {
         return body;
+    }
+    
+    @Override
+    public String toString() {
+        return "[IntStrategy] " + getName();
     }
 }

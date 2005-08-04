@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import aterm.ATerm;
-import aterm.ATermAppl;
 import aterm.ATermInt;
 import aterm.ATermList;
 import aterm.ATermReal;
@@ -42,7 +41,12 @@ public class Library {
             new MethodEntry("_fail", 0, 0),
             new MethodEntry("SSL_addi", 0, 2),
             new MethodEntry("SSL_addr", 0, 2),
-            new MethodEntry("SSL_printnl", 0, 2)
+            new MethodEntry("SSL_printnl", 0, 2),
+            new MethodEntry("SSL_gti", 0, 2),
+            new MethodEntry("SSL_muli", 0, 2),
+            new MethodEntry("SSL_int_to_string", 0, 1),
+            new MethodEntry("SSL_explode_string", 0, 1),
+            
     };
     private static Object hashtable;
 
@@ -117,6 +121,55 @@ public class Library {
             hashtable = new HashMap(); 
         }
         itp.setCurrent(itp.makeTerm(10000000));
+        return true;
+    }
+    
+    public static boolean SSL_gti(Interpreter itp, ATermList svars, ATermList tvars) {
+        if(Tools.termAt(tvars, 0).getType() != ATerm.INT)
+            return false;
+        if(Tools.termAt(tvars, 1).getType() != ATerm.INT)
+            return false;
+        
+        ATermInt a = Tools.intAt(tvars, 0);
+        ATermInt b = Tools.intAt(tvars, 1);
+        
+        return a.getInt() >  b.getInt();
+    }
+    
+    public static boolean SSL_muli(Interpreter itp, ATermList svars, ATermList tvars) {
+        if(Tools.termAt(tvars, 0).getType() != ATerm.INT)
+            return false;
+        if(Tools.termAt(tvars, 1).getType() != ATerm.INT)
+            return false;
+        
+        ATermInt a = Tools.intAt(tvars, 0);
+        ATermInt b = Tools.intAt(tvars, 1);
+        
+        itp.setCurrent(itp.makeTerm(a.getInt()*b.getInt()));
+        return true;
+    }
+
+    public static boolean SSL_int_to_string(Interpreter itp, ATermList svars, ATermList tvars) {
+        if(Tools.termAt(tvars, 0).getType() != ATerm.INT)
+            return false;
+        
+        ATermInt a = Tools.intAt(tvars, 0);
+        itp.setCurrent(itp.makeTerm("\"" + a.getInt() + "\""));
+        return true;
+    }
+
+    public static boolean SSL_explode_string(Interpreter itp, ATermList svars, ATermList tvars) {
+        if(Tools.termAt(tvars, 0).getType() != ATerm.APPL)
+            return false;
+        
+        String s = Tools.stringAt(tvars, 0);
+        ATerm[] r = new ATermInt[s.length()];
+        byte[] bs = s.getBytes();
+        
+        for(int i=0;i<bs.length;i++)
+            r[i] = itp.makeTerm(bs[i]);
+        
+        itp.setCurrent(itp.makeList(r));
         return true;
     }
 }

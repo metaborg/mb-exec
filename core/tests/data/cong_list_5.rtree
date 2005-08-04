@@ -69,12 +69,20 @@ Specification(
           )
         )
       , SDefT(
+          "h_0"
+        , []
+        , []
+        , Build(Anno(Op("Nil", []), Op("Nil", [])))
+        )
+      , SDefT(
           "main_0_0"
         , []
         , []
         , CallT(
             SVar("Cons_2_0")
-          , [Id, Build(Anno(Op("Nil", []), Op("Nil", [])))]
+          , [ CallT(SVar("_id"), [], [])
+            , CallT(SVar("h_0"), [], [])
+            ]
           , []
           )
         )

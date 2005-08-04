@@ -69,21 +69,27 @@ Specification(
           )
         )
       , SDefT(
+          "h_0"
+        , []
+        , []
+        , Match(
+            Anno(
+              Op(
+                "Cons"
+              , [Anno(Int("3"), Wld), Anno(Op("Nil", []), Wld)]
+              )
+            , Wld
+            )
+          )
+        )
+      , SDefT(
           "main_0_0"
         , []
         , []
         , CallT(
             SVar("Cons_2_0")
-          , [ Id
-            , Match(
-                Anno(
-                  Op(
-                    "Cons"
-                  , [Anno(Int("3"), Wld), Anno(Op("Nil", []), Wld)]
-                  )
-                , Wld
-                )
-              )
+          , [ CallT(SVar("_id"), [], [])
+            , CallT(SVar("h_0"), [], [])
             ]
           , []
           )

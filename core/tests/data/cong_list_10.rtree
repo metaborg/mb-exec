@@ -75,20 +75,29 @@ Specification(
         , Scope(
             ["o_9"]
           , Seq(
-              CallT(
-                SVar("Cons_2_0")
-              , [ Id
-                , Match(
-                    Anno(
-                      Op(
-                        "Cons"
-                      , [Var("o_9"), Anno(Op("Nil", []), Wld)]
+              Let(
+                [ SDefT(
+                    "h_0"
+                  , []
+                  , []
+                  , Match(
+                      Anno(
+                        Op(
+                          "Cons"
+                        , [Var("o_9"), Anno(Op("Nil", []), Wld)]
+                        )
+                      , Wld
                       )
-                    , Wld
                     )
                   )
                 ]
-              , []
+              , CallT(
+                  SVar("Cons_2_0")
+                , [ CallT(SVar("_id"), [], [])
+                  , CallT(SVar("h_0"), [], [])
+                  ]
+                , []
+                )
               )
             , Build(Var("o_9"))
             )

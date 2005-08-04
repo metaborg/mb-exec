@@ -86,13 +86,17 @@ Specification(
               , GuardedLChoice(
                   CallT(
                     SVar("Cons_2_0")
-                  , [CallT(SVar("k_116"), [], []), Id]
+                  , [ CallT(SVar("k_116"), [], [])
+                    , CallT(SVar("_id"), [], [])
+                    ]
                   , []
                   )
                 , Id
                 , CallT(
                     SVar("Cons_2_0")
-                  , [Id, CallT(SVar("l_116"), [], [])]
+                  , [ CallT(SVar("_id"), [], [])
+                    , CallT(SVar("l_116"), [], [])
+                    ]
                   , []
                   )
                 )
@@ -102,12 +106,18 @@ Specification(
           )
         )
       , SDefT(
+          "h_0"
+        , []
+        , []
+        , Match(Anno(Int("4"), Wld))
+        )
+      , SDefT(
           "main_0_0"
         , []
         , []
         , CallT(
             SVar("fetch_1_0")
-          , [Match(Anno(Int("4"), Wld))]
+          , [CallT(SVar("h_0"), [], [])]
           , []
           )
         )

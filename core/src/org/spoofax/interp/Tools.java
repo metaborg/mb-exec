@@ -7,9 +7,6 @@
  */
 package org.spoofax.interp;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;

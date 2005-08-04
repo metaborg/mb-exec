@@ -75,19 +75,37 @@ Specification(
           )
         )
       , SDefT(
+          "h_0"
+        , []
+        , []
+        , Match(Anno(Int("1"), Wld))
+        )
+      , SDefT(
+          "i_0"
+        , []
+        , []
+        , CallT(
+            SVar("Cons_2_0")
+          , [ CallT(SVar("j_0"), [], [])
+            , CallT(SVar("Nil_0_0"), [], [])
+            ]
+          , []
+          )
+        )
+      , SDefT(
+          "j_0"
+        , []
+        , []
+        , Build(Anno(Int("3"), Op("Nil", [])))
+        )
+      , SDefT(
           "main_0_0"
         , []
         , []
         , CallT(
             SVar("Cons_2_0")
-          , [ Match(Anno(Int("1"), Wld))
-            , CallT(
-                SVar("Cons_2_0")
-              , [ Build(Anno(Int("3"), Op("Nil", [])))
-                , CallT(SVar("Nil_0_0"), [], [])
-                ]
-              , []
-              )
+          , [ CallT(SVar("h_0"), [], [])
+            , CallT(SVar("i_0"), [], [])
             ]
           , []
           )

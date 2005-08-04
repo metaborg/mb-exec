@@ -80,7 +80,9 @@ Specification(
         , []
         , CallT(
             SVar("Cons_2_0")
-          , [Fail, CallT(SVar("Nil_0_0"), [], [])]
+          , [ CallT(SVar("_fail"), [], [])
+            , CallT(SVar("Nil_0_0"), [], [])
+            ]
           , []
           )
         )

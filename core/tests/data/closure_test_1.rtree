@@ -31,13 +31,20 @@ Specification(
         , []
         , Scope(
             ["k_7"]
-          , Seq(
-              Build(Anno(Int("1"), Op("Nil", [])))
+          , Let(
+              [SDefT("a_0", [], [], Build(Var("k_7")))]
             , Seq(
-                Match(Var("k_7"))
+                Build(Anno(Int("1"), Op("Nil", [])))
               , Seq(
-                  Build(Anno(Int("2"), Op("Nil", [])))
-                , CallT(SVar("foo_1_0"), [Build(Var("k_7"))], [])
+                  Match(Var("k_7"))
+                , Seq(
+                    Build(Anno(Int("2"), Op("Nil", [])))
+                  , CallT(
+                      SVar("foo_1_0")
+                    , [CallT(SVar("a_0"), [], [])]
+                    , []
+                    )
+                  )
                 )
               )
             )

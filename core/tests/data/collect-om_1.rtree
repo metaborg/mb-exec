@@ -1280,13 +1280,17 @@ Specification(
               , GuardedLChoice(
                   CallT(
                     SVar("Cons_2_0")
-                  , [CallT(SVar("b_90"), [], []), Id]
+                  , [ CallT(SVar("b_90"), [], [])
+                    , CallT(SVar("_id"), [], [])
+                    ]
                   , []
                   )
                 , Id
                 , CallT(
                     SVar("Cons_2_0")
-                  , [Id, CallT(SVar("c_90"), [], [])]
+                  , [ CallT(SVar("_id"), [], [])
+                    , CallT(SVar("c_90"), [], [])
+                    ]
                   , []
                   )
                 )
@@ -1327,26 +1331,30 @@ Specification(
               , Seq(
                   CallT(SVar("e_95"), [], [])
                 , Seq(
-                    CallT(
-                      SVar("fetch_1_0")
-                    , [ Scope(
-                          ["t_38", "r_124", "a_0"]
-                        , Seq(
-                            Match(Var("t_38"))
+                    Let(
+                      [ SDefT(
+                          "q_0"
+                        , []
+                        , []
+                        , Scope(
+                            ["t_38", "r_124", "a_0"]
                           , Seq(
-                              Match(Var("a_0"))
+                              Match(Var("t_38"))
                             , Seq(
-                                Build(
-                                  Anno(
-                                    Op("", [Var("s_38"), Var("t_38")])
-                                  , Op("Nil", [])
-                                  )
-                                )
+                                Match(Var("a_0"))
                               , Seq(
-                                  CallT(SVar("d_95"), [], [])
+                                  Build(
+                                    Anno(
+                                      Op("", [Var("s_38"), Var("t_38")])
+                                    , Op("Nil", [])
+                                    )
+                                  )
                                 , Seq(
-                                    Match(Var("r_124"))
-                                  , Seq(Build(Var("a_0")), Build(Var("r_124")))
+                                    CallT(SVar("d_95"), [], [])
+                                  , Seq(
+                                      Match(Var("r_124"))
+                                    , Seq(Build(Var("a_0")), Build(Var("r_124")))
+                                    )
                                   )
                                 )
                               )
@@ -1354,7 +1362,11 @@ Specification(
                           )
                         )
                       ]
-                    , []
+                    , CallT(
+                        SVar("fetch_1_0")
+                      , [CallT(SVar("q_0"), [], [])]
+                      , []
+                      )
                     )
                   , Seq(Build(Var("b_0")), Build(Var("r_38")))
                   )
@@ -1399,17 +1411,24 @@ Specification(
                         , Id
                         , GuardedLChoice(
                             Seq(
-                              CallT(
-                                SVar("HdMember_p__2_0")
-                              , [CallT(SVar("a_95"), [], []), Build(Var("n_38"))]
-                              , []
+                              Let(
+                                [SDefT("s_0", [], [], Build(Var("n_38")))]
+                              , CallT(
+                                  SVar("HdMember_p__2_0")
+                                , [ CallT(SVar("a_95"), [], [])
+                                  , CallT(SVar("s_0"), [], [])
+                                  ]
+                                , []
+                                )
                               )
                             , CallT(SVar("b_95"), [], [])
                             )
                           , Id
                           , CallT(
                               SVar("Cons_2_0")
-                            , [Id, CallT(SVar("b_95"), [], [])]
+                            , [ CallT(SVar("_id"), [], [])
+                              , CallT(SVar("b_95"), [], [])
+                              ]
                             , []
                             )
                           )
@@ -1598,6 +1617,12 @@ Specification(
           )
         )
       , SDefT(
+          "t_0"
+        , []
+        , []
+        , Build(Anno(Op("Nil", []), Op("Nil", [])))
+        )
+      , SDefT(
           "collect_om_2_0"
         , [ VarDec(
               "k_86"
@@ -1641,19 +1666,28 @@ Specification(
               )
             )
           , Id
-          , CallT(
-              SVar("crush_3_0")
-            , [ Build(Anno(Op("Nil", []), Op("Nil", [])))
-              , CallT(SVar("l_86"), [], [])
-              , CallT(
-                  SVar("collect_om_2_0")
-                , [ CallT(SVar("k_86"), [], [])
-                  , CallT(SVar("l_86"), [], [])
-                  ]
+          , Let(
+              [ SDefT(
+                  "u_0"
                 , []
+                , []
+                , CallT(
+                    SVar("collect_om_2_0")
+                  , [ CallT(SVar("k_86"), [], [])
+                    , CallT(SVar("l_86"), [], [])
+                    ]
+                  , []
+                  )
                 )
               ]
-            , []
+            , CallT(
+                SVar("crush_3_0")
+              , [ CallT(SVar("t_0"), [], [])
+                , CallT(SVar("l_86"), [], [])
+                , CallT(SVar("u_0"), [], [])
+                ]
+              , []
+              )
             )
           )
         )

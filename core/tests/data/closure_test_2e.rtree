@@ -1235,30 +1235,36 @@ Specification(
           )
         )
       , SDefT(
+          "k_85"
+        , [ VarDec(
+              "l_85"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , CallT(
+            SVar("_2_0")
+          , [ CallT(SVar("h_0"), [], [])
+            , CallT(SVar("l_85"), [], [])
+            ]
+          , []
+          )
+        )
+      , SDefT(
+          "h_0"
+        , []
+        , []
+        , Build(Anno(Int("3"), Op("Nil", [])))
+        )
+      , SDefT(
           "main_0_0"
         , []
         , []
         , Let(
             [ SDefT(
-                "k_85"
-              , [ VarDec(
-                    "l_85"
-                  , FunType(
-                      [ConstType(Sort("ATerm", []))]
-                    , ConstType(Sort("ATerm", []))
-                    )
-                  )
-                ]
-              , []
-              , CallT(
-                  SVar("_2_0")
-                , [ Build(Anno(Int("3"), Op("Nil", [])))
-                  , CallT(SVar("l_85"), [], [])
-                  ]
-                , []
-                )
-              )
-            , SDefT(
                 "m_85"
               , []
               , []

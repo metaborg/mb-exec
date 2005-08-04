@@ -1207,13 +1207,22 @@ Specification(
                       , Seq(
                           Build(Var("k_12"))
                         , Seq(
-                            CallT(
-                              SVar("at_end_1_0")
-                            , [Seq(
-                                 Build(Var("l_12"))
-                               , CallT(SVar("t_87"), [], [])
-                               )]
-                            , []
+                            Let(
+                              [ SDefT(
+                                  "k_0"
+                                , []
+                                , []
+                                , Seq(
+                                    Build(Var("l_12"))
+                                  , CallT(SVar("t_87"), [], [])
+                                  )
+                                )
+                              ]
+                            , CallT(
+                                SVar("at_end_1_0")
+                              , [CallT(SVar("k_0"), [], [])]
+                              , []
+                              )
                             )
                           , Seq(
                               Match(Var("h_2"))
@@ -1309,7 +1318,9 @@ Specification(
               , GuardedLChoice(
                   CallT(
                     SVar("Cons_2_0")
-                  , [Id, CallT(SVar("x_87"), [], [])]
+                  , [ CallT(SVar("_id"), [], [])
+                    , CallT(SVar("x_87"), [], [])
+                    ]
                   , []
                   )
                 , Id
@@ -1342,7 +1353,14 @@ Specification(
                 , Seq(
                     Build(Var("h_12"))
                   , Seq(
-                      CallT(SVar("at_end_1_0"), [Build(Var("i_12"))], [])
+                      Let(
+                        [SDefT("l_0", [], [], Build(Var("i_12")))]
+                      , CallT(
+                          SVar("at_end_1_0")
+                        , [CallT(SVar("l_0"), [], [])]
+                        , []
+                        )
+                      )
                     , Seq(
                         Match(Var("f_2"))
                       , Seq(Build(Var("b_0")), Build(Var("f_2")))

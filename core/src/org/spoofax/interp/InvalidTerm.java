@@ -9,4 +9,10 @@ package org.spoofax.interp;
 
 public class InvalidTerm extends Exception {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    
 }

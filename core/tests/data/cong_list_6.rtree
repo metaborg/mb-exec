@@ -68,12 +68,20 @@ Specification(
           )
         )
       , SDefT(
+          "h_0"
+        , []
+        , []
+        , Match(Anno(Int("3"), Wld))
+        )
+      , SDefT(
           "main_0_0"
         , []
         , []
         , CallT(
             SVar("Cons_2_0")
-          , [Match(Anno(Int("3"), Wld)), Id]
+          , [ CallT(SVar("h_0"), [], [])
+            , CallT(SVar("_id"), [], [])
+            ]
           , []
           )
         )

@@ -9,6 +9,10 @@ package org.spoofax.interp;
 
 public class FatalError extends Exception {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -3622131518420023392L;
     private String error;
     
     public FatalError(String s) {

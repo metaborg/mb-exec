@@ -1285,12 +1285,18 @@ Specification(
           )
         )
       , SDefT(
+          "d_0"
+        , []
+        , []
+        , Build(Anno(Int("0"), Op("Nil", [])))
+        )
+      , SDefT(
           "sum_0_0"
         , []
         , []
         , CallT(
             SVar("foldr_2_0")
-          , [ Build(Anno(Int("0"), Op("Nil", [])))
+          , [ CallT(SVar("d_0"), [], [])
             , CallT(SVar("add_0_0"), [], [])
             ]
           , []

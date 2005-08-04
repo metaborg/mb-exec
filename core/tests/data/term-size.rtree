@@ -1360,12 +1360,18 @@ Specification(
           )
         )
       , SDefT(
+          "f_0"
+        , []
+        , []
+        , Build(Anno(Int("1"), Op("Nil", [])))
+        )
+      , SDefT(
           "term_size_0_0"
         , []
         , []
         , CallT(
             SVar("crush_3_0")
-          , [ Build(Anno(Int("1"), Op("Nil", [])))
+          , [ CallT(SVar("f_0"), [], [])
             , CallT(SVar("add_0_0"), [], [])
             , CallT(SVar("term_size_0_0"), [], [])
             ]

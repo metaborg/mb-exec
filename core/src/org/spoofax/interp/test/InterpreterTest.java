@@ -139,6 +139,7 @@ public class InterpreterTest extends TestCase {
                 + test + ".rtree");
 
         itp.setCurrent(input);
+        System.out.print("Input : " + input);
         return itp.eval(itp.makeTerm("CallT(SVar(\"main_0_0\"), [], [])"));
         } catch(FatalError e) {
             e.printStackTrace();
@@ -292,15 +293,15 @@ public class InterpreterTest extends TestCase {
     }
 
     public void testRDef1() {
-        interpTest("foo_rdef_1", itp.makeTuple("[]"), itp.makeTerm("3"));
+        interpTest("foo_rdef_1", itp.makeTerm("1"), itp.makeTerm("2"));
     }
 
     public void testRDef2() {
-        interpTest("foo_rdef_2", itp.makeTuple("[]"), itp.makeTerm("3"));
+        interpTest("foo_rdef_2", itp.makeTuple("[]"), itp.makeTuple("[2, 1]"));
     }
 
     public void testRDef3() {
-        interpTest("foo_rdef_3", itp.makeTuple("[]"), itp.makeTerm("3"));
+        interpTest("foo_rdef_3", itp.makeTuple("[]"), itp.makeTerm("2"));
     }
 
     public void testRDef4() {
@@ -320,7 +321,7 @@ public class InterpreterTest extends TestCase {
     }
 
     public void testOverloading4() {
-        interpTest("overloading_3", itp.makeTuple("[]"), itp.makeTerm("2"));
+        interpTest("overloading_4", itp.makeTuple("[]"), itp.makeTerm("2"));
     }
 
     public void testIncInt() {
@@ -352,11 +353,11 @@ public class InterpreterTest extends TestCase {
     }
 
     public void testIntToString() {
-        interpTest("int_to_string", itp.makeTerm("14"), itp.makeTerm("\"14\""));
+        interpTest("int-to-string", itp.makeTerm("14"), itp.makeTerm("\"14\""));
     }
 
     public void testExplodeString() {
-        interpTest("explode_string", itp.makeTerm("\"ab\""), itp.makeList("[97,98]"));
+        interpTest("explode-string", itp.makeTerm("\"ab\""), itp.makeList("[97,98]"));
     }
 
     public void testFstTuple() {
