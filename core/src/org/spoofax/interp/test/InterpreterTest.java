@@ -443,11 +443,11 @@ public class InterpreterTest extends TestCase {
     }
 
     public void testWrapProject1() {
-        interpTest("wrap_project_1", itp.makeTuple("[2,3]"), itp.makeTerm("2"));
+        interpTest("project_1", itp.makeTuple("[2,3]"), itp.makeTerm("2"));
     }
 
     public void testWrapProject2() {
-        interpTest("wrap_split_4", itp.makeTuple("[2,3]"), itp.makeTerm("3"));
+        interpTest("project_2", itp.makeTuple("[2,3]"), itp.makeTerm("3"));
     }
     
     public void testTest1() {

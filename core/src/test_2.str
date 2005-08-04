@@ -1,5 +1,0 @@
-module test_2
-imports lib
-strategies
-
-  main = test(?2)
