@@ -17,14 +17,14 @@ Specification(
       [ SDefT(
           "Cons_2_0"
         , [ VarDec(
-              "k_7"
+              "c_77"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "l_7"
+              "d_77"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -44,13 +44,13 @@ Specification(
             , Seq(
                 Build(Var("a_0"))
               , Seq(
-                  CallT(SVar("k_7"), [], [])
+                  CallT(SVar("c_77"), [], [])
                 , Seq(
                     Match(Var("e_0"))
                   , Seq(
                       Build(Var("b_0"))
                     , Seq(
-                        CallT(SVar("l_7"), [], [])
+                        CallT(SVar("d_77"), [], [])
                       , Seq(
                           Match(Var("f_0"))
                         , Build(
@@ -75,7 +75,39 @@ Specification(
         , Match(Anno(Op("Nil", []), Wld))
         )
       , SDefT(
-          "i_0"
+          "map_1_0"
+        , [ VarDec(
+              "c_116"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Let(
+            [ SDefT(
+                "d_116"
+              , []
+              , []
+              , GuardedLChoice(
+                  CallT(SVar("Nil_0_0"), [], [])
+                , Id
+                , CallT(
+                    SVar("Cons_2_0")
+                  , [ CallT(SVar("c_116"), [], [])
+                    , CallT(SVar("d_116"), [], [])
+                    ]
+                  , []
+                  )
+                )
+              )
+            ]
+          , CallT(SVar("d_116"), [], [])
+          )
+        )
+      , SDefT(
+          "h_0"
         , []
         , []
         , Build(Anno(Int("1"), Op("Nil", [])))
@@ -84,49 +116,10 @@ Specification(
           "main_0_0"
         , []
         , []
-        , Let(
-            [ SDefT(
-                "h_14"
-              , [ VarDec(
-                    "i_14"
-                  , FunType(
-                      [ConstType(Sort("ATerm", []))]
-                    , ConstType(Sort("ATerm", []))
-                    )
-                  )
-                ]
-              , []
-              , GuardedLChoice(
-                  CallT(SVar("Nil_0_0"), [], [])
-                , Id
-                , Let(
-                    [ SDefT(
-                        "h_0"
-                      , []
-                      , []
-                      , CallT(
-                          SVar("h_14")
-                        , [CallT(SVar("i_14"), [], [])]
-                        , []
-                        )
-                      )
-                    ]
-                  , CallT(
-                      SVar("Cons_2_0")
-                    , [ CallT(SVar("i_14"), [], [])
-                      , CallT(SVar("h_0"), [], [])
-                      ]
-                    , []
-                    )
-                  )
-                )
-              )
-            ]
-          , CallT(
-              SVar("h_14")
-            , [CallT(SVar("i_0"), [], [])]
-            , []
-            )
+        , CallT(
+            SVar("map_1_0")
+          , [CallT(SVar("h_0"), [], [])]
+          , []
           )
         )
       ]
