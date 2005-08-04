@@ -294,7 +294,7 @@ public class Interpreter extends ATermed {
         debug("evalSeq()");
         for (int i = 0; i < t.getChildCount(); i++) {
             if (!eval(Tools.applAt(t, i))) {
-                debug("Failed");
+                debug(" fail : " + t);
                 return false;
             }
         }
@@ -462,7 +462,7 @@ public class Interpreter extends ATermed {
         varScope.dumpScope("  ");
         ATermList sdefs = Tools.listAt(t, 0);
         for (int i = 0; i < sdefs.getLength(); i++) {
-            IntStrategy s = new IntStrategy(Tools.termAt(sdefs, 0), defScope,
+            IntStrategy s = new IntStrategy(Tools.termAt(sdefs, i), defScope,
                                             varScope);
             debug(" adding : " + s.getName());
             defScope.addStrategy(s);
