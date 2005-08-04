@@ -381,7 +381,7 @@ public class InterpreterTest extends TestCase {
     }
 
     public void testFetch2() {
-        interpTestFail("fetch_1", itp.makeList("[1,2,3]"));
+        interpTestFail("fetch_2", itp.makeList("[1,2,3]"));
     }
 
     public void testConc() {
