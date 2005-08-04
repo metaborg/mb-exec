@@ -1,0 +1,6 @@
+module closure_test_2a
+imports lib
+strategies
+main = 
+ let foo = [!3 | foo] + [] in foo end 
+          

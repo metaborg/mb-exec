@@ -1,0 +1,5 @@
+module unbinding_in_lchoice
+imports lib
+strategies
+main = 
+ (?x; fail <+ !3; ?x) 

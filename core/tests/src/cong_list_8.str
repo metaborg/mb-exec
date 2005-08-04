@@ -1,0 +1,5 @@
+module cong_list_8
+imports lib
+strategies
+main = 
+ [id | ?[3]] 

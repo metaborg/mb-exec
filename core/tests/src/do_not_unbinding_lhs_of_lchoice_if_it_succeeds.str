@@ -1,0 +1,5 @@
+module do_not_unbinding_lhs_of_lchoice_if_it_succeeds
+imports lib
+strategies
+main = 
+ (!1; ?x <+ !2; ?x) ; !x 

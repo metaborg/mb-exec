@@ -1,0 +1,5 @@
+module match_list_1
+imports lib
+strategies
+main = 
+ ?[x, y] ; !x 

@@ -1,0 +1,5 @@
+module build_string
+imports lib
+strategies
+main = 
+ !"a"     

@@ -1,0 +1,5 @@
+module cong_string_2
+imports lib
+strategies
+main = 
+ "bar"   

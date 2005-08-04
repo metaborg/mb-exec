@@ -1,0 +1,5 @@
+module match_interrupted_by_scope_2
+imports lib
+strategies
+main = 
+ ?y ; !3 ; {y: ?y } ; !y 

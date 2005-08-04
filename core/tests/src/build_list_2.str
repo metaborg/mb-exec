@@ -1,0 +1,5 @@
+module build_list_2
+imports lib
+strategies
+main = 
+ ![1, 2, 3] 

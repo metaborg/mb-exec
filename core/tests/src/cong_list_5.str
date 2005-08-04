@@ -1,0 +1,5 @@
+module cong_list_5
+imports lib
+strategies
+main = 
+ [id | ![]] 

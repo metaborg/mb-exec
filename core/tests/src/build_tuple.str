@@ -1,0 +1,5 @@
+module build_tuple
+imports lib
+strategies
+main = 
+ !(2, 3)    

@@ -1,0 +1,5 @@
+module cong_tuple_3
+imports lib
+strategies
+main = 
+ (id, fail) 

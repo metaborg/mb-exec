@@ -1,0 +1,5 @@
+module guarded_modifies_current_term
+imports lib
+strategies
+main = 
+ !1 < ?1; !3 + !2 

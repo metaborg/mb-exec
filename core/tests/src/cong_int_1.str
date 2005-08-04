@@ -1,0 +1,5 @@
+module cong_int_1
+imports lib
+strategies
+main = 
+ 2         

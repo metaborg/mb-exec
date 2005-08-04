@@ -1,0 +1,6 @@
+module closure_test_5a
+imports lib
+strategies
+main = 
+ let map(s) = [] + [s | map(s)] in map(!1) end 
+          

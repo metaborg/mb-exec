@@ -1,0 +1,5 @@
+module as_2
+imports lib
+strategies
+main = 
+ ?(x@1, 2) ; !() ; !(x, x) 

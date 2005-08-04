@@ -1,0 +1,5 @@
+module fail_fails
+imports lib
+strategies
+main = 
+ fail 

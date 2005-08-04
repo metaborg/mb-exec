@@ -1,0 +1,5 @@
+module build_int
+imports lib
+strategies
+main = 
+ !5         

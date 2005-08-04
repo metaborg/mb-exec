@@ -1,0 +1,5 @@
+module match_tuple_2
+imports lib
+strategies
+main = 
+ ?(x, y) ; !y 
