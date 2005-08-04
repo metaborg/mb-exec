@@ -1,0 +1,5 @@
+module out_of_scope_3
+imports list-cons tuple-cons
+strategies
+
+  main = {x: ?x } ; {x: !x }
