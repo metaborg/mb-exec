@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module topdown_try
-imports list-cons tuple-cons
+imports list-cons tuple-cons simple-traversal
 strategies
 
   main = topdown(try((3 -> 4)))

@@ -1,0 +1,87 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "try_1_0"
+        , [ VarDec(
+              "f_17"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , GuardedLChoice(CallT(SVar("f_17"), [], []), Id, Id)
+        )
+      , SDefT(
+          "topdown_1_0"
+        , [ VarDec(
+              "y_16"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Let(
+            [ SDefT(
+                "a_0"
+              , []
+              , []
+              , CallT(
+                  SVar("topdown_1_0")
+                , [CallT(SVar("y_16"), [], [])]
+                , []
+                )
+              )
+            ]
+          , Seq(
+              CallT(SVar("y_16"), [], [])
+            , CallT(
+                SVar("SRTS_all")
+              , [CallT(SVar("a_0"), [], [])]
+              , []
+              )
+            )
+          )
+        )
+      , SDefT(
+          "b_0"
+        , []
+        , []
+        , CallT(
+            SVar("try_1_0")
+          , [CallT(SVar("d_0"), [], [])]
+          , []
+          )
+        )
+      , SDefT(
+          "d_0"
+        , []
+        , []
+        , Seq(
+            Match(Anno(Int("3"), Wld))
+          , Build(Anno(Int("4"), Op("Nil", [])))
+          )
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , CallT(
+            SVar("topdown_1_0")
+          , [CallT(SVar("b_0"), [], [])]
+          , []
+          )
+        )
+      ]
+    )
+  ]
+)
