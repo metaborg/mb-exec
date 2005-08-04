@@ -64,7 +64,7 @@ public class Interpreter extends ATermed {
         @Override
         public void visitATerm(ATerm t) throws VisitFailure {
 
-            List<ATerm> ats = (List<ATerm>)t.match(needle);
+            List<ATerm> ats = (List<ATerm>) t.match(needle);
             if (ats != null) {
                 coll.addAll(ats);
             }
@@ -173,7 +173,7 @@ public class Interpreter extends ATermed {
         debug("evalMatch");
         debug(" term   : " + t);
         debug(" current: " + current);
-        
+
         ATermAppl p = (ATermAppl) t.getChildAt(0);
         List<Pair<String, ATerm>> r = match(current, p);
 
@@ -184,7 +184,11 @@ public class Interpreter extends ATermed {
         if (r != null) {
             debug(" results : " + r);
 
+            
+            debug(" will bind:");
+            varScope.dumpScope(" ");
             boolean b = bindVars(r);
+            debug(" bound vars:");
             varScope.dumpScope(" ");
             return b;
         }
@@ -193,7 +197,6 @@ public class Interpreter extends ATermed {
     }
 
     private boolean bindVars(List<Pair<String, ATerm>> r) {
-        varScope.dumpScope("  ");
         for (Pair<String, ATerm> x : r) {
             VarScope s = varScope.scopeOf(x.first);
             if (s == null) {
@@ -273,7 +276,7 @@ public class Interpreter extends ATermed {
         debug(" " + t);
         BindingInfo bi = varScope.saveUnboundVars();
         boolean cond = eval(Tools.applAt(t, 0));
-        if(cond) {
+        if (cond) {
             return eval(Tools.applAt(t, 1));
         } else {
             varScope.restoreUnboundVars(bi);
@@ -411,8 +414,8 @@ public class Interpreter extends ATermed {
         }
 
         for (int i = 0; i < actualTVars.getChildCount(); i++)
-            newVarScope.add(formalTVars.get(i), 
-                            varScope.lookup(Tools.stringAt(Tools.applAt(actualTVars, i), 0)));
+            newVarScope.add(formalTVars.get(i), varScope.lookup(Tools
+                    .stringAt(Tools.applAt(actualTVars, i), 0)));
 
         VarScope oldVarScope = varScope;
         DefScope oldDefScope = defScope;
@@ -539,27 +542,27 @@ public class Interpreter extends ATermed {
             List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
             r.add(new Pair<String, ATerm>(Tools.stringAt(p, 0), t));
             return r;
-        } else if(Tools.termType(p, "Explode")) {
+        } else if (Tools.termType(p, "Explode")) {
             AFun ctor = t.getAFun();
             ATermList args = t.getArguments();
-            
+
             ATermAppl ctor_p = Tools.applAt(p, 0);
             ATerm ctor_t = makeTerm("\"" + ctor.getName() + "\"");
-            
+
             List<Pair<String, ATerm>> r = match(ctor_t, ctor_p);
-            if(r == null)
+            if (r == null)
                 return null;
-            
+
             ATermAppl appl_p = Tools.applAt(p, 1);
-            
+
             r.addAll(match(makeList(args), appl_p));
             return r;
-        } else if(Tools.termType(p, "As")) {
+        } else if (Tools.termType(p, "As")) {
             List<Pair<String, ATerm>> r = match(t, Tools.applAt(p, 1));
-            if(r == null)
+            if (r == null)
                 return null;
             debug("" + p);
-            String varName = Tools.stringAt(Tools.applAt(p, 0),0);
+            String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
             r.add(new Pair<String, ATerm>(varName, t));
             return r;
         }
@@ -583,11 +586,11 @@ public class Interpreter extends ATermed {
             r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0))
                     .getName(), t));
             return r;
-        } else if(p.getName().equals("Op")) {
+        } else if (p.getName().equals("Op")) {
             return null;
-        } else if(p.getName().equals("Explode")) {
+        } else if (p.getName().equals("Explode")) {
             return null;
-        } else if(p.getName().equals("Wld")) {
+        } else if (p.getName().equals("Wld")) {
             return emptyList;
         }
 

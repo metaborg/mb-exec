@@ -171,10 +171,6 @@ public class InterpreterTest extends TestCase {
         interpTest("match_interrupted_by_scope_4", "4", "4");
     }
 
-    public void testScopeOutOfScope3() {
-        interpTestFail("out_of_scope_3", "2");
-    }
-
     public static void main(String[] args) {
         junit.textui.TestRunner.run(InterpreterTest.class);
     }
@@ -440,7 +436,7 @@ public class InterpreterTest extends TestCase {
     }
 
     public void testWrapSplit4() {
-        interpTest("wrap_split_4", itp.makeTerm("2"), itp.makeTuple("[2,2]"));
+        interpTest("wrap_split_4", itp.makeTerm("2"), itp.makeList("[2,2]"));
     }
 
     public void testProject1() {
@@ -460,7 +456,7 @@ public class InterpreterTest extends TestCase {
     }
 
     public void testTest3() {
-        interpTest("test_3", itp.makeTuple("[]"), itp.makeTerm("3"));
+        interpTestFail("test_3", itp.makeTuple("[]")); //, itp.makeTerm("3"));
     }
 
     public void testAs1() {
