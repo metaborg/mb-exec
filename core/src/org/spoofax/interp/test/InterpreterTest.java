@@ -151,10 +151,6 @@ public class InterpreterTest extends TestCase {
 
     }
 
-    public void testScopeOutOfScope1() {
-        interpTestFail("out_of_scope_1", "2");
-    }
-
     public void testScopeMatchInterrupt1() {
         interpTest("match_interrupted_by_scope_1", "2", "2");
     }
@@ -464,7 +460,7 @@ public class InterpreterTest extends TestCase {
     }
 
     public void testAs2() {
-        interpTest("test_3", itp.makeTuple("[1,2]"), itp.makeTuple("[1,1]"));
+        interpTest("as_2", itp.makeTuple("[1,2]"), itp.makeTuple("[1,1]"));
     }
 
     public void testDynruleCounter1() {

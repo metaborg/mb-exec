@@ -592,6 +592,11 @@ public class Interpreter extends ATermed {
             return null;
         } else if (p.getName().equals("Wld")) {
             return emptyList;
+        } else if (p.getName().equals("As")) {
+            List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+            String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
+            r.add(new Pair<String, ATerm>(varName, t));
+            return r;
         }
 
         throw new FatalError("Unknown type '" + p.getName());
