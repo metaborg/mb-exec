@@ -21,12 +21,14 @@ sed \
 
 tafname="$(echo $3 | sed 's/ /_/g')"
 
-if [ ! -f data/${tafname}.rtree ] ; then 
+if [ ! -f src/${tafname}.str ] ; then 
   echo "must make ${tafname}"
 
-cat /tmp/foo-test-test.str
-
-#  ~/.nix-profile/bin/strc \
+#  (
+#	~/.nix-profile/bin/strc \
 #	--keep 2 -i /tmp/foo-test-test.str \
 #	&& pp-aterm -i /tmp/foo-test-test.sci.opt16 > data/${tafname}.rtree
+#  ) &&
+#  cp /tmp/foo-test-test.str src/${tafname}.str
+  
 fi
