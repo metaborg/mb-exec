@@ -48,7 +48,7 @@ public class Library {
             new MethodEntry("SSL_muli", 0, 2),
             new MethodEntry("SSL_int_to_string", 0, 1),
             new MethodEntry("SSL_explode_string", 0, 1),
-            
+            new MethodEntry("SSL_is_int", 0, 1),
     };
     private static Object hashtable;
 
@@ -198,5 +198,9 @@ public class Library {
         
         itp.setCurrent(itp.makeList(r));
         return true;
+    }
+    
+    public static boolean SSL_is_int(Interpreter itp, ATermList svars, ATermList tvars) {
+        return Tools.termAt(tvars, 0).getType() == ATerm.INT;
     }
 }
