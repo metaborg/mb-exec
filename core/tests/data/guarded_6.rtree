@@ -1,0 +1,22 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "main_0_0"
+        , []
+        , []
+        , GuardedLChoice(
+            Id
+          , Build(Anno(Int("1"), Op("Nil", [])))
+          , Build(Anno(Int("2"), Op("Nil", [])))
+          )
+        )
+      ]
+    )
+  ]
+)

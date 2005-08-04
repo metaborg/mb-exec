@@ -170,7 +170,7 @@ public class Interpreter extends ATermed {
     }
 
     private boolean evalMatch(ATermAppl t) throws FatalError {
-        debug("evalMatch");
+        debug("evalMatch() - " + current);
         debug(" term   : " + t);
         debug(" current: " + current);
 
@@ -272,13 +272,15 @@ public class Interpreter extends ATermed {
     }
 
     private boolean evalGuardedLChoice(ATermAppl t) throws FatalError {
-        debug("evalGuardedLChoice()");
+        debug("evalGuardedLChoice() - " + current);
         debug(" " + t);
         BindingInfo bi = varScope.saveUnboundVars();
+        ATerm oldCurrent = current;
         boolean cond = eval(Tools.applAt(t, 0));
         if (cond) {
             return eval(Tools.applAt(t, 1));
         } else {
+            current = oldCurrent;
             varScope.restoreUnboundVars(bi);
             return eval(Tools.applAt(t, 2));
         }
@@ -291,7 +293,7 @@ public class Interpreter extends ATermed {
     }
 
     private boolean evalSeq(ATermAppl t) throws FatalError {
-        debug("evalSeq()");
+        debug("evalSeq() - " + current);
         for (int i = 0; i < t.getChildCount(); i++) {
             if (!eval(Tools.applAt(t, i))) {
                 debug(" fail : " + t);
@@ -302,7 +304,7 @@ public class Interpreter extends ATermed {
     }
 
     private boolean evalScope(ATermAppl t) throws FatalError {
-        debug("evalScope()");
+        debug("evalScope() - " + current);
         enterVarScope();
         ATermList vars = (ATermList) t.getChildAt(0);
         debug(" " + vars);
@@ -325,7 +327,7 @@ public class Interpreter extends ATermed {
     }
 
     private boolean evalBuild(ATermAppl t) throws FatalError {
-        debug("evalBuild()");
+        debug("evalBuild() - " + current);
         debug(" term : " + t.toString());
         current = buildTerm((ATermAppl) t.getChildAt(0));
         if (current == null)
@@ -374,17 +376,17 @@ public class Interpreter extends ATermed {
     }
 
     private boolean evalId(ATermAppl t) {
-        debug("evalId");
+        debug("evalId - " + current);
         return true;
     }
 
     private boolean evalFail(ATermAppl t) {
-        System.out.println("evalFail");
+        debug("evalFail - " + current);
         return false;
     }
 
     private boolean evalCall(ATermAppl t) throws FatalError {
-        System.out.println("evalCall");
+        debug("evalCall - " + current);
         debug(" term : " + t);
         ATermAppl sname = Tools.applAt(Tools.applAt(t, 0), 0);
         ATermList actualSVars = Tools.listAt(t, 1);
@@ -457,7 +459,7 @@ public class Interpreter extends ATermed {
     }
 
     private boolean evalLet(ATermAppl t) throws FatalError {
-        debug("evalLet()");
+        debug("evalLet() - " + current);
         enterDefScope();
         varScope.dumpScope("  ");
         ATermList sdefs = Tools.listAt(t, 0);

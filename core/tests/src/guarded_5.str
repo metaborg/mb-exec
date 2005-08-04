@@ -1,0 +1,13 @@
+/**
+ * Part of the Stratego Language Interpreter Test-Suite
+ *
+ *
+ * @author Karl Trygve Kalleberg <karltk@cs.uu.nl>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
+module guarded_5
+imports list-cons tuple-cons
+strategies
+
+  main = (!3 ; ?x) < !1 + !2
