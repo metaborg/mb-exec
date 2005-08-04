@@ -1,0 +1,25 @@
+Specification(
+  [ Signature([Constructors([])])
+  , Strategies(
+      [ SDefT(
+          "explode_string_0_0"
+        , []
+        , []
+        , Scope(
+            ["v_14"]
+          , Seq(
+              Match(Var("v_14"))
+            , PrimT("SSL_explode_string", [], [Var("v_14")])
+            )
+          )
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , CallT(SVar("explode_string_0_0"), [], [])
+        )
+      ]
+    )
+  ]
+)

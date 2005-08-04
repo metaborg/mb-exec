@@ -1179,18 +1179,18 @@ Specification(
         , []
         , []
         , Scope(
-            ["c_0", "a_0"]
+            ["a_0", "b_0"]
           , Seq(
-              Match(Var("a_0"))
+              Match(Var("b_0"))
             , Seq(
-                Match(Var("c_0"))
+                Match(Var("a_0"))
               , Seq(
-                  Build(Var("a_0"))
+                  Build(Var("b_0"))
                 , Build(
                     Anno(
                       Op(
                         ""
-                      , [Var("c_0"), Anno(Int("3"), Op("Nil", []))]
+                      , [Var("a_0"), Anno(Int("3"), Op("Nil", []))]
                       )
                     , Op("Nil", [])
                     )

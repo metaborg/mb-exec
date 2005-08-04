@@ -19,28 +19,28 @@ Specification(
         , []
         , []
         , Scope(
-            ["c_0", "e_0", "d_0", "a_0"]
+            ["a_0", "b_0", "e_0", "d_0"]
           , Seq(
-              Match(Var("a_0"))
+              Match(Var("d_0"))
             , Seq(
-                Match(Var("c_0"))
+                Match(Var("a_0"))
               , Seq(
-                  Build(Var("a_0"))
+                  Build(Var("d_0"))
                 , Seq(
-                    Match(Var("d_0"))
+                    Match(Var("e_0"))
                   , Seq(
-                      Match(Var("e_0"))
+                      Match(Var("b_0"))
                     , Seq(
-                        Build(Var("d_0"))
+                        Build(Var("e_0"))
                       , Build(
                           Anno(
                             Op(
                               "Cons"
-                            , [ Var("c_0")
+                            , [ Var("a_0")
                               , Anno(
                                   Op(
                                     "Cons"
-                                  , [Var("e_0"), Anno(Op("Nil", []), Op("Nil", []))]
+                                  , [Var("b_0"), Anno(Op("Nil", []), Op("Nil", []))]
                                   )
                                 , Op("Nil", [])
                                 )

@@ -1,0 +1,25 @@
+Specification(
+  [ Signature([Constructors([])])
+  , Strategies(
+      [ SDefT(
+          "int_to_string_0_0"
+        , []
+        , []
+        , Scope(
+            ["u_18"]
+          , Seq(
+              Match(Var("u_18"))
+            , PrimT("SSL_int_to_string", [], [Var("u_18")])
+            )
+          )
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , CallT(SVar("int_to_string_0_0"), [], [])
+        )
+      ]
+    )
+  ]
+)

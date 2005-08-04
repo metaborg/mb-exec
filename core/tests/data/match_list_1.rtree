@@ -19,17 +19,17 @@ Specification(
         , []
         , []
         , Scope(
-            ["e_14", "f_14"]
+            ["o_9", "p_9"]
           , Seq(
               Match(
                 Anno(
                   Op(
                     "Cons"
-                  , [ Var("f_14")
+                  , [ Var("p_9")
                     , Anno(
                         Op(
                           "Cons"
-                        , [Var("e_14"), Anno(Op("Nil", []), Wld)]
+                        , [Var("o_9"), Anno(Op("Nil", []), Wld)]
                         )
                       , Wld
                       )
@@ -38,7 +38,7 @@ Specification(
                 , Wld
                 )
               )
-            , Build(Var("f_14"))
+            , Build(Var("p_9"))
             )
           )
         )

@@ -1,0 +1,43 @@
+Specification(
+  [ Signature([Constructors([])])
+  , Strategies(
+      [ SDefT(
+          "foo_0_1"
+        , []
+        , [VarDec("j_7", ConstType(Sort("ATerm", [])))]
+        , Build(Var("j_7"))
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Scope(
+            ["a_0", "e_0", "b_0", "d_0"]
+          , Seq(
+              Match(Var("e_0"))
+            , Seq(
+                Match(Var("d_0"))
+              , Seq(
+                  Match(Var("b_0"))
+                , Seq(
+                    Build(Var("d_0"))
+                  , Seq(
+                      Build(Var("b_0"))
+                    , Seq(
+                        Match(Var("a_0"))
+                      , Seq(
+                          Build(Var("e_0"))
+                        , CallT(SVar("foo_0_1"), [], [Var("a_0")])
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      ]
+    )
+  ]
+)

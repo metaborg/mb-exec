@@ -11,13 +11,13 @@ Specification(
         , []
         , []
         , Scope(
-            ["e_14"]
+            ["o_9"]
           , GuardedLChoice(
-              Seq(Match(Var("e_14")), Fail)
+              Seq(Match(Var("o_9")), Fail)
             , Id
             , Seq(
                 Build(Anno(Int("3"), Op("Nil", [])))
-              , Match(Var("e_14"))
+              , Match(Var("o_9"))
               )
             )
           )

@@ -11,20 +11,20 @@ Specification(
         , []
         , []
         , Scope(
-            ["e_14"]
+            ["o_9"]
           , Seq(
               GuardedLChoice(
                 Seq(
                   Build(Anno(Int("1"), Op("Nil", [])))
-                , Match(Var("e_14"))
+                , Match(Var("o_9"))
                 )
               , Id
               , Seq(
                   Build(Anno(Int("2"), Op("Nil", [])))
-                , Match(Var("e_14"))
+                , Match(Var("o_9"))
                 )
               )
-            , Build(Var("e_14"))
+            , Build(Var("o_9"))
             )
           )
         )

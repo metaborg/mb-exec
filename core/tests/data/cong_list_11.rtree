@@ -23,14 +23,14 @@ Specification(
       , SDefT(
           "Cons_2_0"
         , [ VarDec(
-              "b_95"
+              "m_77"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "c_95"
+              "n_77"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -39,24 +39,24 @@ Specification(
           ]
         , []
         , Scope(
-            ["d_0", "a_0", "c_0", "e_0", "f_0"]
+            ["d_0", "a_0", "b_0", "e_0", "f_0"]
           , Seq(
               Match(
                 Anno(
-                  Op("Cons", [Var("a_0"), Var("c_0")])
+                  Op("Cons", [Var("a_0"), Var("b_0")])
                 , Var("d_0")
                 )
               )
             , Seq(
                 Build(Var("a_0"))
               , Seq(
-                  CallT(SVar("b_95"), [], [])
+                  CallT(SVar("m_77"), [], [])
                 , Seq(
                     Match(Var("e_0"))
                   , Seq(
-                      Build(Var("c_0"))
+                      Build(Var("b_0"))
                     , Seq(
-                        CallT(SVar("c_95"), [], [])
+                        CallT(SVar("n_77"), [], [])
                       , Seq(
                           Match(Var("f_0"))
                         , Build(
@@ -80,9 +80,7 @@ Specification(
         , []
         , CallT(
             SVar("Cons_2_0")
-          , [ CallT(SVar("_fail"), [], [])
-            , CallT(SVar("Nil_0_0"), [], [])
-            ]
+          , [Fail, CallT(SVar("Nil_0_0"), [], [])]
           , []
           )
         )

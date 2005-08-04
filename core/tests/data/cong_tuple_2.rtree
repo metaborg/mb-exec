@@ -1179,18 +1179,18 @@ Specification(
         , []
         , []
         , Scope(
-            ["t_17", "u_17"]
+            ["g_11", "h_11"]
           , Seq(
               Match(
                 Anno(
-                  Op("", [Var("t_17"), Var("u_17")])
+                  Op("", [Var("g_11"), Var("h_11")])
                 , Wld
                 )
               )
             , GuardedLChoice(
-                PrimT("SSL_addi", [], [Var("t_17"), Var("u_17")])
+                PrimT("SSL_addi", [], [Var("g_11"), Var("h_11")])
               , Id
-              , PrimT("SSL_addr", [], [Var("t_17"), Var("u_17")])
+              , PrimT("SSL_addr", [], [Var("g_11"), Var("h_11")])
               )
             )
           )
@@ -1200,11 +1200,11 @@ Specification(
         , []
         , []
         , Scope(
-            ["d_3", "a_0"]
+            ["w_1", "a_0"]
           , Seq(
               Match(Var("a_0"))
             , Seq(
-                Match(Var("d_3"))
+                Match(Var("w_1"))
               , Seq(
                   Build(Var("a_0"))
                 , Seq(
@@ -1212,7 +1212,7 @@ Specification(
                       Anno(
                         Op(
                           ""
-                        , [Var("d_3"), Anno(Int("1"), Op("Nil", []))]
+                        , [Var("w_1"), Anno(Int("1"), Op("Nil", []))]
                         )
                       , Op("Nil", [])
                       )
@@ -1227,14 +1227,14 @@ Specification(
       , SDefT(
           "_2_0"
         , [ VarDec(
-              "h_95"
+              "n_77"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "i_95"
+              "o_77"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1243,29 +1243,29 @@ Specification(
           ]
         , []
         , Scope(
-            ["e_0", "c_0", "d_0", "f_0", "g_0"]
+            ["e_0", "b_0", "d_0", "f_0", "h_0"]
           , Seq(
               Match(
                 Anno(
-                  Op("", [Var("c_0"), Var("d_0")])
+                  Op("", [Var("b_0"), Var("d_0")])
                 , Var("e_0")
                 )
               )
             , Seq(
-                Build(Var("c_0"))
+                Build(Var("b_0"))
               , Seq(
-                  CallT(SVar("h_95"), [], [])
+                  CallT(SVar("n_77"), [], [])
                 , Seq(
                     Match(Var("f_0"))
                   , Seq(
                       Build(Var("d_0"))
                     , Seq(
-                        CallT(SVar("i_95"), [], [])
+                        CallT(SVar("o_77"), [], [])
                       , Seq(
-                          Match(Var("g_0"))
+                          Match(Var("h_0"))
                         , Build(
                             Anno(
-                              Op("", [Var("f_0"), Var("g_0")])
+                              Op("", [Var("f_0"), Var("h_0")])
                             , Var("e_0")
                             )
                           )

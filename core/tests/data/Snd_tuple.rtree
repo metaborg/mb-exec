@@ -1,0 +1,56 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl(
+              "Cons"
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
+              , ConstType(Sort("List", [SortVar("a")]))
+              )
+            )
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "Snd_0_0"
+        , []
+        , []
+        , Scope(
+            ["o_7", "p_7", "q_7"]
+          , Seq(
+              Match(
+                Anno(
+                  Explode(
+                    Anno(Str(""), Wld)
+                  , Anno(
+                      Op(
+                        "Cons"
+                      , [ Var("o_7")
+                        , Anno(
+                            Op("Cons", [Var("q_7"), Var("p_7")])
+                          , Wld
+                          )
+                        ]
+                      )
+                    , Wld
+                    )
+                  )
+                , Wld
+                )
+              )
+            , Build(Var("q_7"))
+            )
+          )
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , CallT(SVar("Snd_0_0"), [], [])
+        )
+      ]
+    )
+  ]
+)

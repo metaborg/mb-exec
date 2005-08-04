@@ -11,12 +11,12 @@ Specification(
         , []
         , []
         , Scope(
-            ["e_14", "f_14"]
+            ["o_9", "p_9"]
           , Seq(
-              Match(Var("e_14"))
+              Match(Var("o_9"))
             , Seq(
                 Build(Anno(Int("3"), Op("Nil", [])))
-              , Seq(Match(Var("f_14")), Build(Var("e_14")))
+              , Seq(Match(Var("p_9")), Build(Var("o_9")))
               )
             )
           )

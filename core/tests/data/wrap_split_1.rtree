@@ -1179,22 +1179,22 @@ Specification(
         , []
         , []
         , Scope(
-            ["c_0", "e_0", "d_0", "a_0"]
+            ["a_0", "b_0", "e_0", "d_0"]
           , Seq(
-              Match(Var("a_0"))
+              Match(Var("d_0"))
             , Seq(
-                Match(Var("c_0"))
+                Match(Var("a_0"))
               , Seq(
-                  Build(Var("a_0"))
+                  Build(Var("d_0"))
                 , Seq(
-                    Match(Var("d_0"))
+                    Match(Var("e_0"))
                   , Seq(
-                      Match(Var("e_0"))
+                      Match(Var("b_0"))
                     , Seq(
-                        Build(Var("d_0"))
+                        Build(Var("e_0"))
                       , Build(
                           Anno(
-                            Op("", [Var("c_0"), Var("e_0")])
+                            Op("", [Var("a_0"), Var("b_0")])
                           , Op("Nil", [])
                           )
                         )

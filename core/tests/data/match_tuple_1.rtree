@@ -1178,15 +1178,15 @@ Specification(
         , []
         , []
         , Scope(
-            ["e_14", "f_14"]
+            ["o_9", "p_9"]
           , Seq(
               Match(
                 Anno(
-                  Op("", [Var("f_14"), Var("e_14")])
+                  Op("", [Var("p_9"), Var("o_9")])
                 , Wld
                 )
               )
-            , Build(Var("f_14"))
+            , Build(Var("p_9"))
             )
           )
         )

@@ -1179,13 +1179,13 @@ Specification(
         , []
         , []
         , Scope(
-            ["e_14"]
+            ["o_9"]
           , Seq(
               Match(
                 Anno(
                   Op(
                     ""
-                  , [ As(Var("e_14"), Anno(Int("1"), Wld))
+                  , [ As(Var("o_9"), Anno(Int("1"), Wld))
                     , Anno(Int("2"), Wld)
                     ]
                   )
@@ -1196,7 +1196,7 @@ Specification(
                 Build(Anno(Op("", []), Op("Nil", [])))
               , Build(
                   Anno(
-                    Op("", [Var("e_14"), Var("e_14")])
+                    Op("", [Var("o_9"), Var("o_9")])
                   , Op("Nil", [])
                   )
                 )

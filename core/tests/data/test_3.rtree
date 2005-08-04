@@ -11,18 +11,18 @@ Specification(
         , []
         , []
         , Scope(
-            ["e_14", "a_0"]
+            ["o_9", "a_0"]
           , Seq(
               Match(Var("a_0"))
             , Seq(
                 Build(Anno(Int("2"), Op("Nil", [])))
               , Seq(
-                  Match(Var("e_14"))
+                  Match(Var("o_9"))
                 , Seq(
                     Build(Var("a_0"))
                   , Seq(
                       Build(Anno(Int("3"), Op("Nil", [])))
-                    , Match(Var("e_14"))
+                    , Match(Var("o_9"))
                     )
                   )
                 )

@@ -17,14 +17,14 @@ Specification(
       [ SDefT(
           "Cons_2_0"
         , [ VarDec(
-              "c_95"
+              "n_77"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "d_95"
+              "o_77"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -33,24 +33,24 @@ Specification(
           ]
         , []
         , Scope(
-            ["d_0", "a_0", "c_0", "e_0", "f_0"]
+            ["d_0", "a_0", "b_0", "e_0", "f_0"]
           , Seq(
               Match(
                 Anno(
-                  Op("Cons", [Var("a_0"), Var("c_0")])
+                  Op("Cons", [Var("a_0"), Var("b_0")])
                 , Var("d_0")
                 )
               )
             , Seq(
                 Build(Var("a_0"))
               , Seq(
-                  CallT(SVar("c_95"), [], [])
+                  CallT(SVar("n_77"), [], [])
                 , Seq(
                     Match(Var("e_0"))
                   , Seq(
-                      Build(Var("c_0"))
+                      Build(Var("b_0"))
                     , Seq(
-                        CallT(SVar("d_95"), [], [])
+                        CallT(SVar("o_77"), [], [])
                       , Seq(
                           Match(Var("f_0"))
                         , Build(
@@ -73,33 +73,24 @@ Specification(
         , []
         , []
         , Scope(
-            ["e_14"]
+            ["o_9"]
           , Seq(
-              Let(
-                [ SDefT(
-                    "g_0"
-                  , []
-                  , []
-                  , Match(
-                      Anno(
-                        Op(
-                          "Cons"
-                        , [Var("e_14"), Anno(Op("Nil", []), Wld)]
-                        )
-                      , Wld
+              CallT(
+                SVar("Cons_2_0")
+              , [ Id
+                , Match(
+                    Anno(
+                      Op(
+                        "Cons"
+                      , [Var("o_9"), Anno(Op("Nil", []), Wld)]
                       )
+                    , Wld
                     )
                   )
                 ]
-              , CallT(
-                  SVar("Cons_2_0")
-                , [ CallT(SVar("_id"), [], [])
-                  , CallT(SVar("g_0"), [], [])
-                  ]
-                , []
-                )
+              , []
               )
-            , Build(Var("e_14"))
+            , Build(Var("o_9"))
             )
           )
         )

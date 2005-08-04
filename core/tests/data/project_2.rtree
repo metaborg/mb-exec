@@ -1178,12 +1178,12 @@ Specification(
         , []
         , []
         , Scope(
-            ["c_0"]
+            ["a_0"]
           , Seq(
               Match(
-                Anno(Op("", [Wld, Var("c_0")]), Wld)
+                Anno(Op("", [Wld, Var("a_0")]), Wld)
               )
-            , Build(Var("c_0"))
+            , Build(Var("a_0"))
             )
           )
         )

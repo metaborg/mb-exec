@@ -1,0 +1,45 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "foo_1_0"
+        , [ VarDec(
+              "a_0"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , GuardedLChoice(
+            Seq(
+              CallT(SVar("a_0"), [], [])
+            , Match(Anno(Int("2"), Wld))
+            )
+          , Id
+          , Seq(
+              CallT(SVar("a_0"), [], [])
+            , Match(Anno(Int("1"), Wld))
+            )
+          )
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , CallT(
+            SVar("foo_1_0")
+          , [Build(Anno(Int("2"), Op("Nil", [])))]
+          , []
+          )
+        )
+      ]
+    )
+  ]
+)

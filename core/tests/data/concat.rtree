@@ -1,0 +1,168 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl(
+              "Cons"
+            , FunType(
+                [ConstType(SortVar("a")), ConstType(Sort("List", [SortVar("a")]))]
+              , ConstType(Sort("List", [SortVar("a")]))
+              )
+            )
+          ]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "Cons_2_0"
+        , [ VarDec(
+              "c_77"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          , VarDec(
+              "d_77"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Scope(
+            ["e_0", "b_0", "d_0", "f_0", "h_0"]
+          , Seq(
+              Match(
+                Anno(
+                  Op("Cons", [Var("b_0"), Var("d_0")])
+                , Var("e_0")
+                )
+              )
+            , Seq(
+                Build(Var("b_0"))
+              , Seq(
+                  CallT(SVar("c_77"), [], [])
+                , Seq(
+                    Match(Var("f_0"))
+                  , Seq(
+                      Build(Var("d_0"))
+                    , Seq(
+                        CallT(SVar("d_77"), [], [])
+                      , Seq(
+                          Match(Var("h_0"))
+                        , Build(
+                            Anno(
+                              Op("Cons", [Var("f_0"), Var("h_0")])
+                            , Var("e_0")
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      , SDefT(
+          "at_end_1_0"
+        , [ VarDec(
+              "w_87"
+            , FunType(
+                [ConstType(Sort("ATerm", []))]
+              , ConstType(Sort("ATerm", []))
+              )
+            )
+          ]
+        , []
+        , Let(
+            [ SDefT(
+                "x_87"
+              , []
+              , []
+              , GuardedLChoice(
+                  CallT(
+                    SVar("Cons_2_0")
+                  , [Id, CallT(SVar("x_87"), [], [])]
+                  , []
+                  )
+                , Id
+                , Seq(
+                    CallT(SVar("Nil_0_0"), [], [])
+                  , CallT(SVar("w_87"), [], [])
+                  )
+                )
+              )
+            ]
+          , CallT(SVar("x_87"), [], [])
+          )
+        )
+      , SDefT(
+          "Nil_0_0"
+        , []
+        , []
+        , Match(Anno(Op("Nil", []), Wld))
+        )
+      , SDefT(
+          "concat_0_0"
+        , []
+        , []
+        , Let(
+            [ SDefT(
+                "t_87"
+              , []
+              , []
+              , GuardedLChoice(
+                  CallT(SVar("Nil_0_0"), [], [])
+                , Id
+                , Scope(
+                    ["k_12", "l_12", "h_2", "a_0"]
+                  , Seq(
+                      Match(
+                        Anno(
+                          Op("Cons", [Var("k_12"), Var("l_12")])
+                        , Wld
+                        )
+                      )
+                    , Seq(
+                        Match(Var("a_0"))
+                      , Seq(
+                          Build(Var("k_12"))
+                        , Seq(
+                            CallT(
+                              SVar("at_end_1_0")
+                            , [Seq(
+                                 Build(Var("l_12"))
+                               , CallT(SVar("t_87"), [], [])
+                               )]
+                            , []
+                            )
+                          , Seq(
+                              Match(Var("h_2"))
+                            , Seq(Build(Var("a_0")), Build(Var("h_2")))
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            ]
+          , CallT(SVar("t_87"), [], [])
+          )
+        )
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , CallT(SVar("concat_0_0"), [], [])
+        )
+      ]
+    )
+  ]
+)
