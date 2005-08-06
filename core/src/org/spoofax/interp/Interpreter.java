@@ -545,12 +545,16 @@ public class Interpreter extends ATermed {
             r.add(new Pair<String, ATerm>(Tools.stringAt(p, 0), t));
             return r;
         } else if (Tools.termType(p, "Explode")) {
+            debug("Explode case");
+            
             AFun ctor = t.getAFun();
             ATermList args = t.getArguments();
 
             ATermAppl ctor_p = Tools.applAt(p, 0);
             ATerm ctor_t = makeTerm("\"" + ctor.getName() + "\"");
 
+            debug("" + ctor_t + " / " + ctor_p); 
+            
             List<Pair<String, ATerm>> r = match(ctor_t, ctor_p);
             if (r == null)
                 return null;
@@ -593,7 +597,14 @@ public class Interpreter extends ATermed {
         } else if (p.getName().equals("Op")) {
             return null;
         } else if (p.getName().equals("Explode")) {
-            return null;
+            if(Tools.applAt(p,0).getName().equals("Wld")) {
+                List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+                String varName = Tools.stringAt(Tools.applAt(p, 1), 0);
+                r.add(new Pair<String, ATerm>(varName, makeList()));
+                return r;
+            }
+            else
+                return null;
         } else if (p.getName().equals("Wld")) {
             return emptyList;
         } else if (p.getName().equals("As")) {
