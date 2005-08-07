@@ -1,4 +1,4 @@
-package org.spoofax.interp;
+package org.spoofax.interpreter;
 
 import java.io.IOException;
 

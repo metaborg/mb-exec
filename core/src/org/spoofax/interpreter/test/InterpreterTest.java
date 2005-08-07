@@ -5,14 +5,14 @@
  * 
  * Licensed under the IBM Common Public License, v1.0
  */
-package org.spoofax.interp.test;
+package org.spoofax.interpreter.test;
 
 import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.spoofax.interp.FatalError;
-import org.spoofax.interp.Interpreter;
+import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.Interpreter;
 
 import aterm.ATerm;
 import aterm.pure.ATermImpl;

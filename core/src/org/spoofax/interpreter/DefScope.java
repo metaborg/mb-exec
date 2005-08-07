@@ -5,7 +5,7 @@
  * 
  * Licensed under the IBM Common Public License, v1.0
  */
-package org.spoofax.interp;
+package org.spoofax.interpreter;
 
 import java.util.HashMap;
 import java.util.Map;
