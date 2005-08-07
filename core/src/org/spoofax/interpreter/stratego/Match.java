@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2004, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
- * Licensed under the IBM Common Public License, v1.0
+ * Licensed under the GNU General Public License, v2
  */
 package org.spoofax.interpreter.stratego;
 
