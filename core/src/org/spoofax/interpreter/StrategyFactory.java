@@ -11,7 +11,7 @@ import aterm.ATermAppl;
 
 public class StrategyFactory {
 
-    public static Strategy create(ATermAppl t, DefScope defScope, VarScope varScope) throws FatalError {
+    public static OldStrategy create(ATermAppl t, DefScope defScope, VarScope varScope) throws FatalError {
         if(t.getName().equals("SDefT"))
             return new IntStrategy(t, defScope, varScope);
         else if(t.getName().equals("ExtSDef"))

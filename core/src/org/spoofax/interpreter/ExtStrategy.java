@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import aterm.ATermList;
 
-public class ExtStrategy extends Strategy {
+public class ExtStrategy extends OldStrategy {
 
     private String name;
     private Method methodPointer;
@@ -34,7 +34,7 @@ public class ExtStrategy extends Strategy {
 
     public String getName() { return name; }
     
-    public boolean invoke(Interpreter itp, ATermList svars, ATermList tvars) throws FatalError {
+    public boolean invoke(OldInterpreter itp, ATermList svars, ATermList tvars) throws FatalError {
         try {
             Object ob = methodPointer.invoke(null, new Object[] { itp, svars, tvars });
             return ((Boolean)ob).booleanValue();

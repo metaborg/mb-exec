@@ -8,61 +8,56 @@
 package org.spoofax.interpreter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.spoofax.interpreter.stratego.OpDecl;
+import org.spoofax.interpreter.stratego.SDefT;
 
 public class DefScope {
 
     private DefScope parent;
     
-    private Map<String, Constructor> constructors;
-    private Map<String, Strategy> strategies;
-//    private Map<String, ExtStrategy> externalStrategies;
+    private Map<String, OpDecl> opdecls;
+    private Map<String, SDefT> sdefs;
 
     public DefScope(DefScope parent) {
         this.parent = parent;
         
-        constructors = new HashMap<String, Constructor>();
-        strategies = new HashMap<String, Strategy>();
-//        externalStrategies = new HashMap<String, ExtStrategy>();
+        opdecls = new HashMap<String, OpDecl>();
+        sdefs = new HashMap<String, SDefT>();
     }
     
 
-    public Constructor lookupConstructor(String name) {
-        Constructor c = constructors.get(name);
-        if(c == null && parent != null)
-            return parent.lookupConstructor(name);
-        return c;
+    public OpDecl lookupOp(String name) {
+        OpDecl op = opdecls.get(name);
+        if(op == null && parent != null)
+            return parent.lookupOp(name);
+        return op;
     }
 
-    public Strategy lookupStrategy(String name) {
-        Strategy c = strategies.get(name);
-        if(c == null && parent != null)
-            return parent.lookupStrategy(name);
-        return c;
+    public SDefT lookupSDefT(String name) {
+        SDefT sdef = sdefs.get(name);
+        if(sdef == null && parent != null)
+            return parent.lookupSDefT(name);
+        return sdef;
     }
-/*
-    public Strategy lookupExtStrategy(String name) {
-        ExtStrategy c = externalStrategies.get(name);
-        if(c == null && parent != null)
-            return parent.lookupExtStrategy(name);
-        return c;
-    }
-*/
-    public void addConstructor(Constructor c) {
-        constructors.put(c.getName(), c);
+
+    public void add(String name, OpDecl op) {
+        opdecls.put(name, op);
     }    
 
-    public void addStrategy(Strategy c) {
-        strategies.put(c.getName(), c);
+    public void add(String name, SDefT sdef) {
+        sdefs.put(name, sdef);
     }    
-/*
-    public void addExtStrategy(ExtStrategy c) {
-        externalStrategies.put(c.getName(), c);
-    }    
-*/
-
-
+    
     public DefScope getParent() {
         return parent;
+    }
+
+
+    public void add(List<SDefT> defs) {
+        for(SDefT def : defs)
+            add(def.getName(), def);
     }
 }

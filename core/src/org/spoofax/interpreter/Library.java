@@ -49,8 +49,8 @@ public class Library {
             new MethodEntry("SSL_int_to_string", 0, 1),
             new MethodEntry("SSL_explode_string", 0, 1),
             new MethodEntry("SSL_is_int", 0, 1),
-            new MethodEntry("SRTS_all", 1, 1),
     };
+    
     private static Object hashtable;
 
     public static List<ExtStrategy> getStrategies() {
@@ -203,14 +203,5 @@ public class Library {
     
     public static boolean SSL_is_int(Interpreter itp, ATermList svars, ATermList tvars) {
         return Tools.termAt(tvars, 0).getType() == ATerm.INT;
-    }
-    
-    public static boolean SRTS_all(Interpreter itp, ATermList svars, ATermList tvars) throws FatalError  {
-        ATerm t = Tools.termAt(tvars, 0);
-        String s = Tools.stringAt(Tools.applAt(Tools.applAt(svars, 0), 0), 0);
-    
-        System.out.println(s);
-        
-        return itp.invoke(s, itp.factory.makeList(), itp.factory.makeList());
     }
 }

@@ -12,16 +12,16 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.Interpreter;
+import org.spoofax.interpreter.OldInterpreter;
 
 public class LibraryTest extends TestCase {
 
-    Interpreter itp;
+    OldInterpreter itp;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        itp = new Interpreter();
+        itp = new OldInterpreter();
     }
     
     public void testTuple() {  interpTest("tuple-test");   }

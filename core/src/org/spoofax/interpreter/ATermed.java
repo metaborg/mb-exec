@@ -17,6 +17,10 @@ public class ATermed {
 
     protected PureFactory factory;
 
+    ATermed() {
+        factory = new PureFactory();
+    }
+    
     ATerm makePattern(String s) {
         return factory.parse(s);
     }

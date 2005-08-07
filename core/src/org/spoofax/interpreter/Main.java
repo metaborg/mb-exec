@@ -24,7 +24,7 @@ public class Main {
         try {
             itp.setCurrent(inp);
             itp.invoke("main_0_0", null, null);
-            System.out.println("" + itp.getCurrent());
+            System.out.println("" + itp.current());
         } catch (FatalError e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

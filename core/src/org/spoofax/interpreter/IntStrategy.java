@@ -14,7 +14,7 @@ import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
 
-public class IntStrategy extends Strategy {
+public class IntStrategy extends OldStrategy {
 
     protected ATermAppl body;
 

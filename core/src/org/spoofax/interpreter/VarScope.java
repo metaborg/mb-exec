@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.spoofax.interpreter.stratego.SDefT;
+
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -21,12 +23,12 @@ public class VarScope {
 
     private Map<String, ATerm> vars;
 
-    private Map<String, Strategy> svars;
+    private Map<String, SDefT> svars;
 
     public VarScope(VarScope parent) {
         this.parent = parent;
         vars = new HashMap<String, ATerm>();
-        svars = new HashMap<String, Strategy>();
+        svars = new HashMap<String, SDefT>();
     }
 
     public ATerm lookup(String name) {
@@ -36,14 +38,14 @@ public class VarScope {
         return t;
     }
 
-    public Strategy lookupSVar(String name) {
-        Strategy t = svars.get(name);
+    public SDefT lookupSVar(String name) {
+        SDefT t = svars.get(name);
         if (t == null && parent != null)
             return parent.lookupSVar(name);
         return t;
     }
 
-    public void addSVar(String svar, Strategy strat) {
+    public void addSVar(String svar, SDefT strat) {
         svars.put(svar, strat);
     }
 
@@ -73,10 +75,10 @@ public class VarScope {
         return null;
     }
     
-    public String dumpScope(String prefix) {
+    public String dump(String prefix) {
         String pre = prefix;
         if(parent != null)
-            pre = parent.dumpScope(prefix);
+            pre = parent.dump(prefix);
 
         for(String t : vars.keySet()) {
             System.out.println(pre + "[v] " + t + "   " + vars.get(t));

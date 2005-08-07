@@ -121,14 +121,14 @@ public class InterpreterTest extends TestCase {
     public void interpTest(String test, ATerm input, ATerm output) {
         assertTrue(runInterp(test, input));
         ATermImpl x = (ATermImpl) output;
-        ATermImpl y = (ATermImpl) itp.getCurrent();
+        ATermImpl y = (ATermImpl) itp.current();
         assertTrue(x.getFactory() == y.getFactory());
         System.out.println("Want : " + x + " / " + x.getType() + " / " + x.getClass()
                 + " / " + x.getChildCount());
         System.out.println("Got  : " + y + " / " + y.getType() + " / " + y.getClass()
                            + " / " + y.getChildCount());
-        System.out.println(itp.getCurrent().match(output));
-        assertTrue(itp.getCurrent().match(output) != null);
+        System.out.println(itp.current().match(output));
+        assertTrue(itp.current().match(output) != null);
     }
 
     private boolean runInterp(String test, ATerm input) {
@@ -137,10 +137,11 @@ public class InterpreterTest extends TestCase {
         try {
         itp.load("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/"
                 + test + ".rtree");
-
+        
         itp.setCurrent(input);
         System.out.println("Input : " + input);
-        return itp.eval(itp.makeTerm("CallT(SVar(\"main_0_0\"), [], [])"));
+        return itp.invoke("main_0_0", null, null);
+
         } catch(FatalError e) {
             e.printStackTrace();
             return false;
