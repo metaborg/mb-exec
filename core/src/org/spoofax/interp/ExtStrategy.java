@@ -23,6 +23,12 @@ public class ExtStrategy extends Strategy {
         termParams = new ArrayList<String>(tvarArity);
         stratParams = new ArrayList<String>(svarArity);
 
+        for(int i=0;i<tvarArity;i++)
+            termParams.add("t" + i);
+
+        for(int i=0;i<svarArity;i++)
+            stratParams.add("s" + i);
+        
         methodPointer = method;
     }
 

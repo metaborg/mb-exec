@@ -500,7 +500,7 @@ public class Interpreter extends ATermed {
         debug("Calling " + name + " with " + svars.toString() + " / "
                 + tvars.toString());
 
-        return eval(makeTerm(("CallT(SVar(\"" + name + "\"), [], [])")));
+        return eval(makeTerm(("CallT(SVar(\"" + name + "\")," + svars + ", " + tvars + ")")));
     }
 
     private List<Pair<String, ATerm>> emptyList = new ArrayList<Pair<String, ATerm>>();
