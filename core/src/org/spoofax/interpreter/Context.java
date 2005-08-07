@@ -7,29 +7,14 @@
  */
 package org.spoofax.interpreter;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.spoofax.interpreter.stratego.Build;
-import org.spoofax.interpreter.stratego.CallT;
-import org.spoofax.interpreter.stratego.Fail;
-import org.spoofax.interpreter.stratego.GuardedLChoice;
-import org.spoofax.interpreter.stratego.Id;
-import org.spoofax.interpreter.stratego.Let;
-import org.spoofax.interpreter.stratego.Match;
 import org.spoofax.interpreter.stratego.OpDecl;
-import org.spoofax.interpreter.stratego.PrimT;
 import org.spoofax.interpreter.stratego.SDefT;
-import org.spoofax.interpreter.stratego.Scope;
-import org.spoofax.interpreter.stratego.Seq;
-import org.spoofax.interpreter.stratego.Strategy;
 
 import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 public class Context extends ATermed implements IContext {
