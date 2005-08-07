@@ -23,7 +23,7 @@ public class Main {
         ATerm inp = itp.makeList("[]");
         try {
             itp.setCurrent(inp);
-            itp.invoke("main_0_0", null, null);
+            itp.invoke("main_0_0");
             System.out.println("" + itp.current());
         } catch (FatalError e) {
             // TODO Auto-generated catch block

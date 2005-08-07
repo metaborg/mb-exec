@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IEnvironment;
-import org.spoofax.interpreter.Interpreter;
+import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.Context;
 import org.spoofax.interpreter.Pair;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.VarScope;
@@ -31,26 +31,27 @@ public class Match extends Strategy {
         this.pattern = pattern;
     }
 
-    public boolean eval(IEnvironment env) throws FatalError {
+    public boolean eval(IContext env) throws FatalError {
+        debug("Match.eval()");
+        
         ATerm current = env.current();
         
-        debug("evalMatch() - " + current);
         debug(" term   : " + pattern);
         debug(" current: " + current);
 
         ATermAppl p = pattern;
         List<Pair<String, ATerm>> r = match(env, current, p);
 
-        Interpreter.debug(" !" + current + " ; ?" + p);
+        Context.debug(" !" + current + " ; ?" + p);
 
         if (r != null) {
             debug(" results : " + r);
             
             debug(" will bind:");
-            env.dumpScope(" ");
+            env.getVarScope().dump(" ");
             boolean b = env.bindVars(r);
             debug(" bound vars:");
-            env.dumpScope(" ");
+            env.getVarScope().dump(" ");
             return b;
         }
         debug(" no match!");
@@ -59,7 +60,7 @@ public class Match extends Strategy {
 
     private List<Pair<String, ATerm>> emptyList = new ArrayList<Pair<String, ATerm>>();
 
-    public List<Pair<String, ATerm>> match(IEnvironment env, ATermAppl t, ATermAppl p)
+    public List<Pair<String, ATerm>> match(IContext env, ATermAppl t, ATermAppl p)
             throws FatalError {
         debug(" ?: '" + t.getName() + "' / " + p.getName());
 
@@ -132,7 +133,7 @@ public class Match extends Strategy {
         throw new FatalError("What?" + p);
     }
 
-    public List<Pair<String, ATerm>> match(IEnvironment env, ATermInt t, ATermAppl p)
+    public List<Pair<String, ATerm>> match(IContext env, ATermInt t, ATermAppl p)
             throws FatalError {
         debug(" !" + t + " ?" + p);
 
@@ -171,7 +172,7 @@ public class Match extends Strategy {
         throw new FatalError("Unknown type '" + p.getName());
     }
 
-    public List<Pair<String, ATerm>> match(IEnvironment env, ATerm t, ATermAppl p)
+    public List<Pair<String, ATerm>> match(IContext env, ATerm t, ATermAppl p)
             throws FatalError {
         if (t.getType() == ATerm.APPL)
             return match(env, (ATermAppl) t, p);

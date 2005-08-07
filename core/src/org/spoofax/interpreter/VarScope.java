@@ -49,6 +49,11 @@ public class VarScope {
         svars.put(svar, strat);
     }
 
+    public void addSVars(List<SDefT> sdefs) {
+        for(SDefT def : sdefs)
+            svars.put(def.getName(), def);
+    }
+
     public void add(String var, ATerm t) {
         vars.put(var, t);
     }
@@ -59,7 +64,7 @@ public class VarScope {
 
     public void addUndeclaredVars(ATermList newVars) {
         for (int i = 0; i < newVars.getLength(); i++) {
-            add(((ATermAppl) newVars.getChildAt(i)).getName(), null);
+            addSVar(((ATermAppl) newVars.getChildAt(i)).getName(), null);
         }
     }
 

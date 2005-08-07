@@ -8,13 +8,12 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IEnvironment;
+import org.spoofax.interpreter.IContext;
 
 public class All extends Strategy {
 
-    public boolean eval(IEnvironment e) throws FatalError {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean eval(IContext e) throws FatalError {
+        throw new FatalError("Unimplemented");
     }
 
 }

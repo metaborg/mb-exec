@@ -7,8 +7,12 @@
  */
 package org.spoofax.interpreter.stratego;
 
+import org.spoofax.interpreter.BindingInfo;
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IEnvironment;
+import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.Tools;
+
+import aterm.ATerm;
 
 public class GuardedLChoice extends Strategy {
 
@@ -22,8 +26,18 @@ public class GuardedLChoice extends Strategy {
         thenClause = thenclause;
     }
 
-    public boolean eval(IEnvironment e) throws FatalError {
-        throw new FatalError("Unimplemented");
+    public boolean eval(IContext env) throws FatalError {
+        debug("GuardedLChoice.eval() - " + env.current());
+        BindingInfo bi = env.getVarScope().saveUnboundVars();
+        ATerm oldCurrent = env.current();
+        boolean r = cond.eval(env);
+        if (r) {
+            return ifClause.eval(env);
+        } else {
+            env.setCurrent(oldCurrent);
+            env.getVarScope().restoreUnboundVars(bi);
+            return thenClause.eval(env);
+        }
     }
 
 }

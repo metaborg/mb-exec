@@ -11,41 +11,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
 
 public class DefScope {
 
     private DefScope parent;
-    
-    private Map<String, OpDecl> opdecls;
+
     private Map<String, SDefT> sdefs;
 
     public DefScope(DefScope parent) {
         this.parent = parent;
-        
-        opdecls = new HashMap<String, OpDecl>();
+
         sdefs = new HashMap<String, SDefT>();
     }
     
-
-    public OpDecl lookupOp(String name) {
-        OpDecl op = opdecls.get(name);
-        if(op == null && parent != null)
-            return parent.lookupOp(name);
-        return op;
-    }
-
     public SDefT lookupSDefT(String name) {
         SDefT sdef = sdefs.get(name);
         if(sdef == null && parent != null)
             return parent.lookupSDefT(name);
         return sdef;
     }
-
-    public void add(String name, OpDecl op) {
-        opdecls.put(name, op);
-    }    
 
     public void add(String name, SDefT sdef) {
         sdefs.put(name, sdef);
@@ -54,7 +39,6 @@ public class DefScope {
     public DefScope getParent() {
         return parent;
     }
-
 
     public void add(List<SDefT> defs) {
         for(SDefT def : defs)

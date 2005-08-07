@@ -20,7 +20,7 @@ import aterm.ATermReal;
 public class Library {
 
     private static final Class[] defaultSignature = new Class[] {
-            Interpreter.class, ATermList.class, ATermList.class };
+            Context.class, ATermList.class, ATermList.class };
 
     private static class MethodEntry {
         MethodEntry(String name, int svarArity, int tvarArity) {
@@ -78,15 +78,15 @@ public class Library {
         return null;
     }
 
-    public static boolean _id(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean _id(Context itp, ATermList svars, ATermList tvars) {
         return true;
     }
 
-    public static boolean _fail(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean _fail(Context itp, ATermList svars, ATermList tvars) {
         return false;
     }
 
-    public static boolean SSL_addi(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean SSL_addi(Context itp, ATermList svars, ATermList tvars) {
         if(Tools.termAt(tvars, 0).getType() != ATerm.INT)
             return false;
         if(Tools.termAt(tvars, 1).getType() != ATerm.INT)
@@ -98,7 +98,7 @@ public class Library {
         return true;
     }
 
-    public static boolean SSL_addr(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean SSL_addr(Context itp, ATermList svars, ATermList tvars) {
         if(Tools.termAt(tvars, 0).getType() != ATerm.REAL)
             return false;
         if(Tools.termAt(tvars, 1).getType() != ATerm.REAL)
@@ -110,7 +110,7 @@ public class Library {
         return true;
     }
 
-    public static boolean SSL_printnl(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean SSL_printnl(Context itp, ATermList svars, ATermList tvars) {
         ATerm file = Tools.termAt(tvars, 0);
         ATerm term = Tools.termAt(tvars, 1);
         
@@ -119,7 +119,7 @@ public class Library {
         return true;
     }
     
-    public static boolean SSL_table_hastable(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean SSL_table_hastable(Context itp, ATermList svars, ATermList tvars) {
         if(hashtable == null) {
             hashtable = new HashMap(); 
         }
@@ -127,7 +127,7 @@ public class Library {
         return true;
     }
     
-    public static boolean SSL_gti(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean SSL_gti(Context itp, ATermList svars, ATermList tvars) {
         if(Tools.termAt(tvars, 0).getType() != ATerm.INT)
             return false;
         if(Tools.termAt(tvars, 1).getType() != ATerm.INT)
@@ -139,7 +139,7 @@ public class Library {
         return a.getInt() >  b.getInt();
     }
 
-    public static boolean SSL_gtr(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean SSL_gtr(Context itp, ATermList svars, ATermList tvars) {
         if(Tools.termAt(tvars, 0).getType() != ATerm.REAL)
             return false;
         if(Tools.termAt(tvars, 1).getType() != ATerm.REAL)
@@ -151,7 +151,7 @@ public class Library {
         return a.getReal() >  b.getReal();
     }
     
-    public static boolean SSL_muli(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean SSL_muli(Context itp, ATermList svars, ATermList tvars) {
         if(Tools.termAt(tvars, 0).getType() != ATerm.INT)
             return false;
         if(Tools.termAt(tvars, 1).getType() != ATerm.INT)
@@ -164,7 +164,7 @@ public class Library {
         return true;
     }
 
-    public static boolean SSL_subti(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean SSL_subti(Context itp, ATermList svars, ATermList tvars) {
         if(Tools.termAt(tvars, 0).getType() != ATerm.INT)
             return false;
         if(Tools.termAt(tvars, 1).getType() != ATerm.INT)
@@ -177,7 +177,7 @@ public class Library {
         return true;
     }
 
-    public static boolean SSL_int_to_string(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean SSL_int_to_string(Context itp, ATermList svars, ATermList tvars) {
         if(Tools.termAt(tvars, 0).getType() != ATerm.INT)
             return false;
         
@@ -186,7 +186,7 @@ public class Library {
         return true;
     }
 
-    public static boolean SSL_explode_string(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean SSL_explode_string(Context itp, ATermList svars, ATermList tvars) {
         if(Tools.termAt(tvars, 0).getType() != ATerm.APPL)
             return false;
         
@@ -201,7 +201,7 @@ public class Library {
         return true;
     }
     
-    public static boolean SSL_is_int(Interpreter itp, ATermList svars, ATermList tvars) {
+    public static boolean SSL_is_int(Context itp, ATermList svars, ATermList tvars) {
         return Tools.termAt(tvars, 0).getType() == ATerm.INT;
     }
 }

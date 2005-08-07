@@ -7,12 +7,12 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.Interpreter;
+import org.spoofax.interpreter.Context;
 
 
 abstract public class Strategy implements IConstruct {
 
     protected static void debug(String s) {
-        Interpreter.debug(s);
+        Context.debug(s);
     }
 }

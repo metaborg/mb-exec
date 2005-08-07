@@ -10,7 +10,7 @@ package org.spoofax.interpreter.stratego;
 import java.util.List;
 
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IEnvironment;
+import org.spoofax.interpreter.IContext;
 
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -29,7 +29,7 @@ public class SDefT implements IConstruct {
         this.body = body;
     }
 
-    public boolean eval(IEnvironment e) throws FatalError {
+    public boolean eval(IContext e) throws FatalError {
         throw new FatalError("Unimplemented");
     }
 

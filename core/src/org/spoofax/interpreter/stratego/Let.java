@@ -9,14 +9,9 @@ package org.spoofax.interpreter.stratego;
 
 import java.util.List;
 
-import org.spoofax.interpreter.DefScope;
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IEnvironment;
-import org.spoofax.interpreter.IntStrategy;
-import org.spoofax.interpreter.Tools;
-
-import aterm.ATermAppl;
-import aterm.ATermList;
+import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.VarScope;
 
 public class Let extends Strategy {
 
@@ -29,14 +24,16 @@ public class Let extends Strategy {
         this.body = body;
     }
     
-    public boolean eval(IEnvironment env) throws FatalError {
-        debug("evalLet() - " + env.current());
-        DefScope oldScope = env.getDefScope();
-        env.setDefScope(new DefScope(oldScope));
+    public boolean eval(IContext env) throws FatalError {
+        debug("Let.eval() - " + env.current());
+        VarScope oldScope = env.getVarScope();
+        VarScope newScope = new VarScope(oldScope);
+        
+        newScope.addSVars(defs);
+        env.setVarScope(newScope);
         env.getVarScope().dump(" ");
-        env.getDefScope().add(defs);
         boolean r = body.eval(env);
-        env.setDefScope(oldScope);
+        env.setVarScope(oldScope);
         return r;
     }
 }

@@ -72,10 +72,6 @@ public class Tools {
         return (ATermList)t.getChildAt(i);
     }
 
-    public static SVar svarAt(ATermList l, int i) {
-        return (SVar)l.getChildAt(i);
-    }
-
     public static ATerm termAt(ATermAppl t, int i) {
         return (ATerm)t.getChildAt(i);
     }

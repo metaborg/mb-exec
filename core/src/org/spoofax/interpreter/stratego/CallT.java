@@ -7,33 +7,35 @@
  */
 package org.spoofax.interpreter.stratego;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.spoofax.interpreter.DefScope;
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IEnvironment;
-import org.spoofax.interpreter.Interpreter;
+import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.Context;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.VarScope;
 
+import aterm.ATerm;
 import aterm.ATermList;
 
 public class CallT extends Strategy {
 
     protected String name;
-    protected ATermList svars;
-    protected ATermList tvars;
+    protected List<Strategy> svars;
+    protected List<ATerm> tvars;
     
-    public CallT(String name, ATermList svars, ATermList tvars) {
+    public CallT(String name, List<Strategy> svars, List<ATerm> tvars) {
         this.name = name;
         this.svars = svars;
         this.tvars = tvars;
     }
 
-    public boolean eval(IEnvironment env) throws FatalError {
-        debug("evalCall - " + env.current());
+    public boolean eval(IContext env) throws FatalError {
+        debug("CallT.eval() - " + env.current());
         SDefT sdef = env.lookupSVar(name);
-        debug(" call : " + sdef.getName());
+        debug(" call : " + name);
         List<String> formalTVars = sdef.getTermParams();
         List<String> formalSVars = sdef.getStrategyParams();
 
@@ -41,35 +43,34 @@ public class CallT extends Strategy {
         debug(" svars: " + formalSVars);
 
         VarScope newVarScope = new VarScope(env.getVarScope());
-        DefScope newDefScope = new DefScope(env.getDefScope());
 
-        if (formalSVars.size() != svars.getChildCount()) {
+        if (formalSVars.size() != svars.size()) {
             System.out.println(" takes : " + formalSVars.size());
-            System.out.println(" have  : " + svars.getChildCount());
+            System.out.println(" have  : " + svars.size());
 
             throw new FatalError("Parameter length mismatch!");
         }
 
-        for (int i = 0; i < svars.getChildCount(); i++) {
-            String varName = Tools.stringAt(Tools.applAt(Tools
-                    .applAt(svars, i), 0), 0);
-            debug("  " + formalSVars.get(i) + " points to " + varName);
-            newVarScope.addSVar(formalSVars.get(i), env.lookupSVar(varName));
+        for (int i = 0; i < svars.size(); i++) {
+            String formal = formalSVars.get(i);
+            Strategy actual = svars.get(i);
+            SDefT def = new SDefT("<anon>", new ArrayList<String>(0), new ArrayList<String>(0), actual);
+            debug("  " + formal + " points to " + actual);
+            newVarScope.addSVar(formal, def);
         }
 
-        for (int i = 0; i < tvars.getChildCount(); i++)
-            newVarScope.add(formalTVars.get(i), env.getVarScope().lookup(Tools
-                    .stringAt(Tools.applAt(tvars, i), 0)));
-
+        for (int i = 0; i < tvars.size(); i++) {
+            String formal = formalTVars.get(i);
+            ATerm actual = tvars.get(i);
+            newVarScope.add(formal, actual);
+        }
+        
         VarScope oldVarScope = env.getVarScope();
-        DefScope oldDefScope = env.getDefScope();
         env.setVarScope(newVarScope);
-        env.setDefScope(newDefScope);
 
         boolean r = sdef.getBody().eval(env);
 
         env.setVarScope(oldVarScope);
-        env.setDefScope(oldDefScope);
         return r;
     }
 }

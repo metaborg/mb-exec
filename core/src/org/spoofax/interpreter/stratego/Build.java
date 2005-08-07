@@ -8,8 +8,8 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IEnvironment;
-import org.spoofax.interpreter.Interpreter;
+import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.Context;
 import org.spoofax.interpreter.Tools;
 
 import aterm.AFun;
@@ -26,16 +26,18 @@ public class Build extends Strategy {
         term = t;
     }
     
-    public boolean eval(IEnvironment e) throws FatalError {
+    public boolean eval(IContext e) throws FatalError {
+        debug("Build.eval()");
+        
         ATerm t = buildTerm(e, term);
         if(t == null)
             return false;
-        Interpreter.debug("" + t);
+        Context.debug("" + t);
         e.setCurrent(t);
         return true;
     }
     
-    public ATerm buildTerm(IEnvironment env, ATermAppl t) throws FatalError {
+    public ATerm buildTerm(IContext env, ATermAppl t) throws FatalError {
         PureFactory factory = env.getFactory();
         
         if (t.getName().equals("Anno")) {
@@ -61,7 +63,7 @@ public class Build extends Strategy {
         } else if (t.getName().equals("Var")) {
             String n = Tools.stringAt(t, 0);
             ATerm x = env.lookupVar(n);
-            Interpreter.debug(" lookup : " + n + " (= " + x + ")");
+            Context.debug(" lookup : " + n + " (= " + x + ")");
             return x;
         }
 

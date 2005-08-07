@@ -8,9 +8,9 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IEnvironment;
+import org.spoofax.interpreter.IContext;
 
 public interface IConstruct {
 
-    boolean eval(IEnvironment e) throws FatalError;
+    boolean eval(IContext e) throws FatalError;
 }

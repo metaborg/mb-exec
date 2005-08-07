@@ -8,7 +8,7 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IEnvironment;
+import org.spoofax.interpreter.IContext;
 
 public class Seq extends Strategy {
 
@@ -20,7 +20,9 @@ public class Seq extends Strategy {
         this.s1 = s1;
     }
 
-    public boolean eval(IEnvironment env) throws FatalError {
+    public boolean eval(IContext env) throws FatalError {
+        debug("Seq.eval()");
+        
         return s0.eval(env) && s1.eval(env);
     }
 

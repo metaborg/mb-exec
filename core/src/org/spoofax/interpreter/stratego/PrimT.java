@@ -8,7 +8,7 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IEnvironment;
+import org.spoofax.interpreter.IContext;
 
 import aterm.ATermList;
 
@@ -24,7 +24,7 @@ public class PrimT extends Strategy {
         this.tvars = tvars;
     }
 
-    public boolean eval(IEnvironment e) throws FatalError {
+    public boolean eval(IContext e) throws FatalError {
         throw new FatalError("Unimplemented");
     }
 

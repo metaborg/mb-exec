@@ -10,7 +10,7 @@ package org.spoofax.interpreter.stratego;
 import java.util.List;
 
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IEnvironment;
+import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.VarScope;
 
 import aterm.ATermList;
@@ -25,11 +25,13 @@ public class Scope extends Strategy {
         this.body = body;
     }
 
-    public boolean eval(IEnvironment env) throws FatalError {
+    public boolean eval(IContext env) throws FatalError {
+        debug("Scope.eval()");
+        
         VarScope oldScope = env.getVarScope();
         VarScope newScope = new VarScope(oldScope);
         for(String s : vars)
-            newScope.add(s, null);
+            newScope.addSVar(s, null);
         env.setVarScope(newScope);
         return body.eval(env);
     }

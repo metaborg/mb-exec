@@ -132,15 +132,13 @@ public class InterpreterTest extends TestCase {
     }
 
     private boolean runInterp(String test, ATerm input) {
-        itp.reset();
-
         try {
         itp.load("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/"
                 + test + ".rtree");
         
         itp.setCurrent(input);
         System.out.println("Input : " + input);
-        return itp.invoke("main_0_0", null, null);
+        return itp.invoke("main_0_0");
 
         } catch(FatalError e) {
             e.printStackTrace();

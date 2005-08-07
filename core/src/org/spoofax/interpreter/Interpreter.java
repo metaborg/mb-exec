@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.spoofax.interpreter.stratego.Build;
 import org.spoofax.interpreter.stratego.CallT;
+import org.spoofax.interpreter.stratego.Fail;
 import org.spoofax.interpreter.stratego.GuardedLChoice;
 import org.spoofax.interpreter.stratego.Id;
 import org.spoofax.interpreter.stratego.Let;
@@ -27,33 +28,23 @@ import org.spoofax.interpreter.stratego.Strategy;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
-import aterm.pure.PureFactory;
 
-public class Interpreter extends ATermed implements IEnvironment {
+public class Interpreter extends ATermed {
 
-    protected ATerm current;
-
-    protected VarScope varScope;
-
-    protected DefScope defScope;
-
+    protected Context context;
+    
     public Interpreter() {
-        super();
-
-        varScope = new VarScope(null);
-        defScope = new DefScope(null);
+    
+        context = new Context();
+        factory = context.factory;
     }
-
-    public ATerm current() {
-        return current;
+    
+    public static void debug(String s) {
+        System.out.println(s);
     }
-
-    public void setCurrent(ATerm term) {
-        current = term;
-    }
-
+    
     public void load(String path) throws IOException, FatalError {
-        ATerm prg = factory.readFromFile(path);
+        ATerm prg = context.getFactory().readFromFile(path);
         debug("" + prg);
         ATerm sign = Tools.applAt(Tools.listAt(prg, 0), 0);
         ATerm strats = Tools.applAt(Tools.listAt(prg, 0), 1);
@@ -66,7 +57,7 @@ public class Interpreter extends ATermed implements IEnvironment {
     private void loadConstructors(ATermList list) {
         for (int i = 0; i < list.getChildCount(); i++) {
             String name = Tools.stringAt(Tools.applAt(list, i), 0);
-            defScope.add(name, new OpDecl(name));
+            context.addOpDecl(name, new OpDecl(name));
         }
     }
 
@@ -94,7 +85,7 @@ public class Interpreter extends ATermed implements IEnvironment {
             }
             debug("tvars : " + realtvars);
             
-            defScope.add(name, new SDefT(name, realsvars, realtvars, body));
+            context.addSVar(name, new SDefT(name, realsvars, realtvars, body));
         }
 
     }
@@ -119,9 +110,15 @@ public class Interpreter extends ATermed implements IEnvironment {
             return makePrimT(appl);
         } else if (op.equals("Let")) {
             return makeLet(appl);
+        } else if (op.equals("Fail")) {
+            return makeFail(appl);
         }
 
         throw new FatalError("Unknown op '" + op + "'");
+    }
+
+    private Strategy makeFail(ATermAppl appl) {
+        return new Fail();
     }
 
     private Let makeLet(ATermAppl t) throws FatalError {
@@ -147,11 +144,24 @@ public class Interpreter extends ATermed implements IEnvironment {
         return new PrimT(name, svars, tvars);
     }
 
-    private Strategy makeCallT(ATermAppl t) {
+    private Strategy makeCallT(ATermAppl t) throws FatalError {
+        debug("makeCallT()");
         String name = Tools.stringAt(Tools.applAt(t, 0), 0);
+        
         ATermList svars = Tools.listAt(t, 1);
+        List<Strategy> realsvars = new ArrayList<Strategy>(svars.getChildCount());
+        
+        for(int i=0;i<svars.getChildCount();i++)
+            realsvars.add(makeStrategy(Tools.applAt(svars, i)));
+        
         ATermList tvars = Tools.listAt(t, 2);
-        return new CallT(name, svars, tvars);
+        List<ATerm> realtvars = new ArrayList<ATerm>(tvars.getChildCount());
+        for(int i=0;i<tvars.getChildCount();i++)
+            realtvars.add(Tools.termAt(svars, i));
+        
+        debug(" svars : " + realsvars);
+        debug(" tvars : " + realtvars);
+        return new CallT(name, realsvars, realtvars);
     }
 
     private Id makeId(ATermAppl t) {
@@ -191,69 +201,21 @@ public class Interpreter extends ATermed implements IEnvironment {
         return new Build(u);
     }
 
-    public static void debug(String s) {
-        System.out.println(s);
+    public boolean invoke(String name) throws FatalError {
+        SDefT def = context.lookupSVar(name);
+        return def.getBody().eval(context);
     }
 
-    public boolean invoke(String name, Object object, Object object2)
-            throws FatalError {
-        SDefT s = lookupSVar(name);
-        return s.getBody().eval(this);
+    public IContext getContext() {
+        return context;
     }
 
-    public void reset() {
+    public void setCurrent(ATerm inp) {
+        context.setCurrent(inp);
     }
-
-    public ATerm lookupVar(String n) throws FatalError {
-        return varScope.lookup(n);
-    }
-
-    public SDefT lookupSVar(String n) throws FatalError {
-        return defScope.lookupSDefT(n);
-    }
-
-    public PureFactory getFactory() {
-        return factory;
-    }
-
-    public boolean bindVars(List<Pair<String, ATerm>> r) {
-        for (Pair<String, ATerm> x : r) {
-            VarScope s = varScope.scopeOf(x.first);
-            if (s == null) {
-                varScope.add(x.first, x.second);
-            } else if (s.hasVarInLocalScope(x.first)) {
-                ATerm t = s.lookup(x.first);
-                boolean eq = t.match(x.second) != null;
-                if (!eq) {
-                    debug(x.first + " already bound to " + t + ", new: "
-                            + x.second);
-                    return eq;
-                }
-            } else {
-                s.add(x.first, x.second);
-            }
-        }
-        return true;
-    }
-
-    public void dumpScope(String prefix) {
-        varScope.dump(prefix);
-    }
-
-    public VarScope getVarScope() {
-        return varScope;
-    }
-
-    public DefScope getDefScope() {
-        return defScope;
-    }
-
-    public void setVarScope(VarScope newVarScope) {
-        varScope = newVarScope;
-    }
-
-    public void setDefScope(DefScope newDefScope) {
-        defScope = newDefScope;   
+    
+    public ATerm current() {
+        return context.current();
     }
 
 }
