@@ -13,7 +13,7 @@ import org.spoofax.interpreter.IContext;
 public class Id extends Strategy {
 
     public boolean eval(IContext e) throws FatalError {
-        throw new FatalError("Unimplemented");
+        return true;
     }
 
 }
