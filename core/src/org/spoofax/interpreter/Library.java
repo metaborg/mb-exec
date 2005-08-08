@@ -37,8 +37,6 @@ public class Library {
     }
 
     private static final MethodEntry[] library = new MethodEntry[] {
-            new MethodEntry("_id", 0, 0), 
-            new MethodEntry("_fail", 0, 0),
             new MethodEntry("SSL_addi", 0, 2),
             new MethodEntry("SSL_addr", 0, 2),
             new MethodEntry("SSL_subti", 0, 2),
@@ -76,14 +74,6 @@ public class Library {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static boolean _id(Context itp, ATermList svars, ATermList tvars) {
-        return true;
-    }
-
-    public static boolean _fail(Context itp, ATermList svars, ATermList tvars) {
-        return false;
     }
 
     public static boolean SSL_addi(Context itp, ATermList svars, ATermList tvars) {

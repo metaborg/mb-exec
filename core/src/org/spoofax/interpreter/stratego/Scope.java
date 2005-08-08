@@ -31,7 +31,7 @@ public class Scope extends Strategy {
         VarScope oldScope = env.getVarScope();
         VarScope newScope = new VarScope(oldScope);
         for(String s : vars)
-            newScope.addSVar(s, null);
+            newScope.add(s, null);
         env.setVarScope(newScope);
         return body.eval(env);
     }

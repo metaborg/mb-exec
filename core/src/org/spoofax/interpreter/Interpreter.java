@@ -136,10 +136,10 @@ public class Interpreter extends ATermed {
         return null;
     }
 
-    private PrimT makePrimT(ATermAppl t) {
+    private PrimT makePrimT(ATermAppl t) throws FatalError {
         String name = Tools.stringAt(t, 0);
-        ATermList svars = Tools.listAt(t, 1);
-        ATermList tvars = Tools.listAt(t, 2);
+        List<Strategy> svars = makeStrategies(Tools.listAt(t, 1));
+        List<ATerm> tvars = makeTerms(Tools.listAt(t, 2));
 
         return new PrimT(name, svars, tvars);
     }
@@ -149,19 +149,28 @@ public class Interpreter extends ATermed {
         String name = Tools.stringAt(Tools.applAt(t, 0), 0);
         
         ATermList svars = Tools.listAt(t, 1);
-        List<Strategy> realsvars = new ArrayList<Strategy>(svars.getChildCount());
+        List<Strategy> realsvars = makeStrategies(svars);
         
-        for(int i=0;i<svars.getChildCount();i++)
-            realsvars.add(makeStrategy(Tools.applAt(svars, i)));
-        
-        ATermList tvars = Tools.listAt(t, 2);
-        List<ATerm> realtvars = new ArrayList<ATerm>(tvars.getChildCount());
-        for(int i=0;i<tvars.getChildCount();i++)
-            realtvars.add(Tools.termAt(svars, i));
+        List<ATerm> realtvars = makeTerms(Tools.listAt(t, 2));
         
         debug(" svars : " + realsvars);
         debug(" tvars : " + realtvars);
         return new CallT(name, realsvars, realtvars);
+    }
+
+    private List<ATerm> makeTerms(ATermList tvars) {
+        List<ATerm> v = new ArrayList<ATerm>(tvars.getChildCount());
+        for(int i=0;i<tvars.getChildCount();i++)
+            v.add(Tools.termAt(tvars, i));
+        return v;
+    }
+
+    private List<Strategy> makeStrategies(ATermList svars) throws FatalError {
+        List<Strategy> v = new ArrayList<Strategy>(svars.getChildCount());
+
+        for(int i=0;i<svars.getChildCount();i++)
+            v.add(makeStrategy(Tools.applAt(svars, i)));
+        return v;
     }
 
     private Id makeId(ATermAppl t) {

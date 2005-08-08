@@ -27,7 +27,7 @@ public interface IContext {
     
     boolean bindVars(List<Pair<String, ATerm>> r);
 
-    ATerm makeTerm(String string);
+    ATerm makeTerm(String s);
     ATerm makeList(ATermList args);
     
     VarScope getVarScope();
