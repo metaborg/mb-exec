@@ -19,6 +19,11 @@ public class SSL {
         registry.put("SSL_is_int", new SSL_is_int());
         registry.put("SSL_addi", new SSL_addi());
         registry.put("SSL_addr", new SSL_addr());
+        registry.put("SSL_gti", new SSL_gti());
+        registry.put("SSL_gtr", new SSL_gtr());
+        registry.put("SSL_muli", new SSL_muli());
+        registry.put("SSL_int_to_string", new SSL_int_to_string());
+        registry.put("SSL_explode_string", new SSL_explode_string());
     }
     
     protected static Map<String, Primitive> getRegistry() {

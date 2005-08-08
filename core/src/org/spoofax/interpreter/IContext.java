@@ -15,7 +15,7 @@ import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
-public interface IContext {
+public interface IContext extends IATermBuilder {
 
     ATerm current();
     void setCurrent(ATerm newCurrent);

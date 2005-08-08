@@ -18,6 +18,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.VarScope;
 
 import aterm.ATerm;
+import aterm.ATermAppl;
 import aterm.ATermList;
 
 public class CallT extends Strategy {
@@ -62,6 +63,9 @@ public class CallT extends Strategy {
         for (int i = 0; i < tvars.size(); i++) {
             String formal = formalTVars.get(i);
             ATerm actual = tvars.get(i);
+            // FIXME: This should not be here
+            if(((ATermAppl)actual).getName().equals("Var"))
+                actual = env.lookupVar(Tools.stringAt(actual, 0));
             newVarScope.add(formal, actual);
         }
         

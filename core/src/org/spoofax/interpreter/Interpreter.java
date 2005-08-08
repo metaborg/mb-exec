@@ -29,7 +29,7 @@ import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
 
-public class Interpreter extends ATermed {
+public class Interpreter extends ATermBuilder {
 
     protected Context context;
     
@@ -81,7 +81,7 @@ public class Interpreter extends ATermed {
             List<String> realtvars = new ArrayList<String>(tvars.getChildCount());
             debug("tvars : " + tvars);
             for(int j=0;j<tvars.getChildCount();j++) {
-                realtvars.add(Tools.stringAt(tvars, 0));
+                realtvars.add(Tools.stringAt(Tools.applAt(tvars, 0), 0));
             }
             debug("tvars : " + realtvars);
             
@@ -131,9 +131,8 @@ public class Interpreter extends ATermed {
         return new Let(defs, body);
     }
 
-    private SDefT makeSDefT(ATermAppl appl) {
-        // TODO Auto-generated method stub
-        return null;
+    private SDefT makeSDefT(ATermAppl appl) throws FatalError {
+        throw new FatalError("Unimplemented"); 
     }
 
     private PrimT makePrimT(ATermAppl t) throws FatalError {
@@ -147,6 +146,7 @@ public class Interpreter extends ATermed {
     private Strategy makeCallT(ATermAppl t) throws FatalError {
         debug("makeCallT()");
         String name = Tools.stringAt(Tools.applAt(t, 0), 0);
+        debug(" name  : " + name);
         
         ATermList svars = Tools.listAt(t, 1);
         List<Strategy> realsvars = makeStrategies(svars);

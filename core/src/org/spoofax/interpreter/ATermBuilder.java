@@ -13,11 +13,11 @@ import aterm.ATermAppl;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
-public class ATermed {
+public class ATermBuilder implements IATermBuilder {
 
     protected PureFactory factory;
 
-    ATermed() {
+    ATermBuilder() {
         factory = new PureFactory();
     }
     
