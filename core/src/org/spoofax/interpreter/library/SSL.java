@@ -24,6 +24,9 @@ public class SSL {
         registry.put("SSL_muli", new SSL_muli());
         registry.put("SSL_int_to_string", new SSL_int_to_string());
         registry.put("SSL_explode_string", new SSL_explode_string());
+        registry.put("SSL_subti", new SSL_subti());
+        registry.put("SSL_subtr", new SSL_subtr());
+                
     }
     
     protected static Map<String, Primitive> getRegistry() {

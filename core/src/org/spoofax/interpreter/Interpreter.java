@@ -64,52 +64,33 @@ public class Interpreter extends ATermBuilder {
     private void loadStrategies(ATermList list) throws FatalError {
         for (int i = 0; i < list.getChildCount(); i++) {
             ATermAppl t = Tools.applAt(list, i);
-            String name = Tools.stringAt(t, 0);
-            ATermList svars = Tools.listAt(t, 1);
-            ATermList tvars = Tools.listAt(t, 2);
-            Strategy body = makeStrategy(Tools.applAt(t, 3));
-
-            debug("name  : " + name);
+            SDefT def = parseSDefT(t);
             
-            List<String> realsvars = new ArrayList<String>(svars.getChildCount());
-            debug("svars : " + svars);
-            for(int j=0;j<svars.getChildCount();j++) {
-                realsvars.add(Tools.stringAt(Tools.applAt(svars, j),0));
-            }
-            debug("svars : " + realsvars);
-
-            List<String> realtvars = new ArrayList<String>(tvars.getChildCount());
-            debug("tvars : " + tvars);
-            for(int j=0;j<tvars.getChildCount();j++) {
-                realtvars.add(Tools.stringAt(Tools.applAt(tvars, 0), 0));
-            }
-            debug("tvars : " + realtvars);
-            
-            context.addSVar(name, new SDefT(name, realsvars, realtvars, body));
+            context.addSVar(def.getName(), def);
         }
 
     }
 
-    private Strategy makeStrategy(ATermAppl appl) throws FatalError {
+    private Strategy parseStrategy(ATermAppl appl) throws FatalError {
         String op = appl.getName();
         if (op.equals("Build")) {
-            return makeBuild(appl);
+            return parseBuild(appl);
         } else if (op.equals("Scope")) {
-            return makeScope(appl);
+            return parseScope(appl);
         } else if (op.equals("Seq")) {
-            return makeSeq(appl);
+            return parseSeq(appl);
         } else if (op.equals("GuardedLChoice")) {
-            return makeGuardedLChoice(appl);
+            return parseGuardedLChoice(appl);
         } else if (op.equals("Match")) {
-            return makeMatch(appl);
+            return parseMatch(appl);
         } else if (op.equals("Id")) {
-            return makeId(appl);
+            return parseId(appl);
         } else if (op.equals("CallT")) {
-            return makeCallT(appl);
+            return parseCallT(appl);
         } else if (op.equals("PrimT")) {
-            return makePrimT(appl);
+            return parsePrimT(appl);
         } else if (op.equals("Let")) {
-            return makeLet(appl);
+            return parseLet(appl);
         } else if (op.equals("Fail")) {
             return makeFail(appl);
         }
@@ -121,91 +102,117 @@ public class Interpreter extends ATermBuilder {
         return new Fail();
     }
 
-    private Let makeLet(ATermAppl t) throws FatalError {
+    private Let parseLet(ATermAppl t) throws FatalError {
         ATermList l = Tools.listAt(t, 0);
         List<SDefT> defs = new ArrayList<SDefT>();
         for (int i = 0; i < l.getChildCount(); i++)
-            defs.add(makeSDefT(Tools.applAt(l, i)));
-        Strategy body = makeStrategy(Tools.applAt(t, 1));
+            defs.add(parseSDefT(Tools.applAt(l, i)));
+        Strategy body = parseStrategy(Tools.applAt(t, 1));
 
         return new Let(defs, body);
     }
 
-    private SDefT makeSDefT(ATermAppl appl) throws FatalError {
-        throw new FatalError("Unimplemented"); 
+    private SDefT parseSDefT(ATermAppl t) throws FatalError {
+        String name = Tools.stringAt(t, 0);
+        ATermList svars = Tools.listAt(t, 1);
+        ATermList tvars = Tools.listAt(t, 2);
+        
+        VarScope oldScope = context.getVarScope();
+        VarScope newScope = new VarScope(oldScope);
+        context.setVarScope(newScope);
+        Strategy body = parseStrategy(Tools.applAt(t, 3));
+
+        debug("name  : " + name);
+        
+        List<String> realsvars = new ArrayList<String>(svars.getChildCount());
+        debug("svars : " + svars);
+        for(int j=0;j<svars.getChildCount();j++) {
+            realsvars.add(Tools.stringAt(Tools.applAt(svars, j),0));
+        }
+        debug("svars : " + realsvars);
+
+        List<String> realtvars = new ArrayList<String>(tvars.getChildCount());
+        debug("tvars : " + tvars);
+        for(int j=0;j<tvars.getChildCount();j++) {
+            realtvars.add(Tools.stringAt(Tools.applAt(tvars, 0), 0));
+        }
+        debug("tvars : " + realtvars);
+        
+        context.setVarScope(oldScope);
+        return new SDefT(name, realsvars, realtvars, body, newScope);
     }
 
-    private PrimT makePrimT(ATermAppl t) throws FatalError {
+    private PrimT parsePrimT(ATermAppl t) throws FatalError {
         String name = Tools.stringAt(t, 0);
-        List<Strategy> svars = makeStrategies(Tools.listAt(t, 1));
-        List<ATerm> tvars = makeTerms(Tools.listAt(t, 2));
+        List<Strategy> svars = parseStrategyList(Tools.listAt(t, 1));
+        List<ATerm> tvars = parseTermList(Tools.listAt(t, 2));
 
         return new PrimT(name, svars, tvars);
     }
 
-    private Strategy makeCallT(ATermAppl t) throws FatalError {
+    private Strategy parseCallT(ATermAppl t) throws FatalError {
         debug("makeCallT()");
         String name = Tools.stringAt(Tools.applAt(t, 0), 0);
         debug(" name  : " + name);
         
         ATermList svars = Tools.listAt(t, 1);
-        List<Strategy> realsvars = makeStrategies(svars);
+        List<Strategy> realsvars = parseStrategyList(svars);
         
-        List<ATerm> realtvars = makeTerms(Tools.listAt(t, 2));
+        List<ATerm> realtvars = parseTermList(Tools.listAt(t, 2));
         
         debug(" svars : " + realsvars);
         debug(" tvars : " + realtvars);
         return new CallT(name, realsvars, realtvars);
     }
 
-    private List<ATerm> makeTerms(ATermList tvars) {
+    private List<ATerm> parseTermList(ATermList tvars) {
         List<ATerm> v = new ArrayList<ATerm>(tvars.getChildCount());
         for(int i=0;i<tvars.getChildCount();i++)
             v.add(Tools.termAt(tvars, i));
         return v;
     }
 
-    private List<Strategy> makeStrategies(ATermList svars) throws FatalError {
+    private List<Strategy> parseStrategyList(ATermList svars) throws FatalError {
         List<Strategy> v = new ArrayList<Strategy>(svars.getChildCount());
 
         for(int i=0;i<svars.getChildCount();i++)
-            v.add(makeStrategy(Tools.applAt(svars, i)));
+            v.add(parseStrategy(Tools.applAt(svars, i)));
         return v;
     }
 
-    private Id makeId(ATermAppl t) {
+    private Id parseId(ATermAppl t) {
         return new Id();
     }
 
-    private Match makeMatch(ATermAppl t) {
+    private Match parseMatch(ATermAppl t) {
         ATermAppl u = Tools.applAt(t, 0);
         return new Match(u);
     }
 
-    private GuardedLChoice makeGuardedLChoice(ATermAppl t) throws FatalError {
-        Strategy cond = makeStrategy(Tools.applAt(t, 0));
-        Strategy ifclause = makeStrategy(Tools.applAt(t, 1));
-        Strategy thenclause = makeStrategy(Tools.applAt(t, 2));
+    private GuardedLChoice parseGuardedLChoice(ATermAppl t) throws FatalError {
+        Strategy cond = parseStrategy(Tools.applAt(t, 0));
+        Strategy ifclause = parseStrategy(Tools.applAt(t, 1));
+        Strategy thenclause = parseStrategy(Tools.applAt(t, 2));
 
         return new GuardedLChoice(cond, ifclause, thenclause);
     }
 
-    private Seq makeSeq(ATermAppl t) throws FatalError {
-        Strategy s0 = makeStrategy(Tools.applAt(t, 0));
-        Strategy s1 = makeStrategy(Tools.applAt(t, 1));
+    private Seq parseSeq(ATermAppl t) throws FatalError {
+        Strategy s0 = parseStrategy(Tools.applAt(t, 0));
+        Strategy s1 = parseStrategy(Tools.applAt(t, 1));
         return new Seq(s0, s1);
     }
 
-    private Scope makeScope(ATermAppl t) throws FatalError {
+    private Scope parseScope(ATermAppl t) throws FatalError {
         ATermList vars = Tools.listAt(t, 0);
         List<String> realvars = new ArrayList<String>(vars.getChildCount());
         for(int i=0;i<vars.getChildCount();i++)
             realvars.add(Tools.stringAt(vars, i));
-        Strategy body = makeStrategy(Tools.applAt(t, 1));
+        Strategy body = parseStrategy(Tools.applAt(t, 1));
         return new Scope(realvars, body);
     }
 
-    private Build makeBuild(ATermAppl t) {
+    private Build parseBuild(ATermAppl t) {
         ATermAppl u = Tools.applAt(t, 0);
         return new Build(u);
     }

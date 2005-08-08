@@ -11,22 +11,26 @@ import java.util.List;
 
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
-
-import aterm.ATermAppl;
-import aterm.ATermList;
-
+import org.spoofax.interpreter.VarScope;
 
 public class SDefT implements IConstruct {
     protected String name;
+
     protected List<String> svars;
+
     protected List<String> tvars;
+
     protected Strategy body;
-    
-    public SDefT(String name, List<String> svars, List<String> tvars, Strategy body) {
+
+    protected VarScope scope;
+
+    public SDefT(String name, List<String> svars, List<String> tvars,
+            Strategy body, VarScope scope) {
         this.name = name;
         this.svars = svars;
         this.tvars = tvars;
         this.body = body;
+        this.scope = scope;
     }
 
     public boolean eval(IContext e) throws FatalError {
@@ -47,5 +51,18 @@ public class SDefT implements IConstruct {
 
     public List<String> getStrategyParams() {
         return svars;
+    }
+
+    public VarScope getScope() {
+        return scope;
+    }
+
+    @Override
+    public String toString() {
+        return "SDefT(\"" + name + "\", " + getBody() + ")";
+    }
+
+    public void setScope(VarScope newScope) {
+        this.scope = newScope;
     }
 }

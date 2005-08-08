@@ -116,7 +116,7 @@ public class Match extends Strategy {
 
             ATermAppl appl_p = Tools.applAt(p, 1);
 
-            r.addAll(match(env, env.getFactory().makeList(args), appl_p));
+            r.addAll(match(env, env.makeList(args), appl_p));
             return r;
         } else if (Tools.termType(p, "As")) {
             List<Pair<String, ATerm>> r = match(env, t, Tools.applAt(p, 1));
@@ -155,7 +155,7 @@ public class Match extends Strategy {
             if(Tools.applAt(p,0).getName().equals("Wld")) {
                 List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
                 String varName = Tools.stringAt(Tools.applAt(p, 1), 0);
-                r.add(new Pair<String, ATerm>(varName, env.getFactory().makeList()));
+                r.add(new Pair<String, ATerm>(varName, env.makeList()));
                 return r;
             }
             else

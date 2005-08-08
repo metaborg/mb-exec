@@ -29,6 +29,8 @@ public class Let extends Strategy {
         VarScope oldScope = env.getVarScope();
         VarScope newScope = new VarScope(oldScope);
         
+        for(SDefT def : defs)
+            def.setScope(newScope);
         newScope.addSVars(defs);
         env.setVarScope(newScope);
         env.getVarScope().dump(" ");

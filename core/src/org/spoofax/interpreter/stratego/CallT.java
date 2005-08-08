@@ -27,6 +27,8 @@ public class CallT extends Strategy {
     protected List<Strategy> svars;
     protected List<ATerm> tvars;
     
+    private static int counter = 0;
+    
     public CallT(String name, List<Strategy> svars, List<ATerm> tvars) {
         this.name = name;
         this.svars = svars;
@@ -36,14 +38,21 @@ public class CallT extends Strategy {
     public boolean eval(IContext env) throws FatalError {
         debug("CallT.eval() - " + env.current());
         SDefT sdef = env.lookupSVar(name);
-        debug(" call : " + name);
+        
+        if(sdef == null)
+            throw new FatalError("Not found '" + name + "'");
+        
+        debug(" call : " + name + " " + sdef);
+        if(name.equals("w_89")) {
+            debug("foop");
+        }
         List<String> formalTVars = sdef.getTermParams();
         List<String> formalSVars = sdef.getStrategyParams();
 
         debug(" args : " + svars);
         debug(" svars: " + formalSVars);
 
-        VarScope newVarScope = new VarScope(env.getVarScope());
+        VarScope newVarScope = new VarScope(sdef.getScope());
 
         if (formalSVars.size() != svars.size()) {
             System.out.println(" takes : " + formalSVars.size());
@@ -55,7 +64,12 @@ public class CallT extends Strategy {
         for (int i = 0; i < svars.size(); i++) {
             String formal = formalSVars.get(i);
             Strategy actual = svars.get(i);
-            SDefT def = new SDefT("<anon>", new ArrayList<String>(0), new ArrayList<String>(0), actual);
+            SDefT def = new SDefT("<anon_" + counter + ">", 
+                                  new ArrayList<String>(0), 
+                                  new ArrayList<String>(0), 
+                                  actual,
+                                  env.getVarScope());
+            counter++;
             debug("  " + formal + " points to " + actual);
             newVarScope.addSVar(formal, def);
         }
@@ -73,8 +87,13 @@ public class CallT extends Strategy {
         env.setVarScope(newVarScope);
 
         boolean r = sdef.getBody().eval(env);
-
         env.setVarScope(oldVarScope);
+        debug(" out of : " + name);
         return r;
+    }
+
+    @Override
+    public String toString() {
+     return "CallT(\"" + name + "\"," + svars + "," + tvars + ")";
     }
 }

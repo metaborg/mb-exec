@@ -17,14 +17,14 @@ import aterm.ATerm;
 import aterm.ATermInt;
 import aterm.ATermReal;
 
-public class SSL_addr extends Primitive {
+public class SSL_subtr extends Primitive {
 
-    protected SSL_addr() {
-        super("SSL_addr", 0, 1);
+    protected SSL_subtr() {
+        super("SSL_subtr", 0, 1);
     }
     
     public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws FatalError {
-        debug("SSL_addr");
+        debug("SSL_subtr");
         
         if(tvars.get(0).getType() != ATerm.REAL)
             return false;
@@ -33,7 +33,7 @@ public class SSL_addr extends Primitive {
 
         ATermReal a = (ATermReal) tvars.get(0);
         ATermReal b = (ATermReal) tvars.get(1);
-        env.setCurrent(env.getFactory().makeReal(a.getReal() + b.getReal()));
+        env.setCurrent(env.getFactory().makeReal(a.getReal() - b.getReal()));
         return true;
     }
 }
