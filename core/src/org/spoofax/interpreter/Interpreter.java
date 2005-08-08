@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.spoofax.interpreter.stratego.All;
 import org.spoofax.interpreter.stratego.Build;
 import org.spoofax.interpreter.stratego.CallT;
 import org.spoofax.interpreter.stratego.Fail;
@@ -93,9 +94,16 @@ public class Interpreter extends ATermBuilder {
             return parseLet(appl);
         } else if (op.equals("Fail")) {
             return makeFail(appl);
+        } else if (op.equals("All")) {
+            return makeAll(appl);
         }
 
         throw new FatalError("Unknown op '" + op + "'");
+    }
+
+    private All makeAll(ATermAppl t) throws FatalError {
+        Strategy body = parseStrategy(Tools.applAt(t, 0));
+        return new All(body);
     }
 
     private Strategy makeFail(ATermAppl appl) {
