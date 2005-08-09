@@ -23,7 +23,7 @@ public interface IContext extends IATermBuilder {
     public ATerm lookupVar(String n) throws FatalError;
     public SDefT lookupSVar(String n) throws FatalError;
     
-    PureFactory getFactory();
+    TermFactory getFactory();
     
     boolean bindVars(List<Pair<String, ATerm>> r);
 

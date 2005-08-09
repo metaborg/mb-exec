@@ -59,7 +59,7 @@ public class Context extends ATermBuilder implements IContext {
         return varScope.lookupSVar(n);
     }
 
-    public PureFactory getFactory() {
+    public TermFactory getFactory() {
         return factory;
     }
 

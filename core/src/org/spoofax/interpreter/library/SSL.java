@@ -26,6 +26,7 @@ public class SSL {
         registry.put("SSL_explode_string", new SSL_explode_string());
         registry.put("SSL_subti", new SSL_subti());
         registry.put("SSL_subtr", new SSL_subtr());
+        registry.put("SSL_new", new SSL_new());
                 
     }
     

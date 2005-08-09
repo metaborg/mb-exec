@@ -15,10 +15,10 @@ import aterm.pure.PureFactory;
 
 public class ATermBuilder implements IATermBuilder {
 
-    protected PureFactory factory;
+    protected TermFactory factory;
 
     ATermBuilder() {
-        factory = new PureFactory();
+        factory = new TermFactory();
     }
     
     ATerm makePattern(String s) {
