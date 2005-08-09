@@ -7,13 +7,11 @@
  */
 package org.spoofax.interpreter;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import shared.SharedObject;
-
 import aterm.AFun;
-import aterm.ATerm;
 import aterm.pure.PureFactory;
 
 public class TermFactory extends PureFactory {
@@ -23,7 +21,7 @@ public class TermFactory extends PureFactory {
     
     TermFactory() {
         super();
-        funny = new HashMap<String, Object>();
+        funny = new WeakHashMap<String, Object>();
     }
     
     @Override
