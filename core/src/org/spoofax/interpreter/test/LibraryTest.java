@@ -7,21 +7,11 @@
  */
 package org.spoofax.interpreter.test;
 
-import java.io.IOException;
-
-import junit.framework.TestCase;
-
-import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.OldInterpreter;
-
-public class LibraryTest extends TestCase {
-
-    OldInterpreter itp;
+public class LibraryTest extends InterpreterTest {
 
     @Override
     protected void setUp() throws Exception {
-        super.setUp();
-        itp = new OldInterpreter();
+        super.setUp("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/");
     }
     
     public void testTuple() {  interpTest("tuple-test");   }
@@ -66,26 +56,7 @@ public class LibraryTest extends TestCase {
 
 
     public void interpTest(String test) {
-        assertTrue(runInterp(test));
+        super.interpTest(test, itp.makeTuple("[]"), itp.makeTuple("[]"));
     }
-
-    private boolean runInterp(String test) {
-        itp.reset();
-
-        try {
-        itp.load("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/"
-                + test + ".rtree");
-        return itp.eval(itp.makeTerm("CallT(SVar(\"main_0_0\"), [], [])"));
-        } catch(FatalError e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
-
 }
 
