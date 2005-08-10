@@ -42,7 +42,7 @@ public class Context extends ATermBuilder implements IContext {
 
 
     public static void debug(String s) {
-        System.out.println(s);
+        Interpreter.debug(s);
     }
 
     public boolean invoke(String name, Object object, Object object2)

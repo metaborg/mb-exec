@@ -50,7 +50,7 @@ public class VarScope {
     }
 
     public void addSVars(List<SDefT> sdefs) {
-        for(SDefT def : sdefs)
+        for (SDefT def : sdefs)
             svars.put(def.getName(), def);
     }
 
@@ -73,47 +73,51 @@ public class VarScope {
     }
 
     public VarScope scopeOf(String name) {
-        if(vars.containsKey(name))
+        if (vars.containsKey(name))
             return this;
-        if(parent != null)
+        if (parent != null)
             return parent.scopeOf(name);
         return null;
     }
-    
+
     public String dump(String prefix) {
         String pre = prefix;
-        if(parent != null)
+        if (parent != null)
             pre = parent.dump(prefix);
 
-        for(String t : vars.keySet()) {
-            System.out.println(pre + "[v] " + t + "   " + vars.get(t));
+        for (String t : vars.keySet()) {
+            debug(pre + "[v] " + t + "   " + vars.get(t));
         }
-        for(String t : svars.keySet()) {
-            System.out.println(pre + "[s] " + t + "   " + svars.get(t));
+        for (String t : svars.keySet()) {
+            debug(pre + "[s] " + t + "   " + svars.get(t));
         }
-        if(svars.size() == 0 && vars.size() == 0)
-            System.out.println(pre + "<empty>");
-        
+        if (svars.size() == 0 && vars.size() == 0)
+            debug(pre + "<empty>");
+
         return pre + "  ";
     }
 
+    private void debug(String s) {
+        Interpreter.debug(s);
+    }
+    
     public BindingInfo saveUnboundVars() {
         return saveUnboundVars(new BindingInfo());
     }
-    
+
     private BindingInfo saveUnboundVars(BindingInfo bi) {
-        for(String k : vars.keySet()) {
-            if(vars.get(k) == null)
+        for (String k : vars.keySet()) {
+            if (vars.get(k) == null)
                 bi.add(this, k);
         }
-        if(parent != null)
+        if (parent != null)
             return parent.saveUnboundVars(bi);
         return bi;
     }
 
     public void restoreUnboundVars(BindingInfo bi) {
         List<Pair<VarScope, String>> bindings = bi.getBindings();
-        for(Pair<VarScope, String> p : bindings) {
+        for (Pair<VarScope, String> p : bindings) {
             p.first.resetVar(p.second);
         }
     }
