@@ -1,0 +1,14 @@
+module analyzer
+imports
+  spoofax
+  
+strategies
+
+  meta-main = id
+
+  analyzer-register-actions = id
+  
+  analyzer-meta-info = ![]
+  
+strategies
+  

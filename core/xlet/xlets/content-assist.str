@@ -1,0 +1,11 @@
+module content-assist
+imports
+  spoofax
+
+strategies
+
+  meta-main = id
+  
+  content-assist-register-actions = id
+  
+  content-assist-meta-info = ![]
