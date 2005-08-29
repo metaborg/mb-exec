@@ -1,0 +1,13 @@
+module outliner
+imports
+  spoofax
+  
+strategies
+
+  meta-main = id
+    
+  outliner-register-actions = id
+
+  outliner-meta-info = ![]
+  
+strategies

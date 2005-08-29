@@ -1,0 +1,38 @@
+module xlet-loader
+imports
+  spoofax/aterm
+  
+signature
+  constructors
+    XLet             : PackageDescriptor * Specification -> XLet
+    PackageDescriptor: Name * Version * Dependencies * List(MetaInfo) -> PackageDescriptor
+    Name             : String                            -> Name
+    Version          : String                            -> Version
+    Dependencies     : List(PackageRef)                  -> Dependencies
+    PackageRef       : Name * List(VersionRange)         -> PackageRef
+    VersionRange     : Version * Version                 -> VersionRange
+    
+    Author           : AuthorName * AuthorEmail          -> MetaInfo
+    AuthorName       : String                            -> AuthorName
+    AuthorEmail      : String                            -> AuthorName    
+    
+    License          : String                            -> MetaInfo
+    Homepage         : String                            -> MetaInfo
+    BugTracker       : String                            -> MetaInfo
+    
+strategies
+
+  xlet-fetch-xlet = fail
+  
+  xlet-lookup-xlet = fail
+  
+  xlet-load-xlet(|name) = 
+      <path-concat> [ <xlet-repo-path>(), name, ".xlet" ]
+    ; aterm-read => xlet
+    ; spoofax-itp-make => itp
+    ; <spoofax-itp-load(|itp)> xlet
+    ; <spoofax-itp-exec(|itp)> "meta-main" => xlet'
+    ; xlet-get-itp => xlet-itp
+    ; <string-concat> [ name, "-register-actions" ] => reg-actions
+    ; <spoofax-itp-load(|xlet-itp)> reg-actions
+    

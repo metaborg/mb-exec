@@ -1,21 +1,7 @@
-module spoofax
-imports lib
-
-signature
-	sorts Header Language Meta Body
-	constructors
-		Spoofax: Language * MetaInfo * Body -> Header
-		Language: String -> Language
-		Frontend: String -> Meta
-		MetaInfo: List(Meta) -> MetaInfo
-		 
-		
-strategies
-
-	spoofax-io-wrap(s) = io-wrap(s)
-
 module path	
-
+imports
+  spoofax-core
+  
 signature
   constructors
     Path: String -> Path
@@ -58,6 +44,7 @@ strategies
 	; prim("SPX_path_dir_contents")
 
   path-make = !Path(x)
+
 
 strategies
   

@@ -1,0 +1,5 @@
+module spoofax-core
+
+strategies
+
+  tc(s) = s

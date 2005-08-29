@@ -1,0 +1,5 @@
+module aterm
+
+strategies
+
+  aterm-read = fail
