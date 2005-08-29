@@ -1,64 +1,7 @@
 module spoofax
-imports lib
-
-signature
-	sorts Header Language Meta Body
-	constructors
-		Spoofax: Language * MetaInfo * Body -> Header
-		Language: String -> Language
-		Frontend: String -> Meta
-		MetaInfo: List(Meta) -> MetaInfo
-		 
-		
-strategies
-
-	spoofax-io-wrap(s) = io-wrap(s)
-
-module path	
-
-signature
-  constructors
-    Path: String -> Path
-    	
-strategies
-
-  path-is-path = ?Path(_)
-	
-  path-is-dir = 
-      tc(path-is-path)
-    ; path-string
-    ; prim("SPX_path_is_dir")
-    
-  path-is-file = 
-      tc(path-is-path)
-	; path-string
-    ; prim("SPX_path_is_file")
-	
-  path-is-exec =
-      tc(path-is-path)
-	; path-string
-    ; prim("SPX_path_is_exec")
-	
-  path-basename =
-      tc(path-is-path)
-	; path-string
-    ; string-split(|"/")
-    ; list-last-element
-	
-  path-dirname = 
-      tc(path-is-path)
-    ; path-string
-    ; string-split(|"/")
-    ; list-first-elements(|-1)
-    ; string-join(|"/")
-	
-  path-dir-contents =
-      tc(path-is-path)
-    ; path-string
-	; prim("SPX_path_dir_contents")
-
-  path-make = !Path(x)
-
-strategies
-  
-  path-string = ?Path(s) ; !s  
+imports
+  spoofax/core
+  spoofax/xlet
+  spoofax/aterm
+  spoofax/path
+  spoofax/iowrap

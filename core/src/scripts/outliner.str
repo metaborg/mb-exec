@@ -11,3 +11,5 @@ strategies
   outliner-meta-info = ![]
   
 strategies
+
+  refresh-outline = id
