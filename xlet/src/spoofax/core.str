@@ -1,5 +1,10 @@
-module spoofax-core
+module core
+imports
+  list-cons
+  tuple-cons
 
 strategies
 
+  unimpl = fail
+  
   tc(s) = s

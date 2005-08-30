@@ -4,4 +4,6 @@ imports
   spoofax/xlet
   spoofax/aterm
   spoofax/path
-  spoofax/iowrap
+  spoofax/ext-string
+  spoofax/ext-list
+  spoofax/interpreter

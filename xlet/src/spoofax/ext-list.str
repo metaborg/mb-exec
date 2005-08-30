@@ -1,0 +1,7 @@
+module ext-list
+strategies
+
+  list-first-elements(|n) = unimpl
+  list-last-elements(|n) = unimpl
+  list-last-element = unimpl
+  

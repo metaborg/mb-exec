@@ -1,4 +1,4 @@
-module xlet-loader
+module xlet
 imports
   spoofax/aterm
   
@@ -22,13 +22,18 @@ signature
     
 strategies
 
+  xlet-get-ist = unimpl
+  xlet-get-itp = unimpl
+  
+  xlet-get-repo-path = unimpl
+  
   xlet-fetch-xlet = fail
   
   xlet-lookup-xlet = fail
   
   xlet-load-xlet = 
       ?name
-    ; <path-concat> [ <xlet-repo-path>(), name, ".xlet" ]
+    ; <path-concat> [ <xlet-get-repo-path>(), name, ".xlet" ]
     ; aterm-read => xlet
     ; spoofax-itp-make => itp
     ; <spoofax-itp-load(|itp)> xlet

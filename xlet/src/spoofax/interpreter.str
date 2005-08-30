@@ -1,0 +1,8 @@
+module interpreter
+
+strategies
+
+  spoofax-itp-load(|itp) = unimpl
+  spoofax-itp-exec(|itp) = unimpl
+  spoofax-itp-make = unimpl
+  
