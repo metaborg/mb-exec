@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.xt
 pkgdata_DATA      = spoofax.rtree-core
 
 .str.rtree-core:
-	$(SCOMPILE) $(STRINCLUDES) $(STRCFLAGS) $(SCFLAGS) -i $< -o $@ -c --library -F
+	$(SCOMPILE) $(STRINCLUDES) $(STRCFLAGS) $(SCFLAGS) -i $< -c --library -F | pp-aterm -o $@
 
 SCFLAGS           = -F --library
 
