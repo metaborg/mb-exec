@@ -3,14 +3,18 @@
  *
  * Copyright (c) 2004, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
- * Licensed under the IBM Common Public License, v1.0
+ * Licensed under the GNU General Public License, v2
  */
 package org.spoofax;
 
+import java.io.IOException;
 import java.util.Vector;
 
 import org.spoofax.ast.AST;
 import org.spoofax.ast.ASTFactory;
+import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.Interpreter;
+import org.spoofax.xlet.Instance;
 
 /**
  * @author Karl Trygve Kalleberg <karltk@ii.uib.no>
@@ -19,24 +23,19 @@ import org.spoofax.ast.ASTFactory;
  */
 public class Main {
 
-	public static void main(String[] args) {
-		Vector vec = new Vector();
-		
-		ASTFactory factory = new ASTFactory();
-		
-		for(int i=0;i<args.length;i++)
-			if(args[i].equals("--parse"))
-				vec.add(args[i + 1]);
+	public static void main(String[] args) throws IOException, FatalError {
+	    if(args.length < 3) {
+	        System.err.println("Usage: <action> <project-path> <file>");
+	        System.exit(2);
+        }
 
-		for(int i=0;i<vec.size();i++) {
-			Logger.log("Loading " + vec.elementAt(i) + "...");
-			AST ast = null;
-			try {
-				ast = factory.loadFromFile((String)vec.elementAt(i));
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-			ast.dump(System.out);
-		}
-	}
+	    String libPath = System.getProperty("spoofax.lib.path");
+        String xletPath = System.getProperty("spoofax.lib.path");
+        
+        Instance ist = new Instance(libPath, xletPath);
+        
+        ist.loadXlet(args[0]);
+        
+        
+    }
 }

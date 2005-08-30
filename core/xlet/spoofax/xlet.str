@@ -26,8 +26,9 @@ strategies
   
   xlet-lookup-xlet = fail
   
-  xlet-load-xlet(|name) = 
-      <path-concat> [ <xlet-repo-path>(), name, ".xlet" ]
+  xlet-load-xlet = 
+      ?name
+    ; <path-concat> [ <xlet-repo-path>(), name, ".xlet" ]
     ; aterm-read => xlet
     ; spoofax-itp-make => itp
     ; <spoofax-itp-load(|itp)> xlet

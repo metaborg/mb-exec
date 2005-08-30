@@ -83,4 +83,8 @@ public class ATermBuilder implements IATermBuilder {
         return factory.makeReal(d);
     }
 
+    public ATerm makeString(String name) {
+        return makeTerm("\"" + name + "\"");
+    }
+
 }

@@ -13,4 +13,8 @@ strategies
   action-lookup-cdef = id
 
     
+  spoofax-get-sglr-location = !"/usr/bin/sglr"
+  
+  spoofax-sglr(|s) = id
+  
   
