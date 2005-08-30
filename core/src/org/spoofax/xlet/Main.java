@@ -5,7 +5,7 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax;
+package org.spoofax.xlet;
 
 import java.io.IOException;
 import java.util.Vector;
@@ -14,7 +14,6 @@ import org.spoofax.ast.AST;
 import org.spoofax.ast.ASTFactory;
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.Interpreter;
-import org.spoofax.xlet.Instance;
 
 /**
  * @author Karl Trygve Kalleberg <karltk@ii.uib.no>

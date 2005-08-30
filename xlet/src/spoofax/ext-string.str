@@ -1,11 +1,11 @@
 module ext-string
 imports
   spoofax/core
-  string
+//  string
   
 strategies
 
   string-join(|conn) = unimpl
   string-split(|disj) = unimpl
   
-  string-concat = concat-strings
+  string-concat = unimpl // concat-strings
