@@ -1,0 +1,16 @@
+module actions
+
+strategies
+
+  action-outline = id
+  
+  action-goto-sdef = id
+  
+  // strategy + rule def = sdef
+  action-lookup-sdef = id
+  
+  // overlay + constructor def = cdef
+  action-lookup-cdef = id
+
+    
+  
