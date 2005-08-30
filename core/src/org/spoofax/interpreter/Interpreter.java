@@ -43,7 +43,7 @@ public class Interpreter extends ATermBuilder {
     }
     
     public static void debug(String s) {
-        System.out.println(s);
+        // System.out.println(s);
     }
     
     public void load(String path) throws IOException, FatalError {
