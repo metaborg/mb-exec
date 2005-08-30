@@ -19,11 +19,13 @@ import org.spoofax.interpreter.stratego.GuardedLChoice;
 import org.spoofax.interpreter.stratego.Id;
 import org.spoofax.interpreter.stratego.Let;
 import org.spoofax.interpreter.stratego.Match;
+import org.spoofax.interpreter.stratego.One;
 import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.PrimT;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.Scope;
 import org.spoofax.interpreter.stratego.Seq;
+import org.spoofax.interpreter.stratego.Some;
 import org.spoofax.interpreter.stratego.Strategy;
 
 import aterm.ATerm;
@@ -96,9 +98,23 @@ public class Interpreter extends ATermBuilder {
             return makeFail(appl);
         } else if (op.equals("All")) {
             return makeAll(appl);
+        } else if (op.equals("One")) {
+            return makeOne(appl);
+        } else if (op.equals("Some")) {
+            return makeSome(appl);
         }
 
         throw new FatalError("Unknown op '" + op + "'");
+    }
+
+    private Some makeSome(ATermAppl t) throws FatalError {
+        Strategy body = parseStrategy(Tools.applAt(t, 0));
+        return new Some(body);
+    }
+
+    private One makeOne(ATermAppl t) throws FatalError {
+        Strategy body = parseStrategy(Tools.applAt(t, 0));
+        return new One(body);
     }
 
     private All makeAll(ATermAppl t) throws FatalError {
@@ -227,6 +243,8 @@ public class Interpreter extends ATermBuilder {
 
     public boolean invoke(String name) throws FatalError {
         SDefT def = context.lookupSVar(name);
+        if(def == null)
+            throw new FatalError("Definition '" + name + "' not found");
         return def.getBody().eval(context);
     }
 

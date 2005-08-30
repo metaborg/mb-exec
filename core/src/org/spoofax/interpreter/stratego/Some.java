@@ -12,6 +12,12 @@ import org.spoofax.interpreter.IContext;
 
 public class Some extends Strategy {
 
+    protected Strategy body;
+    
+    public Some(Strategy body) {
+        this.body = body;
+    }
+
     public boolean eval(IContext e) throws FatalError {
         throw new FatalError("Unimplemented");
     }

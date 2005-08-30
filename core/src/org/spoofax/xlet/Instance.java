@@ -23,11 +23,11 @@ public class Instance {
         this.libPath = libPath;
         this.xletPath = xletPath;
         itp = new Interpreter();
-        itp.load(libPath + "/spoofax.rtree.core");
+        itp.load(libPath + "/spoofax.rtree-core");
     }
 
     public boolean loadXlet(String name) throws FatalError {
         itp.setCurrent(itp.makeString(name));
-        return itp.invoke("xlet-load-xlet");
+        return itp.invoke("xlet_load_xlet_0_0");
     }
 }
