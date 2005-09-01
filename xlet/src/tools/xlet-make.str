@@ -1,0 +1,12 @@
+module xlet-make
+imports
+  spoofax
+  Stratego
+  
+strategies
+
+  main = io-wrap(doit) 
+  
+  doit =
+      collect(?SDefT("analyzer_meta_info_0_0", _, _, _)) => x
+    ; debug
