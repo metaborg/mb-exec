@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2005, Karl Trygve Kalleberg
+ *
+ * Licensed under the GNU Lesser Public License, v2.1
+ */
+
 module outliner
 imports
   spoofax
@@ -7,6 +13,7 @@ strategies
   meta-main = id
     
   outliner-register-actions = id
+
 
   outliner-meta-info = ![]
   

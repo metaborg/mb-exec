@@ -5,11 +5,12 @@ imports
 signature
   constructors
     XLet             : PackageDescriptor * Specification -> XLet
-    PackageDescriptor: Name * Version * Dependencies * List(MetaInfo) -> PackageDescriptor
+    PackageDescriptor: Name * Version * APIVersion * Dependencies * List(MetaInfo) -> PackageDescriptor
     Name             : String                            -> Name
     Version          : String                            -> Version
+    APIVersion       : String                            -> APIVersion
     Dependencies     : List(PackageRef)                  -> Dependencies
-    PackageRef       : Name * List(VersionRange)         -> PackageRef
+    PackageRef       : Name * List(APIVersoin)           -> PackageRef
     VersionRange     : Version * Version                 -> VersionRange
     
     Author           : AuthorName * AuthorEmail          -> MetaInfo

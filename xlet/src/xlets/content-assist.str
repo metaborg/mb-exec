@@ -9,3 +9,11 @@ strategies
   content-assist-register-actions = id
   
   content-assist-meta-info = ![]
+  
+strategies
+
+  /**
+   *
+   * @type Path -> List(Path)
+   */
+  calculate-dependencies = unimpl  

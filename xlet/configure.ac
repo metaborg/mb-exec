@@ -22,5 +22,7 @@ XT_TERM_DEFINE
 AC_CONFIG_FILES([
   Makefile
   src/Makefile
+  src/xlets/Makefile
+  src/tools/Makefile
 ])
 AC_OUTPUT

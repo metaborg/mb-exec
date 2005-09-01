@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 module path	
 imports
   spoofax/core
@@ -12,41 +17,59 @@ strategies
 	
   path-is-dir = 
       tc(path-is-path)
-    ; path-string
+    ; path-to-string
     ; prim("SPX_path_is_dir")
     
   path-is-file = 
       tc(path-is-path)
-	; path-string
+	; path-to-string
     ; prim("SPX_path_is_file")
 	
   path-is-exec =
       tc(path-is-path)
-	; path-string
+	; path-to-string
     ; prim("SPX_path_is_exec")
 	
   path-basename =
       tc(path-is-path)
-	; path-string
+	; path-to-string
     ; string-split(|"/")
     ; list-last-element
 	
   path-dirname = 
       tc(path-is-path)
-    ; path-string
+    ; path-to-string
     ; string-split(|"/")
     ; list-first-elements(|-1)
     ; string-join(|"/")
 	
   path-dir-contents =
       tc(path-is-path)
-    ; path-string
+    ; path-to-string
 	; prim("SPX_path_dir_contents")
 
   path-make = ?x ; !Path(x)
 
   path-concat = unimpl
 
+  path-strip-extension = 
+      tc(path-is-path)
+    ; path-to-string
+    ; string-split(|".")
+    ; list-first-elements(|-1)
+  
+  /**
+   * Returns the extension of a file, if any
+   *
+   * @type Path -> String
+   */
+  path-get-extension = 
+      tc(path-is-path)
+    ; path-to-string
+    ; string-split(|".")
+    ; list-last-element
+  
+  
 strategies
   
-  path-string = ?Path(s) ; !s  
+  path-to-string = ?Path(s) ; !s  

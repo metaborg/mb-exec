@@ -8,7 +8,22 @@ strategies
 
   analyzer-register-actions = id
   
-  analyzer-meta-info = ![]
-  
+  analyzer-meta-info = 
+  !XLet(
+      PackageDescriptor(
+          Name("analyzer")
+        , Version("0.1.0")
+        , [APIVersion("0.1.0")]
+        , Dependencies([PackageRef(Name("spoofax"), APIVersion("0.1.0"))])
+        , [ License("GPL-2")
+          , Author(
+              AuthorName("Karl Trygve Kalleberg")
+            , AuthorEmail("karltk@stratego.org")
+            )
+          ]
+        )
+    , None
+    )
+   
 strategies
   
