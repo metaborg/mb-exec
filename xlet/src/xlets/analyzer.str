@@ -6,9 +6,9 @@ strategies
 
   meta-main = id
 
-  analyzer-register-actions = id
+  register-actions = id
   
-  analyzer-meta-info = 
+  meta-info = 
   !XLet(
       PackageDescriptor(
           Name("analyzer")
