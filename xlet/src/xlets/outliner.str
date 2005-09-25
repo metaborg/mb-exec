@@ -108,18 +108,23 @@ strategies
   scope-name:
   Scope(n, _) -> n
 
+  /** @type Scope -> List(Overlay | OverlayNoArgs) */
   scope-get-overlays =
     lookup-all(?Overlay(_, _, _) + ?OverlayNoArgs(_, _), id)
   
+  /** @type Scope -> List(SDefNoArgs | SDefT) */
   scope-get-strategies =
     lookup-all(?SDefNoArgs(_, _) + ?SDefT(_, _, _, _), id)
   
+  /** @type Scope -> List(RDefNoArgs | RDefT) */
   scope-get-rules =
     lookup-all(?RDefNoArgs(_, _) + ?RDefT(_, _, _, _), id)
   
+  /** @type Scope -> OpDecl */
   scope-get-constructors =
     lookup-all(?OpDecl(_, _), id)
-       
+
+         
 /* hidden */
 strategies
 
