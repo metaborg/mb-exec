@@ -16,7 +16,114 @@ strategies
 
 
   outliner-meta-info = ![]
+
+signature
+  constructors
   
+    Scope: String * List(Decl) -> Scope
+    VarDecl: Name -> Decl
+    StratDecl: Name * SDefT -> Decl
+    RuleDecl: Name * RDefT -> Decl
+    OverlayDecl: Name * ODefT -> Decl
+    ModuleDecl: Name * Module -> Decl  
+    Decl: String * Import -> Decl
+    
 strategies
 
   refresh-outline = id
+  
+  /** @type Module -> Scope */
+  scope-generate-scopes =
+      ?Module(n, t)
+    ; <collect(?Import(_)
+             + ?OpDecl(_, _)
+             + ?SDefNoArgs(_, _)
+             + ?SDefT(_, _, _, _)
+             + ?RDefNoArgs(_, _)
+             + ?RDefT(_, _, _, _)
+             + ?OverlayNoArgs(_, _)
+             + ?Overlay(_, _, _))> t => decls
+    ; debug
+    ; <map({x, n:
+             \ x@Import(n) -> Decl(n, x)\
+           <+ \ x@OpDecl(n, _) -> Decl(n, x)\
+           <+ \ x@SDefNoArgs(n, _) -> Decl(n, x)\
+           <+ \ x@SDefT(n, _, _, _) -> Decl(n, x)\
+           <+ \ x@RDefNoArgs(n, _) -> Decl(n, x)\
+           <+ \ x@OverlayNoArgs(n, _) -> Decl(n, x)\
+           <+ \ x@Overlay(n, _, _) -> Decl(n, x)\
+           <+ id })>
+        decls => decls'
+    ; !Scope(n, decls')
+    
+  /** @type Scope * Name -> Decl */
+  scope-lookup(|name) =
+    lookup-one(?OpDecl(_ , _) 
+                + ?SDefNoArgs(_, _) 
+                + ?SDefT(_, _, _, _)
+                + ?RDefNoArgs(_, _)
+                + ?RDefT(_, _, _, _)
+                + ?Import(_)
+                + ?OverlayNoArgs(_, _)
+                + ?Overlay(_, _, _)
+                , ?name)
+  
+  lookup-one(type, name) =
+      lookup-all => [ x | _ ]
+    ; !x
+
+  lookup-all(type, name) =
+      ?Scope(n, xs) 
+    ; <filter(\ Decl(n, t) -> t where <name> n ; <type> t \)> xs
+
+    
+  /** @type Scope * Name -> ConstrDecl */
+  scope-lookup-constructor(|name) =
+    lookup-one(?OpDecl(_, _), ?name)
+  
+  /** @type Scope * Name -> StratDecl */
+  scope-lookup-strategy(|name) =
+    lookup-one(?SDefT(_, _, _, _)
+                + ?SDefNoArgs(_, _), ?name)
+  
+  /** @type Scope * Name -> RuleDecl */
+  scope-lookup-rule(|name) = 
+    lookup-one(?RDefT(_, _, _, _)
+                + ?RDefNoArgs(_, _), ?name)
+  
+  /** @type Scope * Name -> OverlayDecl */
+  scope-lookup-overlay(|name) =
+    lookup-one(OverlayDecl, ?name)
+  
+  /** @type Scope * Name -> VarDecl */
+  scope-lookup-variable(|name) = unimpl
+  
+  /** @type Scope -> Scope */
+  scope-super-scope = uimpl
+  
+  /** @type Scope -> List(Scope) */
+  scope-sub-scopes = unimpl
+  
+  /** @type Scope -> String */
+  scope-name:
+  Scope(n, _) -> n
+
+  scope-get-overlays =
+    lookup-all(?Overlay(_, _, _) + ?OverlayNoArgs(_, _), id)
+  
+  scope-get-strategies =
+    lookup-all(?SDefNoArgs(_, _) + ?SDefT(_, _, _, _), id)
+  
+  scope-get-rules =
+    lookup-all(?RDefNoArgs(_, _) + ?RDefT(_, _, _, _), id)
+  
+  scope-get-constructors =
+    lookup-all(?OpDecl(_, _), id)
+       
+/* hidden */
+strategies
+
+overlays
+
+  OverlayDecl = Overlay(_, _, _)
+  OverlayDecl = OverlayNoArgs(_, _)

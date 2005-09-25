@@ -16,4 +16,6 @@ strategies
    *
    * @type Path -> List(Path)
    */
-  calculate-dependencies = unimpl  
+  calculate-dependencies = 
+    file-strip-ext
+    ; file-aunimpl  
