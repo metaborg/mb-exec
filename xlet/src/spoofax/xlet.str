@@ -24,22 +24,27 @@ signature
 strategies
 
   xlet-get-ist = unimpl
-  xlet-get-itp = unimpl
+  xlet-get-itp = prim("SPX_get_interpreter")
   
-  xlet-get-repo-path = unimpl
+  xlet-get-repo-path = prim("SPX_get_repo_path")
+    
+  xlet-fetch-xlet = prim("SPX_fetch_xlet")
   
-  xlet-fetch-xlet = fail
+  xlet-lookup-xlet = prim("SPX_lookup_xlet")
   
-  xlet-lookup-xlet = fail
+  xlet-process-meta-info = unimpl
   
   xlet-load-xlet = 
       ?name
     ; <path-concat> [ <xlet-get-repo-path>(), name, ".xlet" ]
-    ; aterm-read => xlet
-    ; spoofax-itp-make => itp
-    ; <spoofax-itp-load(|itp)> xlet
+    ; aterm-read 
+    ; xlet-split => (meta-info, spec)
+    ; <xlet-process-meta-info> meta-info
+    ; spoofax-get-itp => itp
+    ; <spoofax-itp-load(|itp)> spec
     ; <spoofax-itp-exec(|itp)> "meta-main" => xlet'
     ; xlet-get-itp => xlet-itp
-    ; <string-concat> [ name, "-register-actions" ] => reg-actions
-    ; <spoofax-itp-load(|xlet-itp)> reg-actions
+    ; <spoofax-itp-exec(|xlet-itp)> "register-actions"
+    ; <spoofax-itp-remove-sdefs(|xlet-itp)> [ "meta-main", "register-actions" ]
+    
     

@@ -43,7 +43,6 @@ strategies
              + ?RDefT(_, _, _, _)
              + ?OverlayNoArgs(_, _)
              + ?Overlay(_, _, _))> t => decls
-    ; debug
     ; <map({x, n:
              \ x@Import(n) -> Decl(n, x)\
            <+ \ x@OpDecl(n, _) -> Decl(n, x)\
@@ -110,7 +109,8 @@ strategies
 
   /** @type Scope -> List(Overlay | OverlayNoArgs) */
   scope-get-overlays =
-    lookup-all(?Overlay(_, _, _) + ?OverlayNoArgs(_, _), id)
+    lookup-all(//?OverlayDecl, id) 
+               ?Overlay(_, _, _) + ?OverlayNoArgs(_, _), id)
   
   /** @type Scope -> List(SDefNoArgs | SDefT) */
   scope-get-strategies =
@@ -124,6 +124,9 @@ strategies
   scope-get-constructors =
     lookup-all(?OpDecl(_, _), id)
 
+  
+  parse-stratego = 
+    <call> ("/home/karltk/.nix-profile/bin/parse-stratego", <id>)
          
 /* hidden */
 strategies
