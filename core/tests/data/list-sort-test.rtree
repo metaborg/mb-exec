@@ -22,32 +22,33 @@ Specification(
       ]
     )
   , Strategies(
-      [ ExtSDef("uniq_0_0", [], [])
+      [ SDefT("DYNAMIC_CALLS_0_0", [], [], Fail)
+      , ExtSDef("uniq_0_0", [], [])
       , ExtSDef(
           "apply_test_4_0"
         , [ VarDec(
-              "v_137"
+              "b_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "w_137"
+              "c_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "x_137"
+              "d_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "y_137"
+              "e_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -55,164 +56,6 @@ Specification(
             )
           ]
         , []
-        )
-      , SDefT(
-          "a_0"
-        , []
-        , []
-        , Build(Anno(Str("tuple-uniq-test"), Op("Nil", [])))
-        )
-      , SDefT(
-          "c_0"
-        , []
-        , []
-        , Build(
-            Anno(
-              Op(
-                "Cons"
-              , [ Anno(Int("1"), Op("Nil", []))
-                , Anno(
-                    Op(
-                      "Cons"
-                    , [ Anno(Int("2"), Op("Nil", []))
-                      , Anno(
-                          Op(
-                            "Cons"
-                          , [ Anno(Int("3"), Op("Nil", []))
-                            , Anno(
-                                Op(
-                                  "Cons"
-                                , [ Anno(Int("5"), Op("Nil", []))
-                                  , Anno(
-                                      Op(
-                                        "Cons"
-                                      , [ Anno(Int("3"), Op("Nil", []))
-                                        , Anno(
-                                            Op(
-                                              "Cons"
-                                            , [ Anno(Int("7"), Op("Nil", []))
-                                              , Anno(
-                                                  Op(
-                                                    "Cons"
-                                                  , [ Anno(Int("1"), Op("Nil", []))
-                                                    , Anno(
-                                                        Op(
-                                                          "Cons"
-                                                        , [ Anno(Int("4"), Op("Nil", []))
-                                                          , Anno(
-                                                              Op(
-                                                                "Cons"
-                                                              , [ Anno(Int("9"), Op("Nil", []))
-                                                                , Anno(
-                                                                    Op(
-                                                                      "Cons"
-                                                                    , [ Anno(Int("2"), Op("Nil", []))
-                                                                      , Anno(Op("Nil", []), Op("Nil", []))
-                                                                      ]
-                                                                    )
-                                                                  , Op("Nil", [])
-                                                                  )
-                                                                ]
-                                                              )
-                                                            , Op("Nil", [])
-                                                            )
-                                                          ]
-                                                        )
-                                                      , Op("Nil", [])
-                                                      )
-                                                    ]
-                                                  )
-                                                , Op("Nil", [])
-                                                )
-                                              ]
-                                            )
-                                          , Op("Nil", [])
-                                          )
-                                        ]
-                                      )
-                                    , Op("Nil", [])
-                                    )
-                                  ]
-                                )
-                              , Op("Nil", [])
-                              )
-                            ]
-                          )
-                        , Op("Nil", [])
-                        )
-                      ]
-                    )
-                  , Op("Nil", [])
-                  )
-                ]
-              )
-            , Op("Nil", [])
-            )
-          )
-        )
-      , SDefT(
-          "d_0"
-        , []
-        , []
-        , Build(
-            Anno(
-              Op(
-                "Cons"
-              , [ Anno(Int("1"), Op("Nil", []))
-                , Anno(
-                    Op(
-                      "Cons"
-                    , [ Anno(Int("2"), Op("Nil", []))
-                      , Anno(
-                          Op(
-                            "Cons"
-                          , [ Anno(Int("3"), Op("Nil", []))
-                            , Anno(
-                                Op(
-                                  "Cons"
-                                , [ Anno(Int("5"), Op("Nil", []))
-                                  , Anno(
-                                      Op(
-                                        "Cons"
-                                      , [ Anno(Int("7"), Op("Nil", []))
-                                        , Anno(
-                                            Op(
-                                              "Cons"
-                                            , [ Anno(Int("4"), Op("Nil", []))
-                                              , Anno(
-                                                  Op(
-                                                    "Cons"
-                                                  , [ Anno(Int("9"), Op("Nil", []))
-                                                    , Anno(Op("Nil", []), Op("Nil", []))
-                                                    ]
-                                                  )
-                                                , Op("Nil", [])
-                                                )
-                                              ]
-                                            )
-                                          , Op("Nil", [])
-                                          )
-                                        ]
-                                      )
-                                    , Op("Nil", [])
-                                    )
-                                  ]
-                                )
-                              , Op("Nil", [])
-                              )
-                            ]
-                          )
-                        , Op("Nil", [])
-                        )
-                      ]
-                    )
-                  , Op("Nil", [])
-                  )
-                ]
-              )
-            , Op("Nil", [])
-            )
-          )
         )
       , SDefT(
           "tuple_uniq_test_0_0"
@@ -220,10 +63,150 @@ Specification(
         , []
         , CallT(
             SVar("apply_test_4_0")
-          , [ CallT(SVar("a_0"), [], [])
+          , [ Build(Anno(Str("tuple-uniq-test"), Op("Nil", [])))
             , CallT(SVar("uniq_0_0"), [], [])
-            , CallT(SVar("c_0"), [], [])
-            , CallT(SVar("d_0"), [], [])
+            , Build(
+                Anno(
+                  Op(
+                    "Cons"
+                  , [ Anno(Int("1"), Op("Nil", []))
+                    , Anno(
+                        Op(
+                          "Cons"
+                        , [ Anno(Int("2"), Op("Nil", []))
+                          , Anno(
+                              Op(
+                                "Cons"
+                              , [ Anno(Int("3"), Op("Nil", []))
+                                , Anno(
+                                    Op(
+                                      "Cons"
+                                    , [ Anno(Int("5"), Op("Nil", []))
+                                      , Anno(
+                                          Op(
+                                            "Cons"
+                                          , [ Anno(Int("3"), Op("Nil", []))
+                                            , Anno(
+                                                Op(
+                                                  "Cons"
+                                                , [ Anno(Int("7"), Op("Nil", []))
+                                                  , Anno(
+                                                      Op(
+                                                        "Cons"
+                                                      , [ Anno(Int("1"), Op("Nil", []))
+                                                        , Anno(
+                                                            Op(
+                                                              "Cons"
+                                                            , [ Anno(Int("4"), Op("Nil", []))
+                                                              , Anno(
+                                                                  Op(
+                                                                    "Cons"
+                                                                  , [ Anno(Int("9"), Op("Nil", []))
+                                                                    , Anno(
+                                                                        Op(
+                                                                          "Cons"
+                                                                        , [ Anno(Int("2"), Op("Nil", []))
+                                                                          , Anno(Op("Nil", []), Op("Nil", []))
+                                                                          ]
+                                                                        )
+                                                                      , Op("Nil", [])
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                , Op("Nil", [])
+                                                                )
+                                                              ]
+                                                            )
+                                                          , Op("Nil", [])
+                                                          )
+                                                        ]
+                                                      )
+                                                    , Op("Nil", [])
+                                                    )
+                                                  ]
+                                                )
+                                              , Op("Nil", [])
+                                              )
+                                            ]
+                                          )
+                                        , Op("Nil", [])
+                                        )
+                                      ]
+                                    )
+                                  , Op("Nil", [])
+                                  )
+                                ]
+                              )
+                            , Op("Nil", [])
+                            )
+                          ]
+                        )
+                      , Op("Nil", [])
+                      )
+                    ]
+                  )
+                , Op("Nil", [])
+                )
+              )
+            , Build(
+                Anno(
+                  Op(
+                    "Cons"
+                  , [ Anno(Int("1"), Op("Nil", []))
+                    , Anno(
+                        Op(
+                          "Cons"
+                        , [ Anno(Int("2"), Op("Nil", []))
+                          , Anno(
+                              Op(
+                                "Cons"
+                              , [ Anno(Int("3"), Op("Nil", []))
+                                , Anno(
+                                    Op(
+                                      "Cons"
+                                    , [ Anno(Int("5"), Op("Nil", []))
+                                      , Anno(
+                                          Op(
+                                            "Cons"
+                                          , [ Anno(Int("7"), Op("Nil", []))
+                                            , Anno(
+                                                Op(
+                                                  "Cons"
+                                                , [ Anno(Int("4"), Op("Nil", []))
+                                                  , Anno(
+                                                      Op(
+                                                        "Cons"
+                                                      , [ Anno(Int("9"), Op("Nil", []))
+                                                        , Anno(Op("Nil", []), Op("Nil", []))
+                                                        ]
+                                                      )
+                                                    , Op("Nil", [])
+                                                    )
+                                                  ]
+                                                )
+                                              , Op("Nil", [])
+                                              )
+                                            ]
+                                          )
+                                        , Op("Nil", [])
+                                        )
+                                      ]
+                                    )
+                                  , Op("Nil", [])
+                                  )
+                                ]
+                              )
+                            , Op("Nil", [])
+                            )
+                          ]
+                        )
+                      , Op("Nil", [])
+                      )
+                    ]
+                  )
+                , Op("Nil", [])
+                )
+              )
             ]
           , []
           )
@@ -231,14 +214,14 @@ Specification(
       , ExtSDef(
           "test_suite_2_0"
         , [ VarDec(
-              "t_137"
+              "z_119"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "u_137"
+              "a_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -248,18 +231,12 @@ Specification(
         , []
         )
       , SDefT(
-          "e_0"
-        , []
-        , []
-        , Build(Anno(Str("list-sort-test"), Op("Nil", [])))
-        )
-      , SDefT(
           "main_0_0"
         , []
         , []
         , CallT(
             SVar("test_suite_2_0")
-          , [ CallT(SVar("e_0"), [], [])
+          , [ Build(Anno(Str("list-sort-test"), Op("Nil", [])))
             , CallT(SVar("tuple_uniq_test_0_0"), [], [])
             ]
           , []

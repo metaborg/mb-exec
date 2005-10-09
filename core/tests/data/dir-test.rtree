@@ -2342,39 +2342,22 @@ Specification(
       ]
     )
   , Strategies(
-      [ ExtSDef("is_string_0_0", [], [])
+      [ SDefT("DYNAMIC_CALLS_0_0", [], [], Fail)
+      , ExtSDef("is_string_0_0", [], [])
       , ExtSDef("getenv_0_0", [], [])
-      , SDefT(
-          "a_0"
-        , []
-        , []
-        , Build(Anno(Str("test3"), Op("Nil", [])))
-        )
-      , SDefT(
-          "c_0"
-        , []
-        , []
-        , Build(Anno(Str("HOME"), Op("Nil", [])))
-        )
-      , SDefT(
-          "d_0"
-        , []
-        , []
-        , Seq(
-            CallT(SVar("debug_0_0"), [], [])
-          , CallT(SVar("is_string_0_0"), [], [])
-          )
-        )
       , SDefT(
           "test3_0_0"
         , []
         , []
         , CallT(
             SVar("apply_and_check_4_0")
-          , [ CallT(SVar("a_0"), [], [])
+          , [ Build(Anno(Str("test3"), Op("Nil", [])))
             , CallT(SVar("getenv_0_0"), [], [])
-            , CallT(SVar("c_0"), [], [])
-            , CallT(SVar("d_0"), [], [])
+            , Build(Anno(Str("HOME"), Op("Nil", [])))
+            , Seq(
+                CallT(SVar("debug_0_0"), [], [])
+              , CallT(SVar("is_string_0_0"), [], [])
+              )
             ]
           , []
           )
@@ -2384,28 +2367,28 @@ Specification(
       , ExtSDef(
           "apply_and_check_4_0"
         , [ VarDec(
-              "c_138"
+              "i_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "d_138"
+              "j_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "e_138"
+              "k_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "f_138"
+              "l_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2417,67 +2400,37 @@ Specification(
       , ExtSDef("is_int_0_0", [], [])
       , ExtSDef("modification_time_0_0", [], [])
       , SDefT(
-          "e_0"
-        , []
-        , []
-        , Build(Anno(Str("test2a"), Op("Nil", [])))
-        )
-      , SDefT(
-          "f_0"
-        , []
-        , []
-        , Build(Anno(Str("dir-test.str"), Op("Nil", [])))
-        )
-      , SDefT(
-          "g_0"
-        , []
-        , []
-        , Seq(
-            CallT(SVar("debug_0_0"), [], [])
-          , CallT(SVar("is_int_0_0"), [], [])
-          )
-        )
-      , SDefT(
-          "h_0"
-        , []
-        , []
-        , Build(Anno(Str("test2b"), Op("Nil", [])))
-        )
-      , SDefT(
-          "j_0"
-        , []
-        , []
-        , Build(
-            Anno(
-              Op(
-                ""
-              , [ Anno(Str("dir-test.c"), Op("Nil", []))
-                , Anno(Str("dir-test.str"), Op("Nil", []))
-                ]
-              )
-            , Op("Nil", [])
-            )
-          )
-        )
-      , SDefT(
           "test2_0_0"
         , []
         , []
         , Seq(
             CallT(
               SVar("apply_and_check_4_0")
-            , [ CallT(SVar("e_0"), [], [])
+            , [ Build(Anno(Str("test2a"), Op("Nil", [])))
               , CallT(SVar("modification_time_0_0"), [], [])
-              , CallT(SVar("f_0"), [], [])
-              , CallT(SVar("g_0"), [], [])
+              , Build(Anno(Str("dir-test.str"), Op("Nil", [])))
+              , Seq(
+                  CallT(SVar("debug_0_0"), [], [])
+                , CallT(SVar("is_int_0_0"), [], [])
+                )
               ]
             , []
             )
           , CallT(
               SVar("apply_and_check_4_0")
-            , [ CallT(SVar("h_0"), [], [])
+            , [ Build(Anno(Str("test2b"), Op("Nil", [])))
               , CallT(SVar("file_newer_0_0"), [], [])
-              , CallT(SVar("j_0"), [], [])
+              , Build(
+                  Anno(
+                    Op(
+                      ""
+                    , [ Anno(Str("dir-test.c"), Op("Nil", []))
+                      , Anno(Str("dir-test.str"), Op("Nil", []))
+                      ]
+                    )
+                  , Op("Nil", [])
+                  )
+                )
               , CallT(SVar("debug_0_0"), [], [])
               ]
             , []
@@ -2487,7 +2440,7 @@ Specification(
       , ExtSDef(
           "fetch_elem_1_0"
         , [ VarDec(
-              "h_112"
+              "p_100"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2500,28 +2453,28 @@ Specification(
       , ExtSDef(
           "apply_test_4_0"
         , [ VarDec(
-              "v_137"
+              "b_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "w_137"
+              "c_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "x_137"
+              "d_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "y_137"
+              "e_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2529,43 +2482,6 @@ Specification(
             )
           ]
         , []
-        )
-      , SDefT(
-          "k_0"
-        , []
-        , []
-        , Build(Anno(Str("test1"), Op("Nil", [])))
-        )
-      , SDefT(
-          "l_0"
-        , []
-        , []
-        , Seq(
-            CallT(SVar("readdir_0_0"), [], [])
-          , CallT(
-              SVar("fetch_elem_1_0")
-            , [CallT(SVar("o_0"), [], [])]
-            , []
-            )
-          )
-        )
-      , SDefT(
-          "m_0"
-        , []
-        , []
-        , Build(Anno(Str("."), Op("Nil", [])))
-        )
-      , SDefT(
-          "n_0"
-        , []
-        , []
-        , Build(Anno(Str("dir-test.c"), Op("Nil", [])))
-        )
-      , SDefT(
-          "o_0"
-        , []
-        , []
-        , Match(Anno(Str("dir-test.c"), Wld))
         )
       , SDefT(
           "test1_0_0"
@@ -2573,10 +2489,17 @@ Specification(
         , []
         , CallT(
             SVar("apply_test_4_0")
-          , [ CallT(SVar("k_0"), [], [])
-            , CallT(SVar("l_0"), [], [])
-            , CallT(SVar("m_0"), [], [])
-            , CallT(SVar("n_0"), [], [])
+          , [ Build(Anno(Str("test1"), Op("Nil", [])))
+            , Seq(
+                CallT(SVar("readdir_0_0"), [], [])
+              , CallT(
+                  SVar("fetch_elem_1_0")
+                , [Match(Anno(Str("dir-test.c"), Wld))]
+                , []
+                )
+              )
+            , Build(Anno(Str("."), Op("Nil", [])))
+            , Build(Anno(Str("dir-test.c"), Op("Nil", [])))
             ]
           , []
           )
@@ -2584,14 +2507,14 @@ Specification(
       , ExtSDef(
           "test_suite_2_0"
         , [ VarDec(
-              "t_137"
+              "z_119"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "u_137"
+              "a_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2601,31 +2524,19 @@ Specification(
         , []
         )
       , SDefT(
-          "p_0"
-        , []
-        , []
-        , Build(Anno(Str("dir-test"), Op("Nil", [])))
-        )
-      , SDefT(
-          "q_0"
-        , []
-        , []
-        , Seq(
-            CallT(SVar("test1_0_0"), [], [])
-          , Seq(
-              CallT(SVar("test2_0_0"), [], [])
-            , CallT(SVar("test3_0_0"), [], [])
-            )
-          )
-        )
-      , SDefT(
           "main_0_0"
         , []
         , []
         , CallT(
             SVar("test_suite_2_0")
-          , [ CallT(SVar("p_0"), [], [])
-            , CallT(SVar("q_0"), [], [])
+          , [ Build(Anno(Str("dir-test"), Op("Nil", [])))
+            , Seq(
+                CallT(SVar("test1_0_0"), [], [])
+              , Seq(
+                  CallT(SVar("test2_0_0"), [], [])
+                , CallT(SVar("test3_0_0"), [], [])
+                )
+              )
             ]
           , []
           )

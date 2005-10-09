@@ -1182,16 +1182,11 @@ Specification(
       ]
     )
   , Strategies(
-      [ SDefT(
-          "r_0"
-        , []
-        , []
-        , Build(Anno(Str("error: output strategy for this test failed"), Op("Nil", [])))
-        )
+      [ SDefT("DYNAMIC_CALLS_0_0", [], [], Fail)
       , SDefT(
           "sunit_create_output_1_0"
         , [ VarDec(
-              "k_103"
+              "u_85"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1200,12 +1195,12 @@ Specification(
           ]
         , []
         , GuardedLChoice(
-            CallT(SVar("k_103"), [], [])
+            CallT(SVar("u_85"), [], [])
           , Id
           , Seq(
               CallT(
                 SVar("say_1_0")
-              , [CallT(SVar("r_0"), [], [])]
+              , [Build(Anno(Str("error: output strategy for this test failed"), Op("Nil", [])))]
               , []
               )
             , Fail
@@ -1217,40 +1212,40 @@ Specification(
         , []
         , []
         , Scope(
-            ["c_0", "i_151", "a_0"]
+            ["b_0", "f_138", "a_0"]
           , Seq(
-              Match(Var("c_0"))
+              Match(Var("b_0"))
             , Seq(
-                Match(Var("a_0"))
-              , Seq(
-                  Match(Var("i_151"))
+                Seq(
+                  Match(Var("a_0"))
                 , Seq(
-                    Build(Var("a_0"))
+                    Match(Var("f_138"))
                   , Seq(
-                      Build(
-                        Anno(
-                          Op(
-                            ""
-                          , [ Anno(Op("stderr", []), Op("Nil", []))
-                            , Anno(
-                                Op(
-                                  "Cons"
-                                , [Var("i_151"), Anno(Op("Nil", []), Op("Nil", []))]
-                                )
-                              , Op("Nil", [])
-                              )
-                            ]
-                          )
-                        , Op("Nil", [])
-                        )
-                      )
+                      Build(Var("a_0"))
                     , Seq(
-                        CallT(SVar("printnl_0_0"), [], [])
-                      , Build(Var("c_0"))
+                        Build(
+                          Anno(
+                            Op(
+                              ""
+                            , [ Anno(Op("stderr", []), Op("Nil", []))
+                              , Anno(
+                                  Op(
+                                    "Cons"
+                                  , [Var("f_138"), Anno(Op("Nil", []), Op("Nil", []))]
+                                  )
+                                , Op("Nil", [])
+                                )
+                              ]
+                            )
+                          , Op("Nil", [])
+                          )
+                        )
+                      , CallT(SVar("printnl_0_0"), [], [])
                       )
                     )
                   )
                 )
+              , Build(Var("b_0"))
               )
             )
           )
@@ -1258,7 +1253,7 @@ Specification(
       , SDefT(
           "say_1_0"
         , [ VarDec(
-              "k_127"
+              "h_109"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1267,29 +1262,23 @@ Specification(
           ]
         , []
         , Scope(
-            ["d_0"]
+            ["c_0"]
           , Seq(
-              Match(Var("d_0"))
+              Match(Var("c_0"))
             , Seq(
-                CallT(SVar("k_127"), [], [])
+                CallT(SVar("h_109"), [], [])
               , Seq(
                   CallT(SVar("debug_0_0"), [], [])
-                , Build(Var("d_0"))
+                , Build(Var("c_0"))
                 )
               )
             )
           )
         )
       , SDefT(
-          "t_0"
-        , []
-        , []
-        , Build(Anno(Str("error: input strategy for this test failed"), Op("Nil", [])))
-        )
-      , SDefT(
           "sunit_create_input_1_0"
         , [ VarDec(
-              "j_103"
+              "t_85"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1298,12 +1287,12 @@ Specification(
           ]
         , []
         , GuardedLChoice(
-            CallT(SVar("j_103"), [], [])
+            CallT(SVar("t_85"), [], [])
           , Id
           , Seq(
               CallT(
                 SVar("say_1_0")
-              , [CallT(SVar("t_0"), [], [])]
+              , [Build(Anno(Str("error: input strategy for this test failed"), Op("Nil", [])))]
               , []
               )
             , Fail
@@ -1316,9 +1305,7 @@ Specification(
         , []
         , CallT(
             SVar("_2_0")
-          , [ CallT(SVar("_id"), [], [])
-            , CallT(SVar("inc_0_0"), [], [])
-            ]
+          , [Id, CallT(SVar("inc_0_0"), [], [])]
           , []
           )
         )
@@ -1327,18 +1314,18 @@ Specification(
         , []
         , []
         , Scope(
-            ["x_33", "y_33"]
+            ["w_27", "x_27"]
           , Seq(
               Match(
                 Anno(
-                  Op("", [Var("x_33"), Var("y_33")])
+                  Op("", [Var("w_27"), Var("x_27")])
                 , Wld
                 )
               )
             , GuardedLChoice(
-                PrimT("SSL_addi", [], [Var("x_33"), Var("y_33")])
+                PrimT("SSL_addi", [], [Var("w_27"), Var("x_27")])
               , Id
-              , PrimT("SSL_addr", [], [Var("x_33"), Var("y_33")])
+              , PrimT("SSL_addr", [], [Var("w_27"), Var("x_27")])
               )
             )
           )
@@ -1348,19 +1335,19 @@ Specification(
         , []
         , []
         , Scope(
-            ["h_12", "e_0"]
+            ["k_125", "d_0"]
           , Seq(
-              Match(Var("e_0"))
+              Match(Var("d_0"))
             , Seq(
-                Match(Var("h_12"))
+                Match(Var("k_125"))
               , Seq(
-                  Build(Var("e_0"))
+                  Build(Var("d_0"))
                 , Seq(
                     Build(
                       Anno(
                         Op(
                           ""
-                        , [Var("h_12"), Anno(Int("1"), Op("Nil", []))]
+                        , [Var("k_125"), Anno(Int("1"), Op("Nil", []))]
                         )
                       , Op("Nil", [])
                       )
@@ -1378,23 +1365,21 @@ Specification(
         , []
         , CallT(
             SVar("_2_0")
-          , [ CallT(SVar("inc_0_0"), [], [])
-            , CallT(SVar("_id"), [], [])
-            ]
+          , [CallT(SVar("inc_0_0"), [], []), Id]
           , []
           )
         )
       , SDefT(
           "do_test_2_0"
         , [ VarDec(
-              "l_103"
+              "v_85"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "m_103"
+              "w_85"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1403,24 +1388,24 @@ Specification(
           ]
         , []
         , Scope(
-            ["f_0"]
+            ["e_0"]
           , Seq(
-              Match(Var("f_0"))
+              Match(Var("e_0"))
             , Seq(
-                CallT(SVar("l_103"), [], [])
+                CallT(SVar("v_85"), [], [])
               , Seq(
                   CallT(SVar("debug_0_0"), [], [])
                 , Seq(
-                    Build(Var("f_0"))
+                    Build(Var("e_0"))
                   , GuardedLChoice(
                       Scope(
-                        ["g_0"]
+                        ["f_0"]
                       , Seq(
-                          Match(Var("g_0"))
+                          Match(Var("f_0"))
                         , Seq(
-                            CallT(SVar("m_103"), [], [])
+                            CallT(SVar("w_85"), [], [])
                           , Seq(
-                              Build(Var("g_0"))
+                              Build(Var("f_0"))
                             , CallT(SVar("record_success_0_0"), [], [])
                             )
                           )
@@ -1436,42 +1421,30 @@ Specification(
           )
         )
       , SDefT(
-          "v_0"
-        , []
-        , []
-        , Build(Anno(Str("  result not equal : "), Op("Nil", [])))
-        )
-      , SDefT(
-          "w_0"
-        , []
-        , []
-        , Build(Anno(Str("  expected         : "), Op("Nil", [])))
-        )
-      , SDefT(
           "apply_test_4_0"
         , [ VarDec(
-              "y_103"
+              "i_86"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "z_103"
+              "j_86"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "a_104"
+              "k_86"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "b_104"
+              "l_86"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1480,59 +1453,56 @@ Specification(
           ]
         , []
         , Scope(
-            ["u_14", "v_14"]
-          , Let(
-              [ SDefT(
-                  "u_0"
-                , []
-                , []
-                , Seq(
-                    GuardedLChoice(
-                      Seq(
-                        CallT(
-                          SVar("sunit_create_input_1_0")
-                        , [CallT(SVar("a_104"), [], [])]
-                        , []
-                        )
-                      , CallT(SVar("z_103"), [], [])
+            ["u_9", "v_9"]
+          , CallT(
+              SVar("do_test_2_0")
+            , [ CallT(SVar("i_86"), [], [])
+              , Seq(
+                  GuardedLChoice(
+                    Seq(
+                      CallT(
+                        SVar("sunit_create_input_1_0")
+                      , [CallT(SVar("k_86"), [], [])]
+                      , []
                       )
-                    , Id
-                    , Seq(
-                        Build(Anno(Str("  strategy failed"), Op("Nil", [])))
-                      , Seq(CallT(SVar("debug_0_0"), [], []), Fail)
-                      )
+                    , CallT(SVar("j_86"), [], [])
                     )
+                  , Id
                   , Seq(
-                      Match(Var("u_14"))
+                      Build(Anno(Str("  strategy failed"), Op("Nil", [])))
+                    , Seq(CallT(SVar("debug_0_0"), [], []), Fail)
+                    )
+                  )
+                , Seq(
+                    Match(Var("u_9"))
+                  , Seq(
+                      CallT(
+                        SVar("sunit_create_output_1_0")
+                      , [CallT(SVar("l_86"), [], [])]
+                      , []
+                      )
                     , Seq(
-                        CallT(
-                          SVar("sunit_create_output_1_0")
-                        , [CallT(SVar("b_104"), [], [])]
-                        , []
-                        )
-                      , Seq(
-                          Match(Var("v_14"))
-                        , GuardedLChoice(
-                            Seq(Build(Var("v_14")), Match(Var("u_14")))
-                          , Id
+                        Match(Var("v_9"))
+                      , GuardedLChoice(
+                          Seq(Build(Var("v_9")), Match(Var("u_9")))
+                        , Id
+                        , Seq(
+                            Build(Var("u_9"))
                           , Seq(
-                              Build(Var("u_14"))
+                              CallT(
+                                SVar("debug_1_0")
+                              , [Build(Anno(Str("  result not equal : "), Op("Nil", [])))]
+                              , []
+                              )
                             , Seq(
-                                CallT(
-                                  SVar("debug_1_0")
-                                , [CallT(SVar("v_0"), [], [])]
-                                , []
-                                )
+                                Build(Var("v_9"))
                               , Seq(
-                                  Build(Var("v_14"))
-                                , Seq(
-                                    CallT(
-                                      SVar("debug_1_0")
-                                    , [CallT(SVar("w_0"), [], [])]
-                                    , []
-                                    )
-                                  , Fail
+                                  CallT(
+                                    SVar("debug_1_0")
+                                  , [Build(Anno(Str("  expected         : "), Op("Nil", [])))]
+                                  , []
                                   )
+                                , Fail
                                 )
                               )
                             )
@@ -1543,33 +1513,9 @@ Specification(
                   )
                 )
               ]
-            , CallT(
-                SVar("do_test_2_0")
-              , [ CallT(SVar("y_103"), [], [])
-                , CallT(SVar("u_0"), [], [])
-                ]
-              , []
-              )
+            , []
             )
           )
-        )
-      , SDefT(
-          "x_0"
-        , []
-        , []
-        , Build(Anno(Str("test1"), Op("Nil", [])))
-        )
-      , SDefT(
-          "y_0"
-        , []
-        , []
-        , Build(Anno(Op("", []), Op("Nil", [])))
-        )
-      , SDefT(
-          "a_1"
-        , []
-        , []
-        , Build(Anno(Op("", []), Op("Nil", [])))
         )
       , SDefT(
           "test1_0_0"
@@ -1577,19 +1523,13 @@ Specification(
         , []
         , CallT(
             SVar("apply_test_4_0")
-          , [ CallT(SVar("x_0"), [], [])
-            , CallT(SVar("_id"), [], [])
-            , CallT(SVar("y_0"), [], [])
-            , CallT(SVar("a_1"), [], [])
+          , [ Build(Anno(Str("test1"), Op("Nil", [])))
+            , Id
+            , Build(Anno(Op("", []), Op("Nil", [])))
+            , Build(Anno(Op("", []), Op("Nil", [])))
             ]
           , []
           )
-        )
-      , SDefT(
-          "b_1"
-        , []
-        , []
-        , Match(Anno(Int("0"), Wld))
         )
       , SDefT(
           "check_for_failures_0_0"
@@ -1597,23 +1537,21 @@ Specification(
         , []
         , CallT(
             SVar("_2_0")
-          , [ CallT(SVar("_id"), [], [])
-            , CallT(SVar("b_1"), [], [])
-            ]
+          , [Id, Match(Anno(Int("0"), Wld))]
           , []
           )
         )
       , SDefT(
           "_2_0"
         , [ VarDec(
-              "i_91"
+              "y_77"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "j_91"
+              "z_77"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1622,30 +1560,30 @@ Specification(
           ]
         , []
         , Scope(
-            ["o_0", "m_0", "n_0", "p_0", "q_0"]
+            ["m_0", "k_0", "l_0", "n_0", "o_0"]
           , Seq(
               Match(
                 Anno(
-                  Op("", [Var("m_0"), Var("n_0")])
-                , Var("o_0")
+                  Op("", [Var("k_0"), Var("l_0")])
+                , Var("m_0")
                 )
               )
             , Seq(
-                Build(Var("m_0"))
+                Build(Var("k_0"))
               , Seq(
-                  CallT(SVar("i_91"), [], [])
+                  CallT(SVar("y_77"), [], [])
                 , Seq(
-                    Match(Var("p_0"))
+                    Match(Var("n_0"))
                   , Seq(
-                      Build(Var("n_0"))
+                      Build(Var("l_0"))
                     , Seq(
-                        CallT(SVar("j_91"), [], [])
+                        CallT(SVar("z_77"), [], [])
                       , Seq(
-                          Match(Var("q_0"))
+                          Match(Var("o_0"))
                         , Build(
                             Anno(
-                              Op("", [Var("p_0"), Var("q_0")])
-                            , Var("o_0")
+                              Op("", [Var("n_0"), Var("o_0")])
+                            , Var("m_0")
                             )
                           )
                         )
@@ -1658,45 +1596,21 @@ Specification(
           )
         )
       , SDefT(
-          "c_1"
-        , []
-        , []
-        , CallT(
-            SVar("debug_1_0")
-          , [CallT(SVar("e_1"), [], [])]
-          , []
-          )
-        )
-      , SDefT(
-          "d_1"
-        , []
-        , []
-        , CallT(
-            SVar("debug_1_0")
-          , [CallT(SVar("f_1"), [], [])]
-          , []
-          )
-        )
-      , SDefT(
-          "e_1"
-        , []
-        , []
-        , Build(Anno(Str("successes: "), Op("Nil", [])))
-        )
-      , SDefT(
-          "f_1"
-        , []
-        , []
-        , Build(Anno(Str("failures: "), Op("Nil", [])))
-        )
-      , SDefT(
           "report_test_0_0"
         , []
         , []
         , CallT(
             SVar("_2_0")
-          , [ CallT(SVar("c_1"), [], [])
-            , CallT(SVar("d_1"), [], [])
+          , [ CallT(
+                SVar("debug_1_0")
+              , [Build(Anno(Str("successes: "), Op("Nil", [])))]
+              , []
+              )
+            , CallT(
+                SVar("debug_1_0")
+              , [Build(Anno(Str("failures: "), Op("Nil", [])))]
+              , []
+              )
             ]
           , []
           )
@@ -1722,19 +1636,19 @@ Specification(
         , []
         , []
         , Scope(
-            ["a_67", "b_67", "h_0"]
+            ["q_59", "r_59", "g_0"]
           , Seq(
               Match(
                 Anno(
-                  Op("", [Var("a_67"), Var("b_67")])
+                  Op("", [Var("q_59"), Var("r_59")])
                 , Wld
                 )
               )
             , Seq(
-                Match(Var("h_0"))
+                Match(Var("g_0"))
               , Seq(
-                  PrimT("SSL_printnl", [], [Var("a_67"), Var("b_67")])
-                , Build(Var("h_0"))
+                  PrimT("SSL_printnl", [], [Var("q_59"), Var("r_59")])
+                , Build(Var("g_0"))
                 )
               )
             )
@@ -1743,7 +1657,7 @@ Specification(
       , SDefT(
           "debug_1_0"
         , [ VarDec(
-              "t_127"
+              "q_109"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1752,81 +1666,72 @@ Specification(
           ]
         , []
         , Scope(
-            ["l_0", "j_151", "k_151", "k_0", "j_0"]
+            ["j_0", "g_138", "h_138", "i_0", "h_0"]
           , Seq(
-              Match(Var("l_0"))
+              Match(Var("j_0"))
             , Seq(
-                Match(Var("j_0"))
-              , Seq(
-                  CallT(SVar("t_127"), [], [])
-                , Seq(
-                    Match(Var("j_151"))
+                Seq(
+                  Seq(
+                    Match(Var("h_0"))
                   , Seq(
-                      Build(Var("j_0"))
+                      CallT(SVar("q_109"), [], [])
+                    , Seq(Match(Var("g_138")), Build(Var("h_0")))
+                    )
+                  )
+                , Seq(
+                    Match(Var("i_0"))
+                  , Seq(
+                      Match(Var("h_138"))
                     , Seq(
-                        Match(Var("k_0"))
+                        Build(Var("i_0"))
                       , Seq(
-                          Match(Var("k_151"))
-                        , Seq(
-                            Build(Var("k_0"))
-                          , Seq(
-                              Build(
-                                Anno(
-                                  Op(
-                                    ""
-                                  , [ Anno(Op("stderr", []), Op("Nil", []))
-                                    , Anno(
-                                        Op(
-                                          "Cons"
-                                        , [ Var("j_151")
-                                          , Anno(
-                                              Op(
-                                                "Cons"
-                                              , [Var("k_151"), Anno(Op("Nil", []), Op("Nil", []))]
-                                              )
-                                            , Op("Nil", [])
-                                            )
-                                          ]
+                          Build(
+                            Anno(
+                              Op(
+                                ""
+                              , [ Anno(Op("stderr", []), Op("Nil", []))
+                                , Anno(
+                                    Op(
+                                      "Cons"
+                                    , [ Var("g_138")
+                                      , Anno(
+                                          Op(
+                                            "Cons"
+                                          , [Var("h_138"), Anno(Op("Nil", []), Op("Nil", []))]
+                                          )
+                                        , Op("Nil", [])
                                         )
-                                      , Op("Nil", [])
-                                      )
-                                    ]
+                                      ]
+                                    )
+                                  , Op("Nil", [])
                                   )
-                                , Op("Nil", [])
-                                )
+                                ]
                               )
-                            , Seq(
-                                CallT(SVar("printnl_0_0"), [], [])
-                              , Build(Var("l_0"))
-                              )
+                            , Op("Nil", [])
                             )
                           )
+                        , CallT(SVar("printnl_0_0"), [], [])
                         )
                       )
                     )
                   )
                 )
+              , Build(Var("j_0"))
               )
             )
           )
         )
       , SDefT(
-          "h_1"
-        , []
-        , []
-        , Build(Anno(Str("test suite: "), Op("Nil", [])))
-        )
-      , SDefT(
           "test_suite_2_0"
         , [ VarDec(
-              "w_103"
+              "g_86"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "x_103"
+              "h_86"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1835,17 +1740,17 @@ Specification(
           ]
         , []
         , Seq(
-            CallT(SVar("w_103"), [], [])
+            CallT(SVar("g_86"), [], [])
           , Seq(
               CallT(
                 SVar("debug_1_0")
-              , [CallT(SVar("h_1"), [], [])]
+              , [Build(Anno(Str("test suite: "), Op("Nil", [])))]
               , []
               )
             , Seq(
                 CallT(SVar("init_record_0_0"), [], [])
               , Seq(
-                  CallT(SVar("x_103"), [], [])
+                  CallT(SVar("h_86"), [], [])
                 , Seq(
                     CallT(SVar("report_test_0_0"), [], [])
                   , CallT(SVar("check_for_failures_0_0"), [], [])
@@ -1856,18 +1761,12 @@ Specification(
           )
         )
       , SDefT(
-          "i_1"
-        , []
-        , []
-        , Build(Anno(Str("template-test"), Op("Nil", [])))
-        )
-      , SDefT(
           "main_0_0"
         , []
         , []
         , CallT(
             SVar("test_suite_2_0")
-          , [ CallT(SVar("i_1"), [], [])
+          , [ Build(Anno(Str("template-test"), Op("Nil", [])))
             , CallT(SVar("test1_0_0"), [], [])
             ]
           , []

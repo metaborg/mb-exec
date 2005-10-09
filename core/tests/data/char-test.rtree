@@ -8,73 +8,32 @@ Specification(
       ]
     )
   , Strategies(
-      [ SDefT(
-          "a_0"
-        , []
-        , []
-        , Build(Anno(Str("is-not-num-test"), Op("Nil", [])))
-        )
-      , SDefT(
-          "c_0"
-        , []
-        , []
-        , GuardedLChoice(CallT(SVar("is_num_0_0"), [], []), Fail, Id)
-        )
-      , SDefT(
-          "d_0"
-        , []
-        , []
-        , Build(Anno(Int("130"), Op("Nil", [])))
-        )
-      , SDefT(
-          "e_0"
-        , []
-        , []
-        , Build(Anno(Int("130"), Op("Nil", [])))
-        )
+      [ SDefT("DYNAMIC_CALLS_0_0", [], [], Fail)
       , SDefT(
           "is_not_num_test_0_0"
         , []
         , []
         , CallT(
             SVar("apply_test_4_0")
-          , [ CallT(SVar("a_0"), [], [])
-            , CallT(SVar("c_0"), [], [])
-            , CallT(SVar("d_0"), [], [])
-            , CallT(SVar("e_0"), [], [])
+          , [ Build(Anno(Str("is-not-num-test"), Op("Nil", [])))
+            , GuardedLChoice(CallT(SVar("is_num_0_0"), [], []), Fail, Id)
+            , Build(Anno(Int("130"), Op("Nil", [])))
+            , Build(Anno(Int("130"), Op("Nil", [])))
             ]
           , []
           )
         )
       , ExtSDef("is_alphanum_0_0", [], [])
       , SDefT(
-          "f_0"
-        , []
-        , []
-        , Build(Anno(Str("is-alphanum-test"), Op("Nil", [])))
-        )
-      , SDefT(
-          "g_0"
-        , []
-        , []
-        , Build(Anno(Int("50"), Op("Nil", [])))
-        )
-      , SDefT(
-          "h_0"
-        , []
-        , []
-        , Build(Anno(Int("50"), Op("Nil", [])))
-        )
-      , SDefT(
           "is_alphanum_test_0_0"
         , []
         , []
         , CallT(
             SVar("apply_test_4_0")
-          , [ CallT(SVar("f_0"), [], [])
+          , [ Build(Anno(Str("is-alphanum-test"), Op("Nil", [])))
             , CallT(SVar("is_alphanum_0_0"), [], [])
-            , CallT(SVar("g_0"), [], [])
-            , CallT(SVar("h_0"), [], [])
+            , Build(Anno(Int("50"), Op("Nil", [])))
+            , Build(Anno(Int("50"), Op("Nil", [])))
             ]
           , []
           )
@@ -83,28 +42,28 @@ Specification(
       , ExtSDef(
           "apply_test_4_0"
         , [ VarDec(
-              "v_137"
+              "b_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "w_137"
+              "c_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "x_137"
+              "d_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "y_137"
+              "e_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -112,24 +71,6 @@ Specification(
             )
           ]
         , []
-        )
-      , SDefT(
-          "j_0"
-        , []
-        , []
-        , Build(Anno(Str("is-num-test"), Op("Nil", [])))
-        )
-      , SDefT(
-          "k_0"
-        , []
-        , []
-        , Build(Anno(Int("50"), Op("Nil", [])))
-        )
-      , SDefT(
-          "l_0"
-        , []
-        , []
-        , Build(Anno(Int("50"), Op("Nil", [])))
         )
       , SDefT(
           "is_num_test_0_0"
@@ -137,10 +78,10 @@ Specification(
         , []
         , CallT(
             SVar("apply_test_4_0")
-          , [ CallT(SVar("j_0"), [], [])
+          , [ Build(Anno(Str("is-num-test"), Op("Nil", [])))
             , CallT(SVar("is_num_0_0"), [], [])
-            , CallT(SVar("k_0"), [], [])
-            , CallT(SVar("l_0"), [], [])
+            , Build(Anno(Int("50"), Op("Nil", [])))
+            , Build(Anno(Int("50"), Op("Nil", [])))
             ]
           , []
           )
@@ -148,14 +89,14 @@ Specification(
       , ExtSDef(
           "test_suite_2_0"
         , [ VarDec(
-              "t_137"
+              "z_119"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "u_137"
+              "a_120"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -165,31 +106,19 @@ Specification(
         , []
         )
       , SDefT(
-          "m_0"
-        , []
-        , []
-        , Build(Anno(Str("char-test"), Op("Nil", [])))
-        )
-      , SDefT(
-          "n_0"
-        , []
-        , []
-        , Seq(
-            CallT(SVar("is_num_test_0_0"), [], [])
-          , Seq(
-              CallT(SVar("is_alphanum_test_0_0"), [], [])
-            , CallT(SVar("is_not_num_test_0_0"), [], [])
-            )
-          )
-        )
-      , SDefT(
           "main_0_0"
         , []
         , []
         , CallT(
             SVar("test_suite_2_0")
-          , [ CallT(SVar("m_0"), [], [])
-            , CallT(SVar("n_0"), [], [])
+          , [ Build(Anno(Str("char-test"), Op("Nil", [])))
+            , Seq(
+                CallT(SVar("is_num_test_0_0"), [], [])
+              , Seq(
+                  CallT(SVar("is_alphanum_test_0_0"), [], [])
+                , CallT(SVar("is_not_num_test_0_0"), [], [])
+                )
+              )
             ]
           , []
           )
