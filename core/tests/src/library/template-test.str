@@ -1,0 +1,15 @@
+module template-test
+imports sunit
+strategies
+
+  main = 
+    test-suite(!"template-test",
+      test1
+    )
+
+  test1 =
+    apply-test(!"test1"
+	, id
+	, !()
+	, !()
+	)
