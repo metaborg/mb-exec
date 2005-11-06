@@ -24,6 +24,7 @@ public class All extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
+        debug("All.eval() - " + env.current());
         ATerm t = env.current();
         switch(t.getType()) {
         case ATerm.INT: return true;

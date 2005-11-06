@@ -19,6 +19,8 @@ import aterm.pure.PureFactory;
 
 public class Context extends ATermBuilder implements IContext {
 
+    private static int indentation = 0;
+
     protected ATerm current;
 
     private Map<String, OpDecl> opdecls;
@@ -42,7 +44,10 @@ public class Context extends ATermBuilder implements IContext {
 
 
     public static void debug(String s) {
-        Interpreter.debug(s);
+        StringBuffer b = new StringBuffer();
+        for(int i=0;i<indentation;i++)
+            b.append(" "); 
+        Interpreter.debug(b.toString() + s);
     }
 
     public boolean invoke(String name, Object object, Object object2)
@@ -65,6 +70,7 @@ public class Context extends ATermBuilder implements IContext {
 
     public boolean bindVars(List<Pair<String, ATerm>> r) {
         for (Pair<String, ATerm> x : r) {
+            
             VarScope s = varScope.scopeOf(x.first);
             if (s == null) {
                 varScope.add(x.first, x.second);
@@ -72,7 +78,7 @@ public class Context extends ATermBuilder implements IContext {
                 ATerm t = s.lookup(x.first);
                 boolean eq = t.match(x.second) != null;
                 if (!eq) {
-                    debug(x.first + " already bound to " + t + ", new: "
+                    debug(" no bind : " + x.first + " already bound to " + t + ", new: "
                             + x.second);
                     return eq;
                 }
@@ -101,5 +107,13 @@ public class Context extends ATermBuilder implements IContext {
 
     public void addSVar(String name, SDefT def) {
         varScope.addSVar(name, def);
+    }
+
+    public static void bump() {
+        indentation++;
+    }
+    
+    public static void unbump() {
+        indentation--;
     }
 }

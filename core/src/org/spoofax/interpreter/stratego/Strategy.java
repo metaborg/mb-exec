@@ -15,4 +15,12 @@ abstract public class Strategy implements IConstruct {
     protected static void debug(String s) {
         Context.debug(s);
     }
+    
+    protected static void bump() {
+        Context.bump();
+    }
+    
+    protected static void unbump() {
+        Context.unbump();
+    }
 }

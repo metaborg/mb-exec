@@ -86,9 +86,11 @@ public class CallT extends Strategy {
         VarScope oldVarScope = env.getVarScope();
         env.setVarScope(newVarScope);
 
+        bump();
         boolean r = sdef.getBody().eval(env);
         env.setVarScope(oldVarScope);
-        debug(" out of : " + name);
+        unbump();
+        debug("<return: " + name + " (" + ( r ? "ok" : "failed") + ") - " + env.current());
         return r;
     }
 

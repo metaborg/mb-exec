@@ -43,7 +43,7 @@ public class InterpreterTest extends TestCase {
     }
 
     public void interpTest(String test, ATerm input, ATerm output) {
-        System.out.println("Input : " + input);
+        // System.out.println("Input : " + input);
         assertTrue(runInterp(test, input));
         ATermImpl x = (ATermImpl) output;
         ATermImpl y = (ATermImpl) itp.current();
@@ -61,7 +61,7 @@ public class InterpreterTest extends TestCase {
         itp.load(basePath + "/" + test + ".rtree");
         
         itp.setCurrent(input);
-        System.out.println("Input : " + input);
+        // System.out.println("Input : " + input);
         return itp.invoke("main_0_0");
     
         } catch(FatalError e) {

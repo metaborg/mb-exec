@@ -35,15 +35,19 @@ import aterm.ATermList;
 public class Interpreter extends ATermBuilder {
 
     protected Context context;
+    private static boolean debugging;
     
     public Interpreter() {
-    
+        debugging = false;
         context = new Context();
         factory = context.factory;
     }
     
     public static void debug(String s) {
-        // System.out.println(s);
+        if(debugging == false)
+            return;
+        if(s.length() < 20000)
+            System.out.println(s);
     }
     
     public void load(String path) throws IOException, FatalError {
@@ -258,6 +262,10 @@ public class Interpreter extends ATermBuilder {
     
     public ATerm current() {
         return context.current();
+    }
+
+    public void setDebug(boolean b) {
+        debugging = b;
     }
 
 }

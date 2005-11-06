@@ -13,6 +13,7 @@ import org.spoofax.interpreter.IContext;
 public class Id extends Strategy {
 
     public boolean eval(IContext e) throws FatalError {
+        debug("Id.eval() - " + e.current());
         return true;
     }
 

@@ -35,6 +35,6 @@ public abstract class Primitive {
     public abstract boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws FatalError;
     
     protected static void debug(String s) {
-        Interpreter.debug(s);
+        Interpreter.debug("[ " + s + " ]");
     }
 }

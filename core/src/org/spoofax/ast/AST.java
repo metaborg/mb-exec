@@ -18,6 +18,7 @@ import aterm.ATerm;
  * Part of spoofax
  */
 public class AST {
+    
 	private ATerm aterm;
 	private String language;
 	private URL resource;

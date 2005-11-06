@@ -33,7 +33,7 @@ public class Let extends Strategy {
             def.setScope(newScope);
         newScope.addSVars(defs);
         env.setVarScope(newScope);
-        env.getVarScope().dump(" ");
+        // env.getVarScope().dump(" ");
         boolean r = body.eval(env);
         env.setVarScope(oldScope);
         return r;

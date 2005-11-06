@@ -32,34 +32,37 @@ public class Match extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
-        debug("Match.eval()");
+        debug("Match.eval() - " + env.current());
         
         ATerm current = env.current();
         
-        debug(" term   : " + pattern);
-        debug(" current: " + current);
+        debug(" pattern : " + pattern);
+        debug(" current : " + current);
 
         ATermAppl p = pattern;
         List<Pair<String, ATerm>> r = match(env, current, p);
 
+        debug(" to bind: " + r );
+        
         Context.debug(" !" + current + " ; ?" + p);
 
         if (r != null) {
-            debug(" results : " + r);
-            
-            debug(" will bind:");
-            env.getVarScope().dump(" ");
+
             boolean b = env.bindVars(r);
-            debug(" bound vars:");
-            env.getVarScope().dump(" ");
+
+            if(b)
+                debug(" success : " + r);
+            else
+                debug(" failure : no match!");
+            
             return b;
         }
-        debug(" no match!");
+        debug(" failure : no match!");
         return false;
     }
 
-    private List<Pair<String, ATerm>> emptyList = new ArrayList<Pair<String, ATerm>>();
-
+    public List<Pair<String, ATerm>> emptyList() { return new ArrayList<Pair<String, ATerm>>(); }
+    
     public List<Pair<String, ATerm>> match(IContext env, ATermAppl t, ATermAppl p)
             throws FatalError {
         debug(" ?: '" + t.getName() + "' / " + p.getName());
@@ -93,7 +96,7 @@ public class Match extends Strategy {
         } else if (p.getName().equals("Str")) {
             debug(" !" + t + " ?" + p);
             if (t.getName().equals(Tools.stringAt(p, 0)))
-                return emptyList;
+                return emptyList();
             return null;
         } else if (Tools.termType(p, "Var")) {
             List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
@@ -108,7 +111,7 @@ public class Match extends Strategy {
             ATermAppl ctor_p = Tools.applAt(p, 0);
             ATerm ctor_t = env.makeTerm("\"" + ctor.getName() + "\"");
 
-            debug("" + ctor_t + " / " + ctor_p); 
+            debug(" " + ctor_t + " / " + ctor_p); 
             
             List<Pair<String, ATerm>> r = match(env, ctor_t, ctor_p);
             if (r == null)
@@ -116,7 +119,10 @@ public class Match extends Strategy {
 
             ATermAppl appl_p = Tools.applAt(p, 1);
 
-            r.addAll(match(env, env.makeList(args), appl_p));
+            List<Pair<String, ATerm>> x = match(env, env.makeList(args), appl_p);
+            if ( x == null )
+                return null;
+            r.addAll(x);
             return r;
         } else if (Tools.termType(p, "As")) {
             List<Pair<String, ATerm>> r = match(env, t, Tools.applAt(p, 1));
@@ -127,7 +133,7 @@ public class Match extends Strategy {
             r.add(new Pair<String, ATerm>(varName, t));
             return r;
         } else if(Tools.termType(p, "Wld")) {
-            return emptyList;
+            return emptyList();
         }
 
         throw new FatalError("What?" + p);
@@ -142,7 +148,7 @@ public class Match extends Strategy {
         } else if (p.getName().equals("Int")) {
             Integer i = new Integer(Tools.stringAt(p, 0));
             if (i == t.getInt())
-                return emptyList;
+                return emptyList();
             return null;
         } else if (p.getName().equals("Var")) {
             List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
@@ -161,7 +167,7 @@ public class Match extends Strategy {
             else
                 return null;
         } else if (p.getName().equals("Wld")) {
-            return emptyList;
+            return emptyList();
         } else if (p.getName().equals("As")) {
             List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
             String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
@@ -183,6 +189,4 @@ public class Match extends Strategy {
                 + t.getClass().toString() + " " + ATerm.APPL + " "
                 + t.getType() + "]");
     }
-
-
 }

@@ -9,9 +9,21 @@ public class Main {
     public static void main(String args[]) throws IOException {
 
         Interpreter itp = new Interpreter();
+        String file = "";
+
+        for(String s : args) 
+            System.out.println(s);
+        
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--debug")) {
+                itp.setDebug(true);
+            } else if (args[i].equals("-i")) {
+                file = args[i + 1];
+            }
+        }
 
         try {
-            itp.load(args[0]);
+            itp.load(file);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

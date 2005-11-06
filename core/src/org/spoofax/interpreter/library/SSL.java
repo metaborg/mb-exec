@@ -28,7 +28,6 @@ public class SSL {
         registry.put("SSL_subtr", new SSL_subtr());
         registry.put("SSL_new", new SSL_new());
         registry.put("SSL_printnl", new SSL_printnl());
-                
     }
     
     protected static Map<String, Primitive> getRegistry() {

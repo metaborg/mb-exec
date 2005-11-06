@@ -16,6 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 
 import aterm.ATerm;
+import aterm.ATermAppl;
 import aterm.ATermInt;
 import aterm.ATermList;
 
@@ -26,9 +27,20 @@ public class SSL_printnl extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
-        debug("SSL_printnl");
+        debug("SSL_printnl - " + targs);
         
-        System.out.println("" + targs.get(1));
+        ATermList l = Tools.consToListDeep(env.getFactory(), (ATermAppl) targs.get(1));
+        StringBuffer sb = new StringBuffer();
+        for(int i=0;i<l.getChildCount();i++) {
+            ATerm t = Tools.termAt(l, i);
+            if(t.getType() == ATerm.APPL &&
+                    ((ATermAppl) t).getName().equals("Cons"))
+                sb.append(Tools.consToList(env.getFactory(), (ATermAppl) t));
+            else
+                sb.append(t.toString());
+        }
+            
+        System.out.println("Printing : " + sb);
         return true;
     }
 }

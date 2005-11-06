@@ -38,12 +38,13 @@ public class PrimT extends Strategy {
         if(prim == null)
             throw new FatalError("No such function : '" + name + "'");
         
-        debug("" + svars);
+        debug(" call  : " + prim.getName());
+        debug(" svars : " + svars);
         List<ATerm> vals = new ArrayList<ATerm>(svars.size());
         for(ATerm t : tvars) {
             vals.add(env.lookupVar(Tools.stringAt(t, 0)));
         }
-        debug("" + vals);
+        debug(" tvars : " + vals);
         
         return prim.call(env, svars, vals);
     }
