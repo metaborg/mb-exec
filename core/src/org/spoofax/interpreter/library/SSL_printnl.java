@@ -35,7 +35,7 @@ public class SSL_printnl extends Primitive {
             ATerm t = Tools.termAt(l, i);
             if(t.getType() == ATerm.APPL &&
                     ((ATermAppl) t).getName().equals("Cons"))
-                sb.append(Tools.consToList(env.getFactory(), (ATermAppl) t));
+                sb.append(Tools.consToListDeep(env.getFactory(), (ATermAppl) t));
             else
                 sb.append(t.toString());
         }
