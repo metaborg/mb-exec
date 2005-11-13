@@ -100,7 +100,7 @@ public class Tools {
         if (cons.getName().equals("Nil"))
             return factory.makeList();
             
-        ATermList tail = consToList(factory, Tools.applAt(cons, 1));
+        ATermList tail = consToListDeep(factory, Tools.applAt(cons, 1));
 
         ATerm head = Tools.termAt(cons, 0);
         if (Tools.isCons(head)) 
