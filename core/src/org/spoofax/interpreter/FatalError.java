@@ -20,6 +20,6 @@ public class FatalError extends Exception {
     }
     
     public String toString() {
-        return error;
+        return "FatalError: " + error;
     }
 }
