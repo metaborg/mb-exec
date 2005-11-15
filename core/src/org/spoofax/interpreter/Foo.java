@@ -3,10 +3,7 @@ package org.spoofax.interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
-import aterm.AFun;
 import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.pure.PureFactory;
 
 class Foo {
     public static void main(String args[]) {
