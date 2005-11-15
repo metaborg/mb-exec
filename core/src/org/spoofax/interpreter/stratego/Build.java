@@ -55,8 +55,10 @@ public class Build extends Strategy {
             ATermList kids = factory.makeList();
 
             for (int i = 0; i < children.getLength(); i++) {
-                kids = kids.append(buildTerm(env, (ATermAppl) children
-                        .elementAt(i)));
+                ATerm kid = buildTerm(env, (ATermAppl) children.elementAt(i));
+                if(kid == null)
+                    return null;
+                kids = kids.append(kid);
             }
             return factory.makeApplList(afun, kids);
         } else if (t.getName().equals("Int")) {
