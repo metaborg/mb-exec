@@ -10,16 +10,13 @@ package org.spoofax.interpreter.stratego;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.spoofax.interpreter.DefScope;
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.Context;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.VarScope;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
-import aterm.ATermList;
 
 public class CallT extends Strategy {
 
@@ -55,8 +52,8 @@ public class CallT extends Strategy {
         VarScope newVarScope = new VarScope(sdef.getScope());
 
         if (formalSVars.size() != svars.size()) {
-            System.out.println(" takes : " + formalSVars.size());
-            System.out.println(" have  : " + svars.size());
+            debug(" takes : " + formalSVars.size());
+            debug(" have  : " + svars.size());
 
             throw new FatalError("Parameter length mismatch!");
         }
