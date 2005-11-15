@@ -74,7 +74,7 @@ public class Build extends Strategy {
             Context.debug(" lookup : " + n + " (= " + x + ")");
             return x;
         } else if (t.getName().equals("Explode")) {
-            debug("Term construction");
+            debug("Term construction : " + t);
             return buildExplode(env, Tools.applAt(t, 0), Tools.applAt(t, 1));
         }
 
@@ -85,7 +85,10 @@ public class Build extends Strategy {
             throws FatalError {
         PureFactory factory = env.getFactory();
 
+        debug(" applArgs : " + applArgs);
         ATermAppl ctorTerm = (ATermAppl) dropAnno(ctor);
+        debug(" ctorTerm : " + ctorTerm);
+
         String ctorName = Tools.stringAt(ctorTerm, 0);
 
         debug(" ctor : '" + ctorName + "'");
@@ -118,14 +121,19 @@ public class Build extends Strategy {
         PureFactory factory = env.getFactory();
         ATermList r = factory.makeList();
 
-        for (int i = 0; i < args.getChildCount(); i++)
+        debug("" + args);
+        for (int i = 0; i < args.getChildCount(); i++) {
             r.append(env.lookupVar(Tools.stringAt(Tools.termAt(args, i), 0)));
+        }
 
         return r;
     }
 
     private ATerm dropAnno(ATermAppl t) {
-        return Tools.termAt(t, 0);
+        if(t.getName() == "Anno")
+            return Tools.termAt(t, 0);
+        else
+            return t;
     }
 
 }
