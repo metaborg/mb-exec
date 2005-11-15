@@ -33,6 +33,7 @@ public class SSL {
         registry.put("SSL_implode_string", new SSL_implode_string());
         registry.put("SSL_strlen", new SSL_strlen());
         registry.put("SSL_concat_strings", new SSL_concat_strings());
+        registry.put("SSL_rand", new SSL_rand());
     }
     
     protected static Map<String, Primitive> getRegistry() {
