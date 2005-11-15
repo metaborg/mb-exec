@@ -99,19 +99,40 @@ public class Tools {
     public static ATermList consToListDeep(TermFactory factory, ATermAppl cons) {
         if (cons.getName().equals("Nil"))
             return factory.makeList();
-            
+
         ATermList tail = consToListDeep(factory, Tools.applAt(cons, 1));
 
         ATerm head = Tools.termAt(cons, 0);
-        if (Tools.isCons(head)) 
-            head = consToListDeep(factory,(ATermAppl) head);
-        
+        if (Tools.isCons(head))
+            head = consToListDeep(factory, (ATermAppl) head);
+
         return tail.insert(head);
     }
 
-    private static boolean isCons(ATerm head) {
-        return
-            (head.getType() == ATerm.APPL &&
-                ((ATermAppl)head).getName().equals("Cons"));
+    public static boolean isCons(ATerm t) {
+        return (t.getType() == ATerm.APPL && ((ATermAppl) t).getName()
+                .equals("Cons"));
+    }
+
+    public static boolean isATermString(ATerm t) {
+        if (t.getType() == ATerm.APPL) {
+            AFun f = ((ATermAppl) t).getAFun();
+            return f.isQuoted() && f.getChildCount() == 0;
+        }
+        return false;
+    }
+
+    public static String getATermString(ATerm t) {
+        AFun f = ((ATermAppl) t).getAFun();
+        return f.getName(); 
+    }
+
+    public static boolean isATermList(ATerm t) {
+        return t.getType() == ATerm.LIST;
+    }
+
+    public static boolean isNil(ATerm t) {
+        return (t.getType() == ATerm.APPL && ((ATermAppl) t).getName()
+                .equals("Nil"));
     }
 }
