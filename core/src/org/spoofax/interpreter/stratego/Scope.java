@@ -13,8 +13,6 @@ import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.VarScope;
 
-import aterm.ATermList;
-
 public class Scope extends Strategy {
 
     protected List<String> vars;

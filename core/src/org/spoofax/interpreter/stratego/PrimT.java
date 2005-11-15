@@ -13,11 +13,10 @@ import java.util.List;
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
-import org.spoofax.interpreter.library.SSL;
 import org.spoofax.interpreter.library.Primitive;
+import org.spoofax.interpreter.library.SSL;
 
 import aterm.ATerm;
-import aterm.ATermList;
 
 public class PrimT extends Strategy {
 

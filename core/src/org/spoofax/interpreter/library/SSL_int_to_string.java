@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 
 import aterm.ATerm;

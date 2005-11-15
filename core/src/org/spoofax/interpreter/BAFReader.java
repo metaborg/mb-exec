@@ -8,12 +8,11 @@
 package org.spoofax.interpreter;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import aterm.ATerm;
 import aterm.AFun;
+import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 

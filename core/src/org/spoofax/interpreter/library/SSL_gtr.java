@@ -9,15 +9,11 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.Context;
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 
 import aterm.ATerm;
-import aterm.ATermInt;
-import aterm.ATermList;
 import aterm.ATermReal;
 
 public class SSL_gtr extends Primitive {

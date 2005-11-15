@@ -14,7 +14,6 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.stratego.Strategy;
 
 import aterm.ATerm;
-import aterm.ATermInt;
 import aterm.ATermReal;
 
 public class SSL_addr extends Primitive {

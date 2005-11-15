@@ -11,7 +11,6 @@ import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
-import aterm.pure.PureFactory;
 
 public class ATermBuilder implements IATermBuilder {
 

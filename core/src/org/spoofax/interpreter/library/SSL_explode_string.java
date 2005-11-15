@@ -15,9 +15,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 
 import aterm.ATerm;
-import aterm.ATermAppl;
 import aterm.ATermInt;
-import aterm.ATermList;
 
 public class SSL_explode_string extends Primitive {
 

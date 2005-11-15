@@ -14,9 +14,7 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 
-import aterm.AFun;
 import aterm.ATerm;
-import aterm.ATermAppl;
 
 public class SSL_is_string extends Primitive {
 

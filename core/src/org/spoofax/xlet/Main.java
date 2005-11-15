@@ -8,12 +8,8 @@
 package org.spoofax.xlet;
 
 import java.io.IOException;
-import java.util.Vector;
 
-import org.spoofax.ast.AST;
-import org.spoofax.ast.ASTFactory;
 import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.Interpreter;
 
 /**
  * @author Karl Trygve Kalleberg <karltk@ii.uib.no>

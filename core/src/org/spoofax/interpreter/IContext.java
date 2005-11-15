@@ -13,7 +13,6 @@ import org.spoofax.interpreter.stratego.SDefT;
 
 import aterm.ATerm;
 import aterm.ATermList;
-import aterm.pure.PureFactory;
 
 public interface IContext extends IATermBuilder {
 

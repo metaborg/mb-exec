@@ -10,7 +10,6 @@ package org.spoofax.interpreter.stratego;
 import org.spoofax.interpreter.BindingInfo;
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.Tools;
 
 import aterm.ATerm;
 

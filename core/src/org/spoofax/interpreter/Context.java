@@ -15,7 +15,6 @@ import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
 
 import aterm.ATerm;
-import aterm.pure.PureFactory;
 
 public class Context extends ATermBuilder implements IContext {
 
