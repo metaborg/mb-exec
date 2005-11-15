@@ -20,30 +20,28 @@ import aterm.ATermAppl;
 import aterm.ATermInt;
 import aterm.ATermList;
 
-public class SSL_printnl extends Primitive {
+public class SSL_implode_string extends Primitive {
 
-    protected SSL_printnl() {
-        super("SSL_printnl", 0, 1);
+    protected SSL_implode_string() {
+        super("SSL_implode_string", 0, 1);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
-        debug("SSL_printnl - " + targs);
+        debug("SSL_implode_string");
         
-        ATermList l = Tools.consToListDeep(env.getFactory(), (ATermAppl) targs.get(1));
+        ATerm t = targs.get(0);
+        if(!(Tools.isCons(t) || Tools.isNil(t)))
+            return false;
+        
+        ATermList l = Tools.consToList(env.getFactory(), (ATermAppl)t);
+        
         StringBuffer sb = new StringBuffer();
+        
         for(int i=0;i<l.getChildCount();i++) {
-            ATerm t = Tools.termAt(l, i);
-            if(t.getType() == ATerm.APPL) {
-                if(Tools.isCons(t)) 
-                    sb.append(Tools.consToListDeep(env.getFactory(), (ATermAppl) t));
-                else if(Tools.isATermString(t))
-                    sb.append(Tools.getATermString(t));
-                continue;
-            }
-            sb.append(t.toString());
+            ATermInt v = Tools.intAt(l, i);
+            sb.append(new Character((char)v.getInt()));
         }
-            
-        System.out.println(sb);
+        env.setCurrent(env.getFactory().make("\"" + sb.toString() + "\""));
         return true;
     }
 }

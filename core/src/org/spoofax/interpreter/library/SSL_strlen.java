@@ -9,24 +9,30 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
+import org.spoofax.interpreter.Context;
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 
-import aterm.AFun;
 import aterm.ATerm;
-import aterm.ATermAppl;
+import aterm.ATermInt;
+import aterm.ATermList;
 
-public class SSL_is_string extends Primitive {
+public class SSL_strlen extends Primitive {
 
-    protected SSL_is_string() {
-        super("SSL_is_string", 0, 1);
+    protected SSL_strlen() {
+        super("SSL_strlen", 0, 1);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
-        debug("SSL_is_string");
+        debug("SSL_strlen");
         
-        return Tools.isATermString(targs.get(0));
+        if(!Tools.isATermString(targs.get(0)))
+            return false;
+        
+        String s = Tools.getATermString(targs.get(0));
+        env.setCurrent(env.getFactory().makeInt(s.length()));
+        return true;
     }
 }

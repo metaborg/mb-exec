@@ -17,6 +17,7 @@ import org.spoofax.interpreter.stratego.Strategy;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermInt;
+import aterm.ATermList;
 
 public class SSL_explode_string extends Primitive {
 
@@ -27,17 +28,20 @@ public class SSL_explode_string extends Primitive {
     public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws FatalError {
         debug("SSL_explode_string");
         
-        if(tvars.get(0).getType() != ATerm.APPL)
+        ATerm t = tvars.get(0);
+        
+        if(!Tools.isATermString(t))
             return false;
         
-        String s = ((ATermAppl)tvars.get(0)).getName();
+        String s = Tools.getATermString(t);
         ATerm[] r = new ATermInt[s.length()];
         byte[] bs = s.getBytes();
         
         for(int i=0;i<bs.length;i++)
             r[i] = env.getFactory().makeInt(bs[i]);
         
-        env.setCurrent(env.makeList(r));
+        ATerm sl = env.makeList(r);
+        env.setCurrent(sl);
         return true;
     }
 }

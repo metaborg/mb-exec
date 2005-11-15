@@ -29,6 +29,10 @@ public class SSL {
         registry.put("SSL_new", new SSL_new());
         registry.put("SSL_printnl", new SSL_printnl());
         registry.put("SSL_is_string", new SSL_is_string());
+        registry.put("SSL_strcat", new SSL_strcat());
+        registry.put("SSL_implode_string", new SSL_implode_string());
+        registry.put("SSL_strlen", new SSL_strlen());
+        registry.put("SSL_concat_strings", new SSL_concat_strings());
     }
     
     protected static Map<String, Primitive> getRegistry() {

@@ -20,30 +20,25 @@ import aterm.ATermAppl;
 import aterm.ATermInt;
 import aterm.ATermList;
 
-public class SSL_printnl extends Primitive {
+public class SSL_concat_strings extends Primitive {
 
-    protected SSL_printnl() {
-        super("SSL_printnl", 0, 1);
+    protected SSL_concat_strings() {
+        super("SSL_concat_strings", 0, 1);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
-        debug("SSL_printnl - " + targs);
-        
-        ATermList l = Tools.consToListDeep(env.getFactory(), (ATermAppl) targs.get(1));
+        debug("SSL_concat_strings");
+
+        if(!(Tools.isCons(targs.get(0))
+                || Tools.isNil(targs.get(0))))
+            return false;
+
+        ATermList l = Tools.consToList(env.getFactory(), (ATermAppl)targs.get(0));
         StringBuffer sb = new StringBuffer();
         for(int i=0;i<l.getChildCount();i++) {
-            ATerm t = Tools.termAt(l, i);
-            if(t.getType() == ATerm.APPL) {
-                if(Tools.isCons(t)) 
-                    sb.append(Tools.consToListDeep(env.getFactory(), (ATermAppl) t));
-                else if(Tools.isATermString(t))
-                    sb.append(Tools.getATermString(t));
-                continue;
-            }
-            sb.append(t.toString());
+            sb.append(Tools.stringAt(l, i));
         }
-            
-        System.out.println(sb);
+        env.setCurrent(env.getFactory().make("\"" + sb.toString() + "\""));
         return true;
     }
 }
