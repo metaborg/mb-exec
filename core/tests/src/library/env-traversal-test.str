@@ -1,5 +1,5 @@
 module env-traversal-test
-imports sunit strategy/environment/traversal
+imports sunit strategy/traversal/environment
 signature
   constructors
     F : A * A -> A
