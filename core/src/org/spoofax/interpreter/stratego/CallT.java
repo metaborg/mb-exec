@@ -55,7 +55,7 @@ public class CallT extends Strategy {
             debug(" takes : " + formalSVars.size());
             debug(" have  : " + svars.size());
 
-            throw new FatalError("Parameter length mismatch!");
+            throw new FatalError("Parameter length mismatch when calling '" + name + "'!");
         }
 
         for (int i = 0; i < svars.size(); i++) {

@@ -16,24 +16,24 @@ import org.spoofax.interpreter.stratego.Strategy;
 
 import aterm.ATerm;
 
-public class SSL_strcat extends Primitive {
+public class SSL_getenv extends Primitive {
 
-    protected SSL_strcat() {
-        super("SSL_strcat", 0, 1);
+    protected SSL_getenv() {
+        super("SSL_getenv", 0, 1);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
-        debug("SSL_strcat");
-
+        debug("SSL_getenv");
+        
         if(!Tools.isATermString(targs.get(0)))
             return false;
-        if(!Tools.isATermString(targs.get(1)))
-            return false;
-
-        String s = Tools.getATermString(targs.get(0));
-        String t = Tools.getATermString(targs.get(1));
         
-        env.setCurrent(env.makeString(s + t));
+        String s = System.getenv(Tools.getATermString(targs.get(0)));
+
+        if(s == null)
+            return false;
+        
+        env.setCurrent(env.makeString(s));
         return true;
     }
 }

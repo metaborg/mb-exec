@@ -12,7 +12,6 @@ import java.util.List;
 import org.spoofax.interpreter.stratego.SDefT;
 
 import aterm.ATerm;
-import aterm.ATermList;
 
 public interface IContext extends IATermBuilder {
 
@@ -25,10 +24,8 @@ public interface IContext extends IATermBuilder {
     TermFactory getFactory();
     
     boolean bindVars(List<Pair<String, ATerm>> r);
-
-    ATerm makeTerm(String s);
-    ATerm makeList(ATermList args);
     
     VarScope getVarScope();
     void setVarScope(VarScope newVarScope);
+
 }

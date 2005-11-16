@@ -15,8 +15,13 @@ public class LanguageTest extends InterpreterTest {
     protected void setUp() throws Exception {
         super.setUp("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/");
     }
+    
     public void testBuildInt() {
         interpTest("build_int", "1", "5");
+    }
+
+    public void testBuildReal() {
+        interpTest("build_real", itp.makeTuple("[]"), itp.makeTerm("5.0"));
     }
 
     public void testBuildString() {
@@ -49,6 +54,18 @@ public class LanguageTest extends InterpreterTest {
 
     public void testMatchString2() {
         interpTestFail("match_string_2", "\"abc\"");
+    }
+    
+    public void testMatchReal1() {
+        interpTest("match_real_1", itp.makeTerm("2.0"), itp.makeTerm("2.0"));
+    }
+
+    public void testMatchReal2() {
+        interpTest("match_real_2", itp.makeTerm("4.0"), itp.makeTerm("4.0"));
+    }
+
+    public void testMatchReal3() {
+        interpTestFail("match_real_2", itp.makeTerm("2.0"));
     }
 
     public void testMatchTuple1() {
@@ -530,8 +547,23 @@ public class LanguageTest extends InterpreterTest {
        interpTest("guarded_7", itp.makeTuple("[]"), itp.makeTerm("2"));
    }
 
-}
+   public void testTermDeconstr1() {
+       interpTest("term_deconstr_1", itp.makeTerm("1"), itp.makeTerm("1"));
+   }
 
-/*
- 
-*/
+   public void testTermDeconstr2() {
+       interpTest("term_deconstr_2", itp.makeTerm("Plus(1,2)"), itp.makeList("[2]"));
+   }
+
+   public void testTermDeconstr3() {
+       interpTest("term_deconstr_3", itp.makeTerm("Plus(1,2)"), itp.makeList("[1,2]"));
+   }
+
+   public void testTermDeconstr4() {
+       interpTest("term_deconstr_4", itp.makeTerm("Plus(1,2)"), itp.makeList("[1,2]"));
+   }
+
+   public void testTermDeconstr5() {
+       interpTest("term_deconstr_4", itp.makeTerm("Pair(1,2)"), itp.makeTerm("Pair(1,2)"));
+   }
+}

@@ -22,11 +22,11 @@ public class LoaderFactory {
 	
 	static LoaderFactory self;
 	
-	private Collection loaders;
+	private Collection<ILoader> loaders;
 
 	private LoaderFactory() {
 		Logger.log("Constructing LoaderFactory");
-		loaders = new Vector();
+		loaders = new Vector<ILoader>();
 
 		loaders.add(new CLoader());
 		loaders.add(new CPPLoader());

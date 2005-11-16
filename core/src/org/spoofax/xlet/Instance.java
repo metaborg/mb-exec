@@ -14,7 +14,9 @@ import org.spoofax.interpreter.Interpreter;
 
 public class Instance {
     
+    @SuppressWarnings("unused")
     private String libPath;
+    @SuppressWarnings("unused")
     private String xletPath;
     
     protected Interpreter itp;

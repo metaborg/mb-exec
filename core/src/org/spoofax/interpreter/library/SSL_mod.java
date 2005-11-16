@@ -15,25 +15,25 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 
 import aterm.ATerm;
+import aterm.ATermInt;
 
-public class SSL_strcat extends Primitive {
+public class SSL_mod extends Primitive {
 
-    protected SSL_strcat() {
-        super("SSL_strcat", 0, 1);
+    protected SSL_mod() {
+        super("SSL_mod", 0, 1);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
-        debug("SSL_strcat");
-
-        if(!Tools.isATermString(targs.get(0)))
-            return false;
-        if(!Tools.isATermString(targs.get(1)))
-            return false;
-
-        String s = Tools.getATermString(targs.get(0));
-        String t = Tools.getATermString(targs.get(1));
+        debug("SSL_mod");
         
-        env.setCurrent(env.makeString(s + t));
+        if(!Tools.isInt(targs.get(0)))
+            return false;
+        if(!Tools.isInt(targs.get(1)))
+            return false;
+
+        ATermInt a = (ATermInt) targs.get(0);
+        ATermInt b = (ATermInt) targs.get(1);
+        env.setCurrent(env.getFactory().makeInt(a.getInt() % b.getInt()));
         return true;
     }
 }

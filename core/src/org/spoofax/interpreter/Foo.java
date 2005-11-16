@@ -3,14 +3,14 @@ package org.spoofax.interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
-import aterm.ATerm;
+// import aterm.ATerm;
 
 class Foo {
     public static void main(String args[]) {
         TermFactory factory = new TermFactory();
-        ATerm t = factory.parse("Foo(0, Foo(Baz, Zap))");
+        // ATerm t = factory.parse("Foo(0, Foo(Baz, Zap))");
 
-        ATerm p = factory.parse("Foo(<id>, Foo(<fun>, <fun>))");
+        // ATerm p = factory.parse("Foo(<id>, Foo(<fun>, <fun>))");
         
         System.out.println(factory.hasAFun("Foo", 0));
         System.out.println(factory.hasAFun("a_0", 0));

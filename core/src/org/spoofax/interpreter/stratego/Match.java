@@ -21,6 +21,7 @@ import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermInt;
 import aterm.ATermList;
+import aterm.ATermReal;
 
 public class Match extends Strategy {
 
@@ -183,6 +184,8 @@ public class Match extends Strategy {
             return match(env, (ATermAppl) t, p);
         else if (t.getType() == ATerm.INT)
             return match(env, (ATermInt) t, p);
+        else if (t.getType() == ATerm.INT)
+            return match(env, (ATermReal) t, p);
 
         throw new FatalError("Current term is not an ATermAppl term ["
                 + t.getClass().toString() + " " + ATerm.APPL + " "

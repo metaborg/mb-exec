@@ -19,11 +19,14 @@ public class SSL {
         registry.put("SSL_is_int", new SSL_is_int());
         registry.put("SSL_addi", new SSL_addi());
         registry.put("SSL_addr", new SSL_addr());
+        registry.put("SSL_divi", new SSL_divi());
         registry.put("SSL_gti", new SSL_gti());
         registry.put("SSL_gtr", new SSL_gtr());
         registry.put("SSL_muli", new SSL_muli());
+        registry.put("SSL_mod", new SSL_mod());
         registry.put("SSL_int_to_string", new SSL_int_to_string());
         registry.put("SSL_explode_string", new SSL_explode_string());
+        registry.put("SSL_string_to_int", new SSL_string_to_int());
         registry.put("SSL_subti", new SSL_subti());
         registry.put("SSL_subtr", new SSL_subtr());
         registry.put("SSL_new", new SSL_new());
@@ -34,6 +37,7 @@ public class SSL {
         registry.put("SSL_strlen", new SSL_strlen());
         registry.put("SSL_concat_strings", new SSL_concat_strings());
         registry.put("SSL_rand", new SSL_rand());
+        registry.put("SSL_getenv", new SSL_getenv());
     }
     
     protected static Map<String, Primitive> getRegistry() {

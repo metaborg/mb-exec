@@ -40,7 +40,7 @@ public class SSL_implode_string extends Primitive {
             ATermInt v = Tools.intAt(l, i);
             sb.append(new Character((char)v.getInt()));
         }
-        env.setCurrent(env.getFactory().make("\"" + sb.toString() + "\""));
+        env.setCurrent(env.makeString(sb.toString()));
         return true;
     }
 }

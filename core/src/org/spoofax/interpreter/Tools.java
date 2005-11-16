@@ -145,4 +145,8 @@ public class Tools {
         return t.getType() == ATerm.APPL
                 && ((ATermAppl) t).getName().equals("ExtSDef");
     }
+
+    public static boolean isInt(ATerm t) {
+        return t.getType() == ATerm.INT;
+    }
 }

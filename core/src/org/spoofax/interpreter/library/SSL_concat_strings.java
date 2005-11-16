@@ -36,7 +36,7 @@ public class SSL_concat_strings extends Primitive {
         for(int i=0;i<l.getChildCount();i++) {
             sb.append(Tools.stringAt(l, i));
         }
-        env.setCurrent(env.getFactory().make("\"" + sb.toString() + "\""));
+        env.setCurrent(env.makeString(sb.toString()));
         return true;
     }
 }

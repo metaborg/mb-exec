@@ -9,8 +9,6 @@ package org.spoofax.interpreter.stratego;
 
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
-import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.VarScope;
 
 public class ExtSDef extends SDefT {

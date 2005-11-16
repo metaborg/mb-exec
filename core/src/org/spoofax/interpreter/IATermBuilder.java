@@ -12,8 +12,9 @@ import aterm.ATermList;
 
 public interface IATermBuilder {
     
-    // FIXME: Extract all of the ATermBulder interface into this file.
-    
     public ATerm makeList(ATermList t);
     public ATerm makeList(ATerm... terms);
+    public ATerm makeTerm(String s);
+    public ATerm makeString(String s);
+
 }
