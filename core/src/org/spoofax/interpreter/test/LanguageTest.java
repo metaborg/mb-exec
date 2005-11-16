@@ -13,7 +13,7 @@ public class LanguageTest extends InterpreterTest {
 
     @Override
     protected void setUp() throws Exception {
-        super.setUp("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/");
+        super.setUp("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/lang/");
     }
     
     public void testBuildInt() {
