@@ -1178,7 +1178,7 @@ Specification(
       , ExtSDef(
           "test_extension_1_0"
         , [ VarDec(
-              "h_97"
+              "a_126"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1191,7 +1191,7 @@ Specification(
       , ExtSDef(
           "has_extension_1_0"
         , [ VarDec(
-              "y_96"
+              "r_125"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1203,12 +1203,12 @@ Specification(
       , ExtSDef(
           "has_extension_0_1"
         , []
-        , [VarDec("m_32", ConstType(Sort("ATerm", [])))]
+        , [VarDec("m_51", ConstType(Sort("ATerm", [])))]
         )
       , ExtSDef(
           "guarantee_extension_0_1"
         , []
-        , [VarDec("l_32", ConstType(Sort("ATerm", [])))]
+        , [VarDec("l_51", ConstType(Sort("ATerm", [])))]
         )
       , ExtSDef("remove_extension_0_0", [], [])
       , SDefT(
@@ -1450,15 +1450,15 @@ Specification(
                                                             SVar("apply_test_4_0")
                                                           , [ Build(Anno(Str("guarantee-extension 1"), Op("Nil", [])))
                                                             , Scope(
-                                                                ["b_0", "y_0"]
+                                                                ["b_0", "d_0"]
                                                               , Seq(
-                                                                  Match(Var("y_0"))
+                                                                  Match(Var("d_0"))
                                                                 , Seq(
                                                                     Build(Anno(Str("str"), Op("Nil", [])))
                                                                   , Seq(
                                                                       Match(Var("b_0"))
                                                                     , Seq(
-                                                                        Build(Var("y_0"))
+                                                                        Build(Var("d_0"))
                                                                       , CallT(SVar("guarantee_extension_0_1"), [], [Var("b_0")])
                                                                       )
                                                                     )
@@ -1475,16 +1475,16 @@ Specification(
                                                               SVar("apply_test_4_0")
                                                             , [ Build(Anno(Str("guarantee-extension 2"), Op("Nil", [])))
                                                               , Scope(
-                                                                  ["c_0", "a_1"]
+                                                                  ["e_0", "f_0"]
                                                                 , Seq(
-                                                                    Match(Var("a_1"))
+                                                                    Match(Var("f_0"))
                                                                   , Seq(
                                                                       Build(Anno(Str("str"), Op("Nil", [])))
                                                                     , Seq(
-                                                                        Match(Var("c_0"))
+                                                                        Match(Var("e_0"))
                                                                       , Seq(
-                                                                          Build(Var("a_1"))
-                                                                        , CallT(SVar("guarantee_extension_0_1"), [], [Var("c_0")])
+                                                                          Build(Var("f_0"))
+                                                                        , CallT(SVar("guarantee_extension_0_1"), [], [Var("e_0")])
                                                                         )
                                                                       )
                                                                     )
@@ -1500,16 +1500,16 @@ Specification(
                                                                 SVar("apply_test_4_0")
                                                               , [ Build(Anno(Str("guarantee-extension 3"), Op("Nil", [])))
                                                                 , Scope(
-                                                                    ["d_0", "b_1"]
+                                                                    ["g_0", "h_0"]
                                                                   , Seq(
-                                                                      Match(Var("b_1"))
+                                                                      Match(Var("h_0"))
                                                                     , Seq(
                                                                         Build(Anno(Str("str"), Op("Nil", [])))
                                                                       , Seq(
-                                                                          Match(Var("d_0"))
+                                                                          Match(Var("g_0"))
                                                                         , Seq(
-                                                                            Build(Var("b_1"))
-                                                                          , CallT(SVar("guarantee_extension_0_1"), [], [Var("d_0")])
+                                                                            Build(Var("h_0"))
+                                                                          , CallT(SVar("guarantee_extension_0_1"), [], [Var("g_0")])
                                                                           )
                                                                         )
                                                                       )
@@ -1525,16 +1525,16 @@ Specification(
                                                                   SVar("apply_test_4_0")
                                                                 , [ Build(Anno(Str("guarantee-extension 4"), Op("Nil", [])))
                                                                   , Scope(
-                                                                      ["e_0", "c_1"]
+                                                                      ["i_0", "j_0"]
                                                                     , Seq(
-                                                                        Match(Var("c_1"))
+                                                                        Match(Var("j_0"))
                                                                       , Seq(
                                                                           Build(Anno(Str("str"), Op("Nil", [])))
                                                                         , Seq(
-                                                                            Match(Var("e_0"))
+                                                                            Match(Var("i_0"))
                                                                           , Seq(
-                                                                              Build(Var("c_1"))
-                                                                            , CallT(SVar("guarantee_extension_0_1"), [], [Var("e_0")])
+                                                                              Build(Var("j_0"))
+                                                                            , CallT(SVar("guarantee_extension_0_1"), [], [Var("i_0")])
                                                                             )
                                                                           )
                                                                         )
@@ -1550,16 +1550,16 @@ Specification(
                                                                     SVar("apply_test_4_0")
                                                                   , [ Build(Anno(Str("guarantee-extension 5"), Op("Nil", [])))
                                                                     , Scope(
-                                                                        ["f_0", "d_1"]
+                                                                        ["k_0", "l_0"]
                                                                       , Seq(
-                                                                          Match(Var("d_1"))
+                                                                          Match(Var("l_0"))
                                                                         , Seq(
                                                                             Build(Anno(Str("str"), Op("Nil", [])))
                                                                           , Seq(
-                                                                              Match(Var("f_0"))
+                                                                              Match(Var("k_0"))
                                                                             , Seq(
-                                                                                Build(Var("d_1"))
-                                                                              , CallT(SVar("guarantee_extension_0_1"), [], [Var("f_0")])
+                                                                                Build(Var("l_0"))
+                                                                              , CallT(SVar("guarantee_extension_0_1"), [], [Var("k_0")])
                                                                               )
                                                                             )
                                                                           )
@@ -1575,16 +1575,16 @@ Specification(
                                                                       SVar("apply_test_4_0")
                                                                     , [ Build(Anno(Str("guarantee-extension 6"), Op("Nil", [])))
                                                                       , Scope(
-                                                                          ["g_0", "e_1"]
+                                                                          ["m_0", "n_0"]
                                                                         , Seq(
-                                                                            Match(Var("e_1"))
+                                                                            Match(Var("n_0"))
                                                                           , Seq(
                                                                               Build(Anno(Str("str"), Op("Nil", [])))
                                                                             , Seq(
-                                                                                Match(Var("g_0"))
+                                                                                Match(Var("m_0"))
                                                                               , Seq(
-                                                                                  Build(Var("e_1"))
-                                                                                , CallT(SVar("guarantee_extension_0_1"), [], [Var("g_0")])
+                                                                                  Build(Var("n_0"))
+                                                                                , CallT(SVar("guarantee_extension_0_1"), [], [Var("m_0")])
                                                                                 )
                                                                               )
                                                                             )
@@ -1600,16 +1600,16 @@ Specification(
                                                                         SVar("apply_test_4_0")
                                                                       , [ Build(Anno(Str("guarantee-extension 7"), Op("Nil", [])))
                                                                         , Scope(
-                                                                            ["h_0", "f_1"]
+                                                                            ["o_0", "p_0"]
                                                                           , Seq(
-                                                                              Match(Var("f_1"))
+                                                                              Match(Var("p_0"))
                                                                             , Seq(
                                                                                 Build(Anno(Str("str"), Op("Nil", [])))
                                                                               , Seq(
-                                                                                  Match(Var("h_0"))
+                                                                                  Match(Var("o_0"))
                                                                                 , Seq(
-                                                                                    Build(Var("f_1"))
-                                                                                  , CallT(SVar("guarantee_extension_0_1"), [], [Var("h_0")])
+                                                                                    Build(Var("p_0"))
+                                                                                  , CallT(SVar("guarantee_extension_0_1"), [], [Var("o_0")])
                                                                                   )
                                                                                 )
                                                                               )
@@ -1625,16 +1625,16 @@ Specification(
                                                                           SVar("apply_test_4_0")
                                                                         , [ Build(Anno(Str("guarantee-extension 9"), Op("Nil", [])))
                                                                           , Scope(
-                                                                              ["i_0", "g_1"]
+                                                                              ["q_0", "r_0"]
                                                                             , Seq(
-                                                                                Match(Var("g_1"))
+                                                                                Match(Var("r_0"))
                                                                               , Seq(
                                                                                   Build(Anno(Str("str"), Op("Nil", [])))
                                                                                 , Seq(
-                                                                                    Match(Var("i_0"))
+                                                                                    Match(Var("q_0"))
                                                                                   , Seq(
-                                                                                      Build(Var("g_1"))
-                                                                                    , CallT(SVar("guarantee_extension_0_1"), [], [Var("i_0")])
+                                                                                      Build(Var("r_0"))
+                                                                                    , CallT(SVar("guarantee_extension_0_1"), [], [Var("q_0")])
                                                                                     )
                                                                                   )
                                                                                 )
@@ -1650,16 +1650,16 @@ Specification(
                                                                             SVar("apply_test_4_0")
                                                                           , [ Build(Anno(Str("guarantee-extension 10"), Op("Nil", [])))
                                                                             , Scope(
-                                                                                ["j_0", "h_1"]
+                                                                                ["s_0", "t_0"]
                                                                               , Seq(
-                                                                                  Match(Var("h_1"))
+                                                                                  Match(Var("t_0"))
                                                                                 , Seq(
                                                                                     Build(Anno(Str("str"), Op("Nil", [])))
                                                                                   , Seq(
-                                                                                      Match(Var("j_0"))
+                                                                                      Match(Var("s_0"))
                                                                                     , Seq(
-                                                                                        Build(Var("h_1"))
-                                                                                      , CallT(SVar("guarantee_extension_0_1"), [], [Var("j_0")])
+                                                                                        Build(Var("t_0"))
+                                                                                      , CallT(SVar("guarantee_extension_0_1"), [], [Var("s_0")])
                                                                                       )
                                                                                     )
                                                                                   )
@@ -1675,16 +1675,16 @@ Specification(
                                                                               SVar("apply_test_4_0")
                                                                             , [ Build(Anno(Str("guarantee-extension 11"), Op("Nil", [])))
                                                                               , Scope(
-                                                                                  ["k_0", "i_1"]
+                                                                                  ["u_0", "v_0"]
                                                                                 , Seq(
-                                                                                    Match(Var("i_1"))
+                                                                                    Match(Var("v_0"))
                                                                                   , Seq(
                                                                                       Build(Anno(Str("str"), Op("Nil", [])))
                                                                                     , Seq(
-                                                                                        Match(Var("k_0"))
+                                                                                        Match(Var("u_0"))
                                                                                       , Seq(
-                                                                                          Build(Var("i_1"))
-                                                                                        , CallT(SVar("guarantee_extension_0_1"), [], [Var("k_0")])
+                                                                                          Build(Var("v_0"))
+                                                                                        , CallT(SVar("guarantee_extension_0_1"), [], [Var("u_0")])
                                                                                         )
                                                                                       )
                                                                                     )
@@ -1700,16 +1700,16 @@ Specification(
                                                                                 SVar("apply_test_4_0")
                                                                               , [ Build(Anno(Str("guarantee-extension 12"), Op("Nil", [])))
                                                                                 , Scope(
-                                                                                    ["l_0", "j_1"]
+                                                                                    ["w_0", "x_0"]
                                                                                   , Seq(
-                                                                                      Match(Var("j_1"))
+                                                                                      Match(Var("x_0"))
                                                                                     , Seq(
                                                                                         Build(Anno(Str("str"), Op("Nil", [])))
                                                                                       , Seq(
-                                                                                          Match(Var("l_0"))
+                                                                                          Match(Var("w_0"))
                                                                                         , Seq(
-                                                                                            Build(Var("j_1"))
-                                                                                          , CallT(SVar("guarantee_extension_0_1"), [], [Var("l_0")])
+                                                                                            Build(Var("x_0"))
+                                                                                          , CallT(SVar("guarantee_extension_0_1"), [], [Var("w_0")])
                                                                                           )
                                                                                         )
                                                                                       )
@@ -1725,16 +1725,16 @@ Specification(
                                                                                   SVar("apply_test_4_0")
                                                                                 , [ Build(Anno(Str("guarantee-extension 13"), Op("Nil", [])))
                                                                                   , Scope(
-                                                                                      ["m_0", "k_1"]
+                                                                                      ["y_0", "z_0"]
                                                                                     , Seq(
-                                                                                        Match(Var("k_1"))
+                                                                                        Match(Var("z_0"))
                                                                                       , Seq(
                                                                                           Build(Anno(Str("str"), Op("Nil", [])))
                                                                                         , Seq(
-                                                                                            Match(Var("m_0"))
+                                                                                            Match(Var("y_0"))
                                                                                           , Seq(
-                                                                                              Build(Var("k_1"))
-                                                                                            , CallT(SVar("guarantee_extension_0_1"), [], [Var("m_0")])
+                                                                                              Build(Var("z_0"))
+                                                                                            , CallT(SVar("guarantee_extension_0_1"), [], [Var("y_0")])
                                                                                             )
                                                                                           )
                                                                                         )
@@ -1750,16 +1750,16 @@ Specification(
                                                                                     SVar("apply_test_4_0")
                                                                                   , [ Build(Anno(Str("guarantee-extension 14"), Op("Nil", [])))
                                                                                     , Scope(
-                                                                                        ["n_0", "l_1"]
+                                                                                        ["a_1", "b_1"]
                                                                                       , Seq(
-                                                                                          Match(Var("l_1"))
+                                                                                          Match(Var("b_1"))
                                                                                         , Seq(
                                                                                             Build(Anno(Str("str"), Op("Nil", [])))
                                                                                           , Seq(
-                                                                                              Match(Var("n_0"))
+                                                                                              Match(Var("a_1"))
                                                                                             , Seq(
-                                                                                                Build(Var("l_1"))
-                                                                                              , CallT(SVar("guarantee_extension_0_1"), [], [Var("n_0")])
+                                                                                                Build(Var("b_1"))
+                                                                                              , CallT(SVar("guarantee_extension_0_1"), [], [Var("a_1")])
                                                                                               )
                                                                                             )
                                                                                           )
@@ -1775,16 +1775,16 @@ Specification(
                                                                                       SVar("apply_test_4_0")
                                                                                     , [ Build(Anno(Str("guarantee-extension 15"), Op("Nil", [])))
                                                                                       , Scope(
-                                                                                          ["o_0", "m_1"]
+                                                                                          ["c_1", "d_1"]
                                                                                         , Seq(
-                                                                                            Match(Var("m_1"))
+                                                                                            Match(Var("d_1"))
                                                                                           , Seq(
                                                                                               Build(Anno(Str("str"), Op("Nil", [])))
                                                                                             , Seq(
-                                                                                                Match(Var("o_0"))
+                                                                                                Match(Var("c_1"))
                                                                                               , Seq(
-                                                                                                  Build(Var("m_1"))
-                                                                                                , CallT(SVar("guarantee_extension_0_1"), [], [Var("o_0")])
+                                                                                                  Build(Var("d_1"))
+                                                                                                , CallT(SVar("guarantee_extension_0_1"), [], [Var("c_1")])
                                                                                                 )
                                                                                               )
                                                                                             )
@@ -1800,16 +1800,16 @@ Specification(
                                                                                         SVar("apply_test_4_0")
                                                                                       , [ Build(Anno(Str("guarantee-extension 16"), Op("Nil", [])))
                                                                                         , Scope(
-                                                                                            ["p_0", "n_1"]
+                                                                                            ["e_1", "f_1"]
                                                                                           , Seq(
-                                                                                              Match(Var("n_1"))
+                                                                                              Match(Var("f_1"))
                                                                                             , Seq(
                                                                                                 Build(Anno(Str("str"), Op("Nil", [])))
                                                                                               , Seq(
-                                                                                                  Match(Var("p_0"))
+                                                                                                  Match(Var("e_1"))
                                                                                                 , Seq(
-                                                                                                    Build(Var("n_1"))
-                                                                                                  , CallT(SVar("guarantee_extension_0_1"), [], [Var("p_0")])
+                                                                                                    Build(Var("f_1"))
+                                                                                                  , CallT(SVar("guarantee_extension_0_1"), [], [Var("e_1")])
                                                                                                   )
                                                                                                 )
                                                                                               )
@@ -1825,16 +1825,16 @@ Specification(
                                                                                           SVar("apply_test_4_0")
                                                                                         , [ Build(Anno(Str("guarantee-extension 17"), Op("Nil", [])))
                                                                                           , Scope(
-                                                                                              ["q_0", "o_1"]
+                                                                                              ["g_1", "h_1"]
                                                                                             , Seq(
-                                                                                                Match(Var("o_1"))
+                                                                                                Match(Var("h_1"))
                                                                                               , Seq(
                                                                                                   Build(Anno(Str("str"), Op("Nil", [])))
                                                                                                 , Seq(
-                                                                                                    Match(Var("q_0"))
+                                                                                                    Match(Var("g_1"))
                                                                                                   , Seq(
-                                                                                                      Build(Var("o_1"))
-                                                                                                    , CallT(SVar("guarantee_extension_0_1"), [], [Var("q_0")])
+                                                                                                      Build(Var("h_1"))
+                                                                                                    , CallT(SVar("guarantee_extension_0_1"), [], [Var("g_1")])
                                                                                                     )
                                                                                                   )
                                                                                                 )
@@ -1850,16 +1850,16 @@ Specification(
                                                                                             SVar("apply_test_3_0")
                                                                                           , [ Build(Anno(Str("has-extension 1"), Op("Nil", [])))
                                                                                             , Scope(
-                                                                                                ["r_0", "q_1"]
+                                                                                                ["i_1", "j_1"]
                                                                                               , Seq(
-                                                                                                  Match(Var("q_1"))
+                                                                                                  Match(Var("j_1"))
                                                                                                 , Seq(
                                                                                                     Build(Anno(Str("str"), Op("Nil", [])))
                                                                                                   , Seq(
-                                                                                                      Match(Var("r_0"))
+                                                                                                      Match(Var("i_1"))
                                                                                                     , Seq(
-                                                                                                        Build(Var("q_1"))
-                                                                                                      , CallT(SVar("has_extension_0_1"), [], [Var("r_0")])
+                                                                                                        Build(Var("j_1"))
+                                                                                                      , CallT(SVar("has_extension_0_1"), [], [Var("i_1")])
                                                                                                       )
                                                                                                     )
                                                                                                   )
@@ -1874,16 +1874,16 @@ Specification(
                                                                                               SVar("apply_test_3_0")
                                                                                             , [ Build(Anno(Str("has-extension 2"), Op("Nil", [])))
                                                                                               , Scope(
-                                                                                                  ["s_0", "r_1"]
+                                                                                                  ["k_1", "l_1"]
                                                                                                 , Seq(
-                                                                                                    Match(Var("r_1"))
+                                                                                                    Match(Var("l_1"))
                                                                                                   , Seq(
                                                                                                       Build(Anno(Str("str"), Op("Nil", [])))
                                                                                                     , Seq(
-                                                                                                        Match(Var("s_0"))
+                                                                                                        Match(Var("k_1"))
                                                                                                       , Seq(
-                                                                                                          Build(Var("r_1"))
-                                                                                                        , CallT(SVar("has_extension_0_1"), [], [Var("s_0")])
+                                                                                                          Build(Var("l_1"))
+                                                                                                        , CallT(SVar("has_extension_0_1"), [], [Var("k_1")])
                                                                                                         )
                                                                                                       )
                                                                                                     )
@@ -1898,16 +1898,16 @@ Specification(
                                                                                                 SVar("apply_and_fail_3_0")
                                                                                               , [ Build(Anno(Str("has-extension 3"), Op("Nil", [])))
                                                                                                 , Scope(
-                                                                                                    ["t_0", "s_1"]
+                                                                                                    ["m_1", "q_1"]
                                                                                                   , Seq(
-                                                                                                      Match(Var("s_1"))
+                                                                                                      Match(Var("q_1"))
                                                                                                     , Seq(
                                                                                                         Build(Anno(Str("str"), Op("Nil", [])))
                                                                                                       , Seq(
-                                                                                                          Match(Var("t_0"))
+                                                                                                          Match(Var("m_1"))
                                                                                                         , Seq(
-                                                                                                            Build(Var("s_1"))
-                                                                                                          , CallT(SVar("has_extension_0_1"), [], [Var("t_0")])
+                                                                                                            Build(Var("q_1"))
+                                                                                                          , CallT(SVar("has_extension_0_1"), [], [Var("m_1")])
                                                                                                           )
                                                                                                         )
                                                                                                       )
@@ -1922,16 +1922,16 @@ Specification(
                                                                                                   SVar("apply_and_fail_3_0")
                                                                                                 , [ Build(Anno(Str("has-extension 4"), Op("Nil", [])))
                                                                                                   , Scope(
-                                                                                                      ["u_0", "t_1"]
+                                                                                                      ["r_1", "s_1"]
                                                                                                     , Seq(
-                                                                                                        Match(Var("t_1"))
+                                                                                                        Match(Var("s_1"))
                                                                                                       , Seq(
                                                                                                           Build(Anno(Str("str"), Op("Nil", [])))
                                                                                                         , Seq(
-                                                                                                            Match(Var("u_0"))
+                                                                                                            Match(Var("r_1"))
                                                                                                           , Seq(
-                                                                                                              Build(Var("t_1"))
-                                                                                                            , CallT(SVar("has_extension_0_1"), [], [Var("u_0")])
+                                                                                                              Build(Var("s_1"))
+                                                                                                            , CallT(SVar("has_extension_0_1"), [], [Var("r_1")])
                                                                                                             )
                                                                                                           )
                                                                                                         )
@@ -1946,16 +1946,16 @@ Specification(
                                                                                                     SVar("apply_and_fail_3_0")
                                                                                                   , [ Build(Anno(Str("has-extension 5"), Op("Nil", [])))
                                                                                                     , Scope(
-                                                                                                        ["v_0", "u_1"]
+                                                                                                        ["t_1", "u_1"]
                                                                                                       , Seq(
                                                                                                           Match(Var("u_1"))
                                                                                                         , Seq(
                                                                                                             Build(Anno(Str(""), Op("Nil", [])))
                                                                                                           , Seq(
-                                                                                                              Match(Var("v_0"))
+                                                                                                              Match(Var("t_1"))
                                                                                                             , Seq(
                                                                                                                 Build(Var("u_1"))
-                                                                                                              , CallT(SVar("has_extension_0_1"), [], [Var("v_0")])
+                                                                                                              , CallT(SVar("has_extension_0_1"), [], [Var("t_1")])
                                                                                                               )
                                                                                                             )
                                                                                                           )
@@ -1970,16 +1970,16 @@ Specification(
                                                                                                       SVar("apply_and_fail_3_0")
                                                                                                     , [ Build(Anno(Str("has-extension 6"), Op("Nil", [])))
                                                                                                       , Scope(
-                                                                                                          ["w_0", "v_1"]
+                                                                                                          ["v_1", "w_1"]
                                                                                                         , Seq(
-                                                                                                            Match(Var("v_1"))
+                                                                                                            Match(Var("w_1"))
                                                                                                           , Seq(
                                                                                                               Build(Anno(Str("str"), Op("Nil", [])))
                                                                                                             , Seq(
-                                                                                                                Match(Var("w_0"))
+                                                                                                                Match(Var("v_1"))
                                                                                                               , Seq(
-                                                                                                                  Build(Var("v_1"))
-                                                                                                                , CallT(SVar("has_extension_0_1"), [], [Var("w_0")])
+                                                                                                                  Build(Var("w_1"))
+                                                                                                                , CallT(SVar("has_extension_0_1"), [], [Var("v_1")])
                                                                                                                 )
                                                                                                               )
                                                                                                             )
@@ -2379,15 +2379,15 @@ Specification(
         , []
         , []
         , Scope(
-            ["a_0", "w_1"]
+            ["a_0", "c_0"]
           , Seq(
-              Match(Var("w_1"))
+              Match(Var("c_0"))
             , Seq(
                 CallT(SVar("getcwd_0_0"), [], [])
               , Seq(
                   Match(Var("a_0"))
                 , Seq(
-                    Build(Var("w_1"))
+                    Build(Var("c_0"))
                   , Seq(
                       CallT(
                         SVar("apply_test_4_0")
@@ -2462,21 +2462,21 @@ Specification(
       , ExtSDef(
           "apply_test_3_0"
         , [ VarDec(
-              "f_120"
+              "y_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "g_120"
+              "z_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "h_120"
+              "a_149"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2628,21 +2628,21 @@ Specification(
       , ExtSDef(
           "apply_and_fail_3_0"
         , [ VarDec(
-              "m_120"
+              "f_149"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "n_120"
+              "g_149"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "o_120"
+              "h_149"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2679,28 +2679,28 @@ Specification(
       , ExtSDef(
           "apply_test_4_0"
         , [ VarDec(
-              "b_120"
+              "u_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "c_120"
+              "v_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "d_120"
+              "w_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "e_120"
+              "x_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2814,14 +2814,14 @@ Specification(
       , ExtSDef(
           "test_suite_2_0"
         , [ VarDec(
-              "z_119"
+              "s_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "a_120"
+              "t_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))

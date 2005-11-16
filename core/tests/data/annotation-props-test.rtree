@@ -1336,14 +1336,14 @@ Specification(
       , ExtSDef(
           "set_prop_2_0"
         , [ VarDec(
-              "x_109"
+              "i_139"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "y_109"
+              "j_139"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1550,10 +1550,7 @@ Specification(
                       ]
                     , []
                     )
-                  , Seq(
-                      Match(Var("e_0"))
-                    , Seq(Build(Var("a_0")), Build(Var("e_0")))
-                    )
+                  , Match(Var("e_0"))
                   )
                 )
               )
@@ -1646,7 +1643,7 @@ Specification(
       , ExtSDef(
           "merge_props_1_0"
         , [ VarDec(
-              "m_109"
+              "x_138"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -1848,7 +1845,7 @@ Specification(
       , ExtSDef(
           "preserve_props_1_0"
         , [ VarDec(
-              "l_109"
+              "w_138"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2021,14 +2018,14 @@ Specification(
       , ExtSDef(
           "has_prop_2_0"
         , [ VarDec(
-              "o_109"
+              "z_138"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "p_109"
+              "a_139"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2162,7 +2159,7 @@ Specification(
       , ExtSDef(
           "has_prop_1_0"
         , [ VarDec(
-              "n_109"
+              "y_138"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2283,14 +2280,14 @@ Specification(
       , ExtSDef(
           "add_prop_2_0"
         , [ VarDec(
-              "v_109"
+              "g_139"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "w_109"
+              "h_139"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2445,14 +2442,14 @@ Specification(
       , ExtSDef(
           "replace_prop_2_0"
         , [ VarDec(
-              "t_109"
+              "e_139"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "u_109"
+              "f_139"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2768,7 +2765,7 @@ Specification(
       , ExtSDef(
           "get_prop_1_0"
         , [ VarDec(
-              "q_109"
+              "b_139"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2780,28 +2777,28 @@ Specification(
       , ExtSDef(
           "apply_test_4_0"
         , [ VarDec(
-              "b_120"
+              "u_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "c_120"
+              "v_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "d_120"
+              "w_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "e_120"
+              "x_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
@@ -2852,14 +2849,14 @@ Specification(
       , ExtSDef(
           "test_suite_2_0"
         , [ VarDec(
-              "z_119"
+              "s_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
               )
             )
           , VarDec(
-              "a_120"
+              "t_148"
             , FunType(
                 [ConstType(Sort("ATerm", []))]
               , ConstType(Sort("ATerm", []))
