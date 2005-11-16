@@ -14,6 +14,7 @@ import java.util.List;
 import org.spoofax.interpreter.stratego.All;
 import org.spoofax.interpreter.stratego.Build;
 import org.spoofax.interpreter.stratego.CallT;
+import org.spoofax.interpreter.stratego.ExtSDef;
 import org.spoofax.interpreter.stratego.Fail;
 import org.spoofax.interpreter.stratego.GuardedLChoice;
 import org.spoofax.interpreter.stratego.Id;
@@ -71,11 +72,30 @@ public class Interpreter extends ATermBuilder {
     private void loadStrategies(ATermList list) throws FatalError {
         for (int i = 0; i < list.getChildCount(); i++) {
             ATermAppl t = Tools.applAt(list, i);
-            SDefT def = parseSDefT(t);
-            
-            context.addSVar(def.getName(), def);
+            if(Tools.isSDefT(t)) {
+                SDefT def = parseSDefT(t);
+                context.addSVar(def.getName(), def);
+            } else if(Tools.isExtSDef(t)) {
+                ExtSDef def = parseExtSDef(t);
+                context.addSVar(def.getName(), def);
+            }
         }
 
+    }
+
+    private ExtSDef parseExtSDef(ATermAppl t) {
+        String name = Tools.stringAt(t, 0);
+        ATermList svars = Tools.listAt(t, 1);
+        ATermList tvars = Tools.listAt(t, 2);
+
+        debug("name  : " + name);
+
+        List<String> realsvars = makeVars(svars);
+        List<String> realtvars = makeVars(tvars);
+        
+        VarScope oldScope = context.getVarScope();
+        VarScope newScope = new VarScope(oldScope);
+        return new ExtSDef(name, realsvars, realtvars, newScope);
     }
 
     private Strategy parseStrategy(ATermAppl appl) throws FatalError {
@@ -144,30 +164,33 @@ public class Interpreter extends ATermBuilder {
         String name = Tools.stringAt(t, 0);
         ATermList svars = Tools.listAt(t, 1);
         ATermList tvars = Tools.listAt(t, 2);
+
+        debug("name  : " + name);
         
         VarScope oldScope = context.getVarScope();
         VarScope newScope = new VarScope(oldScope);
         context.setVarScope(newScope);
         Strategy body = parseStrategy(Tools.applAt(t, 3));
-
-        debug("name  : " + name);
         
+        debug("svars : " + svars);
+        List<String> realsvars = makeVars(svars);
+        debug("svars : " + realsvars);
+
+        debug("tvars : " + tvars);
+        List<String> realtvars = makeVars(tvars);
+        debug("tvars : " + realtvars);
+        
+        context.setVarScope(oldScope);
+        return new SDefT(name, realsvars, realtvars, body, newScope);
+    }
+
+    private List<String> makeVars(ATermList svars) {
         List<String> realsvars = new ArrayList<String>(svars.getChildCount());
         debug("svars : " + svars);
         for(int j=0;j<svars.getChildCount();j++) {
             realsvars.add(Tools.stringAt(Tools.applAt(svars, j),0));
         }
-        debug("svars : " + realsvars);
-
-        List<String> realtvars = new ArrayList<String>(tvars.getChildCount());
-        debug("tvars : " + tvars);
-        for(int j=0;j<tvars.getChildCount();j++) {
-            realtvars.add(Tools.stringAt(Tools.applAt(tvars, 0), 0));
-        }
-        debug("tvars : " + realtvars);
-        
-        context.setVarScope(oldScope);
-        return new SDefT(name, realsvars, realtvars, body, newScope);
+        return realsvars;
     }
 
     private PrimT parsePrimT(ATermAppl t) throws FatalError {

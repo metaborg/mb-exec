@@ -124,7 +124,7 @@ public class Tools {
 
     public static String getATermString(ATerm t) {
         AFun f = ((ATermAppl) t).getAFun();
-        return f.getName(); 
+        return f.getName();
     }
 
     public static boolean isATermList(ATerm t) {
@@ -132,7 +132,17 @@ public class Tools {
     }
 
     public static boolean isNil(ATerm t) {
-        return (t.getType() == ATerm.APPL && ((ATermAppl) t).getName()
-                .equals("Nil"));
+        return t.getType() == ATerm.APPL
+                && ((ATermAppl) t).getName().equals("Nil");
+    }
+
+    public static boolean isSDefT(ATermAppl t) {
+        return t.getType() == ATerm.APPL
+                && ((ATermAppl) t).getName().equals("SDefT");
+    }
+
+    public static boolean isExtSDef(ATermAppl t) {
+        return t.getType() == ATerm.APPL
+                && ((ATermAppl) t).getName().equals("ExtSDef");
     }
 }
