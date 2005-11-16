@@ -1,7 +1,6 @@
 /**
  * Part of the Stratego Language Interpreter Test-Suite
  *
- *
  * @author Martin Bravenboer <martin@cs.uu.nl>
  * @author Karl Trygve Kalleberg <karltk@cs.uu.nl>
  *
@@ -10,5 +9,5 @@
 module match_int_1
 imports lib
 strategies
-main = 
- ?2       
+
+  main = ?2       

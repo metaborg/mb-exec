@@ -6,7 +6,7 @@ Specification(
           "main_0_0"
         , []
         , []
-        , Match(Anno(Int("2"), Wld))
+        , Match(Anno(Real("2.0"), Wld))
         )
       ]
     )

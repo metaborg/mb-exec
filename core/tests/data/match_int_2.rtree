@@ -1,12 +1,14 @@
 Specification(
   [ Signature([Constructors([])])
   , Strategies(
-      [SDefT(
-         "main_0_0"
-       , []
-       , []
-       , Match(Anno(Int("4"), Wld))
-       )]
+      [ SDefT("DYNAMIC_CALLS_0_0", [], [], Fail)
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Match(Anno(Int("4"), Wld))
+        )
+      ]
     )
   ]
 )

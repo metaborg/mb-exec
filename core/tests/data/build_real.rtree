@@ -1,0 +1,19 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT("DYNAMIC_CALLS_0_0", [], [], Fail)
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Build(Anno(Real("5.0"), Op("Nil", [])))
+        )
+      ]
+    )
+  ]
+)

@@ -6,7 +6,13 @@ Specification(
           "main_0_0"
         , []
         , []
-        , Match(Anno(Int("2"), Wld))
+        , Scope(
+            ["f_21"]
+          , Seq(
+              Match(Anno(Explode(Wld, Var("f_21")), Wld))
+            , Build(Var("f_21"))
+            )
+          )
         )
       ]
     )

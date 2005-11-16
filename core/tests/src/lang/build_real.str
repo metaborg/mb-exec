@@ -1,13 +1,12 @@
 /**
  * Part of the Stratego Language Interpreter Test-Suite
  *
- * @author Martin Bravenboer <martin@cs.uu.nl>
  * @author Karl Trygve Kalleberg <karltk@cs.uu.nl>
  *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
-module match_int_2
+module build_real
 imports lib
 strategies
 
-  main = ?4       
+  main = !5.0
