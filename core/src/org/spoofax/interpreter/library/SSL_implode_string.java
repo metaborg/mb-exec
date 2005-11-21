@@ -29,7 +29,12 @@ public class SSL_implode_string extends Primitive {
         debug("SSL_implode_string");
         
         ATerm t = targs.get(0);
-        if(!(Tools.isCons(t) || Tools.isNil(t)))
+        if(t.getType() != ATerm.APPL)
+            return false;
+        
+        ATermAppl a = (ATermAppl) t;
+        
+        if(!(Tools.isCons(a) || Tools.isNil(a)))
             return false;
         
         ATermList l = Tools.consToList(env.getFactory(), (ATermAppl)t);

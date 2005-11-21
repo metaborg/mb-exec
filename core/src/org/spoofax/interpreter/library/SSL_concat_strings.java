@@ -27,11 +27,15 @@ public class SSL_concat_strings extends Primitive {
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
         debug("SSL_concat_strings");
 
-        if(!(Tools.isCons(targs.get(0))
-                || Tools.isNil(targs.get(0))))
+        ATerm t = targs.get(0);
+        if(t.getType() != ATerm.APPL)
+            return false;
+        
+        ATermAppl a = (ATermAppl) t;
+        if(!(Tools.isCons(a) || Tools.isNil(a)))
             return false;
 
-        ATermList l = Tools.consToList(env.getFactory(), (ATermAppl)targs.get(0));
+        ATermList l = Tools.consToList(env.getFactory(), a);
         StringBuffer sb = new StringBuffer();
         for(int i=0;i<l.getChildCount();i++) {
             sb.append(Tools.stringAt(l, i));

@@ -32,8 +32,9 @@ public class SSL_printnl extends Primitive {
         for(int i=0;i<l.getChildCount();i++) {
             ATerm t = Tools.termAt(l, i);
             if(t.getType() == ATerm.APPL) {
-                if(Tools.isCons(t)) 
-                    sb.append(Tools.consToListDeep(env.getFactory(), (ATermAppl) t));
+                ATermAppl a = (ATermAppl) t;
+                if(Tools.isCons(a)) 
+                    sb.append(Tools.consToListDeep(env.getFactory(), a));
                 else if(Tools.isATermString(t))
                     sb.append(Tools.getATermString(t));
                 continue;
