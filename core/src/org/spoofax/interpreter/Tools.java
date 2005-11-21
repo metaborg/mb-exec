@@ -103,15 +103,14 @@ public class Tools {
         ATermList tail = consToListDeep(factory, Tools.applAt(cons, 1));
 
         ATerm head = Tools.termAt(cons, 0);
-        if (Tools.isCons(head))
+        if (head.getType() == ATerm.APPL && Tools.isCons((ATermAppl)head))
             head = consToListDeep(factory, (ATermAppl) head);
 
         return tail.insert(head);
     }
 
-    public static boolean isCons(ATerm t) {
-        return (t.getType() == ATerm.APPL && ((ATermAppl) t).getName()
-                .equals("Cons"));
+    public static boolean isCons(ATermAppl t) {
+        return isATermConstructor(t, "Cons");
     }
 
     public static boolean isATermString(ATerm t) {
@@ -131,22 +130,53 @@ public class Tools {
         return t.getType() == ATerm.LIST;
     }
 
-    public static boolean isNil(ATerm t) {
-        return t.getType() == ATerm.APPL
-                && ((ATermAppl) t).getName().equals("Nil");
+    public static boolean isNil(ATermAppl t) {
+        return isATermConstructor(t, "Nil");
     }
 
     public static boolean isSDefT(ATermAppl t) {
-        return t.getType() == ATerm.APPL
-                && ((ATermAppl) t).getName().equals("SDefT");
+        return isATermConstructor(t, "SDefT");
     }
 
     public static boolean isExtSDef(ATermAppl t) {
-        return t.getType() == ATerm.APPL
-                && ((ATermAppl) t).getName().equals("ExtSDef");
+        return isATermConstructor(t, "ExtSDef");
     }
 
     public static boolean isInt(ATerm t) {
         return t.getType() == ATerm.INT;
     }
+
+    public static boolean isAnno(ATermAppl t) {
+        return isATermConstructor(t, "Anno");
+    }
+    
+    public static boolean isOp(ATermAppl t) {
+        return isATermConstructor(t, "Op");
+    }
+
+    private static boolean isATermConstructor(ATermAppl t, String opName) {
+        return t.getType() == ATerm.APPL
+        && ((ATermAppl) t).getName().equals(opName);
+    }
+
+    public static boolean isStr(ATermAppl t) {
+        return isATermConstructor(t, "Str");
+    }
+
+    public static boolean isVar(ATermAppl t) {
+        return isATermConstructor(t, "Var");
+    }
+
+    public static boolean isExplode(ATermAppl t) {
+        return isATermConstructor(t, "Explode");
+    }
+
+    public static boolean isWld(ATermAppl t) {
+        return isATermConstructor(t, "Wld");
+    }
+
+    public static boolean isAs(ATermAppl t) {
+        return isATermConstructor(t, "As");
+    }
+
 }
