@@ -1,0 +1,13 @@
+/**
+ * Part of the Stratego Language Interpreter Test-Suite
+ *
+ * @author Karl Trygve Kalleberg <karltk@cs.uu.nl>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
+module term_constr_1
+imports lib
+strategies
+
+  main = !1#([])
+  
