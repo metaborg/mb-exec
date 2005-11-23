@@ -22,6 +22,7 @@ import aterm.ATermAppl;
 import aterm.ATermInt;
 import aterm.ATermList;
 import aterm.ATermReal;
+import aterm.pure.PureFactory;
 
 public class Match extends Strategy {
 
@@ -73,7 +74,7 @@ public class Match extends Strategy {
 
     public List<Pair<String, ATerm>> matchAppl(IContext env, ATermAppl t,
             ATermAppl p) throws FatalError {
-        debug(" ?: '" + t.getName() + "' / " + p.getName());
+        debug("matching Appl");
 
         if (Tools.isAnno(p)) {
             return matchApplAnno(env, t, p);
@@ -183,6 +184,7 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchInt(IContext env, ATermInt t,
             ATermAppl p) throws FatalError {
+        debug("matching Int");
 
         if (Tools.isAnno(p)) {
             return matchIntAnno(env, t, p);
@@ -195,7 +197,7 @@ public class Match extends Strategy {
         } else if (Tools.isOp(p)) {
             return null;
         } else if (Tools.isExplode(p)) {
-            return matchIntExplode(env, p);
+            return matchIntExplode(env, t, p);
         } else if (Tools.isWld(p)) {
             return matchIntWld(p);
         } else if (Tools.isAs(p)) {
@@ -207,7 +209,8 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchReal(IContext env, ATermReal t,
             ATermAppl p) throws FatalError {
-
+        debug("matching Real");
+        
         if (Tools.isAnno(p)) {
             return matchRealAnno(env, t, p);
         } else if (Tools.isInt(p)) {
@@ -297,14 +300,46 @@ public class Match extends Strategy {
     }
 
     protected List<Pair<String, ATerm>> matchIntExplode(IContext env,
-            ATermAppl p) {
-        if (Tools.isWld(Tools.applAt(p, 0))) {
-            List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-            String varName = Tools.stringAt(Tools.applAt(p, 1), 0);
-            r.add(new Pair<String, ATerm>(varName, env.makeList()));
-            return r;
-        } else
+            ATerm t, ATermAppl p) throws FatalError {
+        ATermAppl opPattern = Tools.applAt(p, 0);
+        ATermAppl argsPattern = Tools.applAt(p, 1);
+
+        ATerm op = getTermConstructor(env, t);
+        ATerm args = getTermArguments(env, t);
+        
+        List<Pair<String, ATerm>> opResult = match(env, op, opPattern);
+        List<Pair<String, ATerm>> argsResult = match(env, args, argsPattern);
+        
+        if(opResult == null || argsResult == null)
             return null;
+        
+        opResult.addAll(argsResult);
+        return opResult;
+    }
+
+    private ATerm getTermArguments(IContext env, ATerm t) throws FatalError {
+        if(Tools.isATermInt(t) || Tools.isATermReal(t))
+            return env.makeList(emptyATermList(env));
+        else if(Tools.isATermAppl(t)) {
+            return env.makeList(((ATermAppl)t).getArguments());
+        }
+        
+        throw new FatalError("Unknown term '" + t + "'");
+    }
+
+    private ATermList emptyATermList(IContext env) {
+        PureFactory factory = env.getFactory();
+        return factory.makeList();
+    }
+
+    private ATerm getTermConstructor(IContext env, ATerm t) throws FatalError {
+        if(Tools.isATermInt(t) || Tools.isATermReal(t))
+            return t;
+        else if(Tools.isATermAppl(t)) {
+            return env.makeString(((ATermAppl)t).getName());
+        }
+        
+        throw new FatalError("Unknown term '" + t + "'");
     }
 
     protected List<Pair<String, ATerm>> matchRealExplode(IContext env,

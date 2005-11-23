@@ -39,7 +39,7 @@ public class Interpreter extends ATermBuilder {
     private static boolean debugging;
     
     public Interpreter() {
-        debugging = false;
+        debugging = true;
         context = new Context();
         factory = context.factory;
     }
