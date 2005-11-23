@@ -1,0 +1,27 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))]
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT("DYNAMIC_CALLS_0_0", [], [], Fail)
+      , SDefT(
+          "main_0_0"
+        , []
+        , []
+        , Build(
+            Anno(
+              Explode(
+                Anno(Real("4.5"), Op("Nil", []))
+              , Anno(Op("Nil", []), Op("Nil", []))
+              )
+            , Op("Nil", [])
+            )
+          )
+        )
+      ]
+    )
+  ]
+)
