@@ -297,7 +297,7 @@ public class Match extends Strategy {
         else if (Tools.isATermAppl(t)) {
             ATermAppl a = (ATermAppl)t;
             if(Tools.isNil(a) || Tools.isCons(a))
-                return t;
+                return env.makeTerm("Nil");
             else 
                 return env.makeList(a.getArguments());
         }
@@ -316,7 +316,11 @@ public class Match extends Strategy {
         } else if (Tools.isATermString(t)) {
             return env.makeString("\"" + ((ATermAppl) t).getName() + "\"");
         } else if (Tools.isATermAppl(t)) {
-            return env.makeString(((ATermAppl) t).getName());
+            ATermAppl a = (ATermAppl)t;
+            if(Tools.isCons(a) || Tools.isNil(a))
+                return t;
+            else 
+                return env.makeString(((ATermAppl) t).getName());
         }
 
         throw new FatalError("Unknown term '" + t + "'");

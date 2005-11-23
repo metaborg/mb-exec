@@ -62,12 +62,12 @@ public class TermDeconstructionTest extends LanguageTest {
 
     public void testTermDeconstr8a() {
         interpTest("term_deconstr_1", itp.makeList("[1,2,3]"), itp
-                .makeTerm("\"Cons\""));
+                .makeList("[1,2,3]"));
     }
 
     public void testTermDeconstr8b() {
         interpTest("term_deconstr_3", itp.makeList("[1,2,3]"), itp
-                .makeList("[1,2,3]"));
+                .makeList("[]"));
     }
 
     public void testTermDeconstr9a() {
