@@ -5,7 +5,7 @@
  *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
-module term_constr_1
+module term_constr_3
 imports lib
 strategies
 
