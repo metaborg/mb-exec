@@ -188,6 +188,8 @@ public class Match extends Strategy {
             return matchIntAnno(env, t, p);
         } else if (Tools.isInt(p)) {
             return matchIntInt(t, p);
+        } else if (Tools.isReal(p)) {
+            return null;
         } else if (Tools.isVar(p)) {
             return matchIntVar(t, p);
         } else if (Tools.isOp(p)) {
@@ -209,7 +211,9 @@ public class Match extends Strategy {
         if (Tools.isAnno(p)) {
             return matchRealAnno(env, t, p);
         } else if (Tools.isInt(p)) {
-            return matchRealInt(t, p);
+            return null;
+        } else if (Tools.isReal(p)) {
+            return matchRealReal(t, p);
         } else if (Tools.isVar(p)) {
             return matchRealVar(t, p);
         } else if (Tools.isOp(p)) {
@@ -223,6 +227,13 @@ public class Match extends Strategy {
         }
 
         throw new FatalError("Unknown Real case '" + p + "'");
+    }
+
+    private List<Pair<String, ATerm>> matchRealReal(ATermReal t, ATermAppl p) {
+        Double realVal = new Double(Tools.stringAt(p, 0));
+        if (realVal == t.getReal())
+            return emptyList();
+        return null;
     }
 
     private List<Pair<String, ATerm>> matchRealWld(ATermAppl p) {
@@ -254,10 +265,6 @@ public class Match extends Strategy {
         Integer intVal = new Integer(Tools.stringAt(p, 0));
         if (intVal == t.getInt())
             return emptyList();
-        return null;
-    }
-
-    protected List<Pair<String, ATerm>> matchRealInt(ATermReal t, ATermAppl p) {
         return null;
     }
 
