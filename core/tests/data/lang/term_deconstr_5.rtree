@@ -19,30 +19,27 @@ Specification(
           "main_0_0"
         , []
         , []
-        , Scope(
-            ["f_21"]
-          , Match(
-              Anno(
-                Explode(
-                  Var("f_21")
-                , Anno(
-                    Op(
-                      "Cons"
-                    , [ Anno(Int("1"), Wld)
-                      , Anno(
-                          Op(
-                            "Cons"
-                          , [Anno(Int("2"), Wld), Anno(Op("Nil", []), Wld)]
-                          )
-                        , Wld
+        , Match(
+            Anno(
+              Explode(
+                Anno(Str("Pair"), Wld)
+              , Anno(
+                  Op(
+                    "Cons"
+                  , [ Anno(Int("1"), Wld)
+                    , Anno(
+                        Op(
+                          "Cons"
+                        , [Anno(Int("2"), Wld), Anno(Op("Nil", []), Wld)]
                         )
-                      ]
-                    )
-                  , Wld
+                      , Wld
+                      )
+                    ]
                   )
+                , Wld
                 )
-              , Wld
               )
+            , Wld
             )
           )
         )

@@ -12,4 +12,4 @@ signature
     Pair : Int * Int -> Pair
 strategies
 
-  main = ?Pair#([1,2])
+  main = ?"Pair"#([1,2])
