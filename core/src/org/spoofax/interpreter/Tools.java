@@ -187,4 +187,12 @@ public class Tools {
         return isATermConstructor(t, "Int");
     }
 
+    public static boolean isATermReal(ATerm t) {
+        return t.getType() == ATerm.REAL;
+    }
+
+    public static boolean isATermAppl(ATerm t) {
+        return t.getType() == ATerm.APPL;
+    }
+
 }
