@@ -26,169 +26,304 @@ import aterm.ATermReal;
 public class Match extends Strategy {
 
     protected ATermAppl pattern;
-    
+
     public Match(ATermAppl pattern) {
         this.pattern = pattern;
     }
 
     public boolean eval(IContext env) throws FatalError {
         debug("Match.eval() - " + env.current());
-        
+
         ATerm current = env.current();
-        
+
         debug(" pattern : " + pattern);
         debug(" current : " + current);
 
-        ATermAppl p = pattern;
-        List<Pair<String, ATerm>> r = match(env, current, p);
+        List<Pair<String, ATerm>> r = match(env, current, pattern);
 
-        debug(" to bind: " + r );
-        
-        Context.debug(" !" + current + " ; ?" + p);
+        debug(" to bind: " + r);
 
-        if (r != null) {
+        Context.debug(" !" + current + " ; ?" + pattern);
 
+        if (r == null) {
+            debug(" failure : no match!");
+            return false;
+        } else {
             boolean b = env.bindVars(r);
 
-            if(b)
+            if (b)
                 debug(" success : " + r);
             else
                 debug(" failure : no match!");
-            
+
             return b;
         }
-        debug(" failure : no match!");
-        return false;
     }
 
-    public List<Pair<String, ATerm>> emptyList() { return new ArrayList<Pair<String, ATerm>>(); }
-    
-    public List<Pair<String, ATerm>> match(IContext env, ATermAppl t, ATermAppl p)
-            throws FatalError {
+    public List<Pair<String, ATerm>> emptyList() {
+        return new ArrayList<Pair<String, ATerm>>();
+    }
+
+    public List<Pair<String, ATerm>> matchApplAnno(IContext env, ATermAppl t,
+            ATermAppl anno) throws FatalError {
+        // FIXME: Actually process anno
+        ATermAppl p = Tools.applAt(anno, 0);
+        return match(env, t, p);
+    }
+
+    public List<Pair<String, ATerm>> matchAppl(IContext env, ATermAppl t,
+            ATermAppl p) throws FatalError {
         debug(" ?: '" + t.getName() + "' / " + p.getName());
 
-        if (p.getName().equals("Anno"))
-            return match(env, t, Tools.applAt(p, 0));
-        else if (p.getName().equals("Op")) {
-
-            ATermList l = Tools.listAt(p, 1);
-            if (l.getChildCount() != t.getChildCount())
-                return null;
-
-            ATermAppl c = Tools.applAt(p, 0);
-            if (!t.getName().equals(c.getName()))
-                return null;
-
-            List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-            for (int i = 0; i < t.getChildCount(); i++) {
-                List<Pair<String, ATerm>> m = match(env, (ATerm) t.getChildAt(i),
-                                                    (ATermAppl) l.getChildAt(i));
-                if (m != null)
-                    r.addAll(m);
-                else
-                    return null;
-            }
-            return r;
-        } else if (p.getName().equals("Int")) {
-            if (t.getType() == ATerm.INT)
-                return match(env, Tools.intAt(t, 0), Tools.applAt(p, 0));
-            return null;
-        } else if (p.getName().equals("Str")) {
-            debug(" !" + t + " ?" + p);
-            if (t.getName().equals(Tools.stringAt(p, 0)))
-                return emptyList();
-            return null;
-        } else if (Tools.termType(p, "Var")) {
-            List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-            r.add(new Pair<String, ATerm>(Tools.stringAt(p, 0), t));
-            return r;
-        } else if (Tools.termType(p, "Explode")) {
-            debug("Explode case");
-            
-            AFun ctor = t.getAFun();
-            ATermList args = t.getArguments();
-
-            ATermAppl ctor_p = Tools.applAt(p, 0);
-            ATerm ctor_t = env.makeTerm("\"" + ctor.getName() + "\"");
-
-            debug(" " + ctor_t + " / " + ctor_p); 
-            
-            List<Pair<String, ATerm>> r = match(env, ctor_t, ctor_p);
-            if (r == null)
-                return null;
-
-            ATermAppl appl_p = Tools.applAt(p, 1);
-
-            List<Pair<String, ATerm>> x = match(env, env.makeList(args), appl_p);
-            if ( x == null )
-                return null;
-            r.addAll(x);
-            return r;
-        } else if (Tools.termType(p, "As")) {
-            List<Pair<String, ATerm>> r = match(env, t, Tools.applAt(p, 1));
-            if (r == null)
-                return null;
-            debug("" + p);
-            String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
-            r.add(new Pair<String, ATerm>(varName, t));
-            return r;
-        } else if(Tools.termType(p, "Wld")) {
+        if (Tools.isAnno(p)) {
+            return matchApplAnno(env, t, p);
+        } else if (Tools.isOp(p)) {
+            return matchApplOp(env, t, p);
+        } else if (Tools.isInt(p)) {
+            return matchApplInt(env, t, p);
+        } else if (Tools.isStr(p)) {
+            return matchApplStr(t, p);
+        } else if (Tools.isVar(p)) {
+            return matchApplVar(t, p);
+        } else if (Tools.isExplode(p)) {
+            return matchApplExplode(env, t, p);
+        } else if (Tools.isAs(p)) {
+            return matchApplAs(env, t, p);
+        } else if (Tools.isWld(p)) {
             return emptyList();
         }
 
-        throw new FatalError("What?" + p);
+        throw new FatalError("Unknown Appl case '" + p + "'");
     }
 
-    public List<Pair<String, ATerm>> match(IContext env, ATermInt t, ATermAppl p)
-            throws FatalError {
-        debug(" !" + t + " ?" + p);
+    protected List<Pair<String, ATerm>> matchApplInt(IContext env, ATermAppl t,
+            ATermAppl p) throws FatalError {
+        if (t.getType() == ATerm.INT)
+            return match(env, Tools.intAt(t, 0), Tools.applAt(p, 0));
+        return null;
+    }
 
-        if (p.getName().equals("Anno")) {
-            return match(env, t, Tools.applAt(p, 0));
-        } else if (p.getName().equals("Int")) {
-            Integer i = new Integer(Tools.stringAt(p, 0));
-            if (i == t.getInt())
-                return emptyList();
+    protected List<Pair<String, ATerm>> matchApplStr(ATermAppl t, ATermAppl p) {
+        if (t.getName().equals(Tools.stringAt(p, 0)))
+            return emptyList();
+        return null;
+    }
+
+    protected List<Pair<String, ATerm>> matchApplVar(ATermAppl t, ATermAppl p) {
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        r.add(new Pair<String, ATerm>(Tools.stringAt(p, 0), t));
+        return r;
+    }
+
+    protected List<Pair<String, ATerm>> matchApplAs(IContext env, ATermAppl t,
+            ATermAppl p) throws FatalError {
+        List<Pair<String, ATerm>> r = match(env, t, Tools.applAt(p, 1));
+        if (r == null)
             return null;
-        } else if (p.getName().equals("Var")) {
-            List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-            r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0))
-                    .getName(), t));
-            return r;
-        } else if (p.getName().equals("Op")) {
+        debug("" + p);
+        String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
+        r.add(new Pair<String, ATerm>(varName, t));
+        return r;
+    }
+
+    protected List<Pair<String, ATerm>> matchApplExplode(IContext env,
+            ATermAppl t, ATermAppl p) throws FatalError {
+        debug("Appl:Explode");
+
+        AFun ctor = t.getAFun();
+        ATermList args = t.getArguments();
+
+        ATermAppl ctor_p = Tools.applAt(p, 0);
+        ATerm ctor_t = env.makeTerm("\"" + ctor.getName() + "\"");
+
+        debug(" " + ctor_t + " / " + ctor_p);
+
+        List<Pair<String, ATerm>> r = match(env, ctor_t, ctor_p);
+        if (r == null)
             return null;
-        } else if (p.getName().equals("Explode")) {
-            if(Tools.applAt(p,0).getName().equals("Wld")) {
-                List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-                String varName = Tools.stringAt(Tools.applAt(p, 1), 0);
-                r.add(new Pair<String, ATerm>(varName, env.makeList()));
-                return r;
-            }
+
+        ATermAppl appl_p = Tools.applAt(p, 1);
+
+        List<Pair<String, ATerm>> x = match(env, env.makeList(args), appl_p);
+        if (x == null)
+            return null;
+        r.addAll(x);
+        return r;
+    }
+
+    protected List<Pair<String, ATerm>> matchApplOp(IContext env, ATermAppl t,
+            ATermAppl p) throws FatalError {
+
+        ATermList ctorArgs = Tools.listAt(p, 1);
+
+        // Check if arity of the pattern matches that
+        // of the term
+        if (ctorArgs.getChildCount() != t.getChildCount())
+            return null;
+
+        // Check if the constructor name in the pattern
+        // matches that of the term
+        ATermAppl c = Tools.applAt(p, 0);
+        if (!t.getName().equals(c.getName()))
+            return null;
+
+        // Recursively match all arguments to term
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        for (int i = 0; i < t.getChildCount(); i++) {
+            List<Pair<String, ATerm>> m = match(env, (ATerm) t.getChildAt(i),
+                                                (ATermAppl) ctorArgs
+                                                        .getChildAt(i));
+            if (m != null)
+                r.addAll(m);
             else
                 return null;
-        } else if (p.getName().equals("Wld")) {
-            return emptyList();
-        } else if (p.getName().equals("As")) {
-            List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-            String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
-            r.add(new Pair<String, ATerm>(varName, t));
-            return r;
+        }
+        return r;
+    }
+
+    protected List<Pair<String, ATerm>> matchInt(IContext env, ATermInt t,
+            ATermAppl p) throws FatalError {
+
+        if (Tools.isAnno(p)) {
+            return matchIntAnno(env, t, p);
+        } else if (Tools.isInt(p)) {
+            return matchIntInt(t, p);
+        } else if (Tools.isVar(p)) {
+            return matchIntVar(t, p);
+        } else if (Tools.isOp(p)) {
+            return null;
+        } else if (Tools.isExplode(p)) {
+            return matchIntExplode(env, p);
+        } else if (Tools.isWld(p)) {
+            return matchIntWld(p);
+        } else if (Tools.isAs(p)) {
+            return matchIntAs(t, p);
         }
 
-        throw new FatalError("Unknown type '" + p.getName());
+        throw new FatalError("Unknown Int case '" + p + "'");
+    }
+
+    protected List<Pair<String, ATerm>> matchReal(IContext env, ATermReal t,
+            ATermAppl p) throws FatalError {
+
+        if (Tools.isAnno(p)) {
+            return matchRealAnno(env, t, p);
+        } else if (Tools.isInt(p)) {
+            return matchRealInt(t, p);
+        } else if (Tools.isVar(p)) {
+            return matchRealVar(t, p);
+        } else if (Tools.isOp(p)) {
+            return null;
+        } else if (Tools.isExplode(p)) {
+            return matchRealExplode(env, p);
+        } else if (Tools.isWld(p)) {
+            return matchRealWld(p);
+        } else if (Tools.isAs(p)) {
+            return matchRealAs(t, p);
+        }
+
+        throw new FatalError("Unknown Real case '" + p + "'");
+    }
+
+    private List<Pair<String, ATerm>> matchRealWld(ATermAppl p) {
+        return emptyList();
+    }
+
+    private List<Pair<String, ATerm>> matchIntWld(ATermAppl p) {
+        return emptyList();
+    }
+
+    protected List<Pair<String, ATerm>> matchIntAnno(IContext env, ATermInt t,
+            ATermAppl p) throws FatalError {
+        // FIXME: Do real match of annotations
+        return match(env, t, Tools.applAt(p, 0));
+    }
+
+    protected List<Pair<String, ATerm>> matchRealAnno(IContext env, ATermInt t,
+            ATermAppl p) throws FatalError {
+        // FIXME: Do real match of annotations
+        return match(env, t, Tools.applAt(p, 0));
+    }
+
+    protected List<Pair<String, ATerm>> matchRealAnno(IContext env,
+            ATermReal t, ATermAppl p) throws FatalError {
+        return match(env, t, Tools.applAt(p, 0));
+    }
+
+    protected List<Pair<String, ATerm>> matchIntInt(ATermInt t, ATermAppl p) {
+        Integer intVal = new Integer(Tools.stringAt(p, 0));
+        if (intVal == t.getInt())
+            return emptyList();
+        return null;
+    }
+
+    protected List<Pair<String, ATerm>> matchRealInt(ATermReal t, ATermAppl p) {
+        return null;
+    }
+
+    protected List<Pair<String, ATerm>> matchIntVar(ATermInt t, ATermAppl p) {
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0)).getName(),
+                                      t));
+        return r;
+    }
+
+    protected List<Pair<String, ATerm>> matchRealVar(ATermReal t, ATermAppl p) {
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0)).getName(),
+                                      t));
+        return r;
+    }
+
+    protected List<Pair<String, ATerm>> matchIntAs(ATermInt t, ATermAppl p) {
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
+        r.add(new Pair<String, ATerm>(varName, t));
+        return r;
+    }
+
+    protected List<Pair<String, ATerm>> matchRealAs(ATermReal t, ATermAppl p) {
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
+        r.add(new Pair<String, ATerm>(varName, t));
+        return r;
+    }
+
+    protected List<Pair<String, ATerm>> matchIntExplode(IContext env,
+            ATermAppl p) {
+        if (Tools.isWld(Tools.applAt(p, 0))) {
+            List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+            String varName = Tools.stringAt(Tools.applAt(p, 1), 0);
+            r.add(new Pair<String, ATerm>(varName, env.makeList()));
+            return r;
+        } else
+            return null;
+    }
+
+    protected List<Pair<String, ATerm>> matchRealExplode(IContext env,
+            ATermAppl p) {
+        if (Tools.isWld(Tools.applAt(p, 0))) {
+            List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+            String varName = Tools.stringAt(Tools.applAt(p, 1), 0);
+            r.add(new Pair<String, ATerm>(varName, env.makeList()));
+            return r;
+        } else
+            return null;
     }
 
     public List<Pair<String, ATerm>> match(IContext env, ATerm t, ATermAppl p)
             throws FatalError {
-        if (t.getType() == ATerm.APPL)
-            return match(env, (ATermAppl) t, p);
-        else if (t.getType() == ATerm.INT)
-            return match(env, (ATermInt) t, p);
-        else if (t.getType() == ATerm.INT)
-            return match(env, (ATermReal) t, p);
 
-        throw new FatalError("Current term is not an ATermAppl term ["
-                + t.getClass().toString() + " " + ATerm.APPL + " "
-                + t.getType() + "]");
+        switch (t.getType()) {
+        case ATerm.APPL:
+            return matchAppl(env, (ATermAppl) t, p);
+        case ATerm.INT:
+            return matchInt(env, (ATermInt) t, p);
+        case ATerm.REAL:
+            return matchReal(env, (ATermReal) t, p);
+        default:
+            throw new FatalError("Unsupported term type : "
+                    + t.getClass().toString() + " [" + t.getType() + "]");
+        }
     }
 }
