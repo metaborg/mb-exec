@@ -26,7 +26,7 @@ public class TermDeconstructionTest extends LanguageTest {
        }
 
     public void testTermDeconstr5() {
-           interpTest("term_deconstr_4", itp.makeTerm("Pair(1,2)"), itp.makeTerm("Pair(1,2)"));
+           interpTest("term_deconstr_5", itp.makeTerm("Pair(1,2)"), itp.makeTerm("Pair(1,2)"));
        }
 
     public void testTermArg1() {
