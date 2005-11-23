@@ -142,7 +142,7 @@ public class Tools {
         return isATermConstructor(t, "ExtSDef");
     }
 
-    public static boolean isInt(ATerm t) {
+    public static boolean isATermInt(ATerm t) {
         return t.getType() == ATerm.INT;
     }
 
@@ -177,6 +177,14 @@ public class Tools {
 
     public static boolean isAs(ATermAppl t) {
         return isATermConstructor(t, "As");
+    }
+
+    public static boolean isReal(ATermAppl t) {
+        return isATermConstructor(t, "Real");
+    }
+
+    public static boolean isInt(ATermAppl t) {
+        return isATermConstructor(t, "Int");
     }
 
 }

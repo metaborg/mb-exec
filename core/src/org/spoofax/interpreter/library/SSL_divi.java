@@ -26,9 +26,9 @@ public class SSL_divi extends Primitive {
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
         debug("SSL_divi");
         
-        if(!Tools.isInt(targs.get(0)))
+        if(!Tools.isATermInt(targs.get(0)))
             return false;
-        if(!Tools.isInt(targs.get(1)))
+        if(!Tools.isATermInt(targs.get(1)))
             return false;
 
         ATermInt a = (ATermInt) targs.get(0);
