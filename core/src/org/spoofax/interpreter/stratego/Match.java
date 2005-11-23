@@ -297,7 +297,7 @@ public class Match extends Strategy {
         else if (Tools.isATermAppl(t)) {
             ATermAppl a = (ATermAppl)t;
             if(Tools.isNil(a) || Tools.isCons(a))
-                return env.makeTerm("Nil");
+                return t;
             else 
                 return env.makeList(a.getArguments());
         }
@@ -318,7 +318,7 @@ public class Match extends Strategy {
         } else if (Tools.isATermAppl(t)) {
             ATermAppl a = (ATermAppl)t;
             if(Tools.isCons(a) || Tools.isNil(a))
-                return t;
+                return env.makeTerm("Nil");
             else 
                 return env.makeString(((ATermAppl) t).getName());
         }
