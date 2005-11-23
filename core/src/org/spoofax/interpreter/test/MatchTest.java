@@ -66,7 +66,7 @@ public class MatchTest extends LanguageTest {
     }
 
     public void testMatchReal2() {
-        interpTest("match_real_2", itp.makeTerm("4.0"), itp.makeTerm("4.0"));
+        interpTest("match_real_2", itp.makeTerm("4.5"), itp.makeTerm("4.5"));
     }
 
     public void testAs1() {
