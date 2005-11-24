@@ -1,9 +1,13 @@
 /*
+ * Evaluation of the StrategoCore Build term
+ * 
  * Created on 07.aug.2005
  *
- * Copyright (c) 2004, Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
  * Licensed under the GNU General Public License, v2
+ * 
+ * Part of Spoofax
  */
 package org.spoofax.interpreter.stratego;
 
@@ -30,7 +34,7 @@ public class Build extends Strategy {
         debug("Build.eval() - " + env.current());
 
         debug(" pattern  : " + term);
-        
+
         ATerm t = buildTerm(env, term);
         if (t == null) {
             debug(" build failed");
@@ -44,98 +48,109 @@ public class Build extends Strategy {
     public ATerm buildTerm(IContext env, ATermAppl t) throws FatalError {
         PureFactory factory = env.getFactory();
 
-        if (t.getName().equals("Anno")) {
-            // FIXME: Deal with Anno
-            return buildTerm(env, Tools.applAt(t, 0));
-        } else if (t.getName().equals("Op")) {
-            String ctr = Tools.stringAt(t, 0);
-            ATermList children = (ATermList) t.getChildAt(1);
-
-            AFun afun = factory.makeAFun(ctr, children.getLength(), false);
-            ATermList kids = factory.makeList();
-
-            for (int i = 0; i < children.getLength(); i++) {
-                ATerm kid = buildTerm(env, (ATermAppl) children.elementAt(i));
-                if(kid == null)
-                    return null;
-                kids = kids.append(kid);
-            }
-            return factory.makeApplList(afun, kids);
-        } else if (t.getName().equals("Int")) {
-            ATermAppl x = Tools.applAt(t, 0);
-            return factory.makeInt(new Integer(x.getName()));
-        } else if (t.getName().equals("Real")) {
-            ATermAppl x = Tools.applAt(t, 0);
-            return factory.makeReal(new Double(x.getName()));
-        } else if (t.getName().equals("Str")) {
-            ATermAppl x = Tools.applAt(t, 0);
-            return x;
-        } else if (t.getName().equals("Var")) {
-            String n = Tools.stringAt(t, 0);
-            ATerm x = env.lookupVar(n);
-            Context.debug(" lookup : " + n + " (= " + x + ")");
-            return x;
-        } else if (t.getName().equals("Explode")) {
-            debug("Term construction : " + t);
-            return buildExplode(env, Tools.applAt(t, 0), Tools.applAt(t, 1));
+        if (Tools.isAnno(t)) {
+            return buildAnno(env, t);
+        } else if (Tools.isOp(t)) {
+            return buildOp(env, t, factory);
+        } else if (Tools.isInt(t)) {
+            return buildInt(t, factory);
+        } else if (Tools.isReal(t)) {
+            return buildReal(t, factory);
+        } else if (Tools.isStr(t)) {
+            return buildStr(t);
+        } else if (Tools.isVar(t)) {
+            return buildVar(env, t);
+        } else if (Tools.isExplode(t)) {
+            return buildExplode(env, t);
         }
 
         throw new FatalError("Unknown build constituent '" + t.getName() + "'");
     }
 
-    private ATerm buildExplode(IContext env, ATermAppl ctor, ATermAppl applArgs)
-            throws FatalError {
+    private ATerm buildExplode(IContext env, ATermAppl t) throws FatalError {
+        debug("buildExplode() : " + t);
+
         PureFactory factory = env.getFactory();
 
-        debug(" applArgs : " + applArgs);
-        ATermAppl ctorTerm = (ATermAppl) dropAnno(ctor);
-        debug(" ctorTerm : " + ctorTerm);
+        ATermAppl ctor = Tools.applAt(t, 0);
+        ATermAppl args = Tools.applAt(t, 1);
 
-        String ctorName = Tools.stringAt(ctorTerm, 0);
+        debug(" ctor : " + ctor);
+        debug(" args : " + args);
 
-        debug(" ctor : '" + ctorName + "'");
-        
-        if (applArgs.getName().equals("Var")) {
-            String var = Tools.stringAt(applArgs, 0);
-            debug(" cons : " + env.lookupVar(var));
-            ATermList t = Tools.consToList(factory, (ATermAppl) env.lookupVar(var));
-            debug(" val  : " + t);
-            AFun afun = factory.makeAFun(ctorName, t.getChildCount(), false);
-            return factory.makeApplList(afun, t);
-        } else if (applArgs.getName().equals("Anno")) {
-            ATermAppl explArgs = (ATermAppl) dropAnno(applArgs);
-            if (explArgs.getName().equals("Op")) {
-                ATermList args = Tools.listAt(explArgs, 1);
-                AFun afun = factory.makeAFun(ctorName, args.getChildCount(),
-                                             false);
-                ATermList vals = lookupVars(env, args);
-                debug(" vals : " + vals);
-                return factory.makeApplList(afun, vals);
+        ATerm actualCtor = buildTerm(env, ctor);
+        ATerm actualArgs = buildTerm(env, args);
+
+        debug(" actualCtor : " + actualCtor);
+        debug(" actualArgs : " + actualArgs);
+
+        if (Tools.isATermInt(actualCtor) || Tools.isATermReal(actualCtor)) {
+            return actualCtor;
+        } else if (Tools.isATermString(actualCtor)) {
+
+            if (!Tools.isATermAppl(actualArgs))
+                return null;
+
+            String n = ((ATermAppl) actualCtor).getName();
+
+            boolean quoted = false;
+            if (n.length() > 1 && n.charAt(0) == '"') {
+                n = n.substring(1,n.length()-1);
+                quoted = true;
             }
+            ATermList realArgs = Tools.consToList(factory,
+                                                  (ATermAppl) actualArgs);
+            AFun afun = factory.makeAFun(n, realArgs.getChildCount(), quoted);
+            return factory.makeApplList(afun, realArgs);
+        } else if (Tools.isATermAppl(actualCtor)
+                && Tools.isNil((ATermAppl) actualCtor)) {
+            return actualArgs;
         }
 
-        throw new FatalError("Unknown Explode constitutent '"
-                + applArgs.getName() + "'");
+        throw new FatalError("Unknown explosion combination!");
     }
 
-    private ATermList lookupVars(IContext env, ATermList args)
+    private ATerm buildVar(IContext env, ATermAppl t) throws FatalError {
+        String n = Tools.stringAt(t, 0);
+        ATerm x = env.lookupVar(n);
+        Context.debug(" lookup : " + n + " (= " + x + ")");
+        return x;
+    }
+
+    private ATerm buildStr(ATermAppl t) {
+        ATermAppl x = Tools.applAt(t, 0);
+        return x;
+    }
+
+    private ATerm buildReal(ATermAppl t, PureFactory factory) {
+        ATermAppl x = Tools.applAt(t, 0);
+        return factory.makeReal(new Double(x.getName()));
+    }
+
+    private ATerm buildInt(ATermAppl t, PureFactory factory) {
+        ATermAppl x = Tools.applAt(t, 0);
+        return factory.makeInt(new Integer(x.getName()));
+    }
+
+    private ATerm buildOp(IContext env, ATermAppl t, PureFactory factory)
             throws FatalError {
-        PureFactory factory = env.getFactory();
-        ATermList r = factory.makeList();
+        String ctr = Tools.stringAt(t, 0);
+        ATermList children = (ATermList) t.getChildAt(1);
 
-        debug("" + args);
-        for (int i = 0; i < args.getChildCount(); i++) {
-            r.append(env.lookupVar(Tools.stringAt(Tools.termAt(args, i), 0)));
+        AFun afun = factory.makeAFun(ctr, children.getLength(), false);
+        ATermList kids = factory.makeList();
+
+        for (int i = 0; i < children.getLength(); i++) {
+            ATerm kid = buildTerm(env, (ATermAppl) children.elementAt(i));
+            if (kid == null)
+                return null;
+            kids = kids.append(kid);
         }
-
-        return r;
+        return factory.makeApplList(afun, kids);
     }
 
-    private ATerm dropAnno(ATermAppl t) {
-        if(t.getName() == "Anno")
-            return Tools.termAt(t, 0);
-        else
-            return t;
+    private ATerm buildAnno(IContext env, ATermAppl t) throws FatalError {
+        // FIXME: Actually build annotation
+        return buildTerm(env, Tools.applAt(t, 0));
     }
-
 }
