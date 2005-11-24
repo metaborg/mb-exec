@@ -195,4 +195,8 @@ public class Tools {
         return t.getType() == ATerm.APPL;
     }
 
+    public static int getATermInt(ATermInt t) {
+        return t.getInt();
+    }
+
 }

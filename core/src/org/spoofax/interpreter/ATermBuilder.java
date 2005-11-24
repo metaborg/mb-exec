@@ -86,5 +86,4 @@ public class ATermBuilder implements IATermBuilder {
         AFun f = factory.makeAFun(name, 0, true);
         return factory.makeAppl(f);
     }
-
 }

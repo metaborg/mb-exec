@@ -15,6 +15,7 @@ public interface IATermBuilder {
     public ATerm makeList(ATermList t);
     public ATerm makeList(ATerm... terms);
     public ATerm makeTerm(String s);
+    public ATerm makeTerm(int i);
     public ATerm makeString(String s);
 
 }
