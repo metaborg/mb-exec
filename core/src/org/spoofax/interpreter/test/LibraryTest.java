@@ -31,6 +31,7 @@ public class LibraryTest extends InterpreterTest {
     public void testTermZip() { interpTest("term-zip-test", "[8,0]"); }
     public void testEnvTraversal() { interpTest("env-traversal-test", "[2,0]"); }
     public void testSets() { interpTest("sets-test", "[11,0]"); }
+    public void testTables() { interpTest("tables-test", "[50,0]"); }
     
     // FIXME: Known to fail one or two tests
     
@@ -61,7 +62,6 @@ public class LibraryTest extends InterpreterTest {
     public void testParenthesize() { interpTest("parenthesize-test"); }
     public void testParseOptions() { interpTest("parse-options-test"); }
     public void testFile() { interpTest("file-test"); }
-    public void testTables() { interpTest("tables-test"); }
     public void testDynamicRulesLowlevel() { interpTest("dynamic-rules-lowlevel-test"); }
     public void testDynamicRulesHighlevel() { interpTest("dynamic-rules-highlevel-test"); }
 */

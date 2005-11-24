@@ -55,6 +55,13 @@ public class SSL {
         registry.put("SSL_indexedSet_elements", new SSL_indexedSet_elements());
         registry.put("SSL_indexedSet_remove", new SSL_indexedSet_remove());
         registry.put("SSL_indexedSet_reset", new SSL_indexedSet_reset());
+        registry.put("SSL_hashtable_get", new SSL_hashtable_get());
+        registry.put("SSL_hashtable_create", new SSL_hashtable_create());
+        registry.put("SSL_hashtable_put", new SSL_hashtable_put());
+        registry.put("SSL_stderr_stream", new SSL_stderr_stream());
+        registry.put("SSL_hashtable_destroy", new SSL_hashtable_destroy());
+        registry.put("SSL_hashtable_remove", new SSL_hashtable_remove());
+        registry.put("SSL_hashtable_keys", new SSL_hashtable_keys());
     }
 
     protected static Map<String, Primitive> getRegistry() {

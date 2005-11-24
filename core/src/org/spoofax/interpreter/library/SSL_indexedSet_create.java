@@ -30,14 +30,13 @@ public class SSL_indexedSet_create extends Primitive {
         Map<Integer, ATerm> map;
         
         ATermIndexedSet(int initialSize, int maxLoad) {
-            map = new HashMap<Integer, ATerm>(initialSize);
+            map = new HashMap<Integer, ATerm>(initialSize, 1.0f*maxLoad/100);
             counter = 0;
         }
         
         public int put(ATerm value) {
             int idx = counter++; 
             map.put(idx, value);
-            // System.out.println("put : " + idx + " = " + value);
             return idx;
         }
 

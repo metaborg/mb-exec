@@ -1,5 +1,6 @@
 /**
  * Unit tests for table strategies
+ *
  */
 module tables-test
 imports sunit tables list-set
@@ -7,11 +8,8 @@ strategies
 
   main = 
     test-suite(!"tables-test",
-      test1
-    ; test2
-    ; test3
-
-    ; test-create
+ 
+      test-create
     ; test-put
     ; test-get
     ; test-remove
@@ -28,27 +26,6 @@ strategies
 
     ; test-eq
 
-    )
-
-strategies
-  test1 =
-    apply-and-check(!"legacy table-put"
-    , table-put
-    , !("bla", "key", "value")
-    , <table-get> ("bla", "key") => "value"
-    )
-
-  test2 =
-    apply-and-fail(!"legacy table-get"
-    , table-get
-    , !("blabla", "key")
-    )
-
-  test3 =
-    apply-test(!"legacy table_keys"
-    , table-keys
-    , !"blablabla"
-    , ![]
     )
 
 strategies
