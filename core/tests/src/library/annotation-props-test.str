@@ -1,5 +1,5 @@
 module annotation-props-test
-imports libstrategolib
+imports lib
 
 signature
   sorts Exp Type

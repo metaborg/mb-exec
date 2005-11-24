@@ -1,5 +1,5 @@
 module dynamic-rules-highlevel-test
-imports libstrategolib
+imports lib
 signature
   constructors
     Foo    : Int * Int -> FooBar

@@ -32,6 +32,7 @@ public class LibraryTest extends InterpreterTest {
     public void testEnvTraversal() { interpTest("env-traversal-test", "[2,0]"); }
     public void testSets() { interpTest("sets-test", "[11,0]"); }
     public void testTables() { interpTest("tables-test", "[50,0]"); }
+    public void testSubstitution() {  interpTest("substitution-test", "[1,0]");   }
     
     // FIXME: Known to fail one or two tests
     
@@ -50,7 +51,6 @@ public class LibraryTest extends InterpreterTest {
 /*
     public void testString() { interpTest("string-test"); }
     public void testPlaceholder() {  interpTest("placeholder-test");   }
-    public void testSubstitution() {  interpTest("substitution-test");   }
     public void testRename() { interpTest("rename-test"); }
     public void testShare() { interpTest("share-test"); }
     public void testApply() { interpTest("apply-test"); }
