@@ -77,38 +77,6 @@ public class MatchTest extends LanguageTest {
         interpTest("as_2", itp.makeTuple("[1,2]"), itp.makeTuple("[1,1]"));
     }
 
-    public void testGuarded1() {
-           interpTest("guarded_1", itp.makeTuple("[]"), itp.makeTerm("1"));
-       }
-
-    public void testGuarded2() {
-           interpTest("guarded_2", itp.makeTuple("[]"), itp.makeTerm("2"));
-       }
-
-    public void testGuarded3() {
-           interpTest("guarded_3", itp.makeTuple("[]"), itp.makeTerm("3"));
-       }
-
-    public void testGuarded4() {
-           interpTest("guarded_4", itp.makeTerm("5"), itp.makeTerm("5"));
-       }
-
-    public void testGuarded5() {
-           interpTest("guarded_5", itp.makeTuple("[]"), itp.makeTerm("1"));
-       }
-
-    public void testGuarded6() {
-           interpTest("guarded_6", itp.makeTuple("[]"), itp.makeTerm("1"));
-       }
-
-    public void testGuarded7() {
-           interpTest("guarded_7", itp.makeTuple("[]"), itp.makeTerm("2"));
-       }
-
-    public void testLeftChoiceGuard() {
-        interpTest("guarded_modifies_current_term", itp.makeTuple("[]"), itp
-                .makeTerm("3"));
-    }
 
     public void testMatchAndBuild1() {
         interpTest("match_and_build_1", "1", "1");
