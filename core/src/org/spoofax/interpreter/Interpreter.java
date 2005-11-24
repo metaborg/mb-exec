@@ -78,6 +78,9 @@ public class Interpreter extends ATermBuilder {
             } else if(Tools.isExtSDef(t)) {
                 ExtSDef def = parseExtSDef(t);
                 context.addSVar(def.getName(), def);
+                // FIXME: Come up with a good solution for external
+                // definitions
+                throw new FatalError("Illegal ExtSDef in StrategoCore file");
             }
         }
 
