@@ -38,6 +38,12 @@ public class SSL {
         registry.put("SSL_concat_strings", new SSL_concat_strings());
         registry.put("SSL_rand", new SSL_rand());
         registry.put("SSL_getenv", new SSL_getenv());
+        registry.put("SSL_cos", new SSL_cos());
+        registry.put("SSL_sin", new SSL_sin());
+        registry.put("SSL_sqrt", new SSL_sin());
+        registry.put("SSL_real_to_string", new SSL_real_to_string());
+        registry.put("SSL_real_to_string_precision", new SSL_real_to_string_precision());
+        registry.put("SSL_string_to_real", new SSL_string_to_real());
     }
     
     protected static Map<String, Primitive> getRegistry() {

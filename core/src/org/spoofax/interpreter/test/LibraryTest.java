@@ -1,24 +1,26 @@
 /*
  * Created on 05.jul.2005
  *
- * Copyright (c) 2004, Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
  * Licensed under the IBM Common Public License, v1.0
  */
 package org.spoofax.interpreter.test;
 
+
 public class LibraryTest extends InterpreterTest {
 
     @Override
     protected void setUp() throws Exception {
-        super.setUp("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/");
+        super.setUp("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/library");
     }
     
-    public void testTuple() {  interpTest("tuple-test");   }
-/*    
-    public void testTemplate() {  interpTest("template-test");   }
-    public void testPOSIXError() {  interpTest("posix-error-test");   }
-    public void testReals() {  interpTest("reals-test");   }
+    public void testTuple() {  interpTest("tuple-test", "[2,0]"); }
+    public void testTemplate() {  interpTest("template-test", "[1,0]"); }
+    public void testReals() {  interpTest("reals-test", "[8,0]"); }
+    
+/*    public void testPOSIXError() {  interpTest("posix-error-test");   }
+    
     public void testPlaceholder() {  interpTest("placeholder-test");   }
     public void testSubstitution() {  interpTest("substitution-test");   }
     public void testListFilter() {  interpTest("lister-filter-test");   }
@@ -56,8 +58,8 @@ public class LibraryTest extends InterpreterTest {
     public void testDynamicRulesHighlevel() { interpTest("dynamic-rules-highlevel-test"); }
 */
 
-    public void interpTest(String test) {
-        super.interpTest(test, itp.makeTuple("[]"), itp.makeTerm(1));
+    public void interpTest(String test, String result) {
+        super.interpTest(test, itp.makeTuple("[]"), itp.makeTuple(result));
     }
 }
 
