@@ -18,29 +18,28 @@ import org.spoofax.interpreter.stratego.Strategy;
 import aterm.ATerm;
 import aterm.ATermInt;
 
-public class SSL_indexedSet_getIndex extends Primitive {
+public class SSL_indexedSet_remove extends Primitive {
 
-    protected SSL_indexedSet_getIndex() {
-        super("SSL_indexedSet_getIndex", 0, 2);
+    protected SSL_indexedSet_remove() {
+        super("SSL_indexedSet_remove", 0, 2);
     }
 
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs)
             throws FatalError {
-        debug("SSL_indexedSet_getIndex");
+        debug("SSL_indexedSet_remove");
 
         if (!Tools.isATermInt(targs.get(0)))
             return false;
         
         int ref = Tools.getATermInt((ATermInt)targs.get(0));
         ATermIndexedSet is = SSL_indexedSet_create.map.get(ref);
+        
         if(is == null)
             return false;
+
+        boolean r = is.remove(targs.get(1));
         
-        int idx = is.getIndex(targs.get(1));
-        if(idx == -1)
-            return false;
-        
-        env.setCurrent(env.makeTerm(idx));
-        return true;
+        env.setCurrent(targs.get(0));
+        return r;
     }
 }

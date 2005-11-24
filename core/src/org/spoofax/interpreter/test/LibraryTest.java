@@ -30,7 +30,8 @@ public class LibraryTest extends InterpreterTest {
     public void testStrcmp() { interpTest("strcmp-test", "[16,0]"); }
     public void testTermZip() { interpTest("term-zip-test", "[8,0]"); }
     public void testEnvTraversal() { interpTest("env-traversal-test", "[2,0]"); }
-
+    public void testSets() { interpTest("sets-test", "[11,0]"); }
+    
     // FIXME: Known to fail one or two tests
     
     // public void testListBasic() { interpTest("list-basic-test" ,"[17,0]"); }
@@ -52,7 +53,7 @@ public class LibraryTest extends InterpreterTest {
     public void testRename() { interpTest("rename-test"); }
     public void testShare() { interpTest("share-test"); }
     public void testApply() { interpTest("apply-test"); }
-    public void testSets() { interpTest("sets-test"); }
+
     public void testScopedFiniteMap() { interpTest("scoped-finite-map-test"); }
     public void testSimpleTraversal() { interpTest("simple-traversal-test"); }
     public void testCollect() { interpTest("collect-test"); }

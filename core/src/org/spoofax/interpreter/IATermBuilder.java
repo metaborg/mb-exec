@@ -7,13 +7,16 @@
  */
 package org.spoofax.interpreter;
 
+import java.util.Collection;
+
 import aterm.ATerm;
 import aterm.ATermList;
 
 public interface IATermBuilder {
     
-    public ATerm makeList(ATermList t);
+    public ATerm makeList(ATermList terms);
     public ATerm makeList(ATerm... terms);
+    public ATerm makeList(Collection<ATerm> terms);
     public ATerm makeTerm(String s);
     public ATerm makeTerm(int i);
     public ATerm makeString(String s);

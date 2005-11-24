@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter;
 
+import java.util.Collection;
+
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -44,6 +46,13 @@ public class ATermBuilder implements IATermBuilder {
         return makeList(l);
     }
 
+    public ATerm makeList(Collection<ATerm> terms) {
+        ATermList l = factory.makeList();
+        for(ATerm t : terms)
+            l = l.append(t);
+        return makeList(l);
+    }
+ 
     public ATerm makeTuple(String s) {
         ATermList t = (ATermList) makeTerm(s);
         return makeTuple(t);

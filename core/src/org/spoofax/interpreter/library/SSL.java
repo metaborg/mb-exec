@@ -14,9 +14,9 @@ public class SSL {
 
     // FIXME: Should probably have a separte runtime environment o bjec
     // Runtime data for SSL_indexedSet_create
-    
-    private static Map<String, Primitive> registry; 
-    
+
+    private static Map<String, Primitive> registry;
+
     private static void initRegistry() {
         registry = new HashMap<String, Primitive>();
         registry.put("SSL_is_int", new SSL_is_int());
@@ -52,10 +52,13 @@ public class SSL {
         registry.put("SSL_indexedSet_destroy", new SSL_indexedSet_destroy());
         registry.put("SSL_indexedSet_put", new SSL_indexedSet_put());
         registry.put("SSL_indexedSet_getIndex", new SSL_indexedSet_getIndex());
+        registry.put("SSL_indexedSet_elements", new SSL_indexedSet_elements());
+        registry.put("SSL_indexedSet_remove", new SSL_indexedSet_remove());
+        registry.put("SSL_indexedSet_reset", new SSL_indexedSet_reset());
     }
-    
+
     protected static Map<String, Primitive> getRegistry() {
-        if(registry == null)
+        if (registry == null)
             initRegistry();
         return registry;
     }

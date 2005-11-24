@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.library;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.spoofax.interpreter.FatalError;
@@ -18,29 +19,28 @@ import org.spoofax.interpreter.stratego.Strategy;
 import aterm.ATerm;
 import aterm.ATermInt;
 
-public class SSL_indexedSet_getIndex extends Primitive {
+public class SSL_indexedSet_elements extends Primitive {
 
-    protected SSL_indexedSet_getIndex() {
-        super("SSL_indexedSet_getIndex", 0, 2);
+    protected SSL_indexedSet_elements() {
+        super("SSL_indexedSet_elements", 0, 1);
     }
 
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs)
             throws FatalError {
-        debug("SSL_indexedSet_getIndex");
+        debug("SSL_indexedSet_elements");
 
         if (!Tools.isATermInt(targs.get(0)))
             return false;
         
         int ref = Tools.getATermInt((ATermInt)targs.get(0));
         ATermIndexedSet is = SSL_indexedSet_create.map.get(ref);
+
         if(is == null)
             return false;
+
+        Collection<ATerm> values = is.values();
+        env.setCurrent(env.makeList(values));
         
-        int idx = is.getIndex(targs.get(1));
-        if(idx == -1)
-            return false;
-        
-        env.setCurrent(env.makeTerm(idx));
         return true;
     }
 }

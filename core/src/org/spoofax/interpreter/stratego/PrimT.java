@@ -53,7 +53,9 @@ public class PrimT extends Strategy {
         if (svars.size() != prim.getSArity())
             throw new FatalError("Wrong strategy arity when calling '" + name + "', expected " + prim.getSArity() + " got " + svars.size());
 
-        return prim.call(env, svars, vals);
+        boolean r = prim.call(env, svars, vals);
+        debug(" return: " + prim.getName() + " (" + (r ? "ok" : "failed") + ")" );
+        return r;
     }
 
 }

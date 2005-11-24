@@ -38,9 +38,9 @@ public class SSL_indexedSet_put extends Primitive {
             return false;
         
         ATerm t = targs.get(1);
+        Strategy s = sargs.get(0);
         if (is.containsValue(t)) {
-            debug("" + sargs);
-            throw new FatalError("Must call the interpreter here");
+            return s.eval(env);
         }
 
         int idx = is.put(t);

@@ -27,5 +27,5 @@ public interface IContext extends IATermBuilder {
     
     VarScope getVarScope();
     void setVarScope(VarScope newVarScope);
-
+    
 }

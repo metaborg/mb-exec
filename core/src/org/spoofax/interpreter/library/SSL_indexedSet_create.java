@@ -7,9 +7,11 @@
  */
 package org.spoofax.interpreter.library;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
@@ -25,29 +27,50 @@ public class SSL_indexedSet_create extends Primitive {
         
         private static final long serialVersionUID = -4514696890481283123L;
         private int counter;
-        Map<ATerm, Integer> reverseMap;
-        Map<Integer, ATerm> forwardMap;
-        
+        Map<Integer, ATerm> map;
         
         ATermIndexedSet(int initialSize, int maxLoad) {
-            forwardMap = new HashMap<Integer, ATerm>(initialSize);
-            reverseMap = new HashMap<ATerm, Integer>(initialSize);
+            map = new HashMap<Integer, ATerm>(initialSize);
             counter = 0;
         }
         
         public int put(ATerm value) {
             int idx = counter++; 
-            forwardMap.put(idx, value);
-            reverseMap.put(value, idx);
+            map.put(idx, value);
+            // System.out.println("put : " + idx + " = " + value);
             return idx;
         }
 
         public int getIndex(ATerm t) {
-            return reverseMap.get(t);
+            Set<Map.Entry<Integer,ATerm>> entries = map.entrySet();
+            
+            for(Map.Entry<Integer,ATerm> x : entries) {
+                if(x.getValue() == t)
+                    return x.getKey();
+            }
+            
+            return -1;
         }
 
         public boolean containsValue(ATerm t) {
-            return forwardMap.containsValue(t);
+            return map.containsValue(t);
+        }
+
+        public Collection<ATerm> values() {
+            return map.values();
+        }
+
+        public boolean remove(ATerm t) {
+            int idx = getIndex(t);
+
+            if(idx == -1)
+                return false;
+            map.remove(idx);
+            return true;
+        }
+
+        public void clear() {
+            map.clear();
         }
     }
 
