@@ -98,7 +98,7 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchApplInt(IContext env, ATermAppl t,
             ATermAppl p) throws FatalError {
-        if (t.getType() == ATerm.INT)
+        if (Tools.isATermInt(t))
             return match(env, Tools.intAt(t, 0), Tools.applAt(p, 0));
         return null;
     }
@@ -117,12 +117,17 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchApplAs(IContext env, ATermAppl t,
             ATermAppl p) throws FatalError {
+        
         List<Pair<String, ATerm>> r = match(env, t, Tools.applAt(p, 1));
+        
         if (r == null)
             return null;
+        
         debug("" + p);
+        
         String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
         r.add(new Pair<String, ATerm>(varName, t));
+        
         return r;
     }
 
@@ -153,11 +158,13 @@ public class Match extends Strategy {
             else
                 return null;
         }
+        
         return r;
     }
 
     protected List<Pair<String, ATerm>> matchInt(IContext env, ATermInt t,
             ATermAppl p) throws FatalError {
+        
         debug("matching Int");
 
         if (Tools.isAnno(p)) {
@@ -183,6 +190,7 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchReal(IContext env, ATermReal t,
             ATermAppl p) throws FatalError {
+        
         debug("matching Real");
 
         if (Tools.isAnno(p)) {
@@ -207,9 +215,12 @@ public class Match extends Strategy {
     }
 
     private List<Pair<String, ATerm>> matchRealReal(ATermReal t, ATermAppl p) {
+        
         Double realVal = new Double(Tools.stringAt(p, 0));
+        
         if (realVal == t.getReal())
             return emptyList();
+        
         return null;
     }
 
@@ -242,39 +253,51 @@ public class Match extends Strategy {
         Integer intVal = new Integer(Tools.stringAt(p, 0));
         if (intVal == t.getInt())
             return emptyList();
+        
         return null;
     }
 
     protected List<Pair<String, ATerm>> matchIntVar(ATermInt t, ATermAppl p) {
+
         List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
         r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0)).getName(),
                                       t));
+        
         return r;
     }
 
     protected List<Pair<String, ATerm>> matchRealVar(ATermReal t, ATermAppl p) {
+        
         List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
         r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0)).getName(),
                                       t));
+        
         return r;
     }
 
     protected List<Pair<String, ATerm>> matchIntAs(ATermInt t, ATermAppl p) {
+        
         List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
         String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
+        
         r.add(new Pair<String, ATerm>(varName, t));
+        
         return r;
     }
 
     protected List<Pair<String, ATerm>> matchRealAs(ATermReal t, ATermAppl p) {
+        
         List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
         String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
+        
         r.add(new Pair<String, ATerm>(varName, t));
+        
         return r;
     }
 
     protected List<Pair<String, ATerm>> matchAnyExplode(IContext env, ATerm t,
             ATermAppl p) throws FatalError {
+        
         ATermAppl opPattern = Tools.applAt(p, 0);
         ATermAppl argsPattern = Tools.applAt(p, 1);
 
@@ -288,10 +311,12 @@ public class Match extends Strategy {
             return null;
 
         opResult.addAll(argsResult);
+        
         return opResult;
     }
 
     private ATerm getTermArguments(IContext env, ATerm t) throws FatalError {
+        
         if (Tools.isATermInt(t) || Tools.isATermReal(t))
             return env.makeList(emptyATermList(env));
         else if (Tools.isATermAppl(t)) {
@@ -306,11 +331,14 @@ public class Match extends Strategy {
     }
 
     private ATermList emptyATermList(IContext env) {
+        
         PureFactory factory = env.getFactory();
+        
         return factory.makeList();
     }
 
     private ATerm getTermConstructor(IContext env, ATerm t) throws FatalError {
+        
         if (Tools.isATermInt(t) || Tools.isATermReal(t)) {
             return t;
         } else if (Tools.isATermString(t)) {

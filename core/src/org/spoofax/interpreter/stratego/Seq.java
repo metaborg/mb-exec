@@ -21,6 +21,7 @@ public class Seq extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
+
         debug("Seq.eval() - " + env.current());
         
         return s0.eval(env) && s1.eval(env);

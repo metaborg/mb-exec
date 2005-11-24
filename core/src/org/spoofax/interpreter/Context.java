@@ -43,15 +43,20 @@ public class Context extends ATermBuilder implements IContext {
 
 
     public static void debug(String s) {
+      
         StringBuffer b = new StringBuffer();
+        
         for(int i=0;i<indentation;i++)
             b.append(" "); 
+        
         Interpreter.debug(b.toString() + s);
     }
 
     public boolean invoke(String name, Object object, Object object2)
             throws FatalError {
+        
         SDefT s = lookupSVar(name);
+        
         return s.getBody().eval(this);
     }
 
@@ -68,9 +73,11 @@ public class Context extends ATermBuilder implements IContext {
     }
 
     public boolean bindVars(List<Pair<String, ATerm>> r) {
+        
         for (Pair<String, ATerm> x : r) {
-            
+        
             VarScope s = varScope.scopeOf(x.first);
+            
             if (s == null) {
                 varScope.add(x.first, x.second);
             } else if (s.hasVarInLocalScope(x.first)) {
@@ -85,6 +92,7 @@ public class Context extends ATermBuilder implements IContext {
                 s.add(x.first, x.second);
             }
         }
+        
         return true;
     }
 

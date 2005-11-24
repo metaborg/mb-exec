@@ -26,17 +26,19 @@ public class GuardedLChoice extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
+        
         debug("GuardedLChoice.eval() - " + env.current());
+        
         BindingInfo bi = env.getVarScope().saveUnboundVars();
         ATerm oldCurrent = env.current();
-        boolean r = cond.eval(env);
-        if (r) {
+        
+        if (cond.eval(env))
             return ifClause.eval(env);
-        } else {
-            env.setCurrent(oldCurrent);
-            env.getVarScope().restoreUnboundVars(bi);
-            return thenClause.eval(env);
-        }
+        
+        env.setCurrent(oldCurrent);
+        env.getVarScope().restoreUnboundVars(bi);
+        
+        return thenClause.eval(env);
     }
 
 }

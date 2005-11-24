@@ -13,7 +13,9 @@ import org.spoofax.interpreter.IContext;
 public class Fail extends Strategy {
 
     public boolean eval(IContext e) throws FatalError {
+        
         debug("Fail.eval() - " + e.current());
+        
         return false;
     }
 

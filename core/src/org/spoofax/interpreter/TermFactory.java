@@ -27,6 +27,7 @@ public class TermFactory extends PureFactory {
     
     @Override
     public SharedObject build(SharedObject arg0) {
+
         if(arg0 instanceof aterm.AFun) {
             funny.put(((AFun)arg0).getName(), marker);
         }

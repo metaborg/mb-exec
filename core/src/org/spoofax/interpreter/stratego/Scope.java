@@ -24,25 +24,35 @@ public class Scope extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
+        
         debug("Scope.eval() - " + env.current());
+        
         StringBuffer sb = new StringBuffer();
         
         VarScope oldScope = env.getVarScope();
+        VarScope newScope = new VarScope(oldScope);
+
         // oldScope.dump("o - ");
         
-        VarScope newScope = new VarScope(oldScope);
         for(String s : vars) {
             newScope.add(s, null);
             sb.append(s + ",");
         }
+        
         debug(" vars : [" + sb.toString() + "]");
+        
         env.setVarScope(newScope);
+        
         debug("" + env.getVarScope());
+        
         // env.getVarScope().dump("n - ");
         
         boolean r = body.eval(env);
+        
         env.setVarScope(oldScope);
+        
         debug("<scope, dropped : [" + sb.toString() + "]");
+        
         return r;
     }
 

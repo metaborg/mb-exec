@@ -33,7 +33,9 @@ public class PrimT extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
+       
         debug("PrimT.eval() - " + env.current());
+        
         Primitive prim = SSL.lookup(name);
 
         if (prim == null)
@@ -41,10 +43,12 @@ public class PrimT extends Strategy {
 
         debug(" call  : " + prim.getName());
         debug(" svars : " + svars);
+        
         List<ATerm> vals = new ArrayList<ATerm>(tvars.size());
         for (ATerm t : tvars) {
             vals.add(env.lookupVar(Tools.stringAt(t, 0)));
         }
+        
         debug(" tvars : " + vals);
 
         if (vals.size() != prim.getArity())
@@ -54,7 +58,9 @@ public class PrimT extends Strategy {
             throw new FatalError("Wrong strategy arity when calling '" + name + "', expected " + prim.getSArity() + " got " + svars.size());
 
         boolean r = prim.call(env, svars, vals);
+        
         debug(" return: " + prim.getName() + " (" + (r ? "ok" : "failed") + ")" );
+        
         return r;
     }
 

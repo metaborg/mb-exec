@@ -41,11 +41,14 @@ public class Build extends Strategy {
             return false;
         }
         Context.debug(" built : " + t);
+        
         env.setCurrent(t);
+        
         return true;
     }
 
     public ATerm buildTerm(IContext env, ATermAppl t) throws FatalError {
+        
         PureFactory factory = env.getFactory();
 
         if (Tools.isAnno(t)) {
@@ -111,24 +114,30 @@ public class Build extends Strategy {
     }
 
     private ATerm buildVar(IContext env, ATermAppl t) throws FatalError {
+        
         String n = Tools.stringAt(t, 0);
         ATerm x = env.lookupVar(n);
+        
         Context.debug(" lookup : " + n + " (= " + x + ")");
+        
         return x;
     }
 
     private ATerm buildStr(ATermAppl t) {
         ATermAppl x = Tools.applAt(t, 0);
+        
         return x;
     }
 
     private ATerm buildReal(ATermAppl t, PureFactory factory) {
         ATermAppl x = Tools.applAt(t, 0);
+        
         return factory.makeReal(new Double(x.getName()));
     }
 
     private ATerm buildInt(ATermAppl t, PureFactory factory) {
         ATermAppl x = Tools.applAt(t, 0);
+
         return factory.makeInt(new Integer(x.getName()));
     }
 
@@ -146,6 +155,7 @@ public class Build extends Strategy {
                 return null;
             kids = kids.append(kid);
         }
+        
         return factory.makeApplList(afun, kids);
     }
 

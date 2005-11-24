@@ -24,8 +24,11 @@ public class All extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
+        
         debug("All.eval() - " + env.current());
+        
         ATerm t = env.current();
+        
         switch(t.getType()) {
         case ATerm.INT: return true;
         case ATerm.REAL: return true;
@@ -38,8 +41,10 @@ public class All extends Strategy {
     }
 
     private boolean evalAll(IContext env, ATermAppl t) throws FatalError {
+        
         AFun fun = t.getAFun();
         ATerm[] xt = new ATerm[t.getChildCount()];
+        
         for(int i=0;i<t.getChildCount();i++) {
             env.setCurrent(Tools.termAt(t, i));
             if(!body.eval(env)) {
@@ -48,8 +53,11 @@ public class All extends Strategy {
             }
             xt[i] = env.current(); 
         }
+        
         ATermAppl t2 = env.getFactory().makeAppl(fun, xt);
+        
         env.setCurrent(t2);
+        
         return true;
     }
 

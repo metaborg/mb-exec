@@ -35,13 +35,16 @@ public class CallT extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
+
         debug("CallT.eval() - " + env.current());
+        
         SDefT sdef = env.lookupSVar(name);
 
         if (sdef == null)
             throw new FatalError("Not found '" + name + "'");
 
         debug(" call : " + name + " " + sdef);
+        
         if (name.equals("w_89")) {
             debug("foop");
         }
@@ -85,7 +88,7 @@ public class CallT extends Strategy {
             String formal = formalTVars.get(i);
             ATerm actual = tvars.get(i);
             // FIXME: This should not be here
-            if (((ATermAppl) actual).getName().equals("Var"))
+            if (Tools.isVar((ATermAppl)actual))
                 actual = env.lookupVar(Tools.stringAt(actual, 0));
             newVarScope.add(formal, actual);
         }
@@ -97,8 +100,10 @@ public class CallT extends Strategy {
         boolean r = sdef.getBody().eval(env);
         env.setVarScope(oldVarScope);
         unbump();
+        
         debug("<return: " + name + " (" + (r ? "ok" : "failed") + ") - "
                 + env.current());
+        
         return r;
     }
 

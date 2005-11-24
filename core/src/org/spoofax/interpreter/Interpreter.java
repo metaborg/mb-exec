@@ -45,17 +45,21 @@ public class Interpreter extends ATermBuilder {
     }
     
     public static void debug(String s) {
+     
         if(debugging == false)
             return;
+        
         if(s.length() < 20000)
             System.out.println(s);
     }
     
     public void load(String path) throws IOException, FatalError {
+        
         ATerm prg = context.getFactory().readFromFile(path);
-        debug("" + prg);
         ATerm sign = Tools.applAt(Tools.listAt(prg, 0), 0);
         ATerm strats = Tools.applAt(Tools.listAt(prg, 0), 1);
+        
+        debug("" + prg);
 
         loadConstructors(Tools
                 .listAt(Tools.applAt(Tools.listAt(sign, 0), 0), 0));
@@ -87,6 +91,7 @@ public class Interpreter extends ATermBuilder {
     }
 
     private ExtSDef parseExtSDef(ATermAppl t) {
+
         String name = Tools.stringAt(t, 0);
         ATermList svars = Tools.listAt(t, 1);
         ATermList tvars = Tools.listAt(t, 2);
@@ -98,11 +103,14 @@ public class Interpreter extends ATermBuilder {
         
         VarScope oldScope = context.getVarScope();
         VarScope newScope = new VarScope(oldScope);
+        
         return new ExtSDef(name, realsvars, realtvars, newScope);
     }
 
     private Strategy parseStrategy(ATermAppl appl) throws FatalError {
+        
         String op = appl.getName();
+        
         if (op.equals("Build")) {
             return parseBuild(appl);
         } else if (op.equals("Scope")) {
@@ -154,16 +162,20 @@ public class Interpreter extends ATermBuilder {
     }
 
     private Let parseLet(ATermAppl t) throws FatalError {
+        
         ATermList l = Tools.listAt(t, 0);
         List<SDefT> defs = new ArrayList<SDefT>();
+        
         for (int i = 0; i < l.getChildCount(); i++)
             defs.add(parseSDefT(Tools.applAt(l, i)));
+        
         Strategy body = parseStrategy(Tools.applAt(t, 1));
 
         return new Let(defs, body);
     }
 
     private SDefT parseSDefT(ATermAppl t) throws FatalError {
+        
         String name = Tools.stringAt(t, 0);
         ATermList svars = Tools.listAt(t, 1);
         ATermList tvars = Tools.listAt(t, 2);
@@ -172,6 +184,7 @@ public class Interpreter extends ATermBuilder {
         
         VarScope oldScope = context.getVarScope();
         VarScope newScope = new VarScope(oldScope);
+        
         context.setVarScope(newScope);
         Strategy body = parseStrategy(Tools.applAt(t, 3));
         
@@ -184,19 +197,25 @@ public class Interpreter extends ATermBuilder {
         debug("tvars : " + realtvars);
         
         context.setVarScope(oldScope);
+        
         return new SDefT(name, realsvars, realtvars, body, newScope);
     }
 
     private List<String> makeVars(ATermList svars) {
+        
         List<String> realsvars = new ArrayList<String>(svars.getChildCount());
+        
         debug("svars : " + svars);
+        
         for(int j=0;j<svars.getChildCount();j++) {
             realsvars.add(Tools.stringAt(Tools.applAt(svars, j),0));
         }
+        
         return realsvars;
     }
 
     private PrimT parsePrimT(ATermAppl t) throws FatalError {
+        
         String name = Tools.stringAt(t, 0);
         List<Strategy> svars = parseStrategyList(Tools.listAt(t, 1));
         List<ATerm> tvars = parseTermList(Tools.listAt(t, 2));
@@ -205,6 +224,7 @@ public class Interpreter extends ATermBuilder {
     }
 
     private Strategy parseCallT(ATermAppl t) throws FatalError {
+        
         debug("makeCallT()");
         String name = Tools.stringAt(Tools.applAt(t, 0), 0);
         debug(" name  : " + name);
@@ -228,7 +248,6 @@ public class Interpreter extends ATermBuilder {
 
     private List<Strategy> parseStrategyList(ATermList svars) throws FatalError {
         List<Strategy> v = new ArrayList<Strategy>(svars.getChildCount());
-
         for(int i=0;i<svars.getChildCount();i++)
             v.add(parseStrategy(Tools.applAt(svars, i)));
         return v;
@@ -244,6 +263,7 @@ public class Interpreter extends ATermBuilder {
     }
 
     private GuardedLChoice parseGuardedLChoice(ATermAppl t) throws FatalError {
+
         Strategy cond = parseStrategy(Tools.applAt(t, 0));
         Strategy ifclause = parseStrategy(Tools.applAt(t, 1));
         Strategy thenclause = parseStrategy(Tools.applAt(t, 2));
@@ -252,17 +272,23 @@ public class Interpreter extends ATermBuilder {
     }
 
     private Seq parseSeq(ATermAppl t) throws FatalError {
+        
         Strategy s0 = parseStrategy(Tools.applAt(t, 0));
         Strategy s1 = parseStrategy(Tools.applAt(t, 1));
+        
         return new Seq(s0, s1);
     }
 
     private Scope parseScope(ATermAppl t) throws FatalError {
+     
         ATermList vars = Tools.listAt(t, 0);
         List<String> realvars = new ArrayList<String>(vars.getChildCount());
+        
         for(int i=0;i<vars.getChildCount();i++)
             realvars.add(Tools.stringAt(vars, i));
+        
         Strategy body = parseStrategy(Tools.applAt(t, 1));
+        
         return new Scope(realvars, body);
     }
 
@@ -273,8 +299,10 @@ public class Interpreter extends ATermBuilder {
 
     public boolean invoke(String name) throws FatalError {
         SDefT def = context.lookupSVar(name);
+        
         if(def == null)
             throw new FatalError("Definition '" + name + "' not found");
+        
         return def.getBody().eval(context);
     }
 

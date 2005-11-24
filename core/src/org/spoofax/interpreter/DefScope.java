@@ -26,9 +26,12 @@ public class DefScope {
     }
     
     public SDefT lookupSDefT(String name) {
+
         SDefT sdef = sdefs.get(name);
+        
         if(sdef == null && parent != null)
             return parent.lookupSDefT(name);
+        
         return sdef;
     }
 

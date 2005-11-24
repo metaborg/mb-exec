@@ -27,21 +27,28 @@ public class VarScope {
 
     public VarScope(VarScope parent) {
         this.parent = parent;
+        
         vars = new HashMap<String, ATerm>();
         svars = new HashMap<String, SDefT>();
     }
 
     public ATerm lookup(String name) {
+        
         ATerm t = vars.get(name);
+        
         if (t == null && parent != null)
             return parent.lookup(name);
+        
         return t;
     }
 
     public SDefT lookupSVar(String name) {
+        
         SDefT t = svars.get(name);
+        
         if (t == null && parent != null)
             return parent.lookupSVar(name);
+        
         return t;
     }
 
@@ -73,15 +80,20 @@ public class VarScope {
     }
 
     public VarScope scopeOf(String name) {
+        
         if (vars.containsKey(name))
             return this;
+        
         if (parent != null)
             return parent.scopeOf(name);
+        
         return null;
     }
 
     public String dump(String prefix) {
+        
         String pre = prefix;
+        
         if (parent != null)
             pre = parent.dump(prefix);
 
@@ -106,17 +118,22 @@ public class VarScope {
     }
 
     private BindingInfo saveUnboundVars(BindingInfo bi) {
+        
         for (String k : vars.keySet()) {
             if (vars.get(k) == null)
                 bi.add(this, k);
         }
+        
         if (parent != null)
             return parent.saveUnboundVars(bi);
+        
         return bi;
     }
 
     public void restoreUnboundVars(BindingInfo bi) {
+        
         List<Pair<VarScope, String>> bindings = bi.getBindings();
+        
         for (Pair<VarScope, String> p : bindings) {
             p.first.resetVar(p.second);
         }
