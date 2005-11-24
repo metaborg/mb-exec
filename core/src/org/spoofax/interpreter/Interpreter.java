@@ -1,7 +1,7 @@
 /*
  * Created on 07.aug.2005
  *
- * Copyright (c) 2004, Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
  * Licensed under the GNU General Public License, v2
  */

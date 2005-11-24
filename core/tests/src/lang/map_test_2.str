@@ -7,7 +7,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module map_test_2
-imports list-cons tuple-cons
+imports collection/list/common
 strategies
 
   main = map(\ x -> <inc> x \)

@@ -6,8 +6,8 @@
  *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
-module map_test_1
+module map_test_4
 imports collection/list/common
 strategies
 
-  main = map(inc)
+  main = map(\ xs -> <map(inc)> xs \)

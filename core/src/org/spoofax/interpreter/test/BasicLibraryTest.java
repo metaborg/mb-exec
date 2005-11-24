@@ -10,18 +10,19 @@ package org.spoofax.interpreter.test;
 public class BasicLibraryTest extends LanguageTest {
 
     public void testCollectOm1() {
-        interpTest("collect-om_1", itp.makeList(itp.makeTerm("1"), itp.makeTuple("[2,3]"), itp.makeTerm("3")),
-                   itp.makeList("[1,2,3]"));
+        interpTest("collect-om_1", itp.makeList(itp.makeTerm("1"), itp
+                .makeTuple("[2,3]"), itp.makeTerm("3")), itp
+                .makeList("[1,2,3]"));
     }
 
     public void testConc() {
-        interpTest("conc", itp.makeTuple(itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
-                   itp.makeList("[1,2,3,3,4,5]"));
+        interpTest("conc", itp.makeTuple(itp.makeList("[1,2,3]"), itp
+                .makeList("[3,4,5]")), itp.makeList("[1,2,3,3,4,5]"));
     }
 
     public void testConcat() {
-        interpTest("concat", itp.makeList(itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
-                   itp.makeList("[1,2,3,3,4,5]"));
+        interpTest("concat", itp.makeList(itp.makeList("[1,2,3]"), itp
+                .makeList("[3,4,5]")), itp.makeList("[1,2,3,3,4,5]"));
     }
 
     public void testDynruleCounter1() {
@@ -29,7 +30,8 @@ public class BasicLibraryTest extends LanguageTest {
     }
 
     public void testExplodeString() {
-        interpTest("explode-string", itp.makeTerm("\"ab\""), itp.makeList("[97,98]"));
+        interpTest("explode-string", itp.makeTerm("\"ab\""), itp
+                .makeList("[97,98]"));
     }
 
     public void testFetch1() {
@@ -57,19 +59,14 @@ public class BasicLibraryTest extends LanguageTest {
     }
 
     public void testTopdownTry() {
-        interpTest("topdown_try", 
-                   itp.makeTuple(
-                                 itp.makeTerm("1"),
-                                 itp.makeTerm("2"),
-                                 itp.makeTuple("[3,4]")),
-                                 itp.makeTuple(itp.makeTerm("1"),
-                                               itp.makeTerm("2"),
-                                               itp.makeTuple("[4,4]")));
+        interpTest("topdown_try", itp.makeTuple(itp.makeTerm("1"), itp
+                .makeTerm("2"), itp.makeTuple("[3,4]")), itp.makeTuple(itp
+                .makeTerm("1"), itp.makeTerm("2"), itp.makeTuple("[4,4]")));
     }
 
     public void testUnion() {
-        interpTest("union", itp.makeTuple(itp.makeList("[1,2,3]"), itp.makeList("[3,4,5]")), 
-                   itp.makeList("[1,2,3,4,5]"));
+        interpTest("union", itp.makeTuple(itp.makeList("[1,2,3]"), itp
+                .makeList("[3,4,5]")), itp.makeList("[1,2,3,4,5]"));
     }
 
     public void testTest1() {
@@ -81,7 +78,29 @@ public class BasicLibraryTest extends LanguageTest {
     }
 
     public void testTest3() {
-        interpTestFail("test_3", itp.makeTuple("[]")); //, itp.makeTerm("3"));
+        interpTestFail("test_3", itp.makeTuple("[]")); // , itp.makeTerm("3"));
     }
 
+    public void testTestMap1() {
+        interpTest("map_test_1", itp.makeList("[1,2,3]"), itp
+                .makeList("[2,3,4]"));
+    }
+
+    public void testTestMap2() {
+        interpTest("map_test_2", itp.makeList("[1,2,3]"), itp
+                .makeList("[2,3,4]"));
+    }
+
+    public void testTestMap3() {
+        interpTest("map_test_3", itp.makeTuple(itp.makeTerm(5), itp
+                .makeList("[1,2,3]")), itp.makeList("[6,7,8]"));
+    }
+
+    public void testTestMap4() {
+        interpTest("map_test_4", 
+                   itp.makeList(itp.makeList("[1,2,3]"), 
+                                itp.makeList("[2,3,4]")), 
+                itp.makeList(itp.makeList("[2,3,4]"), 
+                             itp.makeList("[3,4,5]")));
+    }
 }
