@@ -20,7 +20,7 @@ import aterm.ATermInt;
 public class SSL_mod extends Primitive {
 
     protected SSL_mod() {
-        super("SSL_mod", 0, 1);
+        super("SSL_mod", 0, 2);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {

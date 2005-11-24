@@ -21,13 +21,17 @@ import aterm.ATermList;
 public class SSL_printnl extends Primitive {
 
     protected SSL_printnl() {
-        super("SSL_printnl", 0, 1);
+        super("SSL_printnl", 0, 2);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
         debug("SSL_printnl - " + targs);
+
+        // FIXME: Possibly erroneous
+        String output = Tools.getATermString(targs.get(0));
         
         ATermList l = Tools.consToListDeep(env.getFactory(), (ATermAppl) targs.get(1));
+        
         StringBuffer sb = new StringBuffer();
         for(int i=0;i<l.getChildCount();i++) {
             ATerm t = Tools.termAt(l, i);
@@ -41,8 +45,14 @@ public class SSL_printnl extends Primitive {
             }
             sb.append(t.toString());
         }
-            
-        System.out.println(sb);
+
+        if(output.equals("stderr")) 
+            System.err.println(sb);
+        else if(output.equals("stdout")) 
+            System.out.println(sb);
+        else
+            throw new FatalError("Unknown output : " + output);
+        
         return true;
     }
 }

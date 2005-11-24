@@ -19,7 +19,7 @@ import aterm.ATermInt;
 public class SSL_addi extends Primitive {
 
     protected SSL_addi() {
-        super("SSL_addi", 0, 1);
+        super("SSL_addi", 0, 2);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {

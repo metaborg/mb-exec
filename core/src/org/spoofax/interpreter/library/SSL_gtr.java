@@ -19,7 +19,7 @@ import aterm.ATermReal;
 public class SSL_gtr extends Primitive {
 
     protected SSL_gtr() {
-        super("SSL_gtr", 0, 1);
+        super("SSL_gtr", 0, 2);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {

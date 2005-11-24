@@ -16,23 +16,17 @@ import org.spoofax.interpreter.stratego.Strategy;
 import aterm.ATerm;
 import aterm.ATermInt;
 
-public class SSL_muli extends Primitive {
+public class SSL_table_hashtable extends Primitive {
 
-    protected SSL_muli() {
-        super("SSL_muli", 0, 2);
+    protected SSL_table_hashtable() {
+        super("SSL_table_hashtable", 0, 1);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
-        debug("SSL_muli");
+        debug("SSL_table_hashtable");
         
-        if(targs.get(0).getType() != ATerm.INT)
-            return false;
-        if(targs.get(1).getType() != ATerm.INT)
-            return false;
-
-        ATermInt a = (ATermInt) targs.get(0);
-        ATermInt b = (ATermInt) targs.get(1);
-        env.setCurrent(env.getFactory().makeInt(a.getInt() * b.getInt()));
-        return true;
+        debug(" sargs : " + sargs);
+        debug(" targs : " + targs);
+        return false;
     }
 }

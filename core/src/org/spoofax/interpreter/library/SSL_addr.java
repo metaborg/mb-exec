@@ -19,7 +19,7 @@ import aterm.ATermReal;
 public class SSL_addr extends Primitive {
 
     protected SSL_addr() {
-        super("SSL_addr", 0, 1);
+        super("SSL_addr", 0, 2);
     }
     
     public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws FatalError {

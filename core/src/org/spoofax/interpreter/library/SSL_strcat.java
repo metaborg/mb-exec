@@ -19,7 +19,7 @@ import aterm.ATerm;
 public class SSL_strcat extends Primitive {
 
     protected SSL_strcat() {
-        super("SSL_strcat", 0, 1);
+        super("SSL_strcat", 0, 2);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {

@@ -44,6 +44,7 @@ public class SSL {
         registry.put("SSL_real_to_string", new SSL_real_to_string());
         registry.put("SSL_real_to_string_precision", new SSL_real_to_string_precision());
         registry.put("SSL_string_to_real", new SSL_string_to_real());
+        registry.put("SSL_table_hashtable", new SSL_string_to_real());
     }
     
     protected static Map<String, Primitive> getRegistry() {
