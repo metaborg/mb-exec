@@ -22,8 +22,6 @@ public class BAFReader {
 
     private static final int BAF_VERSION = 0x300;
 
-    private static final int MAX_INLINE_ARITY = 6;
-
     private static final int HEADER_BITS = 32;
 
     private BitStream reader;
@@ -59,7 +57,7 @@ public class BAFReader {
         reader = new BitStream(inputStream);
     }
 
-    ATerm readBAF() throws FatalError, IOException {
+    public ATerm readBAF() throws FatalError, IOException {
 
         int val = reader.readInt();
 
@@ -90,69 +88,74 @@ public class BAFReader {
     }
 
     private void debug(int val) {
-        System.out.printf("%x\n", val);
+        // System.out.printf("%x\n", val);
     }
 
     private void debug(String s) {
-        System.out.println(s);
+        // System.out.println(s);
     }
 
     private ATerm readTerm(SymEntry e) throws FatalError, IOException {
         int arity = e.arity;
         ATerm[] args = new ATerm[arity];
-        ATerm result;
+
+        debug("readTerm() - " + e.fun.getName() + "[" + arity + "]");
 
         for (int i = 0; i < arity; i++) {
             int val = reader.readBits(e.symWidth[i]);
-            debug(val);
-            debug("" + e.topSyms[i].length);
+            debug(" [" + i + "] - " + val);
+            debug(" [" + i + "] - " + e.topSyms[i].length);
             SymEntry argSym = symbols[e.topSyms[i][val]];
 
             val = reader.readBits(argSym.termWidth);
             if (argSym.terms[val] == null) {
+                debug(" [" + i + "] - recurse");
                 argSym.terms[val] = readTerm(argSym);
             }
 
             if (argSym.terms[val] == null)
-                argSym.terms[val] = readTerm(e);
-
-            if (argSym.terms[val] == null)
                 throw new FatalError("Cannot be null");
-            
+
             args[i] = argSym.terms[val];
         }
 
+        /*
         switch (e.fun.getType()) {
-        case ATerm.INT:
-            int val = reader.readBits(HEADER_BITS);
-            result = factory.makeInt(val);
-            break;
-        case ATerm.REAL:
-            reader.flushBitsFromReader();
-            String s = reader.readString();
-            result = factory.makeReal(new Double(s));
-            break;
         case ATerm.BLOB:
             reader.flushBitsFromReader();
             String t = reader.readString();
-            result = factory.makeBlob(t.getBytes());
-            break;
+            return factory.makeBlob(t.getBytes());
         case ATerm.PLACEHOLDER:
-            result = factory.makePlaceholder(args[0]);
-            break;
-        case ATerm.LIST:
-            result = ((ATermList) args[1]).append(args[0]);
-            break;
-        // EMPTY_LIST
-        // ANNOTATION
-        default:
-            debug(e.fun + "/ " + args);
-            for (int i = 0; i < args.length; i++)
-                debug("" + args[i]);
-            result = factory.makeAppl(e.fun, args);
+            return factory.makePlaceholder(args[0]);
         }
+        */
+        
+        if (e.fun.getName().equals("<int>")) {
+            int val = reader.readBits(HEADER_BITS);
+            return factory.makeInt(val);
+        }
+        if (e.fun.getName().equals("<real>")) {
+            reader.flushBitsFromReader();
+            String s = reader.readString();
+            return factory.makeReal(new Double(s));
+        }
+        if (e.fun.getName().equals("[_,_]")) {
+            debug("--");
+            for (int i = 0; i < args.length; i++)
+                debug(" + " + args[i].getClass());
+            return ((ATermList) args[1]).insert(args[0]);
+        }
+        if (e.fun.getName().equals("[]"))
+            return factory.makeList();
 
-        return result;
+        // FIXME: Add annotation case
+        // FIXME: Add blob case
+        // FIXME: Add placeholder case
+        
+        debug(e.fun + " / " + args);
+        for (int i = 0; i < args.length; i++)
+            debug("" + args[i]);
+        return factory.makeAppl(e.fun, args);
     }
 
     private void readAllSymbols() throws IOException {

@@ -1,0 +1,21 @@
+Specification(
+  [ Signature(
+      [ Constructors(
+          [ OpDecl(
+              "Foo"
+            , FunType(
+                [ConstType(Sort("Bar", [])), ConstType(Sort("Bar", []))]
+              , ConstType(Sort("Foo", []))
+              )
+            )
+          , OpDecl("Bar", ConstType(Sort("Bar", [])))
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          , OpDecl("Nil", ConstType(Sort("List", [SortVar("a")])))
+          ]
+        )
+      ]
+    )
+  ],
+  [ 1, 2, 3 ]
+)
+
