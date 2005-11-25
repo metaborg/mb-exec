@@ -64,4 +64,8 @@ public class PrimT extends Strategy {
         return r;
     }
 
+    public void prettyPrint(StupidFormatter sf) {
+        sf.append("PrimT(\"" + name + "\")");
+    }
+
 }

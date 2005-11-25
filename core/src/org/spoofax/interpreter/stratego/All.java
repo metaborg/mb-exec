@@ -61,4 +61,13 @@ public class All extends Strategy {
         return true;
     }
 
+    public void prettyPrint(StupidFormatter sf) {
+        sf.append("all(");
+        sf.bump(4);
+        body.prettyPrint(sf);
+        sf.append(")");
+        sf.unbump(4);
+        
+    }
+
 }

@@ -16,4 +16,7 @@ public class LGChoice implements IConstruct {
         throw new FatalError("Unimplemented");
     }
 
+    public void prettyPrint(StupidFormatter sf) {
+       sf.append("LGCHOICE");
+    }
 }

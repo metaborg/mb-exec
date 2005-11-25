@@ -27,4 +27,14 @@ public class Seq extends Strategy {
         return s0.eval(env) && s1.eval(env);
     }
 
+    public void prettyPrint(StupidFormatter sf) {
+        sf.first("Seq(");
+        sf.bump(4);
+        sf.append("  ");
+        s0.prettyPrint(sf);
+        sf.append(", ");
+        s1.prettyPrint(sf);
+        sf.unbump(4);
+        sf.line(")");
+    }
 }

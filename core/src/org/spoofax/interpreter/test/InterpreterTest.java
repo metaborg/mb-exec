@@ -59,7 +59,7 @@ public class InterpreterTest extends TestCase {
     private boolean runInterp(String test, ATerm input) {
         try {
         itp.load(basePath + "/" + test + ".rtree");
-        
+        System.out.println(itp.prettyPrint());
         itp.setCurrent(input);
         // System.out.println("Input : " + input);
         return itp.invoke("main_0_0");

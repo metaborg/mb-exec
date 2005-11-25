@@ -369,4 +369,8 @@ public class Match extends Strategy {
                     + t.getClass().toString() + " [" + t.getType() + "]");
         }
     }
+
+    public void prettyPrint(StupidFormatter sf) {
+        sf.first("Match(" + pattern.toString() + ")");
+    }
 }

@@ -43,4 +43,14 @@ public class Let extends Strategy {
         
         return r;
     }
+    
+    public void prettyPrint(StupidFormatter sf) {
+        sf.append("Let(\n");
+        sf.bump(4);
+        sf.append(", " + defs + "\n");
+        sf.append(", ");
+        body.prettyPrint(sf);
+        sf.append(")");
+        sf.unbump(4);
+    }
 }

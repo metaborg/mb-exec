@@ -28,6 +28,7 @@ import org.spoofax.interpreter.stratego.Scope;
 import org.spoofax.interpreter.stratego.Seq;
 import org.spoofax.interpreter.stratego.Some;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.stratego.StupidFormatter;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -322,4 +323,10 @@ public class Interpreter extends ATermBuilder {
         debugging = b;
     }
 
+    public String prettyPrint() throws FatalError {
+        StupidFormatter sf = new StupidFormatter();
+        SDefT s = context.lookupSVar("main_0_0");
+        s.prettyPrint(sf);
+        return sf.toString();
+    }
 }

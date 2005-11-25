@@ -22,4 +22,9 @@ public class Some extends Strategy {
         throw new FatalError("Unimplemented");
     }
 
+    public void prettyPrint(StupidFormatter sf) {
+        sf.append("Some(");
+        body.prettyPrint(sf);
+        sf.append(")");
+    }
 }

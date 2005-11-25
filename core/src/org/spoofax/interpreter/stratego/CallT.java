@@ -111,4 +111,15 @@ public class CallT extends Strategy {
     public String toString() {
         return "CallT(\"" + name + "\"," + svars + "," + tvars + ")";
     }
+
+    public void prettyPrint(StupidFormatter sf) {
+       sf.append("CallT(\n");
+       sf.bump(6);
+       sf.append("  \"" + name + "\"\n");
+       sf.append(", " + svars + "\n");
+       sf.append(", " + tvars + "\n");
+       sf.append(")");
+    }
+    
+    
 }

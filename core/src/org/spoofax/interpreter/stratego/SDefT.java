@@ -65,4 +65,18 @@ public class SDefT implements IConstruct {
     public void setScope(VarScope newScope) {
         this.scope = newScope;
     }
+
+    public void prettyPrint(StupidFormatter sf) {
+        sf.first("SDefT(");
+        sf.bump(6);
+        sf.line("  \"" + name + "\"");
+        sf.line(", " + svars);
+        sf.line(", " + tvars);
+        sf.append(", ");
+        sf.bump(2);
+        body.prettyPrint(sf);
+        sf.unbump(2);
+        sf.append(")");
+        sf.unbump(6);
+    }
 }

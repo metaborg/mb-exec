@@ -15,4 +15,8 @@ public class BagOf implements IConstruct {
     public boolean eval(IContext e) throws FatalError {
         throw new FatalError("Unimplemented");
     }
+
+    public void prettyPrint(StupidFormatter sf) {
+       sf.append("BAGOF");
+    }
 }

@@ -13,4 +13,5 @@ import org.spoofax.interpreter.IContext;
 public interface IConstruct {
 
     boolean eval(IContext e) throws FatalError;
+    void prettyPrint(StupidFormatter fmt);
 }

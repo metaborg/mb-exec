@@ -56,4 +56,14 @@ public class Scope extends Strategy {
         return r;
     }
 
+    public void prettyPrint(StupidFormatter sf) {
+        sf.append("Scope(\n");
+        sf.bump(6);
+        sf.append(", " + vars);
+        sf.append(", ");
+        body.prettyPrint(sf);
+        sf.append(")");
+        sf.unbump(6);
+    }
+
 }

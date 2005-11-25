@@ -18,5 +18,8 @@ public class Fail extends Strategy {
         
         return false;
     }
-
+    
+    public void prettyPrint(StupidFormatter sf) {
+        sf.append("fail");
+    }
 }

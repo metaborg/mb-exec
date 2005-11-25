@@ -41,4 +41,23 @@ public class GuardedLChoice extends Strategy {
         return thenClause.eval(env);
     }
 
+    public void prettyPrint(StupidFormatter sf) {
+        sf.first("GuardedLChoice(");
+        sf.bump(15);
+        sf.append("  ");
+        sf.bump(2);
+        cond.prettyPrint(sf);
+        sf.unbump(2);
+        sf.append(", ");
+        sf.bump(2);
+        ifClause.prettyPrint(sf);
+        sf.unbump(2);
+        sf.append(", ");
+        sf.bump(2);
+        thenClause.prettyPrint(sf);
+        sf.unbump(2);
+        sf.unbump(15);
+        sf.line(")");
+        
+    }
 }

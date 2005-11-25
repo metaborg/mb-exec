@@ -163,4 +163,8 @@ public class Build extends Strategy {
         // FIXME: Actually build annotation
         return buildTerm(env, Tools.applAt(t, 0));
     }
+
+    public void prettyPrint(StupidFormatter sf) {
+        sf.first("Build(" + term.toString() + ")");
+    }
 }

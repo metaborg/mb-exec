@@ -21,4 +21,12 @@ public class One extends Strategy {
     public boolean eval(IContext e) throws FatalError {
         throw new FatalError("Unimplemented");
     }
+
+    public void prettyPrint(StupidFormatter sf) {
+        sf.append("One(\n");
+        sf.bump(4);
+        body.prettyPrint(sf);
+        sf.append(")");
+        sf.unbump(4);
+    }
 }
