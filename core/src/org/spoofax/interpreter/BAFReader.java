@@ -79,9 +79,9 @@ public class BAFReader {
 
         debug("" + nrUniqueSymbols + " unique symbols");
         debug("" + nrUniqueTerms + " unique terms");
-        
+
         symbols = new SymEntry[nrUniqueSymbols];
-        
+
         readAllSymbols();
 
         int i = reader.readInt();
@@ -92,42 +92,44 @@ public class BAFReader {
     private void debug(int val) {
         System.out.printf("%x\n", val);
     }
-    
+
     private void debug(String s) {
         System.out.println(s);
     }
 
     private ATerm readTerm(SymEntry e) throws FatalError, IOException {
         int arity = e.arity;
-        ATerm[] inlineArgs = new ATerm[MAX_INLINE_ARITY];
-        ATerm[] args = inlineArgs;
+        ATerm[] args = new ATerm[arity];
         ATerm result;
-        
-        for(int i=0;i<arity;i++) {
+
+        for (int i = 0; i < arity; i++) {
             int val = reader.readBits(e.symWidth[i]);
             debug(val);
-            debug(""+e.topSyms[i].length);
+            debug("" + e.topSyms[i].length);
             SymEntry argSym = symbols[e.topSyms[i][val]];
-            
+
             val = reader.readBits(argSym.termWidth);
-            if(argSym.terms[val] == null) {
+            if (argSym.terms[val] == null) {
                 argSym.terms[val] = readTerm(argSym);
             }
 
+            if (argSym.terms[val] == null)
+                argSym.terms[val] = readTerm(e);
+
+            if (argSym.terms[val] == null)
+                throw new FatalError("Cannot be null");
+            
             args[i] = argSym.terms[val];
         }
 
-        if(true)
-           throw new FatalError("Unimplemented");
-        
-        switch(e.fun.getType()) {
+        switch (e.fun.getType()) {
         case ATerm.INT:
             int val = reader.readBits(HEADER_BITS);
             result = factory.makeInt(val);
             break;
         case ATerm.REAL:
             reader.flushBitsFromReader();
-            String s  = reader.readString();
+            String s = reader.readString();
             result = factory.makeReal(new Double(s));
             break;
         case ATerm.BLOB:
@@ -139,15 +141,17 @@ public class BAFReader {
             result = factory.makePlaceholder(args[0]);
             break;
         case ATerm.LIST:
-            result = ((ATermList)args[1]).append(args[0]);
+            result = ((ATermList) args[1]).append(args[0]);
             break;
-            // EMPTY_LIST
-            // ANNOTATION
+        // EMPTY_LIST
+        // ANNOTATION
         default:
-            // FunApp
-            result = null;
+            debug(e.fun + "/ " + args);
+            for (int i = 0; i < args.length; i++)
+                debug("" + args[i]);
+            result = factory.makeAppl(e.fun, args);
         }
-        
+
         return result;
     }
 
@@ -164,12 +168,19 @@ public class BAFReader {
             int v = reader.readInt();
             e.nrTerms = v;
             e.termWidth = bitWidth(v);
-            e.terms = new ATerm[v];
+            // FIXME: original code is inconsistent at this point!
+            e.terms = (v == 0) ? null : new ATerm[v];
 
-            e.nrTopSyms = new int[arity];
-            e.symWidth = new int[arity];
-            e.topSyms = new int[arity][];
+            if (arity == 0) {
+                e.nrTopSyms = null;
+                e.symWidth = null;
+                e.topSyms = null;
+            } else {
 
+                e.nrTopSyms = new int[arity];
+                e.symWidth = new int[arity];
+                e.topSyms = new int[arity][];
+            }
             for (int j = 0; j < arity; j++) {
                 v = reader.readInt();
                 e.nrTopSyms[j] = v;
@@ -202,9 +213,9 @@ public class BAFReader {
         String s = reader.readString();
         int arity = reader.readInt();
         int quoted = reader.readInt();
-        
+
         debug(s + " / " + arity + " / " + quoted);
-            
+
         return factory.makeAFun(s, arity, quoted != 0);
     }
 
@@ -215,7 +226,7 @@ public class BAFReader {
         BAFReader reader = new BAFReader(factory, file);
 
         ATerm t = reader.readBAF();
-        System.out.println("" + t);
+        System.out.println("---\n" + t);
 
     }
 }
