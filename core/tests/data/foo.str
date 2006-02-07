@@ -1,4 +1,0 @@
-module foo
-imports lib
-strategies
-	main = <debug> "Hello, World!"
