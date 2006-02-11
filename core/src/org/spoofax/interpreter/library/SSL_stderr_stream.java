@@ -24,7 +24,7 @@ public class SSL_stderr_stream extends Primitive {
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
         debug("SSL_stderr_stream");
         
-        env.setCurrent(env.makeString("stderr"));
+        env.setCurrent(env.makeTerm(SSL.CONST_STDERR));
         return true;
     }
 }

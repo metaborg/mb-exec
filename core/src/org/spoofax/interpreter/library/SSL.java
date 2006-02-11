@@ -12,6 +12,8 @@ import java.util.Map;
 
 public class SSL {
 
+    public final static int CONST_STDERR = 1;
+    
     // FIXME: Should probably have a separte runtime environment o bjec
     // Runtime data for SSL_indexedSet_create
 
@@ -62,7 +64,9 @@ public class SSL {
         registry.put("SSL_hashtable_destroy", new SSL_hashtable_destroy());
         registry.put("SSL_hashtable_remove", new SSL_hashtable_remove());
         registry.put("SSL_hashtable_keys", new SSL_hashtable_keys());
-    }
+        registry.put("SSL_fputs", new SSL_fputs());
+        registry.put("SSL_fputc", new SSL_fputc());
+     }
 
     protected static Map<String, Primitive> getRegistry() {
         if (registry == null)
