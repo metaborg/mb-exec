@@ -29,6 +29,7 @@ import org.spoofax.interpreter.stratego.Seq;
 import org.spoofax.interpreter.stratego.Some;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.stratego.StupidFormatter;
+import org.spoofax.interpreter.stratego.SDefT.FunType;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -99,7 +100,7 @@ public class Interpreter extends ATermBuilder {
 
         debug("name  : " + name);
 
-        List<String> realsvars = makeVars(svars);
+        List<FunType> realsvars = makeSVars(svars);
         List<String> realtvars = makeVars(tvars);
         
         VarScope oldScope = context.getVarScope();
@@ -176,12 +177,21 @@ public class Interpreter extends ATermBuilder {
     }
 
     private SDefT parseSDefT(ATermAppl t) throws FatalError {
+        debug("parseSDefT()");
         
         String name = Tools.stringAt(t, 0);
         ATermList svars = Tools.listAt(t, 1);
         ATermList tvars = Tools.listAt(t, 2);
 
-        debug("name  : " + name);
+        debug(" name  : " + name);
+
+        debug(" svars : " + svars);
+        List<FunType> realsvars = makeSVars(svars);
+        debug(" svars : " + realsvars);
+
+        debug(" tvars : " + tvars);
+        List<String> realtvars = makeVars(tvars);
+        debug(" tvars : " + realtvars);
         
         VarScope oldScope = context.getVarScope();
         VarScope newScope = new VarScope(oldScope);
@@ -189,15 +199,10 @@ public class Interpreter extends ATermBuilder {
         context.setVarScope(newScope);
         Strategy body = parseStrategy(Tools.applAt(t, 3));
         
-        debug("svars : " + svars);
-        List<String> realsvars = makeVars(svars);
-        debug("svars : " + realsvars);
-
-        debug("tvars : " + tvars);
-        List<String> realtvars = makeVars(tvars);
-        debug("tvars : " + realtvars);
         
         context.setVarScope(oldScope);
+        
+        debug(" +name: " + name);
         
         return new SDefT(name, realsvars, realtvars, body, newScope);
     }
@@ -206,13 +211,51 @@ public class Interpreter extends ATermBuilder {
         
         List<String> realsvars = new ArrayList<String>(svars.getChildCount());
         
-        debug("svars : " + svars);
+        debug(" vars  : " + svars);
         
         for(int j=0;j<svars.getChildCount();j++) {
             realsvars.add(Tools.stringAt(Tools.applAt(svars, j),0));
         }
         
         return realsvars;
+    }
+
+    private List<FunType> makeSVars(ATermList svars) {
+        
+        List<FunType> realsvars = new ArrayList<FunType>(svars.getChildCount());
+        
+        debug(" vars  : " + svars);
+        
+        for(int j=0;j<svars.getChildCount();j++) {
+            ATermAppl t = Tools.applAt(svars, j);
+            int sa = countStrategyArgs(Tools.applAt(t,1));
+            // FIXME: faulty assumption
+            int ta = 0; // countTermArgs(Tools.applAt(t,1));
+            String name = Tools.stringAt(t,0);
+            realsvars.add(new FunType(name, sa, ta));
+        }
+        
+        return realsvars;
+    }
+
+    private int countStrategyArgs(ATermAppl t) {
+        ATermList l = Tools.listAt(t, 0);
+        int count = 0;
+        for(int i=0;i<l.getChildCount();i++) { 
+            if(Tools.isFunType(Tools.applAt(l,i)))
+                count++;
+        }
+        return count;
+    }
+
+    private int countTermArgs(ATermAppl t) {
+        ATermList l = Tools.listAt(t, 0);
+        int count = 0;
+        for(int i=0;i<l.getChildCount();i++) { 
+            if(Tools.isConstType(Tools.applAt(l,i)))
+                count++;
+        }
+        return count;
     }
 
     private PrimT parsePrimT(ATermAppl t) throws FatalError {
@@ -226,8 +269,9 @@ public class Interpreter extends ATermBuilder {
 
     private Strategy parseCallT(ATermAppl t) throws FatalError {
         
-        debug("makeCallT()");
+        debug("parseCallT()");
         String name = Tools.stringAt(Tools.applAt(t, 0), 0);
+        
         debug(" name  : " + name);
         
         ATermList svars = Tools.listAt(t, 1);
@@ -235,8 +279,8 @@ public class Interpreter extends ATermBuilder {
         
         List<ATerm> realtvars = parseTermList(Tools.listAt(t, 2));
         
-        debug(" svars : " + realsvars);
-        debug(" tvars : " + realtvars);
+        debug(" -svars : " + realsvars);
+        debug(" -tvars : " + realtvars);
         return new CallT(name, realsvars, realtvars);
     }
 

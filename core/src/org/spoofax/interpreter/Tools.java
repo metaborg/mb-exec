@@ -199,4 +199,12 @@ public class Tools {
         return t.getInt();
     }
 
+    public static boolean isFunType(ATermAppl t) {
+        return isATermConstructor(t, "FunType");
+    }
+
+    public static boolean isConstType(ATermAppl t) {
+        return isATermConstructor(t, "ConstType");
+    }
+
 }
