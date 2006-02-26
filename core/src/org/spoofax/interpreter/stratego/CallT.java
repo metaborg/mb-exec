@@ -14,7 +14,9 @@ import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.VarScope;
+import org.spoofax.interpreter.stratego.SDefT.ArgType;
 import org.spoofax.interpreter.stratego.SDefT.FunType;
+import org.spoofax.interpreter.stratego.SDefT.SVar;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -51,7 +53,7 @@ public class CallT extends Strategy {
         debug("" + sdef);
 
         List<String> formalTVars = sdef.getTermParams();
-        List<FunType> formalSVars = sdef.getStrategyParams();
+        List<SVar> formalSVars = sdef.getStrategyParams();
 
         debug(" args : " + svars);
         debug(" svars: " + formalSVars);
@@ -74,19 +76,21 @@ public class CallT extends Strategy {
         }
 
         for (int i = 0; i < svars.size(); i++) {
-            FunType formal = formalSVars.get(i);
+            SVar formal = formalSVars.get(i);
             Strategy actual = svars.get(i);
-            List<FunType> svars = new ArrayList<FunType>(formal.svars);
-            for (int j = 0; j < formal.svars; j++) {
-                // FIXME: Not an accurate assumption
-                svars.add(new FunType(makeTempName(), 0, 0));
+
+            throw new FatalError("Unhandled");
+            
+            List<ArgType> stratArgs = new ArrayList<ArgType>(formal.type.getSVarCount());
+            for (int j = 0; j < formal.type.getSVarCount(); j++) {
+                stratArgs.add(new FunType(makeTempName(), 0, 0));
             }
-            List<String> tvars = new ArrayList<String>(formal.tvars);
+            List<String> termArgs = new ArrayList<String>(formal.tvars);
             for (int j = 0; j < formal.tvars; j++) {
-                tvars.add(makeTempName());
+                termArgs.add(makeTempName());
             }
             // FIXME: If svars.size > 0, actual is CallT, must patch in vars  
-            SDefT def = new SDefT(makeTempName(), svars, tvars, actual, env.getVarScope());
+            SDefT def = new SDefT(makeTempName(), stratArgs, termArgs, actual, env.getVarScope());
             counter++;
             debug("  " + formal + " points to " + actual);
             newVarScope.addSVar(formal.name, def);

@@ -30,6 +30,9 @@ import org.spoofax.interpreter.stratego.Some;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.stratego.StupidFormatter;
 import org.spoofax.interpreter.stratego.SDefT.FunType;
+import org.spoofax.interpreter.stratego.SDefT.ArgType;
+import org.spoofax.interpreter.stratego.SDefT.ConstType;
+import org.spoofax.interpreter.stratego.SDefT.SVar;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -100,7 +103,7 @@ public class Interpreter extends ATermBuilder {
 
         debug("name  : " + name);
 
-        List<FunType> realsvars = makeSVars(svars);
+        List<SVar> realsvars = makeSVars(svars);
         List<String> realtvars = makeVars(tvars);
         
         VarScope oldScope = context.getVarScope();
@@ -186,7 +189,7 @@ public class Interpreter extends ATermBuilder {
         debug(" name  : " + name);
 
         debug(" svars : " + svars);
-        List<FunType> realsvars = makeSVars(svars);
+        List<SVar> realsvars = makeSVars(svars);
         debug(" svars : " + realsvars);
 
         debug(" tvars : " + tvars);
@@ -198,7 +201,6 @@ public class Interpreter extends ATermBuilder {
         
         context.setVarScope(newScope);
         Strategy body = parseStrategy(Tools.applAt(t, 3));
-        
         
         context.setVarScope(oldScope);
         
@@ -220,22 +222,35 @@ public class Interpreter extends ATermBuilder {
         return realsvars;
     }
 
-    private List<FunType> makeSVars(ATermList svars) {
+    private List<SVar> makeSVars(ATermList svars) {
+        debug("makeSVars()");
         
-        List<FunType> realsvars = new ArrayList<FunType>(svars.getChildCount());
+        List<SVar> realsvars = new ArrayList<SVar>(svars.getChildCount());
         
         debug(" vars  : " + svars);
         
         for(int j=0;j<svars.getChildCount();j++) {
             ATermAppl t = Tools.applAt(svars, j);
-            int sa = countStrategyArgs(Tools.applAt(t,1));
-            // FIXME: faulty assumption
-            int ta = 0; // countTermArgs(Tools.applAt(t,1));
+            ArgType type = parseArgType(Tools.applAt(t,1));
             String name = Tools.stringAt(t,0);
-            realsvars.add(new FunType(name, sa, ta));
+            realsvars.add(new SVar(name, type));
         }
         
+        debug("       : " + realsvars);
         return realsvars;
+    }
+
+    private ArgType parseArgType(ATermAppl t) {
+        if(Tools.isFunType(t)) {
+            ATermList l = Tools.listAt(t, 0);
+            List<ArgType> ch = new ArrayList<ArgType>();
+            for(int i=0;i<l.getChildCount();i++)
+                ch.add(parseArgType(Tools.applAt(l, i)));
+            return new FunType(ch);
+        } else if(Tools.isConstType(t)) {
+            return new ConstType();
+        }
+        return null;
     }
 
     private int countStrategyArgs(ATermAppl t) {

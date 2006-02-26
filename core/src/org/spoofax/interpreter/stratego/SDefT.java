@@ -16,7 +16,7 @@ import org.spoofax.interpreter.VarScope;
 public class SDefT implements IConstruct {
     protected String name;
 
-    protected List<FunType> svars;
+    protected List<SVar> svars;
 
     protected List<String> tvars;
 
@@ -24,19 +24,42 @@ public class SDefT implements IConstruct {
 
     protected VarScope scope;
 
-    public static class FunType {
+    public static class SVar {
         public final String name;
-        public final int svars;
-        public final int tvars;
-        public FunType(String name, int svars, int tvars) {
+        public final ArgType type;
+        public SVar(String name, ArgType type) {
             this.name = name;
-            this.svars = svars;
-            this.tvars = tvars;
+            this.type = type;
         }
     }
-    
-    public SDefT(String name, List<FunType> svars, List<String> tvars,
-            Strategy body, VarScope scope) {
+    public interface ArgType {
+    }
+
+    public static class FunType implements ArgType {
+        protected List<ArgType> args;
+
+        public FunType(List<ArgType> args) {
+            this.args = args;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof FunType))
+                return false;
+            FunType other = (FunType) obj;
+            if (args.size() != other.args.size())
+                return false;
+            for (int i = 0; i < args.size(); i++)
+                if (!args.get(i).equals(other.args.get(i)))
+                    return false;
+            return true;
+        }
+    }
+
+    public static class ConstType implements ArgType {
+    }
+
+    public SDefT(String name, List<SVar> svars, List<String> tvars, Strategy body, VarScope scope) {
         this.name = name;
         this.svars = svars;
         this.tvars = tvars;
@@ -60,7 +83,7 @@ public class SDefT implements IConstruct {
         return tvars;
     }
 
-    public List<FunType> getStrategyParams() {
+    public List<SVar> getStrategyParams() {
         return svars;
     }
 

@@ -13,7 +13,7 @@ import org.spoofax.interpreter.VarScope;
 
 public class ExtSDef extends SDefT {
 
-    public ExtSDef(String name, List<FunType> svars, List<String> tvars,
+    public ExtSDef(String name, List<SVar> svars, List<String> tvars,
             VarScope scope) {
         super(name, svars, tvars, null, scope);
     }
