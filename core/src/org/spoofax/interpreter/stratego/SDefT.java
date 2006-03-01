@@ -16,9 +16,9 @@ import org.spoofax.interpreter.VarScope;
 public class SDefT implements IConstruct {
     protected String name;
 
-    protected List<SVar> svars;
+    protected List<SVar> strategyArgs;
 
-    protected List<String> tvars;
+    protected List<String> termArgs;
 
     protected Strategy body;
 
@@ -30,6 +30,9 @@ public class SDefT implements IConstruct {
         public SVar(String name, ArgType type) {
             this.name = name;
             this.type = type;
+        }
+        public ArgType getType() {
+            return type;
         }
     }
     public interface ArgType {
@@ -54,15 +57,30 @@ public class SDefT implements IConstruct {
                     return false;
             return true;
         }
+        
+        @Override
+        public String toString() {
+            return "FunType(" + args.toString() + ")";
+        }
     }
 
     public static class ConstType implements ArgType {
+        
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof ConstType;
+        }
+        
+        @Override
+        public String toString() {
+            return "ConstType(\"a\")";
+        }
     }
 
     public SDefT(String name, List<SVar> svars, List<String> tvars, Strategy body, VarScope scope) {
         this.name = name;
-        this.svars = svars;
-        this.tvars = tvars;
+        this.strategyArgs = svars;
+        this.termArgs = tvars;
         this.body = body;
         this.scope = scope;
     }
@@ -80,11 +98,11 @@ public class SDefT implements IConstruct {
     }
 
     public List<String> getTermParams() {
-        return tvars;
+        return termArgs;
     }
 
     public List<SVar> getStrategyParams() {
-        return svars;
+        return strategyArgs;
     }
 
     public VarScope getScope() {
@@ -104,8 +122,8 @@ public class SDefT implements IConstruct {
         sf.first("SDefT(");
         sf.bump(6);
         sf.line("  \"" + name + "\"");
-        sf.line(", " + svars);
-        sf.line(", " + tvars);
+        sf.line(", " + strategyArgs);
+        sf.line(", " + termArgs);
         sf.append(", ");
         sf.bump(2);
         body.prettyPrint(sf);

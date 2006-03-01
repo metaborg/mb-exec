@@ -25,16 +25,16 @@ public class CallT extends Strategy {
 
     protected String name;
 
-    protected List<Strategy> svars;
+    protected List<Strategy> actualStrategyArgs;
 
-    protected List<ATerm> tvars;
+    protected List<ATerm> actualTermArgs;
 
     private static int counter = 0;
 
     public CallT(String name, List<Strategy> svars, List<ATerm> tvars) {
         this.name = name;
-        this.svars = svars;
-        this.tvars = tvars;
+        this.actualStrategyArgs = svars;
+        this.actualTermArgs = tvars;
     }
 
     public boolean eval(IContext env) throws FatalError {
@@ -46,41 +46,47 @@ public class CallT extends Strategy {
         if (sdef == null)
             throw new FatalError("Not found '" + name + "'");
 
-        int sd = sdef.svars.size();
-        int td = sdef.tvars.size();
+        List<String> formalTermArgs = sdef.getTermParams();
+        List<SVar> formalStrategyArgs = sdef.getStrategyParams();
 
-        debug(" call : " + name + " (" + sd + "|" + td + ") " + sdef);
+        debug(" call : " + name + " (" + formalStrategyArgs.size() + "|" + formalTermArgs.size() + ") " + sdef);
         debug("" + sdef);
 
-        List<String> formalTVars = sdef.getTermParams();
-        List<SVar> formalSVars = sdef.getStrategyParams();
+        debug(" actualStrategyArgs : " + actualStrategyArgs);
+        debug(" formalStrategyArgs : " + formalStrategyArgs);
 
-        debug(" args : " + svars);
-        debug(" svars: " + formalSVars);
+        if (actualStrategyArgs.size() != formalStrategyArgs.size())
+            throw new FatalError("Incorrect strategy arguments, expected " + formalStrategyArgs.size()
+                    + " got " + actualStrategyArgs.size());
 
-        if (svars.size() != formalSVars.size())
-            throw new FatalError("Incorrect strategy arguments, expected " + formalSVars.size()
-                    + " got " + svars.size());
-
-        if (tvars.size() != formalTVars.size())
-            throw new FatalError("Incorrect aterm arguments, expected " + formalTVars.size()
-                    + " got " + tvars.size());
+        if (actualTermArgs.size() != formalTermArgs.size())
+            throw new FatalError("Incorrect aterm arguments, expected " + formalTermArgs.size()
+                    + " got " + actualTermArgs.size());
 
         VarScope newVarScope = new VarScope(sdef.getScope());
 
-        if (formalSVars.size() != svars.size()) {
-            debug(" takes : " + formalSVars.size());
-            debug(" have  : " + svars.size());
+        for (int i = 0; i < actualStrategyArgs.size(); i++) {
+            SVar formal = formalStrategyArgs.get(i);
+            Strategy actual = actualStrategyArgs.get(i);
 
-            throw new FatalError("Parameter length mismatch when calling '" + name + "'!");
-        }
+            debug("actual : " + actual);
+/*            
+            if(!actual.getType().equals(formal.getType())) {
+                throw new FatalError("Type mismatch, have " + actual.getType() + " want " + formal.getType());
+            }
+*/            
+            SDefT target = null;
+            if(actual instanceof CallT && ((CallT)actual).getStrategyArguments().size() == 0) {
+                target = env.lookupSVar(((CallT)actual).getTargetStrategyName());
+                
+            } else {
+                List<SVar> stratArgs = new ArrayList<SVar>();
+                List<String> termArgs = new ArrayList<String>();
+                target = new SDefT(makeTempName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
+            }
 
-        for (int i = 0; i < svars.size(); i++) {
-            SVar formal = formalSVars.get(i);
-            Strategy actual = svars.get(i);
-
-            throw new FatalError("Unhandled");
-            
+            newVarScope.addSVar(formal.name, target);
+/*            
             List<ArgType> stratArgs = new ArrayList<ArgType>(formal.type.getSVarCount());
             for (int j = 0; j < formal.type.getSVarCount(); j++) {
                 stratArgs.add(new FunType(makeTempName(), 0, 0));
@@ -94,11 +100,12 @@ public class CallT extends Strategy {
             counter++;
             debug("  " + formal + " points to " + actual);
             newVarScope.addSVar(formal.name, def);
+*/  
         }
 
-        for (int i = 0; i < tvars.size(); i++) {
-            String formal = formalTVars.get(i);
-            ATerm actual = tvars.get(i);
+        for (int i = 0; i < actualTermArgs.size(); i++) {
+            String formal = formalTermArgs.get(i);
+            ATerm actual = actualTermArgs.get(i);
             // FIXME: This should not be here
             if (Tools.isVar((ATermAppl) actual))
                 actual = env.lookupVar(Tools.stringAt(actual, 0));
@@ -118,22 +125,29 @@ public class CallT extends Strategy {
         return r;
     }
 
-    private String makeTempName() {
-        return "<anon_" + counter + ">";
+    private String makeTempName(String s) {
+        return "<anon_" + s + "_" + counter + ">";
     }
 
     @Override
     public String toString() {
-        return "CallT(\"" + name + "\"," + svars + "," + tvars + ")";
+        return "CallT(\"" + name + "\"," + actualStrategyArgs + "," + actualTermArgs + ")";
     }
 
     public void prettyPrint(StupidFormatter sf) {
         sf.append("CallT(\n");
         sf.bump(6);
         sf.append("  \"" + name + "\"\n");
-        sf.append(", " + svars + "\n");
-        sf.append(", " + tvars + "\n");
+        sf.append(", " + actualStrategyArgs + "\n");
+        sf.append(", " + actualTermArgs + "\n");
         sf.append(")");
     }
 
+    public String getTargetStrategyName() {
+        return name;
+    }
+    
+    public List<Strategy> getStrategyArguments() {
+        return actualStrategyArgs;
+    }
 }

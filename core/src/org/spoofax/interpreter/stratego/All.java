@@ -7,9 +7,13 @@
  */
 package org.spoofax.interpreter.stratego;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
+import org.spoofax.interpreter.stratego.SDefT.ArgType;
 
 import aterm.AFun;
 import aterm.ATerm;
@@ -18,7 +22,7 @@ import aterm.ATermAppl;
 public class All extends Strategy {
 
     protected Strategy body;
-    
+
     public All(Strategy body) {
         this.body = body;
     }
@@ -69,5 +73,4 @@ public class All extends Strategy {
         sf.unbump(4);
         
     }
-
 }
