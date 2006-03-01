@@ -14,11 +14,16 @@ public class FatalError extends Exception {
      */
     private static final long serialVersionUID = -3622131518420023392L;
     private String error;
+    private Exception nested;
     
     public FatalError(String s) {
         this.error = s;
     }
     
+    public FatalError(Exception nested) {
+        this.nested = nested;
+    }
+
     public String toString() {
         return "FatalError: " + error;
     }
