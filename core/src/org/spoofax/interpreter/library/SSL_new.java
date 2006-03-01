@@ -23,7 +23,7 @@ public class SSL_new extends Primitive {
     private int letterA = 'a';
     
     protected SSL_new() {
-        super("SSL_new", 0, 1);
+        super("SSL_new", 0, 0);
         
         alphaCounter = 0;
         counter = 0;

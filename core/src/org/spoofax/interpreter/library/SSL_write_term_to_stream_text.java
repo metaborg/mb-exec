@@ -13,33 +13,32 @@ import java.util.List;
 
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 
 import aterm.ATerm;
 import aterm.ATermInt;
 
-public class SSL_fputc extends Primitive {
+public class SSL_write_term_to_stream_text extends Primitive {
 
-    protected SSL_fputc() {
-        super("SSL_fputc", 0, 2);
+    protected SSL_write_term_to_stream_text() {
+        super("SSL_write_term_to_stream_text", 0, 2);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
-        debug("SSL_fputc");
+        debug("SSL_write_term_to_stream_text");
         
-        if(!Tools.isATermInt(targs.get(0)))
-            return false;
-        if(!Tools.isATermInt(targs.get(1)))
+        if(targs.get(0).getType() != ATerm.INT)
             return false;
 
-        OutputStream s = SSL.outputStreamFromTerm((ATermInt)targs.get(1));
+        OutputStream ous = SSL.outputStreamFromTerm((ATermInt)targs.get(0));
+
+        ATerm t = targs.get(1);
+        
         try {
-            s.write(Tools.getATermInt((ATermInt)targs.get(0)));
-        } catch(IOException e) {
+            t.writeToTextFile(ous);
+        } catch (IOException e) {
             throw new FatalError(e);
         }
-        
         return true;
     }
 }

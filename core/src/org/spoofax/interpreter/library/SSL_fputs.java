@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter.library;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 import org.spoofax.interpreter.FatalError;
@@ -31,14 +33,12 @@ public class SSL_fputs extends Primitive {
         if(!Tools.isATermInt(targs.get(1)))
             return false;
 
-        String s = Tools.getATermString(targs.get(0));
-        int sid = Tools.getATermInt((ATermInt)targs.get(1));
-        
-        if(sid == SSL.CONST_STDERR)
-            System.err.print(s);
-        else
-            // FIXME: Handle all kinds of streams
-            throw new FatalError("Stream unknown");
+        OutputStream ous = SSL.outputStreamFromTerm((ATermInt)targs.get(1));
+        try {
+            ous.write(Tools.getATermString(targs.get(0)).getBytes());
+        } catch(IOException e) {
+            throw new FatalError(e);
+        }
         
         return true;
     }

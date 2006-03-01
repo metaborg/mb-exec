@@ -7,19 +7,35 @@
  */
 package org.spoofax.interpreter.library;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import aterm.ATermInt;
 
 public class SSL {
 
     public final static int CONST_STDERR = 1;
+    public final static int CONST_STDOUT = 2;
+    public final static int CONST_STDIN = 3;
     
     // FIXME: Should probably have a separte runtime environment o bjec
     // Runtime data for SSL_indexedSet_create
 
     private static Map<String, Primitive> registry;
 
+    private static Map<Integer, InputStream> inputStreamMap;
+    private static Map<Integer, OutputStream> outputStreamMap;
+
     private static void initRegistry() {
+        inputStreamMap = new HashMap<Integer, InputStream>();
+        inputStreamMap.put(SSL.CONST_STDIN, System.in);
+        
+        outputStreamMap = new HashMap<Integer, OutputStream>();
+        outputStreamMap.put(SSL.CONST_STDERR, System.err);
+        outputStreamMap.put(SSL.CONST_STDOUT, System.out);
+        
         registry = new HashMap<String, Primitive>();
         registry.put("SSL_is_int", new SSL_is_int());
         registry.put("SSL_addi", new SSL_addi());
@@ -66,6 +82,9 @@ public class SSL {
         registry.put("SSL_hashtable_keys", new SSL_hashtable_keys());
         registry.put("SSL_fputs", new SSL_fputs());
         registry.put("SSL_fputc", new SSL_fputc());
+        registry.put("SSL_write_term_to_stream_text", new SSL_write_term_to_stream_text());
+        registry.put("SSL_access", new SSL_access());
+        registry.put("SSL_getcwd", new SSL_getcwd());
      }
 
     protected static Map<String, Primitive> getRegistry() {
@@ -76,5 +95,13 @@ public class SSL {
 
     public static Primitive lookup(String s) {
         return getRegistry().get(s);
+    }
+
+    public static InputStream inputStreamFromTerm(ATermInt idx) {
+        return inputStreamMap.get(new Integer(idx.getInt()));
+    }
+
+    public static OutputStream outputStreamFromTerm(ATermInt idx) {
+        return outputStreamMap.get(new Integer(idx.getInt()));
     }
 }
