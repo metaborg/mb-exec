@@ -14,8 +14,6 @@ import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.VarScope;
-import org.spoofax.interpreter.stratego.SDefT.ArgType;
-import org.spoofax.interpreter.stratego.SDefT.FunType;
 import org.spoofax.interpreter.stratego.SDefT.SVar;
 
 import aterm.ATerm;

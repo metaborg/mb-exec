@@ -253,26 +253,6 @@ public class Interpreter extends ATermBuilder {
         return null;
     }
 
-    private int countStrategyArgs(ATermAppl t) {
-        ATermList l = Tools.listAt(t, 0);
-        int count = 0;
-        for(int i=0;i<l.getChildCount();i++) { 
-            if(Tools.isFunType(Tools.applAt(l,i)))
-                count++;
-        }
-        return count;
-    }
-
-    private int countTermArgs(ATermAppl t) {
-        ATermList l = Tools.listAt(t, 0);
-        int count = 0;
-        for(int i=0;i<l.getChildCount();i++) { 
-            if(Tools.isConstType(Tools.applAt(l,i)))
-                count++;
-        }
-        return count;
-    }
-
     private PrimT parsePrimT(ATermAppl t) throws FatalError {
         
         String name = Tools.stringAt(t, 0);

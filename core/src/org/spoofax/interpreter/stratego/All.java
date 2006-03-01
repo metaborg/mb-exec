@@ -7,13 +7,9 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
-import org.spoofax.interpreter.stratego.SDefT.ArgType;
 
 import aterm.AFun;
 import aterm.ATerm;
