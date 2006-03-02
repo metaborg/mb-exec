@@ -52,6 +52,9 @@ public class CallT extends Strategy {
 
         debug(" actualStrategyArgs : " + actualStrategyArgs);
         debug(" formalStrategyArgs : " + formalStrategyArgs);
+        
+        debug(" actualTermArgs : " + actualTermArgs);
+        debug(" formalTermArgs : " + formalTermArgs);
 
         if (actualStrategyArgs.size() != formalStrategyArgs.size())
             throw new FatalError("Incorrect strategy arguments, expected " + formalStrategyArgs.size()
@@ -68,13 +71,11 @@ public class CallT extends Strategy {
             Strategy actual = actualStrategyArgs.get(i);
 
             debug("actual : " + actual);
-/*            
-            if(!actual.getType().equals(formal.getType())) {
-                throw new FatalError("Type mismatch, have " + actual.getType() + " want " + formal.getType());
-            }
-*/            
+
             SDefT target = null;
-            if(actual instanceof CallT && ((CallT)actual).getStrategyArguments().size() == 0) {
+            if(actual instanceof CallT && 
+                    ((CallT)actual).getStrategyArguments().size() == 0
+                    && ((CallT)actual).getTermArguments().size() == 0) {
                 target = env.lookupSVar(((CallT)actual).getTargetStrategyName());
                 
             } else {
@@ -84,21 +85,6 @@ public class CallT extends Strategy {
             }
 
             newVarScope.addSVar(formal.name, target);
-/*            
-            List<ArgType> stratArgs = new ArrayList<ArgType>(formal.type.getSVarCount());
-            for (int j = 0; j < formal.type.getSVarCount(); j++) {
-                stratArgs.add(new FunType(makeTempName(), 0, 0));
-            }
-            List<String> termArgs = new ArrayList<String>(formal.tvars);
-            for (int j = 0; j < formal.tvars; j++) {
-                termArgs.add(makeTempName());
-            }
-            // FIXME: If svars.size > 0, actual is CallT, must patch in vars  
-            SDefT def = new SDefT(makeTempName(), stratArgs, termArgs, actual, env.getVarScope());
-            counter++;
-            debug("  " + formal + " points to " + actual);
-            newVarScope.addSVar(formal.name, def);
-*/  
         }
 
         for (int i = 0; i < actualTermArgs.size(); i++) {
@@ -121,6 +107,10 @@ public class CallT extends Strategy {
         debug("<return: " + name + " (" + (r ? "ok" : "failed") + ") - " + env.current());
 
         return r;
+    }
+
+    private List<ATerm> getTermArguments() {
+        return actualTermArgs;
     }
 
     private String makeTempName(String s) {
