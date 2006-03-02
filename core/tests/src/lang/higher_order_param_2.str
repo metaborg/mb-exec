@@ -1,0 +1,17 @@
+/**
+ * Part of the Stratego Language Interpreter Test-Suite
+ *
+ *
+ * @author Karl Trygve Kalleberg <karltk@cs.uu.nl>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
+module higher_order_param_2
+imports lib
+strategies
+
+  main = l2(l1)
+
+  l1(s) = s
+  
+  l2(p : (a -> a) * a -> a) = p(!1)
