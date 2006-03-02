@@ -10,6 +10,8 @@ module higher_order_param_1
 imports lib
 strategies
 
-  main = l1(!5)
+  main = l1(l0)
 
-  l1(s) = s
+  l0 = !5
+  
+  l1(s0 : a -> a) = s0

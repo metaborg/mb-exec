@@ -12,10 +12,12 @@ strategies
 
   main = l3(l2)
 
-  l1(s) = s
+  l0 = !5
   
-  l2(p : (a -> a) * a -> a) = p(!1)
+  l1(s0 : a -> a) = s0
   
-  l3(s : ((a -> a) * a -> a) * a -> a) = s(l2)
+  l2(s1 : (a -> a) * a -> a) = s1(l0)
+  
+  l3(s2 : ((a -> a) * a -> a) * a -> a) = s2(l1)
   
   
