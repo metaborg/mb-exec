@@ -1,5 +1,5 @@
 /*
- * Created on 07.aug.2005
+g * Created on 07.aug.2005
  *
  * Copyright (c) 2004, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 

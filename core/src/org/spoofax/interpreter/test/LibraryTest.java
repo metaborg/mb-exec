@@ -45,7 +45,6 @@ public class LibraryTest extends InterpreterTest {
     public void testPOSIXFile() { interpTest("posix-file-test"); }
     public void testPOSIXProcess() { interpTest("posix-process-test"); }
     public void testTime() { interpTest("time-test"); }
-    public void testFile() { interpTest("file-test"); }
     
  *  Known not to work.
     public void testPlaceholder() {  interpTest("placeholder-test");   }
@@ -55,6 +54,7 @@ public class LibraryTest extends InterpreterTest {
 
 */
 
+    public void testFile() { interpTest("file-test", "[96,0]"); }
     public void testString() { interpTest("string-test", "[55,0]"); }
     public void testRename() { interpTest("rename-test", "[2,0]"); }
     public void testApply() { interpTest("apply-test", "[4,0]"); }
