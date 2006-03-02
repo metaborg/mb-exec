@@ -34,10 +34,8 @@ public class LibraryTest extends InterpreterTest {
     public void testTables() { interpTest("tables-test", "[50,0]"); }
     public void testSubstitution() {  interpTest("substitution-test", "[1,0]");   }
     
-    // FIXME: Known to fail one or two tests
-    
-    // public void testListBasic() { interpTest("list-basic-test" ,"[17,0]"); }
-    // public void testStringMisc() { interpTest("string-misc-test", "[14,0]"); }
+    public void testListBasic() { interpTest("list-basic-test" ,"[17,0]"); }
+    public void testStringMisc() { interpTest("string-misc-test", "[14,0]"); }
 
 /*
  *  Relies on ANSI C and/or POSIX semantics
@@ -46,25 +44,25 @@ public class LibraryTest extends InterpreterTest {
     public void testDir() { interpTest("dir-test"); }
     public void testPOSIXFile() { interpTest("posix-file-test"); }
     public void testPOSIXProcess() { interpTest("posix-process-test"); }
-*/
-
-/*
-    public void testString() { interpTest("string-test"); }
-    public void testPlaceholder() {  interpTest("placeholder-test");   }
-    public void testRename() { interpTest("rename-test"); }
-    public void testShare() { interpTest("share-test"); }
-    public void testApply() { interpTest("apply-test"); }
-
-    public void testScopedFiniteMap() { interpTest("scoped-finite-map-test"); }
-    public void testSimpleTraversal() { interpTest("simple-traversal-test"); }
-    public void testCollect() { interpTest("collect-test"); }
     public void testTime() { interpTest("time-test"); }
-    public void testParenthesize() { interpTest("parenthesize-test"); }
-    public void testParseOptions() { interpTest("parse-options-test"); }
     public void testFile() { interpTest("file-test"); }
+    
+ *  Known not to work.
+    public void testPlaceholder() {  interpTest("placeholder-test");   }
+    public void testShare() { interpTest("share-test"); }
     public void testDynamicRulesLowlevel() { interpTest("dynamic-rules-lowlevel-test"); }
     public void testDynamicRulesHighlevel() { interpTest("dynamic-rules-highlevel-test"); }
+
 */
+
+    public void testString() { interpTest("string-test", "[55,0]"); }
+    public void testRename() { interpTest("rename-test", "[2,0]"); }
+    public void testApply() { interpTest("apply-test", "[4,0]"); }
+    public void testScopedFiniteMap() { interpTest("scoped-finite-map-test", "[5,0]"); }
+    public void testSimpleTraversal() { interpTest("simple-traversal-test", "[6,0]"); }
+    public void testCollect() { interpTest("collect-test", "[11,0]"); }
+    public void testParenthesize() { interpTest("parenthesize-test", "[4,0]"); }
+    public void testParseOptions() { interpTest("parse-options-test" ,"[2,0]"); }
 
     public void interpTest(String test, String result) {
         super.interpTest(test, itp.makeTuple("[]"), itp.makeTuple(result));
