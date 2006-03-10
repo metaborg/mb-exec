@@ -7,12 +7,11 @@
  */
 package org.spoofax.interpreter.library;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.library.SSL_hashtable_create.ATermHashtable;
 import org.spoofax.interpreter.stratego.Strategy;
 
 import aterm.ATerm;
@@ -24,12 +23,17 @@ public class SSL_table_hashtable extends Primitive {
     }
     
     // FIXME: Must be per-interpreter instance, not per-JVM instance
-    protected static Map<ATerm,ATerm> map = new HashMap<ATerm,ATerm>(100, 0.80f);
+    protected static ATermHashtable map = new ATermHashtable(100, 80);
+    private int magicRef;
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
         debug("SSL_table_hashtable");
         
-        env.setCurrent(env.makeTerm(0xDEADBEEF));
+        if(magicRef == -1) {
+            magicRef = SSL.registerHashtable(map);
+        }
+        
+        env.setCurrent(env.makeTerm(magicRef));
         return true;
     }
 }
