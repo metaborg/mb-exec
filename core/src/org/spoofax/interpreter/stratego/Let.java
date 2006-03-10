@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.stratego;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.spoofax.interpreter.FatalError;
@@ -31,14 +32,22 @@ public class Let extends Strategy {
         VarScope oldScope = env.getVarScope();
         VarScope newScope = new VarScope(oldScope);
         
-        for(SDefT def : defs)
-            def.setScope(newScope);
+        List<SDefT> newDefs = new ArrayList<SDefT>(defs.size());
         
-        newScope.addSVars(defs);
+        for(SDefT def : defs) {
+            SDefT newDef = new SDefT(def.getName(), 
+                                     def.getStrategyParams(), 
+                                     def.getTermParams(),
+                                     def.getBody(),
+                                     newScope);
+            newDefs.add(newDef);
+        }
+        
+        newScope.addSVars(newDefs);
         env.setVarScope(newScope);
-        // env.getVarScope().dump(" ");
         
         boolean r = body.eval(env);
+        
         env.setVarScope(oldScope);
         
         return r;

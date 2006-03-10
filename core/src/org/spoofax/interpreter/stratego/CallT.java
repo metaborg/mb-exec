@@ -48,7 +48,6 @@ public class CallT extends Strategy {
         List<SVar> formalStrategyArgs = sdef.getStrategyParams();
 
         debug(" call : " + name + " (" + formalStrategyArgs.size() + "|" + formalTermArgs.size() + ") " + sdef);
-        debug("" + sdef);
 
         debug(" actualStrategyArgs : " + actualStrategyArgs);
         debug(" formalStrategyArgs : " + formalStrategyArgs);
@@ -70,19 +69,24 @@ public class CallT extends Strategy {
             SVar formal = formalStrategyArgs.get(i);
             Strategy actual = actualStrategyArgs.get(i);
 
-            debug("actual : " + actual);
-
             SDefT target = null;
             if(actual instanceof CallT && 
                     ((CallT)actual).getStrategyArguments().size() == 0
                     && ((CallT)actual).getTermArguments().size() == 0) {
-                target = env.lookupSVar(((CallT)actual).getTargetStrategyName());
-                
+                String n = ((CallT)actual).getTargetStrategyName();
+                target = env.lookupSVar(n);
+                if(target == null) {
+                    debug(env.getVarScope().dump(" "));
+                    System.out.println(env.getVarScope());
+                    throw new FatalError("No strategy '" + n + "'");
+                }
             } else {
                 List<SVar> stratArgs = new ArrayList<SVar>();
                 List<String> termArgs = new ArrayList<String>();
                 target = new SDefT(makeTempName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
             }
+
+            debug(" " + formal.name + " := " + target);
 
             newVarScope.addSVar(formal.name, target);
         }
@@ -100,7 +104,7 @@ public class CallT extends Strategy {
         env.setVarScope(newVarScope);
 
         bump();
-        boolean r = sdef.getBody().eval(env);
+        boolean r = sdef.eval(env);
         env.setVarScope(oldVarScope);
         unbump();
 

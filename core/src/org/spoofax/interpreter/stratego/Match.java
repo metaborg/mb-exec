@@ -73,7 +73,6 @@ public class Match extends Strategy {
 
     public List<Pair<String, ATerm>> matchAppl(IContext env, ATermAppl t,
             ATermAppl p) throws FatalError {
-        debug("matching Appl");
 
         if (Tools.isAnno(p)) {
             return matchApplAnno(env, t, p);

@@ -43,10 +43,6 @@ public class Scope extends Strategy {
         
         env.setVarScope(newScope);
         
-        debug("" + env.getVarScope());
-        
-        // env.getVarScope().dump("n - ");
-        
         boolean r = body.eval(env);
         
         env.setVarScope(oldScope);

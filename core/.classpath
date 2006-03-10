@@ -6,6 +6,5 @@
 	<classpathentry kind="lib" path="ext/jjtraveler-0.4.3.jar"/>
 	<classpathentry kind="lib" path="ext/shared-objects-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/aterm-1.6.jar"/>
-	<classpathentry sourcepath="ECLIPSE_HOME/plugins/org.eclipse.jdt.source_3.1.1/src/org.junit_3.8.1/junitsrc.zip" kind="var" path="JUNIT_HOME/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

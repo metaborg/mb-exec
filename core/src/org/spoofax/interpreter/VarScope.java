@@ -90,13 +90,14 @@ public class VarScope {
         return null;
     }
 
-    public String dump(String prefix) {
-        
+    public String dump(String prefix, boolean localOnly) {
         String pre = prefix;
-        
-        if (parent != null)
+
+        if(!localOnly && parent != null)
             pre = parent.dump(prefix);
 
+        debug(pre + "=== " + this);
+        
         for (String t : vars.keySet()) {
             debug(pre + "[v] " + t + "   " + vars.get(t));
         }
@@ -107,6 +108,10 @@ public class VarScope {
             debug(pre + "<empty>");
 
         return pre + "  ";
+        
+    }
+    public String dump(String prefix) {
+        return dump(prefix, false);
     }
 
     private void debug(String s) {

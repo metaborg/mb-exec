@@ -39,6 +39,18 @@ public class ClosureTest extends LanguageTest {
                       itp.makeTerm("4"));
        }
 
+    public void testClosure14() {
+        interpTest("closure_test_14", 
+                   itp.makeTerm("1"), 
+                   itp.makeTerm("6"));
+    }
+
+    public void testClosure15() {
+        interpTest("closure_test_15", 
+                   itp.makeList(itp.makeList("[1,2,3]"), itp.makeList("[4,5,6]")), 
+                   itp.makeList(itp.makeList("[2,3,4]"), itp.makeList("[5,6,7]")));
+    }
+
     public void testClosure2() {
         interpTest("closure_test_2", itp.makeTuple("[]"), itp.makeTerm("1"));
     }

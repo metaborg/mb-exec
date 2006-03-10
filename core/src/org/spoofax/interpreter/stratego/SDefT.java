@@ -86,7 +86,8 @@ public class SDefT implements IConstruct {
     }
 
     public boolean eval(IContext e) throws FatalError {
-        throw new FatalError("Unimplemented");
+        e.getVarScope().dump("", true);
+        return body.eval(e);
     }
 
     public String getName() {
