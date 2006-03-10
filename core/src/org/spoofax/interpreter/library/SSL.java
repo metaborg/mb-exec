@@ -68,7 +68,7 @@ public class SSL {
         registry.put("SSL_real_to_string", new SSL_real_to_string());
         registry.put("SSL_real_to_string_precision", new SSL_real_to_string_precision());
         registry.put("SSL_string_to_real", new SSL_string_to_real());
-//        registry.put("SSL_table_hashtable", new SSL_table_hashtable());
+        registry.put("SSL_table_hashtable", new SSL_table_hashtable());
         registry.put("SSL_indexedSet_create", new SSL_indexedSet_create());
         registry.put("SSL_indexedSet_destroy", new SSL_indexedSet_destroy());
         registry.put("SSL_indexedSet_put", new SSL_indexedSet_put());

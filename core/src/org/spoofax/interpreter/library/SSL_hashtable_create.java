@@ -20,7 +20,7 @@ import aterm.ATermInt;
 
 public class SSL_hashtable_create extends Primitive {
 
-    protected class ATermHashtable extends HashMap<ATerm, ATerm> {
+    protected static class ATermHashtable extends HashMap<ATerm, ATerm> {
 
         private static final long serialVersionUID = -8193582031891397734L;
 

@@ -14,7 +14,7 @@ public class LibraryTest extends InterpreterTest {
     protected void setUp() throws Exception {
         super.setUp("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/library");
     }
-    
+
     public void testTuple() {  interpTest("tuple-test", "[2,0]"); }
     public void testTemplate() {  interpTest("template-test", "[1,0]"); }
     public void testReals() {  interpTest("reals-test", "[8,0]"); }
@@ -54,7 +54,7 @@ public class LibraryTest extends InterpreterTest {
 
 */
 
-    public void testFile() { interpTest("file-test", "[96,0]"); }
+    public void testFile() { interpTest("file-test", "[97,0]"); }
     public void testString() { interpTest("string-test", "[55,0]"); }
     public void testRename() { interpTest("rename-test", "[2,0]"); }
     public void testApply() { interpTest("apply-test", "[4,0]"); }
