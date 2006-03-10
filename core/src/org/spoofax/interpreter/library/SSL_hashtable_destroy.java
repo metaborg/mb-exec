@@ -30,9 +30,8 @@ public class SSL_hashtable_destroy extends Primitive {
         if (!Tools.isATermInt(targs.get(0)))
             return false;
 
-        int ref = Tools.getATermInt((ATermInt) targs.get(0));
-
-        env.setCurrent(env.makeTerm(ref));
-        return SSL_hashtable_create.hashtables.remove(ref) != null;
+        boolean res = SSL.removeHashtable(((ATermInt) targs.get(0)).getInt());
+        env.setCurrent(targs.get(0));
+        return res;
     }
 }

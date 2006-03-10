@@ -9,7 +9,6 @@ package org.spoofax.interpreter.library;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
@@ -20,10 +19,6 @@ import aterm.ATerm;
 import aterm.ATermInt;
 
 public class SSL_hashtable_create extends Primitive {
-
-    protected static Map<Integer, ATermHashtable> hashtables = new HashMap<Integer, ATermHashtable>();
-
-    protected static int counter = 0;
 
     protected class ATermHashtable extends HashMap<ATerm, ATerm> {
 
@@ -51,10 +46,8 @@ public class SSL_hashtable_create extends Primitive {
         int initialSize = Tools.getATermInt((ATermInt) targs.get(0));
         int maxLoad = Tools.getATermInt((ATermInt) targs.get(1));
 
-        ATermHashtable ath = new ATermHashtable(initialSize, maxLoad);
-        int ref = counter;
-        hashtables.put(counter++, ath);
-
+        int ref = SSL.registerHashtable(new ATermHashtable(initialSize, maxLoad));
+        
         env.setCurrent(env.makeTerm(ref));
         return true;
     }

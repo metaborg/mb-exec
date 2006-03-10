@@ -30,9 +30,7 @@ public class SSL_hashtable_get extends Primitive {
         if(!Tools.isATermInt(targs.get(0)))
             return false;
         
-        int ref = Tools.getATermInt((ATermInt)targs.get(0));
-        
-        ATermHashtable ath = SSL_hashtable_create.hashtables.get(ref);
+        ATermHashtable ath = SSL.getHashtable(Tools.getATermInt((ATermInt)targs.get(0)));
         if(ath == null)
             return false;
         

@@ -12,21 +12,24 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.spoofax.interpreter.library.SSL_hashtable_create.ATermHashtable;
+
 import aterm.ATermInt;
 
+// FIXME: This class contains global scope information
+//        but this should be per-environment, not per-library.
 public class SSL {
 
     public final static int CONST_STDERR = 1;
     public final static int CONST_STDOUT = 2;
     public final static int CONST_STDIN = 3;
-    
-    // FIXME: Should probably have a separte runtime environment o bjec
-    // Runtime data for SSL_indexedSet_create
 
-    private static Map<String, Primitive> registry;
+    // FIXME: Move these into environment
 
     private static Map<Integer, InputStream> inputStreamMap;
     private static Map<Integer, OutputStream> outputStreamMap;
+
+    private static Map<String, Primitive> registry;
 
     private static void initRegistry() {
         inputStreamMap = new HashMap<Integer, InputStream>();
@@ -65,7 +68,7 @@ public class SSL {
         registry.put("SSL_real_to_string", new SSL_real_to_string());
         registry.put("SSL_real_to_string_precision", new SSL_real_to_string_precision());
         registry.put("SSL_string_to_real", new SSL_string_to_real());
-        registry.put("SSL_table_hashtable", new SSL_table_hashtable());
+//        registry.put("SSL_table_hashtable", new SSL_table_hashtable());
         registry.put("SSL_indexedSet_create", new SSL_indexedSet_create());
         registry.put("SSL_indexedSet_destroy", new SSL_indexedSet_destroy());
         registry.put("SSL_indexedSet_put", new SSL_indexedSet_put());
@@ -103,5 +106,22 @@ public class SSL {
 
     public static OutputStream outputStreamFromTerm(ATermInt idx) {
         return outputStreamMap.get(new Integer(idx.getInt()));
+    }
+
+    protected static Map<Integer, ATermHashtable> hashtables = new HashMap<Integer, ATermHashtable>();
+    protected static int counter = 0;
+
+    public static int registerHashtable(ATermHashtable hashtable) {
+        int ref = counter;
+        SSL.hashtables.put(SSL.counter++, hashtable);
+        return ref;
+    }
+
+    public static boolean removeHashtable(int idx) {
+        return hashtables.remove(idx) != null;
+    }
+
+    public static ATermHashtable getHashtable(int idx) {
+        return hashtables.get(idx);
     }
 }
