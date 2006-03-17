@@ -24,7 +24,14 @@ public class InterpreterTest extends TestCase {
     protected void setUp(String path) throws Exception {
         super.setUp();
         basePath = path;
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!");
         itp = new Interpreter();
+    }
+    
+    @Override
+    protected void tearDown() throws Exception {
+        itp = null;
+        super.tearDown();
     }
 
     public void interpTestFail(String test, ATerm input) {
