@@ -12,7 +12,7 @@ public class LibraryTest extends InterpreterTest {
 
     @Override
     protected void setUp() throws Exception {
-        super.setUp("/home/karltk/source/oss/spoofax/spoofax/core/tests/data/library");
+        super.setUp("tests/data/library");
     }
 
     public void testTuple() {  interpTest("tuple-test", "[2,0]"); }
