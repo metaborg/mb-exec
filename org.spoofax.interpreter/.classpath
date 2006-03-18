@@ -5,6 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="ext/jjtraveler-0.4.3.jar"/>
 	<classpathentry kind="lib" path="ext/shared-objects-1.4.jar"/>
-	<classpathentry kind="lib" path="ext/aterm-1.6.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.spoofax.aterm"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
