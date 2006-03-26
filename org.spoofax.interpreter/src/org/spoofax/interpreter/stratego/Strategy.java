@@ -26,7 +26,7 @@ abstract public class Strategy implements IConstruct {
         type = new FunType(l);
     }
     
-    protected static void debug(String s) {
+    protected static void debug(Object... s) {
         Context.debug(s);
     }
     

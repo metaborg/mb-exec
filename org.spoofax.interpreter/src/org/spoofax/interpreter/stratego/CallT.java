@@ -14,6 +14,7 @@ import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.VarScope;
+import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.stratego.SDefT.SVar;
 
 import aterm.ATerm;
@@ -37,7 +38,9 @@ public class CallT extends Strategy {
 
     public boolean eval(IContext env) throws FatalError {
 
-        debug("CallT.eval() - " + env.current());
+        if (Interpreter.isDebugging()) {
+            debug("CallT.eval() - ", env.current());
+        }
 
         SDefT sdef = env.lookupSVar(name);
 
@@ -47,21 +50,31 @@ public class CallT extends Strategy {
         List<String> formalTermArgs = sdef.getTermParams();
         List<SVar> formalStrategyArgs = sdef.getStrategyParams();
 
-        debug(" call : " + name + " (" + formalStrategyArgs.size() + "|" + formalTermArgs.size() + ") " + sdef);
+        if (Interpreter.isDebugging()) {
+            debug(" call : ", name, " (", formalStrategyArgs.size(), "|", formalTermArgs.size(), ") ", sdef);
+        }
 
-        debug(" actualStrategyArgs : " + actualStrategyArgs);
-        debug(" formalStrategyArgs : " + formalStrategyArgs);
-        
-        debug(" actualTermArgs : " + actualTermArgs);
-        debug(" formalTermArgs : " + formalTermArgs);
+        if (Interpreter.isDebugging()) {
+            debug(" actualStrategyArgs : ", actualStrategyArgs);
+        }
+        if (Interpreter.isDebugging()) {
+            debug(" formalStrategyArgs : ", formalStrategyArgs);
+        }
+
+        if (Interpreter.isDebugging()) {
+            debug(" actualTermArgs : ", actualTermArgs);
+        }
+        if (Interpreter.isDebugging()) {
+            debug(" formalTermArgs : ", formalTermArgs);
+        }
 
         if (actualStrategyArgs.size() != formalStrategyArgs.size())
             throw new FatalError("Incorrect strategy arguments, expected " + formalStrategyArgs.size()
-                    + " got " + actualStrategyArgs.size());
+              + " got " + actualStrategyArgs.size());
 
         if (actualTermArgs.size() != formalTermArgs.size())
             throw new FatalError("Incorrect aterm arguments, expected " + formalTermArgs.size()
-                    + " got " + actualTermArgs.size());
+              + " got " + actualTermArgs.size());
 
         VarScope newVarScope = new VarScope(sdef.getScope());
 
@@ -70,23 +83,28 @@ public class CallT extends Strategy {
             Strategy actual = actualStrategyArgs.get(i);
 
             SDefT target = null;
-            if(actual instanceof CallT && 
-                    ((CallT)actual).getStrategyArguments().size() == 0
-                    && ((CallT)actual).getTermArguments().size() == 0) {
+            if (actual instanceof CallT &&
+              ((CallT)actual).getStrategyArguments().size() == 0
+              && ((CallT)actual).getTermArguments().size() == 0) {
                 String n = ((CallT)actual).getTargetStrategyName();
                 target = env.lookupSVar(n);
-                if(target == null) {
-                    debug(env.getVarScope().dump(" "));
+                if (target == null) {
+                    if (Interpreter.isDebugging()) {
+                        debug(env.getVarScope().dump(" "));
+                    }
                     System.out.println(env.getVarScope());
                     throw new FatalError("No strategy '" + n + "'");
                 }
-            } else {
+            }
+            else {
                 List<SVar> stratArgs = new ArrayList<SVar>();
                 List<String> termArgs = new ArrayList<String>();
                 target = new SDefT(makeTempName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
             }
 
-            debug(" " + formal.name + " := " + target);
+            if (Interpreter.isDebugging()) {
+                debug(" ", formal.name, " := ", target);
+            }
 
             newVarScope.addSVar(formal.name, target);
         }
@@ -95,7 +113,7 @@ public class CallT extends Strategy {
             String formal = formalTermArgs.get(i);
             ATerm actual = actualTermArgs.get(i);
             // FIXME: This should not be here
-            if (Tools.isVar((ATermAppl) actual))
+            if (Tools.isVar((ATermAppl)actual))
                 actual = env.lookupVar(Tools.stringAt(actual, 0));
             newVarScope.add(formal, actual);
         }
@@ -108,7 +126,9 @@ public class CallT extends Strategy {
         env.setVarScope(oldVarScope);
         unbump();
 
-        debug("<return: " + name + " (" + (r ? "ok" : "failed") + ") - " + env.current());
+        if (Interpreter.isDebugging()) {
+            debug("<return: ", name, " (", (r ? "ok" : "failed"), ") - ", env.current());
+        }
 
         return r;
     }

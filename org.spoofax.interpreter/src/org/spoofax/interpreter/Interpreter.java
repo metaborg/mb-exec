@@ -49,25 +49,38 @@ public class Interpreter extends ATermBuilder {
         factory = context.factory;
     }
     
-    public static void debug(String s) {
-     
-        if(debugging == false)
+    public static void debug(Object... strings) {
+
+        if (!debugging) {
             return;
-        
-        if(s.length() < 20000)
-            System.out.println(s);
+        }
+
+        String toPrint = "";
+        if (strings.length > 1) {
+            for (Object s : strings) {
+                toPrint += s; //pay the price
+            }
+        }
+        else {
+            toPrint = (String)strings[0];
+        }
+        if (toPrint.length() < 20000) {
+            System.out.println(toPrint);
+        }
     }
     
     public void load(String path) throws IOException, FatalError {
-        
+
         ATerm prg = context.getFactory().readFromFile(path);
         ATerm sign = Tools.applAt(Tools.listAt(prg, 0), 0);
         ATerm strats = Tools.applAt(Tools.listAt(prg, 0), 1);
-        
-        debug("" + prg);
+
+        if (Interpreter.isDebugging()) {
+            debug(prg);
+        }
 
         loadConstructors(Tools
-                .listAt(Tools.applAt(Tools.listAt(sign, 0), 0), 0));
+          .listAt(Tools.applAt(Tools.listAt(sign, 0), 0), 0));
         loadStrategies(Tools.listAt(strats, 0));
     }
 
@@ -101,14 +114,16 @@ public class Interpreter extends ATermBuilder {
         ATermList svars = Tools.listAt(t, 1);
         ATermList tvars = Tools.listAt(t, 2);
 
-        debug("name  : " + name);
+        if (Interpreter.isDebugging()) {
+            debug("name  : ", name);
+        }
 
         List<SVar> realsvars = makeSVars(svars);
         List<String> realtvars = makeVars(tvars);
-        
+
         VarScope oldScope = context.getVarScope();
         VarScope newScope = new VarScope(oldScope);
-        
+
         return new ExtSDef(name, realsvars, realtvars, newScope);
     }
 
@@ -170,9 +185,10 @@ public class Interpreter extends ATermBuilder {
         
         ATermList l = Tools.listAt(t, 0);
         List<SDefT> defs = new ArrayList<SDefT>();
-        
-        for (int i = 0; i < l.getChildCount(); i++)
+
+        for (int i = 0; i < l.getChildCount(); i++) {
             defs.add(parseSDefT(Tools.applAt(l, i)));
+        }
         
         Strategy body = parseStrategy(Tools.applAt(t, 1));
 
@@ -180,63 +196,85 @@ public class Interpreter extends ATermBuilder {
     }
 
     private SDefT parseSDefT(ATermAppl t) throws FatalError {
-        debug("parseSDefT()");
-        
+        if (Interpreter.isDebugging()) {
+            debug("parseSDefT()");
+        }
+
         String name = Tools.stringAt(t, 0);
         ATermList svars = Tools.listAt(t, 1);
         ATermList tvars = Tools.listAt(t, 2);
 
-        debug(" name  : " + name);
+        if (Interpreter.isDebugging()) {
+            debug(" name  : ", name);
+        }
 
-        debug(" svars : " + svars);
+        if (Interpreter.isDebugging()) {
+            debug(" svars : ", svars);
+        }
         List<SVar> realsvars = makeSVars(svars);
-        debug(" svars : " + realsvars);
+        if (Interpreter.isDebugging()) {
+            debug(" svars : ", realsvars);
+        }
 
-        debug(" tvars : " + tvars);
+        if (Interpreter.isDebugging()) {
+            debug(" tvars : ", tvars);
+        }
         List<String> realtvars = makeVars(tvars);
-        debug(" tvars : " + realtvars);
-        
+        if (Interpreter.isDebugging()) {
+            debug(" tvars : ", realtvars);
+        }
+
         VarScope oldScope = context.getVarScope();
         VarScope newScope = new VarScope(oldScope);
-        
+
         context.setVarScope(newScope);
         Strategy body = parseStrategy(Tools.applAt(t, 3));
-        
+
         context.setVarScope(oldScope);
-        
-        debug(" +name: " + name);
-        
+
+        if (Interpreter.isDebugging()) {
+            debug(" +name: ", name);
+        }
+
         return new SDefT(name, realsvars, realtvars, body, newScope);
     }
 
     private List<String> makeVars(ATermList svars) {
-        
+
         List<String> realsvars = new ArrayList<String>(svars.getChildCount());
-        
-        debug(" vars  : " + svars);
-        
-        for(int j=0;j<svars.getChildCount();j++) {
-            realsvars.add(Tools.stringAt(Tools.applAt(svars, j),0));
+
+        if (Interpreter.isDebugging()) {
+            debug(" vars  : ", svars);
         }
-        
+
+        for (int j = 0; j < svars.getChildCount(); j++) {
+            realsvars.add(Tools.stringAt(Tools.applAt(svars, j), 0));
+        }
+
         return realsvars;
     }
 
     private List<SVar> makeSVars(ATermList svars) {
-        debug("makeSVars()");
-        
+        if (Interpreter.isDebugging()) {
+            debug("makeSVars()");
+        }
+
         List<SVar> realsvars = new ArrayList<SVar>(svars.getChildCount());
-        
-        debug(" vars  : " + svars);
-        
-        for(int j=0;j<svars.getChildCount();j++) {
+
+        if (Interpreter.isDebugging()) {
+            debug(" vars  : ", svars);
+        }
+
+        for (int j = 0; j < svars.getChildCount(); j++) {
             ATermAppl t = Tools.applAt(svars, j);
-            ArgType type = parseArgType(Tools.applAt(t,1));
-            String name = Tools.stringAt(t,0);
+            ArgType type = parseArgType(Tools.applAt(t, 1));
+            String name = Tools.stringAt(t, 0);
             realsvars.add(new SVar(name, type));
         }
-        
-        debug("       : " + realsvars);
+
+        if (Interpreter.isDebugging()) {
+            debug("       : ", realsvars);
+        }
         return realsvars;
     }
 
@@ -244,8 +282,9 @@ public class Interpreter extends ATermBuilder {
         if(Tools.isFunType(t)) {
             ATermList l = Tools.listAt(t, 0);
             List<ArgType> ch = new ArrayList<ArgType>();
-            for(int i=0;i<l.getChildCount();i++)
+            for (int i = 0; i < l.getChildCount(); i++) {
                 ch.add(parseArgType(Tools.applAt(l, i)));
+            }
             return new FunType(ch);
         } else if(Tools.isConstType(t)) {
             return new ConstType();
@@ -263,33 +302,43 @@ public class Interpreter extends ATermBuilder {
     }
 
     private Strategy parseCallT(ATermAppl t) throws FatalError {
-        
-        debug("parseCallT()");
+
+        if (Interpreter.isDebugging()) {
+            debug("parseCallT()");
+        }
         String name = Tools.stringAt(Tools.applAt(t, 0), 0);
-        
-        debug(" name  : " + name);
-        
+
+        if (Interpreter.isDebugging()) {
+            debug(" name  : ", name);
+        }
+
         ATermList svars = Tools.listAt(t, 1);
         List<Strategy> realsvars = parseStrategyList(svars);
-        
+
         List<ATerm> realtvars = parseTermList(Tools.listAt(t, 2));
-        
-        debug(" -svars : " + realsvars);
-        debug(" -tvars : " + realtvars);
+
+        if (Interpreter.isDebugging()) {
+            debug(" -svars : ", realsvars);
+        }
+        if (Interpreter.isDebugging()) {
+            debug(" -tvars : ", realtvars);
+        }
         return new CallT(name, realsvars, realtvars);
     }
 
     private List<ATerm> parseTermList(ATermList tvars) {
         List<ATerm> v = new ArrayList<ATerm>(tvars.getChildCount());
-        for(int i=0;i<tvars.getChildCount();i++)
+        for (int i = 0; i < tvars.getChildCount(); i++) {
             v.add(Tools.termAt(tvars, i));
+        }
         return v;
     }
 
     private List<Strategy> parseStrategyList(ATermList svars) throws FatalError {
         List<Strategy> v = new ArrayList<Strategy>(svars.getChildCount());
-        for(int i=0;i<svars.getChildCount();i++)
+        for (int i = 0; i < svars.getChildCount(); i++) {
             v.add(parseStrategy(Tools.applAt(svars, i)));
+        }
         return v;
     }
 
@@ -323,9 +372,10 @@ public class Interpreter extends ATermBuilder {
      
         ATermList vars = Tools.listAt(t, 0);
         List<String> realvars = new ArrayList<String>(vars.getChildCount());
-        
-        for(int i=0;i<vars.getChildCount();i++)
+
+        for (int i = 0; i < vars.getChildCount(); i++) {
             realvars.add(Tools.stringAt(vars, i));
+        }
         
         Strategy body = parseStrategy(Tools.applAt(t, 1));
         
@@ -339,9 +389,10 @@ public class Interpreter extends ATermBuilder {
 
     public boolean invoke(String name) throws FatalError {
         SDefT def = context.lookupSVar(name);
-        
-        if(def == null)
+
+        if (def == null) {
             throw new FatalError("Definition '" + name + "' not found");
+        }
         
         return def.getBody().eval(context);
     }
@@ -360,6 +411,10 @@ public class Interpreter extends ATermBuilder {
 
     public void setDebug(boolean b) {
         debugging = b;
+    }
+
+    public static boolean isDebugging() {
+        return debugging;
     }
 
     public String prettyPrint() throws FatalError {

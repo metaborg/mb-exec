@@ -9,12 +9,13 @@ package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.Interpreter;
 
 public class Seq extends Strategy {
 
     protected Strategy s0;
-    protected Strategy s1; 
-    
+    protected Strategy s1;
+
     public Seq(Strategy s0, Strategy s1) {
         this.s0 = s0;
         this.s1 = s1;
@@ -22,8 +23,10 @@ public class Seq extends Strategy {
 
     public boolean eval(IContext env) throws FatalError {
 
-        debug("Seq.eval() - " + env.current());
-        
+        if (Interpreter.isDebugging()) {
+            debug("Seq.eval() - ", env.current());
+        }
+
         return s0.eval(env) && s1.eval(env);
     }
 

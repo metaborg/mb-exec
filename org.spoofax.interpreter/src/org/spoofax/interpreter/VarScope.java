@@ -93,22 +93,28 @@ public class VarScope {
     public String dump(String prefix, boolean localOnly) {
         String pre = prefix;
 
-        if(!localOnly && parent != null)
+        if (!localOnly && parent != null)
             pre = parent.dump(prefix);
 
-        debug(pre + "=== " + this);
-        
+        if (Interpreter.isDebugging()) {
+            debug(pre + "=== " + this);
+        }
+
         for (String t : vars.keySet()) {
-            debug(pre + "[v] " + t + "   " + vars.get(t));
+            if (Interpreter.isDebugging()) {
+                debug(pre + "[v] " + t + "   " + vars.get(t));
+            }
         }
         for (String t : svars.keySet()) {
-            debug(pre + "[s] " + t + "   " + svars.get(t));
+            if (Interpreter.isDebugging()) {
+                debug(pre + "[s] " + t + "   " + svars.get(t));
+            }
         }
         if (svars.size() == 0 && vars.size() == 0)
             debug(pre + "<empty>");
 
         return pre + "  ";
-        
+
     }
     public String dump(String prefix) {
         return dump(prefix, false);

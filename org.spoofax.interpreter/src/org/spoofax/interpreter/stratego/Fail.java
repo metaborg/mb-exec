@@ -9,16 +9,19 @@ package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.Interpreter;
 
 public class Fail extends Strategy {
 
     public boolean eval(IContext e) throws FatalError {
-        
-        debug("Fail.eval() - " + e.current());
-        
+
+        if (Interpreter.isDebugging()) {
+            debug("Fail.eval() - ", e.current());
+        }
+
         return false;
     }
-    
+
     public void prettyPrint(StupidFormatter sf) {
         sf.append("fail");
     }

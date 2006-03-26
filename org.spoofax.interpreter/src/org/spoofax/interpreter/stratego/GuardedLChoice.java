@@ -10,6 +10,7 @@ package org.spoofax.interpreter.stratego;
 import org.spoofax.interpreter.BindingInfo;
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.Interpreter;
 
 import aterm.ATerm;
 
@@ -26,18 +27,20 @@ public class GuardedLChoice extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
-        
-        debug("GuardedLChoice.eval() - " + env.current());
-        
+
+        if (Interpreter.isDebugging()) {
+            debug("GuardedLChoice.eval() - ", env.current());
+        }
+
         BindingInfo bi = env.getVarScope().saveUnboundVars();
         ATerm oldCurrent = env.current();
-        
+
         if (cond.eval(env))
             return ifClause.eval(env);
-        
+
         env.setCurrent(oldCurrent);
         env.getVarScope().restoreUnboundVars(bi);
-        
+
         return thenClause.eval(env);
     }
 

@@ -42,14 +42,20 @@ public class Context extends ATermBuilder implements IContext {
     }
 
 
-    public static void debug(String s) {
-      
-        StringBuffer b = new StringBuffer();
-        
-        for(int i=0;i<indentation;i++)
-            b.append(" "); 
-        
-        Interpreter.debug(b.toString() + s);
+    private final static char[] indent = new char[100];
+    static {
+        for (int i = 0; i < indent.length; i++) {
+            indent[i] = 'c';
+        }
+    }
+    public static void debug(Object... s) {
+
+        // A bit of a hack but saves 17% of time (according to JProfiler)...
+        if(Interpreter.isDebugging()) {
+            StringBuffer b = new StringBuffer(indentation);
+            b.append(indent, 0, indentation);
+            Interpreter.debug(b, s);
+        }
     }
 
     public boolean invoke(String name, Object object, Object object2)
@@ -84,8 +90,9 @@ public class Context extends ATermBuilder implements IContext {
                 ATerm t = s.lookup(x.first);
                 boolean eq = t.match(x.second) != null;
                 if (!eq) {
-                    debug(" no bind : " + x.first + " already bound to " + t + ", new: "
-                            + x.second);
+                    if (Interpreter.isDebugging()) {
+                        debug(" no bind : ", x.first, " already bound to ", t, ", new: ", x.second);
+                    }
                     return eq;
                 }
             } else {

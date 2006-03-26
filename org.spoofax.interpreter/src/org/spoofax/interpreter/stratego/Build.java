@@ -15,6 +15,7 @@ import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Context;
 import org.spoofax.interpreter.Tools;
+import org.spoofax.interpreter.Interpreter;
 
 import aterm.AFun;
 import aterm.ATerm;
@@ -31,19 +32,25 @@ public class Build extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
-        debug("Build.eval() - " + env.current());
+        if (Interpreter.isDebugging()) {
+            debug("Build.eval() - ", env.current());
+        }
 
-        debug(" pattern  : " + term);
+        if (Interpreter.isDebugging()) {
+            debug(" pattern  : ", term);
+        }
 
         ATerm t = buildTerm(env, term);
         if (t == null) {
-            debug(" build failed");
+            if (Interpreter.isDebugging()) {
+                debug(" build failed");
+            }
             return false;
         }
-        Context.debug(" built : " + t);
-        
+        Context.debug(" built : ", t);
+
         env.setCurrent(t);
-        
+
         return true;
     }
 
@@ -71,42 +78,54 @@ public class Build extends Strategy {
     }
 
     private ATerm buildExplode(IContext env, ATermAppl t) throws FatalError {
-        debug("buildExplode() : " + t);
+        if (Interpreter.isDebugging()) {
+            debug("buildExplode() : ", t);
+        }
 
         PureFactory factory = env.getFactory();
 
         ATermAppl ctor = Tools.applAt(t, 0);
         ATermAppl args = Tools.applAt(t, 1);
 
-        debug(" ctor : " + ctor);
-        debug(" args : " + args);
+        if (Interpreter.isDebugging()) {
+            debug(" ctor : ", ctor);
+        }
+        if (Interpreter.isDebugging()) {
+            debug(" args : ", args);
+        }
 
         ATerm actualCtor = buildTerm(env, ctor);
         ATerm actualArgs = buildTerm(env, args);
 
-        debug(" actualCtor : " + actualCtor);
-        debug(" actualArgs : " + actualArgs);
+        if (Interpreter.isDebugging()) {
+            debug(" actualCtor : ", actualCtor);
+        }
+        if (Interpreter.isDebugging()) {
+            debug(" actualArgs : ", actualArgs);
+        }
 
         if (Tools.isATermInt(actualCtor) || Tools.isATermReal(actualCtor)) {
             return actualCtor;
-        } else if (Tools.isATermString(actualCtor)) {
+        }
+        else if (Tools.isATermString(actualCtor)) {
 
             if (!Tools.isATermAppl(actualArgs))
                 return null;
 
-            String n = ((ATermAppl) actualCtor).getName();
+            String n = ((ATermAppl)actualCtor).getName();
 
             boolean quoted = false;
             if (n.length() > 1 && n.charAt(0) == '"') {
-                n = n.substring(1,n.length()-1);
+                n = n.substring(1, n.length() - 1);
                 quoted = true;
             }
             ATermList realArgs = Tools.consToList(factory,
-                                                  (ATermAppl) actualArgs);
+              (ATermAppl)actualArgs);
             AFun afun = factory.makeAFun(n, realArgs.getChildCount(), quoted);
             return factory.makeApplList(afun, realArgs);
-        } else if (Tools.isATermAppl(actualCtor)
-                && Tools.isNil((ATermAppl) actualCtor)) {
+        }
+        else if (Tools.isATermAppl(actualCtor)
+          && Tools.isNil((ATermAppl)actualCtor)) {
             return actualArgs;
         }
 
@@ -118,7 +137,7 @@ public class Build extends Strategy {
         String n = Tools.stringAt(t, 0);
         ATerm x = env.lookupVar(n);
         
-        Context.debug(" lookup : " + n + " (= " + x + ")");
+        Context.debug(" lookup : ", n, " (= ", x, ")");
         
         return x;
     }

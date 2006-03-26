@@ -10,6 +10,7 @@ package org.spoofax.interpreter.stratego;
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
+import org.spoofax.interpreter.Interpreter;
 
 import aterm.AFun;
 import aterm.ATerm;
@@ -24,20 +25,24 @@ public class All extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
-        
-        debug("All.eval() - " + env.current());
-        
-        ATerm t = env.current();
-        
-        switch(t.getType()) {
-        case ATerm.INT: return true;
-        case ATerm.REAL: return true;
-        case ATerm.APPL:
-            return evalAll(env, (ATermAppl)t);
-        default:
-            throw new FatalError("Unknown ATerm type " + t.getType());
+
+        if (Interpreter.isDebugging()) {
+            debug("All.eval() - ", env.current());
         }
-        
+
+        ATerm t = env.current();
+
+        switch (t.getType()) {
+            case ATerm.INT:
+                return true;
+            case ATerm.REAL:
+                return true;
+            case ATerm.APPL:
+                return evalAll(env, (ATermAppl)t);
+            default:
+                throw new FatalError("Unknown ATerm type " + t.getType());
+        }
+
     }
 
     private boolean evalAll(IContext env, ATermAppl t) throws FatalError {

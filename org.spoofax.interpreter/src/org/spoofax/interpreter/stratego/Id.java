@@ -9,12 +9,15 @@ package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.Interpreter;
 
 public class Id extends Strategy {
 
     public boolean eval(IContext e) throws FatalError {
 
-        debug("Id.eval() - " + e.current());
+        if (Interpreter.isDebugging()) {
+            debug("Id.eval() - ", e.current());
+        }
 
         return true;
     }

@@ -15,6 +15,7 @@ import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Pair;
 import org.spoofax.interpreter.Tools;
+import org.spoofax.interpreter.Interpreter;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -32,30 +33,44 @@ public class Match extends Strategy {
     }
 
     public boolean eval(IContext env) throws FatalError {
-        debug("Match.eval() - " + env.current());
+        if (Interpreter.isDebugging()) {
+            debug("Match.eval() - ", env.current());
+        }
 
         ATerm current = env.current();
 
-        debug(" pattern : " + pattern);
-        debug(" current : " + current);
+        if (Interpreter.isDebugging()) {
+            debug(" pattern : ", pattern);
+        }
+        if (Interpreter.isDebugging()) {
+            debug(" current : ", current);
+        }
 
         List<Pair<String, ATerm>> r = match(env, current, pattern);
 
-        debug(" to bind: " + r);
+        if (Interpreter.isDebugging()) {
+            debug(" to bind: ", r);
+        }
 
-        Context.debug(" !" + current + " ; ?" + pattern);
+        Context.debug(" !", current, " ; ?", pattern);
 
         if (r == null) {
-            debug(" failure : no match!");
+            if (Interpreter.isDebugging()) {
+                debug(" failure : no match!");
+            }
             return false;
-        } else {
+        }
+        else {
             boolean b = env.bindVars(r);
 
-            if (b)
-                debug(" success : " + r);
-            else
-                debug(" failure : no match!");
-
+            if (Interpreter.isDebugging()) {
+                if (b) {
+                    debug(" success : " + r);
+                }
+                else {
+                    debug(" failure : no match!");
+                }
+            }
             return b;
         }
     }
@@ -116,17 +131,19 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchApplAs(IContext env, ATermAppl t,
             ATermAppl p) throws FatalError {
-        
+
         List<Pair<String, ATerm>> r = match(env, t, Tools.applAt(p, 1));
-        
+
         if (r == null)
             return null;
-        
-        debug("" + p);
-        
+
+        if (Interpreter.isDebugging()) {
+            debug("", p);
+        }
+
         String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
         r.add(new Pair<String, ATerm>(varName, t));
-        
+
         return r;
     }
 
@@ -163,24 +180,33 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchInt(IContext env, ATermInt t,
             ATermAppl p) throws FatalError {
-        
-        debug("matching Int");
+
+        if (Interpreter.isDebugging()) {
+            debug("matching Int");
+        }
 
         if (Tools.isAnno(p)) {
             return matchIntAnno(env, t, p);
-        } else if (Tools.isInt(p)) {
+        }
+        else if (Tools.isInt(p)) {
             return matchIntInt(t, p);
-        } else if (Tools.isReal(p)) {
+        }
+        else if (Tools.isReal(p)) {
             return null;
-        } else if (Tools.isVar(p)) {
+        }
+        else if (Tools.isVar(p)) {
             return matchIntVar(t, p);
-        } else if (Tools.isOp(p)) {
+        }
+        else if (Tools.isOp(p)) {
             return null;
-        } else if (Tools.isExplode(p)) {
+        }
+        else if (Tools.isExplode(p)) {
             return matchAnyExplode(env, t, p);
-        } else if (Tools.isWld(p)) {
+        }
+        else if (Tools.isWld(p)) {
             return matchIntWld(p);
-        } else if (Tools.isAs(p)) {
+        }
+        else if (Tools.isAs(p)) {
             return matchIntAs(t, p);
         }
 
@@ -189,24 +215,33 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchReal(IContext env, ATermReal t,
             ATermAppl p) throws FatalError {
-        
-        debug("matching Real");
+
+        if (Interpreter.isDebugging()) {
+            debug("matching Real");
+        }
 
         if (Tools.isAnno(p)) {
             return matchRealAnno(env, t, p);
-        } else if (Tools.isInt(p)) {
+        }
+        else if (Tools.isInt(p)) {
             return null;
-        } else if (Tools.isReal(p)) {
+        }
+        else if (Tools.isReal(p)) {
             return matchRealReal(t, p);
-        } else if (Tools.isVar(p)) {
+        }
+        else if (Tools.isVar(p)) {
             return matchRealVar(t, p);
-        } else if (Tools.isOp(p)) {
+        }
+        else if (Tools.isOp(p)) {
             return null;
-        } else if (Tools.isExplode(p)) {
+        }
+        else if (Tools.isExplode(p)) {
             return matchAnyExplode(env, t, p);
-        } else if (Tools.isWld(p)) {
+        }
+        else if (Tools.isWld(p)) {
             return matchRealWld(p);
-        } else if (Tools.isAs(p)) {
+        }
+        else if (Tools.isAs(p)) {
             return matchRealAs(t, p);
         }
 

@@ -12,43 +12,50 @@ import java.util.List;
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.VarScope;
+import org.spoofax.interpreter.Interpreter;
 
 public class Scope extends Strategy {
 
     protected List<String> vars;
     protected Strategy body;
-    
+
     public Scope(List<String> vars, Strategy body) {
         this.vars = vars;
         this.body = body;
     }
 
     public boolean eval(IContext env) throws FatalError {
-        
-        debug("Scope.eval() - " + env.current());
-        
+
+        if (Interpreter.isDebugging()) {
+            debug("Scope.eval() - ", env.current());
+        }
+
         StringBuffer sb = new StringBuffer();
-        
+
         VarScope oldScope = env.getVarScope();
         VarScope newScope = new VarScope(oldScope);
 
         // oldScope.dump("o - ");
-        
-        for(String s : vars) {
+
+        for (String s : vars) {
             newScope.add(s, null);
             sb.append(s + ",");
         }
-        
-        debug(" vars : [" + sb.toString() + "]");
-        
+
+        if (Interpreter.isDebugging()) {
+            debug(" vars : [", sb, "]");
+        }
+
         env.setVarScope(newScope);
-        
+
         boolean r = body.eval(env);
-        
+
         env.setVarScope(oldScope);
-        
-        debug("<scope, dropped : [" + sb.toString() + "]");
-        
+
+        if (Interpreter.isDebugging()) {
+            debug("<scope, dropped : [", sb, "]");
+        }
+
         return r;
     }
 
