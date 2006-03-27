@@ -69,6 +69,7 @@
             </classpath>
             <formatter type="plain"/>
             <test name="org.spoofax.interpreter.test.LibraryTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.BasicLibraryTest" todir="${test.out.dir}" haltonfailure="yes"/>
             <test name="org.spoofax.interpreter.test.ClosureTest" todir="${test.out.dir}" haltonfailure="yes"/>
             <test name="org.spoofax.interpreter.test.HigherOrderParamTest" todir="${test.out.dir}" haltonfailure="yes"/>
             <test name="org.spoofax.interpreter.test.GuardTest" todir="${test.out.dir}" haltonfailure="yes"/>
@@ -79,7 +80,6 @@
             <test name="org.spoofax.interpreter.test.ArithmeticTest" todir="${test.out.dir}" haltonfailure="yes"/>
             <test name="org.spoofax.interpreter.test.CongruenceTest" todir="${test.out.dir}" haltonfailure="yes"/>
             <test name="org.spoofax.interpreter.test.OverloadingTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.BasicLibraryTest" todir="${test.out.dir}" haltonfailure="yes"/>
             <test name="org.spoofax.interpreter.test.DefinitionTest" todir="${test.out.dir}" haltonfailure="yes"/>
             <test name="org.spoofax.interpreter.test.MatchTest" todir="${test.out.dir}" haltonfailure="yes"/>
         </junit>
