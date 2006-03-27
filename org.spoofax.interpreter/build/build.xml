@@ -1,0 +1,89 @@
+<project name="aterm" default="compile" basedir=".">
+
+    <property name="compiler.debug" value="on"/>
+
+    <property name="src.dir" value="../src"/>
+    <property name="lib.dir" value="../ext"/>
+    <property name="build.dir" value=".."/>
+    <property name="classes.dir" value="${build.dir}/bin"/>
+    <property name="version" value="0.1"/>
+    <property name="jar.file" value="interpreter-${version}.jar"/>
+    <property name="test.out.dir" value="../testout"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}">
+            <include name="jjtraveler-0.4.3.jar"/>
+            <include name="shared-objects-1.4.jar"/>
+            <include name="junit-3.8.1.jar"/>
+            <include name="ant-junit-1.6.5.jar"/>
+        </fileset>
+        <!-- todo: better idea? -->
+        <pathelement location="../../org.spoofax.aterm/aterm-1.6.jar"/>
+    </path>
+
+    <target name="init">
+        <mkdir dir="${classes.dir}"/>
+    </target>
+
+    <!-- ############################ Compile ############################ -->
+    <target name="compile" depends="init">
+        <mkdir dir="${classes.dir}"/>
+        <javac
+          srcdir="${src.dir}"
+          destdir="${classes.dir}"
+          nowarn="on"
+          debug="${compiler.debug}">
+            <classpath refid="classpath"/>
+        </javac>
+
+    </target>
+
+    <!-- ############################ Jar ############################ -->
+    <target name="jar" depends="compile">
+        <jar jarfile="${build.dir}/${jar.file}"
+             basedir="${classes.dir}"/>
+    </target>
+
+    <!-- ############################ Clean ############################ -->
+    <target name="clean">
+        <delete dir="${classes.dir}"/>
+    </target>
+
+    <target name="clean.full" depends="clean">
+        <delete file="${build.dir}/${jar.file}"/>
+        <delete dir="${test.out.dir}"/>
+    </target>
+
+
+    <!-- ############################ Tests ############################ -->
+    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+        <classpath refid="classpath"/>
+    </taskdef>
+
+    <target name="run.tests" depends="jar">
+        <mkdir dir="${test.out.dir}"/>
+        <junit printsummary="yes" fork="yes" haltonfailure="no">
+            <classpath>
+                <path refid="classpath"/>
+                <pathelement location="${build.dir}/${jar.file}"/>
+            </classpath>
+            <formatter type="plain"/>
+            <test name="org.spoofax.interpreter.test.LibraryTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.ClosureTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.HigherOrderParamTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.GuardTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.ScopingTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.TermDeconstructionTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.BuildTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.TermConstructionTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.ArithmeticTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.CongruenceTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.OverloadingTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.BasicLibraryTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.DefinitionTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.MatchTest" todir="${test.out.dir}" haltonfailure="yes"/>
+        </junit>
+    </target>
+
+</project>
+
