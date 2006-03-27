@@ -30,7 +30,7 @@ public class Scope extends Strategy {
             debug("Scope.eval() - ", env.current());
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer(); //todo: debug only
 
         VarScope oldScope = env.getVarScope();
         VarScope newScope = new VarScope(oldScope);
@@ -52,7 +52,7 @@ public class Scope extends Strategy {
 
         env.setVarScope(oldScope);
 
-        if (Interpreter.isDebugging()) {
+        if (Interpreter.isDebugging()) {        //todo: move this inside setVarScope; maybe create a stack?
             debug("<scope, dropped : [", sb, "]");
         }
 

@@ -39,7 +39,7 @@ public class CallT extends Strategy {
     public boolean eval(IContext env) throws FatalError {
 
         if (Interpreter.isDebugging()) {
-            debug("CallT.eval() - ", env.current());
+            debug("CallT.eval() - ", name, " - " , env.current());
         }
 
         SDefT sdef = env.lookupSVar(name);
@@ -51,20 +51,14 @@ public class CallT extends Strategy {
         List<SVar> formalStrategyArgs = sdef.getStrategyParams();
 
         if (Interpreter.isDebugging()) {
-            debug(" call : ", name, " (", formalStrategyArgs.size(), "|", formalTermArgs.size(), ") ", sdef);
-        }
+            debug(" call : ", name, " (", formalStrategyArgs.size(), "|", formalTermArgs.size(), ") ", sdef); //todo: sdef is too much
 
-        if (Interpreter.isDebugging()) {
             debug(" actualStrategyArgs : ", actualStrategyArgs);
-        }
-        if (Interpreter.isDebugging()) {
-            debug(" formalStrategyArgs : ", formalStrategyArgs);
-        }
 
-        if (Interpreter.isDebugging()) {
+            debug(" formalStrategyArgs : ", formalStrategyArgs);
+
             debug(" actualTermArgs : ", actualTermArgs);
-        }
-        if (Interpreter.isDebugging()) {
+
             debug(" formalTermArgs : ", formalTermArgs);
         }
 
@@ -97,8 +91,8 @@ public class CallT extends Strategy {
                 }
             }
             else {
-                List<SVar> stratArgs = new ArrayList<SVar>();
-                List<String> termArgs = new ArrayList<String>();
+                List<SVar> stratArgs = new ArrayList<SVar>(0);
+                List<String> termArgs = new ArrayList<String>(0);
                 target = new SDefT(makeTempName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
             }
 

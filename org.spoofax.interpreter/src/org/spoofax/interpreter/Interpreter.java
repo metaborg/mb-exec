@@ -58,11 +58,18 @@ public class Interpreter extends ATermBuilder {
         String toPrint = "";
         if (strings.length > 1) {
             for (Object s : strings) {
-                toPrint += s; //pay the price
+                if(s.getClass().isArray()) {
+                    Object ss[] = (Object[])s;
+                    for (Object o : ss) {
+                        toPrint += o;
+                    }
+                } else {
+                    toPrint += s; //pay the price
+                }
             }
         }
         else {
-            toPrint = (String)strings[0];
+            toPrint = (strings[0]).toString();
         }
         if (toPrint.length() < 20000) {
             System.out.println(toPrint);

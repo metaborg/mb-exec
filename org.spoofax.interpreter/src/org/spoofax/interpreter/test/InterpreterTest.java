@@ -8,6 +8,7 @@
 package org.spoofax.interpreter.test;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.Interpreter;
@@ -59,8 +60,9 @@ public class InterpreterTest extends TestCase {
                 + " / " + x.getChildCount());
         System.out.println("Got   : " + y + " / " + y.getType() + " / " + y.getClass()
                            + " / " + y.getChildCount());
-        System.out.println(itp.current().match(output));
-        assertTrue(itp.current().match(output) != null);
+        final List succeeded = itp.current().match(output);
+        System.out.println(succeeded != null);
+        assertTrue(succeeded != null);
     }
 
     private boolean runInterp(String test, ATerm input) {

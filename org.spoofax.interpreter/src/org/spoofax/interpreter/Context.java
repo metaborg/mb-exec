@@ -45,7 +45,7 @@ public class Context extends ATermBuilder implements IContext {
     private final static char[] indent = new char[100];
     static {
         for (int i = 0; i < indent.length; i++) {
-            indent[i] = 'c';
+            indent[i] = ' ';
         }
     }
     public static void debug(Object... s) {

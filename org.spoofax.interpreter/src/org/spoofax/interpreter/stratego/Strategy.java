@@ -41,4 +41,10 @@ abstract public class Strategy implements IConstruct {
     public SDefT.ArgType getType() {
         return type;
     }
+
+//    public String toString() {
+//        StupidFormatter sf = new StupidFormatter();
+//        prettyPrint(sf);
+//        return sf.toString();
+//    }
 }

@@ -61,7 +61,7 @@ public class Match extends Strategy {
             return false;
         }
         else {
-            boolean b = env.bindVars(r);
+            boolean b = env.bindVars(r);   //todo: move logging inside?
 
             if (Interpreter.isDebugging()) {
                 if (b) {
@@ -76,7 +76,7 @@ public class Match extends Strategy {
     }
 
     public List<Pair<String, ATerm>> emptyList() {
-        return new ArrayList<Pair<String, ATerm>>();
+        return new ArrayList<Pair<String, ATerm>>(0);
     }
 
     public List<Pair<String, ATerm>> matchApplAnno(IContext env, ATermAppl t,
@@ -124,7 +124,7 @@ public class Match extends Strategy {
     }
 
     protected List<Pair<String, ATerm>> matchApplVar(ATermAppl t, ATermAppl p) {
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
         r.add(new Pair<String, ATerm>(Tools.stringAt(p, 0), t));
         return r;
     }
@@ -164,7 +164,7 @@ public class Match extends Strategy {
             return null;
 
         // Recursively match all arguments to term
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
         for (int i = 0; i < t.getChildCount(); i++) {
             List<Pair<String, ATerm>> m = match(env, (ATerm) t.getChildAt(i),
                                                 (ATermAppl) ctorArgs
@@ -293,7 +293,7 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchIntVar(ATermInt t, ATermAppl p) {
 
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
         r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0)).getName(),
                                       t));
         
@@ -302,7 +302,7 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchRealVar(ATermReal t, ATermAppl p) {
         
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
         r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0)).getName(),
                                       t));
         
@@ -311,7 +311,7 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchIntAs(ATermInt t, ATermAppl p) {
         
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
         String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
         
         r.add(new Pair<String, ATerm>(varName, t));
@@ -321,7 +321,7 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchRealAs(ATermReal t, ATermAppl p) {
         
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
         String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
         
         r.add(new Pair<String, ATerm>(varName, t));

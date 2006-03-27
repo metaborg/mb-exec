@@ -26,14 +26,13 @@ public class LibraryTest extends InterpreterTest {
     public void testListFilter() {  interpTest("list-filter-test", "[2,0]");   }
     public void testIntegers() { interpTest("integers-test", "[79,0]"); }
     public void testIteration() { interpTest("iteration-test", "[25,0]"); }
-    public void testUnification() { interpTest("unification-test", "[2,0]"); } 
+    public void testUnification() { interpTest("unification-test", "[2,0]"); }
     public void testStrcmp() { interpTest("strcmp-test", "[16,0]"); }
     public void testTermZip() { interpTest("term-zip-test", "[8,0]"); }
     public void testEnvTraversal() { interpTest("env-traversal-test", "[2,0]"); }
     public void testSets() { interpTest("sets-test", "[11,0]"); }
     public void testTables() { interpTest("tables-test", "[50,0]"); }
     public void testSubstitution() {  interpTest("substitution-test", "[1,0]");   }
-    
     public void testListBasic() { interpTest("list-basic-test" ,"[17,0]"); }
     public void testStringMisc() { interpTest("string-misc-test", "[14,0]"); }
 
