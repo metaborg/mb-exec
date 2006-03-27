@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.test;
 
-public class LanguageTest extends InterpreterTest {
+public abstract class AbstractLanguageTest extends AbstractInterpreterTest {
 
     @Override
     protected void setUp() throws Exception {
@@ -15,6 +15,6 @@ public class LanguageTest extends InterpreterTest {
     }
     
     public static void main(String[] args) {
-        junit.textui.TestRunner.run(LanguageTest.class);
+        junit.textui.TestRunner.run(AbstractLanguageTest.class);
     }
 }

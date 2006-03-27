@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.test;
 
-public class ScopingTest extends LanguageTest {
+public class ScopingTest extends AbstractLanguageTest {
 
     public void testScopeMatchInterrupt1() {
         interpTest("match_interrupted_by_scope_1", "2", "2");

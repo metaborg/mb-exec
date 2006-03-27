@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test;
 
 import aterm.ATerm;
 
-public class TermConstructionTest extends LanguageTest {
+public class TermConstructionTest extends AbstractLanguageTest {
 
     public void testTermConstr1() {
         interpTest("term_constr_1", itp.makeTuple("[]"), itp

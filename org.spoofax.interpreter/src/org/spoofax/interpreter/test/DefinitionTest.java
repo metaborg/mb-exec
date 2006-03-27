@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.test;
 
-public class DefinitionTest extends LanguageTest {
+public class DefinitionTest extends AbstractLanguageTest {
 
     public void testRDef1() {
         interpTest("foo_rdef_1", itp.makeTerm("1"), itp.makeTerm("2"));

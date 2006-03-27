@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.test;
 
-public class MatchTest extends LanguageTest {
+public class MatchTest extends AbstractLanguageTest {
 
     public void testMatchReal3() {
         interpTestFail("match_real_2", itp.makeTerm("2.0"));

@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.test;
 
-public class BasicLibraryTest extends LanguageTest {
+public class BasicLibraryTest extends AbstractLanguageTest {
 
     public void testCollectOm1() {
         interpTest("collect-om_1", itp.makeList(itp.makeTerm("1"), itp

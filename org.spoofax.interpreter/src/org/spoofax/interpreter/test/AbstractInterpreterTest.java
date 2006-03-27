@@ -17,7 +17,7 @@ import aterm.ATerm;
 import aterm.pure.ATermImpl;
 import junit.framework.TestCase;
 
-public class InterpreterTest extends TestCase {
+public abstract class AbstractInterpreterTest extends TestCase {
 
     protected Interpreter itp;
     protected String basePath;

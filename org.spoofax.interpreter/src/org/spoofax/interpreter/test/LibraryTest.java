@@ -8,7 +8,7 @@
 package org.spoofax.interpreter.test;
 
 
-public class LibraryTest extends InterpreterTest {
+public class LibraryTest extends AbstractInterpreterTest {
 
     @Override
     protected void setUp() throws Exception {

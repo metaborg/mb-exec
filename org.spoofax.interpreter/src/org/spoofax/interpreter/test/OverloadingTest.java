@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.test;
 
-public class OverloadingTest extends LanguageTest {
+public class OverloadingTest extends AbstractLanguageTest {
 
     public void testOverloading1() {
         interpTest("overloading_1", itp.makeTuple("[]"), itp.makeTerm("1"));

@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.test;
 
-public class CongruenceTest extends LanguageTest {
+public class CongruenceTest extends AbstractLanguageTest {
 
     public void testCongInt1() {
         interpTest("cong_int_1", "2", "2");

@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.test;
 
-public class HigherOrderParamTest extends LanguageTest {
+public class HigherOrderParamTest extends AbstractLanguageTest {
 
     public void testHigherOrderParam1() {
         interpTest("higher_order_param_1", itp.makeTuple("[]"), itp.makeTerm("5"));

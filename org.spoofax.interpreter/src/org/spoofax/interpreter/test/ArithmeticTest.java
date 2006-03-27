@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.test;
 
-public class ArithmeticTest extends LanguageTest {
+public class ArithmeticTest extends AbstractLanguageTest {
 
     public void testAddInt1() {
         interpTest("add_int_1", itp.makeTuple("[1,2]"), itp.makeTerm("3"));

@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.test;
 
-public class GuardTest extends LanguageTest {
+public class GuardTest extends AbstractLanguageTest {
 
     public void testGuarded1() {
            interpTest("guarded_1", itp.makeTuple("[]"), itp.makeTerm("1"));

@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.test;
 
-public class BuildTest extends LanguageTest {
+public class BuildTest extends AbstractLanguageTest {
 
     public void testBuildInt() {
         interpTest("build_int", "1", "5");
