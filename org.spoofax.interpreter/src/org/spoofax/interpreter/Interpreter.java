@@ -231,13 +231,12 @@ public class Interpreter extends ATermBuilder {
             debug(" tvars : ", realtvars);
         }
 
-        VarScope oldScope = context.getVarScope();
-        VarScope newScope = new VarScope(oldScope);
+        VarScope newScope = new VarScope(context.getVarScope());
 
         context.setVarScope(newScope);
         Strategy body = parseStrategy(Tools.applAt(t, 3));
 
-        context.setVarScope(oldScope);
+        context.popVarScope();
 
         if (Interpreter.isDebugging()) {
             debug(" +name: ", name);

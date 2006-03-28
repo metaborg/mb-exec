@@ -19,7 +19,7 @@ public class Fail extends Strategy {
             debug("Fail.eval() - ", e.current());
         }
 
-        return false;
+        return traceReturn(false, e.current());
     }
 
     public void prettyPrint(StupidFormatter sf) {

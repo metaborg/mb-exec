@@ -15,6 +15,7 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.VarScope;
 import org.spoofax.interpreter.Interpreter;
+import org.spoofax.interpreter.Context;
 import org.spoofax.interpreter.stratego.SDefT.SVar;
 
 import aterm.ATerm;
@@ -38,9 +39,9 @@ public class CallT extends Strategy {
 
     public boolean eval(IContext env) throws FatalError {
 
-        if (Interpreter.isDebugging()) {
-            debug("CallT.eval() - ", name, " - " , env.current());
-        }
+//        if (Interpreter.isDebugging()) {
+//            debug("CallT.eval() - ", env.current());
+//        }
 
         SDefT sdef = env.lookupSVar(name);
 
@@ -51,15 +52,7 @@ public class CallT extends Strategy {
         List<SVar> formalStrategyArgs = sdef.getStrategyParams();
 
         if (Interpreter.isDebugging()) {
-            debug(" call : ", name, " (", formalStrategyArgs.size(), "|", formalTermArgs.size(), ") ", sdef); //todo: sdef is too much
-
-            debug(" actualStrategyArgs : ", actualStrategyArgs);
-
-            debug(" formalStrategyArgs : ", formalStrategyArgs);
-
-            debug(" actualTermArgs : ", actualTermArgs);
-
-            debug(" formalTermArgs : ", formalTermArgs);
+            summaryPrint(formalStrategyArgs, formalTermArgs);
         }
 
         if (actualStrategyArgs.size() != formalStrategyArgs.size())
@@ -70,7 +63,7 @@ public class CallT extends Strategy {
             throw new FatalError("Incorrect aterm arguments, expected " + formalTermArgs.size()
               + " got " + actualTermArgs.size());
 
-        VarScope newVarScope = new VarScope(sdef.getScope());
+        VarScope newScope = new VarScope(sdef.getScope());
 
         for (int i = 0; i < actualStrategyArgs.size(); i++) {
             SVar formal = formalStrategyArgs.get(i);
@@ -96,11 +89,11 @@ public class CallT extends Strategy {
                 target = new SDefT(makeTempName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
             }
 
-            if (Interpreter.isDebugging()) {
-                debug(" ", formal.name, " := ", target);
-            }
+//            if (Interpreter.isDebugging()) {
+//                debug(" ", formal.name, " := ", target);
+//            }
 
-            newVarScope.addSVar(formal.name, target);
+            newScope.addSVar(formal.name, target);
         }
 
         for (int i = 0; i < actualTermArgs.size(); i++) {
@@ -109,22 +102,16 @@ public class CallT extends Strategy {
             // FIXME: This should not be here
             if (Tools.isVar((ATermAppl)actual))
                 actual = env.lookupVar(Tools.stringAt(actual, 0));
-            newVarScope.add(formal, actual);
+            newScope.add(formal, actual);
         }
 
         VarScope oldVarScope = env.getVarScope();
-        env.setVarScope(newVarScope);
+        env.setVarScope(newScope);
 
-        bump();
         boolean r = sdef.eval(env);
-        env.setVarScope(oldVarScope);
-        unbump();
+        env.restoreVarScope(oldVarScope);
 
-        if (Interpreter.isDebugging()) {
-            debug("<return: ", name, " (", (r ? "ok" : "failed"), ") - ", env.current());
-        }
-
-        return r;
+        return traceReturn(r, env.current());
     }
 
     private List<ATerm> getTermArguments() {
@@ -147,6 +134,31 @@ public class CallT extends Strategy {
         sf.append(", " + actualStrategyArgs + "\n");
         sf.append(", " + actualTermArgs + "\n");
         sf.append(")");
+    }
+
+    private void summaryPrint(List<SVar> formalStrategyArgs, List<String> formalTermArgs) {
+        // Print this at the same indentation with the associated scope.
+        StringBuilder sb = Context.buildIndent(Context.INDENT_STEP);
+
+        sb.append("call : ").append(name).append("( ");
+
+        for (int i = 0; i < formalStrategyArgs.size(); i++) {
+            SVar sVar = formalStrategyArgs.get(i);
+            if (i > 0) {
+                sb.append(", ");
+            }
+            sb.append(sVar.name).append(" = ").append(actualStrategyArgs.get(i));
+        }
+        sb.append(" | ");
+        for (int i = 0; i < formalTermArgs.size(); i++) {
+            String term = formalTermArgs.get(i);
+            if (i > 0) {
+                sb.append(", ");
+            }
+            sb.append(term).append(" = ").append(actualTermArgs.get(i));
+        }
+        sb.append(" ) ");
+        debug(sb); //todo: sdef is too much
     }
 
     public String getTargetStrategyName() {

@@ -32,8 +32,7 @@ public class Let extends Strategy {
             debug("Let.eval() - ", env.current());
         }
 
-        VarScope oldScope = env.getVarScope();
-        VarScope newScope = new VarScope(oldScope);
+        VarScope newScope = new VarScope(env.getVarScope());
 
         List<SDefT> newDefs = new ArrayList<SDefT>(defs.size());
 
@@ -51,7 +50,7 @@ public class Let extends Strategy {
 
         boolean r = body.eval(env);
 
-        env.setVarScope(oldScope);
+        env.popVarScope();
 
         return r;
     }

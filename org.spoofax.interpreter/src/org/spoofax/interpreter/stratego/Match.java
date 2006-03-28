@@ -10,7 +10,6 @@ package org.spoofax.interpreter.stratego;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.spoofax.interpreter.Context;
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Pair;
@@ -34,44 +33,23 @@ public class Match extends Strategy {
 
     public boolean eval(IContext env) throws FatalError {
         if (Interpreter.isDebugging()) {
-            debug("Match.eval() - ", env.current());
+            debug("Match.eval() - ", " !", env.current(), " ; ?", pattern);
         }
 
         ATerm current = env.current();
 
-        if (Interpreter.isDebugging()) {
-            debug(" pattern : ", pattern);
-        }
-        if (Interpreter.isDebugging()) {
-            debug(" current : ", current);
-        }
-
         List<Pair<String, ATerm>> r = match(env, current, pattern);
 
-        if (Interpreter.isDebugging()) {
-            debug(" to bind: ", r);
-        }
-
-        Context.debug(" !", current, " ; ?", pattern);
-
         if (r == null) {
-            if (Interpreter.isDebugging()) {
-                debug(" failure : no match!");
-            }
-            return false;
+            return traceReturn(false, env.current());
         }
         else {
             boolean b = env.bindVars(r);   //todo: move logging inside?
 
             if (Interpreter.isDebugging()) {
-                if (b) {
-                    debug(" success : " + r);
-                }
-                else {
-                    debug(" failure : no match!");
-                }
+                debug("Bindings: " + r);
             }
-            return b;
+            return traceReturn(b, env.current());
         }
     }
 

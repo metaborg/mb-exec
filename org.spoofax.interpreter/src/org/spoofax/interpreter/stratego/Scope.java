@@ -30,31 +30,15 @@ public class Scope extends Strategy {
             debug("Scope.eval() - ", env.current());
         }
 
-        StringBuffer sb = new StringBuffer(); //todo: debug only
+        VarScope newScope = new VarScope(env.getVarScope());
 
-        VarScope oldScope = env.getVarScope();
-        VarScope newScope = new VarScope(oldScope);
-
-        // oldScope.dump("o - ");
-
-        for (String s : vars) {
-            newScope.add(s, null);
-            sb.append(s + ",");
-        }
-
-        if (Interpreter.isDebugging()) {
-            debug(" vars : [", sb, "]");
-        }
+        newScope.addVars(vars);
 
         env.setVarScope(newScope);
 
         boolean r = body.eval(env);
 
-        env.setVarScope(oldScope);
-
-        if (Interpreter.isDebugging()) {        //todo: move this inside setVarScope; maybe create a stack?
-            debug("<scope, dropped : [", sb, "]");
-        }
+        env.popVarScope();
 
         return r;
     }

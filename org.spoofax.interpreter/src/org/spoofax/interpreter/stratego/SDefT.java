@@ -86,7 +86,7 @@ public class SDefT implements IConstruct {
     }
 
     public boolean eval(IContext e) throws FatalError {
-        e.getVarScope().dump("", true);
+        //e.getVarScope().dump("", true);
         return body.eval(e);
     }
 

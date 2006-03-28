@@ -37,8 +37,12 @@ public class VarScope {
         ATerm t = vars.get(name);
         
         if (t == null && parent != null)
-            return parent.lookup(name);
+            t = parent.lookup(name);
         
+        if(Interpreter.isDebugging()) {
+            Context.debug(Context.buildIndent(Context.INDENT_STEP), "lookup : ", name, " = ", t);
+        }
+
         return t;
     }
 
@@ -63,6 +67,22 @@ public class VarScope {
 
     public void add(String var, ATerm t) {
         vars.put(var, t);
+    }
+
+    public void addVars(List<String> vars) {
+        for (String var : vars) {
+            this.vars.put(var, null);
+        }
+    }
+
+    public String printVars() {
+        StringBuilder sb = new StringBuilder("vars : [");
+        for (String var : vars.keySet()) {
+            sb.append(var).
+              append(", ");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     public boolean hasVarInLocalScope(String name) {

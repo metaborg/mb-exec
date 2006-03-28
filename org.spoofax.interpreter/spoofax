@@ -1,0 +1,87 @@
+#! /bin/bash
+
+function die() {
+	echo $* > /dev/stderr
+	exit 1
+}
+
+function usage() {
+	echo "[xlet       ] $(basename $0) -x <action> <project-path> <file>"
+	echo "[interpreter] $(basename $0) -i <file>.rtree-core"
+}
+
+function run-xlet() {
+	invoke-interpreter org.spoofax.xlet.Main $@
+}
+
+function run-interpreter() {
+	invoke-interpreter org.spoofax.interpreter.Main $@
+}
+
+function invoke-interpreter() {
+	java ${VM_OPTS} -cp ../org.spoofax.aterm/bin:bin:ext/jjtraveler-0.4.3.jar:ext/shared-objects-1.4.jar \
+		-Dspoofax.lib.path=../xlet/src \
+		-Dspoofax.xlet.path=../org.spoofax.interpreter/bin/xlets \
+		$@
+}
+
+function verify-project() {
+	if [ ! -f $1/.project ] ; then
+		die "$1 does not contain a project"
+	fi
+	echo "[ Using project $(abspath $1) ]" 
+}
+
+function verify-action() {
+	if [ ! -f org.spoofax.interpreter/bin/xlets/$1.xlet ] ; then
+		die "$1 is not a known action"
+	fi
+	echo "[ Using xlet $(abspath $1) ]"
+}
+
+function abspath() {
+	pushd . > /dev/null
+	cd $(dirname $1)
+	echo $(pwd)/$(basename $1)
+	popd > /dev/null
+}
+
+
+flags=""
+file=""
+action=""
+
+for x in "$@" ; do 
+	
+	case $x in
+		-x|--xlet)
+			action="xlet"
+			;;
+		-i|--interpret)
+			action="itp"
+			;;
+		-d|--debug) 
+			flags="${flags} --debug"
+			;;
+		-*)
+			usage
+			exit 1
+			;;
+		*)
+			echo "setting file '"$x"'"
+			file="${file} $x"
+			;;
+	esac
+done	
+
+if [ "${action}" == "xlet" ] ; then
+	verify-action $2
+	verify-project $3
+	run-xlet $2 $3 $4
+elif [ "${action}" == "itp" ] ; then
+	run-interpreter ${flags} -i ${file}
+else
+	usage
+fi
+
+

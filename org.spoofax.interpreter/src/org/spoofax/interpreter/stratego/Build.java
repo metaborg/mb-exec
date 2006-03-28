@@ -13,7 +13,6 @@ package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.FatalError;
 import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.Context;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.Interpreter;
 
@@ -33,29 +32,20 @@ public class Build extends Strategy {
 
     public boolean eval(IContext env) throws FatalError {
         if (Interpreter.isDebugging()) {
-            debug("Build.eval() - ", env.current());
-        }
-
-        if (Interpreter.isDebugging()) {
-            debug(" pattern  : ", term);
+            debug("Build.eval() - ", env.current(), " -> !", term);
         }
 
         ATerm t = buildTerm(env, term);
         if (t == null) {
-            if (Interpreter.isDebugging()) {
-                debug(" build failed");
-            }
-            return false;
+            return traceReturn(false, env.current());
         }
-        Context.debug(" built : ", t);
-
         env.setCurrent(t);
 
-        return true;
+        return traceReturn(true, env.current());
     }
 
     public ATerm buildTerm(IContext env, ATermAppl t) throws FatalError {
-        
+
         PureFactory factory = env.getFactory();
 
         if (Tools.isAnno(t)) {
@@ -135,11 +125,7 @@ public class Build extends Strategy {
     private ATerm buildVar(IContext env, ATermAppl t) throws FatalError {
         
         String n = Tools.stringAt(t, 0);
-        ATerm x = env.lookupVar(n);
-        
-        Context.debug(" lookup : ", n, " (= ", x, ")");
-        
-        return x;
+        return env.lookupVar(n);
     }
 
     private ATerm buildStr(ATermAppl t) {

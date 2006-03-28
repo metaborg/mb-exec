@@ -25,10 +25,11 @@ public class Context extends ATermBuilder implements IContext {
     private Map<String, OpDecl> opdecls;
     
     protected VarScope varScope;
+    public static final int INDENT_STEP = 2;
 
     public Context() {
         super();
-        
+
         opdecls = new HashMap<String, OpDecl>();
         varScope = new VarScope(null);
     }
@@ -42,27 +43,19 @@ public class Context extends ATermBuilder implements IContext {
     }
 
 
-    private final static char[] indent = new char[100];
-    static {
-        for (int i = 0; i < indent.length; i++) {
-            indent[i] = ' ';
-        }
-    }
     public static void debug(Object... s) {
 
         // A bit of a hack but saves 17% of time (according to JProfiler)...
         if(Interpreter.isDebugging()) {
-            StringBuffer b = new StringBuffer(indentation);
-            b.append(indent, 0, indentation);
-            Interpreter.debug(b, s);
+            Interpreter.debug(buildIndent(indentation), s);
         }
     }
 
     public boolean invoke(String name, Object object, Object object2)
             throws FatalError {
-        
+
         SDefT s = lookupSVar(name);
-        
+
         return s.getBody().eval(this);
     }
 
@@ -113,6 +106,31 @@ public class Context extends ATermBuilder implements IContext {
 
     public void setVarScope(VarScope newVarScope) {
         varScope = newVarScope;
+        if (Interpreter.isDebugging()) {
+            bump();
+            debug("{ " + newVarScope.printVars());
+            bump();
+        }
+    }
+
+    public void popVarScope() {
+        VarScope current = varScope;
+        varScope = varScope.getParent();
+        if (Interpreter.isDebugging()) {
+            unbump();
+            debug("} " + current.printVars()); //todo: same vars?
+            unbump();
+        }
+    }
+
+    public void restoreVarScope(VarScope anotherVarScope) {
+        VarScope current = varScope;
+        varScope = anotherVarScope;
+        if (Interpreter.isDebugging()) {
+            unbump();
+            debug("} " + current.printVars()); //todo: same vars?
+            unbump();
+        }
     }
 
     void addOpDecl(String name, OpDecl decl) {
@@ -124,10 +142,22 @@ public class Context extends ATermBuilder implements IContext {
     }
 
     public static void bump() {
-        indentation++;
+        indentation += INDENT_STEP;
     }
     
     public static void unbump() {
-        indentation--;
+        indentation -= INDENT_STEP;
+    }
+
+    private final static char[] indent = new char[500];
+    static {
+        for (int i = 0; i < indent.length; i++) {
+            indent[i] = ' ';
+        }
+    }
+    public static StringBuilder buildIndent(final int indentation) {
+        StringBuilder b = new StringBuilder(indentation);
+        b.append(indent, 0, indentation);
+        return b;
     }
 }
