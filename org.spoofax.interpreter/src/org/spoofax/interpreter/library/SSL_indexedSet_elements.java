@@ -10,7 +10,7 @@ package org.spoofax.interpreter.library;
 import java.util.Collection;
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.SSL_indexedSet_create.ATermIndexedSet;
@@ -26,7 +26,7 @@ public class SSL_indexedSet_elements extends Primitive {
     }
 
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs)
-            throws FatalError {
+            throws InterpreterException {
         debug("SSL_indexedSet_elements");
 
         if (!Tools.isATermInt(targs.get(0)))

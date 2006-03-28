@@ -10,7 +10,7 @@ package org.spoofax.interpreter.library;
 import java.util.HashMap;
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -35,7 +35,7 @@ public class SSL_hashtable_create extends Primitive {
     }
 
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs)
-            throws FatalError {
+            throws InterpreterException {
         debug("SSL_hashtable_create");
 
         if (!Tools.isATermInt(targs.get(0)))

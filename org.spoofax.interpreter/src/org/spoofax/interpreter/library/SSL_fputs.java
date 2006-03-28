@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -25,7 +25,7 @@ public class SSL_fputs extends Primitive {
         super("SSL_fputs", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
+    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
         debug("SSL_fputs");
         
         if(!Tools.isATermString(targs.get(0)))
@@ -37,7 +37,7 @@ public class SSL_fputs extends Primitive {
         try {
             ous.write(Tools.getATermString(targs.get(0)).getBytes());
         } catch(IOException e) {
-            throw new FatalError(e);
+            throw new InterpreterException(e);
         }
         
         return true;

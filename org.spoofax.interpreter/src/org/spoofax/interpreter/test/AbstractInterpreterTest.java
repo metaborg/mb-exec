@@ -10,7 +10,7 @@ package org.spoofax.interpreter.test;
 import java.io.IOException;
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Interpreter;
 
 import aterm.ATerm;
@@ -73,7 +73,7 @@ public abstract class AbstractInterpreterTest extends TestCase {
         // System.out.println("Input : " + input);
         return itp.invoke("main_0_0");
     
-        } catch(FatalError e) {
+        } catch(InterpreterException e) {
             e.printStackTrace();
             return false;
         } catch (IOException e) {

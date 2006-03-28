@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Interpreter;
 
@@ -21,7 +21,7 @@ public class Seq extends Strategy {
         this.s1 = s1;
     }
 
-    public boolean eval(IContext env) throws FatalError {
+    public boolean eval(IContext env) throws InterpreterException {
 
         if (Interpreter.isDebugging()) {
             debug("Seq.eval() - ", env.current());

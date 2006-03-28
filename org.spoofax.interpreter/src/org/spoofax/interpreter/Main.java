@@ -27,7 +27,7 @@ public class Main {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (FatalError e) {
+        } catch (InterpreterException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -37,7 +37,7 @@ public class Main {
             itp.setCurrent(inp);
             itp.invoke("main_0_0");
             System.out.println("" + itp.current());
-        } catch (FatalError e) {
+        } catch (InterpreterException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

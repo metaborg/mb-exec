@@ -9,7 +9,7 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -22,7 +22,7 @@ public class SSL_strlen extends Primitive {
         super("SSL_strlen", 0, 1);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
+    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
         debug("SSL_strlen");
         
         if(!Tools.isATermString(targs.get(0)))

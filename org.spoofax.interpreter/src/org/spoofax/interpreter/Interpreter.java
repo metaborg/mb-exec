@@ -76,7 +76,7 @@ public class Interpreter extends ATermBuilder {
         }
     }
     
-    public void load(String path) throws IOException, FatalError {
+    public void load(String path) throws IOException, InterpreterException {
 
         ATerm prg = context.getFactory().readFromFile(path);
         ATerm sign = Tools.applAt(Tools.listAt(prg, 0), 0);
@@ -98,7 +98,7 @@ public class Interpreter extends ATermBuilder {
         }
     }
 
-    private void loadStrategies(ATermList list) throws FatalError {
+    private void loadStrategies(ATermList list) throws InterpreterException {
         for (int i = 0; i < list.getChildCount(); i++) {
             ATermAppl t = Tools.applAt(list, i);
             if(Tools.isSDefT(t)) {
@@ -109,7 +109,7 @@ public class Interpreter extends ATermBuilder {
                 context.addSVar(def.getName(), def);
                 // FIXME: Come up with a good solution for external
                 // definitions
-                throw new FatalError("Illegal ExtSDef in StrategoCore file");
+                throw new InterpreterException("Illegal ExtSDef in StrategoCore file");
             }
         }
 
@@ -134,7 +134,7 @@ public class Interpreter extends ATermBuilder {
         return new ExtSDef(name, realsvars, realtvars, newScope);
     }
 
-    private Strategy parseStrategy(ATermAppl appl) throws FatalError {
+    private Strategy parseStrategy(ATermAppl appl) throws InterpreterException {
         
         String op = appl.getName();
         
@@ -166,20 +166,20 @@ public class Interpreter extends ATermBuilder {
             return makeSome(appl);
         }
 
-        throw new FatalError("Unknown op '" + op + "'");
+        throw new InterpreterException("Unknown op '" + op + "'");
     }
 
-    private Some makeSome(ATermAppl t) throws FatalError {
+    private Some makeSome(ATermAppl t) throws InterpreterException {
         Strategy body = parseStrategy(Tools.applAt(t, 0));
         return new Some(body);
     }
 
-    private One makeOne(ATermAppl t) throws FatalError {
+    private One makeOne(ATermAppl t) throws InterpreterException {
         Strategy body = parseStrategy(Tools.applAt(t, 0));
         return new One(body);
     }
 
-    private All makeAll(ATermAppl t) throws FatalError {
+    private All makeAll(ATermAppl t) throws InterpreterException {
         Strategy body = parseStrategy(Tools.applAt(t, 0));
         return new All(body);
     }
@@ -188,7 +188,7 @@ public class Interpreter extends ATermBuilder {
         return new Fail();
     }
 
-    private Let parseLet(ATermAppl t) throws FatalError {
+    private Let parseLet(ATermAppl t) throws InterpreterException {
         
         ATermList l = Tools.listAt(t, 0);
         List<SDefT> defs = new ArrayList<SDefT>();
@@ -202,7 +202,7 @@ public class Interpreter extends ATermBuilder {
         return new Let(defs, body);
     }
 
-    private SDefT parseSDefT(ATermAppl t) throws FatalError {
+    private SDefT parseSDefT(ATermAppl t) throws InterpreterException {
         if (Interpreter.isDebugging()) {
             debug("parseSDefT()");
         }
@@ -298,7 +298,7 @@ public class Interpreter extends ATermBuilder {
         return null;
     }
 
-    private PrimT parsePrimT(ATermAppl t) throws FatalError {
+    private PrimT parsePrimT(ATermAppl t) throws InterpreterException {
         
         String name = Tools.stringAt(t, 0);
         List<Strategy> svars = parseStrategyList(Tools.listAt(t, 1));
@@ -307,7 +307,7 @@ public class Interpreter extends ATermBuilder {
         return new PrimT(name, svars, tvars);
     }
 
-    private Strategy parseCallT(ATermAppl t) throws FatalError {
+    private Strategy parseCallT(ATermAppl t) throws InterpreterException {
 
         if (Interpreter.isDebugging()) {
             debug("parseCallT()");
@@ -340,7 +340,7 @@ public class Interpreter extends ATermBuilder {
         return v;
     }
 
-    private List<Strategy> parseStrategyList(ATermList svars) throws FatalError {
+    private List<Strategy> parseStrategyList(ATermList svars) throws InterpreterException {
         List<Strategy> v = new ArrayList<Strategy>(svars.getChildCount());
         for (int i = 0; i < svars.getChildCount(); i++) {
             v.add(parseStrategy(Tools.applAt(svars, i)));
@@ -357,7 +357,7 @@ public class Interpreter extends ATermBuilder {
         return new Match(u);
     }
 
-    private GuardedLChoice parseGuardedLChoice(ATermAppl t) throws FatalError {
+    private GuardedLChoice parseGuardedLChoice(ATermAppl t) throws InterpreterException {
 
         Strategy cond = parseStrategy(Tools.applAt(t, 0));
         Strategy ifclause = parseStrategy(Tools.applAt(t, 1));
@@ -366,7 +366,7 @@ public class Interpreter extends ATermBuilder {
         return new GuardedLChoice(cond, ifclause, thenclause);
     }
 
-    private Seq parseSeq(ATermAppl t) throws FatalError {
+    private Seq parseSeq(ATermAppl t) throws InterpreterException {
         
         Strategy s0 = parseStrategy(Tools.applAt(t, 0));
         Strategy s1 = parseStrategy(Tools.applAt(t, 1));
@@ -374,7 +374,7 @@ public class Interpreter extends ATermBuilder {
         return new Seq(s0, s1);
     }
 
-    private Scope parseScope(ATermAppl t) throws FatalError {
+    private Scope parseScope(ATermAppl t) throws InterpreterException {
      
         ATermList vars = Tools.listAt(t, 0);
         List<String> realvars = new ArrayList<String>(vars.getChildCount());
@@ -393,11 +393,11 @@ public class Interpreter extends ATermBuilder {
         return new Build(u);
     }
 
-    public boolean invoke(String name) throws FatalError {
+    public boolean invoke(String name) throws InterpreterException {
         SDefT def = context.lookupSVar(name);
 
         if (def == null) {
-            throw new FatalError("Definition '" + name + "' not found");
+            throw new InterpreterException("Definition '" + name + "' not found");
         }
         
         return def.getBody().eval(context);
@@ -423,7 +423,7 @@ public class Interpreter extends ATermBuilder {
         return debugging;
     }
 
-    public String prettyPrint() throws FatalError {
+    public String prettyPrint() throws InterpreterException {
         StupidFormatter sf = new StupidFormatter();
         SDefT s = context.lookupSVar("main_0_0");
         s.prettyPrint(sf);

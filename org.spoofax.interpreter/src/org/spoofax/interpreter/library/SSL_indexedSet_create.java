@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -81,7 +81,7 @@ public class SSL_indexedSet_create extends Primitive {
         super("SSL_indexedSet_create", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
+    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
         debug("SSL_indexedSet_create");
         
         if(!Tools.isATermInt(targs.get(0)))

@@ -9,7 +9,7 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.library.SSL_hashtable_create.ATermHashtable;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -26,7 +26,7 @@ public class SSL_table_hashtable extends Primitive {
     protected static ATermHashtable map = new ATermHashtable(100, 80);
     private int magicRef;
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
+    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
         debug("SSL_table_hashtable");
         
         if(magicRef == -1) {

@@ -9,7 +9,7 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.stratego.Strategy;
 
@@ -22,7 +22,7 @@ public class SSL_addr extends Primitive {
         super("SSL_addr", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws FatalError {
+    public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException {
         debug("SSL_addr");
         
         if(tvars.get(0).getType() != ATerm.REAL)

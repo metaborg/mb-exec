@@ -9,7 +9,7 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.stratego.Strategy;
 
@@ -21,7 +21,7 @@ public class SSL_rand extends Primitive {
         super("SSL_rand", 0, 0);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws FatalError {
+    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
         debug("SSL_rand");
 
         double r = Math.random();

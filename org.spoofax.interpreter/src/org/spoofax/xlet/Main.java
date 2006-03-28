@@ -9,7 +9,7 @@ package org.spoofax.xlet;
 
 import java.io.IOException;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 
 /**
  * @author Karl Trygve Kalleberg <karltk@ii.uib.no>
@@ -18,7 +18,7 @@ import org.spoofax.interpreter.FatalError;
  */
 public class Main {
 
-	public static void main(String[] args) throws IOException, FatalError {
+	public static void main(String[] args) throws IOException, InterpreterException {
 	    if(args.length < 3) {
 	        System.err.println("Usage: <action> <project-path> <file>");
 	        System.exit(2);

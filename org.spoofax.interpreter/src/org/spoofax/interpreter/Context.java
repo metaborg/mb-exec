@@ -52,18 +52,18 @@ public class Context extends ATermBuilder implements IContext {
     }
 
     public boolean invoke(String name, Object object, Object object2)
-            throws FatalError {
+            throws InterpreterException {
 
         SDefT s = lookupSVar(name);
 
         return s.getBody().eval(this);
     }
 
-    public ATerm lookupVar(String n) throws FatalError {
+    public ATerm lookupVar(String n) throws InterpreterException {
         return varScope.lookup(n);
     }
 
-    public SDefT lookupSVar(String n) throws FatalError {
+    public SDefT lookupSVar(String n) throws InterpreterException {
         return varScope.lookupSVar(n);
     }
 

@@ -18,8 +18,8 @@ public interface IContext extends IATermBuilder {
     ATerm current();
     void setCurrent(ATerm newCurrent);
 
-    public ATerm lookupVar(String n) throws FatalError;
-    public SDefT lookupSVar(String n) throws FatalError;
+    public ATerm lookupVar(String n) throws InterpreterException;
+    public SDefT lookupSVar(String n) throws InterpreterException;
 
     TermFactory getFactory();
 

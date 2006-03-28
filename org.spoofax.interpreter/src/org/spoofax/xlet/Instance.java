@@ -9,7 +9,7 @@ package org.spoofax.xlet;
 
 import java.io.IOException;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Interpreter;
 
 public class Instance {
@@ -21,14 +21,14 @@ public class Instance {
     
     protected Interpreter itp;
     
-    public Instance(String libPath, String xletPath) throws IOException, FatalError {
+    public Instance(String libPath, String xletPath) throws IOException, InterpreterException {
         this.libPath = libPath;
         this.xletPath = xletPath;
         itp = new Interpreter();
         itp.load(libPath + "/spoofax.rtree-core");
     }
 
-    public boolean loadXlet(String name) throws FatalError {
+    public boolean loadXlet(String name) throws InterpreterException {
         itp.setCurrent(itp.makeString(name));
         return itp.invoke("xlet_load_xlet_0_0");
     }

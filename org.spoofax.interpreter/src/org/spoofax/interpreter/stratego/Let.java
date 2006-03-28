@@ -10,7 +10,7 @@ package org.spoofax.interpreter.stratego;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.VarScope;
 import org.spoofax.interpreter.Interpreter;
@@ -26,7 +26,7 @@ public class Let extends Strategy {
         this.body = body;
     }
 
-    public boolean eval(IContext env) throws FatalError {
+    public boolean eval(IContext env) throws InterpreterException {
 
         if (Interpreter.isDebugging()) {
             debug("Let.eval() - ", env.current());

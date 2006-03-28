@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.Interpreter;
@@ -24,7 +24,7 @@ public class All extends Strategy {
         this.body = body;
     }
 
-    public boolean eval(IContext env) throws FatalError {
+    public boolean eval(IContext env) throws InterpreterException {
 
         if (Interpreter.isDebugging()) {
             debug("All.eval() - ", env.current());
@@ -40,12 +40,12 @@ public class All extends Strategy {
             case ATerm.APPL:
                 return evalAll(env, (ATermAppl)t);
             default:
-                throw new FatalError("Unknown ATerm type " + t.getType());
+                throw new InterpreterException("Unknown ATerm type " + t.getType());
         }
 
     }
 
-    private boolean evalAll(IContext env, ATermAppl t) throws FatalError {
+    private boolean evalAll(IContext env, ATermAppl t) throws InterpreterException {
         
         AFun fun = t.getAFun();
         ATerm[] xt = new ATerm[t.getChildCount()];

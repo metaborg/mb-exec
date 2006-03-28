@@ -7,24 +7,29 @@
  */
 package org.spoofax.interpreter;
 
-public class FatalError extends Exception {
+public class InterpreterException extends Exception {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -3622131518420023392L;
     private String error;
     private Exception nested;
     
-    public FatalError(String s) {
+    public InterpreterException(String s) {
         this.error = s;
     }
     
-    public FatalError(Exception nested) {
+    public InterpreterException(Exception nested) {
         this.nested = nested;
     }
 
     public String toString() {
-        return "FatalError: " + error;
+        return "InterpreterException: " + error;
+    }
+    
+    public String getReason() {
+        return error;
+    }
+    
+    public Exception getNestedException() {
+        return nested;
     }
 }

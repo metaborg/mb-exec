@@ -11,7 +11,7 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.Interpreter;
@@ -30,7 +30,7 @@ public class Build extends Strategy {
         term = t;
     }
 
-    public boolean eval(IContext env) throws FatalError {
+    public boolean eval(IContext env) throws InterpreterException {
         if (Interpreter.isDebugging()) {
             debug("Build.eval() - ", env.current(), " -> !", term);
         }
@@ -44,7 +44,7 @@ public class Build extends Strategy {
         return traceReturn(true, env.current());
     }
 
-    public ATerm buildTerm(IContext env, ATermAppl t) throws FatalError {
+    public ATerm buildTerm(IContext env, ATermAppl t) throws InterpreterException {
 
         PureFactory factory = env.getFactory();
 
@@ -64,10 +64,10 @@ public class Build extends Strategy {
             return buildExplode(env, t);
         }
 
-        throw new FatalError("Unknown build constituent '" + t.getName() + "'");
+        throw new InterpreterException("Unknown build constituent '" + t.getName() + "'");
     }
 
-    private ATerm buildExplode(IContext env, ATermAppl t) throws FatalError {
+    private ATerm buildExplode(IContext env, ATermAppl t) throws InterpreterException {
         if (Interpreter.isDebugging()) {
             debug("buildExplode() : ", t);
         }
@@ -119,10 +119,10 @@ public class Build extends Strategy {
             return actualArgs;
         }
 
-        throw new FatalError("Unknown explosion combination!");
+        throw new InterpreterException("Unknown explosion combination!");
     }
 
-    private ATerm buildVar(IContext env, ATermAppl t) throws FatalError {
+    private ATerm buildVar(IContext env, ATermAppl t) throws InterpreterException {
         
         String n = Tools.stringAt(t, 0);
         return env.lookupVar(n);
@@ -147,7 +147,7 @@ public class Build extends Strategy {
     }
 
     private ATerm buildOp(IContext env, ATermAppl t, PureFactory factory)
-            throws FatalError {
+            throws InterpreterException {
         String ctr = Tools.stringAt(t, 0);
         ATermList children = (ATermList) t.getChildAt(1);
 
@@ -164,7 +164,7 @@ public class Build extends Strategy {
         return factory.makeApplList(afun, kids);
     }
 
-    private ATerm buildAnno(IContext env, ATermAppl t) throws FatalError {
+    private ATerm buildAnno(IContext env, ATermAppl t) throws InterpreterException {
         // FIXME: Actually build annotation
         return buildTerm(env, Tools.applAt(t, 0));
     }

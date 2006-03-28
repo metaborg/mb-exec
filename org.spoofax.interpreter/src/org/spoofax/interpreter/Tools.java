@@ -37,7 +37,7 @@ public class Tools {
         return (ATermInt) t.getChildAt(i);
     }
 
-    public ATerm implode(PureFactory factory, ATermAppl t) throws FatalError {
+    public ATerm implode(PureFactory factory, ATermAppl t) throws InterpreterException {
         if (t.getName().equals("Anno")) {
             return implode(factory, applAt(t, 0));
         } else if (t.getName().equals("Op")) {
@@ -60,7 +60,7 @@ public class Tools {
             return x;
         }
 
-        throw new FatalError("Unknown build constituent '" + t.getName() + "'");
+        throw new InterpreterException("Unknown build constituent '" + t.getName() + "'");
     }
 
     public static ATermList listAt(ATerm t, int i) {

@@ -10,7 +10,7 @@ package org.spoofax.interpreter.stratego;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.VarScope;
@@ -37,7 +37,7 @@ public class CallT extends Strategy {
         this.actualTermArgs = tvars;
     }
 
-    public boolean eval(IContext env) throws FatalError {
+    public boolean eval(IContext env) throws InterpreterException {
 
 //        if (Interpreter.isDebugging()) {
 //            debug("CallT.eval() - ", env.current());
@@ -46,7 +46,7 @@ public class CallT extends Strategy {
         SDefT sdef = env.lookupSVar(name);
 
         if (sdef == null)
-            throw new FatalError("Not found '" + name + "'");
+            throw new InterpreterException("Not found '" + name + "'");
 
         List<String> formalTermArgs = sdef.getTermParams();
         List<SVar> formalStrategyArgs = sdef.getStrategyParams();
@@ -56,11 +56,11 @@ public class CallT extends Strategy {
         }
 
         if (actualStrategyArgs.size() != formalStrategyArgs.size())
-            throw new FatalError("Incorrect strategy arguments, expected " + formalStrategyArgs.size()
+            throw new InterpreterException("Incorrect strategy arguments, expected " + formalStrategyArgs.size()
               + " got " + actualStrategyArgs.size());
 
         if (actualTermArgs.size() != formalTermArgs.size())
-            throw new FatalError("Incorrect aterm arguments, expected " + formalTermArgs.size()
+            throw new InterpreterException("Incorrect aterm arguments, expected " + formalTermArgs.size()
               + " got " + actualTermArgs.size());
 
         VarScope newScope = new VarScope(sdef.getScope());
@@ -80,7 +80,7 @@ public class CallT extends Strategy {
                         debug(env.getVarScope().dump(" "));
                     }
                     System.out.println(env.getVarScope());
-                    throw new FatalError("No strategy '" + n + "'");
+                    throw new InterpreterException("No strategy '" + n + "'");
                 }
             }
             else {

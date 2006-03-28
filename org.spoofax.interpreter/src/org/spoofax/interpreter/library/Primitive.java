@@ -9,7 +9,7 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -32,7 +32,7 @@ public abstract class Primitive {
     public int getArity() { return tvars; }
     public int getSArity() { return svars; }
     
-    public abstract boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws FatalError;
+    public abstract boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException;
     
     protected static void debug(String s) {
         Interpreter.debug("[ " + s + " ]");

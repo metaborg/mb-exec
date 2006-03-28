@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 
 public class Some extends Strategy {
@@ -18,8 +18,8 @@ public class Some extends Strategy {
         this.body = body;
     }
 
-    public boolean eval(IContext e) throws FatalError {
-        throw new FatalError("Unimplemented");
+    public boolean eval(IContext e) throws InterpreterException {
+        throw new InterpreterException("Unimplemented");
     }
 
     public void prettyPrint(StupidFormatter sf) {

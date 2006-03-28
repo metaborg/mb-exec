@@ -7,13 +7,13 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Interpreter;
 
 public class Fail extends Strategy {
 
-    public boolean eval(IContext e) throws FatalError {
+    public boolean eval(IContext e) throws InterpreterException {
 
         if (Interpreter.isDebugging()) {
             debug("Fail.eval() - ", e.current());

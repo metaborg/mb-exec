@@ -10,7 +10,7 @@ package org.spoofax.interpreter.stratego;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.spoofax.interpreter.FatalError;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Pair;
 import org.spoofax.interpreter.Tools;
@@ -31,7 +31,7 @@ public class Match extends Strategy {
         this.pattern = pattern;
     }
 
-    public boolean eval(IContext env) throws FatalError {
+    public boolean eval(IContext env) throws InterpreterException {
         if (Interpreter.isDebugging()) {
             debug("Match.eval() - ", " !", env.current(), " ; ?", pattern);
         }
@@ -58,14 +58,14 @@ public class Match extends Strategy {
     }
 
     public List<Pair<String, ATerm>> matchApplAnno(IContext env, ATermAppl t,
-            ATermAppl anno) throws FatalError {
+            ATermAppl anno) throws InterpreterException {
         // FIXME: Actually process anno
         ATermAppl p = Tools.applAt(anno, 0);
         return match(env, t, p);
     }
 
     public List<Pair<String, ATerm>> matchAppl(IContext env, ATermAppl t,
-            ATermAppl p) throws FatalError {
+            ATermAppl p) throws InterpreterException {
 
         if (Tools.isAnno(p)) {
             return matchApplAnno(env, t, p);
@@ -85,11 +85,11 @@ public class Match extends Strategy {
             return emptyList();
         }
 
-        throw new FatalError("Unknown Appl case '" + p + "'");
+        throw new InterpreterException("Unknown Appl case '" + p + "'");
     }
 
     protected List<Pair<String, ATerm>> matchApplInt(IContext env, ATermAppl t,
-            ATermAppl p) throws FatalError {
+            ATermAppl p) throws InterpreterException {
         if (Tools.isATermInt(t))
             return match(env, Tools.intAt(t, 0), Tools.applAt(p, 0));
         return null;
@@ -108,7 +108,7 @@ public class Match extends Strategy {
     }
 
     protected List<Pair<String, ATerm>> matchApplAs(IContext env, ATermAppl t,
-            ATermAppl p) throws FatalError {
+            ATermAppl p) throws InterpreterException {
 
         List<Pair<String, ATerm>> r = match(env, t, Tools.applAt(p, 1));
 
@@ -126,7 +126,7 @@ public class Match extends Strategy {
     }
 
     protected List<Pair<String, ATerm>> matchApplOp(IContext env, ATermAppl t,
-            ATermAppl p) throws FatalError {
+            ATermAppl p) throws InterpreterException {
 
         ATermList ctorArgs = Tools.listAt(p, 1);
 
@@ -157,7 +157,7 @@ public class Match extends Strategy {
     }
 
     protected List<Pair<String, ATerm>> matchInt(IContext env, ATermInt t,
-            ATermAppl p) throws FatalError {
+            ATermAppl p) throws InterpreterException {
 
         if (Interpreter.isDebugging()) {
             debug("matching Int");
@@ -188,11 +188,11 @@ public class Match extends Strategy {
             return matchIntAs(t, p);
         }
 
-        throw new FatalError("Unknown Int case '" + p + "'");
+        throw new InterpreterException("Unknown Int case '" + p + "'");
     }
 
     protected List<Pair<String, ATerm>> matchReal(IContext env, ATermReal t,
-            ATermAppl p) throws FatalError {
+            ATermAppl p) throws InterpreterException {
 
         if (Interpreter.isDebugging()) {
             debug("matching Real");
@@ -223,7 +223,7 @@ public class Match extends Strategy {
             return matchRealAs(t, p);
         }
 
-        throw new FatalError("Unknown Real case '" + p + "'");
+        throw new InterpreterException("Unknown Real case '" + p + "'");
     }
 
     private List<Pair<String, ATerm>> matchRealReal(ATermReal t, ATermAppl p) {
@@ -245,19 +245,19 @@ public class Match extends Strategy {
     }
 
     protected List<Pair<String, ATerm>> matchIntAnno(IContext env, ATermInt t,
-            ATermAppl p) throws FatalError {
+            ATermAppl p) throws InterpreterException {
         // FIXME: Do real match of annotations
         return match(env, t, Tools.applAt(p, 0));
     }
 
     protected List<Pair<String, ATerm>> matchRealAnno(IContext env, ATermInt t,
-            ATermAppl p) throws FatalError {
+            ATermAppl p) throws InterpreterException {
         // FIXME: Do real match of annotations
         return match(env, t, Tools.applAt(p, 0));
     }
 
     protected List<Pair<String, ATerm>> matchRealAnno(IContext env,
-            ATermReal t, ATermAppl p) throws FatalError {
+            ATermReal t, ATermAppl p) throws InterpreterException {
         return match(env, t, Tools.applAt(p, 0));
     }
 
@@ -308,7 +308,7 @@ public class Match extends Strategy {
     }
 
     protected List<Pair<String, ATerm>> matchAnyExplode(IContext env, ATerm t,
-            ATermAppl p) throws FatalError {
+            ATermAppl p) throws InterpreterException {
         
         ATermAppl opPattern = Tools.applAt(p, 0);
         ATermAppl argsPattern = Tools.applAt(p, 1);
@@ -327,7 +327,7 @@ public class Match extends Strategy {
         return opResult;
     }
 
-    private ATerm getTermArguments(IContext env, ATerm t) throws FatalError {
+    private ATerm getTermArguments(IContext env, ATerm t) throws InterpreterException {
         
         if (Tools.isATermInt(t) || Tools.isATermReal(t))
             return env.makeList(emptyATermList(env));
@@ -339,7 +339,7 @@ public class Match extends Strategy {
                 return env.makeList(a.getArguments());
         }
 
-        throw new FatalError("Unknown term '" + t + "'");
+        throw new InterpreterException("Unknown term '" + t + "'");
     }
 
     private ATermList emptyATermList(IContext env) {
@@ -349,7 +349,7 @@ public class Match extends Strategy {
         return factory.makeList();
     }
 
-    private ATerm getTermConstructor(IContext env, ATerm t) throws FatalError {
+    private ATerm getTermConstructor(IContext env, ATerm t) throws InterpreterException {
         
         if (Tools.isATermInt(t) || Tools.isATermReal(t)) {
             return t;
@@ -363,11 +363,11 @@ public class Match extends Strategy {
                 return env.makeString(((ATermAppl) t).getName());
         }
 
-        throw new FatalError("Unknown term '" + t + "'");
+        throw new InterpreterException("Unknown term '" + t + "'");
     }
 
     public List<Pair<String, ATerm>> match(IContext env, ATerm t, ATermAppl p)
-            throws FatalError {
+            throws InterpreterException {
 
         switch (t.getType()) {
         case ATerm.APPL:
@@ -377,7 +377,7 @@ public class Match extends Strategy {
         case ATerm.REAL:
             return matchReal(env, (ATermReal) t, p);
         default:
-            throw new FatalError("Unsupported term type : "
+            throw new InterpreterException("Unsupported term type : "
                     + t.getClass().toString() + " [" + t.getType() + "]");
         }
     }
