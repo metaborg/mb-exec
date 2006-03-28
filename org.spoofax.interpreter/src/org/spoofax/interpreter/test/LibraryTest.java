@@ -35,24 +35,8 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testSubstitution() {  interpTest("substitution-test", "[1,0]");   }
     public void testListBasic() { interpTest("list-basic-test" ,"[17,0]"); }
     public void testStringMisc() { interpTest("string-misc-test", "[14,0]"); }
-
-/*
- *  Relies on ANSI C and/or POSIX semantics
-    public void testPOSIXError() {  interpTest("posix-error-test");   }
-    public void testIO() { interpTest("io-test"); }
-    public void testDir() { interpTest("dir-test"); }
-    public void testPOSIXFile() { interpTest("posix-file-test"); }
-    public void testPOSIXProcess() { interpTest("posix-process-test"); }
-    public void testTime() { interpTest("time-test"); }
-    
- *  Known not to work.
-    public void testPlaceholder() {  interpTest("placeholder-test");   }
-    public void testShare() { interpTest("share-test"); }
-    public void testDynamicRulesLowlevel() { interpTest("dynamic-rules-lowlevel-test"); }
-    public void testDynamicRulesHighlevel() { interpTest("dynamic-rules-highlevel-test"); }
-
-*/
-
+    public void testDynamicRulesLowlevel() { interpTest("dynamic-rules-lowlevel-test", "[46,0]"); }
+    public void testDynamicRulesHighlevel() { interpTest("dynamic-rules-highlevel-test", "[7,0]"); }
     public void testFile() { interpTest("file-test", "[97,0]"); }
     public void testString() { interpTest("string-test", "[55,0]"); }
     public void testRename() { interpTest("rename-test", "[2,0]"); }
@@ -66,5 +50,20 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void interpTest(String test, String result) {
         super.interpTest(test, itp.makeTuple("[]"), itp.makeTuple(result));
     }
+
+    /*
+     *  Relies on ANSI C and/or POSIX semantics: Can never work
+        public void testPOSIXError() {  interpTest("posix-error-test");   }
+        public void testIO() { interpTest("io-test"); }
+        public void testDir() { interpTest("dir-test"); }
+        public void testPOSIXFile() { interpTest("posix-file-test"); }
+        public void testPOSIXProcess() { interpTest("posix-process-test"); }
+        public void testTime() { interpTest("time-test"); }
+        
+     *  Known not to work.
+        public void testPlaceholder() {  interpTest("placeholder-test");   }
+        public void testShare() { interpTest("share-test"); }
+    */
+
 }
 
