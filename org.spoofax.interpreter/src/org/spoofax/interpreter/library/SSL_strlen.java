@@ -23,11 +23,10 @@ public class SSL_strlen extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_strlen");
-        
-        if(!Tools.isATermString(targs.get(0)))
+
+        if (!Tools.isATermString(targs.get(0)))
             return false;
-        
+
         String s = Tools.getATermString(targs.get(0));
         env.setCurrent(env.getFactory().makeInt(s.length()));
         return true;

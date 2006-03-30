@@ -14,7 +14,6 @@ package org.spoofax.interpreter.stratego;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
-import org.spoofax.interpreter.Interpreter;
 
 import aterm.AFun;
 import aterm.ATerm;
@@ -31,17 +30,17 @@ public class Build extends Strategy {
     }
 
     public boolean eval(IContext env) throws InterpreterException {
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug("Build.eval() - ", env.current(), " -> !", term);
         }
 
         ATerm t = buildTerm(env, term);
         if (t == null) {
-            return traceReturn(false, env.current());
+            return DebugUtil.traceReturn(false, env.current(), this);
         }
         env.setCurrent(t);
 
-        return traceReturn(true, env.current());
+        return DebugUtil.traceReturn(true, env.current(), this);
     }
 
     public ATerm buildTerm(IContext env, ATermAppl t) throws InterpreterException {
@@ -68,7 +67,7 @@ public class Build extends Strategy {
     }
 
     private ATerm buildExplode(IContext env, ATermAppl t) throws InterpreterException {
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug("buildExplode() : ", t);
         }
 
@@ -77,20 +76,20 @@ public class Build extends Strategy {
         ATermAppl ctor = Tools.applAt(t, 0);
         ATermAppl args = Tools.applAt(t, 1);
 
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug(" ctor : ", ctor);
         }
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug(" args : ", args);
         }
 
         ATerm actualCtor = buildTerm(env, ctor);
         ATerm actualArgs = buildTerm(env, args);
 
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug(" actualCtor : ", actualCtor);
         }
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug(" actualArgs : ", actualArgs);
         }
 
@@ -99,8 +98,9 @@ public class Build extends Strategy {
         }
         else if (Tools.isATermString(actualCtor)) {
 
-            if (!Tools.isATermAppl(actualArgs))
+            if (!Tools.isATermAppl(actualArgs)) {
                 return null;
+            }
 
             String n = ((ATermAppl)actualCtor).getName();
 
@@ -156,8 +156,9 @@ public class Build extends Strategy {
 
         for (int i = 0; i < children.getLength(); i++) {
             ATerm kid = buildTerm(env, (ATermAppl) children.elementAt(i));
-            if (kid == null)
+            if (kid == null) {
                 return null;
+            }
             kids = kids.append(kid);
         }
         
@@ -171,5 +172,10 @@ public class Build extends Strategy {
 
     public void prettyPrint(StupidFormatter sf) {
         sf.first("Build(" + term.toString() + ")");
+    }
+
+    @Override
+    protected String getTraceName() {
+        return super.getTraceName() + "(" + term + ")";
     }
 }

@@ -73,29 +73,41 @@ public class SSL_indexedSet_create extends Primitive {
         }
     }
 
-    // FIXME: Must have state per-interpreter, not per-JVM
-    protected static Map<Integer, ATermIndexedSet> map = new HashMap<Integer, ATermIndexedSet>();;
-    protected static int setCounter = 0;
-    
+    // FIXME: Must have state per-interpreter, not per-JVM //@todo fix
+    protected static Map<Integer, ATermIndexedSet> map;
+    protected static int setCounter;
+
+    public static Map init() {
+        if(map != null) {
+
+            for (ATermIndexedSet indexedSet : map.values()) {
+                 indexedSet.clear();
+            }
+            map.clear();
+        }
+        map = new HashMap<Integer, ATermIndexedSet>();
+        setCounter = 0;
+        return map;
+    }
+
     protected SSL_indexedSet_create() {
         super("SSL_indexedSet_create", 0, 2);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_indexedSet_create");
-        
-        if(!Tools.isATermInt(targs.get(0)))
+
+        if (!Tools.isATermInt(targs.get(0)))
             return false;
-        if(!Tools.isATermInt(targs.get(1)))
+        if (!Tools.isATermInt(targs.get(1)))
             return false;
-        
+
         int initialSize = Tools.getATermInt((ATermInt)targs.get(0));
         int maxLoad = Tools.getATermInt((ATermInt)targs.get(1));
-        
+
         ATermIndexedSet is = new ATermIndexedSet(initialSize, maxLoad);
         int n = setCounter++;
         map.put(n, is);
-        
+
         env.setCurrent(env.makeTerm(n));
         return true;
     }

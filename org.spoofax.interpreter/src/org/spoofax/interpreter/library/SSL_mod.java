@@ -24,15 +24,14 @@ public class SSL_mod extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_mod");
-        
-        if(!Tools.isATermInt(targs.get(0)))
+
+        if (!Tools.isATermInt(targs.get(0)))
             return false;
-        if(!Tools.isATermInt(targs.get(1)))
+        if (!Tools.isATermInt(targs.get(1)))
             return false;
 
-        ATermInt a = (ATermInt) targs.get(0);
-        ATermInt b = (ATermInt) targs.get(1);
+        ATermInt a = (ATermInt)targs.get(0);
+        ATermInt b = (ATermInt)targs.get(1);
         env.setCurrent(env.getFactory().makeInt(a.getInt() % b.getInt()));
         return true;
     }

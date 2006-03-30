@@ -14,7 +14,6 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Pair;
 import org.spoofax.interpreter.Tools;
-import org.spoofax.interpreter.Interpreter;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -32,7 +31,7 @@ public class Match extends Strategy {
     }
 
     public boolean eval(IContext env) throws InterpreterException {
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug("Match.eval() - ", " !", env.current(), " ; ?", pattern);
         }
 
@@ -41,15 +40,15 @@ public class Match extends Strategy {
         List<Pair<String, ATerm>> r = match(env, current, pattern);
 
         if (r == null) {
-            return traceReturn(false, env.current());
+            return DebugUtil.traceReturn(false, env.current(), this);
         }
         else {
             boolean b = env.bindVars(r);   //todo: move logging inside?
 
-            if (Interpreter.isDebugging()) {
-                debug("Bindings: " + r);
+            if (DebugUtil.isDebugging()) {
+                debug("Bindings: " + r); //todo: unclear
             }
-            return traceReturn(b, env.current());
+            return DebugUtil.traceReturn(b, env.current(), this);
         }
     }
 
@@ -115,8 +114,8 @@ public class Match extends Strategy {
         if (r == null)
             return null;
 
-        if (Interpreter.isDebugging()) {
-            debug("", p);
+        if (DebugUtil.isDebugging()) {
+            debug("matching ApplAs", p);
         }
 
         String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
@@ -159,7 +158,7 @@ public class Match extends Strategy {
     protected List<Pair<String, ATerm>> matchInt(IContext env, ATermInt t,
             ATermAppl p) throws InterpreterException {
 
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug("matching Int");
         }
 
@@ -194,7 +193,7 @@ public class Match extends Strategy {
     protected List<Pair<String, ATerm>> matchReal(IContext env, ATermReal t,
             ATermAppl p) throws InterpreterException {
 
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug("matching Real");
         }
 
@@ -384,5 +383,10 @@ public class Match extends Strategy {
 
     public void prettyPrint(StupidFormatter sf) {
         sf.first("Match(" + pattern.toString() + ")");
+    }
+
+    @Override
+    protected String getTraceName() {
+        return super.getTraceName() + "(" + pattern + ")";
     }
 }

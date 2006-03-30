@@ -23,9 +23,8 @@ public class SSL_string_to_real extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_string_to_real");
 
-        if(!Tools.isATermString(targs.get(0)))
+        if (!Tools.isATermString(targs.get(0)))
             return false;
 
         Double d = new Double(Tools.getATermString(targs.get(0)));

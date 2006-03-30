@@ -3,6 +3,7 @@ package org.spoofax.interpreter;
 import java.io.IOException;
 
 import aterm.ATerm;
+import org.spoofax.interpreter.stratego.DebugUtil;
 
 public class Main {
 
@@ -11,12 +12,12 @@ public class Main {
         Interpreter itp = new Interpreter();
         String file = "";
 
-        for(String s : args) 
+        for(String s : args)
             System.out.println(s);
-        
+
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("--debug")) {
-                itp.setDebug(true);
+                DebugUtil.setDebug(true);
             } else if (args[i].equals("-i")) {
                 file = args[i + 1];
             }

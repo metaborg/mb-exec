@@ -13,19 +13,19 @@ import java.util.Map;
 
 import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
+import org.spoofax.interpreter.stratego.DebugUtil;
 
 import aterm.ATerm;
 
 public class Context extends ATermBuilder implements IContext {
 
-    private static int indentation = 0;
+    public static int indentation = 0; //todo: should this be non static?
 
     protected ATerm current;
 
     private Map<String, OpDecl> opdecls;
     
     protected VarScope varScope;
-    public static final int INDENT_STEP = 2;
 
     public Context() {
         super();
@@ -46,8 +46,8 @@ public class Context extends ATermBuilder implements IContext {
     public static void debug(Object... s) {
 
         // A bit of a hack but saves 17% of time (according to JProfiler)...
-        if(Interpreter.isDebugging()) {
-            Interpreter.debug(buildIndent(indentation), s);
+        if(DebugUtil.isDebugging()) {
+            DebugUtil.debug(DebugUtil.buildIndent(indentation), s);
         }
     }
 
@@ -83,7 +83,7 @@ public class Context extends ATermBuilder implements IContext {
                 ATerm t = s.lookup(x.first);
                 boolean eq = t.match(x.second) != null;
                 if (!eq) {
-                    if (Interpreter.isDebugging()) {
+                    if (DebugUtil.isDebugging()) {
                         debug(" no bind : ", x.first, " already bound to ", t, ", new: ", x.second);
                     }
                     return eq;
@@ -96,40 +96,36 @@ public class Context extends ATermBuilder implements IContext {
         return true;
     }
 
-    public void dump(String prefix) {
-        varScope.dump(prefix);
-    }
-
     public VarScope getVarScope() {
         return varScope;
     }
 
     public void setVarScope(VarScope newVarScope) {
         varScope = newVarScope;
-        if (Interpreter.isDebugging()) {
-            bump();
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.bump(this);
             debug("{ " + newVarScope.printVars());
-            bump();
+            DebugUtil.bump(this);
         }
     }
 
     public void popVarScope() {
         VarScope current = varScope;
         varScope = varScope.getParent();
-        if (Interpreter.isDebugging()) {
-            unbump();
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.unbump(this);
             debug("} " + current.printVars()); //todo: same vars?
-            unbump();
+            DebugUtil.unbump(this);
         }
     }
 
     public void restoreVarScope(VarScope anotherVarScope) {
         VarScope current = varScope;
         varScope = anotherVarScope;
-        if (Interpreter.isDebugging()) {
-            unbump();
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.unbump(this);
             debug("} " + current.printVars()); //todo: same vars?
-            unbump();
+            DebugUtil.unbump(this);
         }
     }
 
@@ -141,23 +137,4 @@ public class Context extends ATermBuilder implements IContext {
         varScope.addSVar(name, def);
     }
 
-    public static void bump() {
-        indentation += INDENT_STEP;
-    }
-    
-    public static void unbump() {
-        indentation -= INDENT_STEP;
-    }
-
-    private final static char[] indent = new char[500];
-    static {
-        for (int i = 0; i < indent.length; i++) {
-            indent[i] = ' ';
-        }
-    }
-    public static StringBuilder buildIndent(final int indentation) {
-        StringBuilder b = new StringBuilder(indentation);
-        b.append(indent, 0, indentation);
-        return b;
-    }
 }

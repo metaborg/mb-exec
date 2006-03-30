@@ -25,7 +25,6 @@ public class SSL_concat_strings extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_concat_strings");
 
         ATerm t = targs.get(0);
         if(t.getType() != ATerm.APPL)
@@ -36,7 +35,7 @@ public class SSL_concat_strings extends Primitive {
             return false;
 
         ATermList l = Tools.consToList(env.getFactory(), a);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i=0;i<l.getChildCount();i++) {
             sb.append(Tools.stringAt(l, i));
         }

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.spoofax.interpreter.Context;
-import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.stratego.SDefT.ArgType;
 import org.spoofax.interpreter.stratego.SDefT.ConstType;
 import org.spoofax.interpreter.stratego.SDefT.FunType;
@@ -41,15 +40,11 @@ abstract public class Strategy implements IConstruct {
 //        return sf.toString();
 //    }
 
-    protected boolean traceReturn(boolean result, Object current) {
-        if (Interpreter.isDebugging()) {
-            StringBuilder sb = Context.buildIndent(Context.INDENT_STEP);
-            if(!result) {
-                debug(sb, "==> failed: ", current, "\n");
-            } else {
-                debug(sb, "==> succeeded: ", current, "\n");
-            }
-        }
-        return result;
+    protected String getTraceName() {
+        return this.getClass().getSimpleName();
+    }
+
+    public String toString() {
+        return getTraceName();
     }
 }

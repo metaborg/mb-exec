@@ -25,14 +25,13 @@ public class SSL_printnl extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_printnl - " + targs);
 
         // FIXME: Possibly erroneous
         String output = Tools.getATermString(targs.get(0));
         
         ATermList l = Tools.consToListDeep(env.getFactory(), (ATermAppl) targs.get(1));
         
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i=0;i<l.getChildCount();i++) {
             ATerm t = Tools.termAt(l, i);
             if(t.getType() == ATerm.APPL) {

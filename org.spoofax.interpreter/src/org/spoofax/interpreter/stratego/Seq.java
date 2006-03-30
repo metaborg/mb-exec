@@ -9,7 +9,6 @@ package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.Interpreter;
 
 public class Seq extends Strategy {
 
@@ -23,9 +22,9 @@ public class Seq extends Strategy {
 
     public boolean eval(IContext env) throws InterpreterException {
 
-        if (Interpreter.isDebugging()) {
-            debug("Seq.eval() - ", env.current());
-        }
+//        if (Interpreter.isDebugging()) {
+//            debug("Seq.eval() - ", env.current());
+//        }
 
         return s0.eval(env) && s1.eval(env);
     }

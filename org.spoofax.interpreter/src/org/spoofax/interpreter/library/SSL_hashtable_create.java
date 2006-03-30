@@ -36,18 +36,17 @@ public class SSL_hashtable_create extends Primitive {
 
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs)
             throws InterpreterException {
-        debug("SSL_hashtable_create");
 
         if (!Tools.isATermInt(targs.get(0)))
             return false;
         if (!Tools.isATermInt(targs.get(1)))
             return false;
 
-        int initialSize = Tools.getATermInt((ATermInt) targs.get(0));
-        int maxLoad = Tools.getATermInt((ATermInt) targs.get(1));
+        int initialSize = Tools.getATermInt((ATermInt)targs.get(0));
+        int maxLoad = Tools.getATermInt((ATermInt)targs.get(1));
 
         int ref = SSL.registerHashtable(new ATermHashtable(initialSize, maxLoad));
-        
+
         env.setCurrent(env.makeTerm(ref));
         return true;
     }

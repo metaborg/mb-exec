@@ -23,8 +23,7 @@ public class SSL_addi extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_addi");
-        
+
         if(targs.get(0).getType() != ATerm.INT)
             return false;
         if(targs.get(1).getType() != ATerm.INT)

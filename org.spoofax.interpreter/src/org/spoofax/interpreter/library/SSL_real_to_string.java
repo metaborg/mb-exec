@@ -24,12 +24,11 @@ public class SSL_real_to_string extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_real_to_string");
 
-        if(!Tools.isATermReal(targs.get(0)))
+        if (!Tools.isATermReal(targs.get(0)))
             return false;
 
-        ATermReal a = (ATermReal) targs.get(0);
+        ATermReal a = (ATermReal)targs.get(0);
         String s = String.format("%.17g", a.getReal());
         env.setCurrent(env.getFactory().makeString(s));
         return true;

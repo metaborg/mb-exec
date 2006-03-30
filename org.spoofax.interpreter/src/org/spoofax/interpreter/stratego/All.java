@@ -10,7 +10,6 @@ package org.spoofax.interpreter.stratego;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.Tools;
-import org.spoofax.interpreter.Interpreter;
 
 import aterm.AFun;
 import aterm.ATerm;
@@ -26,7 +25,7 @@ public class All extends Strategy {
 
     public boolean eval(IContext env) throws InterpreterException {
 
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug("All.eval() - ", env.current());
         }
 
@@ -34,11 +33,11 @@ public class All extends Strategy {
 
         switch (t.getType()) {
             case ATerm.INT:
-                return true;
+                return DebugUtil.traceReturn(true, env.current(), this);
             case ATerm.REAL:
-                return true;
+                return DebugUtil.traceReturn(true, env.current(), this);
             case ATerm.APPL:
-                return evalAll(env, (ATermAppl)t);
+                return DebugUtil.traceReturn(evalAll(env, (ATermAppl)t), env.current(), this);
             default:
                 throw new InterpreterException("Unknown ATerm type " + t.getType());
         }
@@ -54,6 +53,7 @@ public class All extends Strategy {
             env.setCurrent(Tools.termAt(t, i));
             if(!body.eval(env)) {
                 env.setCurrent(t);
+                debug("Child traversal failed at ", Tools.termAt(t, i), ", current = ", env.current());
                 return false;
             }
             xt[i] = env.current(); 

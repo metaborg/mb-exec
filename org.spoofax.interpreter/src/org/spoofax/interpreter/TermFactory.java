@@ -21,7 +21,7 @@ public class TermFactory extends PureFactory {
     private static final Object marker = "foo";
     
     TermFactory() {
-        super();
+        super(5);
         funny = new WeakHashMap<String, Object>();
     }
     

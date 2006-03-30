@@ -22,13 +22,22 @@ public class SSL_table_hashtable extends Primitive {
         super("SSL_table_hashtable", 0, 0);
     }
     
-    // FIXME: Must be per-interpreter instance, not per-JVM instance
-    protected static ATermHashtable map = new ATermHashtable(100, 80);
-    private int magicRef;
-    
+    // FIXME: Must be per-interpreter instance, not per-JVM instance //@todo
+    protected static ATermHashtable map;
+    private int magicRef = -1;
+
+    public static void init() {
+        if(map != null) {
+            for (ATerm aTerm : map.values()) {
+                aTerm.getFactory();
+            }
+            map.clear();
+        }
+        map = new ATermHashtable(100, 80);
+    }
+
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_table_hashtable");
-        
+
         if(magicRef == -1) {
             magicRef = SSL.registerHashtable(map);
         }

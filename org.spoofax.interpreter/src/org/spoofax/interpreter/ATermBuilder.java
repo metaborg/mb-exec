@@ -117,4 +117,8 @@ public class ATermBuilder implements IATermBuilder {
         
         return factory.makeAppl(f);
     }
+
+    public void cleanup() {
+        factory.cleanup();
+    }
 }

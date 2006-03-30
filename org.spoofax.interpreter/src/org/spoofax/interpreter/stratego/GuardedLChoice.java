@@ -10,7 +10,6 @@ package org.spoofax.interpreter.stratego;
 import org.spoofax.interpreter.BindingInfo;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.Interpreter;
 
 import aterm.ATerm;
 
@@ -28,7 +27,7 @@ public class GuardedLChoice extends Strategy {
 
     public boolean eval(IContext env) throws InterpreterException {
 
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug("GuardedLChoice.eval() - ", env.current());
         }
 
@@ -36,12 +35,12 @@ public class GuardedLChoice extends Strategy {
         ATerm oldCurrent = env.current();
 
         if (cond.eval(env))
-            return ifClause.eval(env);
+            return DebugUtil.traceReturn(ifClause.eval(env), env.current(), this);
 
         env.setCurrent(oldCurrent);
         env.getVarScope().restoreUnboundVars(bi);
 
-        return thenClause.eval(env);
+        return DebugUtil.traceReturn(thenClause.eval(env), env.current(), this);
     }
 
     public void prettyPrint(StupidFormatter sf) {

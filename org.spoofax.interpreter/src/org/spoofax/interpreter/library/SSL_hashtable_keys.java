@@ -25,15 +25,14 @@ public class SSL_hashtable_keys extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_hashtable_keys");
-        
-        if(!Tools.isATermInt(targs.get(0)))
+
+        if (!Tools.isATermInt(targs.get(0)))
             return false;
-        
+
         ATermHashtable ath = SSL.getHashtable(Tools.getATermInt((ATermInt)targs.get(0)));
-        if(ath == null)
+        if (ath == null)
             return false;
-        
+
         env.setCurrent(env.makeList(ath.keySet()));
         return true;
     }

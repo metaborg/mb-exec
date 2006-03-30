@@ -10,8 +10,10 @@ package org.spoofax.interpreter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 
 import org.spoofax.interpreter.stratego.SDefT;
+import org.spoofax.interpreter.stratego.DebugUtil;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -28,8 +30,8 @@ public class VarScope {
     public VarScope(VarScope parent) {
         this.parent = parent;
         
-        vars = new HashMap<String, ATerm>();
-        svars = new HashMap<String, SDefT>();
+        vars = new HashMap<String, ATerm>(0); //todo: create these on demand
+        svars = new HashMap<String, SDefT>(0);
     }
 
     public ATerm lookup(String name) {
@@ -39,8 +41,8 @@ public class VarScope {
         if (t == null && parent != null)
             t = parent.lookup(name);
         
-        if(Interpreter.isDebugging()) {
-            Context.debug(Context.buildIndent(Context.INDENT_STEP), "lookup : ", name, " = ", t);
+        if(DebugUtil.isDebugging()) {
+            Context.debug(DebugUtil.buildIndent(DebugUtil.INDENT_STEP), "lookup : ", name, " = ", t);
         }
 
         return t;
@@ -76,12 +78,15 @@ public class VarScope {
     }
 
     public String printVars() {
-        StringBuilder sb = new StringBuilder("vars : [");
-        for (String var : vars.keySet()) {
-            sb.append(var).
-              append(", ");
+        StringBuilder sb = new StringBuilder("");
+        Iterator it = vars.keySet().iterator();
+        while (it.hasNext()) {
+            sb.append(it.next());
+            if(it.hasNext()) {
+                sb.append(", ");
+            }
         }
-        sb.append("]");
+        sb.append(":");
         return sb.toString();
     }
 
@@ -117,7 +122,7 @@ public class VarScope {
             pre = parent.dump(prefix);
         }
 
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug(pre, "=== ", this);
 
             for (String t : vars.keySet()) {
@@ -138,7 +143,7 @@ public class VarScope {
     }
 
     private void debug(Object... s) {
-        Interpreter.debug(s);
+        DebugUtil.debug(s);
     }
     
     public BindingInfo saveUnboundVars() {

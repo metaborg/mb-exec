@@ -13,7 +13,6 @@ import java.util.List;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.VarScope;
-import org.spoofax.interpreter.Interpreter;
 
 public class Let extends Strategy {
 
@@ -28,7 +27,7 @@ public class Let extends Strategy {
 
     public boolean eval(IContext env) throws InterpreterException {
 
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug("Let.eval() - ", env.current());
         }
 
@@ -52,7 +51,7 @@ public class Let extends Strategy {
 
         env.popVarScope();
 
-        return r;
+        return DebugUtil.traceReturn(r, env.current(), this);
     }
 
     public void prettyPrint(StupidFormatter sf) {

@@ -24,7 +24,6 @@ public class SSL_divi extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_divi");
         
         if(!Tools.isATermInt(targs.get(0)))
             return false;

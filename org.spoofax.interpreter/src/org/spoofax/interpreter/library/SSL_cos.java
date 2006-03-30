@@ -24,7 +24,6 @@ public class SSL_cos extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_cos");
         
         if(!Tools.isATermReal(targs.get(0)))
             return false;

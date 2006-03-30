@@ -23,8 +23,7 @@ public class SSL_addr extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException {
-        debug("SSL_addr");
-        
+
         if(tvars.get(0).getType() != ATerm.REAL)
             return false;
         if(tvars.get(1).getType() != ATerm.REAL)

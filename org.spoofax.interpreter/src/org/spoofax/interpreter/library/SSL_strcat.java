@@ -23,16 +23,15 @@ public class SSL_strcat extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_strcat");
 
-        if(!Tools.isATermString(targs.get(0)))
+        if (!Tools.isATermString(targs.get(0)))
             return false;
-        if(!Tools.isATermString(targs.get(1)))
+        if (!Tools.isATermString(targs.get(1)))
             return false;
 
         String s = Tools.getATermString(targs.get(0));
         String t = Tools.getATermString(targs.get(1));
-        
+
         env.setCurrent(env.makeString(s + t));
         return true;
     }

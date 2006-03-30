@@ -26,22 +26,21 @@ public class SSL_implode_string extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_implode_string");
-        
+
         ATerm t = targs.get(0);
-        if(t.getType() != ATerm.APPL)
+        if (t.getType() != ATerm.APPL)
             return false;
-        
-        ATermAppl a = (ATermAppl) t;
-        
-        if(!(Tools.isCons(a) || Tools.isNil(a)))
+
+        ATermAppl a = (ATermAppl)t;
+
+        if (!(Tools.isCons(a) || Tools.isNil(a)))
             return false;
-        
+
         ATermList l = Tools.consToList(env.getFactory(), (ATermAppl)t);
-        
-        StringBuffer sb = new StringBuffer();
-        
-        for(int i=0;i<l.getChildCount();i++) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < l.getChildCount(); i++) {
             ATermInt v = Tools.intAt(l, i);
             sb.append(new Character((char)v.getInt()));
         }

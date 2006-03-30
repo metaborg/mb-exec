@@ -25,7 +25,6 @@ public class SSL_write_term_to_stream_text extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_write_term_to_stream_text");
         
         if(targs.get(0).getType() != ATerm.INT)
             return false;

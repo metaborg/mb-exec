@@ -25,15 +25,14 @@ public class SSL_real_to_string_precision extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_real_to_string_precision");
-        
-        if(!Tools.isATermReal(targs.get(0)))
+
+        if (!Tools.isATermReal(targs.get(0)))
             return false;
-        if(!Tools.isATermInt(targs.get(1)))
+        if (!Tools.isATermInt(targs.get(1)))
             return false;
 
-        ATermReal a = (ATermReal) targs.get(0);
-        ATermInt b = (ATermInt) targs.get(1);
+        ATermReal a = (ATermReal)targs.get(0);
+        ATermInt b = (ATermInt)targs.get(1);
         String s = String.format("%." + b.getInt() + "f", a.getReal());
         env.setCurrent(env.getFactory().makeString(s));
         return true;

@@ -34,7 +34,6 @@ public class SSL_access extends Primitive {
     }
 
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_access");
 
         if (!Tools.isATermString(targs.get(0)))
             return false;
@@ -42,7 +41,7 @@ public class SSL_access extends Primitive {
             return false;
 
         String path = Tools.getATermString(targs.get(0));
-        int permissions = permissions_from_term((ATermList) Tools.consToList(env.getFactory(),
+        int permissions = permissions_from_term(Tools.consToList(env.getFactory(),
                                                                              (ATermAppl) targs
                                                                                      .get(1)));
         File f = new File(path);

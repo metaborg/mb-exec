@@ -26,20 +26,20 @@ public class SSL_fputc extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_fputc");
-        
-        if(!Tools.isATermInt(targs.get(0)))
+
+        if (!Tools.isATermInt(targs.get(0)))
             return false;
-        if(!Tools.isATermInt(targs.get(1)))
+        if (!Tools.isATermInt(targs.get(1)))
             return false;
 
         OutputStream s = SSL.outputStreamFromTerm((ATermInt)targs.get(1));
         try {
             s.write(Tools.getATermInt((ATermInt)targs.get(0)));
-        } catch(IOException e) {
+        }
+        catch (IOException e) {
             throw new InterpreterException(e);
         }
-        
+
         return true;
     }
 }

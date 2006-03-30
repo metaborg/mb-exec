@@ -24,13 +24,12 @@ public class SSL_indexedSet_destroy extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        debug("SSL_indexedSet_destroy");
-        
-        if(!Tools.isATermInt(targs.get(0)))
+
+        if (!Tools.isATermInt(targs.get(0)))
             return false;
 
         int ref = Tools.getATermInt((ATermInt)targs.get(0));
-        
+
         SSL_indexedSet_create.map.remove(ref);
         return true;
     }

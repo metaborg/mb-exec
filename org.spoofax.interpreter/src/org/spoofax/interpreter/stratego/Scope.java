@@ -12,7 +12,6 @@ import java.util.List;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.VarScope;
-import org.spoofax.interpreter.Interpreter;
 
 public class Scope extends Strategy {
 
@@ -26,9 +25,9 @@ public class Scope extends Strategy {
 
     public boolean eval(IContext env) throws InterpreterException {
 
-        if (Interpreter.isDebugging()) {
-            debug("Scope.eval() - ", env.current());
-        }
+//        if (Interpreter.isDebugging()) {
+//            debug("Scope.eval() - ", env.current());
+//        }
 
         VarScope newScope = new VarScope(env.getVarScope());
 

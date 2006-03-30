@@ -27,10 +27,12 @@ public abstract class AbstractInterpreterTest extends TestCase {
         basePath = path;
         System.out.println("!!!!!!!!!!!!!!!!!!!!!");
         itp = new Interpreter();
+        //System.gc();
     }
     
     @Override
     protected void tearDown() throws Exception {
+        itp.shutdown();
         itp = null;
         super.tearDown();
     }

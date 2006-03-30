@@ -29,10 +29,12 @@ import org.spoofax.interpreter.stratego.Seq;
 import org.spoofax.interpreter.stratego.Some;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.stratego.StupidFormatter;
+import org.spoofax.interpreter.stratego.DebugUtil;
 import org.spoofax.interpreter.stratego.SDefT.FunType;
 import org.spoofax.interpreter.stratego.SDefT.ArgType;
 import org.spoofax.interpreter.stratego.SDefT.ConstType;
 import org.spoofax.interpreter.stratego.SDefT.SVar;
+import org.spoofax.interpreter.library.SSL;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -41,49 +43,23 @@ import aterm.ATermList;
 public class Interpreter extends ATermBuilder {
 
     protected Context context;
-    private static boolean debugging;
-    
+
     public Interpreter() {
-        debugging = false;
+        DebugUtil.setDebug(false);
+        Context.indentation = 0;
         context = new Context();
         factory = context.factory;
+        SSL.init();//todo: temporary to verify the hypothesis that the global state causes trouble.
     }
-    
-    public static void debug(Object... strings) {
 
-        if (!debugging) {
-            return;
-        }
-
-        String toPrint = "";
-        if (strings.length > 1) {
-            for (Object s : strings) {
-                if(s.getClass().isArray()) {
-                    Object ss[] = (Object[])s;
-                    for (Object o : ss) {
-                        toPrint += o;
-                    }
-                } else {
-                    toPrint += s; //pay the price
-                }
-            }
-        }
-        else {
-            toPrint = (strings[0]).toString();
-        }
-        if (toPrint.length() < 20000) {
-            System.out.println(toPrint);
-        }
-    }
-    
     public void load(String path) throws IOException, InterpreterException {
 
         ATerm prg = context.getFactory().readFromFile(path);
         ATerm sign = Tools.applAt(Tools.listAt(prg, 0), 0);
         ATerm strats = Tools.applAt(Tools.listAt(prg, 0), 1);
 
-        if (Interpreter.isDebugging()) {
-            debug(prg);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(prg);
         }
 
         loadConstructors(Tools
@@ -121,8 +97,8 @@ public class Interpreter extends ATermBuilder {
         ATermList svars = Tools.listAt(t, 1);
         ATermList tvars = Tools.listAt(t, 2);
 
-        if (Interpreter.isDebugging()) {
-            debug("name  : ", name);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug("name  : ", name);
         }
 
         List<SVar> realsvars = makeSVars(svars);
@@ -203,32 +179,32 @@ public class Interpreter extends ATermBuilder {
     }
 
     private SDefT parseSDefT(ATermAppl t) throws InterpreterException {
-        if (Interpreter.isDebugging()) {
-            debug("parseSDefT()");
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug("parseSDefT()");
         }
 
         String name = Tools.stringAt(t, 0);
         ATermList svars = Tools.listAt(t, 1);
         ATermList tvars = Tools.listAt(t, 2);
 
-        if (Interpreter.isDebugging()) {
-            debug(" name  : ", name);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(" name  : ", name);
         }
 
-        if (Interpreter.isDebugging()) {
-            debug(" svars : ", svars);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(" svars : ", svars);
         }
         List<SVar> realsvars = makeSVars(svars);
-        if (Interpreter.isDebugging()) {
-            debug(" svars : ", realsvars);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(" svars : ", realsvars);
         }
 
-        if (Interpreter.isDebugging()) {
-            debug(" tvars : ", tvars);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(" tvars : ", tvars);
         }
         List<String> realtvars = makeVars(tvars);
-        if (Interpreter.isDebugging()) {
-            debug(" tvars : ", realtvars);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(" tvars : ", realtvars);
         }
 
         VarScope newScope = new VarScope(context.getVarScope());
@@ -238,8 +214,8 @@ public class Interpreter extends ATermBuilder {
 
         context.popVarScope();
 
-        if (Interpreter.isDebugging()) {
-            debug(" +name: ", name);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(" +name: ", name);
         }
 
         return new SDefT(name, realsvars, realtvars, body, newScope);
@@ -249,8 +225,8 @@ public class Interpreter extends ATermBuilder {
 
         List<String> realsvars = new ArrayList<String>(svars.getChildCount());
 
-        if (Interpreter.isDebugging()) {
-            debug(" vars  : ", svars);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(" vars  : ", svars);
         }
 
         for (int j = 0; j < svars.getChildCount(); j++) {
@@ -261,14 +237,14 @@ public class Interpreter extends ATermBuilder {
     }
 
     private List<SVar> makeSVars(ATermList svars) {
-        if (Interpreter.isDebugging()) {
-            debug("makeSVars()");
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug("makeSVars()");
         }
 
         List<SVar> realsvars = new ArrayList<SVar>(svars.getChildCount());
 
-        if (Interpreter.isDebugging()) {
-            debug(" vars  : ", svars);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(" vars  : ", svars);
         }
 
         for (int j = 0; j < svars.getChildCount(); j++) {
@@ -278,8 +254,8 @@ public class Interpreter extends ATermBuilder {
             realsvars.add(new SVar(name, type));
         }
 
-        if (Interpreter.isDebugging()) {
-            debug("       : ", realsvars);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug("       : ", realsvars);
         }
         return realsvars;
     }
@@ -309,13 +285,13 @@ public class Interpreter extends ATermBuilder {
 
     private Strategy parseCallT(ATermAppl t) throws InterpreterException {
 
-        if (Interpreter.isDebugging()) {
-            debug("parseCallT()");
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug("parseCallT()");
         }
         String name = Tools.stringAt(Tools.applAt(t, 0), 0);
 
-        if (Interpreter.isDebugging()) {
-            debug(" name  : ", name);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(" name  : ", name);
         }
 
         ATermList svars = Tools.listAt(t, 1);
@@ -323,11 +299,11 @@ public class Interpreter extends ATermBuilder {
 
         List<ATerm> realtvars = parseTermList(Tools.listAt(t, 2));
 
-        if (Interpreter.isDebugging()) {
-            debug(" -svars : ", realsvars);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(" -svars : ", realsvars);
         }
-        if (Interpreter.isDebugging()) {
-            debug(" -tvars : ", realtvars);
+        if (DebugUtil.isDebugging()) {
+            DebugUtil.debug(" -tvars : ", realtvars);
         }
         return new CallT(name, realsvars, realtvars);
     }
@@ -415,18 +391,14 @@ public class Interpreter extends ATermBuilder {
         return context.current();
     }
 
-    public void setDebug(boolean b) {
-        debugging = b;
-    }
-
-    public static boolean isDebugging() {
-        return debugging;
-    }
-
     public String prettyPrint() throws InterpreterException {
         StupidFormatter sf = new StupidFormatter();
         SDefT s = context.lookupSVar("main_0_0");
         s.prettyPrint(sf);
         return sf.toString();
+    }
+
+    public void shutdown() {
+        context.cleanup();
     }
 }

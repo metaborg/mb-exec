@@ -101,19 +101,41 @@ public class SSL {
     }
 
     public static InputStream inputStreamFromTerm(ATermInt idx) {
-        return inputStreamMap.get(new Integer(idx.getInt()));
+        return inputStreamMap.get(idx.getInt());
     }
 
     public static OutputStream outputStreamFromTerm(ATermInt idx) {
-        return outputStreamMap.get(new Integer(idx.getInt()));
+        return outputStreamMap.get(idx.getInt());
     }
 
-    protected static Map<Integer, ATermHashtable> hashtables = new HashMap<Integer, ATermHashtable>();
+    //@todo fix
+    protected static Map<Integer, ATermHashtable> hashtables;
     protected static int counter = 0;
+
+    /**
+     * Resets the entire state of the SSL. <br>
+     * Should be called once per interpreter.
+     * todo: this state should be scoped inside {@link org.spoofax.interpreter.Context}
+     */
+    public static void init() {
+        if(hashtables != null) {
+            for (ATermHashtable hashtable : hashtables.values()) {
+                hashtable.clear();
+            }
+            hashtables.clear();
+        }
+        hashtables = new HashMap<Integer, ATermHashtable>();
+        counter = 0;
+
+        initRegistry();
+
+        SSL_indexedSet_create.init();
+        SSL_table_hashtable.init();
+    }
 
     public static int registerHashtable(ATermHashtable hashtable) {
         int ref = counter;
-        SSL.hashtables.put(SSL.counter++, hashtable);
+        hashtables.put(counter++, hashtable);
         return ref;
     }
 

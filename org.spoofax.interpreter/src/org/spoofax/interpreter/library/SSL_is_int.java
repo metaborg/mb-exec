@@ -22,8 +22,7 @@ public class SSL_is_int extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException {
-        debug("SSL_is_int");
-        
+
         return tvars.get(0).getType() == ATerm.INT;
     }
 }

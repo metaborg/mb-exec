@@ -9,17 +9,16 @@ package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.Interpreter;
 
 public class Fail extends Strategy {
 
     public boolean eval(IContext e) throws InterpreterException {
 
-        if (Interpreter.isDebugging()) {
+        if (DebugUtil.isDebugging()) {
             debug("Fail.eval() - ", e.current());
         }
 
-        return traceReturn(false, e.current());
+        return DebugUtil.traceReturn(false, e.current(), this);
     }
 
     public void prettyPrint(StupidFormatter sf) {

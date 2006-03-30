@@ -26,20 +26,19 @@ public class SSL_indexedSet_getIndex extends Primitive {
 
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs)
             throws InterpreterException {
-        debug("SSL_indexedSet_getIndex");
 
         if (!Tools.isATermInt(targs.get(0)))
             return false;
-        
+
         int ref = Tools.getATermInt((ATermInt)targs.get(0));
         ATermIndexedSet is = SSL_indexedSet_create.map.get(ref);
-        if(is == null)
+        if (is == null)
             return false;
-        
+
         int idx = is.getIndex(targs.get(1));
-        if(idx == -1)
+        if (idx == -1)
             return false;
-        
+
         env.setCurrent(env.makeTerm(idx));
         return true;
     }

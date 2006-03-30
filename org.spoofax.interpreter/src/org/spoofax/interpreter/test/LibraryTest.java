@@ -7,6 +7,9 @@
  */
 package org.spoofax.interpreter.test;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 
 public class LibraryTest extends AbstractInterpreterTest {
 
@@ -65,5 +68,18 @@ public class LibraryTest extends AbstractInterpreterTest {
         public void testShare() { interpTest("share-test"); }
     */
 
+    public static void main(String[] args) {
+        Map<Integer, Long> timeSpans = new TreeMap<Integer, Long>();
+        long timeSpan = 0;
+        for(int i = 0; i < 20; i++) {
+            long timeStart = System.currentTimeMillis();
+            junit.textui.TestRunner.run(LibraryTest.class);
+            timeSpan = System.currentTimeMillis() - timeStart;
+            timeSpans.put(i, timeSpan);
+        }
+        for (Integer i : timeSpans.keySet()) {
+            System.out.println("->" + i + " = " + timeSpans.get(i));
+        }
+    }
 }
 
