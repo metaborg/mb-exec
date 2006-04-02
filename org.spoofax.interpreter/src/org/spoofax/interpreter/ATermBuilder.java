@@ -18,12 +18,50 @@ public class ATermBuilder implements IATermBuilder {
 
     protected TermFactory factory;
 
+    protected AFun OpAFun;
+    protected AFun ConsAFun;
+    protected AFun NilAFun;
+    protected AFun AnnoAFun;
+    protected AFun IntAFun;
+    protected AFun RealAFun;
+    protected AFun StrAFun;
+    protected AFun VarAFun;
+    protected AFun ExplodeAFun;
+    protected AFun ConstTypeAFun;
+    protected AFun FunTypeAFun;
+    protected AFun ExtSDefAFun;
+    protected AFun SDefTAFun;
+    protected AFun AsAFun;
+    protected AFun WldAFun;
+
     ATermBuilder() {
         factory = new TermFactory();
+        initAFuns();
     }
     
-    ATerm makePattern(String s) {
-        return factory.parse(s);
+//    ATerm makePattern(String s) {
+//        return factory.parse(s);
+//    }
+
+    /**
+     * Create the AFuns the interpretor will need to recognize.
+     */
+    private void initAFuns() {
+        OpAFun = factory.makeAFun("Op", 2, false);
+        ConsAFun = factory.makeAFun("Cons", 2, false);
+        NilAFun = factory.makeAFun("Nil", 0, false);
+        AnnoAFun = factory.makeAFun("Anno", 2, false);
+        IntAFun = factory.makeAFun("Int", 1, false);
+        RealAFun = factory.makeAFun("Real", 1, false);
+        StrAFun = factory.makeAFun("Str", 1, false);
+        VarAFun = factory.makeAFun("Var", 1, false);
+        ExplodeAFun = factory.makeAFun("Explode", 2, false);
+        ConstTypeAFun = factory.makeAFun("ConstType", 1, false);//todo
+        FunTypeAFun = factory.makeAFun("FunType", 2, false);//todo
+        ExtSDefAFun = factory.makeAFun("ExtSDef", 0, false);//todo
+        SDefTAFun = factory.makeAFun("SDefT", 4, false);//todo
+        AsAFun = factory.makeAFun("As", 2, false);//todo
+        WldAFun = factory.makeAFun("Wld", 0, false);//todo
     }
 
     public ATerm makeList(String s) {
@@ -34,8 +72,8 @@ public class ATermBuilder implements IATermBuilder {
     
     public ATerm makeList(ATermList t) {
         
-        ATerm l = makeTerm("Nil");
-        AFun f = factory.makeAFun("Cons", 2, false);
+        ATerm l = factory.makeAppl(getNilAFun());
+        AFun f = getConsAFun();
         
         for (int i = t.getLength() - 1; i >= 0; i--)
             l = factory.makeAppl(f, (ATerm) t.getChildAt(i), l);
@@ -116,6 +154,67 @@ public class ATermBuilder implements IATermBuilder {
         AFun f = factory.makeAFun(name, 0, true);
         
         return factory.makeAppl(f);
+    }
+
+
+    public AFun getOpAFun() {
+        return OpAFun;
+    }
+
+    public AFun getConsAFun() {
+        return ConsAFun;
+    }
+
+    public AFun getNilAFun() {
+        return NilAFun;
+    }
+
+    public AFun getAnnoAFun() {
+        return AnnoAFun;
+    }
+
+    public AFun getStrAFun() {
+        return StrAFun;
+    }
+
+    public AFun getVarAFun() {
+        return VarAFun;
+    }
+
+    public AFun getExplodeAFun() {
+        return ExplodeAFun;
+    }
+
+    public AFun getRealAFun() {
+        return RealAFun;
+    }
+
+    public AFun getIntAFun() {
+        return IntAFun;
+    }
+
+    public AFun getConstTypeAFun() {
+        return ConstTypeAFun;
+    }
+
+    public AFun getFunTypeAFun() {
+        return FunTypeAFun;
+    }
+
+    public AFun getExtSDefAFun() {
+        return ExtSDefAFun;
+    }
+
+    public AFun getSDefTAFun() {
+        return SDefTAFun;
+    }
+
+    public AFun getAsAFun() {
+        return AsAFun;
+    }
+
+    public AFun getWldAFun() {
+        return WldAFun;
     }
 
     public void cleanup() {

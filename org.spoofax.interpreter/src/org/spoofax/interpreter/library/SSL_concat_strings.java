@@ -31,10 +31,10 @@ public class SSL_concat_strings extends Primitive {
             return false;
         
         ATermAppl a = (ATermAppl) t;
-        if(!(Tools.isCons(a) || Tools.isNil(a)))
+        if(!(Tools.isCons(a, env) || Tools.isNil(a, env)))
             return false;
 
-        ATermList l = Tools.consToList(env.getFactory(), a);
+        ATermList l = Tools.consToList(env, a);
         StringBuilder sb = new StringBuilder();
         for(int i=0;i<l.getChildCount();i++) {
             sb.append(Tools.stringAt(l, i));

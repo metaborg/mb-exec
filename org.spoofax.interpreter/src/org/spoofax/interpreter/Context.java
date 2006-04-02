@@ -24,12 +24,13 @@ public class Context extends ATermBuilder implements IContext {
     protected ATerm current;
 
     private Map<String, OpDecl> opdecls;
-    
+
     protected VarScope varScope;
 
     public Context() {
         super();
 
+        assert factory != null;
         opdecls = new HashMap<String, OpDecl>();
         varScope = new VarScope(null);
     }
@@ -72,11 +73,11 @@ public class Context extends ATermBuilder implements IContext {
     }
 
     public boolean bindVars(List<Pair<String, ATerm>> r) {
-        
+
         for (Pair<String, ATerm> x : r) {
-        
+
             VarScope s = varScope.scopeOf(x.first);
-            
+
             if (s == null) {
                 varScope.add(x.first, x.second);
             } else if (s.hasVarInLocalScope(x.first)) {
@@ -92,7 +93,7 @@ public class Context extends ATermBuilder implements IContext {
                 s.add(x.first, x.second);
             }
         }
-        
+
         return true;
     }
 
@@ -136,5 +137,4 @@ public class Context extends ATermBuilder implements IContext {
     public void addSVar(String name, SDefT def) {
         varScope.addSVar(name, def);
     }
-
 }

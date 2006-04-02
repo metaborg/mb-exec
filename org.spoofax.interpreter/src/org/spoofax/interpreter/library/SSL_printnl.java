@@ -29,15 +29,15 @@ public class SSL_printnl extends Primitive {
         // FIXME: Possibly erroneous
         String output = Tools.getATermString(targs.get(0));
         
-        ATermList l = Tools.consToListDeep(env.getFactory(), (ATermAppl) targs.get(1));
+        ATermList l = Tools.consToListDeep(env, (ATermAppl) targs.get(1));
         
         StringBuilder sb = new StringBuilder();
         for(int i=0;i<l.getChildCount();i++) {
             ATerm t = Tools.termAt(l, i);
             if(t.getType() == ATerm.APPL) {
                 ATermAppl a = (ATermAppl) t;
-                if(Tools.isCons(a)) 
-                    sb.append(Tools.consToListDeep(env.getFactory(), a));
+                if(Tools.isCons(a, env))
+                    sb.append(Tools.consToListDeep(env, a));
                 else if(Tools.isATermString(t))
                     sb.append(Tools.getATermString(t));
                 continue;

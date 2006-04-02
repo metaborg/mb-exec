@@ -47,19 +47,19 @@ public class Build extends Strategy {
 
         PureFactory factory = env.getFactory();
 
-        if (Tools.isAnno(t)) {
+        if (Tools.isAnno(t, env)) {
             return buildAnno(env, t);
-        } else if (Tools.isOp(t)) {
+        } else if (Tools.isOp(t, env)) {
             return buildOp(env, t, factory);
-        } else if (Tools.isInt(t)) {
+        } else if (Tools.isInt(t, env)) {
             return buildInt(t, factory);
-        } else if (Tools.isReal(t)) {
+        } else if (Tools.isReal(t, env)) {
             return buildReal(t, factory);
-        } else if (Tools.isStr(t)) {
+        } else if (Tools.isStr(t, env)) {
             return buildStr(t);
-        } else if (Tools.isVar(t)) {
+        } else if (Tools.isVar(t, env)) {
             return buildVar(env, t);
-        } else if (Tools.isExplode(t)) {
+        } else if (Tools.isExplode(t, env)) {
             return buildExplode(env, t);
         }
 
@@ -109,13 +109,12 @@ public class Build extends Strategy {
                 n = n.substring(1, n.length() - 1);
                 quoted = true;
             }
-            ATermList realArgs = Tools.consToList(factory,
-              (ATermAppl)actualArgs);
+            ATermList realArgs = Tools.consToList(env, (ATermAppl)actualArgs);
             AFun afun = factory.makeAFun(n, realArgs.getChildCount(), quoted);
             return factory.makeApplList(afun, realArgs);
         }
         else if (Tools.isATermAppl(actualCtor)
-          && Tools.isNil((ATermAppl)actualCtor)) {
+          && Tools.isNil((ATermAppl)actualCtor, env)) {
             return actualArgs;
         }
 

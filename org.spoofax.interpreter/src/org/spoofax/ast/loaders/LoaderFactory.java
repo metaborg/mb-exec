@@ -9,7 +9,7 @@ package org.spoofax.ast.loaders;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.spoofax.Logger;
 
@@ -26,7 +26,7 @@ public class LoaderFactory {
 
 	private LoaderFactory() {
 		Logger.log("Constructing LoaderFactory");
-		loaders = new Vector<ILoader>();
+		loaders = new ArrayList<ILoader>();
 
 		loaders.add(new CLoader());
 		loaders.add(new CPPLoader());

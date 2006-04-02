@@ -66,21 +66,21 @@ public class Match extends Strategy {
     public List<Pair<String, ATerm>> matchAppl(IContext env, ATermAppl t,
             ATermAppl p) throws InterpreterException {
 
-        if (Tools.isAnno(p)) {
+        if (Tools.isAnno(p, env)) {
             return matchApplAnno(env, t, p);
-        } else if (Tools.isOp(p)) {
+        } else if (Tools.isOp(p, env)) {
             return matchApplOp(env, t, p);
-        } else if (Tools.isInt(p)) {
+        } else if (Tools.isInt(p, env)) {
             return matchApplInt(env, t, p);
-        } else if (Tools.isStr(p)) {
+        } else if (Tools.isStr(p, env)) {
             return matchApplStr(t, p);
-        } else if (Tools.isVar(p)) {
+        } else if (Tools.isVar(p, env)) {
             return matchApplVar(t, p);
-        } else if (Tools.isExplode(p)) {
+        } else if (Tools.isExplode(p, env)) {
             return matchAnyExplode(env, t, p);
-        } else if (Tools.isAs(p)) {
+        } else if (Tools.isAs(p, env)) {
             return matchApplAs(env, t, p);
-        } else if (Tools.isWld(p)) {
+        } else if (Tools.isWld(p, env)) {
             return emptyList();
         }
 
@@ -162,28 +162,28 @@ public class Match extends Strategy {
             debug("matching Int");
         }
 
-        if (Tools.isAnno(p)) {
+        if (Tools.isAnno(p, env)) {
             return matchIntAnno(env, t, p);
         }
-        else if (Tools.isInt(p)) {
+        else if (Tools.isInt(p, env)) {
             return matchIntInt(t, p);
         }
-        else if (Tools.isReal(p)) {
+        else if (Tools.isReal(p, env)) {
             return null;
         }
-        else if (Tools.isVar(p)) {
+        else if (Tools.isVar(p, env)) {
             return matchIntVar(t, p);
         }
-        else if (Tools.isOp(p)) {
+        else if (Tools.isOp(p, env)) {
             return null;
         }
-        else if (Tools.isExplode(p)) {
+        else if (Tools.isExplode(p, env)) {
             return matchAnyExplode(env, t, p);
         }
-        else if (Tools.isWld(p)) {
+        else if (Tools.isWld(p, env)) {
             return matchIntWld(p);
         }
-        else if (Tools.isAs(p)) {
+        else if (Tools.isAs(p, env)) {
             return matchIntAs(t, p);
         }
 
@@ -197,28 +197,28 @@ public class Match extends Strategy {
             debug("matching Real");
         }
 
-        if (Tools.isAnno(p)) {
+        if (Tools.isAnno(p, env)) {
             return matchRealAnno(env, t, p);
         }
-        else if (Tools.isInt(p)) {
+        else if (Tools.isInt(p, env)) {
             return null;
         }
-        else if (Tools.isReal(p)) {
+        else if (Tools.isReal(p, env)) {
             return matchRealReal(t, p);
         }
-        else if (Tools.isVar(p)) {
+        else if (Tools.isVar(p, env)) {
             return matchRealVar(t, p);
         }
-        else if (Tools.isOp(p)) {
+        else if (Tools.isOp(p, env)) {
             return null;
         }
-        else if (Tools.isExplode(p)) {
+        else if (Tools.isExplode(p, env)) {
             return matchAnyExplode(env, t, p);
         }
-        else if (Tools.isWld(p)) {
+        else if (Tools.isWld(p, env)) {
             return matchRealWld(p);
         }
-        else if (Tools.isAs(p)) {
+        else if (Tools.isAs(p, env)) {
             return matchRealAs(t, p);
         }
 
@@ -332,7 +332,7 @@ public class Match extends Strategy {
             return env.makeList(emptyATermList(env));
         else if (Tools.isATermAppl(t)) {
             ATermAppl a = (ATermAppl)t;
-            if(Tools.isNil(a) || Tools.isCons(a))
+            if(Tools.isNil(a, env) || Tools.isCons(a, env))
                 return t;
             else 
                 return env.makeList(a.getArguments());
@@ -356,8 +356,8 @@ public class Match extends Strategy {
             return env.makeString("\"" + ((ATermAppl) t).getName() + "\"");
         } else if (Tools.isATermAppl(t)) {
             ATermAppl a = (ATermAppl)t;
-            if(Tools.isCons(a) || Tools.isNil(a))
-                return env.makeTerm("Nil");
+            if(Tools.isCons(a, env) || Tools.isNil(a, env))
+                return env.getFactory().makeAppl(env.getNilAFun());  
             else 
                 return env.makeString(((ATermAppl) t).getName());
         }

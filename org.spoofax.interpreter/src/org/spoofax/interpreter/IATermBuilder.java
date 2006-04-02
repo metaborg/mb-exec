@@ -11,14 +11,50 @@ import java.util.Collection;
 
 import aterm.ATerm;
 import aterm.ATermList;
+import aterm.AFun;
 
 public interface IATermBuilder {
-    
-    public ATerm makeList(ATermList terms);
-    public ATerm makeList(ATerm... terms);
-    public ATerm makeList(Collection<ATerm> terms);
-    public ATerm makeTerm(String s);
-    public ATerm makeTerm(int i);
-    public ATerm makeString(String s);
 
+    ATerm makeList(ATermList terms);
+
+    ATerm makeList(ATerm... terms);
+
+    ATerm makeList(Collection<ATerm> terms);
+
+    ATerm makeTerm(String s);
+
+    ATerm makeTerm(int i);
+
+    ATerm makeString(String s);
+
+    //todo: move these in a separate interface?
+    AFun getOpAFun();
+
+    AFun getConsAFun();
+
+    AFun getNilAFun();
+
+    AFun getAnnoAFun();
+
+    AFun getStrAFun();
+
+    AFun getVarAFun();
+
+    AFun getExplodeAFun();
+
+    AFun getRealAFun();
+
+    AFun getIntAFun();
+
+    AFun getConstTypeAFun();
+
+    AFun getFunTypeAFun();
+
+    AFun getExtSDefAFun();
+
+    AFun getSDefTAFun();
+
+    AFun getAsAFun();
+
+    AFun getWldAFun();
 }

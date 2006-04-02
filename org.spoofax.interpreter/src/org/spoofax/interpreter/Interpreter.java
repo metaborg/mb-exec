@@ -39,6 +39,7 @@ import org.spoofax.interpreter.library.SSL;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
+import aterm.AFun;
 
 public class Interpreter extends ATermBuilder {
 
@@ -62,8 +63,7 @@ public class Interpreter extends ATermBuilder {
             DebugUtil.debug(prg);
         }
 
-        loadConstructors(Tools
-          .listAt(Tools.applAt(Tools.listAt(sign, 0), 0), 0));
+        loadConstructors(Tools.listAt(Tools.applAt(Tools.listAt(sign, 0), 0), 0));
         loadStrategies(Tools.listAt(strats, 0));
     }
 
@@ -77,10 +77,10 @@ public class Interpreter extends ATermBuilder {
     private void loadStrategies(ATermList list) throws InterpreterException {
         for (int i = 0; i < list.getChildCount(); i++) {
             ATermAppl t = Tools.applAt(list, i);
-            if(Tools.isSDefT(t)) {
+            if(Tools.isSDefT(t, context)) {
                 SDefT def = parseSDefT(t);
                 context.addSVar(def.getName(), def);
-            } else if(Tools.isExtSDef(t)) {
+            } else if(Tools.isExtSDef(t, context)) {
                 ExtSDef def = parseExtSDef(t);
                 context.addSVar(def.getName(), def);
                 // FIXME: Come up with a good solution for external
@@ -111,9 +111,9 @@ public class Interpreter extends ATermBuilder {
     }
 
     private Strategy parseStrategy(ATermAppl appl) throws InterpreterException {
-        
+
         String op = appl.getName();
-        
+
         if (op.equals("Build")) {
             return parseBuild(appl);
         } else if (op.equals("Scope")) {
@@ -165,14 +165,14 @@ public class Interpreter extends ATermBuilder {
     }
 
     private Let parseLet(ATermAppl t) throws InterpreterException {
-        
+
         ATermList l = Tools.listAt(t, 0);
         List<SDefT> defs = new ArrayList<SDefT>();
 
         for (int i = 0; i < l.getChildCount(); i++) {
             defs.add(parseSDefT(Tools.applAt(l, i)));
         }
-        
+
         Strategy body = parseStrategy(Tools.applAt(t, 1));
 
         return new Let(defs, body);
@@ -261,21 +261,21 @@ public class Interpreter extends ATermBuilder {
     }
 
     private ArgType parseArgType(ATermAppl t) {
-        if(Tools.isFunType(t)) {
+        if(Tools.isFunType(t, context)) {
             ATermList l = Tools.listAt(t, 0);
             List<ArgType> ch = new ArrayList<ArgType>();
             for (int i = 0; i < l.getChildCount(); i++) {
                 ch.add(parseArgType(Tools.applAt(l, i)));
             }
             return new FunType(ch);
-        } else if(Tools.isConstType(t)) {
+        } else if(Tools.isConstType(t, context)) {
             return new ConstType();
         }
         return null;
     }
 
     private PrimT parsePrimT(ATermAppl t) throws InterpreterException {
-        
+
         String name = Tools.stringAt(t, 0);
         List<Strategy> svars = parseStrategyList(Tools.listAt(t, 1));
         List<ATerm> tvars = parseTermList(Tools.listAt(t, 2));
@@ -343,24 +343,24 @@ public class Interpreter extends ATermBuilder {
     }
 
     private Seq parseSeq(ATermAppl t) throws InterpreterException {
-        
+
         Strategy s0 = parseStrategy(Tools.applAt(t, 0));
         Strategy s1 = parseStrategy(Tools.applAt(t, 1));
-        
+
         return new Seq(s0, s1);
     }
 
     private Scope parseScope(ATermAppl t) throws InterpreterException {
-     
+
         ATermList vars = Tools.listAt(t, 0);
         List<String> realvars = new ArrayList<String>(vars.getChildCount());
 
         for (int i = 0; i < vars.getChildCount(); i++) {
             realvars.add(Tools.stringAt(vars, i));
         }
-        
+
         Strategy body = parseStrategy(Tools.applAt(t, 1));
-        
+
         return new Scope(realvars, body);
     }
 
@@ -375,7 +375,7 @@ public class Interpreter extends ATermBuilder {
         if (def == null) {
             throw new InterpreterException("Definition '" + name + "' not found");
         }
-        
+
         return def.getBody().eval(context);
     }
 
@@ -386,7 +386,7 @@ public class Interpreter extends ATermBuilder {
     public void setCurrent(ATerm inp) {
         context.setCurrent(inp);
     }
-    
+
     public ATerm current() {
         return context.current();
     }
@@ -400,5 +400,66 @@ public class Interpreter extends ATermBuilder {
 
     public void shutdown() {
         context.cleanup();
+    }
+
+
+    public AFun getOpAFun() {
+        return context.getOpAFun();
+    }
+
+    public AFun getConsAFun() {
+        return context.getConsAFun();
+    }
+
+    public AFun getNilAFun() {
+        return context.getNilAFun();
+    }
+
+    public AFun getAnnoAFun() {
+        return context.getAnnoAFun();
+    }
+
+    public AFun getStrAFun() {
+        return context.getStrAFun();
+    }
+
+    public AFun getVarAFun() {
+        return context.getVarAFun();
+    }
+
+    public AFun getExplodeAFun() {
+        return context.getExplodeAFun();
+    }
+
+    public AFun getRealAFun() {
+        return context.getRealAFun();
+    }
+
+    public AFun getIntAFun() {
+        return context.getIntAFun();
+    }
+
+    public AFun getConstTypeAFun() {
+        return context.getConstTypeAFun();
+    }
+
+    public AFun getFunTypeAFun() {
+        return context.getFunTypeAFun();
+    }
+
+    public AFun getExtSDefAFun() {
+        return context.getExtSDefAFun();
+    }
+
+    public AFun getSDefTAFun() {
+        return context.getSDefTAFun();
+    }
+
+    public AFun getAsAFun() {
+        return context.getAsAFun();
+    }
+
+    public AFun getWldAFun() {
+        return context.getWldAFun();    
     }
 }

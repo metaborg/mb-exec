@@ -33,10 +33,10 @@ public class SSL_implode_string extends Primitive {
 
         ATermAppl a = (ATermAppl)t;
 
-        if (!(Tools.isCons(a) || Tools.isNil(a)))
+        if (!(Tools.isCons(a, env) || Tools.isNil(a, env)))
             return false;
 
-        ATermList l = Tools.consToList(env.getFactory(), (ATermAppl)t);
+        ATermList l = Tools.consToList(env, (ATermAppl)t);
 
         StringBuilder sb = new StringBuilder();
 
