@@ -69,20 +69,20 @@
                 <!--<pathelement location="../../../shared-objects-JJTraveler-bundle/shared-objects-1.4.2/classes"/>-->
             </classpath>
             <formatter type="plain"/>
-            <test name="org.spoofax.interpreter.test.LibraryTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.BasicLibraryTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.ClosureTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.HigherOrderParamTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.GuardTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.ScopingTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.TermDeconstructionTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.BuildTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.TermConstructionTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.ArithmeticTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.CongruenceTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.OverloadingTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.DefinitionTest" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.MatchTest" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.LibraryTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.BasicLibraryTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.ClosureTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.HigherOrderParamTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.GuardTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.ScopingTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.TermDeconstructionTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.BuildTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.TermConstructionTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.ArithmeticTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.CongruenceTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.OverloadingTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.DefinitionTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.MatchTest" todir="${test.out.dir}" haltonfailure="yes"/>
         </junit>
     </target>
 
