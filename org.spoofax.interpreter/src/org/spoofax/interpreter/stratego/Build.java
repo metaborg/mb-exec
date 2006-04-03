@@ -36,30 +36,38 @@ public class Build extends Strategy {
 
         ATerm t = buildTerm(env, term);
         if (t == null) {
-            return DebugUtil.traceReturn(false, env.current(), this);
+            if(DebugUtil.isDebugging()) {
+                return DebugUtil.traceReturn(false, env.current(), this);
+            } else {
+                return false;
+            }
         }
         env.setCurrent(t);
 
-        return DebugUtil.traceReturn(true, env.current(), this);
+        if(DebugUtil.isDebugging()) {
+            return DebugUtil.traceReturn(true, env.current(), this);
+        } else {
+            return true;
+        }
     }
 
     public ATerm buildTerm(IContext env, ATermAppl t) throws InterpreterException {
 
         PureFactory factory = env.getFactory();
 
-        if (Tools.isAnno(t, env)) {
+        if (t.getAFun() == env.getAnnoAFun()) {
             return buildAnno(env, t);
-        } else if (Tools.isOp(t, env)) {
+        } else if (t.getAFun() == env.getOpAFun()) {
             return buildOp(env, t, factory);
-        } else if (Tools.isInt(t, env)) {
+        } else if (t.getAFun() == env.getIntAFun()) {
             return buildInt(t, factory);
-        } else if (Tools.isReal(t, env)) {
+        } else if (t.getAFun() == env.getRealAFun()) {
             return buildReal(t, factory);
-        } else if (Tools.isStr(t, env)) {
+        } else if (t.getAFun() == env.getStrAFun()) {
             return buildStr(t);
-        } else if (Tools.isVar(t, env)) {
+        } else if (t.getAFun() == env.getVarAFun()) {
             return buildVar(env, t);
-        } else if (Tools.isExplode(t, env)) {
+        } else if (t.getAFun() == env.getExplodeAFun()) {
             return buildExplode(env, t);
         }
 
@@ -93,12 +101,12 @@ public class Build extends Strategy {
             debug(" actualArgs : ", actualArgs);
         }
 
-        if (Tools.isATermInt(actualCtor) || Tools.isATermReal(actualCtor)) {
+        if (actualCtor.getType() == ATerm.INT || actualCtor.getType() == ATerm.REAL) {
             return actualCtor;
         }
         else if (Tools.isATermString(actualCtor)) {
 
-            if (!Tools.isATermAppl(actualArgs)) {
+            if (!(actualArgs.getType() == ATerm.APPL)) {
                 return null;
             }
 
@@ -113,8 +121,8 @@ public class Build extends Strategy {
             AFun afun = factory.makeAFun(n, realArgs.getChildCount(), quoted);
             return factory.makeApplList(afun, realArgs);
         }
-        else if (Tools.isATermAppl(actualCtor)
-          && Tools.isNil((ATermAppl)actualCtor, env)) {
+        else if (actualCtor.getType() == ATerm.APPL
+          && ((ATermAppl)actualCtor).getAFun() == env.getNilAFun()) {
             return actualArgs;
         }
 
@@ -122,20 +130,20 @@ public class Build extends Strategy {
     }
 
     private ATerm buildVar(IContext env, ATermAppl t) throws InterpreterException {
-        
+
         String n = Tools.stringAt(t, 0);
         return env.lookupVar(n);
     }
 
     private ATerm buildStr(ATermAppl t) {
         ATermAppl x = Tools.applAt(t, 0);
-        
+
         return x;
     }
 
     private ATerm buildReal(ATermAppl t, PureFactory factory) {
         ATermAppl x = Tools.applAt(t, 0);
-        
+
         return factory.makeReal(new Double(x.getName()));
     }
 
@@ -160,7 +168,7 @@ public class Build extends Strategy {
             }
             kids = kids.append(kid);
         }
-        
+
         return factory.makeApplList(afun, kids);
     }
 

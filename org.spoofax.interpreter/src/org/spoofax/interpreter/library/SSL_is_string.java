@@ -23,7 +23,7 @@ public class SSL_is_string extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-
+        
         return Tools.isATermString(targs.get(0));
     }
 }

@@ -19,17 +19,17 @@ import org.spoofax.interpreter.stratego.SDefT.FunType;
 abstract public class Strategy implements IConstruct {
 
     private final static ArgType type;
-
+    
     static {
         List<ArgType> l = new ArrayList<ArgType>(2);
         l.add(new ConstType());
         type = new FunType(l);
     }
-
+    
     protected static void debug(Object... s) {
         Context.debug(s);
     }
-
+    
     public SDefT.ArgType getType() {
         return type;
     }

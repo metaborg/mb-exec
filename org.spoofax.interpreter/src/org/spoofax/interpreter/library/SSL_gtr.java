@@ -23,14 +23,14 @@ public class SSL_gtr extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-
-        if (targs.get(0).getType() != ATerm.REAL)
+        
+        if(targs.get(0).getType() != ATerm.REAL)
             return false;
-        if (targs.get(1).getType() != ATerm.REAL)
+        if(targs.get(1).getType() != ATerm.REAL)
             return false;
 
-        ATermReal a = (ATermReal)targs.get(0);
-        ATermReal b = (ATermReal)targs.get(1);
+        ATermReal a = (ATermReal) targs.get(0);
+        ATermReal b = (ATermReal) targs.get(1);
         return a.getReal() > b.getReal();
     }
 }

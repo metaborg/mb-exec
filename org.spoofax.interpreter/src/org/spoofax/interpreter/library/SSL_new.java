@@ -21,22 +21,22 @@ public class SSL_new extends Primitive {
     private int alphaCounter;
     private int counter;
     private int letterA = 'a';
-    
+
     protected SSL_new() {
         super("SSL_new", 0, 0);
-        
+
         alphaCounter = 0;
         counter = 0;
     }
-    
+
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
 
         TermFactory factory = env.getFactory();
 
         String s = (char)(letterA + alphaCounter) + "_" + counter;
-        while (factory.hasAFun(s, 0)) {
+        while(factory.hasAFun(s, 0)) {
             alphaCounter++;
-            if (alphaCounter > 26) {
+            if(alphaCounter > 26) {
                 alphaCounter = 0;
                 counter++;
             }

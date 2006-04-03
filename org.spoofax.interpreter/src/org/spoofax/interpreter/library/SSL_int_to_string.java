@@ -21,13 +21,13 @@ public class SSL_int_to_string extends Primitive {
     protected SSL_int_to_string() {
         super("SSL_int_to_string", 0, 1);
     }
-    
+
     public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException {
 
-        if (tvars.get(0).getType() != ATerm.INT)
+        if(tvars.get(0).getType() != ATerm.INT)
             return false;
 
-        ATermInt a = (ATermInt)tvars.get(0);
+        ATermInt a = (ATermInt) tvars.get(0);
         env.setCurrent(env.makeTerm("\"" + a.getInt() + "\""));
         return true;
     }

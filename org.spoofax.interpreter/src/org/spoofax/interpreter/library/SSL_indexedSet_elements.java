@@ -28,18 +28,18 @@ public class SSL_indexedSet_elements extends Primitive {
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs)
             throws InterpreterException {
 
-        if (!Tools.isATermInt(targs.get(0)))
+        if (!(targs.get(0).getType() == ATerm.INT))
             return false;
 
-        int ref = Tools.getATermInt((ATermInt)targs.get(0));
+        int ref = ((ATermInt)targs.get(0)).getInt();
         ATermIndexedSet is = SSL_indexedSet_create.map.get(ref);
 
-        if (is == null)
+        if(is == null)
             return false;
 
         Collection<ATerm> values = is.values();
         env.setCurrent(env.makeList(values));
-
+        
         return true;
     }
 }

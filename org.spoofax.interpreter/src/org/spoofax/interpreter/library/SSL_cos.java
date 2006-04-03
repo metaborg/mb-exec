@@ -24,8 +24,8 @@ public class SSL_cos extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        
-        if(!Tools.isATermReal(targs.get(0)))
+
+        if(!(targs.get(0).getType() == ATerm.REAL))
             return false;
 
         ATermReal a = (ATermReal) targs.get(0);

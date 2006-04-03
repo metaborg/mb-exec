@@ -9,6 +9,7 @@ package org.spoofax.interpreter.library;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.BufferedOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,8 +37,8 @@ public class SSL {
         inputStreamMap.put(SSL.CONST_STDIN, System.in);
         
         outputStreamMap = new HashMap<Integer, OutputStream>();
-        outputStreamMap.put(SSL.CONST_STDERR, System.err);
-        outputStreamMap.put(SSL.CONST_STDOUT, System.out);
+        outputStreamMap.put(SSL.CONST_STDERR, new BufferedOutputStream(System.err));
+        outputStreamMap.put(SSL.CONST_STDOUT, new BufferedOutputStream(System.out));
         
         registry = new HashMap<String, Primitive>();
         registry.put("SSL_is_int", new SSL_is_int());
@@ -91,8 +92,8 @@ public class SSL {
      }
 
     protected static Map<String, Primitive> getRegistry() {
-        if (registry == null)
-            initRegistry();
+//        if (registry == null)
+//            initRegistry();
         return registry;
     }
 
@@ -111,6 +112,11 @@ public class SSL {
     //@todo fix
     protected static Map<Integer, ATermHashtable> hashtables;
     protected static int counter = 0;
+
+    static {
+        initRegistry(); //this *must* be called here
+        init();
+    }
 
     /**
      * Resets the entire state of the SSL. <br>

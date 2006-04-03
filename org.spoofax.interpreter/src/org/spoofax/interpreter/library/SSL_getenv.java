@@ -23,15 +23,15 @@ public class SSL_getenv extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-
-        if (!Tools.isATermString(targs.get(0)))
+        
+        if(!Tools.isATermString(targs.get(0)))
             return false;
-
+        
         String s = System.getenv(Tools.getATermString(targs.get(0)));
 
-        if (s == null)
+        if(s == null)
             return false;
-
+        
         env.setCurrent(env.makeString(s));
         return true;
     }

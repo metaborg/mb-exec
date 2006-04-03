@@ -24,19 +24,19 @@ public class SSL_explode_string extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException {
-
+        
         ATerm t = tvars.get(0);
-
-        if (!Tools.isATermString(t))
+        
+        if(!Tools.isATermString(t))
             return false;
-
+        
         String s = Tools.getATermString(t);
         ATerm[] r = new ATermInt[s.length()];
         byte[] bs = s.getBytes();
-
-        for (int i = 0; i < bs.length; i++)
+        
+        for(int i=0;i<bs.length;i++)
             r[i] = env.getFactory().makeInt(bs[i]);
-
+        
         ATerm sl = env.makeList(r);
         env.setCurrent(sl);
         return true;

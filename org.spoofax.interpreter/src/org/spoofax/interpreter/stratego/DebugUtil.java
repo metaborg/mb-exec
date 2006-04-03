@@ -10,8 +10,11 @@ import org.spoofax.interpreter.Context;
  * Licensed under the GNU General Public License, v2
  */
 public class DebugUtil {
-    private static boolean debugging;
+    public static boolean debugging;
     public static final int INDENT_STEP = 2;
+    public static boolean resetSSL = true;
+    public static boolean cleanupInShutdown = true;
+    public static boolean shareFactory = true;
 
     /**
      * Debug utility to trace the result of a completed strategy and the 'current'
@@ -19,7 +22,7 @@ public class DebugUtil {
      * We do not trace return of {@link org.spoofax.interpreter.stratego.Seq} or {@link org.spoofax.interpreter.stratego.Scope} for clarity.
      */
     public static boolean traceReturn(boolean result, Object current, final Strategy strategy) {
-        if (isDebugging()) {
+        if (debugging) {
             // Indent just for stragies that use a scope.
             boolean doIndent = strategy instanceof CallT || strategy instanceof Let || strategy instanceof Scope;
             StringBuilder sb = buildIndent(doIndent ? INDENT_STEP : 0);
@@ -59,10 +62,6 @@ public class DebugUtil {
         }
     }
 
-    public static boolean isDebugging() {
-        return debugging;
-    }
-
     public static void setDebug(boolean b) {
         debugging = b;
     }
@@ -86,5 +85,9 @@ public class DebugUtil {
         StringBuilder b = new StringBuilder(indentation);
         b.append(indent, 0, indentation);
         return b;
+    }
+
+    public static boolean isDebugging() {
+        return debugging;
     }
 }

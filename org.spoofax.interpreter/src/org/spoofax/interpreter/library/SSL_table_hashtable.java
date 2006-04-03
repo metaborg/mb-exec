@@ -26,6 +26,10 @@ public class SSL_table_hashtable extends Primitive {
     protected static ATermHashtable map;
     private int magicRef = -1;
 
+    static {
+        init();
+    }
+
     public static void init() {
         if(map != null) {
             for (ATerm aTerm : map.values()) {
@@ -37,7 +41,7 @@ public class SSL_table_hashtable extends Primitive {
     }
 
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-
+        
         if(magicRef == -1) {
             magicRef = SSL.registerHashtable(map);
         }

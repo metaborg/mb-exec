@@ -37,11 +37,12 @@ public class SSL_access extends Primitive {
 
         if (!Tools.isATermString(targs.get(0)))
             return false;
-        if (!Tools.isATermAppl(targs.get(1)))
+        if (!(targs.get(1).getType() == ATerm.APPL))
             return false;
 
         String path = Tools.getATermString(targs.get(0));
-        int permissions = permissions_from_term(Tools.consToList(env, (ATermAppl) targs.get(1)));
+        int permissions = permissions_from_term(Tools.
+          consToList(env, (ATermAppl) targs.get(1)));
         File f = new File(path);
 
         if ((permissions & R_OK) != 0) {

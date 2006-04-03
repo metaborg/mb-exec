@@ -13,10 +13,12 @@ import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
+import org.spoofax.interpreter.stratego.DebugUtil;
 
 public class ATermBuilder implements IATermBuilder {
 
     protected TermFactory factory;
+    protected static TermFactory factoryShared = new TermFactory();
 
     protected AFun OpAFun;
     protected AFun ConsAFun;
@@ -35,10 +37,14 @@ public class ATermBuilder implements IATermBuilder {
     protected AFun WldAFun;
 
     ATermBuilder() {
-        factory = new TermFactory();
+        if(DebugUtil.shareFactory) {
+            factory = factoryShared;
+        } else {
+            factory = new TermFactory();
+        }
         initAFuns();
     }
-    
+
 //    ATerm makePattern(String s) {
 //        return factory.parse(s);
 //    }
@@ -66,67 +72,67 @@ public class ATermBuilder implements IATermBuilder {
 
     public ATerm makeList(String s) {
         ATermList t = (ATermList) makeTerm(s);
-        
+
         return makeList(t);
     }
-    
+
     public ATerm makeList(ATermList t) {
-        
+
         ATerm l = factory.makeAppl(getNilAFun());
         AFun f = getConsAFun();
-        
+
         for (int i = t.getLength() - 1; i >= 0; i--)
             l = factory.makeAppl(f, (ATerm) t.getChildAt(i), l);
-        
+
         return l;
     }
 
     public ATerm makeList(ATerm... terms) {
-        
+
         ATermList l = factory.makeList();
-        
+
         for(ATerm t : terms)
             l = l.append(t);
-        
+
         return makeList(l);
     }
 
     public ATerm makeList(Collection<ATerm> terms) {
-        
+
         ATermList l = factory.makeList();
-        
+
         for(ATerm t : terms)
             l = l.append(t);
-        
+
         return makeList(l);
     }
- 
+
     public ATerm makeTuple(String s) {
-        
+
         ATermList t = (ATermList) makeTerm(s);
-        
+
         return makeTuple(t);
     }
-    
+
     public ATerm makeTuple(ATermList t) {
-        
+
         ATerm[] t2 = new ATerm[t.getLength()];
-        
+
         for (int i = 0; i < t.getLength(); i++)
             t2[i] = (ATerm) t.getChildAt(i);
-    
+
         AFun f = factory.makeAFun("", t2.length, false);
-        
+
         return factory.makeAppl(f, t2);
     }
 
     public ATerm makeTuple(ATerm... terms) {
-        
+
         ATermList l = factory.makeList();
-        
+
         for(ATerm t : terms)
             l = l.append(t);
-        
+
         return makeTuple(l);
     }
 
@@ -135,9 +141,9 @@ public class ATermBuilder implements IATermBuilder {
     }
 
     public ATermAppl makeTerm(String op, ATerm a0, ATerm a1) {
-        
+
         AFun fun = factory.makeAFun(op, 2, false);
-        
+
         return factory.makeAppl(fun, a0, a1);
     }
 
@@ -150,12 +156,11 @@ public class ATermBuilder implements IATermBuilder {
     }
 
     public ATerm makeString(String name) {
-        
+
         AFun f = factory.makeAFun(name, 0, true);
-        
+
         return factory.makeAppl(f);
     }
-
 
     public AFun getOpAFun() {
         return OpAFun;

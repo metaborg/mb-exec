@@ -22,7 +22,7 @@ public class SSL_stderr_stream extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-
+        
         env.setCurrent(env.makeTerm(SSL.CONST_STDERR));
         return true;
     }

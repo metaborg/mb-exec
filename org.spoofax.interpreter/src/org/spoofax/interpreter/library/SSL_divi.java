@@ -24,10 +24,10 @@ public class SSL_divi extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-        
-        if(!Tools.isATermInt(targs.get(0)))
+
+        if(!(targs.get(0).getType() == ATerm.INT))
             return false;
-        if(!Tools.isATermInt(targs.get(1)))
+        if(!(targs.get(1).getType() == ATerm.INT))
             return false;
 
         ATermInt a = (ATermInt) targs.get(0);

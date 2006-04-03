@@ -18,11 +18,6 @@ import org.spoofax.interpreter.library.SSL;
 
 import aterm.ATerm;
 
-/**
- * A strategy to delegate to a {@link Primitive "SSL primitive"}.
- *
- * @see Primitive and derived classes
- */
 public class PrimT extends Strategy {
 
     protected String name;
@@ -52,6 +47,7 @@ public class PrimT extends Strategy {
         for (ATerm t : tvars) {
             vals.add(env.lookupVar(Tools.stringAt(t, 0)));
         }
+
 
         if (vals.size() != prim.getTArity())
             throw new InterpreterException("Wrong aterm arity when calling '" + name + "', expected " + prim.getTArity() + " got " + vals.size());

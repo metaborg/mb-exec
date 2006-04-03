@@ -25,10 +25,10 @@ public class SSL_sqrt extends Primitive {
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
 
-        if (!Tools.isATermReal(targs.get(0)))
+        if(!(targs.get(0).getType() == ATerm.REAL))
             return false;
 
-        ATermReal a = (ATermReal)targs.get(0);
+        ATermReal a = (ATermReal) targs.get(0);
         env.setCurrent(env.getFactory().makeReal(Math.sqrt(a.getReal())));
         return true;
     }

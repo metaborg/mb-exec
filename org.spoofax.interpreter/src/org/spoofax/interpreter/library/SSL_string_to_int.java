@@ -23,8 +23,8 @@ public class SSL_string_to_int extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException {
-
-        if (!Tools.isATermString(tvars.get(0)))
+        
+        if(!Tools.isATermString(tvars.get(0)))
             return false;
 
         String s = Tools.getATermString(tvars.get(0));

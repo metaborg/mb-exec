@@ -24,8 +24,8 @@ public class SSL_rand extends Primitive {
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
 
         double r = Math.random();
-        int i = (int)((r - 0.5) * 2147483647);
-
+        int i = (int)((r-0.5) * 2147483647);
+        
         env.setCurrent(env.getFactory().makeInt(i));
         return true;
     }

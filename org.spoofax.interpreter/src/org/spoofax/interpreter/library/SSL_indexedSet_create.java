@@ -77,6 +77,10 @@ public class SSL_indexedSet_create extends Primitive {
     protected static Map<Integer, ATermIndexedSet> map;
     protected static int setCounter;
 
+    static {
+        init();
+    }
+
     public static Map init() {
         if(map != null) {
 
@@ -96,18 +100,18 @@ public class SSL_indexedSet_create extends Primitive {
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
 
-        if (!Tools.isATermInt(targs.get(0)))
+        if(!(targs.get(0).getType() == ATerm.INT))
             return false;
-        if (!Tools.isATermInt(targs.get(1)))
+        if(!(targs.get(1).getType() == ATerm.INT))
             return false;
 
-        int initialSize = Tools.getATermInt((ATermInt)targs.get(0));
-        int maxLoad = Tools.getATermInt((ATermInt)targs.get(1));
-
+        int initialSize = ((ATermInt)targs.get(0)).getInt();
+        int maxLoad = ((ATermInt)targs.get(1)).getInt();
+        
         ATermIndexedSet is = new ATermIndexedSet(initialSize, maxLoad);
         int n = setCounter++;
         map.put(n, is);
-
+        
         env.setCurrent(env.makeTerm(n));
         return true;
     }

@@ -23,19 +23,19 @@ public class SSL_concat_strings extends Primitive {
     protected SSL_concat_strings() {
         super("SSL_concat_strings", 0, 1);
     }
-    
+
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
 
         ATerm t = targs.get(0);
         if(t.getType() != ATerm.APPL)
             return false;
-        
+
         ATermAppl a = (ATermAppl) t;
-        if(!(Tools.isCons(a, env) || Tools.isNil(a, env)))
+        if(!(a.getAFun() == env.getConsAFun() || a.getAFun() == env.getNilAFun()))
             return false;
 
         ATermList l = Tools.consToList(env, a);
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         for(int i=0;i<l.getChildCount();i++) {
             sb.append(Tools.stringAt(l, i));
         }

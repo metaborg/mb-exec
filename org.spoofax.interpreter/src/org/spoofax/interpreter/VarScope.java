@@ -29,18 +29,18 @@ public class VarScope {
 
     public VarScope(VarScope parent) {
         this.parent = parent;
-        
+
         vars = new HashMap<String, ATerm>(0); //todo: create these on demand
         svars = new HashMap<String, SDefT>(0);
     }
 
     public ATerm lookup(String name) {
-        
+
         ATerm t = vars.get(name);
-        
+
         if (t == null && parent != null)
             t = parent.lookup(name);
-        
+
         if(DebugUtil.isDebugging()) {
             Context.debug(DebugUtil.buildIndent(DebugUtil.INDENT_STEP), "lookup : ", name, " = ", t);
         }
@@ -49,12 +49,12 @@ public class VarScope {
     }
 
     public SDefT lookupSVar(String name) {
-        
+
         SDefT t = svars.get(name);
-        
+
         if (t == null && parent != null)
             return parent.lookupSVar(name);
-        
+
         return t;
     }
 
@@ -105,13 +105,13 @@ public class VarScope {
     }
 
     public VarScope scopeOf(String name) {
-        
+
         if (vars.containsKey(name))
             return this;
-        
+
         if (parent != null)
             return parent.scopeOf(name);
-        
+
         return null;
     }
 
@@ -137,7 +137,6 @@ public class VarScope {
         }
         return pre + "  ";
     }
-
     public String dump(String prefix) {
         return dump(prefix, false);
     }

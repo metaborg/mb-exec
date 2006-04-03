@@ -50,7 +50,9 @@ public class Interpreter extends ATermBuilder {
         Context.indentation = 0;
         context = new Context();
         factory = context.factory;
-        SSL.init();//todo: temporary to verify the hypothesis that the global state causes trouble.
+        if(DebugUtil.resetSSL) {
+            SSL.init();//todo: temporary to verify the hypothesis that the global state causes trouble.
+        }
     }
 
     public void load(String path) throws IOException, InterpreterException {
@@ -77,10 +79,10 @@ public class Interpreter extends ATermBuilder {
     private void loadStrategies(ATermList list) throws InterpreterException {
         for (int i = 0; i < list.getChildCount(); i++) {
             ATermAppl t = Tools.applAt(list, i);
-            if(Tools.isSDefT(t, context)) {
+            if(t.getAFun() == context.getSDefTAFun()) {
                 SDefT def = parseSDefT(t);
                 context.addSVar(def.getName(), def);
-            } else if(Tools.isExtSDef(t, context)) {
+            } else if(t.getAFun() == context.getExtSDefAFun()) {
                 ExtSDef def = parseExtSDef(t);
                 context.addSVar(def.getName(), def);
                 // FIXME: Come up with a good solution for external
@@ -261,14 +263,14 @@ public class Interpreter extends ATermBuilder {
     }
 
     private ArgType parseArgType(ATermAppl t) {
-        if(Tools.isFunType(t, context)) {
+        if(t.getAFun() == context.getFunTypeAFun()) {
             ATermList l = Tools.listAt(t, 0);
             List<ArgType> ch = new ArrayList<ArgType>();
             for (int i = 0; i < l.getChildCount(); i++) {
                 ch.add(parseArgType(Tools.applAt(l, i)));
             }
             return new FunType(ch);
-        } else if(Tools.isConstType(t, context)) {
+        } else if(t.getAFun() == context.getConstTypeAFun()) {
             return new ConstType();
         }
         return null;
@@ -399,9 +401,11 @@ public class Interpreter extends ATermBuilder {
     }
 
     public void shutdown() {
-        context.cleanup();
+        //todo perf: this takes 2 secs overall
+        if(DebugUtil.cleanupInShutdown) {
+            context.cleanup();
+        }
     }
-
 
     public AFun getOpAFun() {
         return context.getOpAFun();
@@ -460,6 +464,6 @@ public class Interpreter extends ATermBuilder {
     }
 
     public AFun getWldAFun() {
-        return context.getWldAFun();    
+        return context.getWldAFun();
     }
 }

@@ -28,15 +28,6 @@ public interface IContext extends IATermBuilder {
     VarScope getVarScope();
     void setVarScope(VarScope newVarScope);
 
-    /**
-     * Pop a scope. <br>
-     * A stack-like operation
-     */
     void popVarScope();
-
-    /**
-     * Restore a scope. <br>
-     * A swap operation.
-     */
     void restoreVarScope(VarScope anotherVarScope);
 }

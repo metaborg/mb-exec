@@ -26,10 +26,10 @@ public class SSL_hashtable_destroy extends Primitive {
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs)
             throws InterpreterException {
 
-        if (!Tools.isATermInt(targs.get(0)))
+        if (!(targs.get(0).getType() == ATerm.INT))
             return false;
 
-        boolean res = SSL.removeHashtable(((ATermInt)targs.get(0)).getInt());
+        boolean res = SSL.removeHashtable(((ATermInt) targs.get(0)).getInt());
         env.setCurrent(targs.get(0));
         return res;
     }

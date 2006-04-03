@@ -10,8 +10,9 @@ package org.spoofax.interpreter.test;
 import java.io.IOException;
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Interpreter;
+import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.stratego.DebugUtil;
 
 import aterm.ATerm;
 import aterm.pure.ATermImpl;
@@ -26,8 +27,10 @@ public abstract class AbstractInterpreterTest extends TestCase {
         super.setUp();
         basePath = path;
         System.out.println("!!!!!!!!!!!!!!!!!!!!!");
+        DebugUtil.resetSSL = false; //faster but does not cleanup
+        DebugUtil.cleanupInShutdown = false; //faster but does not cleanup
+        DebugUtil.shareFactory = true; // in unit test mode all can share the same factory
         itp = new Interpreter();
-        //System.gc();
     }
     
     @Override

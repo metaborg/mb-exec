@@ -12,6 +12,7 @@ import java.util.List;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.stratego.DebugUtil;
 
 import aterm.ATerm;
 
@@ -32,4 +33,8 @@ public abstract class Primitive {
     public int getSArity() { return svars; }
     
     public abstract boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException;
+    
+    protected static void debug(String s) {
+        DebugUtil.debug("[ " + s + " ]");
+    }
 }

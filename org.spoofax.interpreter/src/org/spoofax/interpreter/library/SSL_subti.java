@@ -23,14 +23,14 @@ public class SSL_subti extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-
-        if (targs.get(0).getType() != ATerm.INT)
+        
+        if(targs.get(0).getType() != ATerm.INT)
             return false;
-        if (targs.get(1).getType() != ATerm.INT)
+        if(targs.get(1).getType() != ATerm.INT)
             return false;
 
-        ATermInt a = (ATermInt)targs.get(0);
-        ATermInt b = (ATermInt)targs.get(1);
+        ATermInt a = (ATermInt) targs.get(0);
+        ATermInt b = (ATermInt) targs.get(1);
         env.setCurrent(env.getFactory().makeInt(a.getInt() - b.getInt()));
         return true;
     }

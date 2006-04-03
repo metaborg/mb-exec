@@ -26,17 +26,17 @@ public class SSL_hashtable_get extends Primitive {
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
 
-        if (!Tools.isATermInt(targs.get(0)))
+        if(!(targs.get(0).getType() == ATerm.INT))
             return false;
 
-        ATermHashtable ath = SSL.getHashtable(Tools.getATermInt((ATermInt)targs.get(0)));
-        if (ath == null)
+        ATermHashtable ath = SSL.getHashtable(((ATermInt)targs.get(0)).getInt());
+        if(ath == null)
             return false;
-
+        
         ATerm t = ath.get(targs.get(1));
-        if (t == null)
+        if(t == null)
             return false;
-
+        
         env.setCurrent(t);
         return true;
     }

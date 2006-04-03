@@ -23,20 +23,20 @@ public class SSL_printnl extends Primitive {
     protected SSL_printnl() {
         super("SSL_printnl", 0, 2);
     }
-    
+
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
 
         // FIXME: Possibly erroneous
         String output = Tools.getATermString(targs.get(0));
-        
+
         ATermList l = Tools.consToListDeep(env, (ATermAppl) targs.get(1));
-        
-        StringBuilder sb = new StringBuilder();
+
+        StringBuffer sb = new StringBuffer();
         for(int i=0;i<l.getChildCount();i++) {
             ATerm t = Tools.termAt(l, i);
             if(t.getType() == ATerm.APPL) {
                 ATermAppl a = (ATermAppl) t;
-                if(Tools.isCons(a, env))
+                if(a.getAFun() == env.getConsAFun())
                     sb.append(Tools.consToListDeep(env, a));
                 else if(Tools.isATermString(t))
                     sb.append(Tools.getATermString(t));
@@ -45,9 +45,9 @@ public class SSL_printnl extends Primitive {
             sb.append(t.toString());
         }
 
-        if(output.equals("stderr")) 
+        if(output.equals("stderr"))
             System.err.println(sb);
-        else if(output.equals("stdout")) 
+        else if(output.equals("stdout"))
             System.out.println(sb);
         else
             throw new InterpreterException("Unknown output : " + output);

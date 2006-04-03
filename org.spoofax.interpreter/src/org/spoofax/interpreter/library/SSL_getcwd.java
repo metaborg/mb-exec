@@ -22,9 +22,9 @@ public class SSL_getcwd extends Primitive {
     }
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
-
+        
         String cwd = System.getProperty("user.dir");
-
+        
         env.setCurrent(env.makeString(cwd));
         return true;
     }

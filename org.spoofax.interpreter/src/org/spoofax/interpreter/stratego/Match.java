@@ -40,20 +40,24 @@ public class Match extends Strategy {
         List<Pair<String, ATerm>> r = match(env, current, pattern);
 
         if (r == null) {
-            return DebugUtil.traceReturn(false, env.current(), this);
+            if (DebugUtil.isDebugging()) {
+                return DebugUtil.traceReturn(false, env.current(), this);
+            }
+            return false;
         }
         else {
-            boolean b = env.bindVars(r);   //todo: move logging inside?
+            boolean b = env.bindVars(r);
 
             if (DebugUtil.isDebugging()) {
                 debug("Bindings: " + r); //todo: unclear
+                return DebugUtil.traceReturn(b, env.current(), this);
             }
-            return DebugUtil.traceReturn(b, env.current(), this);
+            return b;
         }
     }
 
     public List<Pair<String, ATerm>> emptyList() {
-        return new ArrayList<Pair<String, ATerm>>(0);
+        return new ArrayList<Pair<String, ATerm>>();
     }
 
     public List<Pair<String, ATerm>> matchApplAnno(IContext env, ATermAppl t,
@@ -66,21 +70,21 @@ public class Match extends Strategy {
     public List<Pair<String, ATerm>> matchAppl(IContext env, ATermAppl t,
             ATermAppl p) throws InterpreterException {
 
-        if (Tools.isAnno(p, env)) {
+        if (p.getAFun() == env.getAnnoAFun()) {
             return matchApplAnno(env, t, p);
-        } else if (Tools.isOp(p, env)) {
+        } else if (p.getAFun() == env.getOpAFun()) {
             return matchApplOp(env, t, p);
-        } else if (Tools.isInt(p, env)) {
+        } else if (p.getAFun() == env.getIntAFun()) {
             return matchApplInt(env, t, p);
-        } else if (Tools.isStr(p, env)) {
+        } else if (p.getAFun() == env.getStrAFun()) {
             return matchApplStr(t, p);
-        } else if (Tools.isVar(p, env)) {
+        } else if (p.getAFun() == env.getVarAFun()) {
             return matchApplVar(t, p);
-        } else if (Tools.isExplode(p, env)) {
+        } else if (p.getAFun() == env.getExplodeAFun()) {
             return matchAnyExplode(env, t, p);
-        } else if (Tools.isAs(p, env)) {
+        } else if (p.getAFun() == env.getAsAFun()) {
             return matchApplAs(env, t, p);
-        } else if (Tools.isWld(p, env)) {
+        } else if (p.getAFun() == env.getWldAFun()) {
             return emptyList();
         }
 
@@ -89,7 +93,7 @@ public class Match extends Strategy {
 
     protected List<Pair<String, ATerm>> matchApplInt(IContext env, ATermAppl t,
             ATermAppl p) throws InterpreterException {
-        if (Tools.isATermInt(t))
+        if (t.getType() == ATerm.INT)
             return match(env, Tools.intAt(t, 0), Tools.applAt(p, 0));
         return null;
     }
@@ -101,7 +105,7 @@ public class Match extends Strategy {
     }
 
     protected List<Pair<String, ATerm>> matchApplVar(ATermAppl t, ATermAppl p) {
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
         r.add(new Pair<String, ATerm>(Tools.stringAt(p, 0), t));
         return r;
     }
@@ -141,7 +145,7 @@ public class Match extends Strategy {
             return null;
 
         // Recursively match all arguments to term
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
         for (int i = 0; i < t.getChildCount(); i++) {
             List<Pair<String, ATerm>> m = match(env, (ATerm) t.getChildAt(i),
                                                 (ATermAppl) ctorArgs
@@ -151,7 +155,7 @@ public class Match extends Strategy {
             else
                 return null;
         }
-        
+
         return r;
     }
 
@@ -162,28 +166,28 @@ public class Match extends Strategy {
             debug("matching Int");
         }
 
-        if (Tools.isAnno(p, env)) {
+        if (p.getAFun() == env.getAnnoAFun()) {
             return matchIntAnno(env, t, p);
         }
-        else if (Tools.isInt(p, env)) {
+        else if (p.getAFun() == env.getIntAFun()) {
             return matchIntInt(t, p);
         }
-        else if (Tools.isReal(p, env)) {
+        else if (p.getAFun() == env.getRealAFun()) {
             return null;
         }
-        else if (Tools.isVar(p, env)) {
+        else if (p.getAFun() == env.getVarAFun()) {
             return matchIntVar(t, p);
         }
-        else if (Tools.isOp(p, env)) {
+        else if (p.getAFun() == env.getOpAFun()) {
             return null;
         }
-        else if (Tools.isExplode(p, env)) {
+        else if (p.getAFun() == env.getExplodeAFun()) {
             return matchAnyExplode(env, t, p);
         }
-        else if (Tools.isWld(p, env)) {
+        else if (p.getAFun() == env.getWldAFun()) {
             return matchIntWld(p);
         }
-        else if (Tools.isAs(p, env)) {
+        else if (p.getAFun() == env.getAsAFun()) {
             return matchIntAs(t, p);
         }
 
@@ -197,28 +201,28 @@ public class Match extends Strategy {
             debug("matching Real");
         }
 
-        if (Tools.isAnno(p, env)) {
+        if (p.getAFun() == env.getAnnoAFun()) {
             return matchRealAnno(env, t, p);
         }
-        else if (Tools.isInt(p, env)) {
+        else if (p.getAFun() == env.getIntAFun()) {
             return null;
         }
-        else if (Tools.isReal(p, env)) {
+        else if (p.getAFun() == env.getRealAFun()) {
             return matchRealReal(t, p);
         }
-        else if (Tools.isVar(p, env)) {
+        else if (p.getAFun() == env.getVarAFun()) {
             return matchRealVar(t, p);
         }
-        else if (Tools.isOp(p, env)) {
+        else if (p.getAFun() == env.getOpAFun()) {
             return null;
         }
-        else if (Tools.isExplode(p, env)) {
+        else if (p.getAFun() == env.getExplodeAFun()) {
             return matchAnyExplode(env, t, p);
         }
-        else if (Tools.isWld(p, env)) {
+        else if (p.getAFun() == env.getWldAFun()) {
             return matchRealWld(p);
         }
-        else if (Tools.isAs(p, env)) {
+        else if (p.getAFun() == env.getAsAFun()) {
             return matchRealAs(t, p);
         }
 
@@ -226,12 +230,12 @@ public class Match extends Strategy {
     }
 
     private List<Pair<String, ATerm>> matchRealReal(ATermReal t, ATermAppl p) {
-        
+
         Double realVal = new Double(Tools.stringAt(p, 0));
-        
+
         if (realVal == t.getReal())
             return emptyList();
-        
+
         return null;
     }
 
@@ -264,51 +268,51 @@ public class Match extends Strategy {
         Integer intVal = new Integer(Tools.stringAt(p, 0));
         if (intVal == t.getInt())
             return emptyList();
-        
+
         return null;
     }
 
     protected List<Pair<String, ATerm>> matchIntVar(ATermInt t, ATermAppl p) {
 
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
         r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0)).getName(),
                                       t));
-        
+
         return r;
     }
 
     protected List<Pair<String, ATerm>> matchRealVar(ATermReal t, ATermAppl p) {
-        
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
+
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
         r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0)).getName(),
                                       t));
-        
+
         return r;
     }
 
     protected List<Pair<String, ATerm>> matchIntAs(ATermInt t, ATermAppl p) {
-        
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
+
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
         String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
-        
+
         r.add(new Pair<String, ATerm>(varName, t));
-        
+
         return r;
     }
 
     protected List<Pair<String, ATerm>> matchRealAs(ATermReal t, ATermAppl p) {
-        
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>(0);
+
+        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
         String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
-        
+
         r.add(new Pair<String, ATerm>(varName, t));
-        
+
         return r;
     }
 
     protected List<Pair<String, ATerm>> matchAnyExplode(IContext env, ATerm t,
             ATermAppl p) throws InterpreterException {
-        
+
         ATermAppl opPattern = Tools.applAt(p, 0);
         ATermAppl argsPattern = Tools.applAt(p, 1);
 
@@ -322,19 +326,19 @@ public class Match extends Strategy {
             return null;
 
         opResult.addAll(argsResult);
-        
+
         return opResult;
     }
 
     private ATerm getTermArguments(IContext env, ATerm t) throws InterpreterException {
-        
-        if (Tools.isATermInt(t) || Tools.isATermReal(t))
+
+        if (t.getType() == ATerm.INT || t.getType() == ATerm.REAL)
             return env.makeList(emptyATermList(env));
-        else if (Tools.isATermAppl(t)) {
+        else if (t.getType() == ATerm.APPL) {
             ATermAppl a = (ATermAppl)t;
-            if(Tools.isNil(a, env) || Tools.isCons(a, env))
+            if(a.getAFun() == env.getNilAFun() || a.getAFun() == env.getConsAFun())
                 return t;
-            else 
+            else
                 return env.makeList(a.getArguments());
         }
 
@@ -342,23 +346,23 @@ public class Match extends Strategy {
     }
 
     private ATermList emptyATermList(IContext env) {
-        
+
         PureFactory factory = env.getFactory();
-        
+
         return factory.makeList();
     }
 
     private ATerm getTermConstructor(IContext env, ATerm t) throws InterpreterException {
-        
-        if (Tools.isATermInt(t) || Tools.isATermReal(t)) {
+
+        if (t.getType() == ATerm.INT || t.getType() == ATerm.REAL) {
             return t;
         } else if (Tools.isATermString(t)) {
             return env.makeString("\"" + ((ATermAppl) t).getName() + "\"");
-        } else if (Tools.isATermAppl(t)) {
+        } else if (t.getType() == ATerm.APPL) {
             ATermAppl a = (ATermAppl)t;
-            if(Tools.isCons(a, env) || Tools.isNil(a, env))
-                return env.getFactory().makeAppl(env.getNilAFun());  
-            else 
+            if(a.getAFun() == env.getConsAFun() || a.getAFun() == env.getNilAFun())
+                return env.getFactory().makeAppl(env.getNilAFun());
+            else
                 return env.makeString(((ATermAppl) t).getName());
         }
 
