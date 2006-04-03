@@ -39,6 +39,9 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testListBasic() { interpTest("list-basic-test" ,"[17,0]"); }
     public void testStringMisc() { interpTest("string-misc-test", "[14,0]"); }
 
+    public void testDynamicRulesLowlevel() { interpTest("dynamic-rules-lowlevel-test", "[46,0]"); }
+    public void testDynamicRulesHighlevel() { interpTest("dynamic-rules-highlevel-test", "[7,0]"); }
+
 /*
  *  Relies on ANSI C and/or POSIX semantics
     public void testPOSIXError() {  interpTest("posix-error-test");   }
