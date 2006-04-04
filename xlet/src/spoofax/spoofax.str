@@ -1,7 +1,0 @@
-module spoofax
-imports
-  spoofax/core
-  spoofax/xlet
-  spoofax/aterm
-  spoofax/path
-  spoofax/iowrap
