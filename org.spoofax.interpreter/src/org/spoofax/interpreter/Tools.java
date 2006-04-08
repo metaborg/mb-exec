@@ -2,7 +2,7 @@
  * Created on 24.jun.2005
  *
  * Copyright (c) 2004, Karl Trygve Kalleberg <karltk@ii.uib.no>
- * 
+ *
  * Licensed under the GNU General Public License, v2
  */
 package org.spoofax.interpreter;
@@ -88,7 +88,7 @@ public class Tools {
     }
 
     public static ATermList consToList(IContext env, ATermAppl cons) {
-        if (cons.getAFun() == env.getNilAFun())
+        if (Tools.isNil(cons, env))
             return env.getFactory().makeList();
         ATermList tail = consToList(env, Tools.applAt(cons, 1));
         ATerm head = Tools.termAt(cons, 0);
@@ -97,16 +97,20 @@ public class Tools {
     }
 
     public static ATermList consToListDeep(IContext env, ATermAppl cons) {
-        if (cons.getAFun() == env.getNilAFun())
+        if (Tools.isNil(cons, env))
             return env.getFactory().makeList();
 
         ATermList tail = consToListDeep(env, Tools.applAt(cons, 1));
 
         ATerm head = Tools.termAt(cons, 0);
-        if (head.getType() == ATerm.APPL && ((ATermAppl)head).getAFun() == env.getConsAFun())
+        if (head.getType() == ATerm.APPL && Tools.isCons((ATermAppl)head, env))
             head = consToListDeep(env, (ATermAppl) head);
 
         return tail.insert(head);
+    }
+
+    public static boolean isCons(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getConsAFun();
     }
 
     public static boolean isATermString(ATerm t) {
@@ -126,13 +130,81 @@ public class Tools {
         return t.getType() == ATerm.LIST;
     }
 
-//    public static boolean isNil(ATermAppl t, IContext env) {
-//        return t.getAFun() == env.getNilAFun();
-//    }
+    public static boolean isNil(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getNilAFun();
+    }
+
+    public static boolean isSDefT(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getSDefTAFun();
+    }
+
+    public static boolean isExtSDef(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getExtSDefAFun();
+    }
+
+    public static boolean isATermInt(ATerm t) {
+        return t.getType() == ATerm.INT;
+    }
+
+    public static boolean isAnno(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getAnnoAFun();
+    }
+
+    public static boolean isOp(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getOpAFun();
+    }
 
 //    private static boolean isATermConstructor(ATermAppl t, String opName) {
 //        return t.getType() == ATerm.APPL
 //        && ((ATermAppl) t).getName().equals(opName);
 //    }
+
+    public static boolean isStr(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getStrAFun();
+}
+
+    public static boolean isVar(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getVarAFun();
+    }
+
+    public static boolean isExplode(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getExplodeAFun();
+    }
+
+    public static boolean isWld(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getWldAFun();
+    }
+
+    public static boolean isAs(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getAsAFun();
+    }
+
+    public static boolean isReal(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getRealAFun();
+    }
+
+    public static boolean isInt(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getIntAFun();
+    }
+
+    public static boolean isATermReal(ATerm t) {
+        return t.getType() == ATerm.REAL;
+    }
+
+    public static boolean isATermAppl(ATerm t) {
+        return t.getType() == ATerm.APPL;
+    }
+
+    public static int getATermInt(ATermInt t) {
+        return t.getInt();
+    }
+
+    public static boolean isFunType(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getFunTypeAFun();
+    }
+
+    public static boolean isConstType(ATermAppl t, IContext env) {
+        return t.getAFun() == env.getConstTypeAFun();
+    }
 
 }

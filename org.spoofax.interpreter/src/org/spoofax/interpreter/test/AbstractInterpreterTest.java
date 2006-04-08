@@ -31,6 +31,7 @@ public abstract class AbstractInterpreterTest extends TestCase {
         DebugUtil.cleanupInShutdown = false; //faster but does not cleanup
         DebugUtil.shareFactory = true; // in unit test mode all can share the same factory
         itp = new Interpreter();
+        DebugUtil.setDebug(false);
     }
     
     @Override

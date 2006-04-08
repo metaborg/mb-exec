@@ -33,7 +33,7 @@ public class SSL_implode_string extends Primitive {
 
         ATermAppl a = (ATermAppl) t;
 
-        if(!(a.getAFun() == env.getConsAFun() || a.getAFun() == env.getNilAFun()))
+        if(!(Tools.isCons(a, env) || Tools.isNil(a, env)))
             return false;
 
         ATermList l = Tools.consToList(env, (ATermAppl)t);

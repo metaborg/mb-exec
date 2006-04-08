@@ -2,7 +2,7 @@
  * Created on 07.aug.2005
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
- * 
+ *
  * Licensed under the GNU General Public License, v2
  */
 package org.spoofax.interpreter;
@@ -46,7 +46,7 @@ public class Interpreter extends ATermBuilder {
     protected Context context;
 
     public Interpreter() {
-        DebugUtil.setDebug(false);
+
         Context.indentation = 0;
         context = new Context();
         factory = context.factory;
@@ -79,10 +79,10 @@ public class Interpreter extends ATermBuilder {
     private void loadStrategies(ATermList list) throws InterpreterException {
         for (int i = 0; i < list.getChildCount(); i++) {
             ATermAppl t = Tools.applAt(list, i);
-            if(t.getAFun() == context.getSDefTAFun()) {
+            if(Tools.isSDefT(t, context)) {
                 SDefT def = parseSDefT(t);
                 context.addSVar(def.getName(), def);
-            } else if(t.getAFun() == context.getExtSDefAFun()) {
+            } else if(Tools.isExtSDef(t, context)) {
                 ExtSDef def = parseExtSDef(t);
                 context.addSVar(def.getName(), def);
                 // FIXME: Come up with a good solution for external
@@ -263,14 +263,14 @@ public class Interpreter extends ATermBuilder {
     }
 
     private ArgType parseArgType(ATermAppl t) {
-        if(t.getAFun() == context.getFunTypeAFun()) {
+        if(Tools.isFunType(t, context)) {
             ATermList l = Tools.listAt(t, 0);
             List<ArgType> ch = new ArrayList<ArgType>();
             for (int i = 0; i < l.getChildCount(); i++) {
                 ch.add(parseArgType(Tools.applAt(l, i)));
             }
             return new FunType(ch);
-        } else if(t.getAFun() == context.getConstTypeAFun()) {
+        } else if (Tools.isConstType(t, context)) {
             return new ConstType();
         }
         return null;

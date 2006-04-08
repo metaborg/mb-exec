@@ -25,7 +25,7 @@ public class SSL_real_to_string extends Primitive {
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
 
-        if(!(targs.get(0).getType() == ATerm.REAL))
+        if(!(Tools.isATermReal(targs.get(0))))
             return false;
 
         ATermReal a = (ATermReal) targs.get(0);

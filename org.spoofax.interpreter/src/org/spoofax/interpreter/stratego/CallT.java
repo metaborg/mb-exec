@@ -90,7 +90,7 @@ public class CallT extends Strategy {
             String formal = formalTermArgs.get(i);
             ATerm actual = tvars.get(i);
             // FIXME: This should not be here
-            if (((ATermAppl)actual).getAFun() == env.getVarAFun())
+            if (Tools.isVar(((ATermAppl)actual), env))
                 actual = env.lookupVar(Tools.stringAt(actual, 0));
             newScope.add(formal, actual);
         }

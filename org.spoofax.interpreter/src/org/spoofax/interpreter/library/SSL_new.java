@@ -36,7 +36,7 @@ public class SSL_new extends Primitive {
         String s = (char)(letterA + alphaCounter) + "_" + counter;
         while(factory.hasAFun(s, 0)) {
             alphaCounter++;
-            if(alphaCounter > 26) {
+            if(alphaCounter > 25) {
                 alphaCounter = 0;
                 counter++;
             }

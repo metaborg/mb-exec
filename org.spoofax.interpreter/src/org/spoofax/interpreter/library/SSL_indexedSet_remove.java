@@ -27,7 +27,7 @@ public class SSL_indexedSet_remove extends Primitive {
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs)
             throws InterpreterException {
 
-        if (!(targs.get(0).getType() == ATerm.INT))
+        if (!(Tools.isATermInt(targs.get(0))))
             return false;
 
         int ref = ((ATermInt)targs.get(0)).getInt();

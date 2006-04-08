@@ -29,7 +29,7 @@ public class SSL_fputs extends Primitive {
         
         if(!Tools.isATermString(targs.get(0)))
             return false;
-        if(!(targs.get(1).getType() == ATerm.INT))
+        if(!(Tools.isATermInt(targs.get(1))))
             return false;
 
         OutputStream ous = SSL.outputStreamFromTerm((ATermInt)targs.get(1));

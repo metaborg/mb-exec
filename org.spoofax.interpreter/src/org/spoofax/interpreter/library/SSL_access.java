@@ -37,7 +37,7 @@ public class SSL_access extends Primitive {
 
         if (!Tools.isATermString(targs.get(0)))
             return false;
-        if (!(targs.get(1).getType() == ATerm.APPL))
+        if (!(Tools.isATermAppl(targs.get(1))))
             return false;
 
         String path = Tools.getATermString(targs.get(0));

@@ -26,7 +26,7 @@ public class SSL_hashtable_put extends Primitive {
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
 
-        if(!(targs.get(0).getType() == ATerm.INT))
+        if(!(Tools.isATermInt(targs.get(0))))
             return false;
 
         ATermHashtable ath = SSL.getHashtable(((ATermInt)targs.get(0)).getInt());

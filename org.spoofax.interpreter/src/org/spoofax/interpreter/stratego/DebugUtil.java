@@ -74,7 +74,7 @@ public class DebugUtil {
         ctxt.indentation -= INDENT_STEP;
     }
 
-    private final static char[] indent = new char[500];
+    private final static char[] indent = new char[2000];
     static {
         for (int i = 0; i < indent.length; i++) {
             indent[i] = ' ';

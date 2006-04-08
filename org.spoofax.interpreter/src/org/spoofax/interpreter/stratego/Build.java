@@ -55,19 +55,25 @@ public class Build extends Strategy {
 
         PureFactory factory = env.getFactory();
 
-        if (t.getAFun() == env.getAnnoAFun()) {
+        if (Tools.isAnno(t, env)) {
             return buildAnno(env, t);
-        } else if (t.getAFun() == env.getOpAFun()) {
+        }
+        else if (Tools.isOp(t, env)) {
             return buildOp(env, t, factory);
-        } else if (t.getAFun() == env.getIntAFun()) {
+        }
+        else if (Tools.isInt(t, env)) {
             return buildInt(t, factory);
-        } else if (t.getAFun() == env.getRealAFun()) {
+        }
+        else if (Tools.isReal(t, env)) {
             return buildReal(t, factory);
-        } else if (t.getAFun() == env.getStrAFun()) {
+        }
+        else if (Tools.isStr(t, env)) {
             return buildStr(t);
-        } else if (t.getAFun() == env.getVarAFun()) {
+        }
+        else if (Tools.isVar(t, env)) {
             return buildVar(env, t);
-        } else if (t.getAFun() == env.getExplodeAFun()) {
+        }
+        else if (Tools.isExplode(t, env)) {
             return buildExplode(env, t);
         }
 
@@ -101,12 +107,12 @@ public class Build extends Strategy {
             debug(" actualArgs : ", actualArgs);
         }
 
-        if (actualCtor.getType() == ATerm.INT || actualCtor.getType() == ATerm.REAL) {
+        if (Tools.isATermInt(actualCtor) || Tools.isATermReal(actualCtor)) {
             return actualCtor;
         }
         else if (Tools.isATermString(actualCtor)) {
 
-            if (!(actualArgs.getType() == ATerm.APPL)) {
+            if (!(Tools.isATermAppl(actualArgs))) {
                 return null;
             }
 
@@ -121,8 +127,8 @@ public class Build extends Strategy {
             AFun afun = factory.makeAFun(n, realArgs.getChildCount(), quoted);
             return factory.makeApplList(afun, realArgs);
         }
-        else if (actualCtor.getType() == ATerm.APPL
-          && ((ATermAppl)actualCtor).getAFun() == env.getNilAFun()) {
+        else if (Tools.isATermAppl(actualCtor)
+          && Tools.isNil(((ATermAppl)actualCtor), env)) {
             return actualArgs;
         }
 

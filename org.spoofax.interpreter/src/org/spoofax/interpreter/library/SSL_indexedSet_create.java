@@ -44,7 +44,7 @@ public class SSL_indexedSet_create extends Primitive {
             Set<Map.Entry<Integer,ATerm>> entries = map.entrySet();
             
             for(Map.Entry<Integer,ATerm> x : entries) {
-                if(x.getValue() == t)
+                if(x.getValue() == t) //todo: for no max sharing use equals
                     return x.getKey();
             }
             
@@ -100,9 +100,9 @@ public class SSL_indexedSet_create extends Primitive {
     
     public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
 
-        if(!(targs.get(0).getType() == ATerm.INT))
+        if(!(Tools.isATermInt(targs.get(0))))
             return false;
-        if(!(targs.get(1).getType() == ATerm.INT))
+        if(!(Tools.isATermInt(targs.get(1))))
             return false;
 
         int initialSize = ((ATermInt)targs.get(0)).getInt();

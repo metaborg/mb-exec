@@ -31,7 +31,7 @@ public class SSL_concat_strings extends Primitive {
             return false;
 
         ATermAppl a = (ATermAppl) t;
-        if(!(a.getAFun() == env.getConsAFun() || a.getAFun() == env.getNilAFun()))
+        if(!(Tools.isCons(a, env) || Tools.isNil(a, env)))
             return false;
 
         ATermList l = Tools.consToList(env, a);
