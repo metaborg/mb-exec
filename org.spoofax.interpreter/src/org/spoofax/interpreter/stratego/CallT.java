@@ -10,14 +10,13 @@ package org.spoofax.interpreter.stratego;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.VarScope;
 import org.spoofax.interpreter.stratego.SDefT.SVar;
-
-import aterm.ATerm;
-import aterm.ATermAppl;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class CallT extends Strategy {
 
@@ -25,11 +24,11 @@ public class CallT extends Strategy {
 
     protected List<Strategy> svars;
 
-    protected List<ATerm> tvars;
+    protected List<IStrategoTerm> tvars;
 
     private static int counter = 0;
 
-    public CallT(String name, List<Strategy> svars, List<ATerm> tvars) {
+    public CallT(String name, List<Strategy> svars, List<IStrategoTerm> tvars) {
         this.name = name;
         this.svars = svars;
         this.tvars = tvars;
@@ -88,10 +87,10 @@ public class CallT extends Strategy {
 
         for (int i = 0; i < tvars.size(); i++) {
             String formal = formalTermArgs.get(i);
-            ATerm actual = tvars.get(i);
+            IStrategoTerm actual = tvars.get(i);
             // FIXME: This should not be here
-            if (Tools.isVar(((ATermAppl)actual), env))
-                actual = env.lookupVar(Tools.stringAt(actual, 0));
+            if (Tools.isVar(((IStrategoAppl)actual), env))
+                actual = env.lookupVar(Tools.javaStringAt((IStrategoAppl)actual, 0));
             newScope.add(formal, actual);
         }
 
@@ -104,7 +103,7 @@ public class CallT extends Strategy {
         return DebugUtil.traceReturn(r, env.current(), this);
     }
 
-    private List<ATerm> getTermArguments() {
+    private List<IStrategoTerm> getTermArguments() {
         return tvars;
     }
 
@@ -139,7 +138,7 @@ public class CallT extends Strategy {
     /*package*/
     static void printStrategyCall(final String name,
       final List<SVar> svarsFormal, final List<Strategy> svarsActual,
-      final List<String> tvarsFormal, final List<ATerm> tvarsActual) {
+      final List<String> tvarsFormal, final List<IStrategoTerm> tvarsActual) {
 
         // Print this at the same indentation with the associated scope.
         StringBuilder sb = DebugUtil.buildIndent(DebugUtil.INDENT_STEP);

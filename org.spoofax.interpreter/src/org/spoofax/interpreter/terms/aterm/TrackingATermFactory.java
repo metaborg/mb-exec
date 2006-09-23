@@ -1,47 +1,49 @@
 /*
- * Created on 08.aug.2005
+ * Created on 17. sep.. 2006
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter;
+package org.spoofax.interpreter.terms.aterm;
 
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.spoofax.NotImplementedException;
+
 import shared.SharedObject;
 import aterm.AFun;
-import aterm.ATerm;
+import aterm.ATermAppl;
 import aterm.pure.PureFactory;
 
-public class TermFactory extends PureFactory {
+public class TrackingATermFactory extends PureFactory {
 
-    Map<String, Object>  funny;
+    private Map<String, Object>  seenAFuns;
     private static final Object marker = "foo";
-    
-    TermFactory() {
+
+    public TrackingATermFactory() {
         super();
-        funny = new WeakHashMap<String, Object>();
+        seenAFuns = new WeakHashMap<String, Object>();
     }
-    
+
     @Override
     public SharedObject build(SharedObject arg0) {
 
         if(arg0 instanceof aterm.AFun) {
-            funny.put(((AFun)arg0).getName(), marker);
+            seenAFuns.put(((AFun)arg0).getName(), marker);
         }
         
         return super.build(arg0);
     }
-    
+
     public boolean hasAFun(String name, int arity) {
-        return funny.get(name) != null;
+        return seenAFuns.get(name) != null;
     }
 
-    public ATerm makeString(String name) {
-        // FIXME: Refactor this properly!
-        AFun f = makeAFun(name, 0, true);
+    public ATermAppl makeString(String s) {
+        AFun f = makeAFun(s, 0, true);
         return makeAppl(f);
     }
+
 }

@@ -5,12 +5,14 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.test;
+package org.spoofax.interpreter.test.language;
+
+import org.spoofax.interpreter.test.AbstractLanguageTest;
 
 public class MatchTest extends AbstractLanguageTest {
 
     public void testMatchReal3() {
-        interpTestFail("match_real_2", itp.makeTerm("2.0"));
+        interpTestFail("match_real_2", "2.0");
     }
 
     public void testMatchString1() {
@@ -22,19 +24,19 @@ public class MatchTest extends AbstractLanguageTest {
     }
 
     public void testMatchTuple1() {
-        interpTest("match_tuple_1", itp.makeTuple("[1,2]"), itp.makeTerm("1"));
+        interpTest("match_tuple_1", "(1, 2)", "1");
     }
 
     public void testMatchTuple2() {
-        interpTest("match_tuple_2", itp.makeTuple("[1,2]"), itp.makeTerm("2"));
+        interpTest("match_tuple_2", "(1, 2)", "2");
     }
 
     public void testMatchTuple3() {
-        interpTest("match_tuple_3", itp.makeTuple("[2,2]"), itp.makeTerm("2"));
+        interpTest("match_tuple_3", "(2, 2)", "2");
     }
 
     public void testMatchTuple4() {
-        interpTestFail("match_tuple_4", itp.makeTuple("[2,3]"));
+        interpTestFail("match_tuple_4", "(2, 3)");
     }
 
     public void testMatchInt1() {
@@ -62,19 +64,19 @@ public class MatchTest extends AbstractLanguageTest {
     }
 
     public void testMatchReal1() {
-        interpTest("match_real_1", itp.makeTerm("2.0"), itp.makeTerm("2.0"));
+        interpTest("match_real_1", "2.0", "2.0");
     }
 
     public void testMatchReal2() {
-        interpTest("match_real_2", itp.makeTerm("4.5"), itp.makeTerm("4.5"));
+        interpTest("match_real_2", "4.5", "4.5");
     }
 
     public void testAs1() {
-        interpTest("as_1", itp.makeTuple("[1,2]"), itp.makeTuple(itp.makeTuple("[1,2]"), itp.makeTuple("[1,2]")));
+        interpTest("as_1", "(1, 2)", "((1, 2), (1, 2))");
     }
 
     public void testAs2() {
-        interpTest("as_2", itp.makeTuple("[1,2]"), itp.makeTuple("[1,1]"));
+        interpTest("as_2", "(1, 2)", "(1, 1)");
     }
 
 
@@ -87,11 +89,11 @@ public class MatchTest extends AbstractLanguageTest {
     }
 
     public void testProject1() {
-        interpTest("project_1", itp.makeTuple("[2,3]"), itp.makeTerm("2"));
+        interpTest("project_1", "(2, 3)", "2");
     }
 
     public void testProject2() {
-        interpTest("project_2", itp.makeTuple("[2,3]"), itp.makeTerm("3"));
+        interpTest("project_2", "(2, 3)", "3");
     }
 
 }

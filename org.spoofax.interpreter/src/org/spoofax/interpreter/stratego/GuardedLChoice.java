@@ -8,10 +8,9 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.interpreter.BindingInfo;
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
-
-import aterm.ATerm;
+import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class GuardedLChoice extends Strategy {
 
@@ -32,7 +31,7 @@ public class GuardedLChoice extends Strategy {
         }
 
         BindingInfo bi = env.getVarScope().saveUnboundVars();
-        ATerm oldCurrent = env.current();
+        IStrategoTerm oldCurrent = env.current();
 
         if (cond.eval(env))
             return DebugUtil.traceReturn(ifClause.eval(env), env.current(), this);

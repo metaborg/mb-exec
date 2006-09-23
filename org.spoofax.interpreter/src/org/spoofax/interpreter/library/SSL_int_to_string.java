@@ -9,12 +9,12 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
-
-import aterm.ATerm;
-import aterm.ATermInt;
+import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_int_to_string extends Primitive {
 
@@ -22,13 +22,13 @@ public class SSL_int_to_string extends Primitive {
         super("SSL_int_to_string", 0, 1);
     }
 
-    public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> svars, List<IStrategoTerm> tvars) throws InterpreterException {
 
-        if(tvars.get(0).getType() != ATerm.INT)
+        if(Tools.isTermInt(tvars.get(0)))
             return false;
 
-        ATermInt a = (ATermInt) tvars.get(0);
-        env.setCurrent(env.makeTerm("\"" + a.getInt() + "\""));
+        IStrategoInt a = (IStrategoInt) tvars.get(0);
+        env.setCurrent(env.getFactory().makeString("\"" + a.getValue() + "\""));
         return true;
     }
 }

@@ -7,15 +7,14 @@
  */
 package org.spoofax.interpreter.library;
 
+import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.BufferedOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.spoofax.interpreter.library.SSL_hashtable_create.ATermHashtable;
-
-import aterm.ATermInt;
+import org.spoofax.interpreter.library.SSL_hashtable_create.Hashtable;
+import org.spoofax.interpreter.terms.IStrategoInt;
 
 // FIXME: This class contains global scope information
 //        but this should be per-environment, not per-library.
@@ -101,16 +100,16 @@ public class SSL {
         return getRegistry().get(s);
     }
 
-    public static InputStream inputStreamFromTerm(ATermInt idx) {
-        return inputStreamMap.get(idx.getInt());
+    public static InputStream inputStreamFromTerm(IStrategoInt idx) {
+        return inputStreamMap.get(idx.getValue());
     }
 
-    public static OutputStream outputStreamFromTerm(ATermInt idx) {
-        return outputStreamMap.get(idx.getInt());
+    public static OutputStream outputStreamFromTerm(IStrategoInt idx) {
+        return outputStreamMap.get(idx.getValue());
     }
 
     //@todo fix
-    protected static Map<Integer, ATermHashtable> hashtables;
+    protected static Map<Integer, Hashtable> hashtables;
     protected static int counter = 0;
 
     static {
@@ -125,12 +124,12 @@ public class SSL {
      */
     public static void init() {
         if(hashtables != null) {
-            for (ATermHashtable hashtable : hashtables.values()) {
+            for (Hashtable hashtable : hashtables.values()) {
                 hashtable.clear();
             }
             hashtables.clear();
         }
-        hashtables = new HashMap<Integer, ATermHashtable>();
+        hashtables = new HashMap<Integer, Hashtable>();
         counter = 0;
 
         initRegistry();
@@ -139,7 +138,7 @@ public class SSL {
         SSL_table_hashtable.init();
     }
 
-    public static int registerHashtable(ATermHashtable hashtable) {
+    public static int registerHashtable(Hashtable hashtable) {
         int ref = counter;
         hashtables.put(counter++, hashtable);
         return ref;
@@ -149,7 +148,7 @@ public class SSL {
         return hashtables.remove(idx) != null;
     }
 
-    public static ATermHashtable getHashtable(int idx) {
+    public static Hashtable getHashtable(int idx) {
         return hashtables.get(idx);
     }
 }

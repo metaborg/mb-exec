@@ -9,11 +9,12 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
-import aterm.ATerm;
 import aterm.ATermReal;
 
 public class SSL_gtr extends Primitive {
@@ -22,11 +23,11 @@ public class SSL_gtr extends Primitive {
         super("SSL_gtr", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
         
-        if(targs.get(0).getType() != ATerm.REAL)
+        if(Tools.isTermReal(targs.get(0)))
             return false;
-        if(targs.get(1).getType() != ATerm.REAL)
+        if(Tools.isTermReal(targs.get(1)))
             return false;
 
         ATermReal a = (ATermReal) targs.get(0);

@@ -10,13 +10,13 @@ package org.spoofax.interpreter.stratego;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.Primitive;
 import org.spoofax.interpreter.library.SSL;
-
-import aterm.ATerm;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class PrimT extends Strategy {
 
@@ -24,9 +24,9 @@ public class PrimT extends Strategy {
 
     protected List<Strategy> svars;
 
-    protected List<ATerm> tvars;
+    protected List<IStrategoTerm> tvars;
 
-    public PrimT(String name, List<Strategy> svars, List<ATerm> tvars) {
+    public PrimT(String name, List<Strategy> svars, List<IStrategoTerm> tvars) {
         this.name = name;
         this.svars = svars;
         this.tvars = tvars;
@@ -43,9 +43,10 @@ public class PrimT extends Strategy {
         if (prim == null)
             throw new InterpreterException("No such function : '" + name + "'");
 
-        List<ATerm> vals = new ArrayList<ATerm>(tvars.size());
-        for (ATerm t : tvars) {
-            vals.add(env.lookupVar(Tools.stringAt(t, 0)));
+        List<IStrategoTerm> vals = new ArrayList<IStrategoTerm>(tvars.size());
+        for (IStrategoTerm t : tvars) {
+            // FIXME this cast should be moved out
+            vals.add(env.lookupVar(Tools.javaStringAt((IStrategoAppl)t, 0)));
         }
 
 

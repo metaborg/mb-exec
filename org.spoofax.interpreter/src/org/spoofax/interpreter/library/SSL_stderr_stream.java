@@ -9,11 +9,10 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
-
-import aterm.ATerm;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_stderr_stream extends Primitive {
 
@@ -21,9 +20,9 @@ public class SSL_stderr_stream extends Primitive {
         super("SSL_stderr_stream", 0, 0);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
         
-        env.setCurrent(env.makeTerm(SSL.CONST_STDERR));
+        env.setCurrent(env.getFactory().makeInt(SSL.CONST_STDERR));
         return true;
     }
 }

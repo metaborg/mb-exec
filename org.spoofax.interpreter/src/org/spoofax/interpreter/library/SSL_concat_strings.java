@@ -9,14 +9,15 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTermList;
 
 import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermList;
 
 public class SSL_concat_strings extends Primitive {
 
@@ -24,22 +25,22 @@ public class SSL_concat_strings extends Primitive {
         super("SSL_concat_strings", 0, 1);
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
 
-        ATerm t = targs.get(0);
-        if(t.getType() != ATerm.APPL)
+        IStrategoTerm t = targs.get(0);
+        if(t.getTermType() != ATerm.APPL)
             return false;
 
-        ATermAppl a = (ATermAppl) t;
+        IStrategoAppl a = (IStrategoAppl) t;
         if(!(Tools.isCons(a, env) || Tools.isNil(a, env)))
             return false;
 
-        ATermList l = Tools.consToList(env, a);
+        IStrategoTermList l = Tools.consToList(env, a);
         StringBuffer sb = new StringBuffer();
-        for(int i=0;i<l.getChildCount();i++) {
-            sb.append(Tools.stringAt(l, i));
+        for(int i=0;i<l.size();i++) {
+            sb.append(Tools.javaStringAt(l, i));
         }
-        env.setCurrent(env.makeString(sb.toString()));
+        env.setCurrent(env.getFactory().makeString(sb.toString()));
         return true;
     }
 }

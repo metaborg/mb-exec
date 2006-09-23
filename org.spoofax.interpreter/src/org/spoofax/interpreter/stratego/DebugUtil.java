@@ -67,11 +67,11 @@ public class DebugUtil {
     }
 
     public static void bump(Context ctxt) {
-        ctxt.indentation += INDENT_STEP;
+        Context.indentation += INDENT_STEP;
     }
 
     public static void unbump(Context ctxt) {
-        ctxt.indentation -= INDENT_STEP;
+        Context.indentation -= INDENT_STEP;
     }
 
     private final static char[] indent = new char[2000];

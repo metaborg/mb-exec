@@ -9,12 +9,12 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
-
-import aterm.ATerm;
-import aterm.ATermReal;
+import org.spoofax.interpreter.terms.IStrategoReal;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_subtr extends Primitive {
 
@@ -22,16 +22,16 @@ public class SSL_subtr extends Primitive {
         super("SSL_subtr", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> svars, List<IStrategoTerm> tvars) throws InterpreterException {
         
-        if(tvars.get(0).getType() != ATerm.REAL)
+        if(Tools.isTermReal(tvars.get(0)))
             return false;
-        if(tvars.get(1).getType() != ATerm.REAL)
+        if(Tools.isTermReal(tvars.get(1)))
             return false;
 
-        ATermReal a = (ATermReal) tvars.get(0);
-        ATermReal b = (ATermReal) tvars.get(1);
-        env.setCurrent(env.getFactory().makeReal(a.getReal() - b.getReal()));
+        IStrategoReal a = (IStrategoReal) tvars.get(0);
+        IStrategoReal b = (IStrategoReal) tvars.get(1);
+        env.setCurrent(env.getFactory().makeReal(a.getValue() - b.getValue()));
         return true;
     }
 }

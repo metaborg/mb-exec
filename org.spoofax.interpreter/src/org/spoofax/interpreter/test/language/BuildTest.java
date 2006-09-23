@@ -5,7 +5,9 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.test;
+package org.spoofax.interpreter.test.language;
+
+import org.spoofax.interpreter.test.AbstractLanguageTest;
 
 public class BuildTest extends AbstractLanguageTest {
 
@@ -14,7 +16,7 @@ public class BuildTest extends AbstractLanguageTest {
     }
 
     public void testBuildReal() {
-        interpTest("build_real", itp.makeTuple("[]"), itp.makeTerm("5.0"));
+        interpTest("build_real", "()", "5.0");
     }
 
     public void testBuildString() {
@@ -22,15 +24,15 @@ public class BuildTest extends AbstractLanguageTest {
     }
 
     public void testBuildTuple() {
-        interpTest("build_tuple", itp.makeTerm("1"), itp.makeTuple("[2, 3]"));
+        interpTest("build_tuple", "1", "[2, 3]");
     }
 
     public void testBuildList1() {
-        interpTest("build_list_1", itp.makeTerm("1"), itp.makeList("[]"));
+        interpTest("build_list_1", "1", "()");
     }
 
     public void testBuildList2() {
-        interpTest("build_list_2", itp.makeTerm("1"), itp.makeList("[1,2,3]"));
+        interpTest("build_list_2", "1", "[1,2,3]");
     }
 
 }

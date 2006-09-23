@@ -5,10 +5,12 @@
  * 
  * Licensed under the IBM Common Public License, v1.0
  */
-package org.spoofax.interpreter.test;
+package org.spoofax.interpreter.test.library;
 
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.spoofax.interpreter.test.AbstractInterpreterTest;
 
 public class LibraryTest extends AbstractInterpreterTest {
 
@@ -70,7 +72,8 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testParseOptions() { interpTest("parse-options-test" ,"[2,0]"); }
 
     public void interpTest(String test, String result) {
-        super.interpTest(test, itp.makeTuple("[]"), itp.makeTuple(result));
+        // FIXME tuplify 'result'
+        super.interpTest(test, "()", result);
     }
     public static void main(String[] args) {
         Map<Integer, Long> timeSpans = new TreeMap<Integer, Long>();

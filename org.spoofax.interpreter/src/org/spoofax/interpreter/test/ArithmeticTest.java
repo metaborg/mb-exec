@@ -10,43 +10,43 @@ package org.spoofax.interpreter.test;
 public class ArithmeticTest extends AbstractLanguageTest {
 
     public void testAddInt1() {
-        interpTest("add_int_1", itp.makeTuple("[1,2]"), itp.makeTerm("3"));
+        interpTest("add_int_1", factory.parseFromString("[1,2]"), factory.parseFromString("3"));
     }
 
     public void testAddInt2() {
-        interpTest("add_int_2", itp.makeTuple("[]"), itp.makeTerm("3"));
+        interpTest("add_int_2", factory.parseFromString("[]"), factory.parseFromString("3"));
     }
 
     public void testGtInt1() {
-        interpTest("gt_int_1", itp.makeTuple("[]"), itp.makeTuple("[2, 1]"));
+        interpTest("gt_int_1", factory.parseFromString("[]"), factory.parseFromString("[2, 1]"));
     }
 
     public void testGtInt2() {
-        interpTestFail("gt_int_2", itp.makeTuple("[]"));
+        interpTestFail("gt_int_2", factory.parseFromString("[]"));
     }
 
     public void testIncInt() {
-        interpTest("inc_int", itp.makeTerm("1"), itp.makeTerm("2"));
+        interpTest("inc_int", factory.parseFromString("1"), factory.parseFromString("2"));
     }
 
     public void testIncIntList2() {
-        interpTest("inc_int_list_2", itp.makeList("[1,2,3]"), itp.makeList("[2,3,4]"));
+        interpTest("inc_int_list_2", factory.parseFromString("[1,2,3]"), factory.parseFromString("[2,3,4]"));
     }
 
     public void testIntToString() {
-        interpTest("int-to-string", itp.makeTerm("14"), itp.makeTerm("\"14\""));
+        interpTest("int-to-string", factory.parseFromString("14"), factory.parseFromString("\"14\""));
     }
 
     public void testMulInt() {
-        interpTest("mul_int", itp.makeTuple("[2,3]"), itp.makeTerm("6"));
+        interpTest("mul_int", factory.parseFromString("[2,3]"), factory.parseFromString("6"));
     }
 
     public void testSumOfIntList1() {
-        interpTest("sum_of_int_list", itp.makeList("[1,2,3]"), itp.makeTerm("6"));
+        interpTest("sum_of_int_list", factory.parseFromString("[1,2,3]"), factory.parseFromString("6"));
     }
 
     public void testSumOfIntList2() {
-        interpTest("sum_of_int_list", itp.makeList("[1,1,1,1,1,1,1,1,1,1]"), itp.makeTerm("10"));
+        interpTest("sum_of_int_list", factory.parseFromString("[1,1,1,1,1,1,1,1,1,1]"), factory.parseFromString("10"));
     }
 
 }

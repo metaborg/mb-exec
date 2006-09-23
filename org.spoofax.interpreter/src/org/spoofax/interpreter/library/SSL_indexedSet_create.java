@@ -13,37 +13,37 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
-import aterm.ATerm;
 import aterm.ATermInt;
 
 public class SSL_indexedSet_create extends Primitive {
 
-    class ATermIndexedSet  {
+    class IndexedSet  {
         
         private static final long serialVersionUID = -4514696890481283123L;
         private int counter;
-        Map<Integer, ATerm> map;
+        Map<Integer, IStrategoTerm> map;
         
-        ATermIndexedSet(int initialSize, int maxLoad) {
-            map = new HashMap<Integer, ATerm>(initialSize, 1.0f*maxLoad/100);
+        IndexedSet(int initialSize, int maxLoad) {
+            map = new HashMap<Integer, IStrategoTerm>(initialSize, 1.0f*maxLoad/100);
             counter = 0;
         }
         
-        public int put(ATerm value) {
+        public int put(IStrategoTerm value) {
             int idx = counter++; 
             map.put(idx, value);
             return idx;
         }
 
-        public int getIndex(ATerm t) {
-            Set<Map.Entry<Integer,ATerm>> entries = map.entrySet();
+        public int getIndex(IStrategoTerm t) {
+            Set<Map.Entry<Integer,IStrategoTerm>> entries = map.entrySet();
             
-            for(Map.Entry<Integer,ATerm> x : entries) {
+            for(Map.Entry<Integer,IStrategoTerm> x : entries) {
                 if(x.getValue() == t) //todo: for no max sharing use equals
                     return x.getKey();
             }
@@ -51,15 +51,15 @@ public class SSL_indexedSet_create extends Primitive {
             return -1;
         }
 
-        public boolean containsValue(ATerm t) {
+        public boolean containsValue(IStrategoTerm t) {
             return map.containsValue(t);
         }
 
-        public Collection<ATerm> values() {
+        public Collection<IStrategoTerm> values() {
             return map.values();
         }
 
-        public boolean remove(ATerm t) {
+        public boolean remove(IStrategoTerm t) {
             int idx = getIndex(t);
 
             if(idx == -1)
@@ -74,7 +74,7 @@ public class SSL_indexedSet_create extends Primitive {
     }
 
     // FIXME: Must have state per-interpreter, not per-JVM //@todo fix
-    protected static Map<Integer, ATermIndexedSet> map;
+    protected static Map<Integer, IndexedSet> map;
     protected static int setCounter;
 
     static {
@@ -84,12 +84,12 @@ public class SSL_indexedSet_create extends Primitive {
     public static Map init() {
         if(map != null) {
 
-            for (ATermIndexedSet indexedSet : map.values()) {
+            for (IndexedSet indexedSet : map.values()) {
                  indexedSet.clear();
             }
             map.clear();
         }
-        map = new HashMap<Integer, ATermIndexedSet>();
+        map = new HashMap<Integer, IndexedSet>();
         setCounter = 0;
         return map;
     }
@@ -98,21 +98,21 @@ public class SSL_indexedSet_create extends Primitive {
         super("SSL_indexedSet_create", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
 
-        if(!(Tools.isATermInt(targs.get(0))))
+        if(!(Tools.isTermInt(targs.get(0))))
             return false;
-        if(!(Tools.isATermInt(targs.get(1))))
+        if(!(Tools.isTermInt(targs.get(1))))
             return false;
 
         int initialSize = ((ATermInt)targs.get(0)).getInt();
         int maxLoad = ((ATermInt)targs.get(1)).getInt();
         
-        ATermIndexedSet is = new ATermIndexedSet(initialSize, maxLoad);
+        IndexedSet is = new IndexedSet(initialSize, maxLoad);
         int n = setCounter++;
         map.put(n, is);
         
-        env.setCurrent(env.makeTerm(n));
+        env.setCurrent(env.getFactory().makeInt(n));
         return true;
     }
 }

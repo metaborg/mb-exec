@@ -7,204 +7,217 @@
  */
 package org.spoofax.interpreter;
 
-import aterm.AFun;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoConstructor;
+import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoReal;
+import org.spoofax.interpreter.terms.IStrategoString;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.interpreter.terms.StrategoSignature;
+
 import aterm.ATerm;
 import aterm.ATermAppl;
-import aterm.ATermInt;
-import aterm.ATermList;
-import aterm.ATermReal;
-import aterm.pure.PureFactory;
 
 public class Tools {
 
-    public static String stringAt(ATerm t, int i) {
-        return ((ATermAppl) t.getChildAt(i)).getName();
+    public static IStrategoString stringAt(IStrategoTerm t, int i) {
+        return (IStrategoString) t.getSubterm(i);
     }
 
-    public static ATermAppl applAt(ATerm t, int i) {
-        return (ATermAppl) t.getChildAt(i);
+    public static IStrategoAppl applAt(IStrategoTerm t, int i) {
+        return (IStrategoAppl) t.getSubterm(i);
     }
 
-    public static ATermAppl applAt(ATermList t, int i) {
-        return (ATermAppl) t.getChildAt(i);
+    public static IStrategoAppl applAt(IStrategoTermList t, int i) {
+        return (IStrategoAppl) t.getSubterm(i);
     }
 
-    public static ATermInt intAt(ATerm t, int i) {
-        return (ATermInt) t.getChildAt(i);
+    public static IStrategoInt intAt(IStrategoTerm t, int i) {
+        return (IStrategoInt) t.getSubterm(i);
     }
 
-    public static ATermInt intAt(ATermList t, int i) {
-        return (ATermInt) t.getChildAt(i);
+    public static IStrategoInt intAt(IStrategoTermList t, int i) {
+        return (IStrategoInt) t.getSubterm(i);
     }
 
-    public ATerm implode(PureFactory factory, ATermAppl t) throws InterpreterException {
-        if (t.getName().equals("Anno")) {
+    public IStrategoTerm implode(ITermFactory factory, IStrategoAppl t) throws InterpreterException {
+        IStrategoConstructor ctor = t.getConstructor();
+        StrategoSignature sign = null;
+        
+        if (ctor.equals(sign.getAnno())) {
             return implode(factory, applAt(t, 0));
-        } else if (t.getName().equals("Op")) {
-            String ctr = stringAt(t, 0);
-            ATermList children = (ATermList) t.getChildAt(1);
+        } else if (ctor.equals(sign.getOp())) {
+            String ctorName = javaStringAt(t, 0);
+            IStrategoTermList children = (IStrategoTermList) t.getSubterm(1);
 
-            AFun afun = factory.makeAFun(ctr, children.getLength(), false);
-            ATermList kids = factory.makeList();
+            IStrategoConstructor ctr = factory.makeConstructor(ctorName, children.size(), false);
+            IStrategoTermList kids = factory.makeList();
 
-            for (int i = 0; i < children.getLength(); i++) {
-                kids = kids.append(implode(factory, (ATermAppl) children
-                        .elementAt(i)));
+            for (int i = 0; i < children.size(); i++) {
+                kids = kids.append(implode(factory, (IStrategoAppl) children
+                        .getSubterm(i)));
             }
-            return factory.makeApplList(afun, kids);
-        } else if (t.getName().equals("Int")) {
-            ATermAppl x = (ATermAppl) t.getChildAt(0);
-            return factory.makeInt(new Integer(x.getName()));
-        } else if (t.getName().equals("Str")) {
-            ATermAppl x = (ATermAppl) t.getChildAt(0);
+            return factory.makeAppl(ctr, kids);
+        } else if (ctor.equals(sign.getInt())) {
+            IStrategoString x = (IStrategoString) t.getSubterm(0);
+            return factory.makeInt(new Integer(x.getValue()).intValue());
+        } else if (ctor.equals(sign.getStr())) {
+            IStrategoAppl x = (IStrategoAppl) t.getSubterm(0);
             return x;
         }
 
-        throw new InterpreterException("Unknown build constituent '" + t.getName() + "'");
+        throw new InterpreterException("Unknown build constituent '" + t.getConstructor() + "'");
     }
 
-    public static ATermList listAt(ATerm t, int i) {
-        return (ATermList) t.getChildAt(i);
+    public static IStrategoTermList listAt(IStrategoTerm t, int i) {
+        return (IStrategoTermList) t.getSubterm(i);
     }
 
-    public static ATermList listAt(ATermList t, int i) {
-        return (ATermList) t.getChildAt(i);
+    public static IStrategoTermList listAt(IStrategoTermList t, int i) {
+        return (IStrategoTermList) t.getSubterm(i);
     }
 
-    public static ATerm termAt(ATermAppl t, int i) {
-        return (ATerm) t.getChildAt(i);
+    public static IStrategoTerm termAt(IStrategoTerm t, int i) {
+        return t.getSubterm(i);
     }
 
-    public static ATermReal realAt(ATermList tvars, int i) {
-        return (ATermReal) tvars.getChildAt(i);
+    public static IStrategoReal realAt(IStrategoTermList t, int i) {
+        return (IStrategoReal) t.getSubterm(i);
     }
 
-    public static ATerm termAt(ATermList tvars, int i) {
-        return (ATerm) tvars.getChildAt(i);
+    public static IStrategoTerm termAt(IStrategoTermList t, int i) {
+        return t.getSubterm(i);
     }
 
     public static boolean termType(ATermAppl p, String n) {
         return p.getName().equals(n);
     }
 
-    public static ATermList consToList(IContext env, ATermAppl cons) {
+    public static IStrategoTermList consToList(IContext env, IStrategoAppl cons) {
         if (Tools.isNil(cons, env))
             return env.getFactory().makeList();
-        ATermList tail = consToList(env, Tools.applAt(cons, 1));
-        ATerm head = Tools.termAt(cons, 0);
+        IStrategoTermList tail = consToList(env, Tools.applAt(cons, 1));
+        IStrategoTerm head = Tools.termAt(cons, 0);
 
         return tail.insert(head);
     }
 
-    public static ATermList consToListDeep(IContext env, ATermAppl cons) {
+    public static IStrategoTermList consToListDeep(IContext env, IStrategoAppl cons) {
         if (Tools.isNil(cons, env))
             return env.getFactory().makeList();
 
-        ATermList tail = consToListDeep(env, Tools.applAt(cons, 1));
+        IStrategoTermList tail = consToListDeep(env, Tools.applAt(cons, 1));
 
-        ATerm head = Tools.termAt(cons, 0);
-        if (head.getType() == ATerm.APPL && Tools.isCons((ATermAppl)head, env))
-            head = consToListDeep(env, (ATermAppl) head);
+        IStrategoTerm head = Tools.termAt(cons, 0);
+        if (head.getTermType() == IStrategoTerm.APPL && Tools.isCons((IStrategoAppl)head, env))
+            head = consToListDeep(env, (IStrategoAppl) head);
 
         return tail.insert(head);
     }
 
-    public static boolean isCons(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getConsAFun();
+    public static boolean isCons(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getCons());
     }
 
-    public static boolean isATermString(ATerm t) {
-        if (t.getType() == ATerm.APPL) {
+    public static boolean isTermString(IStrategoTerm t) {
+        return t instanceof IStrategoString;
+/*        
+        if (t.getType() == IStrategoTerm.APPL) {
             AFun f = ((ATermAppl) t).getAFun();
             return f.isQuoted() && f.getChildCount() == 0;
         }
         return false;
+*/        
     }
 
-    public static String getATermString(ATerm t) {
-        AFun f = ((ATermAppl) t).getAFun();
-        return f.getName();
+    public static String javaString(IStrategoTerm t) {
+        return ((IStrategoString)t).getValue();
     }
 
     public static boolean isATermList(ATerm t) {
-        return t.getType() == ATerm.LIST;
+        return t.getType() == IStrategoTerm.LIST;
     }
 
-    public static boolean isNil(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getNilAFun();
+    public static boolean isNil(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getNil());
     }
 
-    public static boolean isSDefT(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getSDefTAFun();
+    public static boolean isSDefT(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getSDefT());
     }
 
-    public static boolean isExtSDef(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getExtSDefAFun();
+    public static boolean isExtSDef(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getExtSDef());
     }
 
-    public static boolean isATermInt(ATerm t) {
-        return t.getType() == ATerm.INT;
+    public static boolean isTermInt(IStrategoTerm t) {
+        return t instanceof IStrategoInt;
     }
 
-    public static boolean isAnno(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getAnnoAFun();
+    public static boolean isAnno(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getAnno());
     }
 
-    public static boolean isOp(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getOpAFun();
+    public static boolean isOp(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getOp());
     }
 
-//    private static boolean isATermConstructor(ATermAppl t, String opName) {
-//        return t.getType() == ATerm.APPL
-//        && ((ATermAppl) t).getName().equals(opName);
-//    }
-
-    public static boolean isStr(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getStrAFun();
+    public static boolean isStr(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getStr());
 }
 
-    public static boolean isVar(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getVarAFun();
+    public static boolean isVar(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getVar());
     }
 
-    public static boolean isExplode(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getExplodeAFun();
+    public static boolean isExplode(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getExplode());
     }
 
-    public static boolean isWld(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getWldAFun();
+    public static boolean isWld(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getWld());
     }
 
-    public static boolean isAs(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getAsAFun();
+    public static boolean isAs(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getAs());
     }
 
-    public static boolean isReal(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getRealAFun();
+    public static boolean isReal(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getReal());
     }
 
-    public static boolean isInt(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getIntAFun();
+    public static boolean isInt(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getInt());
     }
 
-    public static boolean isATermReal(ATerm t) {
-        return t.getType() == ATerm.REAL;
+    public static boolean isTermReal(IStrategoTerm t) {
+        return t instanceof IStrategoReal;
     }
 
-    public static boolean isATermAppl(ATerm t) {
-        return t.getType() == ATerm.APPL;
+    public static boolean isTermAppl(IStrategoTerm t) {
+        return t instanceof IStrategoAppl;
     }
 
-    public static int getATermInt(ATermInt t) {
-        return t.getInt();
+    public static boolean isFunType(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getFunType());
     }
 
-    public static boolean isFunType(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getFunTypeAFun();
+    public static boolean isConstType(IStrategoAppl t, IContext env) {
+        return t.getConstructor().equals(env.getStrategoSignature().getConstType());
     }
 
-    public static boolean isConstType(ATermAppl t, IContext env) {
-        return t.getAFun() == env.getConstTypeAFun();
+    public static String javaStringAt(IStrategoAppl t, int i) {
+        return Tools.stringAt(t, i).getValue();
+    }
+
+    public static String javaStringAt(IStrategoTermList t, int i) {
+        return Tools.stringAt(t, i).getValue();
+    }
+
+    public static int javaInt(IStrategoTerm term) {
+        return ((IStrategoInt)term).getValue();
     }
 
 }

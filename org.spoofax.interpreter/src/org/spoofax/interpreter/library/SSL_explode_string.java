@@ -9,13 +9,13 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
-
-import aterm.ATerm;
-import aterm.ATermInt;
+import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
 
 public class SSL_explode_string extends Primitive {
 
@@ -23,21 +23,22 @@ public class SSL_explode_string extends Primitive {
         super("SSL_explode_string", 0, 1);
     }
     
-    public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> svars, List<IStrategoTerm> tvars) throws InterpreterException {
         
-        ATerm t = tvars.get(0);
+        IStrategoTerm t = tvars.get(0);
         
-        if(!Tools.isATermString(t))
+        if(!Tools.isTermString(t))
             return false;
         
-        String s = Tools.getATermString(t);
-        ATerm[] r = new ATermInt[s.length()];
+        String s = Tools.javaString(t);
+        IStrategoTerm[] r = new IStrategoInt[s.length()];
         byte[] bs = s.getBytes();
         
-        for(int i=0;i<bs.length;i++)
-            r[i] = env.getFactory().makeInt(bs[i]);
+        ITermFactory f = env.getFactory();
+        for(int i = 0; i < bs.length; i++)
+            r[i] = f.makeInt(bs[i]);
         
-        ATerm sl = env.makeList(r);
+        IStrategoTerm sl = env.getFactory().makeList(r);
         env.setCurrent(sl);
         return true;
     }

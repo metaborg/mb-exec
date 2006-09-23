@@ -8,14 +8,14 @@
 package org.spoofax.interpreter;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
 
-import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.DebugUtil;
+import org.spoofax.interpreter.stratego.SDefT;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
-import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
 
@@ -23,20 +23,20 @@ public class VarScope {
 
     private VarScope parent;
 
-    private Map<String, ATerm> vars;
+    private Map<String, IStrategoTerm> vars;
 
     private Map<String, SDefT> svars;
 
     public VarScope(VarScope parent) {
         this.parent = parent;
 
-        vars = new HashMap<String, ATerm>(0); //todo: create these on demand
+        vars = new HashMap<String, IStrategoTerm>(0); //todo: create these on demand
         svars = new HashMap<String, SDefT>(0);
     }
 
-    public ATerm lookup(String name) {
+    public IStrategoTerm lookup(String name) {
 
-        ATerm t = vars.get(name);
+        IStrategoTerm t = vars.get(name);
 
         if (t == null && parent != null)
             t = parent.lookup(name);
@@ -67,7 +67,7 @@ public class VarScope {
             svars.put(def.getName(), def);
     }
 
-    public void add(String var, ATerm t) {
+    public void add(String var, IStrategoTerm t) {
         vars.put(var, t);
     }
 

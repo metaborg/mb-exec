@@ -9,12 +9,11 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.TermFactory;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
-
-import aterm.ATerm;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
 
 public class SSL_new extends Primitive {
 
@@ -29,12 +28,12 @@ public class SSL_new extends Primitive {
         counter = 0;
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
 
-        TermFactory factory = env.getFactory();
+        ITermFactory factory = env.getFactory();
 
         String s = (char)(letterA + alphaCounter) + "_" + counter;
-        while(factory.hasAFun(s, 0)) {
+        while(factory.hasConstructor(s, 0)) {
             alphaCounter++;
             if(alphaCounter > 25) {
                 alphaCounter = 0;
@@ -43,7 +42,7 @@ public class SSL_new extends Primitive {
             s = (char)(letterA + alphaCounter) + "_" + counter;
         }
 
-        env.setCurrent(env.makeTerm("\"" + s + "\""));
+        env.setCurrent(env.getFactory().makeString(s));
         return true;
     }
 }

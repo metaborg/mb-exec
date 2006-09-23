@@ -29,7 +29,7 @@ public class Instance {
     }
 
     public boolean loadXlet(String name) throws InterpreterException {
-        itp.setCurrent(itp.makeString(name));
+        itp.setCurrent(itp.getFactory().makeString(name));
         return itp.invoke("xlet_load_xlet_0_0");
     }
 }

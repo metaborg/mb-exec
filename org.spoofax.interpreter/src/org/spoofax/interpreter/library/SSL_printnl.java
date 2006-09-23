@@ -9,14 +9,13 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
-
-import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermList;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTermList;
 
 public class SSL_printnl extends Primitive {
 
@@ -24,22 +23,22 @@ public class SSL_printnl extends Primitive {
         super("SSL_printnl", 0, 2);
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
 
         // FIXME: Possibly erroneous
-        String output = Tools.getATermString(targs.get(0));
+        String output = Tools.javaString(targs.get(0));
 
-        ATermList l = Tools.consToListDeep(env, (ATermAppl) targs.get(1));
+        IStrategoTermList l = Tools.consToListDeep(env, (IStrategoAppl) targs.get(1));
 
         StringBuffer sb = new StringBuffer();
-        for(int i=0;i<l.getChildCount();i++) {
-            ATerm t = Tools.termAt(l, i);
-            if (Tools.isATermAppl(t)) {
-                ATermAppl a = (ATermAppl)t;
+        for(int i = 0; i < l.size(); i++) {
+            IStrategoTerm t = Tools.termAt(l, i);
+            if (Tools.isTermAppl(t)) {
+                IStrategoAppl a = (IStrategoAppl)t;
                 if (Tools.isCons(a, env))
                     sb.append(Tools.consToListDeep(env, a));
-                else if (Tools.isATermString(t))
-                    sb.append(Tools.getATermString(t));
+                else if (Tools.isTermString(t))
+                    sb.append(Tools.javaString(t));
                 continue;
             }
             sb.append(t.toString());

@@ -9,12 +9,11 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
-
-import aterm.ATerm;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_getenv extends Primitive {
 
@@ -22,17 +21,17 @@ public class SSL_getenv extends Primitive {
         super("SSL_getenv", 0, 1);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
         
-        if(!Tools.isATermString(targs.get(0)))
+        if(!Tools.isTermString(targs.get(0)))
             return false;
         
-        String s = System.getenv(Tools.getATermString(targs.get(0)));
+        String s = System.getenv(Tools.javaString(targs.get(0)));
 
         if(s == null)
             return false;
         
-        env.setCurrent(env.makeString(s));
+        env.setCurrent(env.getFactory().makeString(s));
         return true;
     }
 }

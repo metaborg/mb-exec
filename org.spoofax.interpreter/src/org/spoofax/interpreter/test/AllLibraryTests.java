@@ -7,6 +7,9 @@
  */
 package org.spoofax.interpreter.test;
 
+import org.spoofax.interpreter.test.library.BasicLibraryTest;
+import org.spoofax.interpreter.test.library.LibraryTest;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 

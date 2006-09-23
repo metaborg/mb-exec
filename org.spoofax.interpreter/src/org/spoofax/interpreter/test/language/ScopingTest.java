@@ -5,7 +5,9 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.test;
+package org.spoofax.interpreter.test.language;
+
+import org.spoofax.interpreter.test.AbstractLanguageTest;
 
 public class ScopingTest extends AbstractLanguageTest {
 
@@ -26,8 +28,7 @@ public class ScopingTest extends AbstractLanguageTest {
     }
 
     public void testChoiceDoNotUnbinding() {
-        interpTest("do_not_unbinding_lhs_of_lchoice_if_it_succeeds", itp
-                .makeTuple("[]"), itp.makeTerm("1"));
+        interpTest("do_not_unbinding_lhs_of_lchoice_if_it_succeeds", "()", "1");
     }
 
     public void testChoiceUnbinding() {
@@ -35,11 +36,11 @@ public class ScopingTest extends AbstractLanguageTest {
     }
 
     public void testLet1() {
-        interpTest("let_test_1", itp.makeTerm("1"), itp.makeTerm("2"));
+        interpTest("let_test_1", "1", "2");
     }
 
     public void testLet2() {
-        interpTest("let_test_2", itp.makeTerm("1"), itp.makeTerm("2"));
+        interpTest("let_test_2", "1", "2");
     }
 
 }

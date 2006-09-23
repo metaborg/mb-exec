@@ -7,27 +7,32 @@
  */
 package org.spoofax.interpreter;
 
-import java.util.List;
-
 import org.spoofax.interpreter.stratego.SDefT;
+import org.spoofax.interpreter.stratego.Match.Results;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.interpreter.terms.StrategoSignature;
 
-import aterm.ATerm;
+// FIXME aggregate IStrategoTermBuilder instead
 
-public interface IContext extends IATermBuilder {
+public interface IContext {
 
-    ATerm current();
-    void setCurrent(ATerm newCurrent);
+    public IStrategoTerm current();
+    public void setCurrent(IStrategoTerm newCurrent);
 
-    public ATerm lookupVar(String n) throws InterpreterException;
+    public IStrategoTerm lookupVar(String n) throws InterpreterException;
     public SDefT lookupSVar(String n) throws InterpreterException;
 
-    TermFactory getFactory();
+    public ITermFactory getFactory();
 
-    boolean bindVars(List<Pair<String, ATerm>> r);
+    public boolean bindVars(Results r);
 
-    VarScope getVarScope();
-    void setVarScope(VarScope newVarScope);
+    public VarScope getVarScope();
+    public void setVarScope(VarScope newVarScope);
 
-    void popVarScope();
-    void restoreVarScope(VarScope anotherVarScope);
+    public void popVarScope();
+    public void restoreVarScope(VarScope anotherVarScope);
+    
+    public StrategoSignature getStrategoSignature();
+    
 }

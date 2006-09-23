@@ -11,13 +11,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
-
-import aterm.ATerm;
-import aterm.ATermInt;
+import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_fputc extends Primitive {
 
@@ -25,16 +24,16 @@ public class SSL_fputc extends Primitive {
         super("SSL_fputc", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
 
-        if(!(Tools.isATermInt(targs.get(0))))
+        if(!(Tools.isTermInt(targs.get(0))))
             return false;
-        if(!(Tools.isATermInt(targs.get(1))))
+        if(!(Tools.isTermInt(targs.get(1))))
             return false;
 
-        OutputStream s = SSL.outputStreamFromTerm((ATermInt)targs.get(1));
+        OutputStream s = SSL.outputStreamFromTerm((IStrategoInt)targs.get(1));
         try {
-            s.write(((ATermInt)targs.get(0)).getInt());
+            s.write(((IStrategoInt)targs.get(0)).getValue());
         } catch(IOException e) {
             throw new InterpreterException(e);
         }

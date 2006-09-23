@@ -1,0 +1,81 @@
+/*
+ * Created on 23. sep.. 2006
+ *
+ * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * 
+ * Licensed under the GNU General Public License, v2
+ */
+package org.spoofax.interpreter.terms.aterm;
+
+import org.spoofax.NotImplementedException;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoConstructor;
+import org.spoofax.interpreter.terms.IStrategoString;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTermList;
+
+import aterm.AFun;
+import aterm.ATerm;
+
+public class WrappedAFun extends WrappedATerm implements IStrategoConstructor {
+
+    private AFun afun;
+    
+    WrappedAFun(AFun afun) {
+        this.afun = afun;
+    }
+    
+    public IStrategoAppl instantiate(IStrategoTermList terms) {
+        ATerm[] args = new ATerm[terms.getSubtermCount()];
+        for(int i = 0; i < terms.getSubtermCount(); i++)
+            args[i] = ((WrappedATerm)terms.get(i)).getATerm();
+        return new WrappedATermAppl(afun.getFactory().makeAppl(afun, args));
+    }
+
+
+    @Override
+    public boolean equals(Object second) {
+        if(second instanceof WrappedATerm) {
+            if(second instanceof WrappedAFun) {
+                return ((WrappedAFun)second).afun == afun;
+            }
+            return false;
+        }
+        return slowCompare(second);
+    }
+
+    public IStrategoTerm getSubterm(int index) {
+        return null;
+    }
+
+    public int getSubtermCount() {
+        return 0;
+    }
+
+    public int getTermType() {
+        return IStrategoTerm.CTOR;
+    }
+
+    public boolean match(IStrategoTerm second) {
+        return equals(second);
+    }
+
+    @Override
+    ATerm getATerm() {
+        return afun;
+    }
+
+    public int getArity() {
+        return afun.getArity();
+    }
+
+    public String getName() {
+        return afun.getName();
+    }
+
+    @Override
+    public String toString() {
+        return afun.toString();
+    }
+
+}

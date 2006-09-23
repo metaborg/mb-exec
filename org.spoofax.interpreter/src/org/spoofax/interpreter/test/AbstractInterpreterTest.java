@@ -8,29 +8,29 @@
 package org.spoofax.interpreter.test;
 
 import java.io.IOException;
-import java.util.List;
+
+import junit.framework.TestCase;
 
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.stratego.DebugUtil;
-
-import aterm.ATerm;
-import aterm.pure.ATermImpl;
-import junit.framework.TestCase;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
 
 public abstract class AbstractInterpreterTest extends TestCase {
 
     protected Interpreter itp;
+    protected ITermFactory factory;
     protected String basePath;
     
     protected void setUp(String path) throws Exception {
         super.setUp();
         basePath = path;
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!");
         DebugUtil.resetSSL = false; //faster but does not cleanup
         DebugUtil.cleanupInShutdown = false; //faster but does not cleanup
         DebugUtil.shareFactory = true; // in unit test mode all can share the same factory
         itp = new Interpreter();
+        factory = itp.getFactory();
         DebugUtil.setDebug(false);
     }
     
@@ -41,37 +41,36 @@ public abstract class AbstractInterpreterTest extends TestCase {
         super.tearDown();
     }
 
-    public void interpTestFail(String test, ATerm input) {
+    public void interpTestFail(String test, IStrategoTerm input) {
         assertFalse(runInterp(test, input));
     }
 
     public void interpTestFail(String test, String input) {
-        ATerm t = itp.makeTerm(input);
+        IStrategoTerm t = itp.getFactory().parseFromString(input);
         interpTestFail(test, t);
     }
 
     public void interpTest(String test, String input, String output) {
-        ATerm i = itp.makeTerm(input);
-        ATerm o = itp.makeTerm(output);
+        IStrategoTerm i = factory.parseFromString(input);
+        IStrategoTerm o = factory.parseFromString(output);
         interpTest(test, i, o);
     }
 
-    public void interpTest(String test, ATerm input, ATerm output) {
+    public void interpTest(String test, IStrategoTerm input, IStrategoTerm output) {
         System.out.println("Input : " + input);
         assertTrue(runInterp(test, input));
-        ATermImpl x = (ATermImpl) output;
-        ATermImpl y = (ATermImpl) itp.current();
-        assertTrue(x.getFactory() == y.getFactory());
-        System.out.println("Want  : " + x + " / " + x.getType() + " / " + x.getClass()
-                + " / " + x.getChildCount());
-        System.out.println("Got   : " + y + " / " + y.getType() + " / " + y.getClass()
-                           + " / " + y.getChildCount());
-        final List succeeded = itp.current().match(output);
-        System.out.println(succeeded != null);
-        assertTrue(succeeded != null);
+        IStrategoTerm x = output;
+        IStrategoTerm y = itp.current();
+        System.out.println("Want  : " + x + " / " + x.getTermType() + " / " + x.getClass()
+                + " / " + x.getSubtermCount());
+        System.out.println("Got   : " + y + " / " + y.getTermType() + " / " + y.getClass()
+                           + " / " + y.getSubtermCount());
+        boolean succeeded = itp.current().match(output);
+        System.out.println(succeeded);
+        assertTrue(succeeded);
     }
 
-    private boolean runInterp(String test, ATerm input) {
+    private boolean runInterp(String test, IStrategoTerm input) {
         try {
         itp.load(basePath + "/" + test + ".rtree");
         System.out.println(itp.prettyPrint());

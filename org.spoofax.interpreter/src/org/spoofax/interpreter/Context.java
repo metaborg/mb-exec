@@ -8,38 +8,45 @@
 package org.spoofax.interpreter;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.spoofax.interpreter.stratego.DebugUtil;
 import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
-import org.spoofax.interpreter.stratego.DebugUtil;
+import org.spoofax.interpreter.stratego.Match.Binding;
+import org.spoofax.interpreter.stratego.Match.Results;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.interpreter.terms.StrategoSignature;
+import org.spoofax.interpreter.terms.aterm.WrappedATermFactory;
 
-import aterm.ATerm;
+public class Context implements IContext {
 
-public class Context extends ATermBuilder implements IContext {
+    public static int indentation = 0; // TODO should this be non static?
 
-    public static int indentation = 0; //todo: should this be non static?
+    private IStrategoTerm current;
 
-    protected ATerm current;
-
+    // FIXME deprecated?
     private Map<String, OpDecl> opdecls;
 
-    protected VarScope varScope;
+    private VarScope varScope;
+
+    private StrategoSignature strategoSignature;
+    
+    private ITermFactory factory;
 
     public Context() {
-        super();
-
-        assert factory != null;
+        factory = new WrappedATermFactory();
         opdecls = new HashMap<String, OpDecl>();
         varScope = new VarScope(null);
+        strategoSignature = new StrategoSignature(factory);
     }
 
-    public ATerm current() {
+    public IStrategoTerm current() {
         return current;
     }
 
-    public void setCurrent(ATerm term) {
+   public void setCurrent(IStrategoTerm term) {
         current = term;
     }
 
@@ -60,7 +67,7 @@ public class Context extends ATermBuilder implements IContext {
         return s.getBody().eval(this);
     }
 
-    public ATerm lookupVar(String n) throws InterpreterException {
+    public IStrategoTerm lookupVar(String n) throws InterpreterException {
         return varScope.lookup(n);
     }
 
@@ -68,26 +75,25 @@ public class Context extends ATermBuilder implements IContext {
         return varScope.lookupSVar(n);
     }
 
-    public TermFactory getFactory() {
+    public ITermFactory getFactory() {
         return factory;
     }
 
-    public boolean bindVars(List<Pair<String, ATerm>> r) {
+    public boolean bindVars(Results r) {
 
-        for (Pair<String, ATerm> x : r) {
+        for (Binding x : r) {
 
             VarScope s = varScope.scopeOf(x.first);
 
             if (s == null) {
                 varScope.add(x.first, x.second);
             } else if (s.hasVarInLocalScope(x.first)) {
-                ATerm t = s.lookup(x.first);
-                boolean eq = t.match(x.second) != null;
-                if (!eq) {
+                IStrategoTerm t = s.lookup(x.first);
+                if (!t.equals(x.second)) {
                     if (DebugUtil.isDebugging()) {
                         debug(" no bind : ", x.first, " already bound to ", t, ", new: ", x.second);
                     }
-                    return eq;
+                    return false;
                 }
             } else {
                 s.add(x.first, x.second);
@@ -136,5 +142,9 @@ public class Context extends ATermBuilder implements IContext {
 
     public void addSVar(String name, SDefT def) {
         varScope.addSVar(name, def);
+    }
+
+    public StrategoSignature getStrategoSignature() {
+        return strategoSignature;
     }
 }

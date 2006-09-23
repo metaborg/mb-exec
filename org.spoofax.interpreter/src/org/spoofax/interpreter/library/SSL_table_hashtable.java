@@ -9,12 +9,11 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.library.SSL_hashtable_create.ATermHashtable;
+import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.library.SSL_hashtable_create.Hashtable;
 import org.spoofax.interpreter.stratego.Strategy;
-
-import aterm.ATerm;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_table_hashtable extends Primitive {
 
@@ -23,7 +22,7 @@ public class SSL_table_hashtable extends Primitive {
     }
     
     // FIXME: Must be per-interpreter instance, not per-JVM instance //@todo
-    protected static ATermHashtable map;
+    protected static Hashtable map;
     private int magicRef = -1;
 
     static {
@@ -31,22 +30,16 @@ public class SSL_table_hashtable extends Primitive {
     }
 
     public static void init() {
-        if(map != null) {
-            for (ATerm aTerm : map.values()) {
-                aTerm.getFactory();
-            }
-            map.clear();
-        }
-        map = new ATermHashtable(100, 80);
+        map = new Hashtable(100, 80);
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
         
         if(magicRef == -1) {
             magicRef = SSL.registerHashtable(map);
         }
         
-        env.setCurrent(env.makeTerm(magicRef));
+        env.setCurrent(env.getFactory().makeInt(magicRef));
         return true;
     }
 }

@@ -7,13 +7,14 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoConstructor;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
-import aterm.AFun;
 import aterm.ATerm;
-import aterm.ATermAppl;
 
 public class All extends Strategy {
 
@@ -29,27 +30,27 @@ public class All extends Strategy {
             debug("All.eval() - ", env.current());
         }
 
-        ATerm t = env.current();
+        IStrategoTerm t = env.current();
 
-        switch (t.getType()) {
+        switch (t.getTermType()) {
             case ATerm.INT:
                 return DebugUtil.traceReturn(true, env.current(), this);
             case ATerm.REAL:
                 return DebugUtil.traceReturn(true, env.current(), this);
             case ATerm.APPL:
-                return DebugUtil.traceReturn(evalAll(env, (ATermAppl)t), env.current(), this);
+                return DebugUtil.traceReturn(evalAll(env, (IStrategoAppl)t), env.current(), this);
             default:
-                throw new InterpreterException("Unknown ATerm type " + t.getType());
+                throw new InterpreterException("Unknown ATerm type " + t.getTermType());
         }
 
     }
 
-    private boolean evalAll(IContext env, ATermAppl t) throws InterpreterException {
+    private boolean evalAll(IContext env, IStrategoAppl t) throws InterpreterException {
         
-        AFun fun = t.getAFun();
-        ATerm[] xt = new ATerm[t.getChildCount()];
+        IStrategoConstructor ctor = t.getConstructor();
+        IStrategoTerm[] xt = new IStrategoTerm[t.getSubtermCount()];
         
-        for(int i=0;i<t.getChildCount();i++) {
+        for(int i = 0; i < t.getSubtermCount(); i++) {
             env.setCurrent(Tools.termAt(t, i));
             if(!body.eval(env)) {
                 env.setCurrent(t);
@@ -59,7 +60,7 @@ public class All extends Strategy {
             xt[i] = env.current(); 
         }
         
-        ATermAppl t2 = env.getFactory().makeAppl(fun, xt);
+        IStrategoAppl t2 = env.getFactory().makeAppl(ctor, xt);
         
         env.setCurrent(t2);
         

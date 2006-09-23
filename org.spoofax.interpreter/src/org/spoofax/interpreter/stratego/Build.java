@@ -11,21 +11,25 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoConstructor;
+import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoReal;
+import org.spoofax.interpreter.terms.IStrategoString;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.ITermFactory;
 
-import aterm.AFun;
-import aterm.ATerm;
 import aterm.ATermAppl;
-import aterm.ATermList;
-import aterm.pure.PureFactory;
 
 public class Build extends Strategy {
 
-    private ATermAppl term;
+    private IStrategoAppl term;
 
-    public Build(ATermAppl t) {
+    public Build(IStrategoAppl t) {
         term = t;
     }
 
@@ -34,7 +38,7 @@ public class Build extends Strategy {
             debug("Build.eval() - ", env.current(), " -> !", term);
         }
 
-        ATerm t = buildTerm(env, term);
+        IStrategoTerm t = buildTerm(env, term);
         if (t == null) {
             if(DebugUtil.isDebugging()) {
                 return DebugUtil.traceReturn(false, env.current(), this);
@@ -51,9 +55,9 @@ public class Build extends Strategy {
         }
     }
 
-    public ATerm buildTerm(IContext env, ATermAppl t) throws InterpreterException {
+    public IStrategoTerm buildTerm(IContext env, IStrategoAppl t) throws InterpreterException {
 
-        PureFactory factory = env.getFactory();
+        ITermFactory factory = env.getFactory();
 
         if (Tools.isAnno(t, env)) {
             return buildAnno(env, t);
@@ -77,18 +81,18 @@ public class Build extends Strategy {
             return buildExplode(env, t);
         }
 
-        throw new InterpreterException("Unknown build constituent '" + t.getName() + "'");
+        throw new InterpreterException("Unknown build constituent '" + t.getConstructor() + "'");
     }
 
-    private ATerm buildExplode(IContext env, ATermAppl t) throws InterpreterException {
+    private IStrategoTerm buildExplode(IContext env, IStrategoAppl t) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             debug("buildExplode() : ", t);
         }
 
-        PureFactory factory = env.getFactory();
+        ITermFactory factory = env.getFactory();
 
-        ATermAppl ctor = Tools.applAt(t, 0);
-        ATermAppl args = Tools.applAt(t, 1);
+        IStrategoAppl ctor = Tools.applAt(t, 0);
+        IStrategoAppl args = Tools.applAt(t, 1);
 
         if (DebugUtil.isDebugging()) {
             debug(" ctor : ", ctor);
@@ -97,8 +101,8 @@ public class Build extends Strategy {
             debug(" args : ", args);
         }
 
-        ATerm actualCtor = buildTerm(env, ctor);
-        ATerm actualArgs = buildTerm(env, args);
+        IStrategoTerm actualCtor = buildTerm(env, ctor);
+        IStrategoTerm actualArgs = buildTerm(env, args);
 
         if (DebugUtil.isDebugging()) {
             debug(" actualCtor : ", actualCtor);
@@ -107,78 +111,78 @@ public class Build extends Strategy {
             debug(" actualArgs : ", actualArgs);
         }
 
-        if (Tools.isATermInt(actualCtor) || Tools.isATermReal(actualCtor)) {
+        if (Tools.isTermInt(actualCtor) || Tools.isTermReal(actualCtor)) {
             return actualCtor;
         }
-        else if (Tools.isATermString(actualCtor)) {
+        else if (Tools.isTermString(actualCtor)) {
 
-            if (!(Tools.isATermAppl(actualArgs))) {
+            if (!(Tools.isTermAppl(actualArgs))) {
                 return null;
             }
 
-            String n = ((ATermAppl)actualCtor).getName();
+            String n = ((IStrategoString)actualCtor).getValue();
 
             boolean quoted = false;
             if (n.length() > 1 && n.charAt(0) == '"') {
                 n = n.substring(1, n.length() - 1);
                 quoted = true;
             }
-            ATermList realArgs = Tools.consToList(env, (ATermAppl)actualArgs);
-            AFun afun = factory.makeAFun(n, realArgs.getChildCount(), quoted);
-            return factory.makeApplList(afun, realArgs);
+            IStrategoTermList realArgs = Tools.consToList(env, (IStrategoAppl)actualArgs);
+            IStrategoConstructor afun = factory.makeConstructor(n, realArgs.size(), quoted);
+            return factory.makeAppl(afun, realArgs);
         }
-        else if (Tools.isATermAppl(actualCtor)
-          && Tools.isNil(((ATermAppl)actualCtor), env)) {
+        else if (Tools.isTermAppl(actualCtor)
+          && Tools.isNil(((IStrategoAppl)actualCtor), env)) {
             return actualArgs;
         }
 
         throw new InterpreterException("Unknown explosion combination!");
     }
 
-    private ATerm buildVar(IContext env, ATermAppl t) throws InterpreterException {
+    private IStrategoTerm buildVar(IContext env, IStrategoAppl t) throws InterpreterException {
 
-        String n = Tools.stringAt(t, 0);
+        String n = Tools.javaStringAt(t, 0);
         return env.lookupVar(n);
     }
 
-    private ATerm buildStr(ATermAppl t) {
-        ATermAppl x = Tools.applAt(t, 0);
+    private IStrategoString buildStr(IStrategoAppl t) {
+        IStrategoString x = Tools.stringAt(t, 0);
 
         return x;
     }
 
-    private ATerm buildReal(ATermAppl t, PureFactory factory) {
-        ATermAppl x = Tools.applAt(t, 0);
+    private IStrategoReal buildReal(IStrategoAppl t, ITermFactory factory) {
+        String x = Tools.javaStringAt(t, 0);
 
-        return factory.makeReal(new Double(x.getName()));
+        return factory.makeReal(new Double(x));
     }
 
-    private ATerm buildInt(ATermAppl t, PureFactory factory) {
-        ATermAppl x = Tools.applAt(t, 0);
+    private IStrategoInt buildInt(IStrategoAppl t, ITermFactory factory) {
+        String x = Tools.javaStringAt(t, 0);
 
-        return factory.makeInt(new Integer(x.getName()));
+        return factory.makeInt(new Integer(x).intValue());
     }
 
-    private ATerm buildOp(IContext env, ATermAppl t, PureFactory factory)
+    private IStrategoTerm buildOp(IContext env, IStrategoAppl t, ITermFactory factory)
             throws InterpreterException {
-        String ctr = Tools.stringAt(t, 0);
-        ATermList children = (ATermList) t.getChildAt(1);
+        String ctr = Tools.javaStringAt(t, 0);
+        IStrategoTermList children = (IStrategoTermList) t.getSubterm(1);
 
-        AFun afun = factory.makeAFun(ctr, children.getLength(), false);
-        ATermList kids = factory.makeList();
+        IStrategoConstructor ctor = factory.makeConstructor(ctr, children.size(), false);
+        IStrategoTermList kids = factory.makeList();
 
-        for (int i = 0; i < children.getLength(); i++) {
-            ATerm kid = buildTerm(env, (ATermAppl) children.elementAt(i));
+        for (int i = 0; i < children.size(); i++) {
+            IStrategoTerm kid = buildTerm(env, (IStrategoAppl) children.getSubterm(i));
             if (kid == null) {
                 return null;
             }
             kids = kids.append(kid);
         }
 
-        return factory.makeApplList(afun, kids);
+        return factory.makeAppl(ctor, kids);
     }
 
-    private ATerm buildAnno(IContext env, ATermAppl t) throws InterpreterException {
+    private IStrategoTerm buildAnno(IContext env, IStrategoAppl t) throws InterpreterException {
         // FIXME: Actually build annotation
         return buildTerm(env, Tools.applAt(t, 0));
     }

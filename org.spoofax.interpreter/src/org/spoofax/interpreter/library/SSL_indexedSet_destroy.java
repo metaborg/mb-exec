@@ -9,12 +9,12 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
-import aterm.ATerm;
 import aterm.ATermInt;
 
 public class SSL_indexedSet_destroy extends Primitive {
@@ -23,9 +23,9 @@ public class SSL_indexedSet_destroy extends Primitive {
         super("SSL_indexedSet_destroy", 0, 1);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
 
-        if(!(Tools.isATermInt(targs.get(0))))
+        if(!(Tools.isTermInt(targs.get(0))))
             return false;
 
         int ref = ((ATermInt)targs.get(0)).getInt();

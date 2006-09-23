@@ -10,6 +10,18 @@ package org.spoofax.interpreter.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.spoofax.interpreter.test.language.BuildTest;
+import org.spoofax.interpreter.test.language.ClosureTest;
+import org.spoofax.interpreter.test.language.CongruenceTest;
+import org.spoofax.interpreter.test.language.DefinitionTest;
+import org.spoofax.interpreter.test.language.GuardTest;
+import org.spoofax.interpreter.test.language.HigherOrderParamTest;
+import org.spoofax.interpreter.test.language.MatchTest;
+import org.spoofax.interpreter.test.language.OverloadingTest;
+import org.spoofax.interpreter.test.language.ScopingTest;
+import org.spoofax.interpreter.test.language.TermConstructionTest;
+import org.spoofax.interpreter.test.language.TermDeconstructionTest;
+
 public class AllLanguageTests {
 
     public static Test suite() {

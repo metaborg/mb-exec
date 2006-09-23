@@ -2,8 +2,8 @@ package org.spoofax.interpreter;
 
 import java.io.IOException;
 
-import aterm.ATerm;
 import org.spoofax.interpreter.stratego.DebugUtil;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class Main {
 
@@ -26,20 +26,17 @@ public class Main {
         try {
             itp.load(file);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (InterpreterException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        ATerm inp = itp.makeList("[]");
+        IStrategoTerm inp = itp.getFactory().makeList();
         try {
             itp.setCurrent(inp);
             itp.invoke("main_0_0");
             System.out.println("" + itp.current());
         } catch (InterpreterException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

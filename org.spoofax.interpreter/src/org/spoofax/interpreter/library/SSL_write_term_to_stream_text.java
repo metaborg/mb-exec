@@ -11,12 +11,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
-
-import aterm.ATerm;
-import aterm.ATermInt;
+import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_write_term_to_stream_text extends Primitive {
 
@@ -24,17 +24,17 @@ public class SSL_write_term_to_stream_text extends Primitive {
         super("SSL_write_term_to_stream_text", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
         
-        if(targs.get(0).getType() != ATerm.INT)
+        if(Tools.isTermInt(targs.get(0)))
             return false;
 
-        OutputStream ous = SSL.outputStreamFromTerm((ATermInt)targs.get(0));
+        OutputStream ous = SSL.outputStreamFromTerm((IStrategoInt)targs.get(0));
 
-        ATerm t = targs.get(1);
+        IStrategoTerm t = targs.get(1);
         
         try {
-            t.writeToTextFile(ous);
+            env.getFactory().unparseToFile(t, ous);
         } catch (IOException e) {
             throw new InterpreterException(e);
         }

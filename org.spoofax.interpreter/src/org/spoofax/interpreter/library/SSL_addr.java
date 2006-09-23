@@ -12,6 +12,7 @@ import java.util.List;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 import aterm.ATerm;
 import aterm.ATermReal;
@@ -22,11 +23,11 @@ public class SSL_addr extends Primitive {
         super("SSL_addr", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> svars, List<ATerm> tvars) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> svars, List<IStrategoTerm> tvars) throws InterpreterException {
         
-        if(tvars.get(0).getType() != ATerm.REAL)
+        if(tvars.get(0).getTermType() != ATerm.REAL)
             return false;
-        if(tvars.get(1).getType() != ATerm.REAL)
+        if(tvars.get(1).getTermType() != ATerm.REAL)
             return false;
 
         ATermReal a = (ATermReal) tvars.get(0);

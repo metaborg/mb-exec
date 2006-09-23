@@ -9,13 +9,12 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
-
-import aterm.ATerm;
-import aterm.ATermReal;
+import org.spoofax.interpreter.terms.IStrategoReal;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_cos extends Primitive {
 
@@ -23,13 +22,13 @@ public class SSL_cos extends Primitive {
         super("SSL_cos", 0, 1);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
 
-        if(!(Tools.isATermReal(targs.get(0))))
+        if(!(Tools.isTermReal(targs.get(0))))
             return false;
 
-        ATermReal a = (ATermReal) targs.get(0);
-        env.setCurrent(env.getFactory().makeReal(Math.cos(a.getReal())));
+        IStrategoReal a = (IStrategoReal) targs.get(0);
+        env.setCurrent(env.getFactory().makeReal(Math.cos(a.getValue())));
         return true;
     }
 }

@@ -10,14 +10,15 @@ package org.spoofax.interpreter.library;
 import java.io.File;
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTermList;
 
-import aterm.ATerm;
 import aterm.ATermAppl;
-import aterm.ATermList;
 
 public class SSL_access extends Primitive {
 
@@ -33,16 +34,16 @@ public class SSL_access extends Primitive {
         super("SSL_access", 0, 2);
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, List<ATerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
 
-        if (!Tools.isATermString(targs.get(0)))
+        if (!Tools.isTermString(targs.get(0)))
             return false;
-        if (!(Tools.isATermAppl(targs.get(1))))
+        if (!(Tools.isTermAppl(targs.get(1))))
             return false;
 
-        String path = Tools.getATermString(targs.get(0));
+        String path = Tools.javaString(targs.get(0));
         int permissions = permissions_from_term(Tools.
-          consToList(env, (ATermAppl) targs.get(1)));
+          consToList(env, (IStrategoAppl) targs.get(1)));
         File f = new File(path);
 
         if ((permissions & R_OK) != 0) {
@@ -63,9 +64,9 @@ public class SSL_access extends Primitive {
         return true;
     }
 
-    private int permissions_from_term(ATermList perms) {
+    private int permissions_from_term(IStrategoTermList perms) {
         int res = 0;
-        for (int i = 0; i < perms.getChildCount(); i++) {
+        for (int i = 0; i < perms.size(); i++) {
             ATermAppl t = (ATermAppl) Tools.termAt(perms, i);
             
             if(Tools.termType(t, "W_OK"))

@@ -7,8 +7,8 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 
 public class One extends Strategy {
 

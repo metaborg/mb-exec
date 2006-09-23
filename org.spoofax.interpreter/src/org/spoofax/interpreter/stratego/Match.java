@@ -8,25 +8,25 @@
 package org.spoofax.interpreter.stratego;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Pair;
 import org.spoofax.interpreter.Tools;
-
-import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermInt;
-import aterm.ATermList;
-import aterm.ATermReal;
-import aterm.pure.PureFactory;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoReal;
+import org.spoofax.interpreter.terms.IStrategoString;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoTuple;
 
 public class Match extends Strategy {
 
-    protected ATermAppl pattern;
+    protected IStrategoAppl pattern;
 
-    public Match(ATermAppl pattern) {
+    public Match(IStrategoAppl pattern) {
         this.pattern = pattern;
     }
 
@@ -35,9 +35,9 @@ public class Match extends Strategy {
             debug("Match.eval() - ", " !", env.current(), " ; ?", pattern);
         }
 
-        ATerm current = env.current();
+        IStrategoTerm current = env.current();
 
-        List<Pair<String, ATerm>> r = match(env, current, pattern);
+        Results r = match(env, current, pattern);
 
         if (r == null) {
             if (DebugUtil.isDebugging()) {
@@ -56,19 +56,15 @@ public class Match extends Strategy {
         }
     }
 
-    public List<Pair<String, ATerm>> emptyList() {
-        return new ArrayList<Pair<String, ATerm>>();
-    }
-
-    public List<Pair<String, ATerm>> matchApplAnno(IContext env, ATermAppl t,
-            ATermAppl anno) throws InterpreterException {
+    public Results matchApplAnno(IContext env, IStrategoAppl t,
+            IStrategoAppl anno) throws InterpreterException {
         // FIXME: Actually process anno
-        ATermAppl p = Tools.applAt(anno, 0);
+        IStrategoAppl p = Tools.applAt(anno, 0);
         return match(env, t, p);
     }
 
-    public List<Pair<String, ATerm>> matchAppl(IContext env, ATermAppl t,
-            ATermAppl p) throws InterpreterException {
+    public Results matchAppl(IContext env, IStrategoAppl t,
+            IStrategoAppl p) throws InterpreterException {
 
         if (Tools.isAnno(p, env)) {
             return matchApplAnno(env, t, p);
@@ -98,29 +94,31 @@ public class Match extends Strategy {
         throw new InterpreterException("Unknown Appl case '" + p + "'");
     }
 
-    protected List<Pair<String, ATerm>> matchApplInt(IContext env, ATermAppl t,
-            ATermAppl p) throws InterpreterException {
-        if (Tools.isATermInt(t))
+    protected Results matchApplInt(IContext env, IStrategoTerm t,
+                                                             IStrategoAppl p) throws InterpreterException {
+        if (Tools.isTermInt(t))
             return match(env, Tools.intAt(t, 0), Tools.applAt(p, 0));
         return null;
     }
 
-    protected List<Pair<String, ATerm>> matchApplStr(ATermAppl t, ATermAppl p) {
-        if (t.getName().equals(Tools.stringAt(p, 0)))
-            return emptyList();
-        return null;
+    protected Results matchApplStr(IStrategoTerm t, IStrategoTerm p) {
+
+        throw new NotImplementedException();
+
+        //if (t.equals(p))
+        //    return emptyList();
+        //return null;
     }
 
-    protected List<Pair<String, ATerm>> matchApplVar(ATermAppl t, ATermAppl p) {
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-        r.add(new Pair<String, ATerm>(Tools.stringAt(p, 0), t));
-        return r;
+    protected Results matchApplVar(IStrategoAppl t, IStrategoAppl p) {
+        String varName = Tools.javaStringAt(p, 0);
+        return newResult(new Binding(varName, t));
     }
 
-    protected List<Pair<String, ATerm>> matchApplAs(IContext env, ATermAppl t,
-            ATermAppl p) throws InterpreterException {
+    protected Results matchApplAs(IContext env, IStrategoAppl t,
+            IStrategoAppl p) throws InterpreterException {
 
-        List<Pair<String, ATerm>> r = match(env, t, Tools.applAt(p, 1));
+        Results r = match(env, t, Tools.applAt(p, 1));
 
         if (r == null)
             return null;
@@ -129,34 +127,35 @@ public class Match extends Strategy {
             debug("matching ApplAs", p);
         }
 
-        String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
-        r.add(new Pair<String, ATerm>(varName, t));
+        String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
+        r.add(new Binding(varName, t));
 
         return r;
     }
 
-    protected List<Pair<String, ATerm>> matchApplOp(IContext env, ATermAppl t,
-            ATermAppl p) throws InterpreterException {
+    protected Results matchApplOp(IContext env, IStrategoAppl t,
+            IStrategoAppl p) throws InterpreterException {
 
-        ATermList ctorArgs = Tools.listAt(p, 1);
+        IStrategoTermList ctorArgs = Tools.listAt(p, 1);
 
         // Check if arity of the pattern matches that
         // of the term
-        if (ctorArgs.getChildCount() != t.getChildCount())
+        if (ctorArgs.getSubtermCount() != t.getSubtermCount())
             return null;
 
         // Check if the constructor name in the pattern
         // matches that of the term
-        ATermAppl c = Tools.applAt(p, 0);
-        if (!t.getName().equals(c.getName()))
+        System.out.println(p);
+        IStrategoString c = Tools.stringAt(p, 0);
+        if (!t.getConstructor().getName().equals(c))
             return null;
 
         // Recursively match all arguments to term
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-        for (int i = 0; i < t.getChildCount(); i++) {
-            List<Pair<String, ATerm>> m = match(env, (ATerm) t.getChildAt(i),
-                                                (ATermAppl) ctorArgs
-                                                        .getChildAt(i));
+        Results r = emptyList();
+        for (int i = 0; i < ctorArgs.size(); i++) {
+            Results m = match(env, t.getSubterm(i),
+                              (IStrategoAppl) ctorArgs
+                              .getSubterm(i));
             if (m != null)
                 r.addAll(m);
             else
@@ -166,8 +165,13 @@ public class Match extends Strategy {
         return r;
     }
 
-    protected List<Pair<String, ATerm>> matchInt(IContext env, ATermInt t,
-            ATermAppl p) throws InterpreterException {
+    private Results emptyList() {
+        return new Results();
+    }
+    
+   
+    protected Results matchInt(IContext env, IStrategoInt t,
+                                                         IStrategoAppl p) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("matching Int");
@@ -201,8 +205,8 @@ public class Match extends Strategy {
         throw new InterpreterException("Unknown Int case '" + p + "'");
     }
 
-    protected List<Pair<String, ATerm>> matchReal(IContext env, ATermReal t,
-            ATermAppl p) throws InterpreterException {
+    protected Results matchReal(IContext env, IStrategoReal t,
+                                                          IStrategoAppl p) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("matching Real");
@@ -236,98 +240,97 @@ public class Match extends Strategy {
         throw new InterpreterException("Unknown Real case '" + p + "'");
     }
 
-    private List<Pair<String, ATerm>> matchRealReal(ATermReal t, ATermAppl p) {
+    private Results matchRealReal(IStrategoReal t, IStrategoAppl p) {
 
-        Double realVal = new Double(Tools.stringAt(p, 0));
+        Double realVal = new Double(Tools.javaStringAt(p, 0));
 
-        if (realVal == t.getReal())
+        if (realVal == t.getValue())
             return emptyList();
 
         return null;
     }
 
-    private List<Pair<String, ATerm>> matchRealWld(ATermAppl p) {
+    private Results matchRealWld(IStrategoAppl p) {
         return emptyList();
     }
 
-    private List<Pair<String, ATerm>> matchIntWld(ATermAppl p) {
+    private Results matchIntWld(IStrategoAppl p) {
         return emptyList();
     }
 
-    protected List<Pair<String, ATerm>> matchIntAnno(IContext env, ATermInt t,
-            ATermAppl p) throws InterpreterException {
+    protected Results matchIntAnno(IContext env, IStrategoInt t,
+                                                             IStrategoAppl p) throws InterpreterException {
         // FIXME: Do real match of annotations
         return match(env, t, Tools.applAt(p, 0));
     }
 
-    protected List<Pair<String, ATerm>> matchRealAnno(IContext env, ATermInt t,
-            ATermAppl p) throws InterpreterException {
+    protected Results matchRealAnno(IContext env, IStrategoReal t,
+                                                              IStrategoAppl p) throws InterpreterException {
         // FIXME: Do real match of annotations
         return match(env, t, Tools.applAt(p, 0));
     }
-
-    protected List<Pair<String, ATerm>> matchRealAnno(IContext env,
-            ATermReal t, ATermAppl p) throws InterpreterException {
+    /*
+    protected List<Pair<String, IStrategoTerm>> matchRealAnno(IContext env,
+            IStrategoReal t, IStrategoAppl p) throws InterpreterException {
         return match(env, t, Tools.applAt(p, 0));
     }
+     */
 
-    protected List<Pair<String, ATerm>> matchIntInt(ATermInt t, ATermAppl p) {
-        Integer intVal = new Integer(Tools.stringAt(p, 0));
-        if (intVal == t.getInt())
+    protected Results matchIntInt(IStrategoInt t, IStrategoAppl p) {
+        Integer intVal = new Integer(Tools.javaStringAt(p, 0));
+        if (intVal == t.getValue())
             return emptyList();
 
         return null;
     }
 
-    protected List<Pair<String, ATerm>> matchIntVar(ATermInt t, ATermAppl p) {
+    protected Results matchIntVar(IStrategoInt t, IStrategoAppl p) {
+        String varName = Tools.javaStringAt(p, 0);
+        return newResult(new Binding(varName, t));
+    }
 
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-        r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0)).getName(),
-                                      t));
+    protected Results matchRealVar(IStrategoReal t, IStrategoAppl p) {
+        String varName = Tools.javaStringAt(p, 0);
+        return newResult(new Binding(varName, t));
+    }
 
+    protected Results matchIntAs(IStrategoInt t, IStrategoAppl p) {
+        String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
+        return newResult(new Binding(varName, t));
+    }
+
+    @SuppressWarnings("serial")
+    public static final class Results extends ArrayList<Binding> {
+    }
+    
+    public static final class Binding extends Pair<String, IStrategoTerm> {
+        public Binding(String first, IStrategoTerm second) {
+            super(first, second);
+        }
+    }
+
+    protected Results matchRealAs(IStrategoReal t, IStrategoAppl p) {
+        String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
+        return newResult(new Binding(varName, t));
+    }
+
+    private Results newResult(Binding initial) {
+        Results r = new Results();
+        r.add(initial);
         return r;
     }
 
-    protected List<Pair<String, ATerm>> matchRealVar(ATermReal t, ATermAppl p) {
+    protected Results matchAnyExplode(IContext env, IStrategoTerm t,
+            IStrategoAppl p) throws InterpreterException {
 
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-        r.add(new Pair<String, ATerm>(((ATermAppl) p.getChildAt(0)).getName(),
-                                      t));
+        IStrategoAppl opPattern = Tools.applAt(p, 0);
+        IStrategoAppl argsPattern = Tools.applAt(p, 1);
 
-        return r;
-    }
+        IStrategoTerm op = getTermConstructor(env, t);
+        IStrategoTerm args = getTermArguments(env, t);
 
-    protected List<Pair<String, ATerm>> matchIntAs(ATermInt t, ATermAppl p) {
-
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-        String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
-
-        r.add(new Pair<String, ATerm>(varName, t));
-
-        return r;
-    }
-
-    protected List<Pair<String, ATerm>> matchRealAs(ATermReal t, ATermAppl p) {
-
-        List<Pair<String, ATerm>> r = new ArrayList<Pair<String, ATerm>>();
-        String varName = Tools.stringAt(Tools.applAt(p, 0), 0);
-
-        r.add(new Pair<String, ATerm>(varName, t));
-
-        return r;
-    }
-
-    protected List<Pair<String, ATerm>> matchAnyExplode(IContext env, ATerm t,
-            ATermAppl p) throws InterpreterException {
-
-        ATermAppl opPattern = Tools.applAt(p, 0);
-        ATermAppl argsPattern = Tools.applAt(p, 1);
-
-        ATerm op = getTermConstructor(env, t);
-        ATerm args = getTermArguments(env, t);
-
-        List<Pair<String, ATerm>> opResult = match(env, op, opPattern);
-        List<Pair<String, ATerm>> argsResult = match(env, args, argsPattern);
+        Results opResult = match(env, op, opPattern);
+        Results argsResult = match(env, args, argsPattern);
 
         if (opResult == null || argsResult == null)
             return null;
@@ -337,59 +340,79 @@ public class Match extends Strategy {
         return opResult;
     }
 
-    private ATerm getTermArguments(IContext env, ATerm t) throws InterpreterException {
+    private IStrategoTerm getTermArguments(IContext env, IStrategoTerm t) throws InterpreterException {
 
-        if (Tools.isATermInt(t) || Tools.isATermReal(t))
-            return env.makeList(emptyATermList(env));
-        else if (Tools.isATermAppl(t)) {
-            ATermAppl a = (ATermAppl)t;
+        if (Tools.isTermInt(t) || Tools.isTermReal(t))
+            return env.getFactory().makeList();
+        else if (Tools.isTermAppl(t)) {
+            IStrategoAppl a = (IStrategoAppl)t;
             if (Tools.isNil(a, env) || Tools.isCons(a, env))
                 return t;
             else
-                return env.makeList(a.getArguments());
+                return env.getFactory().makeList(a.getArguments());
         }
 
         throw new InterpreterException("Unknown term '" + t + "'");
     }
 
-    private ATermList emptyATermList(IContext env) {
+    private IStrategoTerm getTermConstructor(IContext env, IStrategoTerm t) throws InterpreterException {
 
-        PureFactory factory = env.getFactory();
-
-        return factory.makeList();
-    }
-
-    private ATerm getTermConstructor(IContext env, ATerm t) throws InterpreterException {
-
-        if (Tools.isATermInt(t) || Tools.isATermReal(t)) {
+        if (Tools.isTermInt(t) || Tools.isTermReal(t)) {
             return t;
-        } else if (Tools.isATermString(t)) {
-            return env.makeString("\"" + ((ATermAppl) t).getName() + "\"");
-        } else if (Tools.isATermAppl(t)) {
-            ATermAppl a = (ATermAppl)t;
+        } else if (Tools.isTermString(t)) {
+            return env.getFactory().makeString("\"" + ((IStrategoString) t).getValue() + "\"");
+        } else if (Tools.isTermAppl(t)) {
+            IStrategoAppl a = (IStrategoAppl)t;
             if (Tools.isCons(a, env) || Tools.isNil(a, env))
-                return env.getFactory().makeAppl(env.getNilAFun());
+                return env.getFactory().makeAppl(env.getStrategoSignature().getNil());
             else
-                return env.makeString(((ATermAppl)t).getName());
+                return env.getFactory().makeString(((IStrategoAppl)t).getConstructor().getName());
         }
 
         throw new InterpreterException("Unknown term '" + t + "'");
     }
 
-    public List<Pair<String, ATerm>> match(IContext env, ATerm t, ATermAppl p)
-            throws InterpreterException {
+    public Results match(IContext env, IStrategoTerm t, IStrategoAppl p)
+    throws InterpreterException {
 
-        switch (t.getType()) {
-        case ATerm.APPL:
-            return matchAppl(env, (ATermAppl) t, p);
-        case ATerm.INT:
-            return matchInt(env, (ATermInt) t, p);
-        case ATerm.REAL:
-            return matchReal(env, (ATermReal) t, p);
+        switch (t.getTermType()) {
+        case IStrategoTerm.APPL:
+            return matchAppl(env, (IStrategoAppl) t, p);
+        case IStrategoTerm.INT:
+            return matchInt(env, (IStrategoInt) t, p);
+        case IStrategoTerm.REAL:
+            return matchReal(env, (IStrategoReal) t, p);
+        case IStrategoTerm.STRING:
+            return matchString(env, (IStrategoString) t, p);
+        case IStrategoTerm.LIST:
+            return matchList(env, (IStrategoTermList) t, p);
+        case IStrategoTerm.TUPLE:
+            return matchTuple(env, (IStrategoTuple) t, p);
         default:
             throw new InterpreterException("Unsupported term type : "
-                    + t.getClass().toString() + " [" + t.getType() + "]");
+                                           + t.getClass().toString() + " [" + t.getTermType() + "]");
         }
+    }
+
+    private Results matchTuple(IContext env, IStrategoTuple tuple, IStrategoAppl p) {
+        if (DebugUtil.isDebugging()) {
+            debug("matching Tuple");
+        }
+        return null;
+    }
+
+    private Results matchList(IContext env, IStrategoTermList list, IStrategoAppl p) {
+        if (DebugUtil.isDebugging()) {
+            debug("matching List");
+        }
+        return null;
+    }
+
+    private Results matchString(IContext env, IStrategoString string, IStrategoAppl p) {
+        if (DebugUtil.isDebugging()) {
+            debug("matching String");
+        }
+        return null;
     }
 
     public void prettyPrint(StupidFormatter sf) {

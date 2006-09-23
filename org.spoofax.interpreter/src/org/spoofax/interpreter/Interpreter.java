@@ -11,9 +11,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.spoofax.interpreter.library.SSL;
 import org.spoofax.interpreter.stratego.All;
 import org.spoofax.interpreter.stratego.Build;
 import org.spoofax.interpreter.stratego.CallT;
+import org.spoofax.interpreter.stratego.DebugUtil;
 import org.spoofax.interpreter.stratego.ExtSDef;
 import org.spoofax.interpreter.stratego.Fail;
 import org.spoofax.interpreter.stratego.GuardedLChoice;
@@ -29,19 +31,18 @@ import org.spoofax.interpreter.stratego.Seq;
 import org.spoofax.interpreter.stratego.Some;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.stratego.StupidFormatter;
-import org.spoofax.interpreter.stratego.DebugUtil;
-import org.spoofax.interpreter.stratego.SDefT.FunType;
 import org.spoofax.interpreter.stratego.SDefT.ArgType;
 import org.spoofax.interpreter.stratego.SDefT.ConstType;
+import org.spoofax.interpreter.stratego.SDefT.FunType;
 import org.spoofax.interpreter.stratego.SDefT.SVar;
-import org.spoofax.interpreter.library.SSL;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoConstructor;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.interpreter.terms.StrategoSignature;
 
-import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermList;
-import aterm.AFun;
-
-public class Interpreter extends ATermBuilder {
+public class Interpreter {
 
     protected Context context;
 
@@ -49,7 +50,7 @@ public class Interpreter extends ATermBuilder {
 
         Context.indentation = 0;
         context = new Context();
-        factory = context.factory;
+
         if(DebugUtil.resetSSL) {
             SSL.init();//todo: temporary to verify the hypothesis that the global state causes trouble.
         }
@@ -57,9 +58,9 @@ public class Interpreter extends ATermBuilder {
 
     public void load(String path) throws IOException, InterpreterException {
 
-        ATerm prg = context.getFactory().readFromFile(path);
-        ATerm sign = Tools.applAt(Tools.listAt(prg, 0), 0);
-        ATerm strats = Tools.applAt(Tools.listAt(prg, 0), 1);
+        IStrategoTerm prg = context.getFactory().parseFromFile(path);
+        IStrategoAppl sign = Tools.applAt(Tools.listAt(prg, 0), 0);
+        IStrategoAppl strats = Tools.applAt(Tools.listAt(prg, 0), 1);
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(prg);
@@ -69,16 +70,16 @@ public class Interpreter extends ATermBuilder {
         loadStrategies(Tools.listAt(strats, 0));
     }
 
-    private void loadConstructors(ATermList list) {
-        for (int i = 0; i < list.getChildCount(); i++) {
-            String name = Tools.stringAt(Tools.applAt(list, i), 0);
+    private void loadConstructors(IStrategoTermList list) {
+        for (int i = 0; i < list.size(); i++) {
+            String name = Tools.javaStringAt(Tools.applAt(list, i), 0);
             context.addOpDecl(name, new OpDecl(name));
         }
     }
 
-    private void loadStrategies(ATermList list) throws InterpreterException {
-        for (int i = 0; i < list.getChildCount(); i++) {
-            ATermAppl t = Tools.applAt(list, i);
+    private void loadStrategies(IStrategoTermList list) throws InterpreterException {
+        for (int i = 0; i < list.size(); i++) {
+            IStrategoAppl t = Tools.applAt(list, i);
             if(Tools.isSDefT(t, context)) {
                 SDefT def = parseSDefT(t);
                 context.addSVar(def.getName(), def);
@@ -93,11 +94,11 @@ public class Interpreter extends ATermBuilder {
 
     }
 
-    private ExtSDef parseExtSDef(ATermAppl t) {
+    private ExtSDef parseExtSDef(IStrategoAppl t) {
 
-        String name = Tools.stringAt(t, 0);
-        ATermList svars = Tools.listAt(t, 1);
-        ATermList tvars = Tools.listAt(t, 2);
+        String name = Tools.javaStringAt(t, 0);
+        IStrategoTermList svars = Tools.listAt(t, 1);
+        IStrategoTermList tvars = Tools.listAt(t, 2);
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug("name  : ", name);
@@ -112,66 +113,73 @@ public class Interpreter extends ATermBuilder {
         return new ExtSDef(name, realsvars, realtvars, newScope);
     }
 
-    private Strategy parseStrategy(ATermAppl appl) throws InterpreterException {
+    private Strategy parseStrategy(IStrategoAppl appl) throws InterpreterException {
 
-        String op = appl.getName();
+        IStrategoConstructor ctor = appl.getConstructor();
+        StrategoSignature sign = context.getStrategoSignature();
 
-        if (op.equals("Build")) {
+        if (ctor.equals(sign.getBuild())) {
             return parseBuild(appl);
-        } else if (op.equals("Scope")) {
+        } else if (ctor.equals(sign.getScope())) {
             return parseScope(appl);
-        } else if (op.equals("Seq")) {
+        } else if (ctor.equals(sign.getSeq())) {
             return parseSeq(appl);
-        } else if (op.equals("GuardedLChoice")) {
+        } else if (ctor.equals(sign.getGuardedLChoice())) {
             return parseGuardedLChoice(appl);
-        } else if (op.equals("Match")) {
+        } else if (ctor.equals(sign.getMatch())) {
             return parseMatch(appl);
-        } else if (op.equals("Id")) {
+        } else if (ctor.equals(sign.getId())) {
             return parseId(appl);
-        } else if (op.equals("CallT")) {
+        } else if (ctor.equals(sign.getCallT())) {
             return parseCallT(appl);
-        } else if (op.equals("PrimT")) {
+        } else if (ctor.equals(sign.getPrimT())) {
             return parsePrimT(appl);
-        } else if (op.equals("Let")) {
+        } else if (ctor.equals(sign.getLet())) {
             return parseLet(appl);
-        } else if (op.equals("Fail")) {
+        } else if (ctor.equals(sign.getFail())) {
             return makeFail(appl);
-        } else if (op.equals("All")) {
+        } else if (ctor.equals(sign.getId())) {
+            return makeId(appl);
+        } else if (ctor.equals(sign.getAll())) {
             return makeAll(appl);
-        } else if (op.equals("One")) {
+        } else if (ctor.equals(sign.getOne())) {
             return makeOne(appl);
-        } else if (op.equals("Some")) {
+        } else if (ctor.equals(sign.getSome())) {
             return makeSome(appl);
         }
 
-        throw new InterpreterException("Unknown op '" + op + "'");
+        throw new InterpreterException("Unknown op '" + ctor + "'");
     }
 
-    private Some makeSome(ATermAppl t) throws InterpreterException {
+    private Strategy makeId(IStrategoAppl appl) {
+        return new Id();
+    }
+
+    private Some makeSome(IStrategoAppl t) throws InterpreterException {
         Strategy body = parseStrategy(Tools.applAt(t, 0));
         return new Some(body);
     }
 
-    private One makeOne(ATermAppl t) throws InterpreterException {
+    private One makeOne(IStrategoAppl t) throws InterpreterException {
         Strategy body = parseStrategy(Tools.applAt(t, 0));
         return new One(body);
     }
 
-    private All makeAll(ATermAppl t) throws InterpreterException {
+    private All makeAll(IStrategoAppl t) throws InterpreterException {
         Strategy body = parseStrategy(Tools.applAt(t, 0));
         return new All(body);
     }
 
-    private Strategy makeFail(ATermAppl appl) {
+    private Strategy makeFail(IStrategoAppl appl) {
         return new Fail();
     }
 
-    private Let parseLet(ATermAppl t) throws InterpreterException {
+    private Let parseLet(IStrategoAppl t) throws InterpreterException {
 
-        ATermList l = Tools.listAt(t, 0);
+        IStrategoTermList l = Tools.listAt(t, 0);
         List<SDefT> defs = new ArrayList<SDefT>();
 
-        for (int i = 0; i < l.getChildCount(); i++) {
+        for (int i = 0; i < l.size(); i++) {
             defs.add(parseSDefT(Tools.applAt(l, i)));
         }
 
@@ -180,14 +188,14 @@ public class Interpreter extends ATermBuilder {
         return new Let(defs, body);
     }
 
-    private SDefT parseSDefT(ATermAppl t) throws InterpreterException {
+    private SDefT parseSDefT(IStrategoAppl t) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug("parseSDefT()");
         }
 
-        String name = Tools.stringAt(t, 0);
-        ATermList svars = Tools.listAt(t, 1);
-        ATermList tvars = Tools.listAt(t, 2);
+        String name = Tools.javaStringAt(t, 0);
+        IStrategoTermList svars = Tools.listAt(t, 1);
+        IStrategoTermList tvars = Tools.listAt(t, 2);
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" name  : ", name);
@@ -223,36 +231,36 @@ public class Interpreter extends ATermBuilder {
         return new SDefT(name, realsvars, realtvars, body, newScope);
     }
 
-    private List<String> makeVars(ATermList svars) {
+    private List<String> makeVars(IStrategoTermList svars) {
 
-        List<String> realsvars = new ArrayList<String>(svars.getChildCount());
+        List<String> realsvars = new ArrayList<String>(svars.size());
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" vars  : ", svars);
         }
 
-        for (int j = 0; j < svars.getChildCount(); j++) {
-            realsvars.add(Tools.stringAt(Tools.applAt(svars, j), 0));
+        for (int j = 0; j < svars.size(); j++) {
+            realsvars.add(Tools.javaStringAt(Tools.applAt(svars, j), 0));
         }
 
         return realsvars;
     }
 
-    private List<SVar> makeSVars(ATermList svars) {
+    private List<SVar> makeSVars(IStrategoTermList svars) {
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug("makeSVars()");
         }
 
-        List<SVar> realsvars = new ArrayList<SVar>(svars.getChildCount());
+        List<SVar> realsvars = new ArrayList<SVar>(svars.size());
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" vars  : ", svars);
         }
 
-        for (int j = 0; j < svars.getChildCount(); j++) {
-            ATermAppl t = Tools.applAt(svars, j);
+        for (int j = 0; j < svars.size(); j++) {
+            IStrategoAppl t = Tools.applAt(svars, j);
             ArgType type = parseArgType(Tools.applAt(t, 1));
-            String name = Tools.stringAt(t, 0);
+            String name = Tools.javaStringAt(t, 0);
             realsvars.add(new SVar(name, type));
         }
 
@@ -262,11 +270,11 @@ public class Interpreter extends ATermBuilder {
         return realsvars;
     }
 
-    private ArgType parseArgType(ATermAppl t) {
+    private ArgType parseArgType(IStrategoAppl t) {
         if(Tools.isFunType(t, context)) {
-            ATermList l = Tools.listAt(t, 0);
+            IStrategoTermList l = Tools.listAt(t, 0);
             List<ArgType> ch = new ArrayList<ArgType>();
-            for (int i = 0; i < l.getChildCount(); i++) {
+            for (int i = 0; i < l.size(); i++) {
                 ch.add(parseArgType(Tools.applAt(l, i)));
             }
             return new FunType(ch);
@@ -276,30 +284,30 @@ public class Interpreter extends ATermBuilder {
         return null;
     }
 
-    private PrimT parsePrimT(ATermAppl t) throws InterpreterException {
+    private PrimT parsePrimT(IStrategoAppl t) throws InterpreterException {
 
-        String name = Tools.stringAt(t, 0);
+        String name = Tools.javaStringAt(t, 0);
         List<Strategy> svars = parseStrategyList(Tools.listAt(t, 1));
-        List<ATerm> tvars = parseTermList(Tools.listAt(t, 2));
+        List<IStrategoTerm> tvars = parseTermList(Tools.listAt(t, 2));
 
         return new PrimT(name, svars, tvars);
     }
 
-    private Strategy parseCallT(ATermAppl t) throws InterpreterException {
+    private Strategy parseCallT(IStrategoAppl t) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug("parseCallT()");
         }
-        String name = Tools.stringAt(Tools.applAt(t, 0), 0);
+        String name = Tools.javaStringAt(Tools.applAt(t, 0), 0);
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" name  : ", name);
         }
 
-        ATermList svars = Tools.listAt(t, 1);
+        IStrategoTermList svars = Tools.listAt(t, 1);
         List<Strategy> realsvars = parseStrategyList(svars);
 
-        List<ATerm> realtvars = parseTermList(Tools.listAt(t, 2));
+        List<IStrategoTerm> realtvars = parseTermList(Tools.listAt(t, 2));
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" -svars : ", realsvars);
@@ -310,32 +318,32 @@ public class Interpreter extends ATermBuilder {
         return new CallT(name, realsvars, realtvars);
     }
 
-    private List<ATerm> parseTermList(ATermList tvars) {
-        List<ATerm> v = new ArrayList<ATerm>(tvars.getChildCount());
-        for (int i = 0; i < tvars.getChildCount(); i++) {
+    private List<IStrategoTerm> parseTermList(IStrategoTermList tvars) {
+        List<IStrategoTerm> v = new ArrayList<IStrategoTerm>(tvars.size());
+        for (int i = 0; i < tvars.size(); i++) {
             v.add(Tools.termAt(tvars, i));
         }
         return v;
     }
 
-    private List<Strategy> parseStrategyList(ATermList svars) throws InterpreterException {
-        List<Strategy> v = new ArrayList<Strategy>(svars.getChildCount());
-        for (int i = 0; i < svars.getChildCount(); i++) {
+    private List<Strategy> parseStrategyList(IStrategoTermList svars) throws InterpreterException {
+        List<Strategy> v = new ArrayList<Strategy>(svars.size());
+        for (int i = 0; i < svars.size(); i++) {
             v.add(parseStrategy(Tools.applAt(svars, i)));
         }
         return v;
     }
 
-    private Id parseId(ATermAppl t) {
+    private Id parseId(IStrategoAppl t) {
         return new Id();
     }
 
-    private Match parseMatch(ATermAppl t) {
-        ATermAppl u = Tools.applAt(t, 0);
+    private Match parseMatch(IStrategoAppl t) {
+        IStrategoAppl u = Tools.applAt(t, 0);
         return new Match(u);
     }
 
-    private GuardedLChoice parseGuardedLChoice(ATermAppl t) throws InterpreterException {
+    private GuardedLChoice parseGuardedLChoice(IStrategoAppl t) throws InterpreterException {
 
         Strategy cond = parseStrategy(Tools.applAt(t, 0));
         Strategy ifclause = parseStrategy(Tools.applAt(t, 1));
@@ -344,7 +352,7 @@ public class Interpreter extends ATermBuilder {
         return new GuardedLChoice(cond, ifclause, thenclause);
     }
 
-    private Seq parseSeq(ATermAppl t) throws InterpreterException {
+    private Seq parseSeq(IStrategoAppl t) throws InterpreterException {
 
         Strategy s0 = parseStrategy(Tools.applAt(t, 0));
         Strategy s1 = parseStrategy(Tools.applAt(t, 1));
@@ -352,13 +360,13 @@ public class Interpreter extends ATermBuilder {
         return new Seq(s0, s1);
     }
 
-    private Scope parseScope(ATermAppl t) throws InterpreterException {
+    private Scope parseScope(IStrategoAppl t) throws InterpreterException {
 
-        ATermList vars = Tools.listAt(t, 0);
-        List<String> realvars = new ArrayList<String>(vars.getChildCount());
+        IStrategoTermList vars = Tools.listAt(t, 0);
+        List<String> realvars = new ArrayList<String>(vars.size());
 
-        for (int i = 0; i < vars.getChildCount(); i++) {
-            realvars.add(Tools.stringAt(vars, i));
+        for (int i = 0; i < vars.size(); i++) {
+            realvars.add(Tools.javaStringAt(vars, i));
         }
 
         Strategy body = parseStrategy(Tools.applAt(t, 1));
@@ -366,8 +374,8 @@ public class Interpreter extends ATermBuilder {
         return new Scope(realvars, body);
     }
 
-    private Build parseBuild(ATermAppl t) {
-        ATermAppl u = Tools.applAt(t, 0);
+    private Build parseBuild(IStrategoAppl t) {
+        IStrategoAppl u = Tools.applAt(t, 0);
         return new Build(u);
     }
 
@@ -385,11 +393,11 @@ public class Interpreter extends ATermBuilder {
         return context;
     }
 
-    public void setCurrent(ATerm inp) {
+    public void setCurrent(IStrategoTerm inp) {
         context.setCurrent(inp);
     }
 
-    public ATerm current() {
+    public IStrategoTerm current() {
         return context.current();
     }
 
@@ -402,68 +410,12 @@ public class Interpreter extends ATermBuilder {
 
     public void shutdown() {
         //todo perf: this takes 2 secs overall
-        if(DebugUtil.cleanupInShutdown) {
-            context.cleanup();
-        }
+        //if(DebugUtil.cleanupInShutdown) {
+        //    context.cleanup();
+        //}
     }
 
-    public AFun getOpAFun() {
-        return context.getOpAFun();
-    }
-
-    public AFun getConsAFun() {
-        return context.getConsAFun();
-    }
-
-    public AFun getNilAFun() {
-        return context.getNilAFun();
-    }
-
-    public AFun getAnnoAFun() {
-        return context.getAnnoAFun();
-    }
-
-    public AFun getStrAFun() {
-        return context.getStrAFun();
-    }
-
-    public AFun getVarAFun() {
-        return context.getVarAFun();
-    }
-
-    public AFun getExplodeAFun() {
-        return context.getExplodeAFun();
-    }
-
-    public AFun getRealAFun() {
-        return context.getRealAFun();
-    }
-
-    public AFun getIntAFun() {
-        return context.getIntAFun();
-    }
-
-    public AFun getConstTypeAFun() {
-        return context.getConstTypeAFun();
-    }
-
-    public AFun getFunTypeAFun() {
-        return context.getFunTypeAFun();
-    }
-
-    public AFun getExtSDefAFun() {
-        return context.getExtSDefAFun();
-    }
-
-    public AFun getSDefTAFun() {
-        return context.getSDefTAFun();
-    }
-
-    public AFun getAsAFun() {
-        return context.getAsAFun();
-    }
-
-    public AFun getWldAFun() {
-        return context.getWldAFun();
+    public ITermFactory getFactory() {
+        return context.getFactory();
     }
 }
