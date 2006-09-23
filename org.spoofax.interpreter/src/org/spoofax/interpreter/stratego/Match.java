@@ -95,7 +95,7 @@ public class Match extends Strategy {
     }
 
     protected Results matchApplInt(IContext env, IStrategoTerm t,
-                                                             IStrategoAppl p) throws InterpreterException {
+            IStrategoAppl p) throws InterpreterException {
         if (Tools.isTermInt(t))
             return match(env, Tools.intAt(t, 0), Tools.applAt(p, 0));
         return null;
@@ -168,10 +168,10 @@ public class Match extends Strategy {
     private Results emptyList() {
         return new Results();
     }
-    
-   
+
+
     protected Results matchInt(IContext env, IStrategoInt t,
-                                                         IStrategoAppl p) throws InterpreterException {
+            IStrategoAppl p) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("matching Int");
@@ -206,7 +206,7 @@ public class Match extends Strategy {
     }
 
     protected Results matchReal(IContext env, IStrategoReal t,
-                                                          IStrategoAppl p) throws InterpreterException {
+            IStrategoAppl p) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("matching Real");
@@ -259,13 +259,13 @@ public class Match extends Strategy {
     }
 
     protected Results matchIntAnno(IContext env, IStrategoInt t,
-                                                             IStrategoAppl p) throws InterpreterException {
+            IStrategoAppl p) throws InterpreterException {
         // FIXME: Do real match of annotations
         return match(env, t, Tools.applAt(p, 0));
     }
 
     protected Results matchRealAnno(IContext env, IStrategoReal t,
-                                                              IStrategoAppl p) throws InterpreterException {
+            IStrategoAppl p) throws InterpreterException {
         // FIXME: Do real match of annotations
         return match(env, t, Tools.applAt(p, 0));
     }
@@ -302,7 +302,7 @@ public class Match extends Strategy {
     @SuppressWarnings("serial")
     public static final class Results extends ArrayList<Binding> {
     }
-    
+
     public static final class Binding extends Pair<String, IStrategoTerm> {
         public Binding(String first, IStrategoTerm second) {
             super(first, second);
@@ -398,21 +398,68 @@ public class Match extends Strategy {
         if (DebugUtil.isDebugging()) {
             debug("matching Tuple");
         }
-        return null;
+        throw new NotImplementedException();
     }
 
-    private Results matchList(IContext env, IStrategoTermList list, IStrategoAppl p) {
+    protected Results matchList(IContext env, IStrategoTermList t,
+            IStrategoAppl p) throws InterpreterException {
+
         if (DebugUtil.isDebugging()) {
             debug("matching List");
         }
-        return null;
+
+        if (Tools.isAnno(p, env)) {
+            return matchListAnno(env, t, p);
+        }
+        else if (Tools.isInt(p, env)) {
+            return null;
+        }
+        else if (Tools.isReal(p, env)) {
+            return null;
+        }
+        else if (Tools.isVar(p, env)) {
+            return matchListVar(t, p);
+        }
+        else if (Tools.isOp(p, env)) {
+            throw new NotImplementedException();
+        }
+        else if (Tools.isExplode(p, env)) {
+            return matchAnyExplode(env, t, p);
+        }
+        else if (Tools.isWld(p, env)) {
+            return matchListWld(p);
+        }
+        else if (Tools.isAs(p, env)) {
+            return matchListAs(t, p);
+        }
+
+        throw new InterpreterException("Unknown List case '" + p + "'");
+    }
+
+    private Results matchListVar(IStrategoTermList t, IStrategoAppl p) {
+        String varName = Tools.javaStringAt(p, 0);
+        return newResult(new Binding(varName, t));
+    }
+
+    private Results matchListAs(IStrategoTermList t, IStrategoAppl p) {
+        String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
+        return newResult(new Binding(varName, t));
+    }
+
+    private Results matchListWld(IStrategoAppl p) {
+        return emptyList();
+    }
+
+    private Results matchListAnno(IContext env, IStrategoTermList t, IStrategoAppl p) throws InterpreterException {
+        // FIXME: Do real match of annotations
+        return match(env, t, Tools.applAt(p, 0));
     }
 
     private Results matchString(IContext env, IStrategoString string, IStrategoAppl p) {
         if (DebugUtil.isDebugging()) {
             debug("matching String");
         }
-        return null;
+        throw new NotImplementedException();
     }
 
     public void prettyPrint(StupidFormatter sf) {

@@ -23,8 +23,6 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTermList;
 import org.spoofax.interpreter.terms.ITermFactory;
 
-import aterm.ATermAppl;
-
 public class Build extends Strategy {
 
     private IStrategoAppl term;
