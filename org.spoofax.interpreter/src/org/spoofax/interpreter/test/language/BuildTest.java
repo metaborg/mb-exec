@@ -12,7 +12,7 @@ import org.spoofax.interpreter.test.AbstractLanguageTest;
 public class BuildTest extends AbstractLanguageTest {
 
     public void testBuildInt() {
-        interpTest("build_int", "1", "5");
+        interpTest("build_int", "()", "5");
     }
 
     public void testBuildReal() {
@@ -20,19 +20,19 @@ public class BuildTest extends AbstractLanguageTest {
     }
 
     public void testBuildString() {
-        interpTest("build_string", "1", "\"a\"");
+        interpTest("build_string", "()", "\"a\"");
     }
 
     public void testBuildTuple() {
-        interpTest("build_tuple", "1", "[2, 3]");
+        interpTest("build_tuple", "()", "(2, 3)");
     }
 
     public void testBuildList1() {
-        interpTest("build_list_1", "1", "()");
+        interpTest("build_list_1", "()", "[]");
     }
 
     public void testBuildList2() {
-        interpTest("build_list_2", "1", "[1,2,3]");
+        interpTest("build_list_2", "()", "[1,2,3]");
     }
 
 }

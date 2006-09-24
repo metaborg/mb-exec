@@ -52,4 +52,9 @@ public class WrappedATermTuple extends WrappedATerm implements IStrategoTuple {
         }
         return slowCompare(second);
     }
+    
+    @Override
+    public String toString() {
+        return tuple.toString();
+    }
 }

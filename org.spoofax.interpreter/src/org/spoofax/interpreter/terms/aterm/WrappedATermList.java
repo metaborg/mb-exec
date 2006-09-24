@@ -77,4 +77,8 @@ public class WrappedATermList extends WrappedATerm implements IStrategoTermList 
         return list;
     }
 
+    @Override
+    public String toString() {
+        return list.toString();
+    }
 }

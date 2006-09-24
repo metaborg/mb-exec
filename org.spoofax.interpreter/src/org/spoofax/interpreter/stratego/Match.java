@@ -17,6 +17,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoReal;
+import org.spoofax.interpreter.terms.IStrategoRef;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTermList;
@@ -388,10 +389,16 @@ public class Match extends Strategy {
             return matchList(env, (IStrategoTermList) t, p);
         case IStrategoTerm.TUPLE:
             return matchTuple(env, (IStrategoTuple) t, p);
+        case IStrategoTerm.REF:
+            return matchRef(env, (IStrategoRef)t, p);
         default:
             throw new InterpreterException("Unsupported term type : "
                                            + t.getClass().toString() + " [" + t.getTermType() + "]");
         }
+    }
+
+    private Results matchRef(IContext env, IStrategoRef ref, IStrategoAppl p) {
+        throw new NotImplementedException();
     }
 
     private Results matchTuple(IContext env, IStrategoTuple tuple, IStrategoAppl p) {

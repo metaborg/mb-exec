@@ -10,8 +10,6 @@ package org.spoofax.interpreter.terms.aterm;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.spoofax.NotImplementedException;
-
 import shared.SharedObject;
 import aterm.AFun;
 import aterm.ATermAppl;

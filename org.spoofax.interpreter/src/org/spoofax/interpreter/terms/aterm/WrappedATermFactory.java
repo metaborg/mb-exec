@@ -71,7 +71,9 @@ public class WrappedATermFactory implements ITermFactory {
             ATermAppl a = (ATermAppl)t;
             if(a.isQuoted() && a.getArity() == 0)
                 return new WrappedATermString(a);
-            else 
+            else if(a.getName().equals("")) // FIXME use AFun
+                return new WrappedATermTuple(a);
+            else  
                 return new WrappedATermAppl(a);
         }
         throw new WrapperException();

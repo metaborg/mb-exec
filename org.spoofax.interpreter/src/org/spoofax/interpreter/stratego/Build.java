@@ -163,7 +163,28 @@ public class Build extends Strategy {
 
     private IStrategoTerm buildOp(IContext env, IStrategoAppl t, ITermFactory factory)
             throws InterpreterException {
+        // FIXME memoize constructors
+        
         String ctr = Tools.javaStringAt(t, 0);
+        
+        if(ctr.equals("")) {
+            return buildTuple(env, t);
+        } else if(ctr.equals("Nil")) {
+            return buildNil(env);
+        } else if(ctr.equals("Cons")) {
+            return buildCons(env, t);
+        } else {
+            return buildOp(ctr, env, t, factory);
+        }
+    }
+    
+    private IStrategoTerm buildNil(IContext env) {
+        return env.getFactory().makeList();
+    }
+
+    private IStrategoTerm buildOp(String ctr, IContext env, IStrategoAppl t, ITermFactory factory) 
+    throws  InterpreterException {
+        
         IStrategoTermList children = (IStrategoTermList) t.getSubterm(1);
 
         IStrategoConstructor ctor = factory.makeConstructor(ctr, children.size(), false);
@@ -178,6 +199,51 @@ public class Build extends Strategy {
         }
 
         return factory.makeAppl(ctor, kids);
+    }
+
+    private IStrategoTerm buildCons(IContext env, IStrategoAppl t) throws InterpreterException {
+
+        IStrategoTermList children = (IStrategoTermList) t.getSubterm(1);
+        
+        IStrategoAppl headPattern = (IStrategoAppl) children.get(0);
+        IStrategoAppl tailPattern = (IStrategoAppl) children.get(1);
+        
+        IStrategoTermList tail = (IStrategoTermList) buildList(env, tailPattern);
+        IStrategoTerm head = buildTerm(env, headPattern);
+        
+        return tail.insert(head);
+    }
+
+    private IStrategoTerm buildList(IContext env, IStrategoAppl t) throws InterpreterException {
+        
+        // FIXME improve! this is an Anno!
+        t = Tools.applAt(t, 0);
+        
+        System.out.println(t);
+        String ctr = Tools.javaStringAt(t, 0);
+        
+        if(ctr.equals("Nil"))
+            return buildNil(env);
+        else if(ctr.equals("Cons"))
+            return buildCons(env, t);
+
+        throw new InterpreterException("List tail must always be a list.");
+    }
+
+
+    private IStrategoTerm buildTuple(IContext env, IStrategoAppl t) throws InterpreterException {
+        
+        IStrategoTermList children = (IStrategoTermList) t.getSubterm(1);
+        IStrategoTerm[] kids = new IStrategoTerm[children.size()];
+
+        for (int i = 0; i < children.size(); i++) {
+            IStrategoTerm kid = kids[i] = buildTerm(env, (IStrategoAppl) children.getSubterm(i));
+            if (kid == null) {
+                return null;
+            }
+        }
+
+        return env.getFactory().makeTuple(kids);
     }
 
     private IStrategoTerm buildAnno(IContext env, IStrategoAppl t) throws InterpreterException {

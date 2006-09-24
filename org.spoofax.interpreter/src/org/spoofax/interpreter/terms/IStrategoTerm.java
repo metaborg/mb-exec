@@ -16,6 +16,7 @@ public interface IStrategoTerm {
     public static final int STRING = 5;
     public static final int CTOR = 6;
     public static final int TUPLE = 7;
+    public static final int REF = 8;
 
     public int getSubtermCount();
     public IStrategoTerm getSubterm(int index);
