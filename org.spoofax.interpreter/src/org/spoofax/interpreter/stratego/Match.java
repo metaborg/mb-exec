@@ -137,6 +137,16 @@ public class Match extends Strategy {
     protected Results matchApplOp(IContext env, IStrategoAppl t,
             IStrategoAppl p) throws InterpreterException {
 
+
+        String c = Tools.javaStringAt(p, 0);
+        if(c.equals("")) {
+            return matchApplTuple(env, t, p);
+        } else if(c.equals("Nil")) {
+            return matchApplNil(env, t);
+        } else if(c.equals("Cons")) {
+            return matchApplCons(env, t, p);
+        }
+
         IStrategoTermList ctorArgs = Tools.listAt(p, 1);
 
         // Check if arity of the pattern matches that
@@ -147,7 +157,6 @@ public class Match extends Strategy {
         // Check if the constructor name in the pattern
         // matches that of the term
         System.out.println(p);
-        IStrategoString c = Tools.stringAt(p, 0);
         if (!t.getConstructor().getName().equals(c))
             return null;
 
@@ -164,6 +173,18 @@ public class Match extends Strategy {
         }
 
         return r;
+    }
+
+    private Results matchApplCons(IContext env, IStrategoAppl t, IStrategoAppl p) {
+        throw new NotImplementedException();
+    }
+
+    private Results matchApplNil(IContext env, IStrategoAppl t) {
+        throw new NotImplementedException();
+    }
+
+    private Results matchApplTuple(IContext env, IStrategoAppl t, IStrategoAppl p) {
+        throw new NotImplementedException();
     }
 
     private Results emptyList() {
