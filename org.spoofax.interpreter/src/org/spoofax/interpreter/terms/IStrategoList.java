@@ -8,14 +8,17 @@
 package org.spoofax.interpreter.terms;
 
 
-public interface IStrategoTermList extends IStrategoTerm {
+public interface IStrategoList extends IStrategoTerm {
 
     public IStrategoTerm get(int i);
 
     public int size();
 
-    public IStrategoTermList append(IStrategoTerm postfix);
+    public IStrategoList append(IStrategoTerm postfix);
     
-    public IStrategoTermList insert(IStrategoTerm prefix);
+    public IStrategoList insert(IStrategoTerm prefix);
+
+    public IStrategoTerm head();
+    public IStrategoList tail();
 
 }

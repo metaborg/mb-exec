@@ -10,7 +10,7 @@ package org.spoofax.interpreter.terms.aterm;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoList;
 
 import aterm.AFun;
 import aterm.ATerm;
@@ -23,7 +23,7 @@ public class WrappedAFun extends WrappedATerm implements IStrategoConstructor {
         this.afun = afun;
     }
     
-    public IStrategoAppl instantiate(IStrategoTermList terms) {
+    public IStrategoAppl instantiate(IStrategoList terms) {
         ATerm[] args = new ATerm[terms.getSubtermCount()];
         for(int i = 0; i < terms.getSubtermCount(); i++)
             args[i] = ((WrappedATerm)terms.get(i)).getATerm();

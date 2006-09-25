@@ -9,4 +9,7 @@ package org.spoofax.interpreter.terms;
 
 public interface IStrategoTuple extends IStrategoTerm {
 
+    public int size();
+    public IStrategoTerm get(int index);
+
 }

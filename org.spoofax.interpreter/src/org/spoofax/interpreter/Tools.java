@@ -13,7 +13,7 @@ import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.StrategoSignature;
 
@@ -30,7 +30,7 @@ public class Tools {
         return (IStrategoAppl) t.getSubterm(i);
     }
 
-    public static IStrategoAppl applAt(IStrategoTermList t, int i) {
+    public static IStrategoAppl applAt(IStrategoList t, int i) {
         return (IStrategoAppl) t.getSubterm(i);
     }
 
@@ -38,7 +38,7 @@ public class Tools {
         return (IStrategoInt) t.getSubterm(i);
     }
 
-    public static IStrategoInt intAt(IStrategoTermList t, int i) {
+    public static IStrategoInt intAt(IStrategoList t, int i) {
         return (IStrategoInt) t.getSubterm(i);
     }
 
@@ -50,10 +50,10 @@ public class Tools {
             return implode(factory, applAt(t, 0));
         } else if (ctor.equals(sign.getOp())) {
             String ctorName = javaStringAt(t, 0);
-            IStrategoTermList children = (IStrategoTermList) t.getSubterm(1);
+            IStrategoList children = (IStrategoList) t.getSubterm(1);
 
             IStrategoConstructor ctr = factory.makeConstructor(ctorName, children.size(), false);
-            IStrategoTermList kids = factory.makeList();
+            IStrategoList kids = factory.makeList();
 
             for (int i = 0; i < children.size(); i++) {
                 kids = kids.append(implode(factory, (IStrategoAppl) children
@@ -71,23 +71,23 @@ public class Tools {
         throw new InterpreterException("Unknown build constituent '" + t.getConstructor() + "'");
     }
 
-    public static IStrategoTermList listAt(IStrategoTerm t, int i) {
-        return (IStrategoTermList) t.getSubterm(i);
+    public static IStrategoList listAt(IStrategoTerm t, int i) {
+        return (IStrategoList) t.getSubterm(i);
     }
 
-    public static IStrategoTermList listAt(IStrategoTermList t, int i) {
-        return (IStrategoTermList) t.getSubterm(i);
+    public static IStrategoList listAt(IStrategoList t, int i) {
+        return (IStrategoList) t.getSubterm(i);
     }
 
     public static IStrategoTerm termAt(IStrategoTerm t, int i) {
         return t.getSubterm(i);
     }
 
-    public static IStrategoReal realAt(IStrategoTermList t, int i) {
+    public static IStrategoReal realAt(IStrategoList t, int i) {
         return (IStrategoReal) t.getSubterm(i);
     }
 
-    public static IStrategoTerm termAt(IStrategoTermList t, int i) {
+    public static IStrategoTerm termAt(IStrategoList t, int i) {
         return t.getSubterm(i);
     }
 
@@ -95,20 +95,20 @@ public class Tools {
         return p.getName().equals(n);
     }
 
-    public static IStrategoTermList consToList(IContext env, IStrategoAppl cons) {
+    public static IStrategoList consToList(IContext env, IStrategoAppl cons) {
         if (Tools.isNil(cons, env))
             return env.getFactory().makeList();
-        IStrategoTermList tail = consToList(env, Tools.applAt(cons, 1));
+        IStrategoList tail = consToList(env, Tools.applAt(cons, 1));
         IStrategoTerm head = Tools.termAt(cons, 0);
 
         return tail.insert(head);
     }
 
-    public static IStrategoTermList consToListDeep(IContext env, IStrategoAppl cons) {
+    public static IStrategoList consToListDeep(IContext env, IStrategoAppl cons) {
         if (Tools.isNil(cons, env))
             return env.getFactory().makeList();
 
-        IStrategoTermList tail = consToListDeep(env, Tools.applAt(cons, 1));
+        IStrategoList tail = consToListDeep(env, Tools.applAt(cons, 1));
 
         IStrategoTerm head = Tools.termAt(cons, 0);
         if (head.getTermType() == IStrategoTerm.APPL && Tools.isCons((IStrategoAppl)head, env))
@@ -212,7 +212,7 @@ public class Tools {
         return Tools.stringAt(t, i).getValue();
     }
 
-    public static String javaStringAt(IStrategoTermList t, int i) {
+    public static String javaStringAt(IStrategoList t, int i) {
         return Tools.stringAt(t, i).getValue();
     }
 

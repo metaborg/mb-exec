@@ -19,7 +19,7 @@ import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
 
@@ -79,7 +79,7 @@ public class WrappedATermFactory implements ITermFactory {
         throw new WrapperException();
     }
 
-    public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTermList kids) {
+    public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
         return ctr.instantiate(kids);
     }
 
@@ -95,7 +95,7 @@ public class WrappedATermFactory implements ITermFactory {
         return new WrappedATermInt(realFactory.makeInt(i));
     }
 
-    public IStrategoTermList makeList(IStrategoTerm... terms) {
+    public IStrategoList makeList(IStrategoTerm... terms) {
         ATermList l = realFactory.makeList();
         
         for(IStrategoTerm t : terms) {
@@ -109,7 +109,7 @@ public class WrappedATermFactory implements ITermFactory {
         return new WrappedATermList(l);
     }
 
-    public IStrategoTermList makeList(Collection<IStrategoTerm> terms) {
+    public IStrategoList makeList(Collection<IStrategoTerm> terms) {
         ATermList l = realFactory.makeList();
         
         for(IStrategoTerm t : terms) {

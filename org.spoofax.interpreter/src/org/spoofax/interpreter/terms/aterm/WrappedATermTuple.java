@@ -34,6 +34,10 @@ public class WrappedATermTuple extends WrappedATerm implements IStrategoTuple {
         return tuple.getChildCount();
     }
 
+    public int size() {
+        return getSubtermCount();
+    }
+    
     public int getTermType() {
         return IStrategoTerm.TUPLE;
     }
@@ -56,5 +60,9 @@ public class WrappedATermTuple extends WrappedATerm implements IStrategoTuple {
     @Override
     public String toString() {
         return tuple.toString();
+    }
+
+    public IStrategoTerm get(int index) {
+        return getSubterm(index);
     }
 }

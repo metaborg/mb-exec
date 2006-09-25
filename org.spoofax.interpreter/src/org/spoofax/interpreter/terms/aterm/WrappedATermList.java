@@ -8,12 +8,12 @@
 package org.spoofax.interpreter.terms.aterm;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoList;
 
 import aterm.ATerm;
 import aterm.ATermList;
 
-public class WrappedATermList extends WrappedATerm implements IStrategoTermList {
+public class WrappedATermList extends WrappedATerm implements IStrategoList {
 
     private ATermList list;
     
@@ -21,7 +21,7 @@ public class WrappedATermList extends WrappedATerm implements IStrategoTermList 
         this.list = list;
     }
     
-    public IStrategoTermList append(IStrategoTerm postfix) {
+    public IStrategoList append(IStrategoTerm postfix) {
         if(!(postfix instanceof WrappedATerm))
             throw new WrapperException();
         
@@ -34,7 +34,7 @@ public class WrappedATermList extends WrappedATerm implements IStrategoTermList 
         return WrappedATermFactory.wrapTerm((ATerm)list.getChildAt(i));
     }
 
-    public IStrategoTermList insert(IStrategoTerm prefix) {
+    public IStrategoList insert(IStrategoTerm prefix) {
         if(prefix instanceof WrappedATerm) {
             return new WrappedATermList(list.insert(((WrappedATerm)prefix).getATerm()));
         }
@@ -80,5 +80,13 @@ public class WrappedATermList extends WrappedATerm implements IStrategoTermList 
     @Override
     public String toString() {
         return list.toString();
+    }
+
+    public IStrategoTerm head() {
+        return WrappedATermFactory.wrapTerm(list.getFirst());
+    }
+
+    public IStrategoList tail() {
+        return new WrappedATermList(list.getNext());
     }
 }

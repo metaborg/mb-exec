@@ -48,15 +48,27 @@ public class MatchTest extends AbstractLanguageTest {
     }
 
     public void testMatchList1() {
-        interpTest("match_list_1", "Cons(1, Cons(2, Nil))", "1");
+        interpTest("match_list_1", "[1, 2]", "1");
+    }
+    
+    public void testMatchList1b() {
+        interpTestFail("match_list_1", "Cons(1, Cons(2, Nil))");
     }
 
     public void testMatchList2() {
-        interpTest("match_list_2", "Cons(1, Cons(2, Nil))", "2");
+        interpTest("match_list_2", "[1, 2]", "2");
+    }
+
+    public void testMatchList2b() {
+        interpTestFail("match_list_2", "Cons(1, Cons(2, Nil))");
     }
 
     public void testMatchList3() {
-        interpTest("match_list_3", "Cons(2, Cons(2, Nil))", "2");
+        interpTest("match_list_3", "[2, 2]", "2");
+    }
+
+    public void testMatchList3b() {
+        interpTestFail("match_list_3", "Cons(2, Cons(2, Nil))");
     }
 
     public void testMatchList4() {

@@ -15,7 +15,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoList;
 
 import aterm.ATerm;
 
@@ -35,7 +35,7 @@ public class SSL_concat_strings extends Primitive {
         if(!(Tools.isCons(a, env) || Tools.isNil(a, env)))
             return false;
 
-        IStrategoTermList l = Tools.consToList(env, a);
+        IStrategoList l = Tools.consToList(env, a);
         StringBuffer sb = new StringBuffer();
         for(int i=0;i<l.size();i++) {
             sb.append(Tools.javaStringAt(l, i));

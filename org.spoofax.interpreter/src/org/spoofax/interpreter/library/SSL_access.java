@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoList;
 
 import aterm.ATermAppl;
 
@@ -64,7 +64,7 @@ public class SSL_access extends Primitive {
         return true;
     }
 
-    private int permissions_from_term(IStrategoTermList perms) {
+    private int permissions_from_term(IStrategoList perms) {
         int res = 0;
         for (int i = 0; i < perms.size(); i++) {
             ATermAppl t = (ATermAppl) Tools.termAt(perms, i);

@@ -15,7 +15,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoList;
 
 public class SSL_printnl extends Primitive {
 
@@ -28,7 +28,7 @@ public class SSL_printnl extends Primitive {
         // FIXME: Possibly erroneous
         String output = Tools.javaString(targs.get(0));
 
-        IStrategoTermList l = Tools.consToListDeep(env, (IStrategoAppl) targs.get(1));
+        IStrategoList l = Tools.consToListDeep(env, (IStrategoAppl) targs.get(1));
 
         StringBuffer sb = new StringBuffer();
         for(int i = 0; i < l.size(); i++) {

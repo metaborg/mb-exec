@@ -20,7 +20,7 @@ import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.ITermFactory;
 
 public class Build extends Strategy {
@@ -125,7 +125,7 @@ public class Build extends Strategy {
                 n = n.substring(1, n.length() - 1);
                 quoted = true;
             }
-            IStrategoTermList realArgs = Tools.consToList(env, (IStrategoAppl)actualArgs);
+            IStrategoList realArgs = Tools.consToList(env, (IStrategoAppl)actualArgs);
             IStrategoConstructor afun = factory.makeConstructor(n, realArgs.size(), quoted);
             return factory.makeAppl(afun, realArgs);
         }
@@ -185,10 +185,10 @@ public class Build extends Strategy {
     private IStrategoTerm buildOp(String ctr, IContext env, IStrategoAppl t, ITermFactory factory) 
     throws  InterpreterException {
         
-        IStrategoTermList children = (IStrategoTermList) t.getSubterm(1);
+        IStrategoList children = (IStrategoList) t.getSubterm(1);
 
         IStrategoConstructor ctor = factory.makeConstructor(ctr, children.size(), false);
-        IStrategoTermList kids = factory.makeList();
+        IStrategoList kids = factory.makeList();
 
         for (int i = 0; i < children.size(); i++) {
             IStrategoTerm kid = buildTerm(env, (IStrategoAppl) children.getSubterm(i));
@@ -203,12 +203,12 @@ public class Build extends Strategy {
 
     private IStrategoTerm buildCons(IContext env, IStrategoAppl t) throws InterpreterException {
 
-        IStrategoTermList children = (IStrategoTermList) t.getSubterm(1);
+        IStrategoList children = (IStrategoList) t.getSubterm(1);
         
         IStrategoAppl headPattern = (IStrategoAppl) children.get(0);
         IStrategoAppl tailPattern = (IStrategoAppl) children.get(1);
         
-        IStrategoTermList tail = (IStrategoTermList) buildList(env, tailPattern);
+        IStrategoList tail = (IStrategoList) buildList(env, tailPattern);
         IStrategoTerm head = buildTerm(env, headPattern);
         
         return tail.insert(head);
@@ -233,7 +233,7 @@ public class Build extends Strategy {
 
     private IStrategoTerm buildTuple(IContext env, IStrategoAppl t) throws InterpreterException {
         
-        IStrategoTermList children = (IStrategoTermList) t.getSubterm(1);
+        IStrategoList children = (IStrategoList) t.getSubterm(1);
         IStrategoTerm[] kids = new IStrategoTerm[children.size()];
 
         for (int i = 0; i < children.size(); i++) {

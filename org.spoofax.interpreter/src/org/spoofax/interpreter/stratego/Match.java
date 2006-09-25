@@ -20,11 +20,12 @@ import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoRef;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 
 public class Match extends Strategy {
 
+    // FIXME pre-process to avoid String.equals() for Op cases
     protected IStrategoAppl pattern;
 
     public Match(IStrategoAppl pattern) {
@@ -130,12 +131,12 @@ public class Match extends Strategy {
         if(c.equals("")) {
             return matchApplTuple(env, t, p);
         } else if(c.equals("Nil")) {
-            return matchApplNil(env, t);
+            return null; //matchApplNil(env, t);
         } else if(c.equals("Cons")) {
-            return matchApplCons(env, t, p);
+            return null; //matchApplCons(env, t, p);
         }
 
-        IStrategoTermList ctorArgs = Tools.listAt(p, 1);
+        IStrategoList ctorArgs = Tools.listAt(p, 1);
 
         // Check if arity of the pattern matches that
         // of the term
@@ -163,13 +164,13 @@ public class Match extends Strategy {
         return r;
     }
 
-    private Results matchApplCons(IContext env, IStrategoAppl t, IStrategoAppl p) {
-        throw new NotImplementedException();
-    }
-
-    private Results matchApplNil(IContext env, IStrategoAppl t) {
-        throw new NotImplementedException();
-    }
+//    private Results matchApplCons(IContext env, IStrategoAppl t, IStrategoAppl p) {
+//        throw new NotImplementedException();
+//    }
+//
+//    private Results matchApplNil(IContext env, IStrategoAppl t) {
+//        throw new NotImplementedException();
+//    }
 
     private Results matchApplTuple(IContext env, IStrategoAppl t, IStrategoAppl p) {
         throw new NotImplementedException();
@@ -364,7 +365,7 @@ public class Match extends Strategy {
         case IStrategoTerm.STRING:
             return matchString(env, (IStrategoString) t, p);
         case IStrategoTerm.LIST:
-            return matchList(env, (IStrategoTermList) t, p);
+            return matchList(env, (IStrategoList) t, p);
         case IStrategoTerm.TUPLE:
             return matchTuple(env, (IStrategoTuple) t, p);
         case IStrategoTerm.REF:
@@ -379,14 +380,71 @@ public class Match extends Strategy {
         throw new NotImplementedException();
     }
 
-    private Results matchTuple(IContext env, IStrategoTuple tuple, IStrategoAppl p) {
+    private Results matchTuple(IContext env, IStrategoTuple t, IStrategoAppl p) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             debug("matching Tuple");
         }
-        throw new NotImplementedException();
+        if (Tools.isAnno(p, env)) {
+            return matchAnyAnno(env, t, p);
+        }
+        else if (Tools.isInt(p, env)) {
+            return null;
+        }
+        else if (Tools.isReal(p, env)) {
+            return null;
+        }
+        else if (Tools.isVar(p, env)) {
+            return matchAnyVar(t, p);
+        }
+        else if (Tools.isOp(p, env)) {
+            return matchTupleOp(env, t, p);
+        }
+        else if (Tools.isWld(p, env)) {
+            return matchAnyWld(p);
+        }
+        else if (Tools.isAs(p, env)) {
+            return matchAnyAs(t, p);
+        }
+        else if (Tools.isExplode(p, env)) {
+            return matchAnyExplode(env, t, p);
+        } 
+        else if (Tools.isStr(p, env)) {
+            return null;
+        }
+
+        throw new InterpreterException("Unknown Tuple case '" + p + "'");
     }
 
-    protected Results matchList(IContext env, IStrategoTermList t,
+    private Results matchTupleOp(IContext env, IStrategoTuple t, IStrategoAppl p) throws InterpreterException {
+        
+        String c = Tools.javaStringAt(p, 0);
+
+        // Check that the pattern p is really against a tuple 
+        if(!c.equals(""))
+            return null;
+
+        IStrategoList ctorArgs = Tools.listAt(p, 1);
+        
+        // Check that arity of pattern equals arity of tuple
+        if(ctorArgs.size() != t.size())
+            return null;
+        
+        // Match subterms of tuple against subpatterns of pattern 
+        Results r = emptyList();
+        for (int i = 0; i < ctorArgs.size(); i++) {
+            Results m = match(env, t.get(i),
+                              (IStrategoAppl) ctorArgs
+                              .getSubterm(i));
+            if (m != null)
+                r.addAll(m);
+            else
+                return null;
+        }
+
+        return r;
+    }
+
+    protected Results matchList(IContext env, IStrategoList t,
             IStrategoAppl p) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
@@ -406,7 +464,7 @@ public class Match extends Strategy {
             return matchAnyVar(t, p);
         }
         else if (Tools.isOp(p, env)) {
-            throw new NotImplementedException();
+            return matchListOp(env, t, p);
         }
         else if (Tools.isWld(p, env)) {
             return matchAnyWld(p);
@@ -419,6 +477,35 @@ public class Match extends Strategy {
         }
 
         throw new InterpreterException("Unknown List case '" + p + "'");
+    }
+
+    private Results matchListOp(IContext env, IStrategoList t, IStrategoAppl p) throws InterpreterException {
+        
+        String c = Tools.javaStringAt(p, 0);
+
+        if(c.equals("Nil")) {
+            if(t.size() == 0)
+                return emptyList();
+        } 
+        else if(c.equals("Cons")) {
+            IStrategoTerm head = t.head();
+            IStrategoList tail = t.tail();
+            
+            IStrategoList pattern = Tools.listAt(p, 1);
+            
+            Results r = match(env, head, (IStrategoAppl)pattern.head());
+            if(r == null)
+                return null;
+            
+            Results r2 = match(env, tail, (IStrategoAppl)pattern.get(1));
+            if(r2 == null)
+                return null;
+            
+            r.addAll(r2);
+            return r;
+        }
+        
+        return null;
     }
 
     private Results matchAnyVar(IStrategoTerm t, IStrategoAppl p) {

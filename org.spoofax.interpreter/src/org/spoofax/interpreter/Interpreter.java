@@ -38,7 +38,7 @@ import org.spoofax.interpreter.stratego.SDefT.SVar;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.StrategoSignature;
 
@@ -70,14 +70,14 @@ public class Interpreter {
         loadStrategies(Tools.listAt(strats, 0));
     }
 
-    private void loadConstructors(IStrategoTermList list) {
+    private void loadConstructors(IStrategoList list) {
         for (int i = 0; i < list.size(); i++) {
             String name = Tools.javaStringAt(Tools.applAt(list, i), 0);
             context.addOpDecl(name, new OpDecl(name));
         }
     }
 
-    private void loadStrategies(IStrategoTermList list) throws InterpreterException {
+    private void loadStrategies(IStrategoList list) throws InterpreterException {
         for (int i = 0; i < list.size(); i++) {
             IStrategoAppl t = Tools.applAt(list, i);
             if(Tools.isSDefT(t, context)) {
@@ -97,8 +97,8 @@ public class Interpreter {
     private ExtSDef parseExtSDef(IStrategoAppl t) {
 
         String name = Tools.javaStringAt(t, 0);
-        IStrategoTermList svars = Tools.listAt(t, 1);
-        IStrategoTermList tvars = Tools.listAt(t, 2);
+        IStrategoList svars = Tools.listAt(t, 1);
+        IStrategoList tvars = Tools.listAt(t, 2);
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug("name  : ", name);
@@ -176,7 +176,7 @@ public class Interpreter {
 
     private Let parseLet(IStrategoAppl t) throws InterpreterException {
 
-        IStrategoTermList l = Tools.listAt(t, 0);
+        IStrategoList l = Tools.listAt(t, 0);
         List<SDefT> defs = new ArrayList<SDefT>();
 
         for (int i = 0; i < l.size(); i++) {
@@ -194,8 +194,8 @@ public class Interpreter {
         }
 
         String name = Tools.javaStringAt(t, 0);
-        IStrategoTermList svars = Tools.listAt(t, 1);
-        IStrategoTermList tvars = Tools.listAt(t, 2);
+        IStrategoList svars = Tools.listAt(t, 1);
+        IStrategoList tvars = Tools.listAt(t, 2);
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" name  : ", name);
@@ -231,7 +231,7 @@ public class Interpreter {
         return new SDefT(name, realsvars, realtvars, body, newScope);
     }
 
-    private List<String> makeVars(IStrategoTermList svars) {
+    private List<String> makeVars(IStrategoList svars) {
 
         List<String> realsvars = new ArrayList<String>(svars.size());
 
@@ -246,7 +246,7 @@ public class Interpreter {
         return realsvars;
     }
 
-    private List<SVar> makeSVars(IStrategoTermList svars) {
+    private List<SVar> makeSVars(IStrategoList svars) {
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug("makeSVars()");
         }
@@ -272,7 +272,7 @@ public class Interpreter {
 
     private ArgType parseArgType(IStrategoAppl t) {
         if(Tools.isFunType(t, context)) {
-            IStrategoTermList l = Tools.listAt(t, 0);
+            IStrategoList l = Tools.listAt(t, 0);
             List<ArgType> ch = new ArrayList<ArgType>();
             for (int i = 0; i < l.size(); i++) {
                 ch.add(parseArgType(Tools.applAt(l, i)));
@@ -304,7 +304,7 @@ public class Interpreter {
             DebugUtil.debug(" name  : ", name);
         }
 
-        IStrategoTermList svars = Tools.listAt(t, 1);
+        IStrategoList svars = Tools.listAt(t, 1);
         List<Strategy> realsvars = parseStrategyList(svars);
 
         List<IStrategoTerm> realtvars = parseTermList(Tools.listAt(t, 2));
@@ -318,7 +318,7 @@ public class Interpreter {
         return new CallT(name, realsvars, realtvars);
     }
 
-    private List<IStrategoTerm> parseTermList(IStrategoTermList tvars) {
+    private List<IStrategoTerm> parseTermList(IStrategoList tvars) {
         List<IStrategoTerm> v = new ArrayList<IStrategoTerm>(tvars.size());
         for (int i = 0; i < tvars.size(); i++) {
             v.add(Tools.termAt(tvars, i));
@@ -326,7 +326,7 @@ public class Interpreter {
         return v;
     }
 
-    private List<Strategy> parseStrategyList(IStrategoTermList svars) throws InterpreterException {
+    private List<Strategy> parseStrategyList(IStrategoList svars) throws InterpreterException {
         List<Strategy> v = new ArrayList<Strategy>(svars.size());
         for (int i = 0; i < svars.size(); i++) {
             v.add(parseStrategy(Tools.applAt(svars, i)));
@@ -362,7 +362,7 @@ public class Interpreter {
 
     private Scope parseScope(IStrategoAppl t) throws InterpreterException {
 
-        IStrategoTermList vars = Tools.listAt(t, 0);
+        IStrategoList vars = Tools.listAt(t, 0);
         List<String> realvars = new ArrayList<String>(vars.size());
 
         for (int i = 0; i < vars.size(); i++) {

@@ -16,7 +16,7 @@ import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTermList;
+import org.spoofax.interpreter.terms.IStrategoList;
 
 public class SSL_implode_string extends Primitive {
 
@@ -35,7 +35,7 @@ public class SSL_implode_string extends Primitive {
         if(!(Tools.isCons(a, env) || Tools.isNil(a, env)))
             return false;
 
-        IStrategoTermList l = Tools.consToList(env, (IStrategoAppl)t);
+        IStrategoList l = Tools.consToList(env, (IStrategoAppl)t);
 
         StringBuffer sb = new StringBuffer();
 
