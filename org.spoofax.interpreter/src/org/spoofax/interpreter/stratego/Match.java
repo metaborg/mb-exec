@@ -57,18 +57,11 @@ public class Match extends Strategy {
         }
     }
 
-    public Results matchApplAnno(IContext env, IStrategoAppl t,
-            IStrategoAppl anno) throws InterpreterException {
-        // FIXME: Actually process anno
-        IStrategoAppl p = Tools.applAt(anno, 0);
-        return match(env, t, p);
-    }
-
     public Results matchAppl(IContext env, IStrategoAppl t,
             IStrategoAppl p) throws InterpreterException {
 
         if (Tools.isAnno(p, env)) {
-            return matchApplAnno(env, t, p);
+            return matchAnyAnno(env, t, p);
         }
         else if (Tools.isOp(p, env)) {
             return matchApplOp(env, t, p);
@@ -80,7 +73,7 @@ public class Match extends Strategy {
             return matchApplStr(t, p);
         }
         else if (Tools.isVar(p, env)) {
-            return matchApplVar(t, p);
+            return matchAnyVar(t, p);
         }
         else if (Tools.isExplode(p, env)) {
             return matchAnyExplode(env, t, p);
@@ -89,7 +82,7 @@ public class Match extends Strategy {
             return matchApplAs(env, t, p);
         }
         else if (Tools.isWld(p, env)) {
-            return emptyList();
+            return matchAnyWld(p);
         }
 
         throw new InterpreterException("Unknown Appl case '" + p + "'");
@@ -109,11 +102,6 @@ public class Match extends Strategy {
         //if (t.equals(p))
         //    return emptyList();
         //return null;
-    }
-
-    protected Results matchApplVar(IStrategoAppl t, IStrategoAppl p) {
-        String varName = Tools.javaStringAt(p, 0);
-        return newResult(new Binding(varName, t));
     }
 
     protected Results matchApplAs(IContext env, IStrategoAppl t,
@@ -200,7 +188,7 @@ public class Match extends Strategy {
         }
 
         if (Tools.isAnno(p, env)) {
-            return matchIntAnno(env, t, p);
+            return matchAnyAnno(env, t, p);
         }
         else if (Tools.isInt(p, env)) {
             return matchIntInt(t, p);
@@ -209,7 +197,7 @@ public class Match extends Strategy {
             return null;
         }
         else if (Tools.isVar(p, env)) {
-            return matchIntVar(t, p);
+            return matchAnyVar(t, p);
         }
         else if (Tools.isOp(p, env)) {
             return null;
@@ -218,10 +206,10 @@ public class Match extends Strategy {
             return matchAnyExplode(env, t, p);
         }
         else if (Tools.isWld(p, env)) {
-            return matchIntWld(p);
+            return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchIntAs(t, p);
+            return matchAnyAs(t, p);
         }
 
         throw new InterpreterException("Unknown Int case '" + p + "'");
@@ -235,7 +223,7 @@ public class Match extends Strategy {
         }
 
         if (Tools.isAnno(p, env)) {
-            return matchRealAnno(env, t, p);
+            return matchAnyAnno(env, t, p);
         }
         else if (Tools.isInt(p, env)) {
             return null;
@@ -244,7 +232,7 @@ public class Match extends Strategy {
             return matchRealReal(t, p);
         }
         else if (Tools.isVar(p, env)) {
-            return matchRealVar(t, p);
+            return matchAnyVar(t, p);
         }
         else if (Tools.isOp(p, env)) {
             return null;
@@ -253,10 +241,10 @@ public class Match extends Strategy {
             return matchAnyExplode(env, t, p);
         }
         else if (Tools.isWld(p, env)) {
-            return matchRealWld(p);
+            return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchRealAs(t, p);
+            return matchAnyAs(t, p);
         }
 
         throw new InterpreterException("Unknown Real case '" + p + "'");
@@ -272,31 +260,15 @@ public class Match extends Strategy {
         return null;
     }
 
-    private Results matchRealWld(IStrategoAppl p) {
+    private Results matchAnyWld(IStrategoAppl p) {
         return emptyList();
     }
 
-    private Results matchIntWld(IStrategoAppl p) {
-        return emptyList();
-    }
-
-    protected Results matchIntAnno(IContext env, IStrategoInt t,
+    protected Results matchAnyAnno(IContext env, IStrategoTerm t,
             IStrategoAppl p) throws InterpreterException {
         // FIXME: Do real match of annotations
         return match(env, t, Tools.applAt(p, 0));
     }
-
-    protected Results matchRealAnno(IContext env, IStrategoReal t,
-            IStrategoAppl p) throws InterpreterException {
-        // FIXME: Do real match of annotations
-        return match(env, t, Tools.applAt(p, 0));
-    }
-    /*
-    protected List<Pair<String, IStrategoTerm>> matchRealAnno(IContext env,
-            IStrategoReal t, IStrategoAppl p) throws InterpreterException {
-        return match(env, t, Tools.applAt(p, 0));
-    }
-     */
 
     protected Results matchIntInt(IStrategoInt t, IStrategoAppl p) {
         Integer intVal = new Integer(Tools.javaStringAt(p, 0));
@@ -306,17 +278,7 @@ public class Match extends Strategy {
         return null;
     }
 
-    protected Results matchIntVar(IStrategoInt t, IStrategoAppl p) {
-        String varName = Tools.javaStringAt(p, 0);
-        return newResult(new Binding(varName, t));
-    }
-
-    protected Results matchRealVar(IStrategoReal t, IStrategoAppl p) {
-        String varName = Tools.javaStringAt(p, 0);
-        return newResult(new Binding(varName, t));
-    }
-
-    protected Results matchIntAs(IStrategoInt t, IStrategoAppl p) {
+    protected Results matchAnyAs(IStrategoTerm t, IStrategoAppl p) {
         String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
         return newResult(new Binding(varName, t));
     }
@@ -329,11 +291,6 @@ public class Match extends Strategy {
         public Binding(String first, IStrategoTerm second) {
             super(first, second);
         }
-    }
-
-    protected Results matchRealAs(IStrategoReal t, IStrategoAppl p) {
-        String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
-        return newResult(new Binding(varName, t));
     }
 
     private Results newResult(Binding initial) {
@@ -437,7 +394,7 @@ public class Match extends Strategy {
         }
 
         if (Tools.isAnno(p, env)) {
-            return matchListAnno(env, t, p);
+            return matchAnyAnno(env, t, p);
         }
         else if (Tools.isInt(p, env)) {
             return null;
@@ -446,7 +403,48 @@ public class Match extends Strategy {
             return null;
         }
         else if (Tools.isVar(p, env)) {
-            return matchListVar(t, p);
+            return matchAnyVar(t, p);
+        }
+        else if (Tools.isOp(p, env)) {
+            throw new NotImplementedException();
+        }
+        else if (Tools.isWld(p, env)) {
+            return matchAnyWld(p);
+        }
+        else if (Tools.isAs(p, env)) {
+            return matchAnyAs(t, p);
+        }
+        else if (Tools.isExplode(p, env)) {
+            return matchAnyExplode(env, t, p);
+        }
+
+        throw new InterpreterException("Unknown List case '" + p + "'");
+    }
+
+    private Results matchAnyVar(IStrategoTerm t, IStrategoAppl p) {
+        String varName = Tools.javaStringAt(p, 0);
+        return newResult(new Binding(varName, t));
+    }
+
+    private Results matchString(IContext env, IStrategoString t, IStrategoAppl p) throws InterpreterException {
+        if (DebugUtil.isDebugging()) {
+            debug("matching String");
+        }
+        
+        if (Tools.isAnno(p, env)) {
+            return matchAnyAnno(env, t, p);
+        }
+        else if(Tools.isStr(p, env)) {
+            return matchStrStr(env, t, p);
+        }
+        else if (Tools.isInt(p, env)) {
+            return null;
+        }
+        else if (Tools.isReal(p, env)) {
+            return null;
+        }
+        else if (Tools.isVar(p, env)) {
+            return matchAnyVar(t, p);
         }
         else if (Tools.isOp(p, env)) {
             throw new NotImplementedException();
@@ -455,39 +453,21 @@ public class Match extends Strategy {
             return matchAnyExplode(env, t, p);
         }
         else if (Tools.isWld(p, env)) {
-            return matchListWld(p);
+            return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchListAs(t, p);
+            return matchAnyAs(t, p);
+        } 
+
+        throw new InterpreterException("Unknown String case '" + p + "'");
+    }
+
+    private Results matchStrStr(IContext env, IStrategoString t, IStrategoAppl p) {
+        IStrategoString s = Tools.stringAt(p, 0);
+        if(s.equals(t)) {
+            return emptyList();
         }
-
-        throw new InterpreterException("Unknown List case '" + p + "'");
-    }
-
-    private Results matchListVar(IStrategoTermList t, IStrategoAppl p) {
-        String varName = Tools.javaStringAt(p, 0);
-        return newResult(new Binding(varName, t));
-    }
-
-    private Results matchListAs(IStrategoTermList t, IStrategoAppl p) {
-        String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
-        return newResult(new Binding(varName, t));
-    }
-
-    private Results matchListWld(IStrategoAppl p) {
-        return emptyList();
-    }
-
-    private Results matchListAnno(IContext env, IStrategoTermList t, IStrategoAppl p) throws InterpreterException {
-        // FIXME: Do real match of annotations
-        return match(env, t, Tools.applAt(p, 0));
-    }
-
-    private Results matchString(IContext env, IStrategoString string, IStrategoAppl p) {
-        if (DebugUtil.isDebugging()) {
-            debug("matching String");
-        }
-        throw new NotImplementedException();
+        return null;
     }
 
     public void prettyPrint(StupidFormatter sf) {
