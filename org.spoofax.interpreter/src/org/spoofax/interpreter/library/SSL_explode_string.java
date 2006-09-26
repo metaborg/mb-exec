@@ -23,9 +23,9 @@ public class SSL_explode_string extends Primitive {
         super("SSL_explode_string", 0, 1);
     }
     
-    public boolean call(IContext env, List<Strategy> svars, List<IStrategoTerm> tvars) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> svars, IStrategoTerm[] tvars) throws InterpreterException {
         
-        IStrategoTerm t = tvars.get(0);
+        IStrategoTerm t = tvars[0];
         
         if(!Tools.isTermString(t))
             return false;

@@ -14,9 +14,8 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.SSL_hashtable_create.Hashtable;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-
-import aterm.ATermInt;
 
 public class SSL_hashtable_put extends Primitive {
 
@@ -24,17 +23,17 @@ public class SSL_hashtable_put extends Primitive {
         super("SSL_hashtable_put", 0, 3);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        if(!(Tools.isTermInt(targs.get(0))))
+        if(!(Tools.isTermInt(targs[0])))
             return false;
 
-        Hashtable ath = SSL.getHashtable(((ATermInt)targs.get(0)).getInt());
+        Hashtable ath = SSL.getHashtable(((IStrategoInt)targs[0]).getValue());
         if(ath == null)
             return false;
         
-        ath.put(targs.get(1), targs.get(2));
-        env.setCurrent(targs.get(0));
+        ath.put(targs[1], targs[2]);
+        env.setCurrent(targs[0]);
         return true;
     }
 }

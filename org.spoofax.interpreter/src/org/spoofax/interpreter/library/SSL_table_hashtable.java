@@ -33,7 +33,7 @@ public class SSL_table_hashtable extends Primitive {
         map = new Hashtable(100, 80);
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         if(magicRef == -1) {
             magicRef = SSL.registerHashtable(map);

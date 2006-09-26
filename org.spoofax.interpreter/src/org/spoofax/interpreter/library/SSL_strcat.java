@@ -21,15 +21,15 @@ public class SSL_strcat extends Primitive {
         super("SSL_strcat", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        if(!Tools.isTermString(targs.get(0)))
+        if(!Tools.isTermString(targs[0]))
             return false;
-        if(!Tools.isTermString(targs.get(1)))
+        if(!Tools.isTermString(targs[1]))
             return false;
 
-        String s = Tools.javaString(targs.get(0));
-        String t = Tools.javaString(targs.get(1));
+        String s = Tools.javaString(targs[0]);
+        String t = Tools.javaString(targs[1]);
         
         env.setCurrent(env.getFactory().makeString(s + t));
         return true;

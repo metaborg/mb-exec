@@ -22,15 +22,15 @@ public class SSL_subtr extends Primitive {
         super("SSL_subtr", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> svars, List<IStrategoTerm> tvars) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> svars, IStrategoTerm[] tvars) throws InterpreterException {
         
-        if(Tools.isTermReal(tvars.get(0)))
+        if(Tools.isTermReal(tvars[0]))
             return false;
-        if(Tools.isTermReal(tvars.get(1)))
+        if(Tools.isTermReal(tvars[1]))
             return false;
 
-        IStrategoReal a = (IStrategoReal) tvars.get(0);
-        IStrategoReal b = (IStrategoReal) tvars.get(1);
+        IStrategoReal a = (IStrategoReal) tvars[0];
+        IStrategoReal b = (IStrategoReal) tvars[1];
         env.setCurrent(env.getFactory().makeReal(a.getValue() - b.getValue()));
         return true;
     }

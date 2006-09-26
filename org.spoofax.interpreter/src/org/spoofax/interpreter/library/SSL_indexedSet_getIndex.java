@@ -14,9 +14,8 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.SSL_indexedSet_create.IndexedSet;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-
-import aterm.ATermInt;
 
 public class SSL_indexedSet_getIndex extends Primitive {
 
@@ -24,18 +23,18 @@ public class SSL_indexedSet_getIndex extends Primitive {
         super("SSL_indexedSet_getIndex", 0, 2);
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs)
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs)
             throws InterpreterException {
 
-        if (!(Tools.isTermInt(targs.get(0))))
+        if (!(Tools.isTermInt(targs[0])))
             return false;
 
-        int ref = ((ATermInt)targs.get(0)).getInt();
+        int ref = ((IStrategoInt)targs[0]).getValue();
         IndexedSet is = SSL_indexedSet_create.map.get(ref);
         if(is == null)
             return false;
         
-        int idx = is.getIndex(targs.get(1));
+        int idx = is.getIndex(targs[1]);
         if(idx == -1)
             return false;
         

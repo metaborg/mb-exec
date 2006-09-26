@@ -9,13 +9,12 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-
-import aterm.ATerm;
-import aterm.ATermInt;
 
 public class SSL_addi extends Primitive {
 
@@ -23,16 +22,16 @@ public class SSL_addi extends Primitive {
         super("SSL_addi", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
         
-        if(targs.get(0).getTermType() != ATerm.INT)
+        if(!Tools.isTermInt(targs[0]))
             return false;
-        if(targs.get(1).getTermType() != ATerm.INT)
+        if(!Tools.isTermInt(targs[1]))
             return false;
 
-        ATermInt a = (ATermInt) targs.get(0);
-        ATermInt b = (ATermInt) targs.get(1);
-        env.setCurrent(env.getFactory().makeInt(a.getInt() + b.getInt()));
+        IStrategoInt a = (IStrategoInt) targs[0];
+        IStrategoInt b = (IStrategoInt) targs[1];
+        env.setCurrent(env.getFactory().makeInt(a.getValue() + b.getValue()));
         return true;
     }
 }

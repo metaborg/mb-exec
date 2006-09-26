@@ -65,7 +65,7 @@ public class TermDeconstructionTest extends AbstractLanguageTest {
     }
 
     public void testTermDeconstr9a() {
-        interpTest("term_deconstr_1", "[1,2,3]", "\"\"");
+        interpTest("term_deconstr_1", "(1,2,3)", "\"\"");
     }
 
     public void testTermDeconstr9b() {

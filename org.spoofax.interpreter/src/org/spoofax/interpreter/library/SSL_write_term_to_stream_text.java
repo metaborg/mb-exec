@@ -24,14 +24,14 @@ public class SSL_write_term_to_stream_text extends Primitive {
         super("SSL_write_term_to_stream_text", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
         
-        if(Tools.isTermInt(targs.get(0)))
+        if(Tools.isTermInt(targs[0]))
             return false;
 
-        OutputStream ous = SSL.outputStreamFromTerm((IStrategoInt)targs.get(0));
+        OutputStream ous = SSL.outputStreamFromTerm((IStrategoInt)targs[0]);
 
-        IStrategoTerm t = targs.get(1);
+        IStrategoTerm t = targs[1];
         
         try {
             env.getFactory().unparseToFile(t, ous);

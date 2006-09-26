@@ -22,12 +22,12 @@ public class SSL_hashtable_keys extends Primitive {
         super("SSL_hashtable_keys", 0, 1);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        if(!(Tools.isTermInt(targs.get(0))))
+        if(!(Tools.isTermInt(targs[0])))
             return false;
 
-        Hashtable ath = SSL.getHashtable(Tools.javaInt(targs.get(0)));
+        Hashtable ath = SSL.getHashtable(Tools.javaInt(targs[0]));
         if(ath == null)
             return false;
         

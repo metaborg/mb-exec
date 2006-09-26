@@ -22,12 +22,12 @@ public class SSL_int_to_string extends Primitive {
         super("SSL_int_to_string", 0, 1);
     }
 
-    public boolean call(IContext env, List<Strategy> svars, List<IStrategoTerm> tvars) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> svars, IStrategoTerm[] tvars) throws InterpreterException {
 
-        if(Tools.isTermInt(tvars.get(0)))
+        if(Tools.isTermInt(tvars[0]))
             return false;
 
-        IStrategoInt a = (IStrategoInt) tvars.get(0);
+        IStrategoInt a = (IStrategoInt) tvars[0];
         env.setCurrent(env.getFactory().makeString("\"" + a.getValue() + "\""));
         return true;
     }

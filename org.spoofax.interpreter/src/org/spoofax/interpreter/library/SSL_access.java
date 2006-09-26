@@ -15,10 +15,8 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
-import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoList;
-
-import aterm.ATermAppl;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_access extends Primitive {
 
@@ -34,16 +32,16 @@ public class SSL_access extends Primitive {
         super("SSL_access", 0, 2);
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        if (!Tools.isTermString(targs.get(0)))
+        if (!Tools.isTermString(targs[0]))
             return false;
-        if (!(Tools.isTermAppl(targs.get(1))))
+        if (!(Tools.isTermAppl(targs[1])))
             return false;
 
-        String path = Tools.javaString(targs.get(0));
+        String path = Tools.javaString(targs[0]);
         int permissions = permissions_from_term(Tools.
-          consToList(env, (IStrategoAppl) targs.get(1)));
+          consToList(env, (IStrategoAppl) targs[1]));
         File f = new File(path);
 
         if ((permissions & R_OK) != 0) {
@@ -60,7 +58,7 @@ public class SSL_access extends Primitive {
                 return false;
         }
 
-        env.setCurrent(targs.get(0));
+        env.setCurrent(targs[0]);
         return true;
     }
 

@@ -24,13 +24,13 @@ public class SSL_indexedSet_elements extends Primitive {
         super("SSL_indexedSet_elements", 0, 1);
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs)
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs)
             throws InterpreterException {
 
-        if (!(Tools.isTermInt(targs.get(0))))
+        if (!(Tools.isTermInt(targs[0])))
             return false;
 
-        int ref = ((IStrategoInt)targs.get(0)).getValue();
+        int ref = ((IStrategoInt)targs[0]).getValue();
         IndexedSet is = SSL_indexedSet_create.map.get(ref);
 
         if(is == null)

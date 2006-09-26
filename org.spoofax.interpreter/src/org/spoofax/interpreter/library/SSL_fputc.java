@@ -24,16 +24,16 @@ public class SSL_fputc extends Primitive {
         super("SSL_fputc", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        if(!(Tools.isTermInt(targs.get(0))))
+        if(!(Tools.isTermInt(targs[0])))
             return false;
-        if(!(Tools.isTermInt(targs.get(1))))
+        if(!(Tools.isTermInt(targs[1])))
             return false;
 
-        OutputStream s = SSL.outputStreamFromTerm((IStrategoInt)targs.get(1));
+        OutputStream s = SSL.outputStreamFromTerm((IStrategoInt)targs[1]);
         try {
-            s.write(((IStrategoInt)targs.get(0)).getValue());
+            s.write(((IStrategoInt)targs[0]).getValue());
         } catch(IOException e) {
             throw new InterpreterException(e);
         }

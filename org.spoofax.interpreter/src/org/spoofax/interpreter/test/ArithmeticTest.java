@@ -10,7 +10,7 @@ package org.spoofax.interpreter.test;
 public class ArithmeticTest extends AbstractLanguageTest {
 
     public void testAddInt1() {
-        interpTest("add_int_1", factory.parseFromString("[1,2]"), factory.parseFromString("3"));
+        interpTest("add_int_1", factory.parseFromString("(1, 2)"), factory.parseFromString("3"));
     }
 
     public void testAddInt2() {
@@ -18,7 +18,7 @@ public class ArithmeticTest extends AbstractLanguageTest {
     }
 
     public void testGtInt1() {
-        interpTest("gt_int_1", factory.parseFromString("[]"), factory.parseFromString("[2, 1]"));
+        interpTest("gt_int_1", factory.parseFromString("[]"), factory.parseFromString("(2, 1)"));
     }
 
     public void testGtInt2() {

@@ -21,8 +21,8 @@ public class SSL_is_int extends Primitive {
         super("SSL_is_int", 0, 1);
     }
     
-    public boolean call(IContext env, List<Strategy> svars, List<IStrategoTerm> tvars) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> svars, IStrategoTerm[] tvars) throws InterpreterException {
 
-        return Tools.isTermInt(tvars.get(0));
+        return Tools.isTermInt(tvars[0]);
     }
 }

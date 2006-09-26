@@ -301,7 +301,7 @@ public class Match extends Strategy {
         return r;
     }
 
-    protected Results matchAnyExplode(IContext env, IStrategoTerm t,
+    private Results matchAnyExplode(IContext env, IStrategoTerm t,
             IStrategoAppl p) throws InterpreterException {
 
         IStrategoAppl opPattern = Tools.applAt(p, 0);
@@ -332,9 +332,13 @@ public class Match extends Strategy {
             else
                 return env.getFactory().makeList(a.getArguments());
         }
-        else if (Tools.isTermString(t))
+        else if (Tools.isTermList(t))
+            return t;
+        else if (Tools.isTermString(t)) 
             return env.getFactory().makeList();
-
+        else if (Tools.isTermTuple(t)) 
+            return t; 
+            
         throw new InterpreterException("Unknown term '" + t + "'");
     }
 
@@ -350,6 +354,10 @@ public class Match extends Strategy {
                 return env.getFactory().makeAppl(env.getStrategoSignature().getNil());
             else
                 return env.getFactory().makeString(((IStrategoAppl)t).getConstructor().getName());
+        } else if (Tools.isTermList(t)) {
+            return env.getFactory().makeList();
+        } else if (Tools.isTermTuple(t)) {
+            return env.getFactory().makeString("");
         }
 
         throw new InterpreterException("Unknown term '" + t + "'");

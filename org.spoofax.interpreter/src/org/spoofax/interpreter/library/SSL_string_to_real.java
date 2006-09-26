@@ -21,12 +21,12 @@ public class SSL_string_to_real extends Primitive {
         super("SSL_string_to_real", 0, 1);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        if(!Tools.isTermString(targs.get(0)))
+        if(!Tools.isTermString(targs[0]))
             return false;
 
-        Double d = new Double(Tools.javaString(targs.get(0)));
+        Double d = new Double(Tools.javaString(targs[0]));
         env.setCurrent(env.getFactory().makeReal(d.doubleValue()));
         return true;
     }

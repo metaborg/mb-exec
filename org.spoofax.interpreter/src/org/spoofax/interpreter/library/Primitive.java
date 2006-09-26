@@ -31,7 +31,7 @@ public abstract class Primitive {
     public int getTArity() { return tvars; }
     public int getSArity() { return svars; }
     
-    public abstract boolean call(IContext env, List<Strategy> svars, List<IStrategoTerm> tvars) throws InterpreterException;
+    public abstract boolean call(IContext env, List<Strategy> svars, IStrategoTerm[] tvars) throws InterpreterException;
     
     protected static void debug(String s) {
         DebugUtil.debug("[ " + s + " ]");

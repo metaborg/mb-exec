@@ -20,7 +20,7 @@ public class SSL_stderr_stream extends Primitive {
         super("SSL_stderr_stream", 0, 0);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         env.setCurrent(env.getFactory().makeInt(SSL.CONST_STDERR));
         return true;

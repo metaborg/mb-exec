@@ -9,6 +9,7 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
+import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
@@ -23,12 +24,12 @@ public class SSL_printnl extends Primitive {
         super("SSL_printnl", 0, 2);
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         // FIXME: Possibly erroneous
-        String output = Tools.javaString(targs.get(0));
+        String output = Tools.javaString(targs[0]);
 
-        IStrategoList l = Tools.consToListDeep(env, (IStrategoAppl) targs.get(1));
+        IStrategoList l = (IStrategoList) targs[1]; 
 
         StringBuffer sb = new StringBuffer();
         for(int i = 0; i < l.size(); i++) {
@@ -36,7 +37,8 @@ public class SSL_printnl extends Primitive {
             if (Tools.isTermAppl(t)) {
                 IStrategoAppl a = (IStrategoAppl)t;
                 if (Tools.isCons(a, env))
-                    sb.append(Tools.consToListDeep(env, a));
+                    break;
+                    //sb.append(Tools.consToListDeep(env, a));
                 else if (Tools.isTermString(t))
                     sb.append(Tools.javaString(t));
                 continue;
@@ -44,6 +46,7 @@ public class SSL_printnl extends Primitive {
             sb.append(t.toString());
         }
 
+        
         if(output.equals("stderr"))
             System.err.println(sb);
         else if(output.equals("stdout"))
@@ -51,6 +54,7 @@ public class SSL_printnl extends Primitive {
         else
             throw new InterpreterException("Unknown output : " + output);
         
-        return true;
+        throw new NotImplementedException();
+//        return true;
     }
 }

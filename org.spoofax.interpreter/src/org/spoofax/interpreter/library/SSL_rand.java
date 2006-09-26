@@ -20,7 +20,7 @@ public class SSL_rand extends Primitive {
         super("SSL_rand", 0, 0);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         double r = Math.random();
         int i = (int)((r-0.5) * 2147483647);

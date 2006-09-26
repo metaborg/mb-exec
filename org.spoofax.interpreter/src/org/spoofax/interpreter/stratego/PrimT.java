@@ -7,7 +7,6 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.spoofax.interpreter.IContext;
@@ -24,12 +23,12 @@ public class PrimT extends Strategy {
 
     protected List<Strategy> svars;
 
-    protected List<IStrategoTerm> tvars;
+    protected IStrategoTerm[] tvars;
 
     public PrimT(String name, List<Strategy> svars, List<IStrategoTerm> tvars) {
         this.name = name;
         this.svars = svars;
-        this.tvars = tvars;
+        this.tvars = tvars.toArray(new IStrategoTerm[0]);
     }
 
     public boolean eval(IContext env) throws InterpreterException {
@@ -43,15 +42,16 @@ public class PrimT extends Strategy {
         if (prim == null)
             throw new InterpreterException("No such function : '" + name + "'");
 
-        List<IStrategoTerm> vals = new ArrayList<IStrategoTerm>(tvars.size());
-        for (IStrategoTerm t : tvars) {
+        IStrategoTerm[] vals = new IStrategoTerm[tvars.length];
+        for(int i = 0; i < tvars.length; i++) {
             // FIXME this cast should be moved out
-            vals.add(env.lookupVar(Tools.javaStringAt((IStrategoAppl)t, 0)));
+            IStrategoAppl t = (IStrategoAppl)tvars[i];
+            vals[i] = env.lookupVar(Tools.javaStringAt(t, 0));
         }
 
 
-        if (vals.size() != prim.getTArity())
-            throw new InterpreterException("Wrong aterm arity when calling '" + name + "', expected " + prim.getTArity() + " got " + vals.size());
+        if (vals.length != prim.getTArity())
+            throw new InterpreterException("Wrong term arity when calling '" + name + "', expected " + prim.getTArity() + " got " + vals.length);
 
         if (svars.size() != prim.getSArity())
             throw new InterpreterException("Wrong strategy arity when calling '" + name + "', expected " + prim.getSArity() + " got " + svars.size());

@@ -21,7 +21,7 @@ public class SSL_is_string extends Primitive {
         super("SSL_is_string", 0, 1);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
-        return Tools.isTermString(targs.get(0));
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
+        return Tools.isTermString(targs[0]);
     }
 }

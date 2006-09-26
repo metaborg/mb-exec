@@ -24,14 +24,14 @@ public class CallT extends Strategy {
 
     protected List<Strategy> svars;
 
-    protected List<IStrategoTerm> tvars;
+    protected IStrategoTerm[] tvars;
 
     private static int counter = 0;
 
     public CallT(String name, List<Strategy> svars, List<IStrategoTerm> tvars) {
         this.name = name;
         this.svars = svars;
-        this.tvars = tvars;
+        this.tvars = tvars.toArray(new IStrategoTerm[0]);
     }
 
     public boolean eval(IContext env) throws InterpreterException {
@@ -52,9 +52,9 @@ public class CallT extends Strategy {
             throw new InterpreterException("Incorrect strategy arguments, expected " + formalStrategyArgs.size()
               + " got " + svars.size());
 
-        if (tvars.size() != formalTermArgs.size())
+        if (tvars.length != formalTermArgs.size())
             throw new InterpreterException("Incorrect aterm arguments, expected " + formalTermArgs.size()
-              + " got " + tvars.size());
+              + " got " + tvars.length);
 
         VarScope newScope = new VarScope(sdef.getScope());
 
@@ -65,7 +65,7 @@ public class CallT extends Strategy {
             SDefT target = null;
             if (actual instanceof CallT &&
               ((CallT)actual).getStrategyArguments().size() == 0
-              && ((CallT)actual).getTermArguments().size() == 0) {
+              && ((CallT)actual).getTermArguments().length == 0) {
                 String n = ((CallT)actual).getTargetStrategyName();
                 target = env.lookupSVar(n);
                 if (target == null) {
@@ -85,9 +85,9 @@ public class CallT extends Strategy {
             newScope.addSVar(formal.name, target);
         }
 
-        for (int i = 0; i < tvars.size(); i++) {
+        for (int i = 0; i < tvars.length; i++) {
             String formal = formalTermArgs.get(i);
-            IStrategoTerm actual = tvars.get(i);
+            IStrategoTerm actual = tvars[i];
             // FIXME: This should not be here
             if (Tools.isVar(((IStrategoAppl)actual), env))
                 actual = env.lookupVar(Tools.javaStringAt((IStrategoAppl)actual, 0));
@@ -103,7 +103,7 @@ public class CallT extends Strategy {
         return DebugUtil.traceReturn(r, env.current(), this);
     }
 
-    private List<IStrategoTerm> getTermArguments() {
+    private IStrategoTerm[] getTermArguments() {
         return tvars;
     }
 
@@ -138,7 +138,7 @@ public class CallT extends Strategy {
     /*package*/
     static void printStrategyCall(final String name,
       final List<SVar> svarsFormal, final List<Strategy> svarsActual,
-      final List<String> tvarsFormal, final List<IStrategoTerm> tvarsActual) {
+      final List<String> tvarsFormal, final IStrategoTerm[] tvarsActual) {
 
         // Print this at the same indentation with the associated scope.
         StringBuilder sb = DebugUtil.buildIndent(DebugUtil.INDENT_STEP);
@@ -156,12 +156,12 @@ public class CallT extends Strategy {
         sb.append(" | ");
 
         final String tNoName = "<t_noname_";
-        for (int i = 0; i < tvarsActual.size(); i++) {
+        for (int i = 0; i < tvarsActual.length; i++) {
             String termName = tvarsFormal != null ? tvarsFormal.get(i) : (tNoName + i + ">");
             if (i > 0) {
                 sb.append(", ");
             }
-            sb.append(termName).append(" = ").append(tvarsActual.get(i));
+            sb.append(termName).append(" = ").append(tvarsActual[i]);
         }
         sb.append(" ) ");
         debug(sb); //todo: sdef is too much

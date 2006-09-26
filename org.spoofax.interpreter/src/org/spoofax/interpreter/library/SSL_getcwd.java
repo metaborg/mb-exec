@@ -20,7 +20,7 @@ public class SSL_getcwd extends Primitive {
         super("SSL_getcwd", 0, 0);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         String cwd = System.getProperty("user.dir");
         

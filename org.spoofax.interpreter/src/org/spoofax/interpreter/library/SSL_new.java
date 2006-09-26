@@ -28,7 +28,7 @@ public class SSL_new extends Primitive {
         counter = 0;
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         ITermFactory factory = env.getFactory();
 

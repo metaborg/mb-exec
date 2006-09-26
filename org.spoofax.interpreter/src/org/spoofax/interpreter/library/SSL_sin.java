@@ -22,12 +22,12 @@ public class SSL_sin extends Primitive {
         super("SSL_sin", 0, 1);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        if(!(Tools.isTermReal(targs.get(0))))
+        if(!(Tools.isTermReal(targs[0])))
             return false;
 
-        IStrategoReal a = (IStrategoReal) targs.get(0);
+        IStrategoReal a = (IStrategoReal) targs[0];
         env.setCurrent(env.getFactory().makeReal(Math.sin(a.getValue())));
         return true;
     }

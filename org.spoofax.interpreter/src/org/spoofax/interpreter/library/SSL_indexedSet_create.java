@@ -17,9 +17,8 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-
-import aterm.ATermInt;
 
 public class SSL_indexedSet_create extends Primitive {
 
@@ -98,15 +97,15 @@ public class SSL_indexedSet_create extends Primitive {
         super("SSL_indexedSet_create", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, List<IStrategoTerm> targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        if(!(Tools.isTermInt(targs.get(0))))
+        if(!(Tools.isTermInt(targs[0])))
             return false;
-        if(!(Tools.isTermInt(targs.get(1))))
+        if(!(Tools.isTermInt(targs[1])))
             return false;
 
-        int initialSize = ((ATermInt)targs.get(0)).getInt();
-        int maxLoad = ((ATermInt)targs.get(1)).getInt();
+        int initialSize = ((IStrategoInt)targs[0]).getValue();
+        int maxLoad = ((IStrategoInt)targs[1]).getValue();
         
         IndexedSet is = new IndexedSet(initialSize, maxLoad);
         int n = setCounter++;
