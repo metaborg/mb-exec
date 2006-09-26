@@ -24,9 +24,9 @@ public class SSL_subtr extends Primitive {
     
     public boolean call(IContext env, List<Strategy> svars, IStrategoTerm[] tvars) throws InterpreterException {
         
-        if(Tools.isTermReal(tvars[0]))
+        if(!Tools.isTermReal(tvars[0]))
             return false;
-        if(Tools.isTermReal(tvars[1]))
+        if(!Tools.isTermReal(tvars[1]))
             return false;
 
         IStrategoReal a = (IStrategoReal) tvars[0];

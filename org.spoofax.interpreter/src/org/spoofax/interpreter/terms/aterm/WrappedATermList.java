@@ -83,6 +83,7 @@ public class WrappedATermList extends WrappedATerm implements IStrategoList {
     }
 
     public IStrategoTerm head() {
+        // FIXME should have a null check
         return WrappedATermFactory.wrapTerm(list.getFirst());
     }
 

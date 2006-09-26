@@ -24,9 +24,9 @@ public class SSL_subti extends Primitive {
     
     public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
         
-        if(Tools.isTermInt(targs[0]))
+        if(!Tools.isTermInt(targs[0]))
             return false;
-        if(Tools.isTermInt(targs[1]))
+        if(!Tools.isTermInt(targs[1]))
             return false;
 
         IStrategoInt a = (IStrategoInt) targs[0];

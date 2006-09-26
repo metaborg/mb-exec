@@ -77,7 +77,7 @@ public class ClosureTest extends AbstractLanguageTest {
         ITermFactory fac = itp.getFactory();
         if(i == 0)
             return fac.makeTuple();
-        return fac.makeTuple(fac.makeString(t), makeRecTuple(i-1, t)); 
+        return fac.makeTuple(fac.parseFromString(t), makeRecTuple(i-1, t)); 
     }
 
     public void testClosure2f() {

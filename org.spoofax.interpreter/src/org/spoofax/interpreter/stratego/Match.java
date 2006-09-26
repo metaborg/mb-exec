@@ -499,6 +499,11 @@ public class Match extends Strategy {
                 return emptyList();
         } 
         else if(c.equals("Cons")) {
+            
+            if(t.size() < 1) {
+                return null;
+            }
+                
             IStrategoTerm head = t.head();
             IStrategoList tail = t.tail();
             
