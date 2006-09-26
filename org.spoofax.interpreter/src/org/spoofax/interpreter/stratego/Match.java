@@ -33,6 +33,7 @@ public class Match extends Strategy {
     }
 
     public boolean eval(IContext env) throws InterpreterException {
+        
         if (DebugUtil.isDebugging()) {
             debug("Match.eval() - ", " !", env.current(), " ; ?", pattern);
         }
@@ -331,6 +332,8 @@ public class Match extends Strategy {
             else
                 return env.getFactory().makeList(a.getArguments());
         }
+        else if (Tools.isTermString(t))
+            return env.getFactory().makeList();
 
         throw new InterpreterException("Unknown term '" + t + "'");
     }
@@ -340,7 +343,7 @@ public class Match extends Strategy {
         if (Tools.isTermInt(t) || Tools.isTermReal(t)) {
             return t;
         } else if (Tools.isTermString(t)) {
-            return env.getFactory().makeString("\"" + ((IStrategoString) t).getValue() + "\"");
+            return env.getFactory().makeString("\"" + ((IStrategoString)t).getValue() + "\"");
         } else if (Tools.isTermAppl(t)) {
             IStrategoAppl a = (IStrategoAppl)t;
             if (Tools.isCons(a, env) || Tools.isNil(a, env))

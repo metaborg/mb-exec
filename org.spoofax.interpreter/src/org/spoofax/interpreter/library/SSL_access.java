@@ -67,15 +67,17 @@ public class SSL_access extends Primitive {
     private int permissions_from_term(IStrategoList perms) {
         int res = 0;
         for (int i = 0; i < perms.size(); i++) {
-            ATermAppl t = (ATermAppl) Tools.termAt(perms, i);
+            IStrategoAppl t =  Tools.applAt(perms, i);
             
-            if(Tools.termType(t, "W_OK"))
+            // FIXME -- put in StrategoSignature (LibrarySignature)
+            
+            if(Tools.hasConstructor(t, "W_OK"))
                 res |= W_OK;
-            else if(Tools.termType(t, "R_OK"))
+            else if(Tools.hasConstructor(t, "R_OK"))
                 res |= R_OK;
-            else if(Tools.termType(t, "X_OK"))
+            else if(Tools.hasConstructor(t, "X_OK"))
                 res |= X_OK;
-            else if(Tools.termType(t, "F_OK"))
+            else if(Tools.hasConstructor(t, "F_OK"))
                 res |= F_OK;
             else 
                 System.err.println("*** ERROR: not an access mode: " + t);

@@ -31,7 +31,7 @@ public abstract class AbstractInterpreterTest extends TestCase {
         DebugUtil.shareFactory = true; // in unit test mode all can share the same factory
         itp = new Interpreter();
         factory = itp.getFactory();
-        DebugUtil.setDebug(false);
+        DebugUtil.setDebug(true);
     }
     
     @Override

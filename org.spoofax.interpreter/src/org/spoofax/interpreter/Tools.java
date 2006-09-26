@@ -10,15 +10,12 @@ package org.spoofax.interpreter;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.StrategoSignature;
-
-import aterm.ATerm;
-import aterm.ATermAppl;
 
 public class Tools {
 
@@ -91,10 +88,6 @@ public class Tools {
         return t.getSubterm(i);
     }
 
-    public static boolean termType(ATermAppl p, String n) {
-        return p.getName().equals(n);
-    }
-
     public static IStrategoList consToList(IContext env, IStrategoAppl cons) {
         if (Tools.isNil(cons, env))
             return env.getFactory().makeList();
@@ -104,18 +97,18 @@ public class Tools {
         return tail.insert(head);
     }
 
-    public static IStrategoList consToListDeep(IContext env, IStrategoAppl cons) {
-        if (Tools.isNil(cons, env))
-            return env.getFactory().makeList();
-
-        IStrategoList tail = consToListDeep(env, Tools.applAt(cons, 1));
-
-        IStrategoTerm head = Tools.termAt(cons, 0);
-        if (head.getTermType() == IStrategoTerm.APPL && Tools.isCons((IStrategoAppl)head, env))
-            head = consToListDeep(env, (IStrategoAppl) head);
-
-        return tail.insert(head);
-    }
+//    public static IStrategoList consToListDeep(IContext env, IStrategoAppl cons) {
+//        if (Tools.isNil(cons, env))
+//            return env.getFactory().makeList();
+//
+//        IStrategoList tail = consToListDeep(env, Tools.applAt(cons, 1));
+//
+//        IStrategoTerm head = Tools.termAt(cons, 0);
+//        if (head.getTermType() == IStrategoTerm.APPL && Tools.isCons((IStrategoAppl)head, env))
+//            head = consToListDeep(env, (IStrategoAppl) head);
+//
+//        return tail.insert(head);
+//    }
 
     public static boolean isCons(IStrategoAppl t, IContext env) {
         return t.getConstructor().equals(env.getStrategoSignature().getCons());
@@ -123,21 +116,14 @@ public class Tools {
 
     public static boolean isTermString(IStrategoTerm t) {
         return t instanceof IStrategoString;
-/*        
-        if (t.getType() == IStrategoTerm.APPL) {
-            AFun f = ((ATermAppl) t).getAFun();
-            return f.isQuoted() && f.getChildCount() == 0;
-        }
-        return false;
-*/        
     }
 
     public static String javaString(IStrategoTerm t) {
         return ((IStrategoString)t).getValue();
     }
 
-    public static boolean isATermList(ATerm t) {
-        return t.getType() == IStrategoTerm.LIST;
+    public static boolean isTermList(IStrategoTerm t) {
+        return t instanceof IStrategoList;
     }
 
     public static boolean isNil(IStrategoAppl t, IContext env) {
@@ -218,6 +204,10 @@ public class Tools {
 
     public static int javaInt(IStrategoTerm term) {
         return ((IStrategoInt)term).getValue();
+    }
+
+    public static boolean hasConstructor(IStrategoAppl t, String ctorName) {
+        return t.getConstructor().getName().equals(ctorName);
     }
 
 }

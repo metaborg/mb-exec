@@ -17,10 +17,10 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.ITermFactory;
 
 public class Build extends Strategy {
@@ -114,27 +114,39 @@ public class Build extends Strategy {
         }
         else if (Tools.isTermString(actualCtor)) {
 
-            if (!(Tools.isTermAppl(actualArgs))) {
-                return null;
+            if (!(Tools.isTermList(actualArgs))) {
+                throw new InterpreterException("");
             }
 
             String n = ((IStrategoString)actualCtor).getValue();
-
+            IStrategoList argList = (IStrategoList)actualArgs;
+            IStrategoTerm[] realArgs = new IStrategoTerm[argList.size()];
+            
+            for(int i = 0; i < argList.size(); i++) {
+                realArgs[i] = argList.get(i);
+            }
+            
+            if (n.equals(""))
+                return factory.makeTuple(realArgs);
+            
             boolean quoted = false;
             if (n.length() > 1 && n.charAt(0) == '"') {
                 n = n.substring(1, n.length() - 1);
                 quoted = true;
             }
-            IStrategoList realArgs = Tools.consToList(env, (IStrategoAppl)actualArgs);
-            IStrategoConstructor afun = factory.makeConstructor(n, realArgs.size(), quoted);
+
+            if(quoted && realArgs.length == 0) {
+                return factory.makeString(n);
+            }
+            
+            IStrategoConstructor afun = factory.makeConstructor(n, argList.size(), quoted);
             return factory.makeAppl(afun, realArgs);
         }
-        else if (Tools.isTermAppl(actualCtor)
-          && Tools.isNil(((IStrategoAppl)actualCtor), env)) {
+        else if (Tools.isTermList(actualCtor)) {
             return actualArgs;
         }
 
-        throw new InterpreterException("Unknown explosion combination!");
+        throw new InterpreterException("Unknown term explosion : " + t.getTermType());
     }
 
     private IStrategoTerm buildVar(IContext env, IStrategoAppl t) throws InterpreterException {

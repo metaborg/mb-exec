@@ -29,7 +29,14 @@ public class WrappedAFun extends WrappedATerm implements IStrategoConstructor {
             args[i] = ((WrappedATerm)terms.get(i)).getATerm();
         return new WrappedATermAppl(afun.getFactory().makeAppl(afun, args));
     }
-
+    
+    public IStrategoAppl instantiate(IStrategoTerm... terms) {
+        ATerm[] args = new ATerm[terms.length];
+        for(int i = 0; i < terms.length; i++) {
+            args[i] = ((WrappedATerm)terms[i]).getATerm();
+        }
+        return new WrappedATermAppl(afun.getFactory().makeAppl(afun, args));
+    }
 
     @Override
     public boolean equals(Object second) {

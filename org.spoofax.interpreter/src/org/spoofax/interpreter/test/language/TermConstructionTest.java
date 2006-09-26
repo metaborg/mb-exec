@@ -36,13 +36,17 @@ public class TermConstructionTest extends AbstractLanguageTest {
         interpTest("term_constr_6", "(\"Pair\", [3, 4]))", "Pair(3,4)");
     }
 
-    public void testTermConstr7() {
+    public void testTermConstr6b() {
         interpTest("term_constr_6", 
                    "(1,[1, 2, 3, 4])",
                    "1");
     }
 
-    public void testTermConstr8() {
-        interpTest("term_constr_6", "(\"foo\", [])", "\"foo\"");
+    public void testTermConstr6c() {
+        interpTest("term_constr_6", "(\"foo\", [])", "foo");
+    }
+
+    public void testTermConstr6d() {
+        interpTest("term_constr_6", "(\"\\\"foo\\\"\", [])", "\"foo\"");
     }
 }

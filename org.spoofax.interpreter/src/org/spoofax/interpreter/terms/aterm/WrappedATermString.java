@@ -49,4 +49,8 @@ class WrappedATermString extends WrappedATerm implements IStrategoString {
         return value;
     }
 
+    @Override
+    public String toString() {
+        return value.getName();
+    }
 }
