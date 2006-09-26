@@ -13,25 +13,25 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
-import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_muli extends Primitive {
+public class SSL_mulr extends Primitive {
 
-    protected SSL_muli() {
-        super("SSL_muli", 0, 2);
+    protected SSL_mulr() {
+        super("SSL_mulr", 0, 2);
     }
     
     public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
         
-        if(!Tools.isTermInt(targs[0]))
+        if(!Tools.isTermReal(targs[0]))
             return false;
-        if(!Tools.isTermInt(targs[1]))
+        if(!Tools.isTermReal(targs[1]))
             return false;
 
-        IStrategoInt a = (IStrategoInt) targs[0];
-        IStrategoInt b = (IStrategoInt) targs[1];
-        env.setCurrent(env.getFactory().makeInt(a.getValue() * b.getValue()));
+        IStrategoReal a = (IStrategoReal) targs[0];
+        IStrategoReal b = (IStrategoReal) targs[1];
+        env.setCurrent(env.getFactory().makeReal(a.getValue() * b.getValue()));
         return true;
     }
 }

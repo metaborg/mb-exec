@@ -47,6 +47,7 @@ public class SSL {
         registry.put("SSL_gti", new SSL_gti());
         registry.put("SSL_gtr", new SSL_gtr());
         registry.put("SSL_muli", new SSL_muli());
+        registry.put("SSL_mulr", new SSL_muli());
         registry.put("SSL_mod", new SSL_mod());
         registry.put("SSL_int_to_string", new SSL_int_to_string());
         registry.put("SSL_explode_string", new SSL_explode_string());

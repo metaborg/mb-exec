@@ -38,7 +38,7 @@ public class ArithmeticTest extends AbstractLanguageTest {
     }
 
     public void testMulInt() {
-        interpTest("mul_int", factory.parseFromString("[2,3]"), factory.parseFromString("6"));
+        interpTest("mul_int", factory.parseFromString("(2, 3)"), factory.parseFromString("6"));
     }
 
     public void testSumOfIntList1() {
