@@ -92,15 +92,15 @@ public class CongruenceTest extends AbstractLanguageTest {
     }
 
     public void testWrapSplit1() {
-        interpTest("wrap_split_1", "2", "[2, 2]");
+        interpTest("wrap_split_1", "2", "(2, 2)");
     }
 
     public void testWrapSplit2() {
-        interpTest("wrap_split_2", "2", "[2, 3]");
+        interpTest("wrap_split_2", "2", "(2, 3)");
     }
 
     public void testWrapSplit3() {
-        interpTest("wrap_split_3", "2", "[3, 3]");
+        interpTest("wrap_split_3", "2", "(3, 3)");
     }
 
     public void testWrapSplit4() {
