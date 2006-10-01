@@ -9,6 +9,20 @@ package org.spoofax;
 
 public class NotImplementedException extends RuntimeException {
 
+    private final String message;
+    
+    public NotImplementedException() {
+        message = "Not Implemented";
+    }
+    
+    public NotImplementedException(String message) {
+        this.message = message;
+    }
+
     private static final long serialVersionUID = -1028814795329444374L;
 
+    @Override
+    public String toString() {
+        return message;
+    }
 }

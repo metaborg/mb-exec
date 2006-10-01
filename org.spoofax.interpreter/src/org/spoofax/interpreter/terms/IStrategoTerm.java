@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.terms;
 
+
 public interface IStrategoTerm {
 
     public static final int APPL = 1;
@@ -23,4 +24,6 @@ public interface IStrategoTerm {
     public int getTermType();
     
     public boolean match(IStrategoTerm second);
+    
+    public void prettyPrint(PrettyPrinter pp);
 }

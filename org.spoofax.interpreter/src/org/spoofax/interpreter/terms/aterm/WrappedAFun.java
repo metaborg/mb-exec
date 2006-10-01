@@ -11,6 +11,7 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.interpreter.terms.ITermFactory;
 
 import aterm.AFun;
 import aterm.ATerm;
@@ -23,14 +24,14 @@ public class WrappedAFun extends WrappedATerm implements IStrategoConstructor {
         this.afun = afun;
     }
     
-    public IStrategoAppl instantiate(IStrategoList terms) {
+    public IStrategoAppl instantiate(ITermFactory factory, IStrategoList terms) {
         ATerm[] args = new ATerm[terms.getSubtermCount()];
         for(int i = 0; i < terms.getSubtermCount(); i++)
             args[i] = ((WrappedATerm)terms.get(i)).getATerm();
         return new WrappedATermAppl(afun.getFactory().makeAppl(afun, args));
     }
     
-    public IStrategoAppl instantiate(IStrategoTerm... terms) {
+    public IStrategoAppl instantiate(ITermFactory factory, IStrategoTerm... terms) {
         ATerm[] args = new ATerm[terms.length];
         for(int i = 0; i < terms.length; i++) {
             args[i] = ((WrappedATerm)terms[i]).getATerm();

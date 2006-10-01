@@ -7,7 +7,9 @@
  */
 package org.spoofax.interpreter.terms.aterm;
 
+import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.PrettyPrinter;
 
 import aterm.ATerm;
 
@@ -18,4 +20,12 @@ public abstract class WrappedATerm implements IStrategoTerm {
     }
     
     abstract ATerm getATerm();
+    
+    public String prettyPrint() {
+         throw new NotImplementedException();
+    }
+    
+    public void prettyPrint(PrettyPrinter pp) {
+         throw new NotImplementedException();        
+    }
 }

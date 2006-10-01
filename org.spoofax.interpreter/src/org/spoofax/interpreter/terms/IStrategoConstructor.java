@@ -9,8 +9,8 @@ package org.spoofax.interpreter.terms;
 
 public interface IStrategoConstructor extends IStrategoTerm {
 
-    public IStrategoAppl instantiate(IStrategoTerm... kids);
-    public IStrategoAppl instantiate(IStrategoList kids);
+    public IStrategoAppl instantiate(ITermFactory factory, IStrategoTerm... kids);
+    public IStrategoAppl instantiate(ITermFactory factory, IStrategoList kids);
 
     public String getName();
     public int getArity();

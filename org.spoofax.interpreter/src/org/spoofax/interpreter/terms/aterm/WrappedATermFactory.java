@@ -80,11 +80,11 @@ public class WrappedATermFactory implements ITermFactory {
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
-        return ctr.instantiate(kids);
+        return ctr.instantiate(this, kids);
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... kids) {
-        return ctr.instantiate(kids);
+        return ctr.instantiate(this, kids);
     }
 
     public IStrategoConstructor makeConstructor(String name, int arity, boolean isQuoted) {

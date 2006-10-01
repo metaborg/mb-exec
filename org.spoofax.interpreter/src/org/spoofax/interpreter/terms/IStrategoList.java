@@ -10,7 +10,7 @@ package org.spoofax.interpreter.terms;
 
 public interface IStrategoList extends IStrategoTerm {
 
-    public IStrategoTerm get(int i);
+    public IStrategoTerm get(int index);
 
     public int size();
 
