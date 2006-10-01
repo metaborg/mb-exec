@@ -15,15 +15,19 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.ArrayAccess;
 import org.eclipse.jdt.core.dom.ArrayCreation;
 import org.eclipse.jdt.core.dom.ArrayInitializer;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.CastExpression;
+import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.Comment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ConditionalExpression;
 import org.eclipse.jdt.core.dom.Expression;
@@ -33,8 +37,13 @@ import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.Javadoc;
+import org.eclipse.jdt.core.dom.MemberRef;
+import org.eclipse.jdt.core.dom.MemberValuePair;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.MethodRef;
+import org.eclipse.jdt.core.dom.MethodRefParameter;
+import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.NullLiteral;
 import org.eclipse.jdt.core.dom.NumberLiteral;
@@ -47,13 +56,18 @@ import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.QualifiedType;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
+import org.eclipse.jdt.core.dom.TagElement;
+import org.eclipse.jdt.core.dom.TextElement;
 import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeLiteral;
+import org.eclipse.jdt.core.dom.TypeParameter;
+import org.eclipse.jdt.core.dom.VariableDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
@@ -172,8 +186,115 @@ public class WrappedECJFactory implements ITermFactory {
             return wrap((VariableDeclarationStatement) node);
         if(node instanceof VariableDeclarationFragment)
             return wrap((VariableDeclarationFragment) node);
+        if(node instanceof AnonymousClassDeclaration)
+            return wrap((AnonymousClassDeclaration) node);
+        if(node instanceof BodyDeclaration)
+            return wrap((BodyDeclaration) node);
+        if(node instanceof CatchClause)
+            return wrap((CatchClause) node);
+        if(node instanceof Comment) 
+            return wrap((Comment) node);
+        if(node instanceof MemberRef)
+            return wrap((MemberRef) node);
+        if(node instanceof MemberValuePair)
+            return wrap((MemberValuePair) node);
+        if(node instanceof MethodRef)
+            return wrap((MethodRef) node);
+        if(node instanceof MethodRefParameter)
+            return wrap((MethodRefParameter) node);
+        if(node instanceof Modifier)
+            return wrap((Modifier) node);
+        if(node instanceof PackageDeclaration)
+            return wrap((PackageDeclaration) node);
+        if(node instanceof Statement)
+            return wrapStatement((Statement) node);
+        if(node instanceof TagElement)
+            return wrap((TagElement) node);
+        if(node instanceof TextElement)
+            return wrap((TextElement) node);
+        if(node instanceof Type)
+            return wrap((Type) node);
+        if(node instanceof TypeParameter)
+            return wrap((TypeParameter) node);
+        if(node instanceof VariableDeclaration)
+            return wrap((VariableDeclaration) node);
         
         throw new NotImplementedException("" + node.getClass());
+    }
+
+    private static IStrategoTerm wrap(VariableDeclaration declaration) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(TypeParameter parameter) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(Type type) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(TextElement element) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(TagElement element) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrapStatement(Statement statement) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(Modifier modifier) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(MethodRefParameter parameter) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(MethodRef ref) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(MemberValuePair pair) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(MemberRef ref) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(Comment comment) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(CatchClause clause) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(BodyDeclaration declaration) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(AnonymousClassDeclaration declaration) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
     }
 
     private static IStrategoTerm wrap(VariableDeclarationFragment fragment) {
@@ -319,8 +440,10 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     private static IStrategoTerm wrap(VariableDeclarationExpression expression) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(expression == null)
+            return None.INSTANCE;
+        else
+            return new WrappedVariableDeclarationExpression(expression);
     }
 
     private static IStrategoTerm wrap(TypeLiteral literal) {
@@ -410,13 +533,17 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     private static IStrategoTerm wrap(FieldAccess access) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(access == null)
+            return None.INSTANCE;
+        else
+            return new WrappedFieldAccess(access);
     }
 
     private static IStrategoTerm wrap(ConditionalExpression expression) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(expression == null)
+            return None.INSTANCE;
+        else
+            return new WrappedConditionalExpression(expression);
     }
 
     private static IStrategoTerm wrap(ClassInstanceCreation creation) {
@@ -504,12 +631,16 @@ public class WrappedECJFactory implements ITermFactory {
             return None.INSTANCE;
         if(type.getPrimitiveTypeCode() == PrimitiveType.INT)
             return new WrappedIntType(type);
+        if(type.getPrimitiveTypeCode() == PrimitiveType.BOOLEAN)
+            return new WrappedBooleanType(type);
         
         throw new NotImplementedException();
     }
 
     private static IStrategoTerm wrap(ParameterizedType type) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(type == null)
+            return None.INSTANCE;
+        else
+            return new WrappedParametrizedType(type); 
     }
 }
