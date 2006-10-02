@@ -9,7 +9,6 @@ package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.FieldAccess;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -22,13 +21,14 @@ public class WrappedFieldAccess extends WrappedAppl {
         super(CTOR);
         this.wrappee = wrappee;
     }
+    
     @Override
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
             return WrappedECJFactory.wrapExpression(wrappee.getExpression());
         case 1:
-            return WrappedECJFactory.wrapName(wrappee.getName());
+            return WrappedECJFactory.wrap(wrappee.getName());
         }
         
         throw new ArrayIndexOutOfBoundsException();
@@ -38,10 +38,4 @@ public class WrappedFieldAccess extends WrappedAppl {
     public ASTNode getWrappee() {
         return wrappee;
     }
-
-    public IStrategoTerm[] getArguments() {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
-    }
-
 }

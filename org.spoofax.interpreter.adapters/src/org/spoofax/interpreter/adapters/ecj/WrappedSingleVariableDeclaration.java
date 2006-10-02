@@ -9,7 +9,6 @@ package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -31,7 +30,7 @@ public class WrappedSingleVariableDeclaration extends WrappedAppl {
         case 1:
             return WrappedECJFactory.wrapType(wrappee.getType());
         case 2:
-            return WrappedECJFactory.wrapName(wrappee.getName());
+            return WrappedECJFactory.wrap(wrappee.getName());
         case 3:
             return WrappedECJFactory.wrapExpression(wrappee.getInitializer());
         }
@@ -42,9 +41,4 @@ public class WrappedSingleVariableDeclaration extends WrappedAppl {
     public ASTNode getWrappee() {
         return wrappee;
     }
-
-    public IStrategoTerm[] getArguments() {
-        throw new NotImplementedException();
-    }
-
 }

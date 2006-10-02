@@ -35,6 +35,15 @@ public abstract class WrappedAppl extends WrappedASTNode implements IStrategoApp
         return constructor.getArity();
     }
  
+
+    public IStrategoTerm[] getArguments() {
+        IStrategoTerm[] r = new IStrategoTerm[constructor.getArity()];
+        for(int i = 0; i < r.length; i++) {
+            r[i] = getSubterm(i);
+        }
+        return r;
+    }
+    
     @Override
     public boolean match(IStrategoTerm second) {
         throw new NotImplementedException();

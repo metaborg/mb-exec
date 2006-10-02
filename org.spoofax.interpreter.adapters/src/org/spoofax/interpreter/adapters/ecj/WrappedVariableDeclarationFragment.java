@@ -27,7 +27,7 @@ public class WrappedVariableDeclarationFragment extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapName(wrappee.getName());
+            return WrappedECJFactory.wrap(wrappee.getName());
         case 1:
             return WrappedECJFactory.wrap(wrappee.getExtraDimensions());
         case 2:

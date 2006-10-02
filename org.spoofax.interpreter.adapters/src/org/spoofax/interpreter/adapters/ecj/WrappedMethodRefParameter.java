@@ -8,28 +8,28 @@
 package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ParameterizedType;
-import org.spoofax.NotImplementedException;
+import org.eclipse.jdt.core.dom.MethodRefParameter;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedParametrizedType extends WrappedAppl {
+public class WrappedMethodRefParameter extends WrappedAppl {
 
-    private final ParameterizedType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ParameterizedType", 2);
+    private final MethodRefParameter wrappee;
+    private final static IStrategoConstructor CTOR = new ASTCtor("MethodRefParameter", 2);
     
-    
-    WrappedParametrizedType(ParameterizedType wrappee) {
+    WrappedMethodRefParameter(MethodRefParameter wrappee) {
         super(CTOR);
         this.wrappee = wrappee;
     }
+    
     @Override
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
             return WrappedECJFactory.wrapType(wrappee.getType());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.typeArguments());
+            return WrappedECJFactory.wrap(wrappee.getName());
+            // FIXME Varags
         }
         
         throw new ArrayIndexOutOfBoundsException();
@@ -39,10 +39,4 @@ public class WrappedParametrizedType extends WrappedAppl {
     public ASTNode getWrappee() {
         return wrappee;
     }
-
-    public IStrategoTerm[] getArguments() {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
-    }
-
 }

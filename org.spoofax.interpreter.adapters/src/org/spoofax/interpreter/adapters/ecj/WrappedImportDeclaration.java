@@ -33,12 +33,6 @@ public class WrappedImportDeclaration extends WrappedAppl {
         return 1;
     }
 
-    public IStrategoTerm[] getArguments() {
-        IStrategoTerm[] r = new IStrategoTerm[1];
-        r[0] = getSubterm(0);
-        return r;
-    }
-
     @Override
     public ASTNode getWrappee() {
         return wrappee;

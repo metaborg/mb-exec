@@ -35,14 +35,6 @@ public class WrappedCompilationUnit extends WrappedAppl {
         throw new ArrayIndexOutOfBoundsException();
     }
 
-    public IStrategoTerm[] getArguments() {
-        IStrategoTerm[] r = new IStrategoTerm[3];
-        r[0] = getSubterm(0);
-        r[1] = getSubterm(1);
-        r[2] = getSubterm(2);
-        return r;
-    }
-
     @Override
     public ASTNode getWrappee() {
         return wrappee;

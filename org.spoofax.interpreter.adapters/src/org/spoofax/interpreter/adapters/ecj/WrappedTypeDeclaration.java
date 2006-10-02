@@ -28,7 +28,7 @@ public class WrappedTypeDeclaration extends WrappedAppl {
         case 0:
             return WrappedECJFactory.wrap(wrappee.getModifiers());
         case 1:
-            return WrappedECJFactory.wrapName(wrappee.getName());
+            return WrappedECJFactory.wrap(wrappee.getName());
         case 2:
             return WrappedECJFactory.wrap(wrappee.typeParameters());
         case 3:
@@ -43,13 +43,7 @@ public class WrappedTypeDeclaration extends WrappedAppl {
 
     @Override
     public ASTNode getWrappee() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public IStrategoTerm[] getArguments() {
-        // TODO Auto-generated method stub
-        return null;
+        return wrappee;
     }
 
 }

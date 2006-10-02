@@ -33,8 +33,4 @@ public class WrappedArrayType extends WrappedAppl {
         return wrappee;
     }
 
-    public IStrategoTerm[] getArguments() {
-        throw new NotImplementedException();
-    }
-
 }

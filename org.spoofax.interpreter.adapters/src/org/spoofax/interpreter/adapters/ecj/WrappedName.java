@@ -34,10 +34,4 @@ public class WrappedName extends WrappedAppl {
     public ASTNode getWrappee() {
         return wrappee;
     }
-
-    public IStrategoTerm[] getArguments() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

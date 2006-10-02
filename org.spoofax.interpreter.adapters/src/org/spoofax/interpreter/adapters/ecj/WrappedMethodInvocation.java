@@ -9,7 +9,6 @@ package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -29,7 +28,7 @@ public class WrappedMethodInvocation extends WrappedAppl {
         case 0:
             return WrappedECJFactory.wrapExpression(wrappee.getExpression());
         case 1:
-            return WrappedECJFactory.wrapName(wrappee.getName());
+            return WrappedECJFactory.wrap(wrappee.getName());
         case 2:
             return WrappedECJFactory.wrap(wrappee.typeArguments());
         case 3:
@@ -43,10 +42,4 @@ public class WrappedMethodInvocation extends WrappedAppl {
     public ASTNode getWrappee() {
         return wrappee;
     }
-
-    public IStrategoTerm[] getArguments() {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
-    }
-
 }

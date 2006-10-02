@@ -31,9 +31,4 @@ public class WrappedIntType extends WrappedAppl {
     public ASTNode getWrappee() {
         return wrappee;
     }
-
-    public IStrategoTerm[] getArguments() {
-        return null;
-    }
-
 }

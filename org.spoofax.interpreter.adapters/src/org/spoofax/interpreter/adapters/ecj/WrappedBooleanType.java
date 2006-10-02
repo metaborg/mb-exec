@@ -9,7 +9,6 @@ package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.PrimitiveType;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -22,6 +21,7 @@ public class WrappedBooleanType extends WrappedAppl {
         super(CTOR);
         this.wrappee = wrappee;
     }
+    
     @Override
     public IStrategoTerm getSubterm(int index) {
         return null;
@@ -30,11 +30,6 @@ public class WrappedBooleanType extends WrappedAppl {
     @Override
     public ASTNode getWrappee() {
         return wrappee;
-    }
-
-    public IStrategoTerm[] getArguments() {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
     }
 
 }
