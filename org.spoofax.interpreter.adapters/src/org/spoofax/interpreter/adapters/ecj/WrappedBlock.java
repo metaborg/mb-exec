@@ -25,7 +25,7 @@ public class WrappedBlock extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrap(wrappee.statements());
+            return ECJFactory.wrap(wrappee.statements());
         throw new ArrayIndexOutOfBoundsException();
     }
 

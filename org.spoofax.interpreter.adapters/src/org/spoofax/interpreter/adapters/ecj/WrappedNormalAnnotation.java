@@ -26,9 +26,9 @@ public class WrappedNormalAnnotation extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapName(wrappee.getTypeName());
+            return ECJFactory.wrapName(wrappee.getTypeName());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.values());
+            return ECJFactory.wrap(wrappee.values());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

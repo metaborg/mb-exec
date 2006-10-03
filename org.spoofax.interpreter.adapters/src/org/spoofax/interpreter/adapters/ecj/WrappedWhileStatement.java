@@ -27,9 +27,9 @@ public class WrappedWhileStatement extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0: 
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         case 1:
-            return WrappedECJFactory.wrapStatement(wrappee.getBody());
+            return ECJFactory.wrapStatement(wrappee.getBody());
         }
         
         throw new ArrayIndexOutOfBoundsException();
@@ -38,11 +38,6 @@ public class WrappedWhileStatement extends WrappedAppl {
     @Override
     public ASTNode getWrappee() {
         return wrappee;
-    }
-
-    public IStrategoTerm[] getArguments() {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
     }
 
 }

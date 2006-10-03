@@ -26,11 +26,11 @@ public class WrappedEnhancedForStatement extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.getParameter());
+            return ECJFactory.wrap(wrappee.getParameter());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         case 2:
-            return WrappedECJFactory.wrapStatement(wrappee.getBody());
+            return ECJFactory.wrapStatement(wrappee.getBody());
         
         }
         

@@ -1,7 +1,7 @@
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.spoofax.interpreter.adapters.ecj.WrappedECJFactory;
+import org.spoofax.interpreter.adapters.ecj.ECJFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.PrettyPrinter;
 
@@ -20,7 +20,7 @@ public class SimpleTest {
         parser.setSource("import java.util.List;\nclass X { static void main(String[] args) { int x = 1 + 0; System.out.println(\"Hello, World!\"); } }\n".toCharArray());
         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
         System.out.println(cu);
-        WrappedECJFactory wef = new WrappedECJFactory();
+        ECJFactory wef = new ECJFactory();
         IStrategoTerm t = wef.parseFromTree(cu);
         PrettyPrinter pp = new PrettyPrinter();
         t.prettyPrint(pp);

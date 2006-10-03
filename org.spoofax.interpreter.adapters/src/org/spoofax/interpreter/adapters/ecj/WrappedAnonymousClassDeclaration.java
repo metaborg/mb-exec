@@ -25,7 +25,7 @@ public class WrappedAnonymousClassDeclaration extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrap(wrappee.bodyDeclarations());
+            return ECJFactory.wrap(wrappee.bodyDeclarations());
         
         throw new ArrayIndexOutOfBoundsException();
     }

@@ -27,11 +27,11 @@ public class WrappedInfixExpression extends WrappedAppl {
         switch(index) {
         case 0:
             // FIXME should probably convert to Plus/Minus/Divide/Times/...
-            return WrappedECJFactory.wrap(wrappee.getOperator().toString());
+            return ECJFactory.wrap(wrappee.getOperator().toString());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getLeftOperand());
+            return ECJFactory.wrapExpression(wrappee.getLeftOperand());
         case 2:
-            return WrappedECJFactory.wrapExpression(wrappee.getRightOperand());
+            return ECJFactory.wrapExpression(wrappee.getRightOperand());
             
         }
         

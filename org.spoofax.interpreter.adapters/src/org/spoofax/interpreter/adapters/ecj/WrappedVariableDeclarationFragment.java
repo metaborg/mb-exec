@@ -9,7 +9,6 @@ package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -27,11 +26,11 @@ public class WrappedVariableDeclarationFragment extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.getName());
+            return ECJFactory.wrap(wrappee.getName());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.getExtraDimensions());
+            return ECJFactory.wrap(wrappee.getExtraDimensions());
         case 2:
-            return WrappedECJFactory.wrapExpression(wrappee.getInitializer());
+            return ECJFactory.wrapExpression(wrappee.getInitializer());
         
         }
         throw new ArrayIndexOutOfBoundsException();
@@ -41,10 +40,4 @@ public class WrappedVariableDeclarationFragment extends WrappedAppl {
     public ASTNode getWrappee() {
         return wrappee;
     }
-
-    public IStrategoTerm[] getArguments() {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
-    }
-
 }

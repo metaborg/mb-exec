@@ -26,9 +26,9 @@ public class WrappedCastExpression extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapType(wrappee.getType());
+            return ECJFactory.wrapType(wrappee.getType());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         }
          
         throw new ArrayIndexOutOfBoundsException();

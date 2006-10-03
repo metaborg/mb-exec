@@ -26,11 +26,11 @@ public class WrappedAnnotationTypeDeclaration extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.modifiers());
+            return ECJFactory.wrap(wrappee.modifiers());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.getName());
+            return ECJFactory.wrap(wrappee.getName());
         case 2:
-            return WrappedECJFactory.wrap(wrappee.bodyDeclarations());
+            return ECJFactory.wrap(wrappee.bodyDeclarations());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

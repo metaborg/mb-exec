@@ -26,11 +26,11 @@ public class WrappedSuperConstructorInvocation extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.typeArguments());
+            return ECJFactory.wrap(wrappee.typeArguments());
         case 2:
-            return WrappedECJFactory.wrap(wrappee.arguments());
+            return ECJFactory.wrap(wrappee.arguments());
         }
         
         throw new ArrayIndexOutOfBoundsException();

@@ -9,14 +9,14 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
-import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class SSL_printnl extends Primitive {
 
@@ -26,8 +26,11 @@ public class SSL_printnl extends Primitive {
 
     public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        // FIXME: Possibly erroneous
-        String output = Tools.javaString(targs[0]);
+        // FIXME this is extremely heavy handed
+
+        PrettyPrinter pp = new PrettyPrinter();
+        targs[0].prettyPrint(pp);
+        String output = pp.getString();
 
         IStrategoList l = (IStrategoList) targs[1]; 
 
@@ -43,7 +46,9 @@ public class SSL_printnl extends Primitive {
                     sb.append(Tools.javaString(t));
                 continue;
             }
-            sb.append(t.toString());
+            PrettyPrinter p = new PrettyPrinter();
+            t.prettyPrint(p);
+            sb.append(p.getString());
         }
 
         
@@ -54,7 +59,6 @@ public class SSL_printnl extends Primitive {
         else
             throw new InterpreterException("Unknown output : " + output);
         
-        throw new NotImplementedException();
-//        return true;
+        return true;
     }
 }

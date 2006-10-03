@@ -25,7 +25,7 @@ public class WrappedStringLiteral extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrap(wrappee.getLiteralValue());
+            return ECJFactory.wrap(wrappee.getLiteralValue());
         
         throw new ArrayIndexOutOfBoundsException();
     }

@@ -25,7 +25,7 @@ public class WrappedJavadoc extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrap(wrappee.tags());
+            return ECJFactory.wrap(wrappee.tags());
         
         throw new ArrayIndexOutOfBoundsException();
     }

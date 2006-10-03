@@ -26,11 +26,11 @@ public class WrappedConditionalExpression extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0: 
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getThenExpression());
+            return ECJFactory.wrapExpression(wrappee.getThenExpression());
         case 2:
-            return WrappedECJFactory.wrapExpression(wrappee.getElseExpression());
+            return ECJFactory.wrapExpression(wrappee.getElseExpression());
         }
         
         throw new ArrayIndexOutOfBoundsException();

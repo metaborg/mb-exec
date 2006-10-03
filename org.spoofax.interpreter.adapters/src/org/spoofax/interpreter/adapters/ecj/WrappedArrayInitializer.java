@@ -25,7 +25,7 @@ public class WrappedArrayInitializer extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrap(wrappee.expressions());
+            return ECJFactory.wrap(wrappee.expressions());
         
         throw new ArrayIndexOutOfBoundsException();
     }

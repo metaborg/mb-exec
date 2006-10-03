@@ -25,7 +25,7 @@ public class WrappedBreakStatement extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrapName(wrappee.getLabel());
+            return ECJFactory.wrapName(wrappee.getLabel());
         
         throw new ArrayIndexOutOfBoundsException();
     }

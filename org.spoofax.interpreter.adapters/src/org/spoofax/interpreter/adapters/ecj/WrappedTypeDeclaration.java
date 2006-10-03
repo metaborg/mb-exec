@@ -26,17 +26,17 @@ public class WrappedTypeDeclaration extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.getModifiers());
+            return ECJFactory.wrap(wrappee.getModifiers());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.getName());
+            return ECJFactory.wrap(wrappee.getName());
         case 2:
-            return WrappedECJFactory.wrap(wrappee.typeParameters());
+            return ECJFactory.wrap(wrappee.typeParameters());
         case 3:
-            return WrappedECJFactory.wrapType(wrappee.getSuperclassType());
+            return ECJFactory.wrapType(wrappee.getSuperclassType());
         case 4:
-            return WrappedECJFactory.wrap(wrappee.superInterfaceTypes());
+            return ECJFactory.wrap(wrappee.superInterfaceTypes());
         case 5:
-            return WrappedECJFactory.wrap(wrappee.bodyDeclarations());
+            return ECJFactory.wrap(wrappee.bodyDeclarations());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

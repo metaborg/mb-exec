@@ -26,13 +26,13 @@ public class WrappedForStatement extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.initializers());
+            return ECJFactory.wrap(wrappee.initializers());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         case 2:
-            return WrappedECJFactory.wrap(wrappee.updaters());
+            return ECJFactory.wrap(wrappee.updaters());
         case 3:
-            return WrappedECJFactory.wrapStatement(wrappee.getBody());
+            return ECJFactory.wrapStatement(wrappee.getBody());
         }
         
         throw new ArrayIndexOutOfBoundsException();

@@ -26,11 +26,11 @@ public class WrappedIfStatement extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         case 1:
-            return WrappedECJFactory.wrapStatement(wrappee.getThenStatement());
+            return ECJFactory.wrapStatement(wrappee.getThenStatement());
         case 2:
-            return WrappedECJFactory.wrapStatement(wrappee.getElseStatement());
+            return ECJFactory.wrapStatement(wrappee.getElseStatement());
         }
         
         throw new ArrayIndexOutOfBoundsException();

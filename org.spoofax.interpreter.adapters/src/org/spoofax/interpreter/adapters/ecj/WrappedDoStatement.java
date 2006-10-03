@@ -26,9 +26,9 @@ public class WrappedDoStatement extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapStatement(wrappee.getBody());
+            return ECJFactory.wrapStatement(wrappee.getBody());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         }
         
         throw new ArrayIndexOutOfBoundsException();

@@ -38,11 +38,14 @@ public class WrappedList implements IStrategoList {
     }
 
     public IStrategoTerm head() {
-        return WrappedECJFactory.genericWrap((ASTNode)wrappee.get(0));
+        return ECJFactory.genericWrap((ASTNode)wrappee.get(0));
     }
 
     public IStrategoList insert(IStrategoTerm prefix) {
-        throw new NotImplementedException();
+        List r = new ArrayList();
+        r.add(prefix);
+        r.addAll(wrappee);
+        return new WrappedList(r);
     }
 
     public int size() {
@@ -54,7 +57,13 @@ public class WrappedList implements IStrategoList {
     }
 
     public IStrategoTerm getSubterm(int index) {
-        return WrappedECJFactory.genericWrap((ASTNode)wrappee.get(index));
+        Object o = wrappee.get(index);
+        if(o instanceof IStrategoTerm)
+            return (IStrategoTerm)o;
+        if(o instanceof ASTNode)
+            return ECJFactory.genericWrap((ASTNode)o);
+        
+        throw new NotImplementedException("Unsupported type : " + o.getClass());
     }
 
     public int getSubtermCount() {

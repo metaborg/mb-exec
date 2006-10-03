@@ -26,9 +26,9 @@ public class WrappedDivide extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapExpression(wrappee.getLeftOperand());
+            return ECJFactory.wrapExpression(wrappee.getLeftOperand());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getRightOperand());
+            return ECJFactory.wrapExpression(wrappee.getRightOperand());
         }
         
         throw new ArrayIndexOutOfBoundsException();

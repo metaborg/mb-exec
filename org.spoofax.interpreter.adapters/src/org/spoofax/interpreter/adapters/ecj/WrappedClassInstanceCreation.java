@@ -26,13 +26,13 @@ public class WrappedClassInstanceCreation extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         case 1:
-            return WrappedECJFactory.wrapType(wrappee.getType());
+            return ECJFactory.wrapType(wrappee.getType());
         case 2:
-            return WrappedECJFactory.wrap(wrappee.getAnonymousClassDeclaration());
+            return ECJFactory.wrap(wrappee.getAnonymousClassDeclaration());
         case 3:
-            return WrappedECJFactory.wrap(wrappee.arguments());
+            return ECJFactory.wrap(wrappee.arguments());
         }
         
         throw new ArrayIndexOutOfBoundsException();

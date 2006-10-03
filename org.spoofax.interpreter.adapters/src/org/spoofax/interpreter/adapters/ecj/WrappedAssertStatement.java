@@ -26,9 +26,9 @@ public class WrappedAssertStatement extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getMessage());
+            return ECJFactory.wrapExpression(wrappee.getMessage());
         }
         
         throw new ArrayIndexOutOfBoundsException();

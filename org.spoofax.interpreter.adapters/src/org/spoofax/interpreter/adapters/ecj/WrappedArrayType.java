@@ -26,11 +26,11 @@ public class WrappedArrayType extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapType(wrappee.getComponentType());
+            return ECJFactory.wrapType(wrappee.getComponentType());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.getDimensions());
+            return ECJFactory.wrap(wrappee.getDimensions());
         case 2:
-            return WrappedECJFactory.wrapType(wrappee.getElementType());
+            return ECJFactory.wrapType(wrappee.getElementType());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

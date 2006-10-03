@@ -26,9 +26,9 @@ public class WrappedSingleMemberAnnotation extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapName(wrappee.getTypeName());
+            return ECJFactory.wrapName(wrappee.getTypeName());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getValue());
+            return ECJFactory.wrapExpression(wrappee.getValue());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

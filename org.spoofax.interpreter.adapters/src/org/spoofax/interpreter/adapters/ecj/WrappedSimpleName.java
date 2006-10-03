@@ -25,7 +25,7 @@ public class WrappedSimpleName extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrap(wrappee.getIdentifier());
+            return ECJFactory.wrap(wrappee.getIdentifier());
         throw new ArrayIndexOutOfBoundsException();
     }
 

@@ -26,9 +26,9 @@ public class WrappedPrefixExpression extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.getOperator());
+            return ECJFactory.wrap(wrappee.getOperator());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getOperand());
+            return ECJFactory.wrapExpression(wrappee.getOperand());
         }
         
         throw new ArrayIndexOutOfBoundsException();

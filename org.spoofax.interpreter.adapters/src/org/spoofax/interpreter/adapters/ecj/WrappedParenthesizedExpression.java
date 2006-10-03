@@ -25,7 +25,7 @@ public class WrappedParenthesizedExpression extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         
         throw new ArrayIndexOutOfBoundsException();
     }

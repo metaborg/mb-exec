@@ -26,11 +26,11 @@ public class WrappedPackageDeclaration extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.getJavadoc());
+            return ECJFactory.wrap(wrappee.getJavadoc());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.annotations());
+            return ECJFactory.wrap(wrappee.annotations());
         case 2:
-            return WrappedECJFactory.wrapName(wrappee.getName());
+            return ECJFactory.wrapName(wrappee.getName());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

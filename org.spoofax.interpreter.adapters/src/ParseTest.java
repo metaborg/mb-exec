@@ -7,7 +7,7 @@ import java.io.IOException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.spoofax.interpreter.adapters.ecj.WrappedECJFactory;
+import org.spoofax.interpreter.adapters.ecj.ECJFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.PrettyPrinter;
 
@@ -40,7 +40,7 @@ public class ParseTest {
         parser.setSource(getBytes(file));
         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
         System.out.println(cu);
-        WrappedECJFactory wef = new WrappedECJFactory();
+        ECJFactory wef = new ECJFactory();
         IStrategoTerm t = wef.parseFromTree(cu);
         PrettyPrinter pp = new PrettyPrinter();
         t.prettyPrint(pp);

@@ -26,13 +26,13 @@ public class WrappedEnumConstantDeclaration extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.modifiers());
+            return ECJFactory.wrap(wrappee.modifiers());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.getName());
+            return ECJFactory.wrap(wrappee.getName());
         case 2:
-            return WrappedECJFactory.wrap(wrappee.arguments());
+            return ECJFactory.wrap(wrappee.arguments());
         case 3:
-            return WrappedECJFactory.wrap(wrappee.getAnonymousClassDeclaration());
+            return ECJFactory.wrap(wrappee.getAnonymousClassDeclaration());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

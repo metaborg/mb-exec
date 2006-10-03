@@ -27,7 +27,7 @@ public class WrappedMarkerAnnotation extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapName(wrappee.getTypeName());
+            return ECJFactory.wrapName(wrappee.getTypeName());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

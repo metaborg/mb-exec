@@ -26,11 +26,11 @@ public class WrappedMethodRef extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.getName());
+            return ECJFactory.wrap(wrappee.getName());
         case 1:
-            return WrappedECJFactory.wrapName(wrappee.getQualifier());
+            return ECJFactory.wrapName(wrappee.getQualifier());
         case 2:
-            return WrappedECJFactory.wrap(wrappee.parameters());
+            return ECJFactory.wrap(wrappee.parameters());
         }
         
         throw new ArrayIndexOutOfBoundsException();

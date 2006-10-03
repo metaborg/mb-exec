@@ -26,7 +26,7 @@ public class WrappedBooleanLiteral extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
             // FIXME Translate to True/False 
-            return WrappedECJFactory.wrap(wrappee.booleanValue() ? 1 : 0);
+            return ECJFactory.wrap(wrappee.booleanValue() ? 1 : 0);
         throw new ArrayIndexOutOfBoundsException();
     }
 

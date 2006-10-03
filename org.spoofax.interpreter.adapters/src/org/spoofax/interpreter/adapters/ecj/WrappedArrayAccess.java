@@ -26,9 +26,9 @@ public class WrappedArrayAccess extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapExpression(wrappee.getArray());
+            return ECJFactory.wrapExpression(wrappee.getArray());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getIndex());
+            return ECJFactory.wrapExpression(wrappee.getIndex());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

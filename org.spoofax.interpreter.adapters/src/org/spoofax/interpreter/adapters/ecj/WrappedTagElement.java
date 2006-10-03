@@ -28,9 +28,9 @@ public class WrappedTagElement extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.getTagName());
+            return ECJFactory.wrap(wrappee.getTagName());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.fragments());
+            return ECJFactory.wrap(wrappee.fragments());
         }
         
         throw new ArrayIndexOutOfBoundsException();

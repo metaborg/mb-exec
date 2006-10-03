@@ -26,9 +26,9 @@ public class WrappedMethodRefParameter extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapType(wrappee.getType());
+            return ECJFactory.wrapType(wrappee.getType());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.getName());
+            return ECJFactory.wrap(wrappee.getName());
             // FIXME Varags
         }
         

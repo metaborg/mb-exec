@@ -25,7 +25,7 @@ public class WrappedTypeDeclarationStatement extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrapTypeDecl(wrappee.getDeclaration());
+            return ECJFactory.wrapTypeDecl(wrappee.getDeclaration());
         
         throw new ArrayIndexOutOfBoundsException();
     }

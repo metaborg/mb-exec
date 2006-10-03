@@ -26,11 +26,11 @@ public class WrappedTryStatement extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.getBody());
+            return ECJFactory.wrap(wrappee.getBody());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.catchClauses());
+            return ECJFactory.wrap(wrappee.catchClauses());
         case 2:
-            return WrappedECJFactory.wrap(wrappee.getFinally());
+            return ECJFactory.wrap(wrappee.getFinally());
         }
         
         throw new ArrayIndexOutOfBoundsException();

@@ -34,11 +34,15 @@ public class ASTCtor implements IStrategoConstructor {
     }
 
     public IStrategoAppl instantiate(ITermFactory factory, IStrategoTerm... kids) {
-        throw new NotImplementedException();
+        return new WrappedGenericAppl(this, kids);
     }
 
     public IStrategoAppl instantiate(ITermFactory factory, IStrategoList kids) {
-        throw new NotImplementedException();
+        IStrategoTerm[] children = new IStrategoTerm[kids.size()];
+        for(int i = 0; i < children.length; i++) 
+            children[i] = kids.get(i); 
+        return new WrappedGenericAppl(this, children); 
+        //throw new NotImplementedException();
     }
 
     public IStrategoTerm getSubterm(int index) {

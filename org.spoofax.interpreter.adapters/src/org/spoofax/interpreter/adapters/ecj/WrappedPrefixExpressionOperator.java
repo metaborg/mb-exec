@@ -29,17 +29,17 @@ public class WrappedPrefixExpressionOperator extends WrappedAppl {
         if(index == 0) {
             // FIXME use constants
             if(wrappee == Operator.COMPLEMENT)
-                return WrappedECJFactory.wrap("~");
+                return ECJFactory.wrap("~");
             if(wrappee == Operator.DECREMENT)
-                return WrappedECJFactory.wrap("--");
+                return ECJFactory.wrap("--");
             if(wrappee == Operator.INCREMENT)
-                return WrappedECJFactory.wrap("++");
+                return ECJFactory.wrap("++");
             if(wrappee == Operator.MINUS)
-                return WrappedECJFactory.wrap("-");
+                return ECJFactory.wrap("-");
             if(wrappee == Operator.NOT)
-                return WrappedECJFactory.wrap("!");
+                return ECJFactory.wrap("!");
             if(wrappee == Operator.PLUS)
-                return WrappedECJFactory.wrap("+");
+                return ECJFactory.wrap("+");
             else
                 throw new NotImplementedException();
         }

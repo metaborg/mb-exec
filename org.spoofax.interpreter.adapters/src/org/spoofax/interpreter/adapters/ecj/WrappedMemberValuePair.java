@@ -26,9 +26,9 @@ public class WrappedMemberValuePair extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            WrappedECJFactory.wrap(wrappee.getName());
+            ECJFactory.wrap(wrappee.getName());
         case 1:
-            WrappedECJFactory.wrapExpression(wrappee.getValue());
+            ECJFactory.wrapExpression(wrappee.getValue());
         }
         
         throw new ArrayIndexOutOfBoundsException();

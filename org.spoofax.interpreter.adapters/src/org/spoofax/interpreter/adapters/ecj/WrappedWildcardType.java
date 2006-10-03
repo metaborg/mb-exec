@@ -27,7 +27,7 @@ public class WrappedWildcardType extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrapType(wrappee.getBound());
+            return ECJFactory.wrapType(wrappee.getBound());
         
         throw new ArrayIndexOutOfBoundsException();
     }
@@ -35,11 +35,6 @@ public class WrappedWildcardType extends WrappedAppl {
     @Override
     public ASTNode getWrappee() {
         return wrappee;
-    }
-
-    public IStrategoTerm[] getArguments() {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
     }
 
 }

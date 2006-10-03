@@ -31,23 +31,23 @@ public class WrappedPrimitiveType extends WrappedAppl {
         if(index == 0) {
             Code code = wrappee.getPrimitiveTypeCode();
             if(code == PrimitiveType.DOUBLE)
-                return WrappedECJFactory.wrap("double");
+                return ECJFactory.wrap("double");
             if(code == PrimitiveType.FLOAT)
-                return WrappedECJFactory.wrap("float");
+                return ECJFactory.wrap("float");
             if(code == PrimitiveType.INT)
-                return WrappedECJFactory.wrap("int");
+                return ECJFactory.wrap("int");
             if(code == PrimitiveType.BYTE)
-                return WrappedECJFactory.wrap("byte");
+                return ECJFactory.wrap("byte");
             if(code == PrimitiveType.BOOLEAN)
-                return WrappedECJFactory.wrap("boolean");
+                return ECJFactory.wrap("boolean");
             if(code == PrimitiveType.CHAR)
-                return WrappedECJFactory.wrap("char");
+                return ECJFactory.wrap("char");
             if(code == PrimitiveType.LONG)
-                return WrappedECJFactory.wrap("long");
+                return ECJFactory.wrap("long");
             if(code == PrimitiveType.SHORT)
-                return WrappedECJFactory.wrap("short");
+                return ECJFactory.wrap("short");
             if(code == PrimitiveType.VOID)
-                return WrappedECJFactory.wrap("void");
+                return ECJFactory.wrap("void");
             else
                 throw new NotImplementedException("Unknown primitive type: " + code.getClass() + " " + code.toString());
         }

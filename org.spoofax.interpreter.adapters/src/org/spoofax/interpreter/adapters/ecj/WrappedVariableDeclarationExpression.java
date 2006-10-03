@@ -27,11 +27,11 @@ public class WrappedVariableDeclarationExpression extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.modifiers());
+            return ECJFactory.wrap(wrappee.modifiers());
         case 1:
-            return WrappedECJFactory.wrapType(wrappee.getType());
+            return ECJFactory.wrapType(wrappee.getType());
         case 2:
-            return WrappedECJFactory.wrap(wrappee.fragments());
+            return ECJFactory.wrap(wrappee.fragments());
         }
         
         throw new ArrayIndexOutOfBoundsException();
@@ -40,11 +40,6 @@ public class WrappedVariableDeclarationExpression extends WrappedAppl {
     @Override
     public ASTNode getWrappee() {
         return wrappee;
-    }
-
-    public IStrategoTerm[] getArguments() {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
     }
 
 }

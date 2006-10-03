@@ -10,7 +10,6 @@ package org.spoofax.interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.spoofax.interpreter.adapters.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.stratego.DebugUtil;
 import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
@@ -35,12 +34,14 @@ public class Context implements IContext {
     private StrategoSignature strategoSignature;
     
     private ITermFactory factory;
+    private ITermFactory programFactory;
 
-    public Context() {
-        factory = new WrappedATermFactory();
+    public Context(ITermFactory factory, ITermFactory programFactory) {
+        this.programFactory =  programFactory;
+        this.factory = factory;
         opdecls = new HashMap<String, OpDecl>();
         varScope = new VarScope(null);
-        strategoSignature = new StrategoSignature(factory);
+        strategoSignature = new StrategoSignature(programFactory);
     }
 
     public IStrategoTerm current() {
@@ -147,5 +148,9 @@ public class Context implements IContext {
 
     public StrategoSignature getStrategoSignature() {
         return strategoSignature;
+    }
+
+    public ITermFactory getProgramFactory() {
+        return programFactory;
     }
 }

@@ -27,9 +27,9 @@ public class WrappedTypeParameter extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.getName());
+            return ECJFactory.wrap(wrappee.getName());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.typeBounds());
+            return ECJFactory.wrap(wrappee.typeBounds());
         }
         
         throw new ArrayIndexOutOfBoundsException();
@@ -38,11 +38,6 @@ public class WrappedTypeParameter extends WrappedAppl {
     @Override
     public ASTNode getWrappee() {
         return wrappee;
-    }
-
-    public IStrategoTerm[] getArguments() {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
     }
 
 }

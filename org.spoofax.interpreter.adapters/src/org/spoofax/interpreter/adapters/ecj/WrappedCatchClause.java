@@ -26,9 +26,9 @@ public class WrappedCatchClause extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.getException());
+            return ECJFactory.wrap(wrappee.getException());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.getBody());
+            return ECJFactory.wrap(wrappee.getBody());
         }
         
         throw new ArrayIndexOutOfBoundsException();

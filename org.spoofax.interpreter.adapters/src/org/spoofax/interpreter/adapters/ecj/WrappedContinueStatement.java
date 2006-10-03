@@ -25,7 +25,7 @@ public class WrappedContinueStatement extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrap(wrappee.getLabel());
+            return ECJFactory.wrap(wrappee.getLabel());
             
         throw new ArrayIndexOutOfBoundsException(); 
     }

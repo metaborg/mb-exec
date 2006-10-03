@@ -25,7 +25,7 @@ public class WrappedModifier extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrap(wrappee.getKeyword());
+            return ECJFactory.wrap(wrappee.getKeyword());
         
         throw new ArrayIndexOutOfBoundsException();
     }

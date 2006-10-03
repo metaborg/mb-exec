@@ -10,6 +10,7 @@ package org.spoofax.interpreter.adapters.ecj;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -118,7 +119,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
 
-public class WrappedECJFactory implements ITermFactory {
+public class ECJFactory implements ITermFactory {
 
     public IStrategoTerm parseFromFile(String path) throws IOException {
         throw new NotImplementedException();
@@ -141,15 +142,17 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
-        throw new NotImplementedException();
+        return ctr.instantiate(this, kids);
+        //throw new NotImplementedException();
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... terms) {
-        throw new NotImplementedException();
+        return ctr.instantiate(this, terms);
     }
 
     public IStrategoConstructor makeConstructor(String string, int arity, boolean quoted) {
-        throw new NotImplementedException();
+        return new ASTCtor(string, arity);
+        //throw new NotImplementedException();
     }
 
     public IStrategoInt makeInt(int i) {
@@ -157,7 +160,11 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     public IStrategoList makeList(IStrategoTerm... terms) {
-        throw new NotImplementedException();
+        List r = new ArrayList();
+        for(IStrategoTerm t : terms)
+            r.add(t);
+        return new WrappedList(r);
+        //throw new NotImplementedException();
     }
 
     public IStrategoList makeList(Collection<IStrategoTerm> terms) {
@@ -169,11 +176,12 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     public IStrategoString makeString(String s) {
-        throw new NotImplementedException();
+        return new WrappedString(s);
+        //throw new NotImplementedException();
     }
 
     public IStrategoTuple makeTuple(IStrategoTerm... terms) {
-        throw new NotImplementedException();
+        return new WrappedTuple(terms);
     }
 
     public static IStrategoTerm wrap(Javadoc javadoc) {

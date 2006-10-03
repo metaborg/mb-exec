@@ -28,9 +28,9 @@ public class WrappedPostfixExpressionOperator extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         if(index == 0) {
             if(wrappee == Operator.DECREMENT)
-                return WrappedECJFactory.wrap("--");
+                return ECJFactory.wrap("--");
             else if(wrappee == Operator.INCREMENT)
-                return WrappedECJFactory.wrap("++");
+                return ECJFactory.wrap("++");
             else
                 throw new NotImplementedException();
         }

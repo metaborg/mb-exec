@@ -25,7 +25,7 @@ public class WrappedThisExpression extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrapName(wrappee.getQualifier());
+            return ECJFactory.wrapName(wrappee.getQualifier());
         
         throw new ArrayIndexOutOfBoundsException();
     }

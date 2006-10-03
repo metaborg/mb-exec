@@ -25,7 +25,7 @@ public class WrappedTextElement extends WrappedAppl {
     @Override
     public IStrategoTerm getSubterm(int index) {
         if(index == 0)
-            return WrappedECJFactory.wrap(wrappee.getText());
+            return ECJFactory.wrap(wrappee.getText());
         
         throw new ArrayIndexOutOfBoundsException();
     }

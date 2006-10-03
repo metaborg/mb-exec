@@ -26,9 +26,9 @@ public class WrappedSwitchStatement extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
+            return ECJFactory.wrapExpression(wrappee.getExpression());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.statements());
+            return ECJFactory.wrap(wrappee.statements());
         }
         
         throw new ArrayIndexOutOfBoundsException();

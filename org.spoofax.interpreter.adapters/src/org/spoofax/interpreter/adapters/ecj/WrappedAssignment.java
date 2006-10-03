@@ -26,9 +26,9 @@ public class WrappedAssignment extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapExpression(wrappee.getLeftHandSide());
+            return ECJFactory.wrapExpression(wrappee.getLeftHandSide());
         case 1:
-            return WrappedECJFactory.wrapExpression(wrappee.getRightHandSide());
+            return ECJFactory.wrapExpression(wrappee.getRightHandSide());
         }
 
         throw new ArrayIndexOutOfBoundsException();

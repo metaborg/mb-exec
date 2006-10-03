@@ -26,11 +26,11 @@ public class WrappedFieldDeclaration extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.modifiers());
+            return ECJFactory.wrap(wrappee.modifiers());
         case 1:
-            return WrappedECJFactory.wrapType(wrappee.getType());
+            return ECJFactory.wrapType(wrappee.getType());
         case 2:
-            return WrappedECJFactory.wrap(wrappee.fragments());
+            return ECJFactory.wrap(wrappee.fragments());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

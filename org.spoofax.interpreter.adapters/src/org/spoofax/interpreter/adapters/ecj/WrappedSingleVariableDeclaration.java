@@ -26,13 +26,13 @@ public class WrappedSingleVariableDeclaration extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrap(wrappee.getModifiers());
+            return ECJFactory.wrap(wrappee.getModifiers());
         case 1:
-            return WrappedECJFactory.wrapType(wrappee.getType());
+            return ECJFactory.wrapType(wrappee.getType());
         case 2:
-            return WrappedECJFactory.wrap(wrappee.getName());
+            return ECJFactory.wrap(wrappee.getName());
         case 3:
-            return WrappedECJFactory.wrapExpression(wrappee.getInitializer());
+            return ECJFactory.wrapExpression(wrappee.getInitializer());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

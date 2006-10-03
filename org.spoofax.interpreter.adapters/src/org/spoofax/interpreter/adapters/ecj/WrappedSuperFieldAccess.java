@@ -26,9 +26,9 @@ public class WrappedSuperFieldAccess extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapName(wrappee.getQualifier());
+            return ECJFactory.wrapName(wrappee.getQualifier());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.getName());
+            return ECJFactory.wrap(wrappee.getName());
         }
         
         throw new ArrayIndexOutOfBoundsException();
