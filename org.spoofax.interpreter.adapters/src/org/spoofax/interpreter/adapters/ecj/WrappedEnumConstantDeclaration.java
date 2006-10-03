@@ -1,5 +1,5 @@
 /*
- * Created on 29. sep.. 2006
+ * Created on 2. okt.. 2006
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -8,17 +8,16 @@
 package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ArrayType;
-import org.spoofax.NotImplementedException;
+import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedArrayType extends WrappedAppl {
+public class WrappedEnumConstantDeclaration extends WrappedAppl {
 
-    private final ArrayType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ArrayType", 3);
+    private final EnumConstantDeclaration wrappee;
+    private final static IStrategoConstructor CTOR = new ASTCtor("EnumConstantDeclaration", 4);
     
-    WrappedArrayType(ArrayType wrappee) {
+    WrappedEnumConstantDeclaration(EnumConstantDeclaration wrappee) {
         super(CTOR);
         this.wrappee = wrappee;
     }
@@ -27,11 +26,13 @@ public class WrappedArrayType extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapType(wrappee.getComponentType());
+            return WrappedECJFactory.wrap(wrappee.modifiers());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.getDimensions());
+            return WrappedECJFactory.wrap(wrappee.getName());
         case 2:
-            return WrappedECJFactory.wrapType(wrappee.getElementType());
+            return WrappedECJFactory.wrap(wrappee.arguments());
+        case 3:
+            return WrappedECJFactory.wrap(wrappee.getAnonymousClassDeclaration());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

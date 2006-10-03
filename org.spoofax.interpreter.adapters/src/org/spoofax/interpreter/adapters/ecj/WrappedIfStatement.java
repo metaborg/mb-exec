@@ -1,5 +1,5 @@
 /*
- * Created on 29. sep.. 2006
+ * Created on 2. okt.. 2006
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -8,17 +8,17 @@
 package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ArrayType;
-import org.spoofax.NotImplementedException;
+import org.eclipse.jdt.core.dom.FieldAccess;
+import org.eclipse.jdt.core.dom.IfStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedArrayType extends WrappedAppl {
+public class WrappedIfStatement extends WrappedAppl {
 
-    private final ArrayType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ArrayType", 3);
+    private final IfStatement wrappee;
+    private final static IStrategoConstructor CTOR = new ASTCtor("IfStatement", 3); 
     
-    WrappedArrayType(ArrayType wrappee) {
+    WrappedIfStatement(IfStatement wrappee) {
         super(CTOR);
         this.wrappee = wrappee;
     }
@@ -27,12 +27,13 @@ public class WrappedArrayType extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapType(wrappee.getComponentType());
+            return WrappedECJFactory.wrapExpression(wrappee.getExpression());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.getDimensions());
+            return WrappedECJFactory.wrapStatement(wrappee.getThenStatement());
         case 2:
-            return WrappedECJFactory.wrapType(wrappee.getElementType());
+            return WrappedECJFactory.wrapStatement(wrappee.getElseStatement());
         }
+        
         throw new ArrayIndexOutOfBoundsException();
     }
 
@@ -40,5 +41,4 @@ public class WrappedArrayType extends WrappedAppl {
     public ASTNode getWrappee() {
         return wrappee;
     }
-
 }

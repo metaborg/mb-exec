@@ -1,5 +1,5 @@
 /*
- * Created on 29. sep.. 2006
+ * Created on 2. okt.. 2006
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -8,16 +8,16 @@
 package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedMethodDeclaration extends WrappedAppl {
+public class WrappedEnumDeclaration extends WrappedAppl {
 
-    private final MethodDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("MethodDeclaration", 6); 
+    private final EnumDeclaration wrappee;
+    private final static IStrategoConstructor CTOR = new ASTCtor("EnumDeclaration", 5);
     
-    WrappedMethodDeclaration(MethodDeclaration wrappee) {
+    WrappedEnumDeclaration(EnumDeclaration wrappee) {
         super(CTOR);
         this.wrappee = wrappee;
     }
@@ -28,15 +28,14 @@ public class WrappedMethodDeclaration extends WrappedAppl {
         case 0:
             return WrappedECJFactory.wrap(wrappee.modifiers());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.typeParameters());
-        case 2:
             return WrappedECJFactory.wrap(wrappee.getName());
+        case 2:
+            return WrappedECJFactory.wrap(wrappee.superInterfaceTypes());
         case 3:
-            return WrappedECJFactory.wrap(wrappee.parameters());
+            return WrappedECJFactory.wrap(wrappee.enumConstants());
         case 4:
-            return WrappedECJFactory.wrap(wrappee.thrownExceptions());
-        case 5:
-            return WrappedECJFactory.wrap(wrappee.getBody());
+            return WrappedECJFactory.wrap(wrappee.bodyDeclarations());
+
         }
         throw new ArrayIndexOutOfBoundsException();
     }
@@ -45,4 +44,5 @@ public class WrappedMethodDeclaration extends WrappedAppl {
     public ASTNode getWrappee() {
         return wrappee;
     }
+
 }

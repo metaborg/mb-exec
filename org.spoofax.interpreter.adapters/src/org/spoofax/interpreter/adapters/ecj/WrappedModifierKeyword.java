@@ -1,5 +1,5 @@
 /*
- * Created on 29. sep.. 2006
+ * Created on 2. okt.. 2006
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -8,37 +8,31 @@
 package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.Modifier;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedArrayType extends WrappedAppl {
+public class WrappedModifierKeyword extends WrappedAppl {
 
-    private final ArrayType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ArrayType", 3);
+    private final Modifier.ModifierKeyword wrappee;
+    private final static IStrategoConstructor CTOR = new ASTCtor("ModifierKeyword", 1);
     
-    WrappedArrayType(ArrayType wrappee) {
+    WrappedModifierKeyword(Modifier.ModifierKeyword wrappee) {
         super(CTOR);
         this.wrappee = wrappee;
     }
     
     @Override
     public IStrategoTerm getSubterm(int index) {
-        switch(index) {
-        case 0:
-            return WrappedECJFactory.wrapType(wrappee.getComponentType());
-        case 1:
-            return WrappedECJFactory.wrap(wrappee.getDimensions());
-        case 2:
-            return WrappedECJFactory.wrapType(wrappee.getElementType());
-        }
+        if(index == 0)
+            return WrappedECJFactory.wrap(wrappee.toFlagValue());
         throw new ArrayIndexOutOfBoundsException();
     }
 
     @Override
     public ASTNode getWrappee() {
-        return wrappee;
+        throw new NotImplementedException();
     }
 
 }

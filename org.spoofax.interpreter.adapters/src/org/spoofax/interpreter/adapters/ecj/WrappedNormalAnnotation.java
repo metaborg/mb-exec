@@ -1,5 +1,5 @@
 /*
- * Created on 29. sep.. 2006
+ * Created on 2. okt.. 2006
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -8,17 +8,16 @@
 package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ArrayType;
-import org.spoofax.NotImplementedException;
+import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedArrayType extends WrappedAppl {
+public class WrappedNormalAnnotation extends WrappedAppl {
 
-    private final ArrayType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ArrayType", 3);
+    private final NormalAnnotation wrappee;
+    private final static IStrategoConstructor CTOR = new ASTCtor("NormalAnnotation", 2);
     
-    WrappedArrayType(ArrayType wrappee) {
+    WrappedNormalAnnotation(NormalAnnotation wrappee) {
         super(CTOR);
         this.wrappee = wrappee;
     }
@@ -27,11 +26,9 @@ public class WrappedArrayType extends WrappedAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return WrappedECJFactory.wrapType(wrappee.getComponentType());
+            return WrappedECJFactory.wrapName(wrappee.getTypeName());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.getDimensions());
-        case 2:
-            return WrappedECJFactory.wrapType(wrappee.getElementType());
+            return WrappedECJFactory.wrap(wrappee.values());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

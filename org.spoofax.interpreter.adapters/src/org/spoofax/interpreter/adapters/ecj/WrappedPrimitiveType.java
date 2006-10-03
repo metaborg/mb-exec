@@ -9,6 +9,7 @@ package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -27,8 +28,30 @@ public class WrappedPrimitiveType extends WrappedAppl {
     
     @Override
     public IStrategoTerm getSubterm(int index) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(index == 0) {
+            Code code = wrappee.getPrimitiveTypeCode();
+            if(code == PrimitiveType.DOUBLE)
+                return WrappedECJFactory.wrap("double");
+            if(code == PrimitiveType.FLOAT)
+                return WrappedECJFactory.wrap("float");
+            if(code == PrimitiveType.INT)
+                return WrappedECJFactory.wrap("int");
+            if(code == PrimitiveType.BYTE)
+                return WrappedECJFactory.wrap("byte");
+            if(code == PrimitiveType.BOOLEAN)
+                return WrappedECJFactory.wrap("boolean");
+            if(code == PrimitiveType.CHAR)
+                return WrappedECJFactory.wrap("char");
+            if(code == PrimitiveType.LONG)
+                return WrappedECJFactory.wrap("long");
+            if(code == PrimitiveType.SHORT)
+                return WrappedECJFactory.wrap("short");
+            if(code == PrimitiveType.VOID)
+                return WrappedECJFactory.wrap("void");
+            else
+                throw new NotImplementedException("Unknown primitive type: " + code.getClass() + " " + code.toString());
+        }
+        throw new ArrayIndexOutOfBoundsException();
     }
 
     @Override

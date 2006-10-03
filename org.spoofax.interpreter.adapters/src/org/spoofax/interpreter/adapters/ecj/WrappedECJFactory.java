@@ -177,7 +177,10 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     public static IStrategoTerm wrap(Javadoc javadoc) {
-        throw new NotImplementedException();
+        if(javadoc == null)
+            return None.INSTANCE;
+        else
+            return new WrappedJavadoc(javadoc);
     }
 
     public static IStrategoTerm wrap(List list) {
@@ -188,25 +191,34 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     static IStrategoTerm wrapName(Name name) {
+        
+        if(name == null)
+            return None.INSTANCE;
+        
         if(name instanceof QualifiedName)
             return wrap((QualifiedName) name);
         if(name instanceof SimpleName)
             return wrap((SimpleName) name);
         
-        throw new NotImplementedException();
+        throw new NotImplementedException("Unknown Name type: " + name.getClass());
     }
 
     static IStrategoTerm wrap(SimpleName name) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(name == null)
+            return None.INSTANCE;
+        else
+            return new WrappedSimpleName(name);
     }
 
     private static IStrategoTerm wrap(QualifiedName name) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(name == null)
+            return None.INSTANCE;
+        else
+            return new WrappedQualifiedName(name);
     }
 
     static IStrategoTerm genericWrap(ASTNode node) {
+        
         if(node instanceof ImportDeclaration)
             return wrap((ImportDeclaration) node);
         if(node instanceof Name)
@@ -262,7 +274,7 @@ public class WrappedECJFactory implements ITermFactory {
         if(node instanceof VariableDeclaration)
             return wrapVarDecl((VariableDeclaration) node);
         
-        throw new NotImplementedException("" + node.getClass());
+        throw new NotImplementedException("Unknown ASTNode type" + node.getClass());
     }
 
     private static IStrategoTerm wrapVarDecl(VariableDeclaration decl) {
@@ -286,13 +298,17 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     private static IStrategoTerm wrap(LineComment comment) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(comment == null)
+            return None.INSTANCE;
+        else
+            return new WrappedLineComment(comment);
     }
 
     private static IStrategoTerm wrap(BlockComment comment) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(comment == null)
+            return None.INSTANCE;
+        else
+            return new WrappedBlockComment(comment);
     }
 
     private static IStrategoTerm wrapBody(BodyDeclaration decl) {
@@ -314,23 +330,31 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     private static IStrategoTerm wrap(AnnotationTypeMemberDeclaration declaration) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(declaration == null)
+            return None.INSTANCE;
+        else
+            return new WrappedAnnotationTypeMemberDeclaration(declaration);
     }
 
     private static IStrategoTerm wrap(EnumConstantDeclaration declaration) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(declaration == null)
+            return None.INSTANCE;
+        else
+            return new WrappedEnumConstantDeclaration(declaration);
     }
 
     private static IStrategoTerm wrap(FieldDeclaration declaration) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(declaration == null)
+            return None.INSTANCE;
+        else
+            return new WrappedFieldDeclaration(declaration);
     }
 
     private static IStrategoTerm wrap(Initializer initializer) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(initializer == null)
+                return None.INSTANCE;
+        else
+            return new WrappedInitializer(initializer);
     }
 
     private static IStrategoTerm wrap(TypeParameter parameter) {
@@ -356,6 +380,9 @@ public class WrappedECJFactory implements ITermFactory {
 
     static IStrategoTerm wrapStatement(Statement stat) {
         
+        if(stat == null)
+            return None.INSTANCE;
+        
         if(stat instanceof ExpressionStatement)
             return wrap((ExpressionStatement) stat);
         if(stat instanceof VariableDeclarationStatement)
@@ -379,7 +406,7 @@ public class WrappedECJFactory implements ITermFactory {
         if(stat instanceof ForStatement)
             return wrap((ForStatement) stat);
         if(stat instanceof IfStatement)
-            return wrap((EnhancedForStatement) stat);
+            return wrap((IfStatement) stat);
         if(stat instanceof LabeledStatement)
             return wrap((LabeledStatement) stat);
         if(stat instanceof ReturnStatement)
@@ -402,6 +429,13 @@ public class WrappedECJFactory implements ITermFactory {
             return wrap((WhileStatement) stat);
 
         throw new NotImplementedException();
+    }
+
+    private static IStrategoTerm wrap(IfStatement statement) {
+        if(statement == null)
+            return None.INSTANCE;
+        else
+            return new WrappedIfStatement(statement);
     }
 
     private static IStrategoTerm wrap(SuperConstructorInvocation invocation) {
@@ -673,6 +707,10 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     static IStrategoTerm wrapExpression(Expression expr) {
+
+        if(expr == null)
+            return None.INSTANCE;
+
         if(expr instanceof Annotation)
             return wrapAnnotation((Annotation) expr);
         if(expr instanceof ArrayAccess)
@@ -726,7 +764,7 @@ public class WrappedECJFactory implements ITermFactory {
         if(expr instanceof VariableDeclarationExpression)
             return wrap((VariableDeclarationExpression) expr);
         
-        throw new NotImplementedException();
+        throw new NotImplementedException("Unknown Expression Type:" + expr.getClass());
     }
 
     private static IStrategoTerm wrapAnnotation(Annotation anno) {
@@ -742,18 +780,24 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     private static IStrategoTerm wrap(SingleMemberAnnotation annotation) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(annotation == null)
+            return None.INSTANCE;
+        else
+            return new WrappedSingleMemberAnnotation(annotation);
     }
 
     private static IStrategoTerm wrap(NormalAnnotation annotation) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(annotation == null)
+            return None.INSTANCE;
+        else
+            return new WrappedNormalAnnotation(annotation);
     }
 
     private static IStrategoTerm wrap(MarkerAnnotation annotation) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(annotation == null) 
+            return None.INSTANCE;
+        else
+            return new WrappedMarkerAnnotation(annotation);
     }
 
     private static IStrategoTerm wrap(VariableDeclarationExpression expression) {
@@ -848,18 +892,26 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     private static IStrategoTerm wrap(InfixExpression expression) {
+        
         if(expression == null)
             return None.INSTANCE;
-        if(expression.getOperator() == InfixExpression.Operator.PLUS)
+        else
+            return new WrappedInfixExpression(expression);
+
+/*
+        InfixExpression.Operator op = expression.getOperator();
+        
+        if(op == InfixExpression.Operator.PLUS)
             return new WrappedPlus(expression); 
-        if(expression.getOperator() == InfixExpression.Operator.MINUS)
+        if(op == InfixExpression.Operator.MINUS)
             return new WrappedMinus(expression); 
-        if(expression.getOperator() == InfixExpression.Operator.TIMES)
+        if(op == InfixExpression.Operator.TIMES)
             return new WrappedTimes(expression); 
-        if(expression.getOperator() == InfixExpression.Operator.DIVIDE)
+        if(op == InfixExpression.Operator.DIVIDE)
             return new WrappedDivide(expression); 
 
-        throw new NotImplementedException();
+        throw new NotImplementedException("Unknown InfixExpression Operator " + expression.getO);
+*/  
     }
 
     private static IStrategoTerm wrap(FieldAccess access) {
@@ -975,8 +1027,12 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     private static IStrategoTerm wrap(PrimitiveType type) {
+        
         if(type == null)
             return None.INSTANCE;
+        else
+            return new WrappedPrimitiveType(type);
+        /*
         if(type.getPrimitiveTypeCode() == PrimitiveType.INT)
             return new WrappedIntType(type);
         if(type.getPrimitiveTypeCode() == PrimitiveType.BOOLEAN)
@@ -991,6 +1047,7 @@ public class WrappedECJFactory implements ITermFactory {
             return new WrappedLongType(type);
         
         throw new NotImplementedException();
+        */
     }
 
     private static IStrategoTerm wrap(ParameterizedType type) {
@@ -1001,18 +1058,24 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     public static IStrategoTerm wrap(ModifierKeyword keyword) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(keyword == null)
+            return None.INSTANCE;
+        else 
+            return new WrappedModifierKeyword(keyword);
     }
 
     public static IStrategoTerm wrap(PostfixExpression.Operator operator) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(operator == null)
+            return None.INSTANCE;
+        else
+            return new WrappedPostfixExpressionOperator(operator);
     }
 
     public static IStrategoTerm wrap(PrefixExpression.Operator operator) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(operator == null)
+            return None.INSTANCE;
+        else
+            return new WrappedPrefixExpressionOperator(operator);
     }
 
     public static IStrategoTerm wrapTypeDecl(AbstractTypeDeclaration decl) {
@@ -1027,12 +1090,16 @@ public class WrappedECJFactory implements ITermFactory {
     }
 
     private static IStrategoTerm wrap(EnumDeclaration declaration) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(declaration == null)
+            return None.INSTANCE;
+        else
+            return new WrappedEnumDeclaration(declaration);
     }
 
     private static IStrategoTerm wrap(AnnotationTypeDeclaration declaration) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(declaration == null)
+            return None.INSTANCE;
+        else
+            return new WrappedAnnotationTypeDeclaration(declaration);
     }
 }

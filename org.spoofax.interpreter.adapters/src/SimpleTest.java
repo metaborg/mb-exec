@@ -13,7 +13,7 @@ import org.spoofax.interpreter.terms.PrettyPrinter;
  * Licensed under the GNU General Public License, v2
  */
 
-public class ECJTest {
+public class SimpleTest {
 
     public static void main(String[] args) {
         ASTParser parser = ASTParser.newParser(AST.JLS3);

@@ -1,5 +1,5 @@
 /*
- * Created on 29. sep.. 2006
+ * Created on 2. okt.. 2006
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -8,16 +8,16 @@
 package org.spoofax.interpreter.adapters.ecj;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedMethodDeclaration extends WrappedAppl {
+public class WrappedAnnotationTypeMemberDeclaration extends WrappedAppl {
 
-    private final MethodDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("MethodDeclaration", 6); 
+    private final AnnotationTypeMemberDeclaration wrappee;
+    private final static IStrategoConstructor CTOR = new ASTCtor("AnnotationTypeMemberDeclaration", 4);
     
-    WrappedMethodDeclaration(MethodDeclaration wrappee) {
+    WrappedAnnotationTypeMemberDeclaration(AnnotationTypeMemberDeclaration wrappee) {
         super(CTOR);
         this.wrappee = wrappee;
     }
@@ -28,16 +28,12 @@ public class WrappedMethodDeclaration extends WrappedAppl {
         case 0:
             return WrappedECJFactory.wrap(wrappee.modifiers());
         case 1:
-            return WrappedECJFactory.wrap(wrappee.typeParameters());
+            return WrappedECJFactory.wrapType(wrappee.getType());
         case 2:
             return WrappedECJFactory.wrap(wrappee.getName());
         case 3:
-            return WrappedECJFactory.wrap(wrappee.parameters());
-        case 4:
-            return WrappedECJFactory.wrap(wrappee.thrownExceptions());
-        case 5:
-            return WrappedECJFactory.wrap(wrappee.getBody());
-        }
+            return WrappedECJFactory.wrapExpression(wrappee.getDefault());
+    }
         throw new ArrayIndexOutOfBoundsException();
     }
 
@@ -45,4 +41,5 @@ public class WrappedMethodDeclaration extends WrappedAppl {
     public ASTNode getWrappee() {
         return wrappee;
     }
+
 }
