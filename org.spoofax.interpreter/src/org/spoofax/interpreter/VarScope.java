@@ -16,9 +16,6 @@ import org.spoofax.interpreter.stratego.DebugUtil;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-import aterm.ATermAppl;
-import aterm.ATermList;
-
 public class VarScope {
 
     private VarScope parent;

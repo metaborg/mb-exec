@@ -10,6 +10,7 @@ package org.spoofax.interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.spoofax.interpreter.adapters.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.stratego.DebugUtil;
 import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;

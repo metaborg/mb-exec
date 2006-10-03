@@ -14,8 +14,6 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-import aterm.ATerm;
-
 public class All extends Strategy {
 
     protected Strategy body;
@@ -33,11 +31,11 @@ public class All extends Strategy {
         IStrategoTerm t = env.current();
 
         switch (t.getTermType()) {
-            case ATerm.INT:
+            case IStrategoTerm.INT:
                 return DebugUtil.traceReturn(true, env.current(), this);
-            case ATerm.REAL:
+            case IStrategoTerm.REAL:
                 return DebugUtil.traceReturn(true, env.current(), this);
-            case ATerm.APPL:
+            case IStrategoTerm.APPL:
                 return DebugUtil.traceReturn(evalAll(env, (IStrategoAppl)t), env.current(), this);
             default:
                 throw new InterpreterException("Unknown ATerm type " + t.getTermType());
