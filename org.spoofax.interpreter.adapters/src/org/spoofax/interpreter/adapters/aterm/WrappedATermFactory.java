@@ -5,7 +5,7 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.terms.aterm;
+package org.spoofax.interpreter.adapters.aterm;
 
 import java.io.IOException;
 import java.io.InputStream;

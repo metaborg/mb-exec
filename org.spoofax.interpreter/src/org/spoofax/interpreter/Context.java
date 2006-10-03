@@ -18,7 +18,7 @@ import org.spoofax.interpreter.stratego.Match.Results;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.StrategoSignature;
-import org.spoofax.interpreter.terms.aterm.WrappedATermFactory;
+
 
 public class Context implements IContext {
 

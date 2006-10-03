@@ -94,12 +94,6 @@ public class VarScope {
         return vars.containsKey(name) && vars.get(name) != null;
     }
 
-    public void addUndeclaredVars(ATermList newVars) {
-        for (int i = 0; i < newVars.getLength(); i++) {
-            addSVar(((ATermAppl) newVars.getChildAt(i)).getName(), null);
-        }
-    }
-
     public VarScope getParent() {
         return parent;
     }

@@ -2,6 +2,9 @@
 <projectDescription>
 	<name>org.spoofax.interpreter.adapters</name>
 	<comment></comment>
+	<projects>
+		<project>org.spoofax.aterm</project>
+	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>

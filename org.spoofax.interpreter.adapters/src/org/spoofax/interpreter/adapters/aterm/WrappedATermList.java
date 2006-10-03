@@ -5,7 +5,7 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.terms.aterm;
+package org.spoofax.interpreter.adapters.aterm;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoList;
