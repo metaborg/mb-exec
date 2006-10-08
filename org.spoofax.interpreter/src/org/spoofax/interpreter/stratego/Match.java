@@ -72,7 +72,8 @@ public class Match extends Strategy {
             return matchApplInt(env, t, p);
         }
         else if (Tools.isStr(p, env)) {
-            return matchApplStr(t, p);
+            return null;
+            //return matchApplStr(t, p);
         }
         else if (Tools.isVar(p, env)) {
             return matchAnyVar(t, p);
@@ -268,6 +269,9 @@ public class Match extends Strategy {
 
     protected Results matchAnyAnno(IContext env, IStrategoTerm t,
             IStrategoAppl p) throws InterpreterException {
+        if(DebugUtil.isDebugging()) {
+            DebugUtil.debug("  against Anno");
+        }
         // FIXME: Do real match of annotations
         return match(env, t, Tools.applAt(p, 0));
     }
@@ -550,7 +554,7 @@ public class Match extends Strategy {
             return matchAnyVar(t, p);
         }
         else if (Tools.isOp(p, env)) {
-            throw new NotImplementedException();
+            return null;
         }
         else if (Tools.isExplode(p, env)) {
             return matchAnyExplode(env, t, p);
@@ -566,6 +570,10 @@ public class Match extends Strategy {
     }
 
     private Results matchStrStr(IContext env, IStrategoString t, IStrategoAppl p) {
+        if(DebugUtil.isDebugging()) {
+            DebugUtil.debug("  against Str");
+            int x = 0;
+        }
         IStrategoString s = Tools.stringAt(p, 0);
         if(s.equals(t)) {
             return emptyList();

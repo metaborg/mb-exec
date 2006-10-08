@@ -18,6 +18,10 @@ public class TestMatch extends AbstractLanguageTest {
     public void testMatchString1() {
         interpTest("match_string_1", "\"abc\"", "\"abc\"");
     }
+    
+    public void testMatchString1b() {
+        interpTestFail("match_string_1", "abc()");
+    }
 
     public void testMatchString2() {
         interpTestFail("match_string_2", "\"abc\"");
@@ -106,6 +110,30 @@ public class TestMatch extends AbstractLanguageTest {
 
     public void testProject2() {
         interpTest("project_2", "(2, 3)", "3");
+    }
+
+    public void testMatchAppl1() {
+        interpTest("match_appl_1", "A()", "A()");
+    }
+
+    public void testMatchAppl1b() {
+        interpTestFail("match_appl_1", "\"abc\"");
+    }
+
+    public void testMatchAppl1c() {
+        interpTestFail("match_appl_1", "1");
+    }
+
+    public void testMatchAppl1d() {
+        interpTestFail("match_appl_1", "1.0");
+    }
+
+    public void testMatchAppl1e() {
+        interpTestFail("match_appl_1", "[]");
+    }
+
+    public void testMatchAppl1f() {
+        interpTestFail("match_appl_1", "()");
     }
 
 }

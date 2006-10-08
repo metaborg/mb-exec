@@ -33,7 +33,14 @@ public class Interpreter {
     private void doInit(ITermFactory factory) {
         
         Context.indentation = 0;
-        context = new Context(factory, new WrappedATermFactory());
+        // FIXME this is a hack -- improve factory interop
+        ITermFactory programFactory = null; 
+        if(factory instanceof WrappedATermFactory) {
+            programFactory = factory;
+        } else {
+            programFactory = new WrappedATermFactory();
+        }
+        context = new Context(factory, programFactory);
         
         loader = new StrategoCoreLoader(context);
 

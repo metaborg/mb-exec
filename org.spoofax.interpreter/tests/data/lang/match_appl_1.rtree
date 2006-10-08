@@ -1,0 +1,1 @@
+Specification([Signature([Constructors([OpDecl("A",ConstType(Sort("A",[])))])]),Strategies([SDefT("DYNAMIC_CALLS_0_0",[],[],Fail),SDefT("main_0_0",[],[],Match(Anno(Op("A",[]),Wld)))])])
