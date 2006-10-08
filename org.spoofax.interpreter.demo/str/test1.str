@@ -1,0 +1,8 @@
+module test1
+imports
+  lib
+  EclipseJava
+  
+strategies
+
+  main = debug ; topdown(try(?TypeDeclaration(_, _, _, _, _, _) ; debug))

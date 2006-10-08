@@ -1,0 +1,102 @@
+module EclipseJava
+signature
+  constructors
+
+    AnnotationTypeDeclaration       : Term * Term * Term -> Term
+    AnnotationTypeMemberDeclaration : Term * Term * Term * Term -> Term
+    AnonymousClassDeclaration       : Term -> Term
+    ArrayAccess                     : Term * Term -> Term
+    ArrayCreation                   : Term * Term * Term -> Term
+    ArrayInitializer                : Term -> Term
+    ArrayType                       : Term * Term * Term -> Term
+    AssertStatement                 : Term * Term -> Term
+    Assignment                      : Term * Term -> Term
+    BlockComment                    : Term
+    Block                           : Term -> Term 
+    BooleanLiteral                  : Term -> Term
+    BooleanType                     : Term
+    BreakStatement                  : Term -> Term
+    ByteType                        : Term
+    CastExpression                  : Term * Term -> Term
+    CatchClause                     : Term * Term -> Term
+    CharacterLiteral                : Term -> Term
+    ClassInstanceCreation           : Term * Term * Term * Term -> Term
+    CompilationUnit                 : Term * Term * Term -> Term 
+    ConditionalExpression           : Term * Term * Term -> Term
+    ConstructorInvocation           : Term -> Term
+    ContinueStatement               : Term -> Term
+    Divide                          : Term * Term -> Term
+    DoStatement                     : Term * Term -> Term
+    DoubleType                      : Term
+    EmptyStatement                  : Term
+    EnhancedForStatement            : Term * Term * Term -> Term
+    EnumConstantDeclaration         : Term * Term * Term * Term -> Term 
+    EnumDeclaration                 : Term * Term * Term * Term * Term -> Term 
+    ExpressionStatement             : Term -> Term
+    FieldAccess                     : Term * Term -> Term 
+    FieldDeclaration                : Term * Term * Term -> Term
+    FloatType                       : Term
+    ForStatement                    : Term * Term * Term * Term -> Term 
+    IfStatement                     : Term * Term * Term -> Term 
+    ImportReference                 : Term -> Term 
+    InfixExpression                 : Term * Term * Term -> Term
+    Initializer                     : Term -> Term
+    Instanceof                      : Term * Term -> Term
+    IntType                         : Term
+    Javadoc                         : Term -> Term
+    LabeledStatement                : Term * Term -> Term
+    LineComment                     : Term
+    LongType                        : Term
+    MarkerAnnotation                : Term -> Term
+    MemberRef                       : Term * Term -> Term
+    MemberValuePair                 : Term * Term -> Term
+    MethodDeclaration               : Term * Term * Term * Term * Term * Term -> Term 
+    MethodInvocation                : Term * Term * Term * Term -> Term
+    MethodRef                       : Term * Term * Term -> Term
+    MethodRefParameter              : Term * Term -> Term
+    Minus                           : Term * Term -> Term
+    Modifier                        : Term -> Term
+    ModifierKeyword                 : Term -> Term
+    Name                            : Term -> Term
+    NormalAnnotation                : Term * Term -> Term
+    NullLiteral                     : Term
+    NumberLiteral                   : Term -> Term
+    PackageDeclaration              : Term * Term * Term -> Term 
+    ParameterizedType               : Term * Term -> Term
+    ParenthesizedExpression         : Term -> Term
+    Plus                            : Term * Term -> Term 
+    PostfixExpression               : Term * Term -> Term
+    PostfixExpressionOperator       : Term -> Term
+    PrefixExpression                : Term * Term -> Term
+    PrefixExpressionOperator        : Term -> Term
+    PrimitiveType                   : Term -> Term
+    QualifiedName                   : Term * Term -> Term
+    QualifiedType                   : Term * Term -> Term
+    ReturnStatement                 : Term -> Term
+    SimpleName                      : Term -> Term 
+    SimpleType                      : Term -> Term
+    SingleMemberAnnotation          : Term * Term -> Term
+    SingleVariableDeclaration       : Term -> Term
+    StringLiteral                   : Term -> Term 
+    SuperConstructorInvocation      : Term * Term * Term -> Term
+    SuperFieldAccess                : Term * Term -> Term
+    SuperMethodInvocation           : Term * Term * Term * Term -> Term
+    SwitchCase                      : Term -> Term
+    SwitchStatement                 : Term * Term -> Term
+    SynchronizedStatement           : Term * Term -> Term
+    TagElement                      : Term * Term -> Term
+    TextElement                     : Term -> Term
+    ThisExpression                  : Term -> Term
+    ThrowStatement                  : Term -> Term
+    Times                           : Term * Term -> Term
+    TryStatement                    : Term * Term * Term -> Term
+    TypeDeclaration                 : Term * Term * Term * Term * Term * Term -> Term
+    TypeDeclarationStatement        : Term -> Term
+    TypeLiteral                     : Term -> Term
+    TypeParameter                   : Term * Term -> Term
+    VariableDeclarationExpression   : Term * Term * Term -> Term
+    VariableDeclarationFragment     : Term * Term * Term -> Term 
+    VariableDeclarationStatement    : Term * Term * Term -> Term 
+    WhileStatement                  : Term * Term -> Term
+    WildcardType                    : Term -> Term
+  

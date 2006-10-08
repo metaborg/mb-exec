@@ -1,0 +1,9 @@
+module deconstructor
+imports
+  lib
+
+strategies
+
+  main = topdown(deconstruct)
+
+  deconstruct = where(?x#(y) ; <debug> x)
