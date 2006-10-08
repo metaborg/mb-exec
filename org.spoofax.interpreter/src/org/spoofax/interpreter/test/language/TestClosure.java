@@ -11,7 +11,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
-public class ClosureTest extends AbstractLanguageTest {
+public class TestClosure extends AbstractLanguageTest {
 
     public void testClosure1() {
         interpTest("closure_test_1", 

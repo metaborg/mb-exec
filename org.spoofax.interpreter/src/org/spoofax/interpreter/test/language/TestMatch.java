@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test.language;
 
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
-public class MatchTest extends AbstractLanguageTest {
+public class TestMatch extends AbstractLanguageTest {
 
     public void testMatchReal3() {
         interpTestFail("match_real_2", "2.0");

@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test.language;
 
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
-public class HigherOrderParamTest extends AbstractLanguageTest {
+public class TestHigherOrderParameters extends AbstractLanguageTest {
 
     public void testHigherOrderParam1() {
         interpTest("higher_order_param_1", "()", "5");

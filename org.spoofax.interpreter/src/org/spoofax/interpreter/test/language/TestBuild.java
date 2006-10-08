@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test.language;
 
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
-public class BuildTest extends AbstractLanguageTest {
+public class TestBuild extends AbstractLanguageTest {
 
     public void testBuildInt() {
         interpTest("build_int", "()", "5");

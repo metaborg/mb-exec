@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test.language;
 
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
-public class GuardTest extends AbstractLanguageTest {
+public class TestGuard extends AbstractLanguageTest {
 
     public void testGuarded1() {
            interpTest("guarded_1", "()", "1");

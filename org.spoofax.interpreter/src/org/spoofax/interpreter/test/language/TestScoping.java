@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test.language;
 
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
-public class ScopingTest extends AbstractLanguageTest {
+public class TestScoping extends AbstractLanguageTest {
 
     public void testScopeMatchInterrupt1() {
         interpTest("match_interrupted_by_scope_1", "2", "2");

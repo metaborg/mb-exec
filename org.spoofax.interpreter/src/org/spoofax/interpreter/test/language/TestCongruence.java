@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test.language;
 
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
-public class CongruenceTest extends AbstractLanguageTest {
+public class TestCongruence extends AbstractLanguageTest {
 
     public void testCongInt1() {
         interpTest("cong_int_1", "2", "2");

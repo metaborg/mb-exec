@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test.language;
 
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
-public class DefinitionTest extends AbstractLanguageTest {
+public class TestDefinition extends AbstractLanguageTest {
 
     public void testRDef1() {
         interpTest("foo_rdef_1", "1", "2");

@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test.language;
 
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
-public class OverloadingTest extends AbstractLanguageTest {
+public class TestOverloading extends AbstractLanguageTest {
 
     public void testOverloading1() {
         interpTest("overloading_1", "()", "1");

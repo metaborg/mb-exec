@@ -10,7 +10,7 @@ package org.spoofax.interpreter.test.language;
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
 
-public class TermConstructionTest extends AbstractLanguageTest {
+public class TestTermConstruction extends AbstractLanguageTest {
 
     public void testTermConstr1() {
         interpTest("term_constr_1", "()", "Pair(1,2)");

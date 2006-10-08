@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test.language;
 
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
-public class TermDeconstructionTest extends AbstractLanguageTest {
+public class TestTermDeconstruction extends AbstractLanguageTest {
 
     public void testTermDeconstr1a() {
         interpTest("term_deconstr_1", "1", "1");

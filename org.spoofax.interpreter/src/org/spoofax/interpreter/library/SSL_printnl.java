@@ -37,15 +37,15 @@ public class SSL_printnl extends Primitive {
         StringBuffer sb = new StringBuffer();
         for(int i = 0; i < l.size(); i++) {
             IStrategoTerm t = Tools.termAt(l, i);
-            if (Tools.isTermAppl(t)) {
-                IStrategoAppl a = (IStrategoAppl)t;
-                if (Tools.isCons(a, env))
-                    break;
-                    //sb.append(Tools.consToListDeep(env, a));
-                else if (Tools.isTermString(t))
-                    sb.append(Tools.javaString(t));
-                continue;
-            }
+//            if (Tools.isTermAppl(t)) {
+//                IStrategoAppl a = (IStrategoAppl)t;
+//                if (Tools.isCons(a, env))
+//                    break;
+//                    //sb.append(Tools.consToListDeep(env, a));
+//                else if (Tools.isTermString(t))
+//                    sb.append(Tools.javaString(t));
+//                continue;
+//            }
             PrettyPrinter p = new PrettyPrinter();
             t.prettyPrint(p);
             sb.append(p.getString());
