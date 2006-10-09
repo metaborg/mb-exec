@@ -10,8 +10,7 @@ package org.spoofax.interpreter;
 import java.io.IOException;
 
 import org.spoofax.interpreter.adapters.aterm.WrappedATermFactory;
-import org.spoofax.interpreter.library.SSL;
-import org.spoofax.interpreter.stratego.DebugUtil;
+import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.StupidFormatter;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -43,10 +42,6 @@ public class Interpreter {
         context = new Context(factory, programFactory);
         
         loader = new StrategoCoreLoader(context);
-
-        if(DebugUtil.resetSSL) {
-            SSL.init();//todo: temporary to verify the hypothesis that the global state causes trouble.
-        }
     }
     
 
@@ -92,5 +87,9 @@ public class Interpreter {
 
     public void load(String file) throws IOException, InterpreterException {
         loader.load(file);
+    }
+
+    public void addOperatorRegistry(String domainName, IOperatorRegistry or) {
+        context.addOperatorRegistry(domainName, or);
     }
 }

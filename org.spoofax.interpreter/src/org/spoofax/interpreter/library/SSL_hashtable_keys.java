@@ -27,7 +27,8 @@ public class SSL_hashtable_keys extends Primitive {
         if(!(Tools.isTermInt(targs[0])))
             return false;
 
-        Hashtable ath = SSL.getHashtable(Tools.javaInt(targs[0]));
+        SSL or = (SSL) env.getOperatorRegistry(SSL.REGISTRY_NAME);
+        Hashtable ath = or.getHashtable(Tools.javaInt(targs[0]));
         if(ath == null)
             return false;
         

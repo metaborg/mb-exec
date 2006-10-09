@@ -10,6 +10,9 @@ package org.spoofax.interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.spoofax.interpreter.library.IOperatorRegistry;
+import org.spoofax.interpreter.library.Primitive;
+import org.spoofax.interpreter.library.SSL;
 import org.spoofax.interpreter.stratego.DebugUtil;
 import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
@@ -36,12 +39,17 @@ public class Context implements IContext {
     private ITermFactory factory;
     private ITermFactory programFactory;
 
+    private Map<String, IOperatorRegistry> operatorRegistries;
+
     public Context(ITermFactory factory, ITermFactory programFactory) {
         this.programFactory =  programFactory;
         this.factory = factory;
         opdecls = new HashMap<String, OpDecl>();
         varScope = new VarScope(null);
         strategoSignature = new StrategoSignature(programFactory);
+        operatorRegistries = new HashMap<String, IOperatorRegistry>();
+        
+        operatorRegistries.put(SSL.REGISTRY_NAME, new SSL());
     }
 
     public IStrategoTerm current() {
@@ -152,5 +160,22 @@ public class Context implements IContext {
 
     public ITermFactory getProgramFactory() {
         return programFactory;
+    }
+
+    public IOperatorRegistry getOperatorRegistry(String domain) {
+        return operatorRegistries.get(domain);
+    }
+
+    public Primitive lookupOperator(String name) {
+        for(IOperatorRegistry or : operatorRegistries.values()) {
+            Primitive t = or.get(name);
+            if(t != null)
+                return t;
+        }
+        return null;
+    }
+
+    public void addOperatorRegistry(String domain, IOperatorRegistry or) {
+        operatorRegistries.put(domain, or);
     }
 }

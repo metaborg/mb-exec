@@ -31,7 +31,10 @@ public class SSL_fputc extends Primitive {
         if(!(Tools.isTermInt(targs[1])))
             return false;
 
-        OutputStream s = SSL.outputStreamFromTerm((IStrategoInt)targs[1]);
+        SSL or = (SSL) env.getOperatorRegistry(SSL.REGISTRY_NAME);
+        
+        OutputStream s = or.outputStreamFromTerm((IStrategoInt)targs[1]);
+        
         try {
             s.write(((IStrategoInt)targs[0]).getValue());
         } catch(IOException e) {

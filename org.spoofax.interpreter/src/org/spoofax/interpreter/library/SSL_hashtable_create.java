@@ -44,7 +44,8 @@ public class SSL_hashtable_create extends Primitive {
         int initialSize = ((IStrategoInt)targs[0]).getValue();
         int maxLoad = ((IStrategoInt)targs[1]).getValue();
 
-        int ref = SSL.registerHashtable(new Hashtable(initialSize, maxLoad));
+        SSL or = (SSL) env.getOperatorRegistry(SSL.REGISTRY_NAME);
+        int ref = or.registerHashtable(new Hashtable(initialSize, maxLoad));
         
         env.setCurrent(env.getFactory().makeInt(ref));
         return true;

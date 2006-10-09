@@ -572,7 +572,6 @@ public class Match extends Strategy {
     private Results matchStrStr(IContext env, IStrategoString t, IStrategoAppl p) {
         if(DebugUtil.isDebugging()) {
             DebugUtil.debug("  against Str");
-            int x = 0;
         }
         IStrategoString s = Tools.stringAt(p, 0);
         if(s.equals(t)) {

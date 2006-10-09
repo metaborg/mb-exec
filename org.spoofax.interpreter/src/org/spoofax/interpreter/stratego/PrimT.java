@@ -13,7 +13,6 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.Primitive;
-import org.spoofax.interpreter.library.SSL;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -37,7 +36,8 @@ public class PrimT extends Strategy {
             debug("PrimT.eval() - ", env.current());
         }
 
-        Primitive prim = SSL.lookup(name);
+        
+        Primitive prim = env.lookupOperator(name);
 
         if (prim == null)
             throw new InterpreterException("No such function : '" + name + "'");

@@ -28,7 +28,8 @@ public class SSL_hashtable_remove extends Primitive {
         if(!(Tools.isTermInt(targs[0])))
             return false;
 
-        Hashtable ath = SSL.getHashtable(((IStrategoInt)targs[0]).getValue());
+        SSL or = (SSL) env.getOperatorRegistry(SSL.REGISTRY_NAME);
+        Hashtable ath = or.getHashtable(((IStrategoInt)targs[0]).getValue());
         if(ath == null)
             return false;
         

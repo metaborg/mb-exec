@@ -36,7 +36,8 @@ public class SSL_table_hashtable extends Primitive {
     public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         if(magicRef == -1) {
-            magicRef = SSL.registerHashtable(map);
+            SSL or = (SSL) env.getOperatorRegistry(SSL.REGISTRY_NAME);
+            magicRef = or.registerHashtable(map);
         }
         
         env.setCurrent(env.getFactory().makeInt(magicRef));

@@ -29,7 +29,8 @@ public class SSL_write_term_to_stream_text extends Primitive {
         if(Tools.isTermInt(targs[0]))
             return false;
 
-        OutputStream ous = SSL.outputStreamFromTerm((IStrategoInt)targs[0]);
+        SSL or = (SSL) env.getOperatorRegistry(SSL.REGISTRY_NAME);
+        OutputStream ous = or.outputStreamFromTerm((IStrategoInt)targs[0]);
 
         IStrategoTerm t = targs[1];
         
