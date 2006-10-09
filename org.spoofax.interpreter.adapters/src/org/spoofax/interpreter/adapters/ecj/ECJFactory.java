@@ -50,6 +50,7 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.InfixExpression;
@@ -164,6 +165,7 @@ public class ECJFactory implements ITermFactory {
         throw new NotImplementedException();
     }
 
+    @SuppressWarnings("unchecked")
     public IStrategoList makeList(IStrategoTerm... terms) {
         
         boolean mustUseGeneric = false;
@@ -1124,5 +1126,10 @@ public class ECJFactory implements ITermFactory {
             return None.INSTANCE;
         else
             return new WrappedAnnotationTypeDeclaration(declaration);
+    }
+
+    public boolean wrapBinding(ITypeBinding binding) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
     }
 }

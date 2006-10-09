@@ -9,9 +9,11 @@ package org.spoofax.interpreter.demo;
 
 import java.util.List;
 
-import org.spoofax.NotImplementedException;
+import org.eclipse.jdt.core.dom.Type;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.adapters.ecj.ECJFactory;
+import org.spoofax.interpreter.adapters.ecj.WrappedASTNode;
 import org.spoofax.interpreter.library.Primitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -25,8 +27,18 @@ public class ECJ_type_of_type extends Primitive {
     @Override
     public boolean call(IContext env, List<Strategy> svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        
+        if(!(tvars[0] instanceof WrappedASTNode))
+            return false;
+        
+        WrappedASTNode n = (WrappedASTNode) tvars[0];
+        if(n.getWrappee() instanceof Type)
+            return false;
+        
+        Type t = (Type) n.getWrappee();
+        ECJFactory fac = (ECJFactory) env.getFactory();
+        
+        return fac.wrapBinding(t.resolveBinding());
     }
 
 }
