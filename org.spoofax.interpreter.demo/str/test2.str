@@ -2,18 +2,13 @@ module test2
 imports
   lib
   EclipseJava
+  ecj-adapter
 
-signature
-  constructors
-  FILE : Term -> FILE
-    
 strategies
-
-  ecj-parse-java = ?FILE(x) ; prim("ECJ_parse_java", x)
   
   main = where(
       !FILE(<id>) 
     ; debug 
-    ; ecj-parse-java 
+    ; ecj-parse-only
     ; topdown(try(?TypeDeclaration(_, _, _, _, _, _) ; debug))
     ) ; !()

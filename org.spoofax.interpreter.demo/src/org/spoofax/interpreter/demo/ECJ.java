@@ -18,6 +18,15 @@ public class ECJ extends AbstractStrategoOperatorRegistry {
     }
     
     private void init() {
-        add("ECJ_parse_java", new ECJ_parse_java());
+        add(new ECJ_parse_only());
+        add(new ECJ_parse_and_resolve());
+        add(new ECJ_open_project());
+        add(new ECJ_create_project());
+        add(new ECJ_add_source_folder());
+        add(new ECJ_add_jar());
+        add(new ECJ_binding_of_name());
+        add(new ECJ_type_of_type());
+        add(new ECJ_type_of_typeparameter());
+        add(new ECJ_is_cast_compatible());
     }
 }

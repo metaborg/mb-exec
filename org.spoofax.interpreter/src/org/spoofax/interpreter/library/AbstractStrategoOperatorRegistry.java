@@ -18,8 +18,14 @@ public abstract class AbstractStrategoOperatorRegistry implements IOperatorRegis
         registry = new HashMap<String, Primitive>();
     }
     
+    // FIXME kill - this is superflouse
+    @Deprecated
     protected void add(String name, Primitive prim) {
         registry.put(name, prim);
+    }
+
+    protected void add(Primitive prim) {
+        registry.put(prim.getName(), prim);
     }
     
     public Primitive get(String name) {

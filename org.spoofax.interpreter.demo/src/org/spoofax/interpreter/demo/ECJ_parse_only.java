@@ -24,10 +24,10 @@ import org.spoofax.interpreter.library.Primitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_parse_java extends Primitive {
+public class ECJ_parse_only extends Primitive {
 
-    protected ECJ_parse_java() {
-        super("ECJ_parse_java", 0, 1);
+    protected ECJ_parse_only() {
+        super("ECJ_parse_only", 0, 1);
     }
 
     private static char[] getBytes(String fileName) throws FileNotFoundException, IOException {

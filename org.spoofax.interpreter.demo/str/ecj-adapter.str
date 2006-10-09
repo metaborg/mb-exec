@@ -1,0 +1,63 @@
+module ecj-adapter
+imports
+  lib
+  
+signature
+  constructors
+  FILE : Term -> FILE
+  
+  Project : Term -> Project
+    
+strategies
+
+  ecj-parse-only = ?FILE(name) ; prim("ECJ_parse_only", name)
+
+  ecj-open-project = ?path ; prim("ECJ_open_project", path)
+  
+  ecj-create-project = ?path ; prim("ECJ_create_project", path)
+
+  ecj-add-source-folder(|project) = ?path ; prim("ECJ_add_source_folder", path, project)
+  
+  ecj-add-jar(|project) = ?path ; prim("ECJ_add_jar", path, project)
+    
+  ecj-parse-and-resolve(|project) = ?FILE(name) ; prim("ECJ_parse_and_resolve", name, project) 
+  
+  ecj-binding-of =
+     ecj-is-Name
+   ; ?name
+   ; prim("ECJ_binding_of_name", name)
+   
+  ecj-type-of = 
+     ecj-is-Type
+   ; ?type
+   ; prim("ECJ_type_of_type", type)
+
+  ecj-type-of =
+     ?TypeDeclarationStatement
+   ; ?stmt
+   ; prim("ECJ_type_of_typedeclstmt", stmt)
+  
+  ecj-type-of =
+     ?TypeParameter
+   ; ?param
+   ; prim("ECJ_type_of_typeparameter", param)
+   
+  ecj-is-cast-compatible(|target) =
+     ?source
+   ; prim("ECJ_is_cast_compatible", target, source)
+
+strategies
+
+  ecj-is-Type = 
+      ?ArrayType(_, _, _)
+    + ?ParameterizedType(_, _)
+    + ?PrimitiveType(_)
+    + ?QualifiedType(_, _)
+    + ?SimpleType(_)
+    + ?WildcardType
+
+  ecj-is-Name =
+      ?SimpleName(_)
+    ; ?QualifiedName(_, _)
+   
+  

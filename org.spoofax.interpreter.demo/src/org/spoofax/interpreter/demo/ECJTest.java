@@ -1,29 +1,45 @@
 package org.spoofax.interpreter.demo;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.adapters.ecj.ECJFactory;
-import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJTest {
 
-    public static void main(String[] args) throws IOException, InterpreterException {
-        Interpreter itp = new Interpreter(new ECJFactory());
-        itp.load("str/test1.rtree");
+    public static void main(String[] args) throws IOException, InterpreterException, CoreException {
+        IWorkspace workspace = ResourcesPlugin.getWorkspace();
+        IWorkspaceRoot root = workspace.getRoot();
+        IProject project  = root.getProject("MyProject");
+        IFolder folder = project.getFolder("Folder1");
+        IFile file = folder.getFile("hello.txt");
+        //at this point, no resources have been created
+        if (!project.exists()) project.create(null);
+        if (!project.isOpen()) project.open(null);
+        if (!folder.exists()) 
+           folder.create(IResource.NONE, true, null);
+        if (!file.exists()) {
+           byte[] bytes = "File contents".getBytes();
+           InputStream source = new ByteArrayInputStream(bytes);
+           file.create(source, IResource.NONE, null);
+        }
+        ICompilationUnit cu = JavaCore.createCompilationUnitFrom(file);
         ASTParser parser = ASTParser.newParser(AST.JLS3);
-        parser.setSource("import java.util.List;\nclass X { static void main(String[] args) { int x = 1 + 0; System.out.println(\"Hello, World!\"); } }\n".toCharArray());
-        CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-        System.out.println(cu);
-        ECJFactory wef = new ECJFactory();
-        IStrategoTerm t = wef.parseFromTree(cu);
-        itp.setCurrent(t);
-        //DebugUtil.debugging = true;
-        itp.invoke("main_0_0");
+        parser.setSource(cu);
+        
     }
 }
