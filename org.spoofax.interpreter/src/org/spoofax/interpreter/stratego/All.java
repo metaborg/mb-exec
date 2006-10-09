@@ -14,6 +14,7 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTuple;
 
 public class All extends Strategy {
 
@@ -42,6 +43,8 @@ public class All extends Strategy {
                 return DebugUtil.traceReturn(evalAll(env, (IStrategoAppl)t), env.current(), this);
             case IStrategoTerm.LIST:
                 return DebugUtil.traceReturn(evalAll(env, (IStrategoList)t), env.current(), this);
+            case IStrategoTerm.TUPLE:
+                return DebugUtil.traceReturn(evalAll(env, (IStrategoTuple)t), env.current(), this);
             default:
                 throw new InterpreterException("Unknown ATerm type " + t.getTermType());
         }
@@ -59,6 +62,29 @@ public class All extends Strategy {
             if(!body.eval(env)) {
                 env.setCurrent(list);
                 debug("Child traversal failed at ", list.get(i), ", current = ", env.current());
+                return false;
+            }
+            r[i] = env.current(); 
+        }
+        
+        IStrategoList r2 = env.getFactory().makeList(r);
+        
+        env.setCurrent(r2);
+        
+        return true;
+    }
+
+    private boolean evalAll(IContext env, IStrategoTuple tuple) throws InterpreterException {
+
+        // FIXME collapse with other evalAll
+        
+        IStrategoTerm[] r = new IStrategoTerm[tuple.size()];
+        
+        for(int i = 0; i < r.length; i++) {
+            env.setCurrent(tuple.get(i));
+            if(!body.eval(env)) {
+                env.setCurrent(tuple);
+                debug("Child traversal failed at ", tuple.get(i), ", current = ", env.current());
                 return false;
             }
             r[i] = env.current(); 
