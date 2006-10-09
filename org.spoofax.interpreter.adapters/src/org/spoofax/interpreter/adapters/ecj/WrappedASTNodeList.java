@@ -16,23 +16,14 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.PrettyPrinter;
 
-public class WrappedList implements IStrategoList {
+public class WrappedASTNodeList implements IStrategoList {
 
     private List wrappee;
     
-    public WrappedList(List wrappee) {
+    public WrappedASTNodeList(List wrappee) {
         this.wrappee = wrappee;
     }
     
-    public IStrategoList append(IStrategoTerm postfix) {
-        ASTNode n = ((WrappedASTNode)postfix).getWrappee();
-        
-        List r = new ArrayList();
-        r.addAll(wrappee);
-        r.add(n);
-        return new WrappedList(r);
-    }
-
     public IStrategoTerm get(int i) {
         return getSubterm(i);
     }
@@ -41,11 +32,23 @@ public class WrappedList implements IStrategoList {
         return ECJFactory.genericWrap((ASTNode)wrappee.get(0));
     }
 
-    public IStrategoList insert(IStrategoTerm prefix) {
+    public IStrategoList prepend(IStrategoTerm prefix) {
+        
+        // Trying to build a hybrid list. Do on-the-fly conversion. 
+        if(!(prefix instanceof WrappedASTNode)) {
+            final int sz = wrappee.size();
+            IStrategoTerm[] r = new IStrategoTerm[sz + 1];
+            r[0] = prefix;
+            for(int i = 0; i < sz; i++) {
+                r[i + 1] = (IStrategoTerm) wrappee.get(i);
+            }
+            return new WrappedGenericList(r);
+        }
+        
         List r = new ArrayList();
         r.add(prefix);
         r.addAll(wrappee);
-        return new WrappedList(r);
+        return new WrappedASTNodeList(r);
     }
 
     public int size() {

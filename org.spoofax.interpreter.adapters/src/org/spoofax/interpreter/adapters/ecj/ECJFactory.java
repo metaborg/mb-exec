@@ -165,10 +165,20 @@ public class ECJFactory implements ITermFactory {
     }
 
     public IStrategoList makeList(IStrategoTerm... terms) {
+        
+        boolean mustUseGeneric = false;
+        for(IStrategoTerm t : terms)
+            if(!(t instanceof WrappedASTNode))
+                mustUseGeneric = true;
+        
+        if(mustUseGeneric) {
+            return new WrappedGenericList(terms);
+        }
+        
         List r = new ArrayList();
         for(IStrategoTerm t : terms)
             r.add(t);
-        return new WrappedList(r);
+        return new WrappedASTNodeList(r);
         //throw new NotImplementedException();
     }
 
@@ -200,7 +210,7 @@ public class ECJFactory implements ITermFactory {
         if(list == null)
             return None.INSTANCE;
         else
-            return new WrappedList(list);
+            return new WrappedASTNodeList(list);
     }
 
     static IStrategoTerm wrapName(Name name) {

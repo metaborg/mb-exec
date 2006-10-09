@@ -53,8 +53,8 @@ public class Tools {
             IStrategoConstructor ctr = factory.makeConstructor(ctorName, children.size(), false);
             IStrategoList kids = factory.makeList();
 
-            for (int i = 0; i < children.size(); i++) {
-                kids = kids.append(implode(factory, (IStrategoAppl) children
+            for (int i = children.size() - 1; i >= 0; i--) {
+                kids = kids.prepend(implode(factory, (IStrategoAppl) children
                         .getSubterm(i)));
             }
             return factory.makeAppl(ctr, kids);
@@ -88,28 +88,6 @@ public class Tools {
     public static IStrategoTerm termAt(IStrategoList t, int i) {
         return t.getSubterm(i);
     }
-
-    public static IStrategoList consToList(IContext env, IStrategoAppl cons) {
-        if (Tools.isNil(cons, env))
-            return env.getFactory().makeList();
-        IStrategoList tail = consToList(env, Tools.applAt(cons, 1));
-        IStrategoTerm head = Tools.termAt(cons, 0);
-
-        return tail.insert(head);
-    }
-
-//    public static IStrategoList consToListDeep(IContext env, IStrategoAppl cons) {
-//        if (Tools.isNil(cons, env))
-//            return env.getFactory().makeList();
-//
-//        IStrategoList tail = consToListDeep(env, Tools.applAt(cons, 1));
-//
-//        IStrategoTerm head = Tools.termAt(cons, 0);
-//        if (head.getTermType() == IStrategoTerm.APPL && Tools.isCons((IStrategoAppl)head, env))
-//            head = consToListDeep(env, (IStrategoAppl) head);
-//
-//        return tail.insert(head);
-//    }
 
     public static boolean isCons(IStrategoAppl t, IContext env) {
         return t.getConstructor().equals(env.getStrategoSignature().getCons());

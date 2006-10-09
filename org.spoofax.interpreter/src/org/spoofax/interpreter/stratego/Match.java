@@ -147,7 +147,6 @@ public class Match extends Strategy {
 
         // Check if the constructor name in the pattern
         // matches that of the term
-        System.out.println(p);
         if (!t.getConstructor().getName().equals(c))
             return null;
 

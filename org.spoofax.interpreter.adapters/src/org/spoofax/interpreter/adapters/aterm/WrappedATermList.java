@@ -21,20 +21,11 @@ public class WrappedATermList extends WrappedATerm implements IStrategoList {
         this.list = list;
     }
     
-    public IStrategoList append(IStrategoTerm postfix) {
-        if(!(postfix instanceof WrappedATerm))
-            throw new WrapperException();
-        
-        ATerm post = ((WrappedATerm)postfix).getATerm();
-        
-        return new WrappedATermList(list.append(post));
-    }
-
     public IStrategoTerm get(int i) {
         return WrappedATermFactory.wrapTerm((ATerm)list.getChildAt(i));
     }
 
-    public IStrategoList insert(IStrategoTerm prefix) {
+    public IStrategoList prepend(IStrategoTerm prefix) {
         if(prefix instanceof WrappedATerm) {
             return new WrappedATermList(list.insert(((WrappedATerm)prefix).getATerm()));
         }

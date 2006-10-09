@@ -7,44 +7,20 @@
  */
 package org.spoofax.interpreter.adapters.ecj;
 
-import org.spoofax.NotImplementedException;
-import org.spoofax.interpreter.terms.IStrategoString;
+import org.spoofax.interpreter.terms.BasicStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.PrettyPrinter;
 
-public class WrappedString implements IStrategoString {
+public class WrappedString extends BasicStrategoString {
 
-    private String wrappee;
-    
     WrappedString(String wrappee) {
-        this.wrappee = wrappee;
+        super(wrappee);
     }
 
     WrappedString(char[] wrappee) {
-        this.wrappee = String.valueOf(wrappee);
-    }
-
-    public String getValue() {
-        return wrappee;
-    }
-
-    public IStrategoTerm getSubterm(int index) {
-        return null;
-    }
-
-    public int getSubtermCount() {
-        return 0;
-    }
-
-    public int getTermType() {
-        return IStrategoString.STRING;
+        super(String.valueOf(wrappee));
     }
 
     public boolean match(IStrategoTerm second) {
-        throw new NotImplementedException();
-    }
-
-    public void  prettyPrint(PrettyPrinter pp) {
-        pp.print("\"" + wrappee + "\"");
+        return doSlowMatch(second);
     }
 }

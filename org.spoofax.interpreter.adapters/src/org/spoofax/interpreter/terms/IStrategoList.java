@@ -14,11 +14,12 @@ public interface IStrategoList extends IStrategoTerm {
 
     public int size();
 
-    public IStrategoList append(IStrategoTerm postfix);
-    
-    public IStrategoList insert(IStrategoTerm prefix);
+    // FIXME this must go into the factory -- it is a builder
+    public IStrategoList prepend(IStrategoTerm prefix);
 
     public IStrategoTerm head();
+
+    // FIXME this should go into the factory -- it may be a builder
     public IStrategoList tail();
 
 }

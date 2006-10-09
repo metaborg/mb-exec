@@ -18,6 +18,6 @@ public class ECJ extends AbstractStrategoOperatorRegistry {
     }
     
     private void init() {
-        new ECJ_parse_java();
+        add("ECJ_parse_java", new ECJ_parse_java());
     }
 }

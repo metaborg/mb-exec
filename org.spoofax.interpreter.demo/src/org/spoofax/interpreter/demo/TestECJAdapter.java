@@ -29,11 +29,12 @@ public class TestECJAdapter extends TestCase {
     private void interpTest(String string, String in, String out) throws IOException, InterpreterException {
         ECJFactory f = new ECJFactory();
         Interpreter itp = new Interpreter(f);
+        itp.addOperatorRegistry(ECJ.REGISTRY_NAME, new ECJ());
         itp.load("str/" + string + ".rtree");
         IStrategoTerm inTerm = f.parseFromString(in);
         IStrategoTerm outTerm = f.parseFromString(out);
         itp.setCurrent(inTerm);
         assertTrue(itp.invoke("main_0_0"));
-        assertTrue(inTerm.match(outTerm));
+        assertTrue(itp.current().match(outTerm));
     }
 }

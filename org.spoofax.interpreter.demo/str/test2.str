@@ -9,9 +9,11 @@ signature
     
 strategies
 
-  ecj-parse-java = ?FILE(x) ; !x ; prim("ECJ_parse_java")
+  ecj-parse-java = ?FILE(x) ; prim("ECJ_parse_java", x)
   
-  main = !FILE(<id>) 
+  main = where(
+      !FILE(<id>) 
     ; debug 
     ; ecj-parse-java 
     ; topdown(try(?TypeDeclaration(_, _, _, _, _, _) ; debug))
+    ) ; !()

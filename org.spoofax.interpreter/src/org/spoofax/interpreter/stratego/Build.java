@@ -202,12 +202,12 @@ public class Build extends Strategy {
         IStrategoConstructor ctor = factory.makeConstructor(ctr, children.size(), false);
         IStrategoList kids = factory.makeList();
 
-        for (int i = 0; i < children.size(); i++) {
+        for (int i = children.size() -1 ; i >= 0; i--) {
             IStrategoTerm kid = buildTerm(env, (IStrategoAppl) children.getSubterm(i));
             if (kid == null) {
                 return null;
             }
-            kids = kids.append(kid);
+            kids = kids.prepend(kid);
         }
 
         return factory.makeAppl(ctor, kids);
@@ -223,7 +223,7 @@ public class Build extends Strategy {
         IStrategoList tail = (IStrategoList) buildList(env, tailPattern);
         IStrategoTerm head = buildTerm(env, headPattern);
         
-        return tail.insert(head);
+        return tail.prepend(head);
     }
 
     private IStrategoTerm buildList(IContext env, IStrategoAppl t) throws InterpreterException {
