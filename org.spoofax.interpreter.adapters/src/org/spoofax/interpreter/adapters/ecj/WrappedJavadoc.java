@@ -31,7 +31,7 @@ public class WrappedJavadoc extends WrappedASTNode {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public Javadoc getWrappee() {
         return wrappee;
     }
 }

@@ -202,6 +202,7 @@ public class Build extends Strategy {
         IStrategoConstructor ctor = factory.makeConstructor(ctr, children.size(), false);
         IStrategoList kids = factory.makeList();
 
+        // FIXME use IStrategoTerm[]
         for (int i = children.size() -1 ; i >= 0; i--) {
             IStrategoTerm kid = buildTerm(env, (IStrategoAppl) children.getSubterm(i));
             if (kid == null) {

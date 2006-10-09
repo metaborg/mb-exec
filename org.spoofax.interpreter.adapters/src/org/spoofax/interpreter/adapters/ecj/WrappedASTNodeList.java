@@ -8,6 +8,7 @@
 package org.spoofax.interpreter.adapters.ecj;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -109,5 +110,9 @@ public class WrappedASTNodeList implements IStrategoList {
         } else {
             pp.print("[]");
         }
+    }
+
+    public List getWrappee() {
+        return wrappee;
     }
 }

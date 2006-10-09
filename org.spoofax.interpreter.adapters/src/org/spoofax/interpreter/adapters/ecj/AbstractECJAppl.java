@@ -8,11 +8,12 @@
 package org.spoofax.interpreter.adapters.ecj;
 
 import org.spoofax.NotImplementedException;
+import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.PrettyPrinter;
 
-public abstract class AbstractECJAppl extends AbstractECJNode {
+public abstract class AbstractECJAppl extends AbstractECJNode implements IStrategoAppl {
 
     private final IStrategoConstructor constructor;
     

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.Annotation;
@@ -148,8 +149,58 @@ public class ECJFactory implements ITermFactory {
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
+        final String c = ctr.getName();
+        if(c.equals("PackageDeclaration")) {
+            if(!(ensureJavadoc(kids.get(0)) || ensureNone(kids.get(0))))
+                return null;
+            if(!ensureAnnotations(kids.get(1)))
+                return null;
+            if(!ensureName(kids.get(2)))
+                return null;
+            
+            AST ast = AST.newAST(AST.JLS3);
+            PackageDeclaration pd = ast.newPackageDeclaration();
+            pd.setJavadoc(getJavadoc(kids.get(0)));
+            pd.annotations().addAll(getAnnotations(kids.get(1)));
+            pd.setName(getName(kids.get(2)));
+            
+            return wrap(pd);
+        }
+        if(c.equals("None")) {
+            return None.INSTANCE;
+        }
+         
+        
         return ctr.instantiate(this, kids);
-        //throw new NotImplementedException();
+
+    }
+
+    private boolean ensureNone(IStrategoTerm term) {
+        return term instanceof None;
+    }
+
+    private boolean ensureName(IStrategoTerm term) {
+        return term instanceof WrappedName;
+    }
+
+    private boolean ensureAnnotations(IStrategoTerm term) {
+        return term instanceof WrappedASTNodeList;
+    }
+
+    private boolean ensureJavadoc(IStrategoTerm term) {
+        return term instanceof WrappedJavadoc;
+    }
+
+    private Name getName(IStrategoTerm term) {
+        return ((WrappedName)term).getWrappee();
+    }
+
+    private List getAnnotations(IStrategoTerm term) {
+        return ((WrappedASTNodeList)term).getWrappee();
+    }
+
+    private Javadoc getJavadoc(IStrategoTerm term) {
+        return ((WrappedJavadoc)term).getWrappee();
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... terms) {
@@ -695,7 +746,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedCompilationUnit(unit);
     }
 
-    static IStrategoTerm wrap(PackageDeclaration declaration) {
+    static IStrategoAppl wrap(PackageDeclaration declaration) {
         if(declaration == null)
             return None.INSTANCE;
         else

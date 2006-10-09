@@ -31,7 +31,7 @@ public class WrappedName extends WrappedASTNode {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public Name getWrappee() {
         return wrappee;
     }
 }

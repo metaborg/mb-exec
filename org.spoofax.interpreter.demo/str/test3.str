@@ -1,0 +1,9 @@
+module test3
+imports
+  lib
+  EclipseJava
+  ecj-adapter
+
+strategies
+  
+  main = where(!CompilationUnit(PackageDeclaration(None, [], SimpleName("foo")), [], []) ; debug)
