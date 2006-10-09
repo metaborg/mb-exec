@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.LineComment;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedLineComment extends WrappedAppl {
+public class WrappedLineComment extends WrappedASTNode {
 
     // FIXME where is the content?
     private final LineComment wrappee;

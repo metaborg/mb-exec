@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedPostfixExpression extends WrappedAppl {
+public class WrappedPostfixExpression extends WrappedASTNode {
 
     private final PostfixExpression wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("PostfixExpression", 2);

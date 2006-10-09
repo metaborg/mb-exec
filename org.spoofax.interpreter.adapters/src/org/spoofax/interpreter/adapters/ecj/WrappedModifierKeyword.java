@@ -13,7 +13,7 @@ import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedModifierKeyword extends WrappedAppl {
+public class WrappedModifierKeyword extends WrappedASTNode {
 
     private final Modifier.ModifierKeyword wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ModifierKeyword", 1);

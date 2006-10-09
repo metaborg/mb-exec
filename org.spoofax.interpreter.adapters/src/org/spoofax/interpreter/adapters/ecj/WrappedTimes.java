@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.InfixExpression;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedTimes extends WrappedAppl {
+public class WrappedTimes extends WrappedASTNode {
 
     private final InfixExpression wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("Times", 2);

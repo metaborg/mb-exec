@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedFieldDeclaration extends WrappedAppl {
+public class WrappedFieldDeclaration extends WrappedASTNode {
 
     private final FieldDeclaration wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("FieldDeclaration", 3);

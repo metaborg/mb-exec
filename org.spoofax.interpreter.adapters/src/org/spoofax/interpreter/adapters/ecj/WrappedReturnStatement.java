@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedReturnStatement extends WrappedAppl {
+public class WrappedReturnStatement extends WrappedASTNode {
 
     private final ReturnStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ReturnStatement", 1);

@@ -36,9 +36,9 @@ public class ECJ_type_of_type extends Primitive {
             return false;
         
         Type t = (Type) n.getWrappee();
-        ECJFactory fac = (ECJFactory) env.getFactory();
         
-        return fac.wrapBinding(t.resolveBinding());
+        env.setCurrent(ECJFactory.wrap(t.resolveBinding()));
+        return true;
     }
 
 }

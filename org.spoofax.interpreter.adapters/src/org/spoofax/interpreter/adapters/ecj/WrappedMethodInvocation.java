@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedMethodInvocation extends WrappedAppl {
+public class WrappedMethodInvocation extends WrappedASTNode {
 
     private final MethodInvocation wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("MethodInvocation", 4);

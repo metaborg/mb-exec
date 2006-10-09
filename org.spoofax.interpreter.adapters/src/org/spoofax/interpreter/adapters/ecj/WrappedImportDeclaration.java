@@ -11,7 +11,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedImportDeclaration extends WrappedAppl {
+public class WrappedImportDeclaration extends WrappedASTNode {
 
     private ImportDeclaration wrappee;
     public final static ASTCtor CTOR = new ASTCtor("ImportReference", 1); 

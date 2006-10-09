@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.FieldAccess;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedFieldAccess extends WrappedAppl {
+public class WrappedFieldAccess extends WrappedASTNode {
 
     private final FieldAccess wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("FieldAccess", 2); 

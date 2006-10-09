@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.SimpleType;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedSimpleType extends WrappedAppl {
+public class WrappedSimpleType extends WrappedASTNode {
 
     private final SimpleType wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SimpleType", 1);

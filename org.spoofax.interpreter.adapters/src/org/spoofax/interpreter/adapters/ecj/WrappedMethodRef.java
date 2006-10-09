@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.MethodRef;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedMethodRef extends WrappedAppl {
+public class WrappedMethodRef extends WrappedASTNode {
 
     private final MethodRef wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("MethodRef", 3);

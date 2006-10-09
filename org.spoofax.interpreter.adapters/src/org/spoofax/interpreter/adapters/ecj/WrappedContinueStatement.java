@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedContinueStatement extends WrappedAppl {
+public class WrappedContinueStatement extends WrappedASTNode {
 
     private final ContinueStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ContinueStatement", 1);

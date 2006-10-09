@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedTypeDeclarationStatement extends WrappedAppl {
+public class WrappedTypeDeclarationStatement extends WrappedASTNode {
 
     private final TypeDeclarationStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("TypeDeclarationStatement", 1);

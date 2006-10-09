@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedClassInstanceCreation extends WrappedAppl {
+public class WrappedClassInstanceCreation extends WrappedASTNode {
 
     private final ClassInstanceCreation wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ClassInstanceCreation", 4);

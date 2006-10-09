@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedCompilationUnit extends WrappedAppl {
+public class WrappedCompilationUnit extends WrappedASTNode {
 
     private final CompilationUnit wrappee;
     private static final IStrategoConstructor CTOR = new ASTCtor("CompilationUnit", 3); 

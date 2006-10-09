@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.Javadoc;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedJavadoc extends WrappedAppl {
+public class WrappedJavadoc extends WrappedASTNode {
 
     private final Javadoc wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("Javadoc", 1);

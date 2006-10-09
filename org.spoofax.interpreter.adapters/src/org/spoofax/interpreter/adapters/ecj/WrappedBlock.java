@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.Block;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedBlock extends WrappedAppl {
+public class WrappedBlock extends WrappedASTNode {
 
     private final Block wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("Block", 1); 

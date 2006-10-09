@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.TagElement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedTagElement extends WrappedAppl {
+public class WrappedTagElement extends WrappedASTNode {
 
     // FIXME nested
     

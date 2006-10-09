@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedParameterizedType extends WrappedAppl {
+public class WrappedParameterizedType extends WrappedASTNode {
 
     private final ParameterizedType wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ParameterizedType", 2);

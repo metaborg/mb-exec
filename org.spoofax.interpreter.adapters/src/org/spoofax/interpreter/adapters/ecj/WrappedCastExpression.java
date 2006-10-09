@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.CastExpression;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedCastExpression extends WrappedAppl {
+public class WrappedCastExpression extends WrappedASTNode {
 
     private final CastExpression wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("CastExpression", 2);

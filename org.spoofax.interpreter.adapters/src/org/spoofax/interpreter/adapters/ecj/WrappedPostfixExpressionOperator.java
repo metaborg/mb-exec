@@ -14,7 +14,7 @@ import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedPostfixExpressionOperator extends WrappedAppl {
+public class WrappedPostfixExpressionOperator extends WrappedASTNode {
 
     private final PostfixExpression.Operator wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("PostfixExpressionOperator", 1);

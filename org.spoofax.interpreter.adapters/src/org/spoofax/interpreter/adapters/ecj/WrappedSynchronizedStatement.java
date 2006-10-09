@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.SynchronizedStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedSynchronizedStatement extends WrappedAppl {
+public class WrappedSynchronizedStatement extends WrappedASTNode {
 
     private final SynchronizedStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SynchronizedStatement", 2);

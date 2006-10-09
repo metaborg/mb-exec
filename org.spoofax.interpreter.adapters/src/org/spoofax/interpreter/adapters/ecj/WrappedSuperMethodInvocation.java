@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedSuperMethodInvocation extends WrappedAppl {
+public class WrappedSuperMethodInvocation extends WrappedASTNode {
 
     private final SuperMethodInvocation wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SuperMethodInvocation", 4);

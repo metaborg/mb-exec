@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.MemberValuePair;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedMemberValuePair extends WrappedAppl {
+public class WrappedMemberValuePair extends WrappedASTNode {
 
     private final MemberValuePair wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("MemberValuePair", 2);

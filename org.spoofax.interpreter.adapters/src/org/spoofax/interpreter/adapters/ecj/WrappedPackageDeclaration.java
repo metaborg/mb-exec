@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedPackageDeclaration extends WrappedAppl {
+public class WrappedPackageDeclaration extends WrappedASTNode {
 
     private static final IStrategoConstructor CTOR = new ASTCtor("PackageDeclaration", 3); 
     private final PackageDeclaration wrappee;

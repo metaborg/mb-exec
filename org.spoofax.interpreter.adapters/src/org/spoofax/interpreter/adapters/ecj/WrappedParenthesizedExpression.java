@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.ParenthesizedExpression;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedParenthesizedExpression extends WrappedAppl {
+public class WrappedParenthesizedExpression extends WrappedASTNode {
 
     private final ParenthesizedExpression wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ParenthesizedExpression", 1);

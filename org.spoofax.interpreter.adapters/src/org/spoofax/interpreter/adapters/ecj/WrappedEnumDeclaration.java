@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedEnumDeclaration extends WrappedAppl {
+public class WrappedEnumDeclaration extends WrappedASTNode {
 
     private final EnumDeclaration wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("EnumDeclaration", 5);

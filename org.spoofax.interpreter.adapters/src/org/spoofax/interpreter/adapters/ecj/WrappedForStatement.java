@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.ForStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedForStatement extends WrappedAppl {
+public class WrappedForStatement extends WrappedASTNode {
 
     private final ForStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ForStatement", 4);

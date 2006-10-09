@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedSuperFieldAccess extends WrappedAppl {
+public class WrappedSuperFieldAccess extends WrappedASTNode {
 
     private final SuperFieldAccess wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SuperFieldAccess", 2);

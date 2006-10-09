@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedSingleVariableDeclaration extends WrappedAppl {
+public class WrappedSingleVariableDeclaration extends WrappedASTNode {
 
     private final SingleVariableDeclaration wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SingleVariableDeclaration", 1);

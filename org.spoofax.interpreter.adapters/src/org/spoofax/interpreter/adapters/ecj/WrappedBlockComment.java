@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.BlockComment;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedBlockComment extends WrappedAppl {
+public class WrappedBlockComment extends WrappedASTNode {
 
     // FIXME where's the content?
     private final BlockComment wrappee;

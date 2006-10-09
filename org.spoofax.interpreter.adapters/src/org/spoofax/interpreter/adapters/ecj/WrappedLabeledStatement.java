@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.LabeledStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedLabeledStatement extends WrappedAppl {
+public class WrappedLabeledStatement extends WrappedASTNode {
 
     private final LabeledStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("LabeledStatement", 2);

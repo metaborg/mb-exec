@@ -13,7 +13,7 @@ import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedPlus extends WrappedAppl {
+public class WrappedPlus extends WrappedASTNode {
 
     private final InfixExpression wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("Plus", 2); 

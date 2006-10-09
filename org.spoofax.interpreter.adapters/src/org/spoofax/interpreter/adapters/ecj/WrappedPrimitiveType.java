@@ -14,7 +14,7 @@ import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedPrimitiveType extends WrappedAppl {
+public class WrappedPrimitiveType extends WrappedASTNode {
 
     // FIXME should we even keep this?
     

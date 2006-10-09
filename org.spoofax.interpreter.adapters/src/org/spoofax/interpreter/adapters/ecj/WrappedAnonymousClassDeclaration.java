@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedAnonymousClassDeclaration extends WrappedAppl {
+public class WrappedAnonymousClassDeclaration extends WrappedASTNode {
 
     private final AnonymousClassDeclaration wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("AnonymousClassDeclaration", 1);

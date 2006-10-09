@@ -11,7 +11,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class None extends WrappedAppl {
+public class None extends WrappedASTNode {
 
 
     private final static IStrategoTerm[] EMPTY = new IStrategoTerm[0];

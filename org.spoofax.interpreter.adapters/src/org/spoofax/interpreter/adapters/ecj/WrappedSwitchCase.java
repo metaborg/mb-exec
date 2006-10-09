@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.SwitchCase;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedSwitchCase extends WrappedAppl {
+public class WrappedSwitchCase extends WrappedASTNode {
 
     // FIXME default
     

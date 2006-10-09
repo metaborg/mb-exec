@@ -1128,8 +1128,17 @@ public class ECJFactory implements ITermFactory {
             return new WrappedAnnotationTypeDeclaration(declaration);
     }
 
-    public boolean wrapBinding(ITypeBinding binding) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+    public static IStrategoTerm wrap(ITypeBinding binding) {
+        if(binding == null)
+            return None.INSTANCE;
+        else
+            return new WrappedITypeBinding(binding);
+    }
+
+    public static IStrategoTerm wrap(ITypeBinding[] bindings) {
+        IStrategoTerm[] terms = new IStrategoTerm[bindings.length];
+        for(int i = 0, sz = bindings.length; i < sz; i++)
+            terms[i] = ECJFactory.wrap(bindings[i]);
+        return new WrappedGenericList(terms);
     }
 }

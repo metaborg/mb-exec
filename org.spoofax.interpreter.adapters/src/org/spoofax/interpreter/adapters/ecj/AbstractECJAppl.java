@@ -1,5 +1,5 @@
 /*
- * Created on 29. sep.. 2006
+ * Created on 9. okt.. 2006
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -8,20 +8,18 @@
 package org.spoofax.interpreter.adapters.ecj;
 
 import org.spoofax.NotImplementedException;
-import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.PrettyPrinter;
 
-public abstract class WrappedAppl extends WrappedASTNode implements IStrategoAppl {
+public abstract class AbstractECJAppl extends AbstractECJNode {
 
     private final IStrategoConstructor constructor;
     
-    protected WrappedAppl(IStrategoConstructor constructor) {
+    protected AbstractECJAppl(IStrategoConstructor constructor) {
         this.constructor = constructor;
     }
     
-    @Override
     public int getTermType() {
         return IStrategoTerm.APPL;
     }
@@ -30,7 +28,6 @@ public abstract class WrappedAppl extends WrappedASTNode implements IStrategoApp
         return constructor;
     }
 
-    @Override
     public int getSubtermCount() {
         return constructor.getArity();
     }
@@ -44,7 +41,6 @@ public abstract class WrappedAppl extends WrappedASTNode implements IStrategoApp
         return r;
     }
     
-    @Override
     public boolean match(IStrategoTerm second) {
         throw new NotImplementedException();
     }
@@ -71,4 +67,6 @@ public abstract class WrappedAppl extends WrappedASTNode implements IStrategoApp
             
         }
     }
+    
+    public abstract IStrategoTerm getSubterm(int index);
 }

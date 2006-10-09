@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedIntType extends WrappedAppl {
+public class WrappedIntType extends WrappedASTNode {
 
     private final PrimitiveType wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("IntType", 0);

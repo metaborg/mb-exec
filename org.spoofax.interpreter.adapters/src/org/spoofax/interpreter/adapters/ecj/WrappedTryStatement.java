@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.TryStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedTryStatement extends WrappedAppl {
+public class WrappedTryStatement extends WrappedASTNode {
 
     private final TryStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("TryStatement", 3);

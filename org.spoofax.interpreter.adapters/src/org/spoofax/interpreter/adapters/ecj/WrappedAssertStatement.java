@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.AssertStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedAssertStatement extends WrappedAppl {
+public class WrappedAssertStatement extends WrappedASTNode {
 
     private final AssertStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("AssertStatement", 2);

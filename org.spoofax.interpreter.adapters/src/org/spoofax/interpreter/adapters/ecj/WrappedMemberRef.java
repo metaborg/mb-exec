@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.MemberRef;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedMemberRef extends WrappedAppl {
+public class WrappedMemberRef extends WrappedASTNode {
 
     private final MemberRef wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("MemberRef", 2);

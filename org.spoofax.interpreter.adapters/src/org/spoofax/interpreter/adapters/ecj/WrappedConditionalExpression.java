@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.ConditionalExpression;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedConditionalExpression extends WrappedAppl {
+public class WrappedConditionalExpression extends WrappedASTNode {
 
     private final ConditionalExpression wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ConditionalExpression", 3);

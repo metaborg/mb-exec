@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.NullLiteral;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedNullLiteral extends WrappedAppl {
+public class WrappedNullLiteral extends WrappedASTNode {
 
     private final NullLiteral wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("NullLiteral", 0);

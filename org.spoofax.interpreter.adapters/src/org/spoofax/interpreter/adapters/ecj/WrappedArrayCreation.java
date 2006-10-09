@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.ArrayCreation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedArrayCreation extends WrappedAppl {
+public class WrappedArrayCreation extends WrappedASTNode {
 
     private final ArrayCreation wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ArrayCreation", 3);

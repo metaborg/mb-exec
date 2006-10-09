@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.CatchClause;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedCatchClause extends WrappedAppl {
+public class WrappedCatchClause extends WrappedASTNode {
 
     private final CatchClause wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("CatchClause", 2);

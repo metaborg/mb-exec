@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.TextElement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedTextElement extends WrappedAppl {
+public class WrappedTextElement extends WrappedASTNode {
 
     private final TextElement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("TextElement", 1);

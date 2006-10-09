@@ -9,9 +9,10 @@ package org.spoofax.interpreter.demo;
 
 import java.util.List;
 
-import org.spoofax.NotImplementedException;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.adapters.ecj.WrappedITypeBinding;
 import org.spoofax.interpreter.library.Primitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -25,8 +26,19 @@ public class ECJ_is_cast_compatible extends Primitive {
     @Override
     public boolean call(IContext env, List<Strategy> svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        
+        if(!(tvars[0] instanceof WrappedITypeBinding))
+            return true;
+        if(!(tvars[1] instanceof WrappedITypeBinding))
+            return true;
+            
+        WrappedITypeBinding wb0 = (WrappedITypeBinding) tvars[0];
+        ITypeBinding b0 = wb0.getWrappee();
+
+        WrappedITypeBinding wb1 = (WrappedITypeBinding) tvars[0];
+        ITypeBinding b1 = wb1.getWrappee();
+        
+        return b0.isCastCompatible(b1);
     }
 
 }
