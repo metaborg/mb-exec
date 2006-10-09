@@ -130,6 +130,11 @@ public class ECJFactory implements ITermFactory {
     }
 
     public IStrategoTerm parseFromString(String text) {
+        if(text.equals("()")) {
+            return makeTuple();
+        } else if(text.charAt(0) == '"') {
+            return makeString(text.substring(1).substring(0, text.length() - 2));
+        }
         throw new NotImplementedException();
     }
 

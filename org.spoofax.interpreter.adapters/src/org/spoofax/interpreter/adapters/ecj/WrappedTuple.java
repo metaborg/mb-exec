@@ -41,13 +41,41 @@ public class WrappedTuple implements IStrategoTuple {
     }
 
     public boolean match(IStrategoTerm second) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(!(second instanceof WrappedTuple))
+            return false;
+        
+        WrappedTuple t = (WrappedTuple)second;
+        
+        if(kids.length != kids.length)
+            return false;
+        
+        for(int i = 0, sz = t.size(); i < sz; i++) {
+            if(!kids[i].match(t.kids[i]))
+                return false;
+        }
+        
+        return true;
     }
 
     public void prettyPrint(PrettyPrinter pp) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        int sz = size();
+        if(sz > 0) {
+            pp.println("(");
+            pp.indent(2);
+            get(0).prettyPrint(pp);
+            for(int i = 1; i < sz; i++) {
+                pp.print(", ");
+                pp.nextIndentOff();
+                get(i).prettyPrint(pp);
+                pp.println("");
+            }
+            pp.println("");
+            pp.print(")");
+            pp.outdent(2);
+
+        } else {
+            pp.print("()");
+        }
     }
 
 }
