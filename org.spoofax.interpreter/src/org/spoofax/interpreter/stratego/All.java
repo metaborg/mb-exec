@@ -53,11 +53,9 @@ public class All extends Strategy {
 
     private boolean evalAll(IContext env, IStrategoList list) throws InterpreterException {
 
-        // FIXME collapse with other evalAll
-        
         IStrategoTerm[] r = new IStrategoTerm[list.size()];
         
-        for(int i = 0; i < r.length; i++) {
+        for(int i = 0, sz = r.length; i < sz; i++) {
             env.setCurrent(list.get(i));
             if(!body.eval(env)) {
                 env.setCurrent(list);
@@ -76,11 +74,9 @@ public class All extends Strategy {
 
     private boolean evalAll(IContext env, IStrategoTuple tuple) throws InterpreterException {
 
-        // FIXME collapse with other evalAll
-        
         IStrategoTerm[] r = new IStrategoTerm[tuple.size()];
         
-        for(int i = 0; i < r.length; i++) {
+        for(int i = 0, sz = r.length; i < sz; i++) {
             env.setCurrent(tuple.get(i));
             if(!body.eval(env)) {
                 env.setCurrent(tuple);
@@ -90,7 +86,7 @@ public class All extends Strategy {
             r[i] = env.current(); 
         }
         
-        IStrategoList r2 = env.getFactory().makeList(r);
+        IStrategoTuple r2 = env.getFactory().makeTuple(r);
         
         env.setCurrent(r2);
         
@@ -102,7 +98,7 @@ public class All extends Strategy {
         IStrategoConstructor ctor = t.getConstructor();
         IStrategoTerm[] xt = new IStrategoTerm[t.getSubtermCount()];
         
-        for(int i = 0; i < t.getSubtermCount(); i++) {
+        for(int i = 0, sz = t.getSubtermCount(); i < sz; i++) {
             env.setCurrent(Tools.termAt(t, i));
             if(!body.eval(env)) {
                 env.setCurrent(t);

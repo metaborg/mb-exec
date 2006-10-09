@@ -26,6 +26,16 @@ public class TestECJAdapter extends TestCase {
         interpTest("test2", "\"src/org/spoofax/interpreter/demo/ECJ.java\"", "()");
     }
 
+    private void interpTestFail(String string, String in) throws IOException, InterpreterException {
+        ECJFactory f = new ECJFactory();
+        Interpreter itp = new Interpreter(f);
+        itp.addOperatorRegistry(ECJ.REGISTRY_NAME, new ECJ());
+        itp.load("str/" + string + ".rtree");
+        IStrategoTerm inTerm = f.parseFromString(in);
+        itp.setCurrent(inTerm);
+        assertTrue(!itp.invoke("main_0_0"));
+    }
+
     private void interpTest(String string, String in, String out) throws IOException, InterpreterException {
         ECJFactory f = new ECJFactory();
         Interpreter itp = new Interpreter(f);

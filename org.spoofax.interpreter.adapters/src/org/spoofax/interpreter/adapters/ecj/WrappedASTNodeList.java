@@ -78,7 +78,16 @@ public class WrappedASTNodeList implements IStrategoList {
     }
 
     public boolean match(IStrategoTerm second) {
-        throw new NotImplementedException();
+        if(second instanceof IStrategoList) {
+            IStrategoList snd = (IStrategoList) second;
+            if(size() != snd.size()) 
+                return false;
+            for(int i = 0; i < size(); i++) 
+                if(!get(i).match(snd.get(i)))
+                    return false;
+            return true;
+        } 
+        return false;
     }
 
     public void prettyPrint(PrettyPrinter pp) {
