@@ -1,0 +1,17 @@
+module test2
+imports
+  lib
+  EclipseJava
+
+signature
+  constructors
+  FILE : Term -> FILE
+    
+strategies
+
+  ecj-parse-java = ?FILE(x) ; !x ; prim("ECJ_parse_java")
+  
+  main = !FILE(<id>) 
+    ; debug 
+    ; ecj-parse-java 
+    ; topdown(try(?TypeDeclaration(_, _, _, _, _, _) ; debug))

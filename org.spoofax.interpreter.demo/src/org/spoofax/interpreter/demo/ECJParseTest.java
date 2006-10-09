@@ -39,6 +39,7 @@ public class ECJParseTest {
     static void parse(String file) throws FileNotFoundException, IOException, InterpreterException {
 
         Interpreter itp = new Interpreter(new ECJFactory());
+        itp.addOperatorRegistry(ECJ.REGISTRY_NAME, new ECJ());
         itp.load("deconstructor.rtree");
         ASTParser parser = ASTParser.newParser(AST.JLS3);
         parser.setSource(getBytes(file));
