@@ -7,13 +7,8 @@
  */
 package org.spoofax.interpreter.demo;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -37,6 +32,28 @@ public class SpoofaxDemo implements IPlatformRunnable {
         return EXIT_OK;
     }
 
+    private void test() {
+        try {
+            IWorkspace workspace = ResourcesPlugin.getWorkspace();
+            IWorkspaceRoot root = workspace.getRoot();
+            IProject project  = root.getProject("demo1");
+            IFile file = project.getFile("HelloWorld.java");
+            if (!project.isOpen()) project.open(null);
+            ICompilationUnit cu = JavaCore.createCompilationUnitFrom(file);
+            ASTParser parser = ASTParser.newParser(AST.JLS3);
+            parser.setResolveBindings(true);
+            parser.setSource(cu);
+            CompilationUnit n = (CompilationUnit)parser.createAST(null);
+            AbstractTypeDeclaration t = (AbstractTypeDeclaration) n.types().get(0);
+            ITypeBinding tb = t.resolveBinding();
+            System.out.print(n);
+            System.out.println(tb);
+        } catch(CoreException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
     private void test() {
         try {
             IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -69,4 +86,5 @@ public class SpoofaxDemo implements IPlatformRunnable {
             e.printStackTrace();
         }
     }
+    */
 }

@@ -29,13 +29,18 @@ public class WrappedITypeBinding extends AbstractWrappedBinding {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            // FIXME should become a QualifiedName
-            return ECJFactory.wrap(wrappee.getPackage().getNameComponents());
+            if(wrappee.getPackage() == null)
+                return ECJFactory.wrap(new String[0]);
+            else 
+                return ECJFactory.wrap(wrappee.getPackage().getNameComponents());
         case 1:
             // FIXME should become a QualifiedName
             return ECJFactory.wrap(wrappee.getQualifiedName());
         case 2:
-            return ECJFactory.wrap(wrappee.getSuperclass().getQualifiedName());
+            if(wrappee.getSuperclass() == null)
+                return None.INSTANCE;
+            else 
+                return ECJFactory.wrap(wrappee.getSuperclass().getQualifiedName());
         case 3:
             return ECJFactory.wrap(wrappee.getTypeArguments());
         case 4:
