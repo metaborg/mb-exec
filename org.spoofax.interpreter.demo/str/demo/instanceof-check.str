@@ -1,0 +1,30 @@
+module instanceof-check
+imports
+  lib
+  EclipseJava
+  ecj-adapter
+  
+strategies 
+
+  main = ?basedir
+    ; traverse-dir(swt-check)
+ 
+  traverse-dir(s) =
+       is-dir ; list-files => files ; map(traverse-dir)(s)
+    <+ s
+    
+  instanceof-check =
+    parse-and-resolve(|project)
+    ; do-instanceof-check
+    
+  do-instanceof-check =
+    topdown(try(InstanceofCheck))
+    
+  InstanceofCheck:
+    md@MethodDeclaration(_, _, _, _, _, body) -> md
+  where
+      !body => Block([fst | _])
+    ; not(!fst => IfStatement(InstanceofExpression(_, _), _, _))
+    ; warn(|"equals() does not start with instanceof check")
+    
+    

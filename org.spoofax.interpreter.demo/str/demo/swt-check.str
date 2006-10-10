@@ -1,0 +1,33 @@
+module swt-check
+imports
+  lib
+  EclipseJava
+  ecj-adapter
+  
+strategies 
+
+  main = ?basedir
+    ; traverse-dir(swt-check)
+ 
+  traverse-dir(s) =
+       is-dir ; list-files => files ; map(traverse-dir)(s)
+    <+ s
+    
+  swt-check =
+    parse-and-resolve(|project)
+    ; do-swt-check
+    
+  do-swt-check =
+    topdown(try(SWTCheck))
+    
+  SWTCheck:
+    td@TypeDeclaration(_, _, _, _, _, _) -> td
+  where
+      <to-qualified-name> "org.eclipse.swt.widgets" => qn
+    ; <find-type-binding> (qn, "Widget") => widget-tp
+    ; <type-of> td => tp
+    ; <is-cast-compatible> (tp, widget-tp)
+    ; not(<package-of ; to-dottect-name> td => "org.eclipse.swt.widgets")
+    ; warn(|"Illegal subclassing of org.eclipse.swt.widgets.Widget!")
+    
+    
