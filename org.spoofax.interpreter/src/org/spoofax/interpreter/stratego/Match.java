@@ -9,6 +9,7 @@ package org.spoofax.interpreter.stratego;
 
 import java.util.ArrayList;
 
+import org.spoofax.DebugUtil;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;

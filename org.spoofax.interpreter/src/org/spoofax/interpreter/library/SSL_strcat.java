@@ -9,10 +9,10 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
-import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_strcat extends Primitive {
@@ -21,7 +21,7 @@ public class SSL_strcat extends Primitive {
         super("SSL_strcat", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
+    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         if(!Tools.isTermString(targs[0]))
             return false;

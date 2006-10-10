@@ -11,10 +11,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.stratego.All;
 import org.spoofax.interpreter.stratego.Build;
 import org.spoofax.interpreter.stratego.CallT;
-import org.spoofax.interpreter.stratego.DebugUtil;
 import org.spoofax.interpreter.stratego.ExtSDef;
 import org.spoofax.interpreter.stratego.Fail;
 import org.spoofax.interpreter.stratego.GuardedLChoice;

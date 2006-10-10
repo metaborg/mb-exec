@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.spoofax.interpreter.Context;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.stratego.SDefT.ArgType;
 import org.spoofax.interpreter.stratego.SDefT.ConstType;
 import org.spoofax.interpreter.stratego.SDefT.FunType;
@@ -26,7 +27,7 @@ abstract public class Strategy implements IConstruct {
         type = new FunType(l);
     }
     
-    protected static void debug(Object... s) {
+    public static void debug(Object... s) {
         Context.debug(s);
     }
     

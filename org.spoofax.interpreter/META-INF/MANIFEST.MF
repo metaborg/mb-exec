@@ -1,14 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Spoofax Core
-Bundle-SymbolicName: org.spoofax.core
+Bundle-Name: Spoofax Interpreter
+Bundle-SymbolicName: org.spoofax.interpreter
 Bundle-Version: 0.3.9
-Bundle-Activator: org.spoofax.core.SpoofaxCorePlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.junit
-Eclipse-AutoStart: true
-Bundle-ClassPath: ext/aterm-1.6.jar,
- ext/jjtraveler-0.4.3.jar,
- ext/shared-objects-1.4.jar
+ org.junit,
+ org.spoofax.interpreter.adapters
+Eclipse-LazyStart: true
+Export-Package: org.spoofax,
+ org.spoofax.interpreter,
+ org.spoofax.interpreter.library

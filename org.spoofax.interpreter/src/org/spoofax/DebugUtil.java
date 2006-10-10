@@ -1,6 +1,10 @@
-package org.spoofax.interpreter.stratego;
+package org.spoofax;
 
 import org.spoofax.interpreter.Context;
+import org.spoofax.interpreter.stratego.CallT;
+import org.spoofax.interpreter.stratego.Let;
+import org.spoofax.interpreter.stratego.Scope;
+import org.spoofax.interpreter.stratego.Strategy;
 
 /*
  * Created on 28.mar.2006

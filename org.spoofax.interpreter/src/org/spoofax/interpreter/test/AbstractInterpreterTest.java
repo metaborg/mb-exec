@@ -11,9 +11,9 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
+import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.stratego.DebugUtil;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 

@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.stratego;
 
+import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.BindingInfo;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;

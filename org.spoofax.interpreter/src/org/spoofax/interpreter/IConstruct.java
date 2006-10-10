@@ -5,10 +5,9 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.stratego;
+package org.spoofax.interpreter;
 
-import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.stratego.StupidFormatter;
 
 public interface IConstruct {
 

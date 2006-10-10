@@ -10,10 +10,10 @@ package org.spoofax.interpreter.demo;
 import java.util.List;
 
 import org.spoofax.NotImplementedException;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.library.Primitive;
-import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJ_parse_and_resolve extends Primitive {
@@ -22,7 +22,7 @@ public class ECJ_parse_and_resolve extends Primitive {
         super("ECJ_parse_and_resolve", 0, 2);
     }
     @Override
-    public boolean call(IContext env, List<Strategy> svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         // TODO Auto-generated method stub
         throw new NotImplementedException();

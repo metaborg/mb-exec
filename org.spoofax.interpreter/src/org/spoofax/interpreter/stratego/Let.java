@@ -10,6 +10,7 @@ package org.spoofax.interpreter.stratego;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.VarScope;

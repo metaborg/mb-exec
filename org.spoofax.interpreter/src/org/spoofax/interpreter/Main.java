@@ -2,7 +2,7 @@ package org.spoofax.interpreter;
 
 import java.io.IOException;
 
-import org.spoofax.interpreter.stratego.DebugUtil;
+import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class Main {

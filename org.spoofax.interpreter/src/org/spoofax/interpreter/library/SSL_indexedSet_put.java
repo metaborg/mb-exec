@@ -9,11 +9,11 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.SSL_indexedSet_create.IndexedSet;
-import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -23,7 +23,7 @@ public class SSL_indexedSet_put extends Primitive {
         super("SSL_indexedSet_put", 1, 2);
     }
 
-    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs)
+    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs)
             throws InterpreterException {
 
         if (!(Tools.isTermInt(targs[0])))
@@ -36,7 +36,7 @@ public class SSL_indexedSet_put extends Primitive {
             return false;
         
         IStrategoTerm t = targs[1];
-        Strategy s = sargs.get(0);
+        IConstruct s = sargs.get(0);
         if (is.containsValue(t)) {
             return s.eval(env);
         }

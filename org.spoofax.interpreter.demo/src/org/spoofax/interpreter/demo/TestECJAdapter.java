@@ -11,10 +11,10 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
+import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapters.ecj.ECJFactory;
-import org.spoofax.interpreter.stratego.DebugUtil;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class TestECJAdapter extends TestCase {

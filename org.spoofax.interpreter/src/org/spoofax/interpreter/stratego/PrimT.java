@@ -7,8 +7,11 @@
  */
 package org.spoofax.interpreter.stratego;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
@@ -20,13 +23,15 @@ public class PrimT extends Strategy {
 
     protected String name;
 
-    protected List<Strategy> svars;
+    protected List<IConstruct> svars;
 
     protected IStrategoTerm[] tvars;
 
     public PrimT(String name, List<Strategy> svars, List<IStrategoTerm> tvars) {
         this.name = name;
-        this.svars = svars;
+        this.svars = new ArrayList<IConstruct>();
+        for(Strategy s : svars)
+            this.svars.add(s);
         this.tvars = tvars.toArray(new IStrategoTerm[0]);
     }
 

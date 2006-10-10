@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.spoofax.aterm"/>
 	<classpathentry kind="lib" path="lib/aterm-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/jjtraveler-0.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/shared-objects-1.4.jar"/>

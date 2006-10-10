@@ -9,11 +9,11 @@ package org.spoofax.interpreter.library;
 
 import java.util.List;
 
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.SSL_hashtable_create.Hashtable;
-import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -23,7 +23,7 @@ public class SSL_hashtable_get extends Primitive {
         super("SSL_hashtable_get", 0, 2);
     }
     
-    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
+    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         if(!(Tools.isTermInt(targs[0])))
             return false;

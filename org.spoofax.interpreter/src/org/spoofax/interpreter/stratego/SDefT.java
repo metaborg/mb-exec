@@ -9,6 +9,7 @@ package org.spoofax.interpreter.stratego;
 
 import java.util.List;
 
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.VarScope;
@@ -20,7 +21,7 @@ public class SDefT implements IConstruct {
 
     protected List<String> termArgs;
 
-    protected Strategy body;
+    protected IConstruct body;
 
     protected VarScope scope;
 
@@ -77,7 +78,7 @@ public class SDefT implements IConstruct {
         }
     }
 
-    public SDefT(String name, List<SVar> svars, List<String> tvars, Strategy body, VarScope scope) {
+    public SDefT(String name, List<SVar> svars, List<String> tvars, IConstruct body, VarScope scope) {
         this.name = name;
         this.strategyArgs = svars;
         this.termArgs = tvars;
@@ -94,7 +95,7 @@ public class SDefT implements IConstruct {
         return name;
     }
 
-    public Strategy getBody() {
+    public IConstruct getBody() {
         return body;
     }
 

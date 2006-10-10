@@ -10,6 +10,8 @@ package org.spoofax.interpreter.stratego;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
@@ -22,7 +24,7 @@ public class CallT extends Strategy {
 
     protected String name;
 
-    protected List<Strategy> svars;
+    protected List<IConstruct> svars;
 
     protected IStrategoTerm[] tvars;
 
@@ -30,7 +32,9 @@ public class CallT extends Strategy {
 
     public CallT(String name, List<Strategy> svars, List<IStrategoTerm> tvars) {
         this.name = name;
-        this.svars = svars;
+        this.svars = new ArrayList<IConstruct>();
+        for(Strategy s : svars)
+            this.svars.add(s);
         this.tvars = tvars.toArray(new IStrategoTerm[0]);
     }
 
@@ -60,7 +64,7 @@ public class CallT extends Strategy {
 
         for (int i = 0; i < svars.size(); i++) {
             SVar formal = formalStrategyArgs.get(i);
-            Strategy actual = svars.get(i);
+            IConstruct actual = svars.get(i);
 
             SDefT target = null;
             if (actual instanceof CallT &&
@@ -137,7 +141,7 @@ public class CallT extends Strategy {
      */
     /*package*/
     static void printStrategyCall(final String name,
-      final List<SVar> svarsFormal, final List<Strategy> svarsActual,
+      final List<SVar> svarsFormal, final List<IConstruct> svarsActual,
       final List<String> tvarsFormal, final IStrategoTerm[] tvarsActual) {
 
         // Print this at the same indentation with the associated scope.
@@ -171,7 +175,7 @@ public class CallT extends Strategy {
         return name;
     }
 
-    public List<Strategy> getStrategyArguments() {
+    public List<IConstruct> getStrategyArguments() {
         return svars;
     }
 
