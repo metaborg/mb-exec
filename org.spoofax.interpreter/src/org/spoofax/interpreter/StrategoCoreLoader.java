@@ -8,6 +8,7 @@
 package org.spoofax.interpreter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -336,8 +337,11 @@ public class StrategoCoreLoader {
     }
     
     public void load(String path) throws IOException, InterpreterException {
-
-        IStrategoTerm prg = factory.parseFromFile(path);
+        doLoad(factory.parseFromFile(path));
+    }
+    
+    private void doLoad(IStrategoTerm prg) throws InterpreterException {
+        
         IStrategoAppl sign = Tools.applAt(Tools.listAt(prg, 0), 0);
         IStrategoAppl strats = Tools.applAt(Tools.listAt(prg, 0), 1);
 
@@ -371,6 +375,10 @@ public class StrategoCoreLoader {
             }
         }
 
+    }
+
+    public void load(InputStream stream) throws InterpreterException, IOException {
+        doLoad(factory.parseFromStream(stream));
     }
 
 }

@@ -8,6 +8,7 @@
 package org.spoofax.interpreter;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.spoofax.interpreter.adapters.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.library.IOperatorRegistry;
@@ -85,6 +86,10 @@ public class Interpreter {
         return context.getFactory();
     }
 
+    public void load(InputStream stream) throws IOException, InterpreterException {
+        loader.load(stream);
+    }
+    
     public void load(String file) throws IOException, InterpreterException {
         loader.load(file);
     }

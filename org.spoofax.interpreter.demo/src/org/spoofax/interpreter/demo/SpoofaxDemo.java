@@ -7,8 +7,13 @@
  */
 package org.spoofax.interpreter.demo;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -37,20 +42,20 @@ public class SpoofaxDemo implements IPlatformRunnable {
             IWorkspace workspace = ResourcesPlugin.getWorkspace();
             IWorkspaceRoot root = workspace.getRoot();
             IProject project  = root.getProject("demo1");
-            //IFolder folder = project.getFolder("/");
+            IFolder folder = project.getFolder("src");
             IFile file = project.getFile("HelloWorld.java");
             //at this point, no resources have been created
-            //if (!project.exists()) project.create(null);
+            if (!project.exists()) project.create(null);
             if (!project.isOpen()) project.open(null);
-            //if (!folder.exists()) 
-            //    folder.create(IResource.NONE, true, null);
-            /*
+            if (!folder.exists()) 
+                folder.create(IResource.NONE, true, null);
+            
             if (!file.exists()) {
                 byte[] bytes = "class X { }".getBytes();
                 InputStream source = new ByteArrayInputStream(bytes);
                 file.create(source, IResource.NONE, null);
             }
-            */
+            
             ICompilationUnit cu = JavaCore.createCompilationUnitFrom(file);
             ASTParser parser = ASTParser.newParser(AST.JLS3);
             parser.setResolveBindings(true);
