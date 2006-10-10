@@ -14,7 +14,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedITypeBinding extends AbstractWrappedBinding {
 
     private final ITypeBinding wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("TypeBinding", 1);
+    private final static IStrategoConstructor CTOR = new ASTCtor("TypeBinding", 6);
     
     WrappedITypeBinding(ITypeBinding wrappee) {
         super(CTOR);
@@ -30,7 +30,18 @@ public class WrappedITypeBinding extends AbstractWrappedBinding {
         switch(index) {
         case 0:
             // FIXME should become a QualifiedName
+            return ECJFactory.wrap(wrappee.getPackage().getNameComponents());
+        case 1:
+            // FIXME should become a QualifiedName
             return ECJFactory.wrap(wrappee.getQualifiedName());
+        case 2:
+            return ECJFactory.wrap(wrappee.getSuperclass().getQualifiedName());
+        case 3:
+            return ECJFactory.wrap(wrappee.getTypeArguments());
+        case 4:
+            return ECJFactory.wrap(wrappee.getDimensions());
+        case 5:
+            return ECJFactory.wrap(wrappee.getElementType());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

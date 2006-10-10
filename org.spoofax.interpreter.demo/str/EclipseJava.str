@@ -41,7 +41,7 @@ signature
     ImportReference                 : Term -> Term 
     InfixExpression                 : Term * Term * Term -> Term
     Initializer                     : Term -> Term
-    Instanceof                      : Term * Term -> Term
+    InstanceofExpression            : Term * Term -> Term
     IntType                         : Term
     Javadoc                         : Term -> Term
     LabeledStatement                : Term * Term -> Term

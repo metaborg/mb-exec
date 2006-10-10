@@ -9,10 +9,15 @@ package org.spoofax.interpreter.demo;
 
 import java.util.List;
 
-import org.spoofax.NotImplementedException;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.Tools;
+import org.spoofax.interpreter.adapters.ecj.ECJFactory;
 import org.spoofax.interpreter.library.Primitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -24,8 +29,19 @@ public class ECJ_open_project extends Primitive {
     @Override
     public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        
+        if(!Tools.isTermString(tvars[0]))
+            return false;
+        
+        String name = Tools.javaString(tvars[0]);
+        
+        IWorkspace workspace = ResourcesPlugin.getWorkspace();
+        IWorkspaceRoot root = workspace.getRoot();
+        IProject proj = root.getProject(name);
+        if(proj == null)
+            return false;
+        env.setCurrent(ECJFactory.wrap(proj));
+        return true;
     }
 
 }

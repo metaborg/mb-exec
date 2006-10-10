@@ -15,7 +15,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedInstanceofExpression extends WrappedASTNode {
 
     private final InstanceofExpression wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("Instanceof", 2);
+    private final static IStrategoConstructor CTOR = new ASTCtor("InstanceofExpression", 2);
     
     WrappedInstanceofExpression(InstanceofExpression wrappee) {
         super(CTOR);

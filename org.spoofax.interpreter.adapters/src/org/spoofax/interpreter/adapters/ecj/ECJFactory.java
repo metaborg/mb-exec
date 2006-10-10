@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
@@ -51,6 +52,7 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
@@ -148,6 +150,7 @@ public class ECJFactory implements ITermFactory {
         throw new NotImplementedException();
     }
 
+    @SuppressWarnings("unchecked")
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
         final String c = ctr.getName();
         if(c.equals("PackageDeclaration")) {
@@ -293,7 +296,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedQualifiedName(name);
     }
 
-    static IStrategoTerm genericWrap(ASTNode node) {
+    public static IStrategoTerm genericWrap(ASTNode node) {
         
         if(node instanceof ImportDeclaration)
             return wrap((ImportDeclaration) node);
@@ -1191,5 +1194,26 @@ public class ECJFactory implements ITermFactory {
         for(int i = 0, sz = bindings.length; i < sz; i++)
             terms[i] = ECJFactory.wrap(bindings[i]);
         return new WrappedGenericList(terms);
+    }
+
+    public static IStrategoTerm wrap(IProject proj) {
+        if(proj == null)
+            return None.INSTANCE;
+        else
+            return new WrappedProject(proj);
+    }
+
+    public static IStrategoTerm wrap(String[] strs) {
+        IStrategoTerm[] r = new IStrategoTerm[strs.length];
+        for(int i = 0; i < r.length; i++)
+            r[i] = wrap(strs[i]);
+        return new WrappedGenericList(r);
+    }
+
+    public static IStrategoTerm wrap(IMethodBinding mb) {
+        if(mb == null)
+            return None.INSTANCE;
+        else
+            return new WrappedIMethodBinding(mb);
     }
 }

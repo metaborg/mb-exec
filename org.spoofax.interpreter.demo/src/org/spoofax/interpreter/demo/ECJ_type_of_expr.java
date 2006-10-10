@@ -9,7 +9,7 @@ package org.spoofax.interpreter.demo;
 
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
@@ -19,10 +19,10 @@ import org.spoofax.interpreter.adapters.ecj.WrappedASTNode;
 import org.spoofax.interpreter.library.Primitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_type_of_type extends Primitive {
+public class ECJ_type_of_expr extends Primitive {
 
-    public ECJ_type_of_type() {
-        super("ECJ_type_of_type", 0, 1);
+    public ECJ_type_of_expr() {
+        super("ECJ_type_of_expr", 0, 1);
     }
     
     @Override
@@ -33,12 +33,12 @@ public class ECJ_type_of_type extends Primitive {
             return false;
         
         WrappedASTNode n = (WrappedASTNode) tvars[0];
-        if(!(n.getWrappee() instanceof AbstractTypeDeclaration))
+        if(!(n.getWrappee() instanceof Expression))
             return false;
         
-        AbstractTypeDeclaration t = (AbstractTypeDeclaration) n.getWrappee();
+        Expression e = (Expression) n.getWrappee();
         
-        ITypeBinding tb = t.resolveBinding();
+        ITypeBinding tb = e.resolveTypeBinding();
         if(tb == null)
             return false;
         

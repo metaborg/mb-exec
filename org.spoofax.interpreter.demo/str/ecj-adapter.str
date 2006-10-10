@@ -16,13 +16,13 @@ strategies
   
   ecj-create-project = ?path ; prim("ECJ_create_project", path)
 
-  ecj-add-source-folder(|project) = ?path ; prim("ECJ_add_source_folder", path, project)
+  ecj-add-source-folder(|project) = ?path ; prim("ECJ_add_source_folder", project, path)
   
   ecj-add-jar(|project) = ?path ; prim("ECJ_add_jar", path, project)
     
-  ecj-parse-and-resolve(|project) = ?FILE(name) ; prim("ECJ_parse_and_resolve", name, project) 
+  ecj-parse-and-resolve(|project) = ?FILE(name) ; prim("ECJ_parse_and_resolve", project, name) 
   
-  ecj-binding-of =
+  ecj-type-of =
      ecj-is-Name
    ; ?name
    ; prim("ECJ_binding_of_name", name)
@@ -33,12 +33,12 @@ strategies
    ; prim("ECJ_type_of_type", type)
 
   ecj-type-of =
-     ?TypeDeclarationStatement
+     ?TypeDeclarationStatement(_)
    ; ?stmt
    ; prim("ECJ_type_of_typedeclstmt", stmt)
   
   ecj-type-of =
-     ?TypeParameter
+     ?TypeParameter(_,_)
    ; ?param
    ; prim("ECJ_type_of_typeparameter", param)
    
@@ -46,6 +46,28 @@ strategies
      ?source
    ; prim("ECJ_is_cast_compatible", target, source)
 
+  ecj-type-of =
+      ecj-is-Expression
+    ; ?expr
+    ; prim("ECJ_type_of_expr", expr)
+    
+strategies
+
+  ecj-method-of =
+      ?MethodInvocation(_, _, _, _)
+    ; ?meth
+    ; prim("ECJ_method_of_methodinvoc", meth)
+
+  ecj-method-of =
+      ?SuperMethodInvocation(_, _, _, _)
+    ; ?meth
+    ; prim("ECJ_method_of_supermethodinvoc", meth)
+
+  ecj-method-of =
+      ?SuperConstructorInvocation(_, _, _)
+    ; ?meth
+    ; prim("ECJ_method_of_superctorinvoc", meth)
+    
 strategies
 
   ecj-is-Type = 
@@ -60,4 +82,34 @@ strategies
       ?SimpleName(_)
     ; ?QualifiedName(_, _)
    
+  ecj-is-Expression =
+      ?MarkerAnnotation(_)
+    + ?NormalAnnotation(_,_)
+    + ?SingleMemberAnnotation(_,_)
+    + ?ArrayAccess(_, _)
+    + ?ArrayCreation(_, _, _)
+    + ?ArrayInitializer(_)
+    + ?Assignment(_, _)
+    + ?BooleanLiteral(_)
+    + ?CastExpression(_, _)
+    + ?CharacterLiteral(_)
+    + ?ClassInstanceCreation(_, _, _, _)
+    + ?ConditionalExpression(_, _, _)
+    + ?FieldAccess(_, _)
+    + ?InfixExpression(_, _, _)
+    + ?InstanceofExpression(_, _)
+    + ?MethodInvocation(_, _, _, _)
+    + ?QualifiedName(_, _)
+    + ?SimpleName(_)
+    + ?NullLiteral()
+    + ?NumberLiteral(_)
+    + ?ParenthesizedExpression(_)
+    + ?PostfixExpression(_, _)
+    + ?StringLiteral(_)
+    + ?SuperFieldAccess(_, _)
+    + ?SuperMethodInvocation(_, _, _, _)
+    + ?ThisExpression(_)
+    + ?TypeLiteral(_)
+    + ?VariableDeclarationExpression(_, _, _)
+     
   

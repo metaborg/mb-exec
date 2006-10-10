@@ -27,6 +27,11 @@ public class ECJ extends AbstractStrategoOperatorRegistry {
         add(new ECJ_binding_of_name());
         add(new ECJ_type_of_type());
         add(new ECJ_type_of_typeparameter());
+        add(new ECJ_method_of_methoddecl());
+        add(new ECJ_method_of_methodinvoc());
+        add(new ECJ_method_of_supermethodinvoc());
+        add(new ECJ_method_of_superctorinvoc());
+        add(new ECJ_type_of_expr());
         add(new ECJ_is_cast_compatible());
     }
 }

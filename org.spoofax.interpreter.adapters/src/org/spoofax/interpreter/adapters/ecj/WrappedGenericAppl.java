@@ -45,8 +45,20 @@ public class WrappedGenericAppl implements IStrategoAppl {
     }
 
     public boolean match(IStrategoTerm second) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        if(!(second instanceof IStrategoAppl))
+            return false;
+        
+        IStrategoAppl snd = (IStrategoAppl)second;
+        
+        if(!snd.getConstructor().equals(getConstructor()))
+            return false;
+        
+        for(int i = 0, sz = getConstructor().getArity(); i < sz; i++) {
+            if(!getSubterm(i).equals(snd.getSubterm(i)))
+                return false;
+        }
+        
+        return true;
     }
 
     public void prettyPrint(PrettyPrinter pp) {

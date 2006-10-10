@@ -9,8 +9,8 @@ package org.spoofax.interpreter.demo;
 
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
-import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
@@ -19,10 +19,10 @@ import org.spoofax.interpreter.adapters.ecj.WrappedASTNode;
 import org.spoofax.interpreter.library.Primitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_type_of_type extends Primitive {
+public class ECJ_method_of_supermethodinvoc extends Primitive {
 
-    public ECJ_type_of_type() {
-        super("ECJ_type_of_type", 0, 1);
+    public ECJ_method_of_supermethodinvoc() {
+        super("ECJ_method_of_supermethodinvoc", 0, 1);
     }
     
     @Override
@@ -33,16 +33,16 @@ public class ECJ_type_of_type extends Primitive {
             return false;
         
         WrappedASTNode n = (WrappedASTNode) tvars[0];
-        if(!(n.getWrappee() instanceof AbstractTypeDeclaration))
+        if(!(n.getWrappee() instanceof SuperMethodInvocation))
             return false;
         
-        AbstractTypeDeclaration t = (AbstractTypeDeclaration) n.getWrappee();
+        SuperMethodInvocation m = (SuperMethodInvocation) n.getWrappee();
         
-        ITypeBinding tb = t.resolveBinding();
-        if(tb == null)
+        IMethodBinding mb = m.resolveMethodBinding();
+        if(mb == null)
             return false;
         
-        env.setCurrent(ECJFactory.wrap(tb));
+        env.setCurrent(ECJFactory.wrap(mb));
         return true;
     }
 

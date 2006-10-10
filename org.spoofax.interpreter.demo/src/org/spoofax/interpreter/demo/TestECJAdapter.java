@@ -13,13 +13,11 @@ import java.io.InputStream;
 import junit.framework.TestCase;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapters.ecj.ECJFactory;
@@ -32,6 +30,7 @@ public class TestECJAdapter extends TestCase {
         IWorkspaceRoot root = workspace.getRoot();
         IProject project  = root.getProject("demo1");
         project.open(null);
+        project.refreshLocal(IProject.DEPTH_INFINITE, null);
         IFile file = (IFile) project.findMember("str/" + name + ".rtree");
         return file.getContents();
     }
@@ -48,7 +47,19 @@ public class TestECJAdapter extends TestCase {
         interpTest("test3", "()", "()");
     }
 
-    private void interpTestFail(String string, String in) throws IOException, InterpreterException {
+    public void testTest4() throws IOException, InterpreterException, CoreException {
+        interpTest("test4", "\"HelloWorld.java\"", "()");
+    }
+
+    public void testTest5() throws IOException, InterpreterException, CoreException {
+        interpTest("test5", "\"HelloWorld.java\"", "()");
+    }
+
+    public void testTest6() throws IOException, InterpreterException, CoreException {
+        interpTest("test6", "\"HelloWorld.java\"", "()");
+    }
+
+    protected void interpTestFail(String string, String in) throws IOException, InterpreterException {
         ECJFactory f = new ECJFactory();
         Interpreter itp = new Interpreter(f);
         itp.addOperatorRegistry(ECJ.REGISTRY_NAME, new ECJ());
@@ -61,7 +72,7 @@ public class TestECJAdapter extends TestCase {
     private void interpTest(String string, String in, String out) throws IOException, InterpreterException, CoreException {
         ECJFactory f = new ECJFactory();
         Interpreter itp = new Interpreter(f);
-        DebugUtil.debugging = true;
+        //DebugUtil.debugging = true;
         itp.addOperatorRegistry(ECJ.REGISTRY_NAME, new ECJ());
         itp.load(findFile(string));
         IStrategoTerm inTerm = f.parseFromString(in);

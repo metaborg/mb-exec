@@ -1,0 +1,19 @@
+module test6
+imports
+  lib
+  EclipseJava
+  ecj-adapter
+
+strategies
+  
+  main =  
+      where(<ecj-open-project> "demo1" => p)
+    ;!FILE(<id>)
+    ; ecj-parse-and-resolve(|p)
+    ; debug
+    ; topdown(try(?MethodInvocation(_, _, _, _) 
+                  ; where(debug ; ecj-method-of ; debug)
+                  ; where(debug ; ecj-type-of ; debug)
+                 )
+             )
+    ;!()

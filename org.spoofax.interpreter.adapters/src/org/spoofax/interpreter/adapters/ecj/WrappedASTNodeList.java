@@ -32,6 +32,7 @@ public class WrappedASTNodeList implements IStrategoList {
         return ECJFactory.genericWrap((ASTNode)wrappee.get(0));
     }
 
+    @SuppressWarnings("unchecked")
     public IStrategoList prepend(IStrategoTerm prefix) {
         
         // Trying to build a hybrid list. Do on-the-fly conversion. 
