@@ -3,31 +3,63 @@ imports
   lib
   EclipseJava
   ecj-adapter
-  
+
+signature
+  constructors
+    TypeBinding: Term * Term * Term * Term * Term * Term -> Term
+    
 strategies 
 
-  main = ?basedir
-    ; traverse-dir(swt-check)
- 
-  traverse-dir(s) =
-       is-dir ; list-files => files ; map(traverse-dir)(s)
-    <+ s
+  //to-qualified-name = is-list ; debug(!"list case") ; ToQualifiedName
+  //to-qualified-name = is-string ; debug(!"string case") ; string-tokenize(|['.']) ; debug(!"tokenized") ; ToQualifiedName
+  
+  //ToQualifiedName: [] -> SimpleName("")
+  //ToQualifiedName: [x] -> SimpleName(x)
+  //ToQualifiedName: [x | xs] -> QualifiedName(x, <ToQualifiedName> xs)
+  
+  to-dotted-name = ToDottedName ; concat-strings
+  
+  ToDottedName: [ x ] -> [ ".", x ]
+  ToDottedName: [ x | xs ] -> [ x, "." | <ToDottedName> xs ]
+  
+  find-type-binding = fail
+  type-of = ecj-type-of
+  is-cast-compatible = ecj-is-cast-compatible
+  is-subtype-compatible = ecj-is-subtype-compatible
+  emit-warn(|x) = where(<debug> x)
+  
+  type-of-typedecl = 
+     debug(!"type-of-typedecl")
+   ; ecj-is-TypeDeclaration
+   ; debug(!"yes")
+   ; ?type
+   ; prim("ECJ_type_of_typedecl", type)
+
+  package-of: TypeBinding(p, _, _, _, _, _) -> <to-dotted-name> p
+  
+  main = where(<ecj-open-project> "demo1" => p) 
+    ; !FILE(<id>) 
+    ; swt-check(|p)
+  
+  swt-check(|project) =
+      ecj-parse-and-resolve(|project)
+    ; debug
+    ; swt-check-illegal-subclasses
     
-  swt-check =
-    parse-and-resolve(|project)
-    ; do-swt-check
+  swt-check-illegal-subclasses =
+    topdown(try(swt-check-illegal-subclass))
     
-  do-swt-check =
-    topdown(try(SWTCheck))
-    
-  SWTCheck:
-    td@TypeDeclaration(_, _, _, _, _, _) -> td
-  where
+  swt-widget-binding = 
       <to-qualified-name> "org.eclipse.swt.widgets" => qn
-    ; <find-type-binding> (qn, "Widget") => widget-tp
-    ; <type-of> td => tp
-    ; <is-cast-compatible> (tp, widget-tp)
-    ; not(<package-of ; to-dottect-name> td => "org.eclipse.swt.widgets")
-    ; warn(|"Illegal subclassing of org.eclipse.swt.widgets.Widget!")
+    ; debug
+    ; <find-type-binding> (qn, "Widget")
+    
+  swt-check-illegal-subclass = 
+      ?TypeDeclaration(_, _, _, _, _, _)
+    ; type-of => tp 
+    ; swt-widget-binding => widget-tp
+    ; <is-subtype-compatible> (tp, widget-tp)
+    ; not(<package-of ; debug ; to-dotted-name> tp => "org.eclipse.swt.widgets")
+    ; emit-warn(|"Illegal subclassing of org.eclipse.swt.widgets.Widget!")
     
     

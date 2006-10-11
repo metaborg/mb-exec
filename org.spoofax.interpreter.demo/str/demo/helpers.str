@@ -1,7 +1,17 @@
 module helpers
-
+imports
+  lib
 
 strategies
 
-  traverse-dir(s) = fail
+  dir-topdown(s) =
+      ?base
+    ; readdir 
+    ; filter(not(?".") ; not(?".."))
+    ; map({ x, y: ( x -> <concat-strings> [ base, "/", x ])}) => files
+    ; <filter({ x: ?x ; filemode ; not(isdir) ; !x })
+      ; filter(s)> files => r
+    ; <filter({ x: ?x ; filemode ; isdir ; !x })
+      ; map(dir-topdown(s))> files => r'
+    ; <concat> [ r, r' ]
   
