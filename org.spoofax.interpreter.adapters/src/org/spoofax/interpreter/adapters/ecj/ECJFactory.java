@@ -216,7 +216,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     public IStrategoInt makeInt(int i) {
-        throw new NotImplementedException();
+        return new WrappedInt(i);
     }
 
     @SuppressWarnings("unchecked")
