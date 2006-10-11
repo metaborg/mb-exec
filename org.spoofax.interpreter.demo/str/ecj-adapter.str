@@ -28,9 +28,9 @@ strategies
    ; prim("ECJ_binding_of_name", name)
    
   ecj-type-of = 
-     ecj-is-Type
+     ecj-is-TypeDeclaration
    ; ?type
-   ; prim("ECJ_type_of_type", type)
+   ; prim("ECJ_type_of_typedecl", type)
 
   ecj-type-of =
      ?TypeDeclarationStatement(_)
@@ -42,14 +42,21 @@ strategies
    ; ?param
    ; prim("ECJ_type_of_typeparameter", param)
    
-  ecj-is-cast-compatible(|target) =
-     ?source
-   ; prim("ECJ_is_cast_compatible", target, source)
-
   ecj-type-of =
       ecj-is-Expression
     ; ?expr
     ; prim("ECJ_type_of_expr", expr)
+
+strategies
+
+  ecj-is-cast-compatible(|target) =
+     ?source
+   ; prim("ECJ_is_cast_compatible", target, source)
+
+  ecj-is-subtype-compatible(|target) =
+     ?source
+   ; prim("ECJ_is_subtype_compatible", target, source)
+
     
 strategies
 
@@ -70,6 +77,11 @@ strategies
     
 strategies
 
+  ecj-is-TypeDeclaration = 
+      ?AnnotationTypeDeclaration(_, _, _)
+    + ?EnumDeclaration(_, _, _, _, _)
+    + ?TypeDeclaration(_, _, _, _, _ ,_)
+      
   ecj-is-Type = 
       ?ArrayType(_, _, _)
     + ?ParameterizedType(_, _)
