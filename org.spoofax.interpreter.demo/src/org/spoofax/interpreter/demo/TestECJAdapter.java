@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapters.ecj.ECJFactory;
@@ -57,6 +58,10 @@ public class TestECJAdapter extends TestCase {
 
     public void testTest6() throws IOException, InterpreterException, CoreException {
         interpTest("test6", "\"HelloWorld.java\"", "()");
+    }
+
+    public void testSWTCheck() throws IOException, InterpreterException, CoreException {
+        interpTest("swt-check", "\"SWTViolation.java\"", "()");
     }
 
     protected void interpTestFail(String string, String in) throws IOException, InterpreterException {

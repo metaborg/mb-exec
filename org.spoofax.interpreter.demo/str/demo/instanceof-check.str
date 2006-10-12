@@ -19,12 +19,17 @@ strategies
     
   do-instanceof-check =
     topdown(try(InstanceofCheck))
-    
+/*    
   InstanceofCheck:
     md@MethodDeclaration(_, _, _, _, _, body) -> md
   where
       !body => Block([fst | _])
     ; not(!fst => IfStatement(InstanceofExpression(_, _), _, _))
+    ; warn(|"equals() does not start with instanceof check")
+*/    
+  check-equals(|type) =
+      ?MethodDeclaration(SimpleName("equals"), _, _, _, _, Block(stmts))
+    ; not(<Hd> stmts => IfStatement(InstanceofExpression(_, type), _, _))
     ; warn(|"equals() does not start with instanceof check")
     
     

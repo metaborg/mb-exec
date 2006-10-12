@@ -1,0 +1,10 @@
+  check-for =
+      ?ForStatement(_, InfixExpression(_, lhs, rhs), _, _)
+    ; <topdown(try(check-for-call-to-immutable))> lhs
+    ; <topdown(try(check-for-call-to-immutable))> rhs
+
+  call-to-immutable =
+      ?MethodInvocation(_, _, _, _, _, _)
+    ; binding-of => MethodBinding(class-name, _, _, _)
+    ; <list-contains(?class-name)> immutable-classes
+    ; emit-warn(|"Call to method on immutable object in loop iteration")

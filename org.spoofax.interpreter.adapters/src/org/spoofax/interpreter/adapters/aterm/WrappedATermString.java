@@ -53,4 +53,11 @@ class WrappedATermString extends WrappedATerm implements IStrategoString {
     public String toString() {
         return value.getName();
     }
+
+    @Override
+    protected boolean slowCompare(Object second) {
+        if(!(second instanceof IStrategoString))
+            return false;
+        return ((IStrategoString)second).getValue().equals(value.getName());
+    }
 }

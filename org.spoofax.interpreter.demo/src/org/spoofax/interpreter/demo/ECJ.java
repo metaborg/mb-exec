@@ -1,5 +1,4 @@
 /*
- * Created on 9. okt.. 2006
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -25,7 +24,7 @@ public class ECJ extends AbstractStrategoOperatorRegistry {
         add(new ECJ_add_source_folder());
         add(new ECJ_add_jar());
         add(new ECJ_binding_of_name());
-        add(new ECJ_type_of_type());
+        add(new ECJ_type_of_typedecl());
         add(new ECJ_type_of_typeparameter());
         add(new ECJ_method_of_methoddecl());
         add(new ECJ_method_of_methodinvoc());
@@ -33,5 +32,6 @@ public class ECJ extends AbstractStrategoOperatorRegistry {
         add(new ECJ_method_of_superctorinvoc());
         add(new ECJ_type_of_expr());
         add(new ECJ_is_cast_compatible());
+        add(new ECJ_is_subtype_compatible());
     }
 }

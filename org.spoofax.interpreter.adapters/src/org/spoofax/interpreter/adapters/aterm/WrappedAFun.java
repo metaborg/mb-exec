@@ -84,4 +84,16 @@ public class WrappedAFun extends WrappedATerm implements IStrategoConstructor {
         return afun.toString();
     }
 
+    @Override
+    protected boolean slowCompare(Object second) {
+        if(!(second instanceof IStrategoConstructor))
+            return false;
+        IStrategoConstructor snd = (IStrategoConstructor) second;
+        if(!afun.getName().equals(snd.getName()))
+            return false;
+        if(afun.getArity() != snd.getArity())
+            return false;
+        return true;
+    }
+
 }

@@ -81,4 +81,17 @@ public class WrappedATermList extends WrappedATerm implements IStrategoList {
     public IStrategoList tail() {
         return new WrappedATermList(list.getNext());
     }
+
+    @Override
+    protected boolean slowCompare(Object second) {
+        if(!(second instanceof IStrategoList))
+            return false;
+        IStrategoList snd = (IStrategoList) second;
+        if(snd.getSubtermCount() != getSubtermCount())
+            return false;
+        for(int i = 0, sz = getSubtermCount(); i < sz; i++)
+            if(!getSubterm(i).equals(snd.getSubterm(i)))
+                return false;
+        return true;
+    }
 }

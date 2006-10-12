@@ -15,9 +15,9 @@ import aterm.ATerm;
 
 public abstract class WrappedATerm implements IStrategoTerm {
 
-    protected boolean slowCompare(Object second) {
+    protected abstract boolean slowCompare(Object second); /*{
         throw new WrapperException("Cannot compare with class " + second.getClass());
-    }
+    }*/
     
     abstract ATerm getATerm();
     

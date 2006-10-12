@@ -24,10 +24,21 @@ strategies
     md@TypeDeclaration(_, _, _, _, _, body) -> md
   where
     map(try(check-field))
-    
+ 
+ /*   
   check-field =
     ?fd@FieldDeclaration(_, tp, fragments)
     ; !tp => SimpleType("List")
     ; warn(|"Field is List, not array!")
-    
+*/ 
+   
+  check-no-list-field = 
+      ?TypeDeclaration(_, _, _, _, _, fields)
+    ; <map(check-field)> fields
+
+  check-field =
+      ?FieldDeclaration(_, _, _)
+    ; type-of => tp
+    ; <is-subtype-of(|"java.lang.List")> tp
+    ; emit-warn(|"Field is of illegal type List!")
     

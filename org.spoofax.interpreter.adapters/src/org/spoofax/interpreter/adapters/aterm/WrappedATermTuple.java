@@ -65,4 +65,17 @@ public class WrappedATermTuple extends WrappedATerm implements IStrategoTuple {
     public IStrategoTerm get(int index) {
         return getSubterm(index);
     }
+
+    @Override
+    protected boolean slowCompare(Object second) {
+        if(!(second instanceof IStrategoTuple))
+            return false;
+        IStrategoTuple snd = (IStrategoTuple)second;
+        if(snd.getSubtermCount() != getSubtermCount())
+            return false;
+        for(int i = 0, sz = getSubtermCount(); i < sz; i++)
+            if(!getSubterm(i).equals(snd.getSubterm(i)))
+                return false;
+        return true;
+    }
 }

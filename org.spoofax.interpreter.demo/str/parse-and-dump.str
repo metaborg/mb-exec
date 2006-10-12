@@ -1,0 +1,9 @@
+module parse-and-dump
+imports
+  lib
+  ecj-adapter
+  EclipseJava
+  
+strategies
+
+  main = debug

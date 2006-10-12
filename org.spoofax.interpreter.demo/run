@@ -1,0 +1,10 @@
+#! /bin/sh
+
+ep=${HOME}/apps/eclipse/plugins
+java -cp \
+	bin:../org.spoofax.interpreter.adapters/bin:../org.spoofax.interpreter/bin:${ep}/org.eclipse.jdt.core_3.2.0.v_671.jar:../org.spoofax.aterm:../org.spoofax.aterm/shared-objects-1.4.jar:../org.spoofax.aterm/jjtraveler-0.4.3.jar:${ep}/org.eclipse.core.runtime_3.2.0.v20060603.jar:${ep}/org.eclipse.core.resources_3.2.0.v20060603.jar:${ep}/org.eclipse.equinox.common_3.2.0.v20060603.jar:${ep}/org.eclipse.osgi_3.2.0.v20060601.jar:${ep}/org.eclipse.core.jobs_3.2.0.v20060603.jar:${ep}/org.eclipse.core.contenttype_3.2.0.v20060603.jar:${ep}/org.eclipse.equinox.registry_3.2.0.v20060601.jar:${ep}/org.eclipse.equinox.preferences_3.2.0.v20060601.jar \
+	org.spoofax.interpreter.demo.ECJParseFile \
+	$1 $2 $3 
+
+
+

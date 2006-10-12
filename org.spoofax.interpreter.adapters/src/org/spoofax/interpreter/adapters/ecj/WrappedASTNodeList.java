@@ -56,8 +56,13 @@ public class WrappedASTNodeList implements IStrategoList {
         return wrappee.size();
     }
 
+    @SuppressWarnings("unchecked")
     public IStrategoList tail() {
-        throw new NotImplementedException();
+        List r = new ArrayList();
+        for(int i = 1; i < wrappee.size(); i++) {
+            r.add(wrappee.get(i));
+        }
+        return new WrappedASTNodeList(r);
     }
 
     public IStrategoTerm getSubterm(int index) {

@@ -19,10 +19,10 @@ import org.spoofax.interpreter.adapters.ecj.WrappedASTNode;
 import org.spoofax.interpreter.library.Primitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_type_of_type extends Primitive {
+public class ECJ_type_of_typedecl extends Primitive {
 
-    public ECJ_type_of_type() {
-        super("ECJ_type_of_type", 0, 1);
+    public ECJ_type_of_typedecl() {
+        super("ECJ_type_of_typedecl", 0, 1);
     }
     
     @Override

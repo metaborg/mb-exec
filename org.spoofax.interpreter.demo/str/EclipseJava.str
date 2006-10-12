@@ -10,7 +10,7 @@ signature
     ArrayInitializer                : Term -> Term
     ArrayType                       : Term * Term * Term -> Term
     AssertStatement                 : Term * Term -> Term
-    Assignment                      : Term * Term -> Term
+    Assignment                      : Expression * Expression -> Expression
     BlockComment                    : Term
     Block                           : Term -> Term 
     BooleanLiteral                  : Term -> Term

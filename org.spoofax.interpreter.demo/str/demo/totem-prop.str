@@ -1,0 +1,55 @@
+module totem-prop
+imports
+  lib
+  EclipseJava
+  
+signature
+  constructors
+    Dimensions : Int * Int -> Dimensions
+    
+strategies
+
+  main = 
+      prop-totem(!Dimensions(100, 100))
+    ; debug
+  
+  prop-totem(pgator) =
+      prop-totem-set(pgator) 
+   <+ prop-totem-assign(pgator)
+   <+ ( all(prop-totem(pgator)) )
+
+  prop-totem-set(pgator) =
+      ?MethodInvocation(SimpleName("Totems"), SimpleName("setTotem"), [], args)
+    ; where(
+        <Hd> args => StringLiteral(n)
+      ; <Hd ; Hd> args => totem
+      ; !SimpleName(n) => n'
+      )
+    ; rules( Totem.n' : n' -> totem )
+    ; where(<debug> ("Setting totem", totem, "to", n'))
+    
+  prop-totem-assign(pgator) =
+      ?Assignment(lhs, rhs)
+    ; where(
+        <prop-totem(pgator)> rhs
+      ; <get-assignee-name> lhs => n
+      ; <infer-totems(pgator)> rhs => inferred
+      )
+    ; if !inferred => None then
+          rules ( Totem.n : n -> inferred )
+        ; where(<debug> ("Assigning inferred totem", inferred, "to", n))
+      else 
+          rules ( Totem.n :- n )
+        ; where(<debug> ("Erasing totems from", n))
+      end
+  
+  infer-totems(pgator) = pgator
+  
+  // FIXME ask for declaration
+  get-assignee-name = ?SimpleName(_)
+  get-assignee-name = ?QualifiedName(_, _)  
+  
+  get-totem = Totem 
+  
+  
+    

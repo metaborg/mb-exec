@@ -74,4 +74,18 @@ public class WrappedATermAppl extends WrappedATerm implements IStrategoAppl {
     public String toString() {
          return appl.toString();
     }
+
+    @Override
+    protected boolean slowCompare(Object second) {
+        if(!(second instanceof IStrategoAppl))
+            return false;
+        IStrategoAppl snd = (IStrategoAppl) second;
+        if(!snd.getConstructor().equals(getConstructor()))
+            return false;
+        for(int i = 0, sz = getSubtermCount(); i < sz; i++) {
+            if(!snd.getSubterm(i).equals(getSubterm(i)))
+                return false;
+        }
+        return true;
+    }
 }
