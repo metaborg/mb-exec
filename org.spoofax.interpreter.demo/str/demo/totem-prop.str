@@ -45,6 +45,9 @@ strategies
   
   infer-totems(pgator) = pgator
   
+  propagate-over-plus = 
+    ?Method
+  
   // FIXME ask for declaration
   get-assignee-name = ?SimpleName(_)
   get-assignee-name = ?QualifiedName(_, _)  

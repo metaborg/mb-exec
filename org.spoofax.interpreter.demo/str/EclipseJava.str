@@ -90,7 +90,7 @@ signature
     ThrowStatement                  : Term -> Term
     Times                           : Term * Term -> Term
     TryStatement                    : Term * Term * Term -> Term
-    TypeDeclaration                 : Term * Term * Term * Term * Term * Term -> Term
+    TypeDeclaration                 : List(Modifier) * Name * List(TypeParameter) * Type * List(Type) * List(BodyDeclaration) -> Term
     TypeDeclarationStatement        : Term -> Term
     TypeLiteral                     : Term -> Term
     TypeParameter                   : Term * Term -> Term

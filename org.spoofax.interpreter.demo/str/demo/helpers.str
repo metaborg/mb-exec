@@ -4,6 +4,8 @@ imports
 
 strategies
 
+  emit-warn(|s) = where(<debug> s)
+  
   dir-topdown(s) =
       ?base
     ; readdir 

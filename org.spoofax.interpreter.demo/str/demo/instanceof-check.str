@@ -2,34 +2,28 @@ module instanceof-check
 imports
   lib
   EclipseJava
-  ecj-adapter
+  helpers
   
 strategies 
 
-  main = ?basedir
-    ; traverse-dir(swt-check)
- 
-  traverse-dir(s) =
-       is-dir ; list-files => files ; map(traverse-dir)(s)
-    <+ s
-    
-  instanceof-check =
-    parse-and-resolve(|project)
-    ; do-instanceof-check
-    
-  do-instanceof-check =
-    topdown(try(InstanceofCheck))
-/*    
-  InstanceofCheck:
-    md@MethodDeclaration(_, _, _, _, _, body) -> md
-  where
-      !body => Block([fst | _])
-    ; not(!fst => IfStatement(InstanceofExpression(_, _), _, _))
-    ; warn(|"equals() does not start with instanceof check")
-*/    
-  check-equals(|type) =
-      ?MethodDeclaration(SimpleName("equals"), _, _, _, _, Block(stmts))
-    ; not(<Hd> stmts => IfStatement(InstanceofExpression(_, type), _, _))
-    ; warn(|"equals() does not start with instanceof check")
+  main = check-equals 
+  
+  check-equals = topdown(try(check-equals-method(id)))
+  
+  check-expression(type) =
+    ?PrefixExpression(
+        PrefixExpressionOperator("!")
+      , ParenthesizedExpression(InstanceofExpression(_, tp))
+     )
+    ; where(<type> tp)
+    ; debug(!"check-expression")
+      
+  check-equals-method(type) =
+      ?MethodDeclaration(_, _, SimpleName("equals"), _, _, Block(stmts))
+    ; debug(!"check-equals-method")
+    ; where(
+        not(<Hd> stmts => IfStatement(e, _, _) ; <check-expression(type)> e)
+      ; emit-warn(|"equals() does not start with instanceof check")
+      )
     
     

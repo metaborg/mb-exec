@@ -1,3 +1,12 @@
+module for-check
+imports
+  lib
+  EclipseJava
+ 
+strategies
+
+  main = topdown(try(check-for))
+  
   check-for =
       ?ForStatement(_, InfixExpression(_, lhs, rhs), _, _)
     ; <topdown(try(check-for-call-to-immutable))> lhs
