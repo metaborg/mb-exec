@@ -34,7 +34,7 @@ signature
     EnumDeclaration                 : Term * Term * Term * Term * Term -> Term 
     ExpressionStatement             : Term -> Term
     FieldAccess                     : Term * Term -> Term 
-    FieldDeclaration                : Term * Term * Term -> Term
+    FieldDeclaration                : List(Modifier) * Type * List(VariableDeclarationFragment) -> Term
     FloatType                       : Term
     ForStatement                    : Term * Term * Term * Term -> Term 
     IfStatement                     : Term * Term * Term -> Term 

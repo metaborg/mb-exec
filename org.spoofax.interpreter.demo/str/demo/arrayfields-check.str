@@ -3,10 +3,16 @@ imports
   lib
   EclipseJava
   ecj-adapter
+  helpers
   
 strategies 
 
-  main = check-array-fields
+  main = 
+      where(<ecj-open-project> "demo1" => p) 
+    ; !FILE(<id>)
+    ; ecj-parse-and-resolve(|p)
+    ; check-array-fields
+    ; !() // FIXME present to make the unit test happy
   
   check-array-fields = topdown(try(check-type-decl))
     
@@ -15,9 +21,11 @@ strategies
     ; where(<map(try(check-field))> body)
 
   check-field =
-      ?FieldDeclaration(_, _, _)
-    ; 
-    ; type-of => tp
-    ; <is-subtype-of(|"java.lang.List")> tp
+      ?FieldDeclaration(_, field-tp, _)
+    ; <type-of> field-tp => tp
+    ; <is-subtype-of(|"java.util.List")> tp
     ; emit-warn(|"Field is of illegal type List!")
     
+  is-subtype-of(|dotted-name) =
+     ?TypeBinding(_, dotted-name, _, _, _, _)
+   <+ TypeBinding(id, id, is-subtype-of(|dotted-name), id, id, id)

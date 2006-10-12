@@ -47,6 +47,11 @@ strategies
     ; ?expr
     ; prim("ECJ_type_of_expr", expr)
 
+  ecj-type-of =
+      ecj-is-Type
+    ; ?expr
+    ; prim("ECJ_type_of_type", expr)
+
 strategies
 
   ecj-is-cast-compatible(|target) =

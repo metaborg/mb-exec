@@ -21,7 +21,7 @@ strategies
   
 signature
   constructors
-    TypeBinding: List(String) * String * TypeBinding * List(TypeBinding) * Int * TypeBinding -> TypeBinding
+    TypeBinding  : List(String) * String * TypeBinding * List(TypeBinding) * Int * TypeBinding -> TypeBinding
     MethodBinding: TypeBinding * String * TypeBinding * List(TypeBinding) -> Term
         
 strategies 
