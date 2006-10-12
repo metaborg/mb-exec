@@ -6,38 +6,17 @@ imports
   
 strategies 
 
-  main = ?basedir
-    ; traverse-dir(swt-check)
- 
-  traverse-dir(s) =
-       is-dir ; list-files => files ; map(traverse-dir)(s)
-    <+ s
+  main = check-array-fields
+  
+  check-array-fields = topdown(try(check-type-decl))
     
-  instanceof-check =
-    parse-and-resolve(|project)
-    ; do-instanceof-check
-    
-  do-instanceof-check =
-    topdown(try(InstanceofCheck))
-    
-  ArrayFieldsCheck:
-    md@TypeDeclaration(_, _, _, _, _, body) -> md
-  where
-    map(try(check-field))
- 
- /*   
-  check-field =
-    ?fd@FieldDeclaration(_, tp, fragments)
-    ; !tp => SimpleType("List")
-    ; warn(|"Field is List, not array!")
-*/ 
-   
-  check-no-list-field = 
-      ?TypeDeclaration(_, _, _, _, _, fields)
-    ; <map(check-field)> fields
+  check-type-decl = 
+     ?TypeDeclaration(_, _, _, _, _, body)
+    ; where(<map(try(check-field))> body)
 
   check-field =
       ?FieldDeclaration(_, _, _)
+    ; 
     ; type-of => tp
     ; <is-subtype-of(|"java.lang.List")> tp
     ; emit-warn(|"Field is of illegal type List!")

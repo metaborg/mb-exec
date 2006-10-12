@@ -61,7 +61,7 @@ public class TestECJAdapter extends TestCase {
     }
 
     public void testSWTCheck() throws IOException, InterpreterException, CoreException {
-        interpTest("swt-check", "\"SWTViolation.java\"", "()");
+        interpTest("swt-check", "\"examples/SWTTest.java\"", "()");
     }
 
     protected void interpTestFail(String string, String in) throws IOException, InterpreterException {

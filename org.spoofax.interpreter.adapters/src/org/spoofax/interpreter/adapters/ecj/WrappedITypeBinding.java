@@ -40,7 +40,7 @@ public class WrappedITypeBinding extends AbstractWrappedBinding {
             if(wrappee.getSuperclass() == null)
                 return None.INSTANCE;
             else 
-                return ECJFactory.wrap(wrappee.getSuperclass().getQualifiedName());
+                return ECJFactory.wrap(wrappee.getSuperclass());
         case 3:
             return ECJFactory.wrap(wrappee.getTypeArguments());
         case 4:
