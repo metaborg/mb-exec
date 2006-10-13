@@ -2,18 +2,33 @@ module for-check
 imports
   lib
   EclipseJava
- 
+  ecj-adapter
+  helpers
+  
+overlays
+
+  immutable-classes = [ "java.lang.String" ]
+   
 strategies
 
-  main = topdown(try(check-for))
+  main = 
+      where(<ecj-open-project> "demo1" => p) 
+    ; !FILE(<id>)
+    ; ecj-parse-and-resolve(|p)
+    ; topdown(try(check-for))
+    ; !() // FIXME present to make the unit test happy
+  
   
   check-for =
       ?ForStatement(_, InfixExpression(_, lhs, rhs), _, _)
     ; <topdown(try(check-for-call-to-immutable))> lhs
     ; <topdown(try(check-for-call-to-immutable))> rhs
 
-  call-to-immutable =
-      ?MethodInvocation(_, _, _, _, _, _)
-    ; binding-of => MethodBinding(class-name, _, _, _)
-    ; <list-contains(?class-name)> immutable-classes
-    ; emit-warn(|"Call to method on immutable object in loop iteration")
+  check-for-call-to-immutable =
+      ?MethodInvocation(_, _, _, _)
+    ; where(
+        method-of => MethodBinding(cls-tp, _, _, _)
+      ; <dotted-name-of> cls-tp => cls-name
+      ; <list-contains(?cls-name)> immutable-classes
+      ; emit-warn(|"Call to method on immutable object in loop iteration")
+      )

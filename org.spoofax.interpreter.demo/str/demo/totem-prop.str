@@ -6,30 +6,53 @@ imports
 signature
   constructors
     Dimensions : Int * Int -> Dimensions
+    Totem      : String * List(Term) -> Totem
     
 strategies
 
-  main = 
-      prop-totem(!Dimensions(100, 100))
-    ; debug
+  main = io-wrap(prop-totem(!Dimensions(100, 100)))
+//    ; debug
+  
+  emit-warn(|s) = where(<debug> s)
   
   prop-totem(pgator) =
-      prop-totem-set(pgator) 
+      PropTotem
+   <+ prop-totem-vardecl(pgator)
+   <+ prop-totem-set(pgator) 
    <+ prop-totem-assign(pgator)
    <+ ( all(prop-totem(pgator)) )
 
+  var-name: [ StringLiteral(n) | _] -> SimpleName(n)
+  totem-name : [ _, StringLiteral(n) | _ ] -> SimpleName(n)
+  totem-args : [ _, _ | xs ] -> xs
+  
+  prop-totem-vardecl(pgator) = 
+    ?VariableDeclarationStatement(_, tp, vars)
+    ; debug(!"at vardecl")
+    ; where(<map(prop-totem-vardecl-fragment(|tp))> vars)
+    
+  prop-totem-vardecl-fragment(|tp) = 
+    ?VariableDeclarationFragment(name, _, _)
+   ; debug(!["setting type of", name, "to", tp])
+   ; rules(TypeOf: name -> tp)
+  
   prop-totem-set(pgator) =
       ?MethodInvocation(SimpleName("Totems"), SimpleName("setTotem"), [], args)
+    ; debug(!"method invocation of Totems.setTotem")
     ; where(
-        <Hd> args => StringLiteral(n)
-      ; <Hd ; Hd> args => totem
-      ; !SimpleName(n) => n'
+        <var-name> args => vn
+      ; debug(!"vn")
+      ; <totem-name> args => tn
+      ; debug(!"tn")
+      ; <totem-args> args => tn-args
+      ; debug(!"tn-args")
       )
-    ; rules( Totem.n' : n' -> totem )
-    ; where(<debug> ("Setting totem", totem, "to", n'))
+    ; rules( Totem : vn -> Totem(tn, tn-args) )
+    ; where(<debug> ("Setting totem", tn, "on", vn))
     
   prop-totem-assign(pgator) =
       ?Assignment(lhs, rhs)
+    ; debug(!"assignment")
     ; where(
         <prop-totem(pgator)> rhs
       ; <get-assignee-name> lhs => n
@@ -44,15 +67,47 @@ strategies
       end
   
   infer-totems(pgator) = pgator
+
+  PropTotem =
+     ?MethodInvocation(dst, SimpleName("add"), _,  [src])
+   ; debug(!"calling add")
+   ; <type-of ; name-of> dst => "Matrix"
+   ; debug(!"is a matrix call")
+   ; <get-totem(|"dim")> src => srcdim
+   ; <get-totem(|"dim")> dst => dstdim
+   ; not(!dstdim => srcdim)
+   ; emit-warn(|["Dimensions not compatible", srcdim, dstdim])
+
+  PropTotem =
+     ?MethodInvocation(src1, SimpleName("mult"), _,  [src2, dst])
+   ; debug(!"calling mult")
+   ; <type-of ; name-of> dst => "Matrix"
+   ; debug(!"is a matrix call")
+   ; <get-totem(|"dim")> src1 ; get-dimensions => (s1r, s1c)
+   ; debug(!"A dimensions")
+   ; <get-totem(|"dim")> src2 ; get-dimensions => (s2r, s2c)
+   ; debug(!"B dimensions")
+   ; <get-totem(|"dim")> dst ; get-dimensions => (dr, dc)
+   ; debug(!"C dimensions")
+   ; if not(!s1c => s2r) then
+       emit-warn(|["A columns must be equal to B rows"])
+     else if not(!s2c => dc) then
+       emit-warn(|["B columns must be equal to C columns"])
+     else if not(!s1r => dr) then
+       emit-warn(|["A rows must be equal to C rows"])   
+     end end end
+
+  get-dimensions: [NumberLiteral(m), NumberLiteral(n)] -> (m,n)
   
-  propagate-over-plus = 
-    ?Method
+  type-of = TypeOf
+  name-of: SimpleType(SimpleName(n)) -> n
+  
   
   // FIXME ask for declaration
   get-assignee-name = ?SimpleName(_)
   get-assignee-name = ?QualifiedName(_, _)  
   
-  get-totem = Totem 
+  get-totem(|totem-name) = Totem => Totem(_, args) ; !args
   
   
     

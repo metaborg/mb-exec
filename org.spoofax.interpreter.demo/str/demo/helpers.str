@@ -40,6 +40,7 @@ strategies
   
   find-type-binding = fail
   type-of = ecj-type-of
+  method-of = ecj-method-of
   is-cast-compatible = ecj-is-cast-compatible
   is-subtype-compatible = ecj-is-subtype-compatible
   emit-warn(|x) = where(<debug> x)
