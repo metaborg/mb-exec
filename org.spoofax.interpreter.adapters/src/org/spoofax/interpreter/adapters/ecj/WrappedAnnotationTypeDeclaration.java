@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedAnnotationTypeDeclaration extends WrappedASTNode {
+public class WrappedAnnotationTypeDeclaration extends WrappedAbstractTypeDeclaration {
 
     private final AnnotationTypeDeclaration wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("AnnotationTypeDeclaration", 3);

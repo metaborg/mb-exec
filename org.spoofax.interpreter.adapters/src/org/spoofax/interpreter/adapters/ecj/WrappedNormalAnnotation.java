@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedNormalAnnotation extends WrappedASTNode {
+public class WrappedNormalAnnotation extends WrappedAnnotation {
 
     private final NormalAnnotation wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("NormalAnnotation", 2);

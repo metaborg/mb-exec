@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedVariableDeclarationFragment extends WrappedASTNode {
+public class WrappedVariableDeclarationFragment extends WrappedVariableDeclaration {
 
     private final VariableDeclarationFragment wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("VariableDeclarationFragment", 3); 

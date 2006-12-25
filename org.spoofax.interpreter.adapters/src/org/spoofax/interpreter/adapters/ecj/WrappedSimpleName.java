@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedSimpleName extends WrappedASTNode {
+public class WrappedSimpleName extends WrappedName {
 
     private final SimpleName wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SimpleName", 1); 
@@ -30,7 +30,7 @@ public class WrappedSimpleName extends WrappedASTNode {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public SimpleName getWrappee() {
         return wrappee;
     }
 }

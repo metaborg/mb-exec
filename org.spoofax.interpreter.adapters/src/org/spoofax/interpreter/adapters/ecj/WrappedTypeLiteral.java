@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.TypeLiteral;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedTypeLiteral extends WrappedASTNode {
+public class WrappedTypeLiteral extends WrappedStatement {
 
     private final TypeLiteral wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("TypeLiteral", 1);

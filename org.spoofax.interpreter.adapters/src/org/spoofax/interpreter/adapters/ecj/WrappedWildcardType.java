@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.WildcardType;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedWildcardType extends WrappedASTNode {
+public class WrappedWildcardType extends WrappedType {
 
     // FIXME isUpperBound()
     private final WildcardType wrappee;

@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedNumberLiteral extends WrappedASTNode {
+public class WrappedNumberLiteral extends WrappedExpression {
 
     private final NumberLiteral wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("NumberLiteral", 1);

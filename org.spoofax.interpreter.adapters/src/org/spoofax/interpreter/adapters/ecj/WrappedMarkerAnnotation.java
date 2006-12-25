@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedMarkerAnnotation extends WrappedASTNode {
+public class WrappedMarkerAnnotation extends WrappedAnnotation {
 
     // FIXME improve
     private final MarkerAnnotation wrappee;

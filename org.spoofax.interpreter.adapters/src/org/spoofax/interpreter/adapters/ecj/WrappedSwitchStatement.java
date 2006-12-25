@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.SwitchStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedSwitchStatement extends WrappedASTNode {
+public class WrappedSwitchStatement extends WrappedStatement {
 
     private final SwitchStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SwitchStatement", 2);

@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.ArrayAccess;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedArrayAccess extends WrappedASTNode {
+public class WrappedArrayAccess extends WrappedExpression {
 
     private final ArrayAccess wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ArrayAccess", 2);

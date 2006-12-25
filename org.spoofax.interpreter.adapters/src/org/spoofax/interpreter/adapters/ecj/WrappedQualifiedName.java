@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.QualifiedName;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedQualifiedName extends WrappedASTNode {
+public class WrappedQualifiedName extends WrappedName {
 
     private final QualifiedName wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("QualifiedName", 2);
@@ -34,7 +34,7 @@ public class WrappedQualifiedName extends WrappedASTNode {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public QualifiedName getWrappee() {
         return wrappee;
     }
 

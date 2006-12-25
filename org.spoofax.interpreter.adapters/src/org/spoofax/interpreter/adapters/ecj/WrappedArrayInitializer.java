@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.ArrayInitializer;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedArrayInitializer extends WrappedASTNode {
+public class WrappedArrayInitializer extends WrappedExpression {
 
     private final ArrayInitializer wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ArrayInitializer", 1);

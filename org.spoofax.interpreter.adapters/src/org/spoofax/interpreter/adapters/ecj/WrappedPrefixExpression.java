@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedPrefixExpression extends WrappedASTNode {
+public class WrappedPrefixExpression extends WrappedExpression {
 
     private final PrefixExpression wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("PrefixExpression", 2);

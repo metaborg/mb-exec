@@ -12,7 +12,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.dom.AST;
@@ -125,6 +127,195 @@ import org.spoofax.interpreter.terms.ITermFactory;
 
 public class ECJFactory implements ITermFactory {
 
+    private static final int ARRAY_ACCESS = 1;
+    private static final int PACKAGE_DECLARATION = 2;
+    private static final int NONE = 3;
+    private static final int BOOLEAN_LITERAL = 4;
+    private static final int BOOLEAN_TYPE = 5;
+    private static final int BREAK_STATEMENT = 6;
+    private static final int CATCH_CLAUSE = 7;
+    private static final int CHARACTER_LITERAL = 8;
+    private static final int CLASS_INSTANCE_CREATION = 9;
+    private static final int ANNOTATION_TYPE_DECLARATION = 10;
+    private static final int ENUM_DECLARATION = 11;
+    private static final int TYPE_DECLARATION = 12;
+    private static final int ANNOTATION_TYPE_MEMBER_DECLARATION = 13;
+    private static final int ENUM_CONSTANT_DECLARATION = 14;
+    private static final int FIELD_DECLARATION = 15;
+    private static final int INITIALIZER = 16;
+    private static final int METHOD_DECLARATION = 17;
+    private static final int BLOCK_COMMENT = 18;
+    private static final int JAVADOC = 19;
+    private static final int LINE_COMMENT = 20;
+    private static final int COMPILATION_UNIT = 21;
+    private static final int MARKER_ANNOTATION = 22;
+    private static final int NORMAL_ANNOTATION = 23;
+    private static final int SINGLE_MEMBER_ANNOTATION = 24;
+    private static final int ARRAY_CREATION = 25;
+    private static final int ARRAY_INITIALIZER = 26;
+    private static final int ASSIGNMENT = 27;
+    private static final int CAST_EXPRESSION = 28;
+    private static final int CONDITIONAL_EXPRESSION = 29;
+    private static final int FIELD_ACCESS = 30;
+    private static final int INFIX_EXPRESSION = 31;
+    private static final int INSTANCEOF_EXPRESSION = 32;
+    private static final int METHOD_INVOCATION = 33;
+    private static final int QUALIFIED_NAME = 34;
+    private static final int SIMPLE_NAME = 35;
+    private static final int NULL_LITERAL = 36;
+    private static final int NUMBER_LITERAL = 37;
+    private static final int PARENTHESIZED_EXPRESSION = 38;
+    private static final int POSTFIX_EXPRESSION = 39;
+    private static final int PREFIX_EXPRESSION = 40;
+    private static final int STRING_LITERAL = 41;
+    private static final int SUPER_FIELD_ACCESS = 42;
+    private static final int THIS_EXPRESSION = 43;
+    private static final int VARIABLE_DECLARATION_EXPRESSION = 44;
+    private static final int IMPORT_DECLARATION = 45;
+    private static final int MEMBER_REF = 46;
+    private static final int MEMBER_VALUE_PAIR = 47;
+    private static final int METHOD_REF = 48;
+    private static final int METHOD_REF_PARAMETER = 49;
+    private static final int MODIFIER = 50;
+    private static final int MODIFIER_KEYWORD = 51;
+    private static final int POSTFIX_EXPRESSION_OPERATOR = 52;
+    private static final int PREFIX_EXPRESSION_OPERATOR = 53;
+    private static final int ASSERT_STATEMENT = 54;
+    private static final int BLOCK = 55;
+    private static final int CONSTRUCTOR_INVOCATION = 56;
+    private static final int CONTINUE_STATEMENT = 57;
+    private static final int DO_STATEMENT = 58;
+    private static final int EMPTY_STATEMENT = 59;
+    private static final int ENHANCED_FOR_STATEMENT = 60;
+    private static final int EXPRESSION_STATEMENT = 61;
+    private static final int FOR_STATEMENT = 62;
+    private static final int IF_STATEMENT = 63;
+    private static final int LABELED_STATEMENT = 64;
+    private static final int RETURN_STATEMENT = 65;
+    private static final int SUPER_CONSTRUCTOR_INVOCATION = 66;
+    private static final int SWITCH_CASE = 67;
+    private static final int SWITCH_STATEMENT = 68;
+    private static final int SYNCHRONIZED_STATEMENT = 69;
+    private static final int THROW_STATEMENT = 70;
+    private static final int TRY_STATEMENT = 71;
+    private static final int TYPE_DECLARATION_STATEMENT = 72;
+    private static final int TYPE_LITERAL = 73;
+    private static final int VARIABLE_DECLARATION_STATEMENT = 74;
+    private static final int WHILE_STATEMENT = 75;
+    private static final int SUPER_METHOD_INVOCATION = 76;
+    private static final int TAG_ELEMENT = 77;
+    private static final int TEXT_ELEMENT = 78;
+    private static final int ARRAY_TYPE = 79;
+    private static final int DOUBLE_TYPE = 80;
+    private static final int FLOAT_TYPE = 81;
+    private static final int INT_TYPE = 82;
+    private static final int LONG_TYPE = 83;
+    private static final int PARAMETERIZED_TYPE = 84;
+    private static final int PRIMITIVE_TYPE = 85;
+    private static final int QUALIFIED_TYPE = 86;
+    private static final int SIMPLE_TYPE = 87;
+    private static final int WILDCARD_TYPE = 88;
+    private static final int TYPE_PARAMETER = 89;
+    private static final int SINGLE_VARIABLE_DECLARATION = 90;
+    private static final int VARIABLE_DECLARATION_FRAGMENT = 91;
+    
+    private Map<String,Integer> ctorNameToIndexMap;
+
+    public ECJFactory() {
+        ctorNameToIndexMap = new HashMap<String,Integer>();
+        ctorNameToIndexMap.put("ArrayAccess", ARRAY_ACCESS);
+        ctorNameToIndexMap.put("PackageDeclaration", PACKAGE_DECLARATION);
+        ctorNameToIndexMap.put("BooleanLiteral", BOOLEAN_LITERAL);
+        ctorNameToIndexMap.put("BooleanType", BOOLEAN_TYPE);
+        ctorNameToIndexMap.put("BreakStatement", BREAK_STATEMENT);
+        ctorNameToIndexMap.put("CatchClause", CATCH_CLAUSE);
+        ctorNameToIndexMap.put("CharacterLiteral", CHARACTER_LITERAL);
+        ctorNameToIndexMap.put("ClassInstanceCreation", CLASS_INSTANCE_CREATION);
+        ctorNameToIndexMap.put("AnnotationTypeDeclaration", ANNOTATION_TYPE_DECLARATION);
+        ctorNameToIndexMap.put("EnumDeclaration", ENUM_DECLARATION);
+        ctorNameToIndexMap.put("TypeDeclaration", TYPE_DECLARATION);
+        ctorNameToIndexMap.put("AnnotatioTypeMemberDeclaration", ANNOTATION_TYPE_MEMBER_DECLARATION);
+        ctorNameToIndexMap.put("EnumConstantDeclaration", ENUM_CONSTANT_DECLARATION);
+        ctorNameToIndexMap.put("FieldDeclaration", FIELD_DECLARATION);
+        ctorNameToIndexMap.put("Initializer", INITIALIZER);
+        ctorNameToIndexMap.put("MethodDeclaration", METHOD_DECLARATION);
+        ctorNameToIndexMap.put("BlockComment", BLOCK_COMMENT);
+        ctorNameToIndexMap.put("Javadoc", JAVADOC);
+        ctorNameToIndexMap.put("LineComment", LINE_COMMENT);
+        ctorNameToIndexMap.put("CompilationUnit", COMPILATION_UNIT);
+        ctorNameToIndexMap.put("MarkerAnnotation", MARKER_ANNOTATION);
+        ctorNameToIndexMap.put("NormalAnnotation", NORMAL_ANNOTATION);
+        ctorNameToIndexMap.put("SingleMemberAnnotation", SINGLE_MEMBER_ANNOTATION);
+        ctorNameToIndexMap.put("ArrayCreation", ARRAY_CREATION);
+        ctorNameToIndexMap.put("ArrayInitializer", ARRAY_INITIALIZER);
+        ctorNameToIndexMap.put("Assignment", ASSIGNMENT);
+        ctorNameToIndexMap.put("CastExpression", CAST_EXPRESSION);
+        ctorNameToIndexMap.put("ConditionalExpression", CONDITIONAL_EXPRESSION);
+        ctorNameToIndexMap.put("FieldAccess", FIELD_ACCESS);
+        ctorNameToIndexMap.put("InfixExpression", INFIX_EXPRESSION);
+        ctorNameToIndexMap.put("InstanceofExpression", INSTANCEOF_EXPRESSION);
+        ctorNameToIndexMap.put("MethodInvocation", METHOD_INVOCATION);
+        ctorNameToIndexMap.put("QualifiedName", QUALIFIED_NAME);
+        ctorNameToIndexMap.put("SimpleName", SIMPLE_NAME);
+        ctorNameToIndexMap.put("NullLiteral", NULL_LITERAL);
+        ctorNameToIndexMap.put("NumberLiteral", NUMBER_LITERAL);
+        ctorNameToIndexMap.put("ParenthesizedExpression", PARENTHESIZED_EXPRESSION);
+        ctorNameToIndexMap.put("PostfixExpression", POSTFIX_EXPRESSION);
+        ctorNameToIndexMap.put("PrefixExpression", PREFIX_EXPRESSION);
+        ctorNameToIndexMap.put("StringLiteral", STRING_LITERAL);
+        ctorNameToIndexMap.put("SuperFieldAccess", SUPER_FIELD_ACCESS);
+        ctorNameToIndexMap.put("ThisExpression", THIS_EXPRESSION);
+        ctorNameToIndexMap.put("VariableDeclarationExpression", VARIABLE_DECLARATION_EXPRESSION);
+        ctorNameToIndexMap.put("ImportDeclaration", IMPORT_DECLARATION);
+        ctorNameToIndexMap.put("MemberRef", MEMBER_REF);
+        ctorNameToIndexMap.put("MemberValuePair", MEMBER_VALUE_PAIR);
+        ctorNameToIndexMap.put("MethodRef", METHOD_REF);
+        ctorNameToIndexMap.put("MethodRefParameter", METHOD_REF_PARAMETER);
+        ctorNameToIndexMap.put("Modifier", MODIFIER);
+        ctorNameToIndexMap.put("ModifiedKeyword", MODIFIER_KEYWORD);
+        ctorNameToIndexMap.put("PackageDeclaration", PACKAGE_DECLARATION);
+        ctorNameToIndexMap.put("PostfixExpressionOperator", POSTFIX_EXPRESSION_OPERATOR);
+        ctorNameToIndexMap.put("PrefixExpressionOperator", PREFIX_EXPRESSION_OPERATOR);
+        ctorNameToIndexMap.put("AssertStatement", ASSERT_STATEMENT);
+        ctorNameToIndexMap.put("Block", BLOCK);
+        ctorNameToIndexMap.put("ConstructorInvocation", CONSTRUCTOR_INVOCATION);
+        ctorNameToIndexMap.put("ContinueStatement", CONTINUE_STATEMENT);
+        ctorNameToIndexMap.put("DoStatement", DO_STATEMENT);
+        ctorNameToIndexMap.put("EmptyStatement", EMPTY_STATEMENT);
+        ctorNameToIndexMap.put("EnhancedForStatement", ENHANCED_FOR_STATEMENT);
+        ctorNameToIndexMap.put("ExpressionStatement", EXPRESSION_STATEMENT);
+        ctorNameToIndexMap.put("ForStatement", FOR_STATEMENT);
+        ctorNameToIndexMap.put("IfStatement", IF_STATEMENT);
+        ctorNameToIndexMap.put("LabeledStatement", LABELED_STATEMENT);
+        ctorNameToIndexMap.put("ReturnStatement", RETURN_STATEMENT);
+        ctorNameToIndexMap.put("SuperConstructorInvocation", SUPER_CONSTRUCTOR_INVOCATION);
+        ctorNameToIndexMap.put("SwitchCase", SWITCH_CASE);
+        ctorNameToIndexMap.put("SwitchStatement", SWITCH_STATEMENT);
+        ctorNameToIndexMap.put("SynchronizedStatement", SYNCHRONIZED_STATEMENT);
+        ctorNameToIndexMap.put("ThrowStatement", THROW_STATEMENT);
+        ctorNameToIndexMap.put("TryStatement", TRY_STATEMENT);
+        ctorNameToIndexMap.put("TypeDeclarationStatement", TYPE_DECLARATION_STATEMENT);
+        ctorNameToIndexMap.put("TypeLiteral", TYPE_LITERAL);
+        ctorNameToIndexMap.put("VariableDeclarationStatement", VARIABLE_DECLARATION_STATEMENT);
+        ctorNameToIndexMap.put("WhileStatement", WHILE_STATEMENT);
+        ctorNameToIndexMap.put("SuperMethodInvocation", SUPER_METHOD_INVOCATION);
+        ctorNameToIndexMap.put("TagElement", TAG_ELEMENT);
+        ctorNameToIndexMap.put("TextElement", TEXT_ELEMENT);
+        ctorNameToIndexMap.put("ArrayType", ARRAY_TYPE);
+        ctorNameToIndexMap.put("DoubleType", DOUBLE_TYPE);
+        ctorNameToIndexMap.put("FloatType", FLOAT_TYPE);
+        ctorNameToIndexMap.put("IntType", INT_TYPE);
+        ctorNameToIndexMap.put("LongType", LONG_TYPE);
+        ctorNameToIndexMap.put("ParameterizedType", PARAMETERIZED_TYPE);
+        ctorNameToIndexMap.put("PrimitiveType", PRIMITIVE_TYPE);
+        ctorNameToIndexMap.put("QualifiedType", QUALIFIED_TYPE);
+        ctorNameToIndexMap.put("SimpleType", SIMPLE_TYPE);
+        ctorNameToIndexMap.put("WildcardType", WILDCARD_TYPE);
+        ctorNameToIndexMap.put("TypeParameter", TYPE_PARAMETER);
+        ctorNameToIndexMap.put("SingleVariableDeclaration", SINGLE_VARIABLE_DECLARATION);
+        ctorNameToIndexMap.put("VariableDeclarationFragment", VARIABLE_DECLARATION_FRAGMENT);
+    }
+    
     public IStrategoTerm parseFromFile(String path) throws IOException {
         throw new NotImplementedException();
     }
@@ -148,34 +339,6 @@ public class ECJFactory implements ITermFactory {
 
     public boolean hasConstructor(String s, int i) {
         throw new NotImplementedException();
-    }
-
-    @SuppressWarnings("unchecked")
-    public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
-        final String c = ctr.getName();
-        if(c.equals("PackageDeclaration")) {
-            if(!(ensureJavadoc(kids.get(0)) || ensureNone(kids.get(0))))
-                return null;
-            if(!ensureAnnotations(kids.get(1)))
-                return null;
-            if(!ensureName(kids.get(2)))
-                return null;
-            
-            AST ast = AST.newAST(AST.JLS3);
-            PackageDeclaration pd = ast.newPackageDeclaration();
-            pd.setJavadoc(getJavadoc(kids.get(0)));
-            pd.annotations().addAll(getAnnotations(kids.get(1)));
-            pd.setName(getName(kids.get(2)));
-            
-            return wrap(pd);
-        }
-        if(c.equals("None")) {
-            return None.INSTANCE;
-        }
-         
-        
-        return ctr.instantiate(this, kids);
-
     }
 
     private boolean ensureNone(IStrategoTerm term) {
@@ -206,8 +369,236 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedJavadoc)term).getWrappee();
     }
 
+    public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList terms) {
+        IStrategoTerm[] kids = new IStrategoTerm[terms.size()];
+        for(int i = 0; i < terms.size(); i++)
+            kids[i] = terms.get(i);
+        return makeAppl(ctr, kids);
+    }
+
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... terms) {
-        return ctr.instantiate(this, terms);
+        IStrategoAppl t = constructASTNode(ctr, terms);
+        if(t == null)
+            return ctr.instantiate(this, terms);
+        return t;
+    }
+
+    @SuppressWarnings("unchecked")
+    private IStrategoAppl constructASTNode(IStrategoConstructor ctr, IStrategoTerm[] kids) {
+        int index = ctorNameToIndex(ctr);
+        AST ast = AST.newAST(AST.JLS3);
+        switch(index) {
+        case ANNOTATION_TYPE_DECLARATION:
+            break;
+        case ANNOTATION_TYPE_MEMBER_DECLARATION:
+            break;
+        case ARRAY_ACCESS: 
+            ArrayAccess x = ast.newArrayAccess();
+            if(!ensureExpression(kids[0]) || !ensureExpression(kids[1]))
+                return null;
+            x.setArray(asExpression(kids[0]));
+            x.setIndex(asExpression(kids[1]));
+            return wrap(x);
+        case ARRAY_CREATION:
+            break;
+        case ARRAY_INITIALIZER:
+            break;
+        case ARRAY_TYPE:
+            break;
+        case ASSERT_STATEMENT:
+            break;
+        case ASSIGNMENT:
+            break;
+        case BLOCK:
+            break;
+        case BLOCK_COMMENT:
+            break;
+        case BOOLEAN_LITERAL:
+            break;
+        case BOOLEAN_TYPE:
+            break;
+        case BREAK_STATEMENT:
+            break;
+        case CAST_EXPRESSION:
+            break;
+        case CATCH_CLAUSE:
+            break;
+        case CHARACTER_LITERAL:
+            break;
+        case CLASS_INSTANCE_CREATION:
+            break;
+        case COMPILATION_UNIT:
+            break;
+        case CONDITIONAL_EXPRESSION:
+            break;
+        case CONSTRUCTOR_INVOCATION:
+            break;
+        case CONTINUE_STATEMENT:
+            break;
+        case DO_STATEMENT:
+            break;
+        case DOUBLE_TYPE:
+            break;
+        case EMPTY_STATEMENT:
+            break;
+        case ENHANCED_FOR_STATEMENT:
+            break;
+        case ENUM_CONSTANT_DECLARATION:
+            break;
+        case ENUM_DECLARATION:
+            break;
+        case FIELD_ACCESS:
+            break;
+        case FIELD_DECLARATION:
+            break;
+        case FLOAT_TYPE:
+            break;
+        case FOR_STATEMENT:
+            break;
+        case IF_STATEMENT:
+            break;
+        case IMPORT_DECLARATION:
+            break;
+        case INFIX_EXPRESSION:
+            break;
+        case INITIALIZER:
+            break;
+        case INSTANCEOF_EXPRESSION:
+            break;
+        case INT_TYPE:
+            break;
+        case JAVADOC:
+            break;
+        case LABELED_STATEMENT:
+            break;
+        case LINE_COMMENT:
+            break;
+        case LONG_TYPE:
+            break;
+        case MARKER_ANNOTATION:
+            break;
+        case MEMBER_REF:
+            break;
+        case MEMBER_VALUE_PAIR:
+            break;
+        case METHOD_DECLARATION:
+            break;
+        case METHOD_INVOCATION:
+            break;
+        case METHOD_REF:
+            break;
+        case METHOD_REF_PARAMETER:
+            break;
+        case MODIFIER:
+            break;
+        case MODIFIER_KEYWORD:
+            break;
+        case NONE:
+            return None.INSTANCE;
+        case NORMAL_ANNOTATION:
+            break;
+        case NULL_LITERAL:
+            break;
+        case NUMBER_LITERAL:
+            break;
+        case PACKAGE_DECLARATION:
+            if(!(ensureJavadoc(kids[0]) || ensureNone(kids[0])))
+                return null;
+            if(!ensureAnnotations(kids[1]))
+                return null;
+            if(!ensureName(kids[2]))
+                return null;
+            
+            PackageDeclaration pd = ast.newPackageDeclaration();
+            pd.setJavadoc(getJavadoc(kids[0]));
+            pd.annotations().addAll(getAnnotations(kids[1]));
+            pd.setName(getName(kids[2]));
+            return wrap(pd);
+        case PARAMETERIZED_TYPE:
+            break;
+        case PARENTHESIZED_EXPRESSION:
+            break;
+        case POSTFIX_EXPRESSION:
+            break;
+        case POSTFIX_EXPRESSION_OPERATOR:
+            break;
+        case PREFIX_EXPRESSION:
+            break;
+        case PREFIX_EXPRESSION_OPERATOR:
+            break;
+        case PRIMITIVE_TYPE:
+            break;
+        case QUALIFIED_NAME:
+            break;
+        case QUALIFIED_TYPE:
+            break;
+        case RETURN_STATEMENT:
+            break;
+        case SIMPLE_NAME:
+            break;
+        case SIMPLE_TYPE:
+            break;
+        case SINGLE_MEMBER_ANNOTATION:
+            break;
+        case SINGLE_VARIABLE_DECLARATION:
+            break;
+        case STRING_LITERAL:
+            break;
+        case SUPER_CONSTRUCTOR_INVOCATION:
+            break;
+        case SUPER_FIELD_ACCESS:
+            break;
+        case SUPER_METHOD_INVOCATION:
+            break;
+        case TAG_ELEMENT:
+            break;
+        case TEXT_ELEMENT:
+            break;
+        case THIS_EXPRESSION:
+            break;
+        case THROW_STATEMENT:
+            break;
+        case TRY_STATEMENT:
+            break;
+        case TYPE_DECLARATION:
+            break;
+        case TYPE_DECLARATION_STATEMENT:
+            break;
+        case TYPE_LITERAL:
+            break;
+        case TYPE_PARAMETER:
+            break;
+        case VARIABLE_DECLARATION_EXPRESSION:
+            break;
+        case VARIABLE_DECLARATION_FRAGMENT:
+            break;
+        case VARIABLE_DECLARATION_STATEMENT:
+            break;
+        case WHILE_STATEMENT:
+            break;
+        case WILDCARD_TYPE:
+            break;
+        default:
+            return null;
+        }
+        throw new NotImplementedException();
+    }
+
+    private boolean ensureExpression(IStrategoTerm term) {
+        return term instanceof WrappedExpression;
+    }
+
+    private Expression asExpression(IStrategoTerm term) {
+        if(term instanceof WrappedASTNode) {
+            ASTNode n = ((WrappedASTNode) term).getWrappee(); 
+            if(n instanceof Expression)
+                return (Expression) n;
+        }
+        throw new NotImplementedException();
+    }
+
+    private int ctorNameToIndex(IStrategoConstructor ctr) {
+        return ctorNameToIndexMap.get(ctr.getName());
     }
 
     public IStrategoConstructor makeConstructor(String string, int arity, boolean quoted) {
@@ -1056,7 +1447,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedArrayCreation(creation);
     }
 
-    private static IStrategoTerm wrap(ArrayAccess access) {
+    private static IStrategoAppl wrap(ArrayAccess access) {
         if(access == null)
             return None.INSTANCE;
         else

@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedSingleMemberAnnotation extends WrappedASTNode {
+public class WrappedSingleMemberAnnotation extends WrappedAnnotation {
 
     private final SingleMemberAnnotation wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SingleMemberAnnotation", 2);

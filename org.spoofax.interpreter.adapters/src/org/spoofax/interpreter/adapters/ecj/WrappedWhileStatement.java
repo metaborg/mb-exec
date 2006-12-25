@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedWhileStatement extends WrappedASTNode {
+public class WrappedWhileStatement extends WrappedStatement {
 
     private final WhileStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("WhileStatement", 2);

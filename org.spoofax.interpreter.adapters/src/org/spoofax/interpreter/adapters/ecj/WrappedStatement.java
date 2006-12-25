@@ -1,5 +1,5 @@
 /*
- * Created on 29. sep.. 2006
+ * Created on 25. des.. 2006
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -7,14 +7,11 @@
  */
 package org.spoofax.interpreter.adapters.ecj;
 
-import org.eclipse.jdt.core.dom.Name;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 
-public abstract class WrappedName extends WrappedExpression {
+public abstract class WrappedStatement extends WrappedASTNode {
 
-    protected WrappedName(IStrategoConstructor constructor) {
+    protected WrappedStatement(IStrategoConstructor constructor) {
         super(constructor);
     }
-    
-    public abstract Name getWrappee();
 }

@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.IfStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedIfStatement extends WrappedASTNode {
+public class WrappedIfStatement extends WrappedStatement {
 
     private final IfStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("IfStatement", 3); 

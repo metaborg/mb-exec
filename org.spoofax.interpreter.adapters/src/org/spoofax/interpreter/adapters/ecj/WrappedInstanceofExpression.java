@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedInstanceofExpression extends WrappedASTNode {
+public class WrappedInstanceofExpression extends WrappedExpression {
 
     private final InstanceofExpression wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("InstanceofExpression", 2);

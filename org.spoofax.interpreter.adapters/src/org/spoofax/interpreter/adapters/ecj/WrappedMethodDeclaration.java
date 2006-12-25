@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedMethodDeclaration extends WrappedASTNode {
+public class WrappedMethodDeclaration extends WrappedBodyDeclaration {
 
     private final MethodDeclaration wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("MethodDeclaration", 6); 

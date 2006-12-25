@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.QualifiedType;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedQualifiedType extends WrappedASTNode {
+public class WrappedQualifiedType extends WrappedType {
 
     private final QualifiedType wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("QualifiedType", 2);

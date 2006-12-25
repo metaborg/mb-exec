@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.Assignment;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedAssignment extends WrappedASTNode {
+public class WrappedAssignment extends WrappedExpression {
 
     private final Assignment wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("Assignment", 2);
