@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_cos extends Primitive {
+public class SSL_cos extends AbstractPrimitive {
 
     protected SSL_cos() {
         super("SSL_cos", 0, 1);

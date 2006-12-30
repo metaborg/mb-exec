@@ -15,7 +15,7 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.library.SSL_hashtable_create.Hashtable;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_table_hashtable extends Primitive {
+public class SSL_table_hashtable extends AbstractPrimitive {
 
     protected SSL_table_hashtable() {
         super("SSL_table_hashtable", 0, 0);
@@ -36,7 +36,7 @@ public class SSL_table_hashtable extends Primitive {
     public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         if(magicRef == -1) {
-            SSL or = (SSL) env.getOperatorRegistry(SSL.REGISTRY_NAME);
+            SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
             magicRef = or.registerHashtable(map);
         }
         

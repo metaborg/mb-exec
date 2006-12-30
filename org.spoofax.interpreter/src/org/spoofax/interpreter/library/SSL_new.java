@@ -15,7 +15,7 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
-public class SSL_new extends Primitive {
+public class SSL_new extends AbstractPrimitive {
 
     private int alphaCounter;
     private int counter;

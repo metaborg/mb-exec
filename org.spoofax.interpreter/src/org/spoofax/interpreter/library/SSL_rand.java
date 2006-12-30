@@ -14,7 +14,7 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_rand extends Primitive {
+public class SSL_rand extends AbstractPrimitive {
 
     protected SSL_rand() {
         super("SSL_rand", 0, 0);

@@ -15,13 +15,13 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public abstract class Primitive {
+public abstract class AbstractPrimitive {
 
     protected String name;
     protected int svars;
     protected int tvars;
     
-    protected Primitive(String name, int svars, int tvars) {
+    protected AbstractPrimitive(String name, int svars, int tvars) {
         this.name = name;
         this.svars = svars;
         this.tvars = tvars;

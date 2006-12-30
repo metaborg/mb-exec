@@ -14,7 +14,7 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_getcwd extends Primitive {
+public class SSL_getcwd extends AbstractPrimitive {
 
     protected SSL_getcwd() {
         super("SSL_getcwd", 0, 0);

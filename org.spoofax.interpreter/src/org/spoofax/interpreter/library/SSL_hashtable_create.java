@@ -17,7 +17,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_hashtable_create extends Primitive {
+public class SSL_hashtable_create extends AbstractPrimitive {
 
     protected static class Hashtable extends HashMap<IStrategoTerm, IStrategoTerm> {
 
@@ -44,7 +44,7 @@ public class SSL_hashtable_create extends Primitive {
         int initialSize = ((IStrategoInt)targs[0]).getValue();
         int maxLoad = ((IStrategoInt)targs[1]).getValue();
 
-        SSL or = (SSL) env.getOperatorRegistry(SSL.REGISTRY_NAME);
+        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         int ref = or.registerHashtable(new Hashtable(initialSize, maxLoad));
         
         env.setCurrent(env.getFactory().makeInt(ref));

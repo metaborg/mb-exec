@@ -15,7 +15,7 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_string_to_int extends Primitive {
+public class SSL_string_to_int extends AbstractPrimitive {
 
     protected SSL_string_to_int() {
         super("SSL_string_to_int", 0, 1);

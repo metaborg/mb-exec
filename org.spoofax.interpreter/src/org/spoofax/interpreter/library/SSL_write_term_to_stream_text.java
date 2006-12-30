@@ -18,7 +18,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_write_term_to_stream_text extends Primitive {
+public class SSL_write_term_to_stream_text extends AbstractPrimitive {
 
     protected SSL_write_term_to_stream_text() {
         super("SSL_write_term_to_stream_text", 0, 2);
@@ -29,7 +29,7 @@ public class SSL_write_term_to_stream_text extends Primitive {
         if(Tools.isTermInt(targs[0]))
             return false;
 
-        SSL or = (SSL) env.getOperatorRegistry(SSL.REGISTRY_NAME);
+        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         OutputStream ous = or.outputStreamFromTerm((IStrategoInt)targs[0]);
 
         IStrategoTerm t = targs[1];

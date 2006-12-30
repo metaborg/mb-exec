@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_muli extends Primitive {
+public class SSL_muli extends AbstractPrimitive {
 
     protected SSL_muli() {
         super("SSL_muli", 0, 2);

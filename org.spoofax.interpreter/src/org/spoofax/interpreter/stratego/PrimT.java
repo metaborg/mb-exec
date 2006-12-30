@@ -15,7 +15,7 @@ import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
-import org.spoofax.interpreter.library.Primitive;
+import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -42,7 +42,7 @@ public class PrimT extends Strategy {
         }
 
         
-        Primitive prim = env.lookupOperator(name);
+        AbstractPrimitive prim = env.lookupOperator(name);
 
         if (prim == null)
             throw new InterpreterException("No such function : '" + name + "'");

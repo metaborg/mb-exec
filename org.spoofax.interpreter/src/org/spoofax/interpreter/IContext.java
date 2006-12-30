@@ -8,7 +8,7 @@
 package org.spoofax.interpreter;
 
 import org.spoofax.interpreter.library.IOperatorRegistry;
-import org.spoofax.interpreter.library.Primitive;
+import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.Match.Results;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -37,6 +37,6 @@ public interface IContext {
     public void restoreVarScope(VarScope anotherVarScope);
     
     public StrategoSignature getStrategoSignature();
-    public Primitive lookupOperator(String name);
+    public AbstractPrimitive lookupOperator(String name);
     
 }

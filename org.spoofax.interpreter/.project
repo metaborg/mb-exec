@@ -3,7 +3,6 @@
 	<name>org.spoofax.interpreter</name>
 	<comment></comment>
 	<projects>
-		<project>org.spoofax.interpreter.adapters</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

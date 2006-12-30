@@ -17,7 +17,7 @@ import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_real_to_string_precision extends Primitive {
+public class SSL_real_to_string_precision extends AbstractPrimitive {
 
     protected SSL_real_to_string_precision() {
         super("SSL_real_to_string_precision", 0, 2);

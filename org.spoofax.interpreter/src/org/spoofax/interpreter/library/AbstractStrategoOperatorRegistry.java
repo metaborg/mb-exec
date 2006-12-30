@@ -12,23 +12,23 @@ import java.util.Map;
 
 public abstract class AbstractStrategoOperatorRegistry implements IOperatorRegistry {
 
-    Map<String, Primitive> registry;
+    Map<String, AbstractPrimitive> registry;
     
     protected AbstractStrategoOperatorRegistry() {
-        registry = new HashMap<String, Primitive>();
+        registry = new HashMap<String, AbstractPrimitive>();
     }
     
     // FIXME kill - this is superflouse
     @Deprecated
-    protected void add(String name, Primitive prim) {
+    protected void add(String name, AbstractPrimitive prim) {
         registry.put(name, prim);
     }
 
-    protected void add(Primitive prim) {
+    protected void add(AbstractPrimitive prim) {
         registry.put(prim.getName(), prim);
     }
     
-    public Primitive get(String name) {
+    public AbstractPrimitive get(String name) {
         return registry.get(name);
     }
 }

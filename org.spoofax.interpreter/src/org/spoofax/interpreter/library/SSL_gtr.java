@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_gtr extends Primitive {
+public class SSL_gtr extends AbstractPrimitive {
 
     protected SSL_gtr() {
         super("SSL_gtr", 0, 2);

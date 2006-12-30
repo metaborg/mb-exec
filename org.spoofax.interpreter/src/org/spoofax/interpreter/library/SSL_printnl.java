@@ -17,7 +17,7 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.PrettyPrinter;
 
-public class SSL_printnl extends Primitive {
+public class SSL_printnl extends AbstractPrimitive {
 
     protected SSL_printnl() {
         super("SSL_printnl", 0, 2);

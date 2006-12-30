@@ -17,7 +17,7 @@ import org.spoofax.interpreter.library.SSL_hashtable_create.Hashtable;
 import org.spoofax.interpreter.terms.IStrategoInt;
 
 // FIXME: The function registry should probably be shared between instances
-public class SSL extends AbstractStrategoOperatorRegistry {
+public class SSLLibrary extends AbstractStrategoOperatorRegistry {
 
     public final static int CONST_STDERR = 1;
     public final static int CONST_STDOUT = 2;
@@ -29,18 +29,18 @@ public class SSL extends AbstractStrategoOperatorRegistry {
     private Map<Integer, InputStream> inputStreamMap;
     private Map<Integer, OutputStream> outputStreamMap;
 
-    public SSL() {
+    public SSLLibrary() {
         initRegistry();
         init();
     }
     
     private void initRegistry() {
         inputStreamMap = new HashMap<Integer, InputStream>();
-        inputStreamMap.put(SSL.CONST_STDIN, System.in);
+        inputStreamMap.put(SSLLibrary.CONST_STDIN, System.in);
         
         outputStreamMap = new HashMap<Integer, OutputStream>();
-        outputStreamMap.put(SSL.CONST_STDERR, new BufferedOutputStream(System.err));
-        outputStreamMap.put(SSL.CONST_STDOUT, new BufferedOutputStream(System.out));
+        outputStreamMap.put(SSLLibrary.CONST_STDERR, new BufferedOutputStream(System.err));
+        outputStreamMap.put(SSLLibrary.CONST_STDOUT, new BufferedOutputStream(System.out));
         
         add(new SSL_is_int());
         add(new SSL_addi());
@@ -93,11 +93,11 @@ public class SSL extends AbstractStrategoOperatorRegistry {
         add(new SSL_getcwd());
      }
 
-    protected Map<String, Primitive> getRegistry() {
+    protected Map<String, AbstractPrimitive> getRegistry() {
         return registry;
     }
 
-    public Primitive lookup(String s) {
+    public AbstractPrimitive lookup(String s) {
         return get(s);
     }
 

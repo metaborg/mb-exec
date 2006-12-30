@@ -17,7 +17,7 @@ import org.spoofax.interpreter.library.SSL_indexedSet_create.IndexedSet;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_indexedSet_getIndex extends Primitive {
+public class SSL_indexedSet_getIndex extends AbstractPrimitive {
 
     protected SSL_indexedSet_getIndex() {
         super("SSL_indexedSet_getIndex", 0, 2);

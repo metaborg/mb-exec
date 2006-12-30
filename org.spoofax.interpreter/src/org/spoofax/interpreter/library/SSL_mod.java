@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_mod extends Primitive {
+public class SSL_mod extends AbstractPrimitive {
 
     protected SSL_mod() {
         super("SSL_mod", 0, 2);

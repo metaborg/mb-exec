@@ -17,7 +17,7 @@ import org.spoofax.interpreter.library.SSL_indexedSet_create.IndexedSet;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_indexedSet_reset extends Primitive {
+public class SSL_indexedSet_reset extends AbstractPrimitive {
 
     protected SSL_indexedSet_reset() {
         super("SSL_indexedSet_reset", 0, 1);

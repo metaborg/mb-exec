@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_divi extends Primitive {
+public class SSL_divi extends AbstractPrimitive {
 
     protected SSL_divi() {
         super("SSL_divi", 0, 2);

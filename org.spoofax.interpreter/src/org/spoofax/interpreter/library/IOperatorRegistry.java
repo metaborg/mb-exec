@@ -9,6 +9,6 @@ package org.spoofax.interpreter.library;
 
 public interface IOperatorRegistry {
 
-    Primitive get(String name);
+    AbstractPrimitive get(String name);
 
 }

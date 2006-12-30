@@ -17,7 +17,7 @@ import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
-public class SSL_explode_string extends Primitive {
+public class SSL_explode_string extends AbstractPrimitive {
 
     protected SSL_explode_string() {
         super("SSL_explode_string", 0, 1);

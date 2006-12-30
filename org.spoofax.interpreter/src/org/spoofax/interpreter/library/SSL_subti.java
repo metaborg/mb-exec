@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_subti extends Primitive {
+public class SSL_subti extends AbstractPrimitive {
 
     protected SSL_subti() {
         super("SSL_subti", 0, 2);

@@ -18,7 +18,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_fputs extends Primitive {
+public class SSL_fputs extends AbstractPrimitive {
 
     protected SSL_fputs() {
         super("SSL_fputs", 0, 2);
@@ -31,7 +31,7 @@ public class SSL_fputs extends Primitive {
         if(!(Tools.isTermInt(targs[1])))
             return false;
 
-        SSL or = (SSL) env.getOperatorRegistry(SSL.REGISTRY_NAME);
+        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         
         OutputStream ous = or.outputStreamFromTerm((IStrategoInt)targs[1]);
         try {

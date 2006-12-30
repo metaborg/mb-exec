@@ -18,7 +18,7 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_access extends Primitive {
+public class SSL_access extends AbstractPrimitive {
 
     private static final int R_OK = 4;
 

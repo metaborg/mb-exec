@@ -17,7 +17,7 @@ import org.spoofax.interpreter.library.SSL_hashtable_create.Hashtable;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_hashtable_remove extends Primitive {
+public class SSL_hashtable_remove extends AbstractPrimitive {
 
     protected SSL_hashtable_remove() {
         super("SSL_hashtable_remove", 0, 2);
@@ -28,7 +28,7 @@ public class SSL_hashtable_remove extends Primitive {
         if(!(Tools.isTermInt(targs[0])))
             return false;
 
-        SSL or = (SSL) env.getOperatorRegistry(SSL.REGISTRY_NAME);
+        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         Hashtable ath = or.getHashtable(((IStrategoInt)targs[0]).getValue());
         if(ath == null)
             return false;

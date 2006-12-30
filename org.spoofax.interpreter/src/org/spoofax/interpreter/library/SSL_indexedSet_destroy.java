@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_indexedSet_destroy extends Primitive {
+public class SSL_indexedSet_destroy extends AbstractPrimitive {
 
     protected SSL_indexedSet_destroy() {
         super("SSL_indexedSet_destroy", 0, 1);

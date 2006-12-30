@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_sqrt extends Primitive {
+public class SSL_sqrt extends AbstractPrimitive {
 
     protected SSL_sqrt() {
         super("SSL_sqrt", 0, 1);

@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_addr extends Primitive {
+public class SSL_addr extends AbstractPrimitive {
 
     protected SSL_addr() {
         super("SSL_addr", 0, 2);

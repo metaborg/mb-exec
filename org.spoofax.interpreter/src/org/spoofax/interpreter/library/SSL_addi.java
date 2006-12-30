@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_addi extends Primitive {
+public class SSL_addi extends AbstractPrimitive {
 
     protected SSL_addi() {
         super("SSL_addi", 0, 2);

@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_concat_strings extends Primitive {
+public class SSL_concat_strings extends AbstractPrimitive {
 
     protected SSL_concat_strings() {
         super("SSL_concat_strings", 0, 1);

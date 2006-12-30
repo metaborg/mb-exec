@@ -16,7 +16,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_sin extends Primitive {
+public class SSL_sin extends AbstractPrimitive {
 
     protected SSL_sin() {
         super("SSL_sin", 0, 1);

@@ -15,7 +15,7 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_getenv extends Primitive {
+public class SSL_getenv extends AbstractPrimitive {
 
     protected SSL_getenv() {
         super("SSL_getenv", 0, 1);

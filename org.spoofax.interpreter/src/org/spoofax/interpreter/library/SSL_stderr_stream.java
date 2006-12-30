@@ -14,7 +14,7 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_stderr_stream extends Primitive {
+public class SSL_stderr_stream extends AbstractPrimitive {
 
     protected SSL_stderr_stream() {
         super("SSL_stderr_stream", 0, 0);
@@ -22,7 +22,7 @@ public class SSL_stderr_stream extends Primitive {
     
     public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
         
-        env.setCurrent(env.getFactory().makeInt(SSL.CONST_STDERR));
+        env.setCurrent(env.getFactory().makeInt(SSLLibrary.CONST_STDERR));
         return true;
     }
 }

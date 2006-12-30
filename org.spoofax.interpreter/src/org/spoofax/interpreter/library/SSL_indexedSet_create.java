@@ -20,7 +20,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_indexedSet_create extends Primitive {
+public class SSL_indexedSet_create extends AbstractPrimitive {
 
     class IndexedSet  {
         

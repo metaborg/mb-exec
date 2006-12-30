@@ -12,8 +12,8 @@ import java.util.Map;
 
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.library.IOperatorRegistry;
-import org.spoofax.interpreter.library.Primitive;
-import org.spoofax.interpreter.library.SSL;
+import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.library.SSLLibrary;
 import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.Match.Binding;
@@ -49,7 +49,7 @@ public class Context implements IContext {
         strategoSignature = new StrategoSignature(programFactory);
         operatorRegistries = new HashMap<String, IOperatorRegistry>();
         
-        operatorRegistries.put(SSL.REGISTRY_NAME, new SSL());
+        operatorRegistries.put(SSLLibrary.REGISTRY_NAME, new SSLLibrary());
     }
 
     public IStrategoTerm current() {
@@ -166,9 +166,9 @@ public class Context implements IContext {
         return operatorRegistries.get(domain);
     }
 
-    public Primitive lookupOperator(String name) {
+    public AbstractPrimitive lookupOperator(String name) {
         for(IOperatorRegistry or : operatorRegistries.values()) {
-            Primitive t = or.get(name);
+            AbstractPrimitive t = or.get(name);
             if(t != null)
                 return t;
         }

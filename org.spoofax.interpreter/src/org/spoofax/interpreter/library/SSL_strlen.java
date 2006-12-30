@@ -15,7 +15,7 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_strlen extends Primitive {
+public class SSL_strlen extends AbstractPrimitive {
 
     protected SSL_strlen() {
         super("SSL_strlen", 0, 1);
