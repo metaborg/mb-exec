@@ -10,7 +10,6 @@ Require-Bundle: org.eclipse.jdt.core,
  org.eclipse.core.resources,
  org.spoofax.aterm
 Export-Package: org.spoofax,
- org.spoofax.interpreter.adapters.ecj,
  org.spoofax.interpreter.adapters.aterm,
  org.spoofax.interpreter.terms
  
