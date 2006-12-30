@@ -7,7 +7,7 @@
  */
 package org.spoofax.ecjadapter.library;
 
-import org.spoofax.interpreter.adapters.ecj.WrappedProject;
+import org.spoofax.ecjadapter.adapter.WrappedProject;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJTools {

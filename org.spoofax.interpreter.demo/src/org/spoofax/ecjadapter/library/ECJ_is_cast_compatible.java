@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.adapters.ecj.WrappedITypeBinding;
+import org.spoofax.ecjadapter.adapter.WrappedITypeBinding;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 

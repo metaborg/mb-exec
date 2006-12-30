@@ -20,7 +20,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.adapters.ecj.ECJFactory;
+import org.spoofax.ecjadapter.adapter.ECJFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class TestECJAdapter extends TestCase {

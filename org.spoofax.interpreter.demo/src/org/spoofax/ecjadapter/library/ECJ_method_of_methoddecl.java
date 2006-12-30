@@ -14,8 +14,8 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.adapters.ecj.ECJFactory;
-import org.spoofax.interpreter.adapters.ecj.WrappedASTNode;
+import org.spoofax.ecjadapter.adapter.ECJFactory;
+import org.spoofax.ecjadapter.adapter.WrappedASTNode;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
