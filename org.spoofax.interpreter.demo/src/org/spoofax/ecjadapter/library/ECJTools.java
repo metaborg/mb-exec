@@ -5,7 +5,7 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.demo;
+package org.spoofax.ecjadapter.library;
 
 import org.spoofax.interpreter.adapters.ecj.WrappedProject;
 import org.spoofax.interpreter.terms.IStrategoTerm;

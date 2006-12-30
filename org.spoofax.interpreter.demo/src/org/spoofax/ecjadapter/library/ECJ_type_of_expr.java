@@ -5,24 +5,24 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.demo;
+package org.spoofax.ecjadapter.library;
 
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.eclipse.jdt.core.dom.SuperMethodInvocation;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapters.ecj.ECJFactory;
 import org.spoofax.interpreter.adapters.ecj.WrappedASTNode;
-import org.spoofax.interpreter.library.Primitive;
+import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_method_of_supermethodinvoc extends Primitive {
+public class ECJ_type_of_expr extends AbstractPrimitive {
 
-    public ECJ_method_of_supermethodinvoc() {
-        super("ECJ_method_of_supermethodinvoc", 0, 1);
+    public ECJ_type_of_expr() {
+        super("ECJ_type_of_expr", 0, 1);
     }
     
     @Override
@@ -33,16 +33,16 @@ public class ECJ_method_of_supermethodinvoc extends Primitive {
             return false;
         
         WrappedASTNode n = (WrappedASTNode) tvars[0];
-        if(!(n.getWrappee() instanceof SuperMethodInvocation))
+        if(!(n.getWrappee() instanceof Expression))
             return false;
         
-        SuperMethodInvocation m = (SuperMethodInvocation) n.getWrappee();
+        Expression e = (Expression) n.getWrappee();
         
-        IMethodBinding mb = m.resolveMethodBinding();
-        if(mb == null)
+        ITypeBinding tb = e.resolveTypeBinding();
+        if(tb == null)
             return false;
         
-        env.setCurrent(ECJFactory.wrap(mb));
+        env.setCurrent(ECJFactory.wrap(tb));
         return true;
     }
 

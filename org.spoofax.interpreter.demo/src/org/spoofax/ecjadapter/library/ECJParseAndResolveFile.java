@@ -1,7 +1,5 @@
-package org.spoofax.interpreter.demo;
-import java.io.BufferedReader;
+package org.spoofax.ecjadapter.library;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
@@ -14,9 +12,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapters.ecj.ECJFactory;
@@ -47,7 +43,7 @@ public class ECJParseAndResolveFile {
 
         ECJFactory wef = new ECJFactory();
         Interpreter itp = new Interpreter(wef);
-        itp.addOperatorRegistry(ECJ.REGISTRY_NAME, new ECJ());
+        itp.addOperatorRegistry(ECJLibrary.REGISTRY_NAME, new ECJLibrary());
         itp.load(prg);
         IStrategoTerm t = wef.parseFromTree(n);
         itp.setCurrent(t);

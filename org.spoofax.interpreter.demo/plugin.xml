@@ -5,7 +5,7 @@
          id="demo"
          point="org.eclipse.core.runtime.applications">
       <application>
-         <run class="org.spoofax.interpreter.demo.SpoofaxDemo"/>
+         <run class="org.spoofax.ecjadapter.library.SpoofaxDemo"/>
       </application>
    </extension>
 

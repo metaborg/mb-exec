@@ -5,25 +5,24 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.demo;
+package org.spoofax.ecjadapter.library;
 
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapters.ecj.ECJFactory;
 import org.spoofax.interpreter.adapters.ecj.WrappedASTNode;
-import org.spoofax.interpreter.library.Primitive;
+import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_type_of_type extends Primitive {
+public class ECJ_method_of_methodinvoc extends AbstractPrimitive {
 
-    public ECJ_type_of_type() {
-        super("ECJ_type_of_type", 0, 1);
+    public ECJ_method_of_methodinvoc() {
+        super("ECJ_method_of_methodinvoc", 0, 1);
     }
     
     @Override
@@ -34,16 +33,16 @@ public class ECJ_type_of_type extends Primitive {
             return false;
         
         WrappedASTNode n = (WrappedASTNode) tvars[0];
-        if(!(n.getWrappee() instanceof Type))
+        if(!(n.getWrappee() instanceof MethodInvocation))
             return false;
         
-        Type e = (Type) n.getWrappee();
+        MethodInvocation m = (MethodInvocation) n.getWrappee();
         
-        ITypeBinding tb = e.resolveBinding();
-        if(tb == null)
+        IMethodBinding mb = m.resolveMethodBinding();
+        if(mb == null)
             return false;
         
-        env.setCurrent(ECJFactory.wrap(tb));
+        env.setCurrent(ECJFactory.wrap(mb));
         return true;
     }
 

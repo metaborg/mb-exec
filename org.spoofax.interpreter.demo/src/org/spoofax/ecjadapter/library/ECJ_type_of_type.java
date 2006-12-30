@@ -5,24 +5,24 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.demo;
+package org.spoofax.ecjadapter.library;
 
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.Type;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapters.ecj.ECJFactory;
 import org.spoofax.interpreter.adapters.ecj.WrappedASTNode;
-import org.spoofax.interpreter.library.Primitive;
+import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_type_of_expr extends Primitive {
+public class ECJ_type_of_type extends AbstractPrimitive {
 
-    public ECJ_type_of_expr() {
-        super("ECJ_type_of_expr", 0, 1);
+    public ECJ_type_of_type() {
+        super("ECJ_type_of_type", 0, 1);
     }
     
     @Override
@@ -33,12 +33,12 @@ public class ECJ_type_of_expr extends Primitive {
             return false;
         
         WrappedASTNode n = (WrappedASTNode) tvars[0];
-        if(!(n.getWrappee() instanceof Expression))
+        if(!(n.getWrappee() instanceof Type))
             return false;
         
-        Expression e = (Expression) n.getWrappee();
+        Type e = (Type) n.getWrappee();
         
-        ITypeBinding tb = e.resolveTypeBinding();
+        ITypeBinding tb = e.resolveBinding();
         if(tb == null)
             return false;
         

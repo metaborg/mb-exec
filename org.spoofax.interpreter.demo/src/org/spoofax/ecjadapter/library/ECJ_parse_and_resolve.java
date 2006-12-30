@@ -5,7 +5,7 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.demo;
+package org.spoofax.ecjadapter.library;
 
 import java.util.List;
 
@@ -22,11 +22,11 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.adapters.ecj.ECJFactory;
 import org.spoofax.interpreter.adapters.ecj.WrappedProject;
-import org.spoofax.interpreter.library.Primitive;
+import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_parse_and_resolve extends Primitive {
+public class ECJ_parse_and_resolve extends AbstractPrimitive {
 
     public ECJ_parse_and_resolve() {
         super("ECJ_parse_and_resolve", 0, 2);

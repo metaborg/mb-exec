@@ -5,7 +5,7 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.demo;
+package org.spoofax.ecjadapter.library;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;

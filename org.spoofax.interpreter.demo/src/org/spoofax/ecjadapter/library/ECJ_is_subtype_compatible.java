@@ -4,7 +4,7 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.demo;
+package org.spoofax.ecjadapter.library;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapters.ecj.WrappedITypeBinding;
-import org.spoofax.interpreter.library.Primitive;
+import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_is_subtype_compatible extends Primitive {
+public class ECJ_is_subtype_compatible extends AbstractPrimitive {
 
     protected ECJ_is_subtype_compatible() {
         super("ECJ_is_subtype_compatible", 0, 1);

@@ -4,15 +4,15 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.demo;
+package org.spoofax.ecjadapter.library;
 
 import org.spoofax.interpreter.library.AbstractStrategoOperatorRegistry;
 
-public class ECJ extends AbstractStrategoOperatorRegistry {
+public class ECJLibrary extends AbstractStrategoOperatorRegistry {
 
     public static final String REGISTRY_NAME = "ECJ";
 
-    ECJ() {
+    ECJLibrary() {
         init();
     }
     

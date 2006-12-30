@@ -1,4 +1,4 @@
-package org.spoofax.interpreter.demo;
+package org.spoofax.ecjadapter.library;
 
 
 import java.io.ByteArrayInputStream;

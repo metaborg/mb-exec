@@ -1,5 +1,6 @@
-package org.spoofax.interpreter.demo;
+package org.spoofax.ecjadapter.library;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
  * Licensed under the GNU General Public License, v2
  */
 
-public class ECJParseFile {
+public class ECJParseTest {
 
     private static char[] getBytes(String fileName) throws FileNotFoundException, IOException {
 
@@ -35,15 +36,15 @@ public class ECJParseFile {
         return sb.toString().toCharArray();
     }
 
-    static void parse(String prg, String file) throws FileNotFoundException, IOException, InterpreterException {
+    static void parse(String file) throws FileNotFoundException, IOException, InterpreterException {
 
         Interpreter itp = new Interpreter(new ECJFactory());
-        itp.addOperatorRegistry(ECJ.REGISTRY_NAME, new ECJ());
-        itp.load(prg);
+        itp.addOperatorRegistry(ECJLibrary.REGISTRY_NAME, new ECJLibrary());
+        itp.load("deconstructor.rtree");
         ASTParser parser = ASTParser.newParser(AST.JLS3);
         parser.setSource(getBytes(file));
         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-        //System.out.println(cu);
+        System.out.println(cu);
         ECJFactory wef = new ECJFactory();
         IStrategoTerm t = wef.parseFromTree(cu);
         itp.setCurrent(t);
@@ -51,12 +52,25 @@ public class ECJParseFile {
 
     }
     
+    static void recurse(File base) throws FileNotFoundException, IOException, InterpreterException {
+        for(String s : base.list()) {
+            if(s.endsWith(".java"))
+                parse(base.getAbsolutePath() + "/" + s);
+            else {
+                File x = new File(base.getAbsolutePath() + "/" + s);
+                if(x.isDirectory())
+                    recurse(x);
+            }
+            //System.out.println(s);
+        }
+        
+    }
     
     public static void main(String[] args) throws FileNotFoundException, IOException, InterpreterException {
-       if(args.length > 1)
-            parse(args[0], args[1]);
-        else
-            parse("str/parse-and-dump.rtree", args[0]);
+        File f = new File(args[0]);
+        
+        recurse(f);
+        System.out.println("Finished");
     }
     
 }

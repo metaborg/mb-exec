@@ -5,7 +5,7 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.demo;
+package org.spoofax.ecjadapter.library;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +18,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapters.ecj.ECJFactory;
@@ -68,10 +67,14 @@ public class TestECJAdapter extends TestCase {
         interpTest("arrayfields-check", "\"examples/FieldTest.java\"", "()");
     }
 
+    public void testFor() throws IOException, InterpreterException, CoreException {
+        interpTest("for-check", "\"examples/ForTest.java\"", "()");
+    }
+
     protected void interpTestFail(String string, String in) throws IOException, InterpreterException {
         ECJFactory f = new ECJFactory();
         Interpreter itp = new Interpreter(f);
-        itp.addOperatorRegistry(ECJ.REGISTRY_NAME, new ECJ());
+        itp.addOperatorRegistry(ECJLibrary.REGISTRY_NAME, new ECJLibrary());
         itp.load("str/" + string + ".rtree");
         IStrategoTerm inTerm = f.parseFromString(in);
         itp.setCurrent(inTerm);
@@ -82,7 +85,7 @@ public class TestECJAdapter extends TestCase {
         ECJFactory f = new ECJFactory();
         Interpreter itp = new Interpreter(f);
         //DebugUtil.debugging = true;
-        itp.addOperatorRegistry(ECJ.REGISTRY_NAME, new ECJ());
+        itp.addOperatorRegistry(ECJLibrary.REGISTRY_NAME, new ECJLibrary());
         itp.load(findFile(string));
         IStrategoTerm inTerm = f.parseFromString(in);
         IStrategoTerm outTerm = f.parseFromString(out);
