@@ -22,6 +22,7 @@ public abstract class AbstractInterpreterTest extends TestCase {
     protected Interpreter itp;
     protected ITermFactory factory;
     protected String basePath;
+    private boolean unitTestDebug = false;
     
     protected void setUp(String path) throws Exception {
         super.setUp();
@@ -29,6 +30,8 @@ public abstract class AbstractInterpreterTest extends TestCase {
         itp = new Interpreter();
         factory = itp.getFactory();
         DebugUtil.setDebug(false);
+        DebugUtil.setTracing(false);
+        unitTestDebug = true; 
     }
     
     @Override
@@ -55,20 +58,20 @@ public abstract class AbstractInterpreterTest extends TestCase {
     }
 
     public void interpTest(String test, IStrategoTerm input, IStrategoTerm output) {
-        if(DebugUtil.debugging) {
+        if(unitTestDebug) {
             System.out.println("Input : " + input);
         }
         assertTrue(runInterp(test, input));
         IStrategoTerm x = output;
         IStrategoTerm y = itp.current();
-        if(DebugUtil.debugging) {
+        if(unitTestDebug) {
             System.out.println("Want  : " + x + " / " + x.getTermType() + " / " + x.getClass()
                                + " / " + x.getSubtermCount());
             System.out.println("Got   : " + y + " / " + y.getTermType() + " / " + y.getClass()
                                + " / " + y.getSubtermCount());
         }
         boolean succeeded = itp.current().match(output);
-        if(DebugUtil.debugging) {
+        if(unitTestDebug) {
             System.out.println(succeeded);
         }
         assertTrue(succeeded);

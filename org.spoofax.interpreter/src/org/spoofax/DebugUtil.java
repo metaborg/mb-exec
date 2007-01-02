@@ -9,12 +9,14 @@ import org.spoofax.interpreter.stratego.Strategy;
 /*
  * Created on 28.mar.2006
  *
- * Copyright (c) 2004, Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * Copyright (c) 2006-2007, Karl Trygve Kalleberg <karltk@ii.uib.no>
  *
  * Licensed under the GNU General Public License, v2
  */
 public class DebugUtil {
-    public static boolean debugging;
+    public static boolean debugging = false;
+    public static boolean tracing = false;
+    
     public static final int INDENT_STEP = 2;
     //public static boolean resetSSL = true;
     //public static boolean cleanupInShutdown = true;
@@ -93,5 +95,9 @@ public class DebugUtil {
 
     public static boolean isDebugging() {
         return debugging;
+    }
+
+    public static void setTracing(boolean enableTracing) {
+        tracing = enableTracing;
     }
 }

@@ -20,7 +20,7 @@ public class BasicLibraryTest extends AbstractLanguageTest {
     public void testConc() {
         interpTest("conc", 
                    "([1,2,3],[3,4,5])",
-                   "[1,2,3,4,5]");
+                   "[1,2,3,3,4,5]");
     }
 
     public void testConcat() {
@@ -50,15 +50,15 @@ public class BasicLibraryTest extends AbstractLanguageTest {
     }
 
     public void testFstTuple() {
-        interpTest("Fst_tuple", "[1,2]", "1");
+        interpTest("Fst_tuple", "(1,2)", "1");
     }
 
     public void testSndTuple() {
-        interpTest("Snd_tuple", "[1,2]", "2");
+        interpTest("Snd_tuple", "(1,2)", "2");
     }
 
     public void testSwapTuple() {
-        interpTest("swap_tuple", "[1,2]", "[2,1]");
+        interpTest("swap_tuple", "(1,2)", "(2,1)");
     }
 
     public void testTopdownTry() {
@@ -96,7 +96,7 @@ public class BasicLibraryTest extends AbstractLanguageTest {
     }
 
     public void testTestMap3() {
-        interpTest("map_test_3", "(5, [1,2,3]", "[6,7,8]");
+        interpTest("map_test_3", "(5, [1,2,3])", "[6,7,8]");
     }
 
     public void testTestMap4() {

@@ -74,7 +74,6 @@ public class Match extends Strategy {
         }
         else if (Tools.isStr(p, env)) {
             return null;
-            //return matchApplStr(t, p);
         }
         else if (Tools.isVar(p, env)) {
             return matchAnyVar(t, p);
@@ -489,6 +488,9 @@ public class Match extends Strategy {
         }
         else if (Tools.isExplode(p, env)) {
             return matchAnyExplode(env, t, p);
+        }
+        else if (Tools.isStr(p, env)) {
+            return null;
         }
 
         throw new InterpreterException("Unknown List case '" + p + "'");

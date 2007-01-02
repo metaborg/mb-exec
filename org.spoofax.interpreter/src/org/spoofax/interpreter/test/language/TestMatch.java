@@ -24,6 +24,22 @@ public class TestMatch extends AbstractLanguageTest {
     public void testMatchString1b() {
         interpTestFail("match_string_1", "abc()");
     }
+    
+    public void testMatchString1c() {
+        interpTestFail("match_string_1", "[]");
+    }
+
+    public void testMatchString1d() {
+        interpTestFail("match_string_1", "1");
+    }
+
+    public void testMatchString1e() {
+        interpTestFail("match_string_1", "()");
+    }
+
+    public void testMatchString1f() {
+        interpTestFail("match_string_1", "1.0");
+    }
 
     public void testMatchString2() {
         interpTestFail("match_string_2", "\"abc\"");
@@ -31,6 +47,22 @@ public class TestMatch extends AbstractLanguageTest {
 
     public void testMatchTuple1() {
         interpTest("match_tuple_1", "(1, 2)", "1");
+    }
+
+    public void testMatchTuple1b() {
+        interpTestFail("match_tuple_1", "[1, 2]");
+    }
+
+    public void testMatchTuple1c() {
+        interpTestFail("match_tuple_1", "\"foo\"");
+    }
+
+    public void testMatchTuple1d() {
+        interpTestFail("match_tuple_1", "1");
+    }
+
+    public void testMatchTuple1e() {
+        interpTestFail("match_tuple_1", "1.0");
     }
 
     public void testMatchTuple2() {
@@ -79,6 +111,22 @@ public class TestMatch extends AbstractLanguageTest {
 
     public void testMatchList4() {
         interpTestFail("match_list_4", "Cons(2, Cons(3, Nil))");
+    }
+
+//    public void testMatchList4b() {
+//        interpTest("match_list_4", "Cons(3, Cons(3, Nil))", "[3,3]");
+//    }
+
+    public void testMatchList4c() {
+        interpTestFail("match_list_4", "\"foo\"");
+    }
+
+    public void testMatchList4d() {
+        interpTestFail("match_list_4", "1");
+    }
+
+    public void testMatchList4e() {
+        interpTestFail("match_list_4", "1.0");
     }
 
     public void testMatchReal1() {
