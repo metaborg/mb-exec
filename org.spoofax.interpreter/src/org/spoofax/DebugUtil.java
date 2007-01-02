@@ -16,9 +16,9 @@ import org.spoofax.interpreter.stratego.Strategy;
 public class DebugUtil {
     public static boolean debugging;
     public static final int INDENT_STEP = 2;
-    public static boolean resetSSL = true;
-    public static boolean cleanupInShutdown = true;
-    public static boolean shareFactory = true;
+    //public static boolean resetSSL = true;
+    //public static boolean cleanupInShutdown = true;
+    //public static boolean shareFactory = true;
 
     /**
      * Debug utility to trace the result of a completed strategy and the 'current'

@@ -26,9 +26,6 @@ public abstract class AbstractInterpreterTest extends TestCase {
     protected void setUp(String path) throws Exception {
         super.setUp();
         basePath = path;
-        DebugUtil.resetSSL = false; //faster but does not cleanup
-        DebugUtil.cleanupInShutdown = false; //faster but does not cleanup
-        DebugUtil.shareFactory = true; // in unit test mode all can share the same factory
         itp = new Interpreter();
         factory = itp.getFactory();
         DebugUtil.setDebug(false);
@@ -38,6 +35,7 @@ public abstract class AbstractInterpreterTest extends TestCase {
     protected void tearDown() throws Exception {
         itp.shutdown();
         itp = null;
+        factory = null;
         super.tearDown();
     }
 

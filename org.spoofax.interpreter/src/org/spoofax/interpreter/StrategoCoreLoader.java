@@ -38,17 +38,14 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.StrategoSignature;
 
 public class StrategoCoreLoader {
 
-    private ITermFactory factory;
     private Context context;
     
     StrategoCoreLoader(Context context) {
         this.context = context;
-        factory = context.getProgramFactory();
     }
     
     private ExtSDef parseExtSDef(IStrategoAppl t) {
@@ -337,7 +334,7 @@ public class StrategoCoreLoader {
     }
     
     public void load(String path) throws IOException, InterpreterException {
-        doLoad(factory.parseFromFile(path));
+        doLoad(context.getFactory().parseFromFile(path));
     }
     
     private void doLoad(IStrategoTerm prg) throws InterpreterException {
@@ -378,7 +375,7 @@ public class StrategoCoreLoader {
     }
 
     public void load(InputStream stream) throws InterpreterException, IOException {
-        doLoad(factory.parseFromStream(stream));
+        doLoad(context.getFactory().parseFromStream(stream));
     }
 
 }

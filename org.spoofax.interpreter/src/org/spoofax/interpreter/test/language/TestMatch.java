@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter.test.language;
 
+import java.io.IOException;
+
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
 public class TestMatch extends AbstractLanguageTest {
@@ -136,4 +138,7 @@ public class TestMatch extends AbstractLanguageTest {
         interpTestFail("match_appl_1", "()");
     }
 
+    public void testZ() throws IOException {
+        //System.in.read();
+    }
 }

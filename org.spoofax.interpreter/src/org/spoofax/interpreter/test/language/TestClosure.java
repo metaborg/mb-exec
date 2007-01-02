@@ -52,7 +52,7 @@ public class TestClosure extends AbstractLanguageTest {
     public void testClosure15() {
         interpTest("closure_test_15", 
                    factory.parseFromString("[[1,2,3], [4,5,6]]"), 
-                   factory.parseFromString("[[2,3,4], [5,6,7]"));
+                   factory.parseFromString("[[2,3,4], [5,6,7]]"));
     }
 
     public void testClosure2() {
