@@ -103,6 +103,9 @@ public class Build extends Strategy {
         IStrategoTerm actualCtor = buildTerm(env, ctor);
         IStrategoTerm actualArgs = buildTerm(env, args);
 
+        if(actualCtor == null || actualArgs == null)
+            return null;
+        
         if (DebugUtil.isDebugging()) {
             debug(" actualCtor : ", actualCtor);
         }
@@ -114,40 +117,44 @@ public class Build extends Strategy {
             return actualCtor;
         }
         else if (Tools.isTermString(actualCtor)) {
-
-            if (!(Tools.isTermList(actualArgs))) {
-                throw new InterpreterException("");
-            }
-
-            String n = ((IStrategoString)actualCtor).getValue();
-            IStrategoList argList = (IStrategoList)actualArgs;
-            IStrategoTerm[] realArgs = new IStrategoTerm[argList.size()];
-            
-            for(int i = 0; i < argList.size(); i++) {
-                realArgs[i] = argList.get(i);
-            }
-            
-            if (n.equals(""))
-                return factory.makeTuple(realArgs);
-            
-            boolean quoted = false;
-            if (n.length() > 1 && n.charAt(0) == '"') {
-                n = n.substring(1, n.length() - 1);
-                quoted = true;
-            }
-
-            if(quoted && realArgs.length == 0) {
-                return factory.makeString(n);
-            }
-            
-            IStrategoConstructor afun = factory.makeConstructor(n, argList.size(), quoted);
-            return factory.makeAppl(afun, realArgs);
+            return doBuildExplode(factory, actualCtor, actualArgs);
         }
         else if (Tools.isTermList(actualCtor)) {
             return actualArgs;
         }
 
-        throw new InterpreterException("Unknown term explosion : " + t.getTermType());
+        throw new InterpreterException("Unknown term explosion : '" + t + "' " + t.getTermType()
+                                       + " : " + actualCtor + " / " + actualArgs);
+    }
+
+    private IStrategoTerm doBuildExplode(ITermFactory factory, IStrategoTerm actualCtor, IStrategoTerm actualArgs) throws InterpreterException {
+        if (!(Tools.isTermList(actualArgs))) {
+            throw new InterpreterException("");
+        }
+
+        String n = ((IStrategoString)actualCtor).getValue();
+        IStrategoList argList = (IStrategoList)actualArgs;
+        IStrategoTerm[] realArgs = new IStrategoTerm[argList.size()];
+        
+        for(int i = 0; i < argList.size(); i++) {
+            realArgs[i] = argList.get(i);
+        }
+        
+        if (n.equals(""))
+            return factory.makeTuple(realArgs);
+        
+        boolean quoted = false;
+        if (n.length() > 1 && n.charAt(0) == '"') {
+            n = n.substring(1, n.length() - 1);
+            quoted = true;
+        }
+
+        if(quoted && realArgs.length == 0) {
+            return factory.makeString(n);
+        }
+        
+        IStrategoConstructor afun = factory.makeConstructor(n, argList.size(), quoted);
+        return factory.makeAppl(afun, realArgs);
     }
 
     private IStrategoTerm buildVar(IContext env, IStrategoAppl t) throws InterpreterException {
