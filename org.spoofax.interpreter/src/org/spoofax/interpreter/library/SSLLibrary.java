@@ -68,6 +68,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_cos());
         add(new SSL_sin());
         add(new SSL_sin());
+        add(new SSL_sqrt());
         add(new SSL_real_to_string());
         add(new SSL_real_to_string_precision());
         add(new SSL_string_to_real());
