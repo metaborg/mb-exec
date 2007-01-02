@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter.test;
 
+import java.io.IOException;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -24,7 +26,7 @@ import org.spoofax.interpreter.test.language.TestTermDeconstruction;
 
 public class AllLanguageTests {
 
-    public static Test suite() {
+    public static Test suite() throws IOException {
         TestSuite suite = new TestSuite("Test for org.spoofax.interpreter.test");
         //$JUnit-BEGIN$
         suite.addTestSuite(TestDefinition.class);
@@ -39,6 +41,7 @@ public class AllLanguageTests {
         suite.addTestSuite(TestClosure.class);
         suite.addTestSuite(TestMatch.class);
         suite.addTestSuite(TestHigherOrderParameters.class);
+        suite.addTestSuite(Pause.class);
         //$JUnit-END$
         return suite;
     }

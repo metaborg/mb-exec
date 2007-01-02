@@ -11,6 +11,7 @@ public class Main {
 
         Interpreter itp = new Interpreter();
         String file = "";
+        boolean waitForProfiler = false;
 
         for(String s : args)
             System.out.println(s);
@@ -20,6 +21,8 @@ public class Main {
                 DebugUtil.setDebug(true);
             } else if (args[i].equals("-i")) {
                 file = args[i + 1];
+            } else if (args[i].equals("--wait-for-profiler")) {
+                waitForProfiler = true;
             }
         }
 
@@ -39,5 +42,8 @@ public class Main {
         } catch (InterpreterException e) {
             e.printStackTrace();
         }
+        
+        if(waitForProfiler)
+            System.in.read();
     }
 }

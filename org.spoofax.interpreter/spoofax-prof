@@ -20,10 +20,13 @@ function run-interpreter() {
 
 function invoke-interpreter() {
 	java ${VM_OPTS} \
+		-Xrunjmp:nomethods \
 		-cp ../org.spoofax.aterm/aterm-1.6.jar:bin:ext/jjtraveler-0.4.3.jar:ext/shared-objects-1.4.jar:../org.spoofax.interpreter.adapters/bin \
 		-Dspoofax.lib.path=../xlet/src \
 		-Dspoofax.xlet.path=../org.spoofax.interpreter/bin/xlets \
-		$@
+		$@ \
+		--wait-for-profiler
+
 }
 
 function verify-project() {

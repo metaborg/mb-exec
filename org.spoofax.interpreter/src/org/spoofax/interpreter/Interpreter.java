@@ -47,6 +47,8 @@ public class Interpreter {
     
 
     public boolean invoke(String name) throws InterpreterException {
+        System.out.println("Factory " + this.context.getFactory());
+        
         SDefT def = context.lookupSVar(name);
 
         if (def == null) {

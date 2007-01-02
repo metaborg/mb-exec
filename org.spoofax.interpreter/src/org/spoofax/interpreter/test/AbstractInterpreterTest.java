@@ -31,7 +31,7 @@ public abstract class AbstractInterpreterTest extends TestCase {
         DebugUtil.shareFactory = true; // in unit test mode all can share the same factory
         itp = new Interpreter();
         factory = itp.getFactory();
-        DebugUtil.setDebug(true);
+        DebugUtil.setDebug(false);
     }
     
     @Override
@@ -57,23 +57,28 @@ public abstract class AbstractInterpreterTest extends TestCase {
     }
 
     public void interpTest(String test, IStrategoTerm input, IStrategoTerm output) {
-        System.out.println("Input : " + input);
+        if(DebugUtil.debugging) {
+            System.out.println("Input : " + input);
+        }
         assertTrue(runInterp(test, input));
         IStrategoTerm x = output;
         IStrategoTerm y = itp.current();
-        System.out.println("Want  : " + x + " / " + x.getTermType() + " / " + x.getClass()
-                + " / " + x.getSubtermCount());
-        System.out.println("Got   : " + y + " / " + y.getTermType() + " / " + y.getClass()
-                           + " / " + y.getSubtermCount());
+        if(DebugUtil.debugging) {
+            System.out.println("Want  : " + x + " / " + x.getTermType() + " / " + x.getClass()
+                               + " / " + x.getSubtermCount());
+            System.out.println("Got   : " + y + " / " + y.getTermType() + " / " + y.getClass()
+                               + " / " + y.getSubtermCount());
+        }
         boolean succeeded = itp.current().match(output);
-        System.out.println(succeeded);
+        if(DebugUtil.debugging) {
+            System.out.println(succeeded);
+        }
         assertTrue(succeeded);
     }
 
     private boolean runInterp(String test, IStrategoTerm input) {
         try {
         itp.load(basePath + "/" + test + ".rtree");
-        System.out.println(itp.prettyPrint());
         itp.setCurrent(input);
         // System.out.println("Input : " + input);
         return itp.invoke("main_0_0");
