@@ -25,7 +25,7 @@ public class SSL_concat_strings extends AbstractPrimitive {
     public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         IStrategoTerm t = targs[0];
-        if(Tools.isTermList(t))
+        if(!Tools.isTermList(t))
             return false;
 
         IStrategoList l = (IStrategoList) t;

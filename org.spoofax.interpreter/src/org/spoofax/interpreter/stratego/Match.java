@@ -186,7 +186,7 @@ public class Match extends Strategy {
             IStrategoAppl p) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
-            debug("matching Int");
+            debug("term is Int");
         }
 
         if (Tools.isAnno(p, env)) {
@@ -212,6 +212,8 @@ public class Match extends Strategy {
         }
         else if (Tools.isAs(p, env)) {
             return matchAnyAs(t, p);
+        } else if(Tools.isStr(p, env)) {
+            return null;
         }
 
         throw new InterpreterException("Unknown Int case '" + p + "'");
@@ -221,7 +223,7 @@ public class Match extends Strategy {
             IStrategoAppl p) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
-            debug("matching Real");
+            debug("term is Real");
         }
 
         if (Tools.isAnno(p, env)) {
@@ -247,6 +249,8 @@ public class Match extends Strategy {
         }
         else if (Tools.isAs(p, env)) {
             return matchAnyAs(t, p);
+        } else if (Tools.isStr(p, env)) {
+            return null;
         }
 
         throw new InterpreterException("Unknown Real case '" + p + "'");
@@ -269,7 +273,7 @@ public class Match extends Strategy {
     protected Results matchAnyAnno(IContext env, IStrategoTerm t,
             IStrategoAppl p) throws InterpreterException {
         if(DebugUtil.isDebugging()) {
-            DebugUtil.debug("  against Anno");
+            DebugUtil.debug("  pattern is Anno");
         }
         // FIXME: Do real match of annotations
         return match(env, t, Tools.applAt(p, 0));
@@ -307,6 +311,9 @@ public class Match extends Strategy {
     private Results matchAnyExplode(IContext env, IStrategoTerm t,
             IStrategoAppl p) throws InterpreterException {
 
+        if(DebugUtil.isDebugging()) {
+            DebugUtil.debug("  pattern is Explode");
+        }
         IStrategoAppl opPattern = Tools.applAt(p, 0);
         IStrategoAppl argsPattern = Tools.applAt(p, 1);
 
@@ -326,21 +333,27 @@ public class Match extends Strategy {
 
     private IStrategoTerm getTermArguments(IContext env, IStrategoTerm t) throws InterpreterException {
 
-        if (Tools.isTermInt(t) || Tools.isTermReal(t))
+        switch(t.getTermType()) {
+        case IStrategoTerm.INT:
+        case IStrategoTerm.REAL:
             return env.getFactory().makeList();
-        else if (Tools.isTermAppl(t)) {
+        case IStrategoTerm.APPL:
             IStrategoAppl a = (IStrategoAppl)t;
             if (Tools.isNil(a, env) || Tools.isCons(a, env))
                 return t;
             else
                 return env.getFactory().makeList(a.getArguments());
-        }
-        else if (Tools.isTermList(t))
+        case IStrategoTerm.LIST: 
             return t;
-        else if (Tools.isTermString(t)) 
+        case IStrategoTerm.STRING:
             return env.getFactory().makeList();
-        else if (Tools.isTermTuple(t)) 
-            return t; 
+        case IStrategoTerm.TUPLE:
+            IStrategoTuple tup = (IStrategoTuple) t;
+            IStrategoTerm[] args = new IStrategoTerm[tup.getSubtermCount()];
+            for(int i = 0; i < args.length; i++) 
+                args[i] = tup.get(i);
+            return env.getFactory().makeList(args); 
+        }
             
         throw new InterpreterException("Unknown term '" + t + "'");
     }
@@ -396,7 +409,7 @@ public class Match extends Strategy {
 
     private Results matchTuple(IContext env, IStrategoTuple t, IStrategoAppl p) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
-            debug("matching Tuple");
+            debug("term is Tuple");
         }
         if (Tools.isAnno(p, env)) {
             return matchAnyAnno(env, t, p);
@@ -462,7 +475,7 @@ public class Match extends Strategy {
             IStrategoAppl p) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
-            debug("matching List");
+            debug("term is List");
         }
 
         if (Tools.isAnno(p, env)) {
@@ -537,7 +550,7 @@ public class Match extends Strategy {
 
     private Results matchString(IContext env, IStrategoString t, IStrategoAppl p) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
-            debug("matching String");
+            debug("term is String");
         }
         
         if (Tools.isAnno(p, env)) {
@@ -573,10 +586,10 @@ public class Match extends Strategy {
 
     private Results matchStrStr(IContext env, IStrategoString t, IStrategoAppl p) {
         if(DebugUtil.isDebugging()) {
-            DebugUtil.debug("  against Str");
+            DebugUtil.debug("  pattern is Str");
         }
         IStrategoString s = Tools.stringAt(p, 0);
-        if(s.equals(t)) {
+        if(s.match(t)) {
             return emptyList();
         }
         return null;

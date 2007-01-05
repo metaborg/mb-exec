@@ -102,4 +102,8 @@ public class BasicLibraryTest extends AbstractLanguageTest {
     public void testTestMap4() {
         interpTest("map_test_4", "[[1,2,3],[2,3,4]]", "[[2,3,4],[3,4,5]]");
     }
+    
+    public void testStringConcat() {
+        interpTest("string_concat_1", "()", "[102,110,111,114,100]");
+    }
 }

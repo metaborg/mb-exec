@@ -28,8 +28,8 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testListMisc() { interpTest("list-misc-test", "(23,0)"); }
     public void testListIndex() { interpTest("list-index-test", "(17,0)"); }
     public void testListFilter() {  interpTest("list-filter-test", "(2,0)");   }
-    public void testIntegers() { interpTest("integers-test", "(1,2)"); }
-    public void testIteration() { interpTest("iteration-test", "(1,2)"); }
+    public void testIntegers() { interpTest("integers-test", "(79,0)"); }
+    public void testIteration() { interpTest("iteration-test", "(25,0)"); }
     public void testUnification() { interpTest("unification-test", "(2,0)"); }
     public void testStrcmp() { interpTest("strcmp-test", "(16,0)"); }
     public void testTermZip() { interpTest("term-zip-test", "(8,0)"); }
