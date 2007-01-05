@@ -1,0 +1,10 @@
+module string-concat-test
+imports 
+  term/string
+  term/real
+  system/error
+  system/c99/fallback-posix
+
+strategies
+
+  main = !["a", "b", "c" ] ; concat-strings
