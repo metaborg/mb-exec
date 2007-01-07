@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module closure_test_8
-imports list-cons tuple-cons integers
+imports stratego-lib
 strategies
 
   bar = rec x([] + [inc | foo])

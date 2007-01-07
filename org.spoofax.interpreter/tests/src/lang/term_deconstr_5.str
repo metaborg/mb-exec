@@ -6,7 +6,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module term_deconstr_5
-imports lib
+imports stratego-lib
 signature
   constructors
     Pair : Int * Int -> Pair

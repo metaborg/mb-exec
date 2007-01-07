@@ -6,7 +6,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module term_constr_6
-imports lib
+imports stratego-lib
 strategies
 
   main = ?(x,y) ; !x#(y)

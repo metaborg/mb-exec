@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module closure_test_5a
-imports list-cons tuple-cons
+imports stratego-lib
 strategies
 
   main = let map(s) = [] + [s | map(s)] in map(!1) end 

@@ -7,7 +7,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module let_test_3
-imports list-cons tuple-cons integers
+imports stratego-lib
 strategies
 
    main = !5 ; outer(!6)

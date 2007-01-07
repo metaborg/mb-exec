@@ -7,7 +7,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module build_list_3
-imports lib
+imports stratego-lib
 strategies
 main = 
  !Cons(1, Cons(2, Cons(3, Nil))) 

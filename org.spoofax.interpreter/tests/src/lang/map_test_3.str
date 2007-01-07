@@ -7,7 +7,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module map_test_3
-imports collection/list/common
+imports stratego-lib
 strategies
 
   main = ?(x, xs) ; <map(\ y -> <add> (x, y) \)> xs

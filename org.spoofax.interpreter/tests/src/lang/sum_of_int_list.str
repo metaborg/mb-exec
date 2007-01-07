@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module sum_of_int_list
-imports int-list
+imports stratego-lib
 strategies
 
   main = sum

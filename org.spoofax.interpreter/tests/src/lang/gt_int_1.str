@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module gt_int_1
-imports integers
+imports stratego-lib
 strategies
 
   main = <gt> (2, 1)

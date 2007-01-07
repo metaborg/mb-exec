@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module unbinding_of_guard_in_guarded_lchoice
-imports list-cons tuple-const
+imports stratego-lib
 strategies
 
-  main = ?x ; fail < !x ; !2 + !x ; !3
+  main = id // ?x ; fail < !x ; !2 + !x ; !3 FIXME compiler

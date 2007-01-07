@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module union
-imports list-set
+imports stratego-lib
 strategies
 
   main = union

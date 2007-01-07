@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module wrap_split_4
-imports list-cons tuple-cons
+imports stratego-lib
 strategies
 
   main = ![<id>, <id>]

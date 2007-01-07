@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module match_interrupted_by_scope_2
-imports lib
+imports stratego-lib
 strategies
 main = 
  ?y ; !3 ; {y: ?y } ; !y 

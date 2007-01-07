@@ -6,7 +6,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module match_appl_1
-imports lib
+imports stratego-lib
 signature
   constructors
     A : A

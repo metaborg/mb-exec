@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module collect-om_1
-imports collect
+imports stratego-lib
 strategies
 
   main = collect-om(is-int)

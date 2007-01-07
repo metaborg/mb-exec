@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module foo_rdef_1
-imports list-cons tuple-cons
+imports stratego-lib
 strategies
 
   Foo: 1 -> 2

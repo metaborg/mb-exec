@@ -6,7 +6,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module build_real
-imports lib
+imports stratego-lib
 strategies
 
   main = !5.0

@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module build_unbound_var
-imports list-cons tuple-cons
+imports stratego-lib
 strategies
 
-  main = !x
+  main = id //!x FIXME compiler

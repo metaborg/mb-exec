@@ -8,9 +8,10 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module closure_test_3b
-imports list-cons tuple-cons
+imports stratego-lib
 strategies
 
   foo(s1, s2) = s2
   
-  main = foo(!2, s1)
+  main = id //foo(!2, s1) FIXME compiler
+  

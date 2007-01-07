@@ -7,7 +7,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module guarded_7
-imports list-cons tuple-cons
+imports stratego-lib
 strategies
 
   main = fail < !1 + !2

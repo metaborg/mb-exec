@@ -7,7 +7,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module higher_order_param_4
-imports lib
+imports stratego-lib
 strategies
 
   main = l3(l2)

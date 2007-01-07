@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module unbinding_in_lchoice
-imports lib
+imports stratego-lib
 strategies
 main = 
  (?x; fail <+ !3; ?x) 

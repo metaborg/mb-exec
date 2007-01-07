@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module test_3
-imports list-cons tuple-cons
+imports stratego-lib
 strategies
 
   main = !() ; test(!2; ?x); !3; ?x 

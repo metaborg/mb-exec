@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module cong_list_9
-imports lib
+imports stratego-lib
 strategies
 main = 
  [1 | ?xs] ; !xs 

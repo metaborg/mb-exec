@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module id_term-arg_2
-imports list-cons tuple-cons
+imports stratego-lib
 strategies
 
   foo(|x) = !x

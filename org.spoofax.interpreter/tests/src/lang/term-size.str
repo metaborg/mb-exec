@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module term-size
-imports term
+imports stratego-lib
 strategies
 
   main = term-size

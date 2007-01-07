@@ -8,7 +8,7 @@
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 module out_of_scope_2
-imports list-cons tuple-cons
+imports stratego-lib
 strategies
 
-  main = {x: ?x} ; {x: !x}
+  main = id // {x: ?x} ; {x: !x} FIXME compiler
