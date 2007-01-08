@@ -1,15 +1,15 @@
 /**
  * Unit tests for table strategies
- *
  */
 module tables-test
-imports sunit tables list-set
+imports stratego-lib
 strategies
 
   main = 
     test-suite(!"tables-test",
- 
-      test-create
+      legacy-tests
+
+    ; test-create
     ; test-put
     ; test-get
     ; test-remove
@@ -25,8 +25,28 @@ strategies
     ; test-union
 
     ; test-eq
-
+    ; test-fold
     )
+
+strategies
+
+  legacy-tests = id
+    ; apply-and-check(!"legacy table-put"
+      , table-put
+      , !("bla", "key", "value")
+      , <table-get> ("bla", "key") => "value"
+      )
+
+    ; apply-and-fail(!"legacy table-get"
+      , table-get
+      , !("blabla", "key")
+      )
+
+    ; apply-test(!"legacy table_keys"
+      , table-keys
+      , !"blablabla"
+      , ![]
+      )
 
 strategies
 
@@ -74,6 +94,67 @@ strategies
       , !["key"]
       )
     ; where(<hashtable-destroy> tbl)
+
+
+/**
+ * Hashtable folds
+ */
+strategies
+
+  test-fold =
+    let kv-mul-add(|k, v) = <add> (<id>, <mul> (k, v))
+     in
+
+    where(new-hashtable => tbl)
+
+    ; apply-test(!"hashtable-fold-keys 1"
+      , hashtable-fold-keys(int-add | 0)
+      , !tbl
+      , !0
+      )
+
+    ; apply-test(!"hashtable-fold-values 1"
+      , hashtable-fold-values(int-add | 0)
+      , !tbl
+      , !0
+      )
+
+    ; apply-test(!"hashtable-fold 1"
+      , hashtable-fold(kv-mul-add | 0)
+      , !tbl
+      , !0
+      )
+
+    ; where(
+        !tbl
+        ; hashtable-put(|1, 2)
+        ; hashtable-put(|2, 3)
+        ; hashtable-put(|3, 4)
+      )
+
+    ; apply-test(!"hashtable-fold-keys 2"
+      , hashtable-fold-keys(int-add | 0)
+      , !tbl
+      , !6
+      )
+
+    ; apply-test(!"hashtable-fold-values 2"
+      , hashtable-fold-values(int-add | 0)
+      , !tbl
+      , !9
+      )
+          
+    ; apply-test(!"hashtable-fold 2"
+      , hashtable-fold(kv-mul-add | 0)
+      , !tbl
+      , !20
+      )
+
+    ; where(<hashtable-destroy> tbl)
+
+    end
+
+strategies
 
   test-getlist =
     where(new-hashtable => tbl)

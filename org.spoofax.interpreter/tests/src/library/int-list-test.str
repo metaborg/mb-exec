@@ -1,5 +1,5 @@
 module int-list-test
-imports int-list sunit
+imports stratego-lib
 
 strategies 
 

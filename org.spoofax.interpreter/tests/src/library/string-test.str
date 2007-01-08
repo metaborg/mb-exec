@@ -4,8 +4,7 @@
  * @copyright See bottom.
  */
 module string-test
-imports string sunit
-
+imports stratego-lib
 strategies 
 
   main = 
@@ -16,7 +15,7 @@ strategies
     ; concat-strings-tests
     ; quote-tests
     ; padd-with-test
-    ; is-substring-test
+    ; is-substring-tests
     ; copy-char-test
     ; upper-case-test
     ; escape-tests
@@ -210,10 +209,36 @@ strategies
   upper-case-test = 
     apply-test(!"upper-case-test",upper-case,!"foOBaR",!"FOOBAR")
 
-  is-substring-test =
-    apply-test(!"is-substring-test",is-substring(!"foo"),
-  !"barfoofnord",id)
-  
+/**
+ * is-substring
+ */
+strategies
+
+  is-substring-tests = id
+    ; is-substring-test(|"foo", "barfoofnord")
+    ; is-substring-test(|"foo", "foo")
+    ; is-substring-test(|"foo", "barfoo")
+    ; is-substring-test(|"foo", "foobar")
+    ; is-substring-test(|"foo", "foofoo")
+    ; is-substring-test(|"f", "f")
+    ; is-substring-test(|"f", "foo")
+    ; not-is-substring-test(|"foo", "")
+    ; not-is-substring-test(|"f", "")
+    ; not-is-substring-test(|"foo", "fobar")
+
+  is-substring-test(|substring, string) = 
+    apply-test(!"is-substring-test"
+    , is-substring(!substring)
+    , !string
+    , id
+    )
+
+  not-is-substring-test(|substring, string) = 
+    apply-and-fail(!"is-substring-test"
+    , is-substring(!substring)
+    , !string
+    )
+
 strategies  
 
   string-tokenize-test =
@@ -264,21 +289,62 @@ strategies
   , !["2001","2000","1999","1998"]
   )
 
-   string-replace-test =
-     apply-test(!"string-replace-test-a"
-  , string-replace(|"foo","bar")
-  , !"foobarfoo"
-  , !"barbarbar"
-  )
-  ; apply-test(!"string-replace-test-b"
-  , string-replace(|"","bar")
-  , !"foobarfoo"
-  , !"foobarfoo"
-  )
-  ; apply-test(!"string-replace-test-c"
-  , string-replace(|"foo","")
-  , !"foobarfoo"
-  , !"bar"
-  )
-  
-  
+  string-replace-test = id
+    ; apply-test(!"string-replace-test-a"
+      , string-replace(|"foo","bar")
+      , !"foobarfoo"
+      , !"barbarbar"
+      )
+    ; apply-test(!"string-replace-test-b"
+      , string-replace(|"","bar")
+      , !"foobarfoo"
+      , !"foobarfoo"
+      )
+
+    ; apply-test(!"string-replace-test-c"
+      , string-replace(|"foo","")
+      , !"foobarfoo"
+      , !"bar"
+    )
+
+    ; apply-test(!"string-replace-test-d"
+      , string-replace(|"foo","bar")
+      , !"fooXfoo"
+      , !"barXbar"
+    )
+
+    ; apply-test(!"string-replace-test-e"
+      , string-replace(|"foo","bar")
+      , !"fredXfoo"
+      , !"fredXbar"
+    )
+
+    ; apply-test(!"string-replace-test-f"
+      , string-replace(|"foo","bar")
+      , !"fooXfred"
+      , !"barXfred"
+    )
+
+    ; apply-test(!"string-replace-test-g"
+      , string-replace(|"foo","bar")
+      , !"foofoo"
+      , !"barbar"
+    )
+
+    ; apply-test(!"string-replace-test-h"
+      , string-replace(|"foo","bar")
+      , !"fredfoo"
+      , !"fredbar"
+    )
+
+    ; apply-test(!"string-replace-test-i"
+      , string-replace(|"foo","bar")
+      , !"foofred"
+      , !"barfred"
+    )
+
+    ; apply-test(!"string-replace-test-j"
+      , string-replace(|"foo","bar")
+      , !"foo"
+      , !"bar"
+    )

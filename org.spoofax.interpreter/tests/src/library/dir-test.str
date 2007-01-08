@@ -1,5 +1,7 @@
+// FIXME old
+
 module dir-test
-imports sunit system/io/dir
+imports stratego-lib
 strategies
 
   main = 

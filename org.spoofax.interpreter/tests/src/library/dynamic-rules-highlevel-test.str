@@ -1,5 +1,5 @@
 module dynamic-rules-highlevel-test
-imports lib
+imports stratego-lib
 signature
   constructors
     Foo    : Int * Int -> FooBar
@@ -19,19 +19,13 @@ strategies
   ; test-add-1
   ; test-add-bagof
   ; test-dr-fork-and-union
+  ; test-dr-ignore-state
   )
 
 // plain dynamic rule
 // Strategy1 = {| A1 : [try(Gen1 + A1) | Strategy1] |}
 // Gen1 = ?FooGen(x,z); rules(A1 : Foo(x, y) -> Bar(y, z))
 // Gen2 = ?FooGen(x,z); hide rules(A1 : Foo(x, y))
-
-  debug-rules() =
-    where( 
-      <table-getlist> "_rules"
-      ; map((id, map(RuleScope(id, hashtable-getlist))))
-      ; debug(!"All rules: ")
-   )
 
   Strategy1 =
     dr-scope([try(Gen1 + Hide1 + A1) | Strategy1] <+ [] | "A1")
@@ -237,4 +231,26 @@ strategies
     : rules( A : _ -> "a")
     ; dr-fork-and-union(rules(A : _ -> "b"), id | ["A"])
     ; bagof-A
+    |}
+
+  test-dr-ignore-state =
+    {| A, B :
+        rules( A : _ -> "a")
+      ; rules( B : _ -> "b")
+
+    ; apply-test(!"Ignore the state of a dynamic rule"
+      , dr-ignore-state(A <+ B | "A")
+      , !()
+      , !"b"
+      )
+    ; apply-test(!"Ignore the state of a dynamic rule"
+      , dr-ignore-state(B <+ A | "B")
+      , !()
+      , !"a"
+      )
+    ; apply-test(!"Ignore the state of a dynamic rule"
+      , dr-ignore-states(B <+ A <+ !"failed" | ["A", "B"])
+      , !()
+      , !"failed"
+      )
     |}

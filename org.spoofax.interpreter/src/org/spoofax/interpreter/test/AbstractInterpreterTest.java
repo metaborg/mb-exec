@@ -79,7 +79,7 @@ public abstract class AbstractInterpreterTest extends TestCase {
 
     private boolean runInterp(String test, IStrategoTerm input) {
         try {
-        itp.load(basePath + "/" + test + ".rtree");
+        itp.load(basePath + "/" + test + ".ctree");
         itp.setCurrent(input);
         // System.out.println("Input : " + input);
         return itp.invoke("main_0_0");

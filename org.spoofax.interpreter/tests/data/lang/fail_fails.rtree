@@ -1,5 +1,0 @@
-Specification(
-  [ Signature([Constructors([])])
-  , Strategies([SDefT("main_0_0", [], [], Fail)])
-  ]
-)

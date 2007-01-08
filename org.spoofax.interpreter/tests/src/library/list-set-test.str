@@ -1,6 +1,5 @@
 module list-set-test
-imports sunit
-
+imports stratego-lib
 strategies 
 
  main = 

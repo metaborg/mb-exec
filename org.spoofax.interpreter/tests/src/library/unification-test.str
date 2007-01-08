@@ -1,5 +1,5 @@
 module unification-test
-imports sunit unification
+imports stratego-lib
 strategies
 
   main =

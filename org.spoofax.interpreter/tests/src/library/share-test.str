@@ -1,5 +1,5 @@
 module share-test
-imports share sunit
+imports stratego-lib
 
 signature
   sorts A
