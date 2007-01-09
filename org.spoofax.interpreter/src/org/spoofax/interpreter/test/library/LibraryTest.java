@@ -7,9 +7,11 @@
  */
 package org.spoofax.interpreter.test.library;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.test.AbstractInterpreterTest;
 
 public class LibraryTest extends AbstractInterpreterTest {
@@ -19,31 +21,82 @@ public class LibraryTest extends AbstractInterpreterTest {
         super.setUp("tests/data/library");
     }
 
-    public void testTuple() {  interpTest("tuple-test", "(2,0)"); }
-    public void testTemplate() {  interpTest("template-test", "(1,0)"); }
-    public void testReals() {  interpTest("reals-test", "(8,0)"); }
-    public void testListSet() { interpTest("list-set-test", "(25,0)"); }
-    public void testListZip() { interpTest("list-zip-test", "(3,0)"); }
-    public void testIntList() { interpTest("int-list-test", "(15,0)"); }
-    public void testListMisc() { interpTest("list-misc-test", "(23,0)"); }
-    public void testListIndex() { interpTest("list-index-test", "(17,0)"); }
-    public void testListFilter() {  interpTest("list-filter-test", "(2,0)");   }
-    public void testIntegers() { interpTest("integers-test", "(79,0)"); }
-    public void testIteration() { interpTest("iteration-test", "(25,0)"); }
-    public void testUnification() { interpTest("unification-test", "(2,0)"); }
-    public void testStrcmp() { interpTest("strcmp-test", "(16,0)"); }
-    public void testTermZip() { interpTest("term-zip-test", "(8,0)"); }
-    public void testEnvTraversal() { interpTest("env-traversal-test", "(2,0)"); }
-    public void testSets() { interpTest("sets-test", "(11,0)"); }
-    public void testTables() { interpTest("tables-test", "(50,0)"); }
-    public void testSubstitution() {  interpTest("substitution-test", "(1,0)");   }
+    public void testChar() throws IOException, InterpreterException {
+        interpTest("char-test", "(3,0)");
+    }
+    
+    public void testDir() throws IOException, InterpreterException {
+        interpTest("dir-test", "(0,0)");
+    }
+    
+    public void testOldParseOptions() throws IOException, InterpreterException {
+        interpTest("old-parse-options", "(0,0)");
+    }
+    public void testTuple() throws IOException, InterpreterException 
+    {  interpTest("tuple-test", "(2,0)"); }
+    public void testTemplate() throws IOException, InterpreterException 
+    {  interpTest("template-test", "(1,0)"); }
+    public void testReals() throws IOException, InterpreterException 
+    {  interpTest("reals-test", "(8,0)"); }
+    public void testListSet() throws IOException, InterpreterException 
+    { interpTest("list-set-test", "(25,0)"); }
+    public void testListSort() throws IOException, InterpreterException 
+    { interpTest("list-sort-test", "(0,0)"); }
+    public void testListZip() throws IOException, InterpreterException 
+    { interpTest("list-zip-test", "(3,0)"); }
+    public void testIntList() throws IOException, InterpreterException 
+    { interpTest("int-list-test", "(15,0)"); }
+    public void testListMisc() throws IOException, InterpreterException 
+    { interpTest("list-misc-test", "(23,0)"); }
+    public void testListIndex() throws IOException, InterpreterException 
+    { interpTest("list-index-test", "(17,0)"); }
+    public void testListFilter() throws IOException, InterpreterException 
+    { interpTest("list-filter-test", "(2,0)");   }
+    public void testIntegers() throws IOException, InterpreterException 
+    { interpTest("integers-test", "(79,0)"); }
+    public void testIteration() throws IOException, InterpreterException 
+    { interpTest("iteration-test", "(25,0)"); }
+    public void testUnification() throws IOException, InterpreterException 
+    { interpTest("unification-test", "(2,0)"); }
+    public void testStrcmp() throws IOException, InterpreterException 
+    { interpTest("strcmp-test", "(16,0)"); }
+    public void testTermZip() throws IOException, InterpreterException 
+    { interpTest("term-zip-test", "(8,0)"); }
+    public void testEnvTraversal() throws IOException, InterpreterException 
+    { interpTest("env-traversal-test", "(2,0)"); }
+    public void testSets() throws IOException, InterpreterException 
+    { interpTest("sets-test", "(11,0)"); }
+    public void testTables() throws IOException, InterpreterException 
+    { interpTest("tables-test", "(50,0)"); }
+    public void testSubstitution() throws IOException, InterpreterException 
+    { interpTest("substitution-test", "(1,0)");   }
 
-    public void testListBasic() { interpTest("list-basic-test" ,"(17,0)"); }
-    public void testStringMisc() { interpTest("string-misc-test", "(14,0)"); }
+    public void testTermCommon() throws IOException, InterpreterException {
+        interpTest("term-common-test", "(0,0)");
+    }
+    
+    public void testListBasic() throws IOException, InterpreterException 
+    { interpTest("list-basic-test" ,"(17,0)"); }
+    public void testStringMisc() throws IOException, InterpreterException 
+    { interpTest("string-misc-test", "(14,0)"); }
 
-    public void testDynamicRulesLowlevel() { interpTest("dynamic-rules-lowlevel-test", "(46,0)"); }
-    public void testDynamicRulesHighlevel() { interpTest("dynamic-rules-highlevel-test", "(7,0)"); }
+    public void testDynamicRulesLowlevel() throws IOException, InterpreterException 
+    { interpTest("dynamic-rules-lowlevel-test", "(46,0)"); }
+    public void testDynamicRulesHighlevel() throws IOException, InterpreterException 
+    { interpTest("dynamic-rules-highlevel-test", "(7,0)"); }
 
+    public void testSystemIOFile() throws IOException, InterpreterException {
+        interpTest("system-io-file-test", "(0,0)");
+    }
+    
+    public void testPOSIX() throws IOException, InterpreterException {
+        interpTest("system-posix-test", "(0,0)");
+    }
+
+    public void testPOSIXXSI() throws IOException, InterpreterException {
+        interpTest("system-posix-xsi-test", "(0,0)");
+    }
+    
 /*
  *  Relies on ANSI C and/or POSIX semantics
     public void testPOSIXError() {  interpTest("posix-error-test");   }
@@ -54,24 +107,36 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testTime() { interpTest("time-test"); }
 
  *  Known not to work.
-    public void testPlaceholder() {  interpTest("placeholder-test");   }
-    public void testShare() { interpTest("share-test"); }
     public void testDynamicRulesLowlevel() { interpTest("dynamic-rules-lowlevel-test"); }
     public void testDynamicRulesHighlevel() { interpTest("dynamic-rules-highlevel-test"); }
 
 */
+    public void testShare() throws IOException, InterpreterException 
+    { interpTest("share-test", "(0,0)"); }
+    
+    public void testPlaceholder() throws IOException, InterpreterException 
+    {  interpTest("placeholder-test", "(0,0)");   }
 
-    public void testFile() { interpTest("file-test", "(97,0)"); }
-    public void testString() { interpTest("string-test", "(55,0)"); }
-    public void testRename() { interpTest("rename-test", "(2,0)"); }
-    public void testApply() { interpTest("apply-test", "(4,0)"); }
-    public void testScopedFiniteMap() { interpTest("scoped-finite-map-test", "(5,0)"); }
-    public void testSimpleTraversal() { interpTest("simple-traversal-test", "(6,0)"); }
-    public void testCollect() { interpTest("collect-test", "(11,0)"); }
-    public void testParenthesize() { interpTest("parenthesize-test", "(4,0)"); }
-    public void testParseOptions() { interpTest("parse-options-test" ,"(2,0)"); }
+    public void testFile() throws IOException, InterpreterException 
+    { interpTest("file-test", "(97,0)"); }
+    public void testString() throws IOException, InterpreterException 
+    { interpTest("string-test", "(55,0)"); }
+    public void testRename() throws IOException, InterpreterException 
+    { interpTest("rename-test", "(2,0)"); }
+    public void testApply() throws IOException, InterpreterException 
+    { interpTest("apply-test", "(4,0)"); }
+    public void testScopedFiniteMap() throws IOException, InterpreterException 
+    { interpTest("scoped-finite-map-test", "(5,0)"); }
+    public void testSimpleTraversal() throws IOException, InterpreterException 
+    { interpTest("simple-traversal-test", "(6,0)"); }
+    public void testCollect() throws IOException, InterpreterException 
+    { interpTest("collect-test", "(11,0)"); }
+    public void testParenthesize() throws IOException, InterpreterException
+    { interpTest("parenthesize-test", "(4,0)"); }
+    public void testParseOptions() throws IOException, InterpreterException 
+    { interpTest("parse-options-test" ,"(2,0)"); }
 
-    public void interpTest(String test, String result) {
+    public void interpTest(String test, String result) throws IOException, InterpreterException {
         // FIXME tuplify 'result'
         super.interpTest(test, "()", result);
     }

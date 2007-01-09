@@ -7,31 +7,34 @@
  */
 package org.spoofax.interpreter.test.language;
 
+import java.io.IOException;
+
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
 public class TestBuild extends AbstractLanguageTest {
 
-    public void testBuildInt() {
+    public void testBuildInt() throws IOException, InterpreterException {
         interpTest("build_int", "()", "5");
     }
 
-    public void testBuildReal() {
+    public void testBuildReal() throws IOException, InterpreterException {
         interpTest("build_real", "()", "5.0");
     }
 
-    public void testBuildString() {
+    public void testBuildString() throws IOException, InterpreterException {
         interpTest("build_string", "()", "\"a\"");
     }
 
-    public void testBuildTuple() {
+    public void testBuildTuple() throws IOException, InterpreterException {
         interpTest("build_tuple", "()", "(2, 3)");
     }
 
-    public void testBuildList1() {
+    public void testBuildList1() throws IOException, InterpreterException {
         interpTest("build_list_1", "()", "[]");
     }
 
-    public void testBuildList2() {
+    public void testBuildList2() throws IOException, InterpreterException {
         interpTest("build_list_2", "()", "[1,2,3]");
     }
 

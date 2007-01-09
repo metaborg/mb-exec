@@ -29,7 +29,7 @@ public abstract class AbstractInterpreterTest extends TestCase {
         basePath = path;
         itp = new Interpreter();
         factory = itp.getFactory();
-        DebugUtil.setDebug(true);
+        DebugUtil.setDebug(false);
         DebugUtil.setTracing(false);
         unitTestDebug = true; 
     }
@@ -42,22 +42,22 @@ public abstract class AbstractInterpreterTest extends TestCase {
         super.tearDown();
     }
 
-    public void interpTestFail(String test, IStrategoTerm input) {
+    public void interpTestFail(String test, IStrategoTerm input) throws IOException, InterpreterException {
         assertFalse(runInterp(test, input));
     }
 
-    public void interpTestFail(String test, String input) {
+    public void interpTestFail(String test, String input) throws IOException, InterpreterException {
         IStrategoTerm t = itp.getFactory().parseFromString(input);
         interpTestFail(test, t);
     }
 
-    public void interpTest(String test, String input, String output) {
+    public void interpTest(String test, String input, String output) throws IOException, InterpreterException {
         IStrategoTerm i = factory.parseFromString(input);
         IStrategoTerm o = factory.parseFromString(output);
         interpTest(test, i, o);
     }
 
-    public void interpTest(String test, IStrategoTerm input, IStrategoTerm output) {
+    public void interpTest(String test, IStrategoTerm input, IStrategoTerm output) throws IOException, InterpreterException {
         if(unitTestDebug) {
             System.out.println("Input : " + input);
         }
@@ -77,21 +77,11 @@ public abstract class AbstractInterpreterTest extends TestCase {
         assertTrue(succeeded);
     }
 
-    private boolean runInterp(String test, IStrategoTerm input) {
-        try {
+    private boolean runInterp(String test, IStrategoTerm input) throws IOException, InterpreterException {
         itp.load(basePath + "/" + test + ".ctree");
         itp.setCurrent(input);
         // System.out.println("Input : " + input);
         return itp.invoke("main_0_0");
-    
-        } catch(InterpreterException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    
     }
 
 }

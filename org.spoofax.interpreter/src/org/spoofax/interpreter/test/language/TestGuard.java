@@ -7,42 +7,43 @@
  */
 package org.spoofax.interpreter.test.language;
 
+import java.io.IOException;
+
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
 public class TestGuard extends AbstractLanguageTest {
 
-    public void testGuarded1() {
-           interpTest("guarded_1", "()", "1");
-       }
+    public void testGuarded1() throws IOException, InterpreterException {
+        interpTest("guarded_1", "()", "1");
+    }
 
-    public void testGuarded2() {
-           interpTest("guarded_2", "()", "2");
-       }
+    public void testGuarded2() throws IOException, InterpreterException {
+        interpTest("guarded_2", "()", "2");
+    }
 
-    public void testGuarded3() {
-           interpTest("guarded_3", "()", "3");
-       }
+    public void testGuarded3() throws IOException, InterpreterException {
+        interpTest("guarded_3", "()", "3");
+    }
 
-    public void testGuarded4() {
-           interpTest("guarded_4", "5", "5");
-       }
+    public void testGuarded4() throws IOException, InterpreterException {
+        interpTest("guarded_4", "5", "5");
+    }
 
-    public void testGuarded5() {
-           interpTest("guarded_5", "()", "1");
-       }
+    public void testGuarded5() throws IOException, InterpreterException {
+        interpTest("guarded_5", "()", "1");
+    }
 
-    public void testGuarded6() {
-           interpTest("guarded_6", "()", "1");
-       }
+    public void testGuarded6() throws IOException, InterpreterException {
+        interpTest("guarded_6", "()", "1");
+    }
 
-    public void testGuarded7() {
-           interpTest("guarded_7", "()", "2");
-       }
+    public void testGuarded7() throws IOException, InterpreterException {
+        interpTest("guarded_7", "()", "2");
+    }
 
-    public void testLeftChoiceGuard() {
-        interpTest("guarded_modifies_current_term", 
-                   "()", 
-                   "3");
+    public void testLeftChoiceGuard() throws IOException, InterpreterException {
+        interpTest("guarded_modifies_current_term", "()", "3");
     }
 
 }

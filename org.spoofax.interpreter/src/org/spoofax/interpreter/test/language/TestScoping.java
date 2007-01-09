@@ -7,39 +7,42 @@
  */
 package org.spoofax.interpreter.test.language;
 
+import java.io.IOException;
+
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
 public class TestScoping extends AbstractLanguageTest {
 
-    public void testScopeMatchInterrupt1() {
+    public void testScopeMatchInterrupt1() throws IOException, InterpreterException {
         interpTest("match_interrupted_by_scope_1", "2", "2");
     }
 
-    public void testScopeMatchInterrupt2() {
+    public void testScopeMatchInterrupt2() throws IOException, InterpreterException {
         interpTest("match_interrupted_by_scope_2", "2", "2");
     }
 
-    public void testScopeMatchInterrupt3() {
+    public void testScopeMatchInterrupt3() throws IOException, InterpreterException {
         interpTest("match_interrupted_by_scope_3", "3", "3");
     }
 
-    public void testScopeMatchInterrupt4() {
+    public void testScopeMatchInterrupt4() throws IOException, InterpreterException {
         interpTest("match_interrupted_by_scope_4", "4", "4");
     }
 
-    public void testChoiceDoNotUnbinding() {
+    public void testChoiceDoNotUnbinding() throws IOException, InterpreterException {
         interpTest("do_not_unbinding_lhs_of_lchoice_if_it_succeeds", "()", "1");
     }
 
-    public void testChoiceUnbinding() {
+    public void testChoiceUnbinding() throws IOException, InterpreterException {
         interpTest("unbinding_in_lchoice", "2", "3");
     }
 
-    public void testLet1() {
+    public void testLet1() throws IOException, InterpreterException {
         interpTest("let_test_1", "1", "2");
     }
 
-    public void testLet2() {
+    public void testLet2() throws IOException, InterpreterException {
         interpTest("let_test_2", "1", "2");
     }
 
