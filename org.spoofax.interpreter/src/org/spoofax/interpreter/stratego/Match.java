@@ -82,7 +82,7 @@ public class Match extends Strategy {
             return matchAnyExplode(env, t, p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchApplAs(env, t, p);
+            return matchCompoundAs(env, t, p);
         }
         else if (Tools.isWld(p, env)) {
             return matchAnyWld(p);
@@ -105,24 +105,6 @@ public class Match extends Strategy {
         //if (t.equals(p))
         //    return emptyList();
         //return null;
-    }
-
-    protected Results matchApplAs(IContext env, IStrategoAppl t,
-            IStrategoAppl p) throws InterpreterException {
-
-        Results r = match(env, t, Tools.applAt(p, 1));
-
-        if (r == null)
-            return null;
-
-        if (DebugUtil.isDebugging()) {
-            debug("matching ApplAs", p);
-        }
-
-        String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
-        r.add(new Binding(varName, t));
-
-        return r;
     }
 
     protected Results matchApplOp(IContext env, IStrategoAppl t,
@@ -430,7 +412,7 @@ public class Match extends Strategy {
             return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchAnyAs(t, p);
+            return matchCompoundAs(env, t, p);
         }
         else if (Tools.isExplode(p, env)) {
             return matchAnyExplode(env, t, p);
@@ -497,7 +479,7 @@ public class Match extends Strategy {
             return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchAnyAs(t, p);
+            return matchCompoundAs(env, t, p);
         }
         else if (Tools.isExplode(p, env)) {
             return matchAnyExplode(env, t, p);
@@ -507,6 +489,23 @@ public class Match extends Strategy {
         }
 
         throw new InterpreterException("Unknown List case '" + p + "'");
+    }
+
+    private Results matchCompoundAs(IContext env, IStrategoTerm t, IStrategoAppl p) throws InterpreterException {
+        
+        Results r = match(env, t, Tools.applAt(p, 1));
+
+        if (r == null)
+            return null;
+
+        if (DebugUtil.isDebugging()) {
+            debug("matching CompoundAs", p);
+        }
+
+        String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
+        r.add(new Binding(varName, t));
+
+        return r;
     }
 
     private Results matchListOp(IContext env, IStrategoList t, IStrategoAppl p) throws InterpreterException {
@@ -528,7 +527,7 @@ public class Match extends Strategy {
             
             IStrategoList pattern = Tools.listAt(p, 1);
             
-            Results r = match(env, head, (IStrategoAppl)pattern.head());
+            Results r = match(env, head, (IStrategoAppl)pattern.get(0));
             if(r == null)
                 return null;
             

@@ -26,7 +26,7 @@ public class SSL_write_term_to_stream_text extends AbstractPrimitive {
     
     public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
         
-        if(Tools.isTermInt(targs[0]))
+        if(!Tools.isTermInt(targs[0]))
             return false;
 
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);

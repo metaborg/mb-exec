@@ -40,6 +40,10 @@ public class CallT extends Strategy {
 
     public boolean eval(IContext env) throws InterpreterException {
 
+        if (DebugUtil.isDebugging()) {
+            debug("CallT.eval() - ", env.current());
+        }
+
         SDefT sdef = env.lookupSVar(name);
 
         if (sdef == null)

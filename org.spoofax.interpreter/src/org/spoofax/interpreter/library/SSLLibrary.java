@@ -39,8 +39,8 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         inputStreamMap.put(SSLLibrary.CONST_STDIN, System.in);
         
         outputStreamMap = new HashMap<Integer, OutputStream>();
-        outputStreamMap.put(SSLLibrary.CONST_STDERR, new BufferedOutputStream(System.err));
-        outputStreamMap.put(SSLLibrary.CONST_STDOUT, new BufferedOutputStream(System.out));
+        outputStreamMap.put(SSLLibrary.CONST_STDERR, System.err);
+        outputStreamMap.put(SSLLibrary.CONST_STDOUT, System.out);
         
         add(new SSL_is_int());
         add(new SSL_addi());
@@ -92,6 +92,8 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_write_term_to_stream_text());
         add(new SSL_access());
         add(new SSL_getcwd());
+        
+        add(new SSL_dynamic_rules_hashtable());
      }
 
     protected Map<String, AbstractPrimitive> getRegistry() {
