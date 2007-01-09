@@ -1,0 +1,5 @@
+module is_substring_1
+imports stratego-lib
+strategies
+
+  main = <is-substring(!"foo")> "barfoofnord"

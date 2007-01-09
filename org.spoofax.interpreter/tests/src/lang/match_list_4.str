@@ -10,5 +10,5 @@
 module match_list_4
 imports stratego-lib
 strategies
-main = 
- ?[x, x] 
+
+  main = ?[x, x] 

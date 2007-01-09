@@ -9,5 +9,5 @@
 module match_list_5
 imports stratego-lib
 strategies
-main = 
- ?Cons(x, Cons(x, Nil))
+
+  main = ?Cons(x, Cons(x, Nil()))

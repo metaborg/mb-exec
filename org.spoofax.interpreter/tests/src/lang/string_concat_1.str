@@ -1,4 +1,4 @@
-module string-concat-test
+module string_concat_1
 imports stratego-lib
 strategies
 

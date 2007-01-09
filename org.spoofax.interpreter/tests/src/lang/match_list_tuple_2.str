@@ -6,8 +6,8 @@
  *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
-module match_list_6
+module match_list_tuple_2
 imports stratego-lib
 strategies
 
-  main = ?Cons(x, Nil())
+ main = ?([x | y1], [x | y2]) ; !(y1,y2)
