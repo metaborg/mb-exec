@@ -26,24 +26,22 @@ public class LibraryTest extends AbstractInterpreterTest {
     }
     
     public void testDir() throws IOException, InterpreterException {
-        interpTest("dir-test", "(0,0)");
+        interpTest("dir-test", "(2,2)");
     }
     
     public void testOldParseOptions() throws IOException, InterpreterException {
-        interpTest("old-parse-options", "(0,0)");
+        interpTest("old-parse-options-test", "(2,0)");
     }
     public void testTuple() throws IOException, InterpreterException 
     {  interpTest("tuple-test", "(2,0)"); }
-    public void testTemplate() throws IOException, InterpreterException 
-    {  interpTest("template-test", "(1,0)"); }
     public void testReals() throws IOException, InterpreterException 
     {  interpTest("reals-test", "(8,0)"); }
     public void testListSet() throws IOException, InterpreterException 
     { interpTest("list-set-test", "(25,0)"); }
     public void testListSort() throws IOException, InterpreterException 
-    { interpTest("list-sort-test", "(0,0)"); }
+    { interpTest("list-sort-test", "(7,0)"); }
     public void testListZip() throws IOException, InterpreterException 
-    { interpTest("list-zip-test", "(3,0)"); }
+    { interpTest("list-zip-test", "(4,0)"); }
     public void testIntList() throws IOException, InterpreterException 
     { interpTest("int-list-test", "(15,0)"); }
     public void testListMisc() throws IOException, InterpreterException 
@@ -72,7 +70,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     { interpTest("substitution-test", "(1,0)");   }
 
     public void testTermCommon() throws IOException, InterpreterException {
-        interpTest("term-common-test", "(0,0)");
+        interpTest("term-common-test", "(12,0)");
     }
     
     public void testListBasic() throws IOException, InterpreterException 
@@ -120,7 +118,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testFile() throws IOException, InterpreterException 
     { interpTest("file-test", "(97,0)"); }
     public void testString() throws IOException, InterpreterException 
-    { interpTest("string-test", "(55,0)"); }
+    { interpTest("string-test", "(71,0)"); }
     public void testRename() throws IOException, InterpreterException 
     { interpTest("rename-test", "(2,0)"); }
     public void testApply() throws IOException, InterpreterException 
@@ -130,7 +128,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testSimpleTraversal() throws IOException, InterpreterException 
     { interpTest("simple-traversal-test", "(6,0)"); }
     public void testCollect() throws IOException, InterpreterException 
-    { interpTest("collect-test", "(11,0)"); }
+    { interpTest("collect-test", "(15,0)"); }
     public void testParenthesize() throws IOException, InterpreterException
     { interpTest("parenthesize-test", "(4,0)"); }
     public void testParseOptions() throws IOException, InterpreterException 

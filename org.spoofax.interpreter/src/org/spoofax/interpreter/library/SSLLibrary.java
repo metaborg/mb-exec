@@ -7,7 +7,6 @@
  */
 package org.spoofax.interpreter.library;
 
-import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -50,7 +49,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_gtr());
         add(new SSL_muli());
         add(new SSL_muli());
-        add(new SSL_mod());
+        add(new SSL_modi());
         add(new SSL_int_to_string());
         add(new SSL_explode_string());
         add(new SSL_string_to_int());
@@ -92,8 +91,16 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_write_term_to_stream_text());
         add(new SSL_access());
         add(new SSL_getcwd());
-        
         add(new SSL_dynamic_rules_hashtable());
+        add(new SSL_readdir());
+        add(new SSL_modification_time());
+        add(new SSL_write_term_to_string());
+        add(new SSL_stdin_stream());
+        add(new SSL_fileno());
+        add(new SSL_get_list_length());
+        add(new SSL_get_constructor());
+        add(new SSL_get_arguments());
+        add(new SSL_get_appl_arguments_map());
      }
 
     protected Map<String, AbstractPrimitive> getRegistry() {
