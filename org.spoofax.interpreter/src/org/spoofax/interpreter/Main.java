@@ -13,9 +13,6 @@ public class Main {
         String file = "";
         boolean waitForProfiler = false;
 
-        for(String s : args)
-            System.out.println(s);
-
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("--debug")) {
                 DebugUtil.setDebug(true);
@@ -37,8 +34,13 @@ public class Main {
         IStrategoTerm inp = itp.getFactory().makeList();
         try {
             itp.setCurrent(inp);
-            itp.invoke("main_0_0");
-            System.out.println("" + itp.current());
+            boolean r = itp.invoke("main_0_0");
+            if(r) {
+                System.out.println("" + itp.current());
+            } else {
+                System.err.println("rewriting failed");
+                System.exit(-1);
+            }
         } catch (InterpreterException e) {
             e.printStackTrace();
         }
