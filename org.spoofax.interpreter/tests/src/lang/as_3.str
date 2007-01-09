@@ -2,13 +2,12 @@
  * Part of the Stratego Language Interpreter Test-Suite
  *
  *
- * @author Martin Bravenboer <martin@cs.uu.nl>
  * @author Karl Trygve Kalleberg <karltk@cs.uu.nl>
  *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
-module as_2
+module as_3
 imports stratego-lib
 strategies
 
-  main = ?(x@1, 2) ; !() ; !(x, x) 
+  main = ?x@(y@1, 2) ; !() ; !(x, y)   
