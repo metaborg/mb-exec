@@ -115,14 +115,10 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testPlaceholder() throws IOException, InterpreterException 
     {  interpTest("placeholder-test", "(0,0)");   }
 
-    public void testFile() throws IOException, InterpreterException 
-    { interpTest("file-test", "(97,0)"); }
     public void testString() throws IOException, InterpreterException 
     { interpTest("string-test", "(71,0)"); }
     public void testRename() throws IOException, InterpreterException 
     { interpTest("rename-test", "(2,0)"); }
-    public void testApply() throws IOException, InterpreterException 
-    { interpTest("apply-test", "(4,0)"); }
     public void testScopedFiniteMap() throws IOException, InterpreterException 
     { interpTest("scoped-finite-map-test", "(5,0)"); }
     public void testSimpleTraversal() throws IOException, InterpreterException 
