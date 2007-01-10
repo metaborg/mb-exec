@@ -76,7 +76,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testListBasic() throws IOException, InterpreterException 
     { interpTest("list-basic-test" ,"(17,0)"); }
     public void testStringMisc() throws IOException, InterpreterException 
-    { interpTest("string-misc-test", "(14,0)"); }
+    { interpTest("string-misc-test", "(29,0)"); }
 
     public void testDynamicRulesLowlevel() throws IOException, InterpreterException 
     { interpTest("dynamic-rules-lowlevel-test", "(46,0)"); }

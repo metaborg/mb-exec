@@ -102,6 +102,9 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_get_arguments());
         add(new SSL_get_appl_arguments_map());
         add(new SSL_STDIN_FILENO());
+        add(new SSL_STDOUT_FILENO());
+        add(new SSL_stdout_stream());
+        add(new SSL_STDERR_FILENO());
      }
 
     protected Map<String, AbstractPrimitive> getRegistry() {
@@ -123,6 +126,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
     //@todo fix
     protected Map<Integer, Hashtable> hashtables;
     protected int counter = 0;
+    private int dynruleHashtableRef;
 
     /**
      * Resets the entire state of the SSL. <br>
@@ -143,6 +147,8 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
 
         SSL_indexedSet_create.init();
         SSL_table_hashtable.init();
+        
+        dynruleHashtableRef = registerHashtable(new Hashtable(128, 75));
     }
 
     public int registerHashtable(Hashtable hashtable) {
@@ -157,5 +163,9 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
 
     public Hashtable getHashtable(int idx) {
         return hashtables.get(idx);
+    }
+
+    public int getDynamicRuleHashtableRef() {
+        return dynruleHashtableRef;
     }
 }

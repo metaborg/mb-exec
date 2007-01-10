@@ -14,20 +14,16 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_dynamic_rules_hashtable extends AbstractPrimitive {
+public class SSL_STDERR_FILENO extends AbstractPrimitive {
 
-    protected SSL_dynamic_rules_hashtable() {
-        super("SSL_dynamic_rules_hashtable", 0, 0);
+    public SSL_STDERR_FILENO() {
+        super("SSL_STDERR_FILENO", 0, 0);
     }
-
+    
     @Override
     public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-
-        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        or.getDynamicRuleHashtableRef();
-
-        env.setCurrent(env.getFactory().makeInt(or.getDynamicRuleHashtableRef()));
+        env.setCurrent(env.getFactory().makeInt(SSLLibrary.CONST_STDERR));
         return true;
     }
 
