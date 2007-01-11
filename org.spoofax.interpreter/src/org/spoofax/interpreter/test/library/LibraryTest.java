@@ -128,7 +128,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testParenthesize() throws IOException, InterpreterException
     { interpTest("parenthesize-test", "(4,0)"); }
     public void testParseOptions() throws IOException, InterpreterException 
-    { interpTest("parse-options-test" ,"(2,0)"); }
+    { interpTest("parse-options-test" ,"(23,0)"); }
 
     public void interpTest(String test, String result) throws IOException, InterpreterException {
         // FIXME tuplify 'result'
