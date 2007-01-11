@@ -1,5 +1,5 @@
 /*
- * Created on 08.aug.2005
+ * Created on 11. jan.. 2007
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -8,38 +8,40 @@
 package org.spoofax.interpreter.library;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
-import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_fputs extends AbstractPrimitive {
+public class SSL_fgetc extends AbstractPrimitive {
 
-    protected SSL_fputs() {
-        super("SSL_fputs", 0, 2);
+    SSL_fgetc() {
+        super("SSL_fgetc", 0, 1);
     }
     
-    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
+    @Override
+    public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
+            throws InterpreterException {
+        if(!Tools.isTermInt(tvars[0]))
+            return false;
         
-        if(!Tools.isTermString(targs[0]))
-            return false;
-        if(!(Tools.isTermInt(targs[1])))
-            return false;
-
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
+        InputStream is = or.getInputStream(Tools.asJavaInt(tvars[0]));
+        byte[] bs = new byte[1];
         
-        OutputStream ous = or.getOutputStream(Tools.asJavaInt(targs[1]));
         try {
-            ous.write(Tools.javaString(targs[0]).getBytes());
+            is.read(bs, 0, 1);
         } catch(IOException e) {
             throw new InterpreterException(e);
         }
         
+        env.setCurrent(env.getFactory().makeInt(bs[0]));
         return true;
+        
     }
+
 }

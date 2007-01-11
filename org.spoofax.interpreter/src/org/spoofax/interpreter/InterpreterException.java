@@ -22,7 +22,10 @@ public class InterpreterException extends Exception {
     }
 
     public String toString() {
-        return "InterpreterException: " + error;
+        if(error != null)
+            return "InterpreterException: " + error;
+        else
+            return "InterpreterException: " + nested.toString();
     }
 
     public String getReason() {

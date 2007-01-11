@@ -193,4 +193,8 @@ public class Tools {
         return t instanceof IStrategoTuple;
     }
 
+    public static int asJavaInt(IStrategoTerm term) {
+        return ((IStrategoInt)term).getValue();
+    }
+
 }

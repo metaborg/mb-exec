@@ -17,10 +17,10 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_write_term_to_stream_text extends AbstractPrimitive {
+public class SSL_write_term_to_stream_taf extends AbstractPrimitive {
 
-    protected SSL_write_term_to_stream_text() {
-        super("SSL_write_term_to_stream_text", 0, 2);
+    protected SSL_write_term_to_stream_taf() {
+        super("SSL_write_term_to_stream_taf", 0, 2);
     }
     
     public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
@@ -30,7 +30,7 @@ public class SSL_write_term_to_stream_text extends AbstractPrimitive {
 
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         int fd = Tools.asJavaInt(targs[0]);
-        
+       
         OutputStream ous = or.getOutputStream(fd);
         if(ous == null)
             return false;

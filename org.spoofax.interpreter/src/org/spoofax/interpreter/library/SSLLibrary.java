@@ -7,39 +7,43 @@
  */
 package org.spoofax.interpreter.library;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.library.SSL_hashtable_create.Hashtable;
-import org.spoofax.interpreter.terms.IStrategoInt;
 
 // FIXME: The function registry should probably be shared between instances
 public class SSLLibrary extends AbstractStrategoOperatorRegistry {
 
-    public final static int CONST_STDERR = 1;
-    public final static int CONST_STDOUT = 2;
-    public final static int CONST_STDIN = 3;
+    public final static int CONST_STDIN = 0;
+    public final static int CONST_STDOUT = 1;
+    public final static int CONST_STDERR = 2;
     public static final String REGISTRY_NAME = "SSL";
 
     // FIXME: Move these into environment
 
-    private Map<Integer, InputStream> inputStreamMap;
-    private Map<Integer, OutputStream> outputStreamMap;
-
+    InputStream stdinStream;
+    OutputStream stdoutStream;
+    OutputStream stderrStream;
+    
+    private Map<Integer, RandomAccessFile> fileMap;
+    private int fileCounter = 3;
+    
     public SSLLibrary() {
         initRegistry();
         init();
     }
     
     private void initRegistry() {
-        inputStreamMap = new HashMap<Integer, InputStream>();
-        inputStreamMap.put(SSLLibrary.CONST_STDIN, System.in);
-        
-        outputStreamMap = new HashMap<Integer, OutputStream>();
-        outputStreamMap.put(SSLLibrary.CONST_STDERR, System.err);
-        outputStreamMap.put(SSLLibrary.CONST_STDOUT, System.out);
+        stdinStream = System.in;
+        stdoutStream = System.out;
+        stderrStream = System.err;
         
         add(new SSL_is_int());
         add(new SSL_addi());
@@ -106,6 +110,15 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_stdout_stream());
         add(new SSL_STDERR_FILENO());
         add(new SSL_hashtable_reset());
+        add(new SSL_EXDEV());
+        add(new SSL_close());
+        add(new SSL_perror());
+        add(new SSL_fopen());
+        add(new SSL_write_term_to_stream_baf());
+        add(new SSL_write_term_to_stream_taf());
+        add(new SSL_fclose());
+        add(new SSL_read_term_from_string());
+        add(new SSL_fgetc());
      }
 
     protected Map<String, AbstractPrimitive> getRegistry() {
@@ -116,17 +129,9 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         return get(s);
     }
 
-    public InputStream inputStreamFromTerm(IStrategoInt idx) {
-        return inputStreamMap.get(idx.getValue());
-    }
-
-    public OutputStream outputStreamFromTerm(IStrategoInt idx) {
-        return outputStreamMap.get(idx.getValue());
-    }
-
     //@todo fix
     protected Map<Integer, Hashtable> hashtables;
-    protected int counter = 0;
+    protected int hashtableCounter = 0;
     private int dynruleHashtableRef;
 
     /**
@@ -144,17 +149,18 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         }
         
         hashtables = new HashMap<Integer, Hashtable>();
-        counter = 0;
+        hashtableCounter = 0;
 
         SSL_indexedSet_create.init();
         SSL_table_hashtable.init();
         
         dynruleHashtableRef = registerHashtable(new Hashtable(128, 75));
+        fileMap = new HashMap<Integer, RandomAccessFile>();
     }
 
     public int registerHashtable(Hashtable hashtable) {
-        int ref = counter;
-        hashtables.put(counter++, hashtable);
+        int ref = hashtableCounter;
+        hashtables.put(hashtableCounter++, hashtable);
         return ref;
     }
 
@@ -168,5 +174,52 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
 
     public int getDynamicRuleHashtableRef() {
         return dynruleHashtableRef;
+    }
+
+    public OutputStream getOutputStream(int fd) {
+        if(fd == CONST_STDOUT) {
+            return stdoutStream;
+        } else if (fd == CONST_STDERR) {
+            return stderrStream;
+        }
+        RandomAccessFile raf = fileMap.get(fd);
+        if(raf == null)
+            return null;
+        
+        return new RandomAccessOutputStream(raf);
+    }
+
+    public boolean closeRandomAccessFile(int fd) throws InterpreterException {
+        RandomAccessFile raf = fileMap.get(fd);
+        if(raf == null)
+            return false;
+        try {
+            raf.close();
+        } catch(IOException e) {
+            throw new InterpreterException(e);
+        }
+        fileMap.remove(fd);
+        return true;
+    }
+
+    public int openRandomAccessFile(String fn, String mode) throws InterpreterException {
+        String m = mode.indexOf('w') >= 0 ? "rw" : "r";
+        try {
+            fileMap.put(fileCounter, new RandomAccessFile(fn, m));
+        } catch(FileNotFoundException e) {
+            throw new InterpreterException(e); 
+        }
+        return fileCounter++;
+    }
+
+    public InputStream getInputStream(int fd) {
+        if(fd == CONST_STDIN) {
+            return stdinStream;
+        }
+        RandomAccessFile raf = fileMap.get(fd);
+        if(raf == null)
+            return null;
+        
+        return new RandomAccessInputStream(raf);
     }
 }

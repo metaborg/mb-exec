@@ -33,7 +33,7 @@ public class SSL_fputc extends AbstractPrimitive {
 
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         
-        OutputStream s = or.outputStreamFromTerm((IStrategoInt)targs[1]);
+        OutputStream s = or.getOutputStream(Tools.asJavaInt(targs[1]));
         
         try {
             s.write(((IStrategoInt)targs[0]).getValue());

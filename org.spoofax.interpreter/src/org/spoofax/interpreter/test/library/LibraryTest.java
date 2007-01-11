@@ -105,15 +105,11 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testTime() { interpTest("time-test"); }
 
  *  Known not to work.
-    public void testDynamicRulesLowlevel() { interpTest("dynamic-rules-lowlevel-test"); }
-    public void testDynamicRulesHighlevel() { interpTest("dynamic-rules-highlevel-test"); }
-
-*/
     public void testShare() throws IOException, InterpreterException 
     { interpTest("share-test", "(0,0)"); }
-    
     public void testPlaceholder() throws IOException, InterpreterException 
     {  interpTest("placeholder-test", "(0,0)");   }
+*/
 
     public void testString() throws IOException, InterpreterException 
     { interpTest("string-test", "(71,0)"); }
