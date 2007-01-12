@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
@@ -26,71 +25,47 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
         
         private static final long serialVersionUID = -4514696890481283123L;
         private int counter;
-        Map<Integer, IStrategoTerm> map;
+        Map<IStrategoTerm, Integer> map;
         
         IndexedSet(int initialSize, int maxLoad) {
-            map = new HashMap<Integer, IStrategoTerm>(initialSize, 1.0f*maxLoad/100);
+            map = new HashMap<IStrategoTerm, Integer>(initialSize, 1.0f*maxLoad/100);
             counter = 0;
         }
         
         public int put(IStrategoTerm value) {
             int idx = counter++; 
-            map.put(idx, value);
+            map.put(value, idx);
             return idx;
         }
 
         public int getIndex(IStrategoTerm t) {
-            Set<Map.Entry<Integer,IStrategoTerm>> entries = map.entrySet();
-            
-            for(Map.Entry<Integer,IStrategoTerm> x : entries) {
-                if(x.getValue() == t) //todo: for no max sharing use equals
-                    return x.getKey();
-            }
-            
-            return -1;
+            Integer r = map.get(t);
+            return r == null ? -1 : r;
         }
 
         public boolean containsValue(IStrategoTerm t) {
-            return map.containsValue(t);
+            return map.containsKey(t);
         }
 
-        public Collection<IStrategoTerm> values() {
+        public Collection<Integer> values() {
             return map.values();
         }
 
         public boolean remove(IStrategoTerm t) {
-            int idx = getIndex(t);
-
-            if(idx == -1)
-                return false;
-            map.remove(idx);
-            return true;
+            return map.remove(t) != null;
         }
 
         public void clear() {
             map.clear();
         }
-    }
 
-    // FIXME: Must have state per-interpreter, not per-JVM //@todo fix
-    protected static Map<Integer, IndexedSet> map;
-    protected static int setCounter;
-
-    static {
-        init();
-    }
-
-    public static Map init() {
-        if(map != null) {
-
-            for (IndexedSet indexedSet : map.values()) {
-                 indexedSet.clear();
-            }
-            map.clear();
+        public Collection<IStrategoTerm> keySet() {
+            return map.keySet();
         }
-        map = new HashMap<Integer, IndexedSet>();
-        setCounter = 0;
-        return map;
+
+        public boolean containsKey(IStrategoTerm t) {
+            return map.containsKey(t);
+        }
     }
 
     protected SSL_indexedSet_create() {
@@ -106,12 +81,10 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
 
         int initialSize = ((IStrategoInt)targs[0]).getValue();
         int maxLoad = ((IStrategoInt)targs[1]).getValue();
+
+        int ref = SSLLibrary.instance(env).registerIndexedSet(new IndexedSet(initialSize, maxLoad));
+        env.setCurrent(env.getFactory().makeInt(ref));
         
-        IndexedSet is = new IndexedSet(initialSize, maxLoad);
-        int n = setCounter++;
-        map.put(n, is);
-        
-        env.setCurrent(env.getFactory().makeInt(n));
         return true;
     }
 }

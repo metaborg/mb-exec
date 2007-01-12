@@ -13,7 +13,6 @@ import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
-import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_indexedSet_destroy extends AbstractPrimitive {
@@ -27,9 +26,9 @@ public class SSL_indexedSet_destroy extends AbstractPrimitive {
         if(!(Tools.isTermInt(targs[0])))
             return false;
 
-        int ref = ((IStrategoInt)targs[0]).getValue();
+        boolean r = SSLLibrary.instance(env).removeIndexedSet(Tools.asJavaInt(targs[0]));
+        env.setCurrent(targs[0]);
         
-        SSL_indexedSet_create.map.remove(ref);
-        return true;
+        return r;
     }
 }

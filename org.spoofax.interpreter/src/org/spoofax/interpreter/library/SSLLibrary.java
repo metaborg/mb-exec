@@ -15,8 +15,10 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.library.SSL_hashtable_create.Hashtable;
+import org.spoofax.interpreter.library.SSL_indexedSet_create.IndexedSet;
 
 // FIXME: The function registry should probably be shared between instances
 public class SSLLibrary extends AbstractStrategoOperatorRegistry {
@@ -35,6 +37,15 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
     private Map<Integer, RandomAccessFile> fileMap;
     private int fileCounter = 3;
     
+    private Map<Integer, IndexedSet> indexedSetMap;
+    private int indexedSetCounter;
+
+    //@todo fix
+    protected Map<Integer, Hashtable> hashtableMap;
+    private int hashtableCounter = 0;
+    private int dynruleHashtableRef;
+    private int tableTableRef;
+
     public SSLLibrary() {
         initRegistry();
         init();
@@ -132,10 +143,6 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         return get(s);
     }
 
-    //@todo fix
-    protected Map<Integer, Hashtable> hashtables;
-    protected int hashtableCounter = 0;
-    private int dynruleHashtableRef;
 
     /**
      * Resets the entire state of the SSL. <br>
@@ -144,41 +151,51 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
      */
     public void init() {
 
-        if(hashtables != null) {
-            for (Hashtable hashtable : hashtables.values()) {
+        if(hashtableMap != null) {
+            for (Hashtable hashtable : hashtableMap.values()) {
                 hashtable.clear();
             }
-            hashtables.clear();
+            hashtableMap.clear();
         }
         
-        hashtables = new HashMap<Integer, Hashtable>();
+        hashtableMap = new HashMap<Integer, Hashtable>();
         hashtableCounter = 0;
 
-        SSL_indexedSet_create.init();
-        SSL_table_hashtable.init();
+        indexedSetMap = new HashMap<Integer, IndexedSet>();
+        indexedSetCounter = 0;
         
+        // FIXME initialize on-demand
         dynruleHashtableRef = registerHashtable(new Hashtable(128, 75));
+        tableTableRef = registerHashtable(new Hashtable(128, 75));
+        
         fileMap = new HashMap<Integer, RandomAccessFile>();
+        fileCounter = 0;
+        
     }
+    
 
     public int registerHashtable(Hashtable hashtable) {
         int ref = hashtableCounter;
-        hashtables.put(hashtableCounter++, hashtable);
+        hashtableMap.put(hashtableCounter++, hashtable);
         return ref;
     }
 
     public boolean removeHashtable(int idx) {
-        return hashtables.remove(idx) != null;
+        return hashtableMap.remove(idx) != null;
     }
 
     public Hashtable getHashtable(int idx) {
-        return hashtables.get(idx);
+        return hashtableMap.get(idx);
     }
 
     public int getDynamicRuleHashtableRef() {
         return dynruleHashtableRef;
     }
 
+    public int getTableTableRef() {
+        return tableTableRef;
+    }
+    
     public OutputStream getOutputStream(int fd) {
         if(fd == CONST_STDOUT) {
             return stdoutStream;
@@ -225,4 +242,24 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         
         return new RandomAccessInputStream(raf);
     }
+
+    public static SSLLibrary instance(IContext env) {
+        return (SSLLibrary)env.getOperatorRegistry(REGISTRY_NAME);
+    }
+
+    public IndexedSet getIndexedSet(int i) {
+        return indexedSetMap.get(i);
+    }
+
+    public int registerIndexedSet(IndexedSet set) {
+        int ref = indexedSetCounter;
+        indexedSetMap.put(indexedSetCounter++, set);
+        return ref;
+    }
+
+    public boolean removeIndexedSet(int idx) {
+        return indexedSetMap.remove(idx) != null;
+    }
+
+    
 }

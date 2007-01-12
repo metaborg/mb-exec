@@ -14,7 +14,6 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.SSL_indexedSet_create.IndexedSet;
-import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_indexedSet_put extends AbstractPrimitive {
@@ -29,20 +28,20 @@ public class SSL_indexedSet_put extends AbstractPrimitive {
         if (!(Tools.isTermInt(targs[0])))
             return false;
 
-        int ref = ((IStrategoInt)targs[0]).getValue();
-
-        IndexedSet is = SSL_indexedSet_create.map.get(ref);
+        IndexedSet is = SSLLibrary.instance(env).getIndexedSet(Tools.asJavaInt(targs[0]));
+        
         if(is == null)
             return false;
         
         IStrategoTerm t = targs[1];
         IConstruct s = sargs.get(0);
-        if (is.containsValue(t)) {
+        
+        if(is.containsKey(t)) {
+            is.put(t);
             return s.eval(env);
         }
 
-        int idx = is.put(t);
-        env.setCurrent(env.getFactory().makeInt(idx));
+        env.setCurrent(env.getFactory().makeInt(is.put(t)));
 
         return true;
     }

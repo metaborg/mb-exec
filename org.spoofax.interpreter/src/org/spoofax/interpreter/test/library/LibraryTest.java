@@ -65,7 +65,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testSets() throws IOException, InterpreterException 
     { interpTest("sets-test", "(11,0)"); }
     public void testTables() throws IOException, InterpreterException 
-    { interpTest("tables-test", "(50,0)"); }
+    { interpTest("tables-test", "(59,0)"); }
     public void testSubstitution() throws IOException, InterpreterException 
     { interpTest("substitution-test", "(1,0)");   }
 
