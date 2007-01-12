@@ -337,6 +337,10 @@ public class StrategoCoreLoader {
         doLoad(context.getFactory().parseFromFile(path));
     }
     
+    public void load(IStrategoTerm prg) throws InterpreterException {
+    	doLoad(prg);
+    }
+
     private void doLoad(IStrategoTerm prg) throws InterpreterException {
         
         IStrategoAppl sign = Tools.applAt(Tools.listAt(prg, 0), 0);

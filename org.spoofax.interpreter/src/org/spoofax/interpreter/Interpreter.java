@@ -95,6 +95,10 @@ public class Interpreter {
         loader.load(file);
     }
 
+	public void load(IStrategoTerm term) throws InterpreterException {
+		loader.load(term);
+	}
+
     public void addOperatorRegistry(String domainName, IOperatorRegistry or) {
         context.addOperatorRegistry(domainName, or);
     }

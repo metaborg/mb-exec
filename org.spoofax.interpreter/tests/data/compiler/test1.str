@@ -1,0 +1,6 @@
+module test1
+strategies
+
+  main =
+    ![1, 2, 3]
+  ; rec x([] <+ [debug|x])
