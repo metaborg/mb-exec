@@ -38,4 +38,21 @@ public class TestBuild extends AbstractLanguageTest {
         interpTest("build_list_2", "()", "[1,2,3]");
     }
 
+    public void testBuildList3() throws IOException, InterpreterException {
+        interpTest("build_list_3", "()", "[1,2,3]");
+    }
+
+    public void testBuildList4() throws IOException, InterpreterException {
+        try {
+            interpTestFail("build_list_4", "1");
+        } catch(InterpreterException e) {
+            assertTrue(true);
+            return;
+        }
+        assertTrue(false);
+    }
+    
+    public void testBuildList4b() throws IOException, InterpreterException {
+        interpTest("build_list_4", "[3]", "[1,2,3]");
+    }
 }
