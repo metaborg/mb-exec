@@ -44,7 +44,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
 
     //@todo fix
     protected Map<Integer, Hashtable> hashtableMap;
-    private int hashtableCounter = 0;
+    private int hashtableCounter;
     private int dynruleHashtableRef;
     private int tableTableRef;
 

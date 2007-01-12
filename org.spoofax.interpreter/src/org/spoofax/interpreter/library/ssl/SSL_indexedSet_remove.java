@@ -34,9 +34,9 @@ public class SSL_indexedSet_remove extends AbstractPrimitive {
         if(is == null)
             return false;
 
-        boolean r = is.remove(targs[1]);
+        is.remove(targs[1]);
         
         env.setCurrent(targs[0]);
-        return r;
+        return true;
     }
 }

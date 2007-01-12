@@ -77,7 +77,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testDynamicRulesLowlevel() throws IOException, InterpreterException 
     { interpTest("dynamic-rules-lowlevel-test", "(46,0)"); }
     public void testDynamicRulesHighlevel() throws IOException, InterpreterException 
-    { interpTest("dynamic-rules-highlevel-test", "(7,0)"); }
+    { interpTest("dynamic-rules-highlevel-test", "(10,0)"); }
 
     public void testSystemIOFile() throws IOException, InterpreterException {
         interpTest("system-io-file-test", "(0,0)");
