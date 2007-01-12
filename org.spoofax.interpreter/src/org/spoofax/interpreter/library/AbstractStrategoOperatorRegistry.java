@@ -12,7 +12,7 @@ import java.util.Map;
 
 public abstract class AbstractStrategoOperatorRegistry implements IOperatorRegistry {
 
-    Map<String, AbstractPrimitive> registry;
+    protected Map<String, AbstractPrimitive> registry;
     
     protected AbstractStrategoOperatorRegistry() {
         registry = new HashMap<String, AbstractPrimitive>();
