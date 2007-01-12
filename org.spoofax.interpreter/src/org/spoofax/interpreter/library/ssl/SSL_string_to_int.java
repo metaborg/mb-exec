@@ -27,9 +27,31 @@ public class SSL_string_to_int extends AbstractPrimitive {
         if(!Tools.isTermString(tvars[0]))
             return false;
 
+        
         String s = Tools.javaString(tvars[0]);
-        Integer i = new Integer(s);
-        env.setCurrent(env.getFactory().makeInt(i.intValue()));
-        return true;
+        
+        String s0 = s;
+        try {
+            env.setCurrent(env.getFactory().makeInt(new Integer(s0)));
+            return true;
+        } catch(NumberFormatException e) {
+        }
+        try {
+            s0 = s.trim();
+            if(s0.length() > 0 && s0.charAt(0) == '+') 
+                s0 = s0.substring(1);
+            env.setCurrent(env.getFactory().makeInt(new Integer(s0)));
+            return true;
+        } catch (NumberFormatException e) {
+        }
+//        try {
+//            if(s0.startsWith("0x")) {
+//                env.setCurrent(env.getFactory().makeInt(Integer.parseInt(s0.substring(2), 16)));
+//                return true;
+//            }
+//        } catch(NumberFormatException e) {
+//            
+//        }
+        return false;
     }
 }

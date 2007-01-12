@@ -15,3 +15,6 @@ data/lang/%.ctree : src/lang/%.str
 
 data/library/%.ctree : src/library/%.str
 	strc -i $< -F -o $@
+
+data/library/system-io-file-test.str:
+	touch data/library/system-io-file-test.str

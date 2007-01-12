@@ -25,10 +25,6 @@ public class LibraryTest extends AbstractInterpreterTest {
         interpTest("char-test", "(3,0)");
     }
     
-    public void testDir() throws IOException, InterpreterException {
-        interpTest("dir-test", "(2,2)");
-    }
-    
     public void testOldParseOptions() throws IOException, InterpreterException {
         interpTest("old-parse-options-test", "(2,0)");
     }
@@ -51,7 +47,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testListFilter() throws IOException, InterpreterException 
     { interpTest("list-filter-test", "(2,0)");   }
     public void testIntegers() throws IOException, InterpreterException 
-    { interpTest("integers-test", "(79,0)"); }
+    { interpTest("integers-test", "(101,0)"); }
     public void testIteration() throws IOException, InterpreterException 
     { interpTest("iteration-test", "(25,0)"); }
     public void testUnification() throws IOException, InterpreterException 
