@@ -7,10 +7,14 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
@@ -61,11 +65,39 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
         }
 
         public Collection<IStrategoTerm> keySet() {
-            return map.keySet();
+            // FIXME this could easily be more efficient
+            class X implements Comparable<X> {
+                IStrategoTerm t;
+                Integer i;
+                X(IStrategoTerm t, Integer i) {
+                    this.t = t;
+                    this.i = i;
+                }
+                public int compareTo(X o) {
+                    return i.compareTo(o.i);
+                }
+            }
+            List<X> xs = new ArrayList<X>();
+            for(Entry<IStrategoTerm,Integer> e : map.entrySet()) { 
+                xs.add(new X(e.getKey(), e.getValue()));
+            }
+            Collections.sort(xs);
+            List<IStrategoTerm> r = new ArrayList<IStrategoTerm>();
+            for(X x : xs)
+                r.add(x.t);
+            return r;
         }
 
         public boolean containsKey(IStrategoTerm t) {
             return map.containsKey(t);
+        }
+
+        public int size() {
+            return map.size();
+        }
+        
+        public Set<Entry<IStrategoTerm, Integer>> entrySet() {
+            return map.entrySet();
         }
     }
 

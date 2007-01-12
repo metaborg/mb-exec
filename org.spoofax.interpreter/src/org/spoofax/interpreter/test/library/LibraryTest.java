@@ -63,7 +63,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testEnvTraversal() throws IOException, InterpreterException 
     { interpTest("env-traversal-test", "(2,0)"); }
     public void testSets() throws IOException, InterpreterException 
-    { interpTest("sets-test", "(11,0)"); }
+    { interpTest("sets-test", "(15,0)"); }
     public void testTables() throws IOException, InterpreterException 
     { interpTest("tables-test", "(59,0)"); }
     public void testSubstitution() throws IOException, InterpreterException 
