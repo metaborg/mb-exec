@@ -1,9 +1,9 @@
 package org.spoofax.interpreter.compiler;
 
 import java.io.IOException;
+
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.adapters.aterm.WrappedATermFactory;
 import org.spoofax.jsglr.InvalidParseTableException;
 
 public class ConcreteInterpreter extends Interpreter {

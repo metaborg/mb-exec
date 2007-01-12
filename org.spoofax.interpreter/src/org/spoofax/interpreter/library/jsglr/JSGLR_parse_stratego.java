@@ -2,14 +2,16 @@ package org.spoofax.interpreter.library.jsglr;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.Tools;
+import org.spoofax.interpreter.adapters.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.jsglr.InvalidParseTableException;
@@ -18,11 +20,8 @@ import org.spoofax.jsglr.ParseTableManager;
 import org.spoofax.jsglr.SGLR;
 import org.spoofax.jsglr.SGLRException;
 
-import aterm.pure.PureFactory;
-import org.spoofax.interpreter.Tools;
-import org.spoofax.interpreter.terms.IStrategoString;
 import aterm.ATerm;
-import org.spoofax.interpreter.adapters.aterm.WrappedATermFactory;
+import aterm.pure.PureFactory;
 
 public class JSGLR_parse_stratego extends AbstractPrimitive {
 	private SGLR StrategoSGLR;
@@ -30,6 +29,7 @@ public class JSGLR_parse_stratego extends AbstractPrimitive {
 	JSGLR_parse_stratego(ITermFactory factory) throws IOException, InvalidParseTableException
 	{
 		super("JSGLR_parse_stratego", 0, 1);
+        // FIXME this must be cleaned
 		PureFactory pf = ((WrappedATermFactory) factory).getFactory();
 		ParseTableManager ptm = new ParseTableManager(pf);
 	
@@ -62,7 +62,9 @@ public class JSGLR_parse_stratego extends AbstractPrimitive {
 		System.err.println(parsed);
 		if (parsed == null)
 			return false;
-		env.setCurrent(WrappedATermFactory.wrapTerm(parsed));
+        // FIXME this is dangerous!
+        WrappedATermFactory fac = (WrappedATermFactory) env.getFactory();
+		env.setCurrent(fac.wrapTerm(parsed));
 		return true;
 	}
 
