@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
@@ -31,9 +30,12 @@ import aterm.ATermList;
 import aterm.ATermReal;
 
 public class WrappedATermFactory implements ITermFactory {
-
     private TrackingATermFactory realFactory;
     
+    public TrackingATermFactory getFactory() {
+    	return realFactory;
+    }
+
     public WrappedATermFactory() {
         this.realFactory = new TrackingATermFactory();
     }
@@ -57,7 +59,7 @@ public class WrappedATermFactory implements ITermFactory {
         return wrapTerm(t);
     }
 
-    static WrappedATerm wrapTerm(ATerm t) {
+    static public WrappedATerm wrapTerm(ATerm t) {
         switch(t.getType()) {
         case ATerm.AFUN:
             return new WrappedAFun((AFun)t);
@@ -142,6 +144,8 @@ public class WrappedATermFactory implements ITermFactory {
     }
 
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException {
-        throw new NotImplementedException();
+    	if (!(t instanceof WrappedATerm))
+    		throw new WrapperException();
+    	((WrappedATerm)t).getATerm().writeToTextFile(ous);
     }
 }
