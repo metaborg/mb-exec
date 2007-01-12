@@ -198,7 +198,7 @@ public class Build extends Strategy {
         }
     }
     
-    private IStrategoTerm buildNil(IContext env) {
+    private IStrategoList buildNil(IContext env) {
         return env.getFactory().makeList();
     }
 
@@ -222,20 +222,23 @@ public class Build extends Strategy {
         return factory.makeAppl(ctor, kids);
     }
 
-    private IStrategoTerm buildCons(IContext env, IStrategoAppl t) throws InterpreterException {
+    private IStrategoList buildCons(IContext env, IStrategoAppl t) throws InterpreterException {
 
         IStrategoList children = (IStrategoList) t.getSubterm(1);
         
         IStrategoAppl headPattern = (IStrategoAppl) children.get(0);
         IStrategoAppl tailPattern = (IStrategoAppl) children.get(1);
         
-        IStrategoList tail = (IStrategoList) buildList(env, tailPattern);
+        IStrategoList tail = (IStrategoList) buildList(env, tailPattern); 
         IStrategoTerm head = buildTerm(env, headPattern);
+        
+        if(tail == null || head == null)
+            return null;
         
         return tail.prepend(head);
     }
 
-    private IStrategoTerm buildList(IContext env, IStrategoAppl t) throws InterpreterException {
+    private IStrategoList buildList(IContext env, IStrategoAppl t) throws InterpreterException {
         
         // FIXME improve! this is an Anno!
         if(Tools.isAnno(t, env)) {
@@ -246,13 +249,16 @@ public class Build extends Strategy {
                 return buildNil(env);
             else if(c.equals("Cons"))
                 return buildCons(env, t);
-
-            throw new InterpreterException("List tail must always be a list.");
         }
-        else if(Tools.isVar(t, env))
-            return buildVar(env, t);
+        else if(Tools.isVar(t, env)) {
+            IStrategoTerm r = buildVar(env, t);
+            if(r instanceof IStrategoList) {
+                return (IStrategoList) r;
+            }
+            throw new InterpreterException("List tail must always be a list -- got " + r);
+        }
 
-        throw new InterpreterException("List tail must always be a list.");
+        throw new InterpreterException("List tail must always be a list!");
     }
 
 

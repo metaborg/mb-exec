@@ -49,11 +49,12 @@ public class CallT extends Strategy {
         if (sdef == null)
             throw new InterpreterException("Not found '" + name + "'");
 
+    
         List<String> formalTermArgs = sdef.getTermParams();
         List<SVar> formalStrategyArgs = sdef.getStrategyParams();
 
         if (DebugUtil.isDebugging()) {
-            printStrategyCall(name, formalStrategyArgs, svars, formalTermArgs, tvars);
+            printStrategyCall(sdef.getName(), formalStrategyArgs, svars, formalTermArgs, tvars);
         }
 
         if (svars.size() != formalStrategyArgs.size())
@@ -111,11 +112,83 @@ public class CallT extends Strategy {
         return DebugUtil.traceReturn(r, env.current(), this);
     }
 
+    public boolean evalWithArgs(IContext env, List<IConstruct> actualSVars, IStrategoTerm[] actualTVars) throws InterpreterException {
+
+        System.err.println(actualTVars.length);
+        
+        if (DebugUtil.isDebugging()) {
+            debug("CallT.eval() - ", env.current());
+        }
+
+        SDefT sdef = env.lookupSVar(name);
+
+        if (sdef == null)
+            throw new InterpreterException("Not found '" + name + "'");
+
+    
+        List<String> formalTermArgs = sdef.getTermParams();
+        List<SVar> formalStrategyArgs = sdef.getStrategyParams();
+
+        if (DebugUtil.isDebugging()) {
+            printStrategyCall(sdef.getName(), formalStrategyArgs, actualSVars, formalTermArgs, actualTVars);
+        }
+
+        if (actualSVars.size() != formalStrategyArgs.size())
+            throw new InterpreterException("Incorrect strategy arguments, expected " + formalStrategyArgs.size()
+              + " got " + actualSVars.size());
+
+        if (actualTVars.length != formalTermArgs.size())
+            throw new InterpreterException("Incorrect aterm arguments, expected " + formalTermArgs.size()
+              + " got " + actualTVars.length);
+
+        VarScope newScope = new VarScope(sdef.getScope());
+
+        for (int i = 0; i < actualSVars.size(); i++) {
+            SVar formal = formalStrategyArgs.get(i);
+            IConstruct actual = actualSVars.get(i);
+
+            SDefT target = null;
+            if (actual instanceof CallT &&
+              ((CallT)actual).getStrategyArguments().size() == 0
+              && ((CallT)actual).getTermArguments().length == 0) {
+                String n = ((CallT)actual).getTargetStrategyName();
+                target = env.lookupSVar(n);
+                if (target == null) {
+                    if (DebugUtil.isDebugging()) {
+                        debug(env.getVarScope().dump(" "));
+                    }
+                    System.out.println(env.getVarScope());
+                    throw new InterpreterException("No strategy '" + n + "'");
+                }
+            }
+            else {
+                List<SVar> stratArgs = new ArrayList<SVar>(0);
+                List<String> termArgs = new ArrayList<String>(0);
+                target = new SDefT(makeTempName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
+            }
+
+            newScope.addSVar(formal.name, target);
+        }
+
+        for (int i = 0; i < actualTVars.length; i++) {
+            String formal = formalTermArgs.get(i);
+            newScope.add(formal, actualTVars[i]);
+        }
+
+        VarScope oldVarScope = env.getVarScope();
+        env.setVarScope(newScope);
+
+        boolean r = sdef.eval(env);
+        env.restoreVarScope(oldVarScope);
+
+        return DebugUtil.traceReturn(r, env.current(), this);
+    }
+
     private IStrategoTerm[] getTermArguments() {
         return tvars;
     }
 
-    private String makeTempName(String s) {
+    private static String makeTempName(String s) {
         return "<anon_" + s + "_" + counter + ">";
     }
 
