@@ -21,7 +21,7 @@ function run-interpreter() {
 function invoke-interpreter() {
 	java ${VM_OPTS} \
 		-Xrunjmp:nomethods \
-		-cp ../org.spoofax.aterm/aterm-1.6.jar:bin:ext/jjtraveler-0.4.3.jar:ext/shared-objects-1.4.jar:../org.spoofax.interpreter.adapters/bin \
+		-cp ${bp}/../org.spoofax.aterm/bin:${bp}/bin:${bp}/ext/jjtraveler-0.4.3.jar:${bp}/ext/shared-objects-1.4.jar:${bp}/../org.spoofax.interpreter.adapters/bin \
 		-Dspoofax.lib.path=../xlet/src \
 		-Dspoofax.xlet.path=../org.spoofax.interpreter/bin/xlets \
 		$@ \
@@ -55,6 +55,8 @@ flags=""
 file=""
 action=""
 
+bp=$(dirname $0)
+
 for x in "$@" ; do 
 	
 	case $x in
@@ -72,7 +74,6 @@ for x in "$@" ; do
 			exit 1
 			;;
 		*)
-			echo "setting file '"$x"'"
 			file="${file} $x"
 			;;
 	esac
