@@ -197,4 +197,8 @@ public class Tools {
         return ((IStrategoInt)term).getValue();
     }
 
+    public static String asJavaString(IStrategoTerm term) {
+        return ((IStrategoString)term).getValue();
+    }
+
 }

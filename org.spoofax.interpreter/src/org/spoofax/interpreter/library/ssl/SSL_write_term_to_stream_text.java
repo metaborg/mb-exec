@@ -32,16 +32,17 @@ public class SSL_write_term_to_stream_text extends AbstractPrimitive {
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         int fd = Tools.asJavaInt(targs[0]);
         
-        OutputStream ous = or.getOutputStream(fd);
-        if(ous == null)
+        OutputStream os = or.getOutputStream(fd);
+        if(os == null)
             return false;
         
         try {
-            env.getFactory().unparseToFile(targs[1], or.stderrStream);
+            env.getFactory().unparseToFile(targs[1],os);
         } catch(IOException e) {
             throw new InterpreterException(e);
         }
         
+        env.setCurrent(targs[0]);
         return true;
     }
 }

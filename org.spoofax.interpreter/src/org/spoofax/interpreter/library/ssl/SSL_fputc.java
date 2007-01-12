@@ -42,6 +42,7 @@ public class SSL_fputc extends AbstractPrimitive {
             throw new InterpreterException(e);
         }
         
+        env.setCurrent(targs[1]);
         return true;
     }
 }

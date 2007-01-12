@@ -37,7 +37,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
     OutputStream stderrStream;
     
     private Map<Integer, RandomAccessFile> fileMap;
-    private int fileCounter = 3;
+    private int fileCounter;
     
     private Map<Integer, IndexedSet> indexedSetMap;
     private int indexedSetCounter;
@@ -138,6 +138,8 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_table_values_fold());
         add(new SSL_list_loop());
         add(new SSL_list_fold());
+        add(new SSL_read_term_from_stream());
+        add(new SSL_remove());
      }
 
     protected Map<String, AbstractPrimitive> getRegistry() {
@@ -174,7 +176,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         tableTableRef = registerHashtable(new Hashtable(128, 75));
         
         fileMap = new HashMap<Integer, RandomAccessFile>();
-        fileCounter = 0;
+        fileCounter = 3;
         
     }
     

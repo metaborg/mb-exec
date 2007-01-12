@@ -8,7 +8,7 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import org.spoofax.interpreter.IConstruct;
@@ -18,12 +18,12 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_write_term_to_stream_baf extends AbstractPrimitive {
+public class SSL_read_term_from_stream extends AbstractPrimitive {
 
-    SSL_write_term_to_stream_baf() {
-        super("SSL_write_term_to_stream_baf", 0, 2);
-        
+    SSL_read_term_from_stream() {
+        super("SSL_read_term_from_stream", 0, 1);
     }
+    
     @Override
     public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
             throws InterpreterException {
@@ -34,19 +34,15 @@ public class SSL_write_term_to_stream_baf extends AbstractPrimitive {
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        OutputStream os = or.getOutputStream(Tools.asJavaInt(tvars[0]));
-        if(os == null)
+        InputStream is = or.getInputStream(Tools.asJavaInt(tvars[0]));
+        if(is == null)
             return false;
 
-        System.err.println("warning: Only writing of text ATerms is supported on this platform");
-        
         try {
-            env.getFactory().unparseToFile(tvars[1], os);
+            env.setCurrent(env.getFactory().parseFromStream(is));
         } catch(IOException e) {
             throw new InterpreterException(e);
         }
-        
-        env.setCurrent(tvars[0]);
         return true;
     }
 
