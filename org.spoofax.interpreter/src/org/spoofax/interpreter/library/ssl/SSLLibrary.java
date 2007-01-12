@@ -135,6 +135,8 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_table_fold());
         add(new SSL_table_keys_fold());
         add(new SSL_table_values_fold());
+        add(new SSL_list_loop());
+        add(new SSL_list_fold());
      }
 
     protected Map<String, AbstractPrimitive> getRegistry() {

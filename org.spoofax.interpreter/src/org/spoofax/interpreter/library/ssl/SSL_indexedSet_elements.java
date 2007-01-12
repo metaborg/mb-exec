@@ -7,13 +7,7 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
