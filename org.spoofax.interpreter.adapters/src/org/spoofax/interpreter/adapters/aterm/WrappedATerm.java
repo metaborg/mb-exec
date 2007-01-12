@@ -15,9 +15,16 @@ import aterm.ATerm;
 
 public abstract class WrappedATerm implements IStrategoTerm {
 
+    protected WrappedATermFactory parent;
+    
+    protected WrappedATerm(WrappedATermFactory parent) {
+        this.parent = parent;
+    }
+    
     protected abstract boolean slowCompare(Object second); /*{
         throw new WrapperException("Cannot compare with class " + second.getClass());
     }*/
+    
     
     abstract ATerm getATerm();
     
@@ -28,4 +35,19 @@ public abstract class WrappedATerm implements IStrategoTerm {
     public void prettyPrint(PrettyPrinter pp) {
         pp.print(getATerm().toString());        
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof IStrategoTerm))
+            return false;
+        return match((IStrategoTerm)obj);
+    }
+    
+    @Override
+    public String toString() {
+        throw new NotImplementedException();
+    }
+    
+    @Override
+    abstract public int hashCode();
 }

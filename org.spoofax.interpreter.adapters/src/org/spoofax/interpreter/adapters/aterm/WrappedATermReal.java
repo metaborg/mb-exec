@@ -17,7 +17,8 @@ public class WrappedATermReal extends WrappedATerm implements IStrategoReal {
 
     private ATermReal real;
     
-    WrappedATermReal(ATermReal real) {
+    WrappedATermReal(WrappedATermFactory parent, ATermReal real) {
+        super(parent);
         this.real = real;
     }
     
@@ -60,5 +61,15 @@ public class WrappedATermReal extends WrappedATerm implements IStrategoReal {
     @Override
     ATerm getATerm() {
         return real;
+    }
+    
+    @Override
+    public String toString() {
+        return real.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return real.hashCode();
     }
 }

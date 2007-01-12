@@ -17,7 +17,8 @@ public class WrappedATermTuple extends WrappedATerm implements IStrategoTuple {
 
     private ATermAppl tuple;
     
-    WrappedATermTuple(ATermAppl tuple) {
+    WrappedATermTuple(WrappedATermFactory parent, ATermAppl tuple) {
+        super(parent);
         this.tuple = tuple;
     }
     
@@ -27,7 +28,7 @@ public class WrappedATermTuple extends WrappedATerm implements IStrategoTuple {
     }
 
     public IStrategoTerm getSubterm(int index) {
-        return WrappedATermFactory.wrapTerm((ATerm)tuple.getChildAt(index));
+        return parent.wrapTerm((ATerm)tuple.getChildAt(index));
     }
 
     public int getSubtermCount() {
@@ -77,5 +78,10 @@ public class WrappedATermTuple extends WrappedATerm implements IStrategoTuple {
             if(!getSubterm(i).equals(snd.getSubterm(i)))
                 return false;
         return true;
+    }
+    
+    @Override
+    public int hashCode() {
+        return tuple.hashCode();
     }
 }

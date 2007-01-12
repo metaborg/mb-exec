@@ -11,14 +11,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.WeakHashMap;
 
+import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
 
@@ -31,13 +33,17 @@ import aterm.ATermReal;
 
 public class WrappedATermFactory implements ITermFactory {
     private TrackingATermFactory realFactory;
+    private WeakHashMap<ATerm, WrappedATerm> termCache;
+    private WeakHashMap<AFun, IStrategoConstructor> ctorCache;
     
     public TrackingATermFactory getFactory() {
     	return realFactory;
     }
 
     public WrappedATermFactory() {
-        this.realFactory = new TrackingATermFactory();
+        realFactory = new TrackingATermFactory();
+        termCache = new WeakHashMap<ATerm, WrappedATerm>();
+        ctorCache = new WeakHashMap<AFun, IStrategoConstructor>();
     }
     
     public boolean hasConstructor(String name, int arity) {
@@ -59,26 +65,36 @@ public class WrappedATermFactory implements ITermFactory {
         return wrapTerm(t);
     }
 
-    static public WrappedATerm wrapTerm(ATerm t) {
+    public WrappedATerm wrapTerm(ATerm t) {
+        
+        WrappedATerm r = termCache.get(t);
+        if(r != null)
+            return r;
+        
         switch(t.getType()) {
         case ATerm.AFUN:
-            return new WrappedAFun((AFun)t);
+            return memoize(t, new WrappedAFun(this, (AFun)t));
         case ATerm.REAL:
-            return new WrappedATermReal((ATermReal)t);
+            return memoize(t, new WrappedATermReal(this, (ATermReal)t));
         case ATerm.INT:
-            return new WrappedATermInt((ATermInt)t);
+            return memoize(t, new WrappedATermInt(this, (ATermInt)t));
         case ATerm.LIST:
-            return new WrappedATermList((ATermList)t);
+            return memoize(t, new WrappedATermList(this, (ATermList)t));
         case ATerm.APPL:
             ATermAppl a = (ATermAppl)t;
             if(a.isQuoted() && a.getArity() == 0)
-                return new WrappedATermString(a);
+                return memoize(t, new WrappedATermString(this, a));
             else if(a.getName().equals("")) // FIXME use AFun
-                return new WrappedATermTuple(a);
+                return memoize(t, new WrappedATermTuple(this, a));
             else  
-                return new WrappedATermAppl(a);
+                return memoize(t, new WrappedATermAppl(this, a));
         }
         throw new WrapperException();
+    }
+
+     private <T extends WrappedATerm> T memoize(ATerm t, T wrapper) {
+        termCache.put(t, wrapper);
+        return wrapper;
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
@@ -90,11 +106,12 @@ public class WrappedATermFactory implements ITermFactory {
     }
 
     public IStrategoConstructor makeConstructor(String name, int arity, boolean isQuoted) {
-        return new WrappedAFun(realFactory.makeAFun(name, arity, isQuoted));
+        return wrapConstructor(realFactory.makeAFun(name, arity, isQuoted));
     }
 
     public IStrategoInt makeInt(int i) {
-        return new WrappedATermInt(realFactory.makeInt(i));
+        ATermInt x = realFactory.makeInt(i);
+        return memoize(x, new WrappedATermInt(this, x));
     }
 
     public IStrategoList makeList(IStrategoTerm... terms) {
@@ -107,8 +124,16 @@ public class WrappedATermFactory implements ITermFactory {
                 throw new WrapperException();
             }
         }
-        
-        return new WrappedATermList(l);
+
+        IStrategoList r = (IStrategoList) lookupTerm(l);
+        if(r != null)
+            return r;
+
+        return memoize(l, new WrappedATermList(this, l));
+    }
+
+    private IStrategoTerm lookupTerm(ATermList l) {
+        return termCache.get(l);
     }
 
     public IStrategoList makeList(Collection<IStrategoTerm> terms) {
@@ -122,15 +147,19 @@ public class WrappedATermFactory implements ITermFactory {
             }
         }
         
-        return new WrappedATermList(l);
+        IStrategoList r = (IStrategoList) lookupTerm(l);
+        if(r != null)
+            return r;
+
+        return memoize(l, new WrappedATermList(this, l));
     }
 
     public IStrategoReal makeReal(double d) {
-        return new WrappedATermReal(realFactory.makeReal(d));
+        return (IStrategoReal) wrapTerm(realFactory.makeReal(d));
     }
 
     public IStrategoString makeString(String s) {
-        return new WrappedATermString(realFactory.makeString(s));
+        return (IStrategoString) wrapTerm(realFactory.makeString(s));
     }
 
     public IStrategoTuple makeTuple(IStrategoTerm... terms) {
@@ -140,12 +169,33 @@ public class WrappedATermFactory implements ITermFactory {
             args[pos++] = ((WrappedATerm)t).getATerm();
         }
         AFun afun = realFactory.makeAFun("", terms.length, false);
-        return new WrappedATermTuple(realFactory.makeAppl(afun, args));
+        return (IStrategoTuple) wrapTerm(realFactory.makeAppl(afun, args));
     }
 
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException {
+        if(!(t instanceof WrappedATerm)) {
+            throw new NotImplementedException();
+        }
+
     	if (!(t instanceof WrappedATerm))
     		throw new WrapperException();
     	((WrappedATerm)t).getATerm().writeToTextFile(ous);
+    }
+
+    public IStrategoConstructor wrapConstructor(AFun fun) {
+        
+        IStrategoConstructor c = lookupCtor(fun);
+        if(c != null)
+            return c;
+        c = new WrappedAFun(this, fun);
+        ctorCache.put(fun, c);
+        return c;
+    }
+
+    private IStrategoConstructor lookupCtor(AFun fun) {
+        return ctorCache.get(fun);
+//        IStrategoConstructor c = (IStrategoConstructor) ctorCache.get(fun);
+//        if(c == null)
+//            System.out.println()
     }
 }

@@ -10,7 +10,8 @@ class WrappedATermString extends WrappedATerm implements IStrategoString {
 
     private final ATermAppl value;
 
-    WrappedATermString(ATermAppl value) {
+    WrappedATermString(WrappedATermFactory parent, ATermAppl value) {
+        super(parent);
         this.value = value;
     }
 
@@ -31,7 +32,14 @@ class WrappedATermString extends WrappedATerm implements IStrategoString {
     }
 
     public boolean match(IStrategoTerm other) {
-        return equals(other);
+        if(other instanceof WrappedATermString) {
+            WrappedATermString o = (WrappedATermString) other;
+            return o.value.isEqual(value);
+        }
+        if(!(other instanceof IStrategoString))
+            return false;
+        IStrategoString o = (IStrategoString) other;
+        return o.getValue().equals(getValue());
     }
 
     @Override
@@ -59,5 +67,10 @@ class WrappedATermString extends WrappedATerm implements IStrategoString {
         if(!(second instanceof IStrategoString))
             return false;
         return ((IStrategoString)second).getValue().equals(value.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
     }
 }

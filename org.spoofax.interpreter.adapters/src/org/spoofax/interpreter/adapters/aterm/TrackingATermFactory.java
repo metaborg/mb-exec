@@ -43,5 +43,4 @@ public class TrackingATermFactory extends PureFactory {
         AFun f = makeAFun(s, 0, true);
         return makeAppl(f);
     }
-
 }

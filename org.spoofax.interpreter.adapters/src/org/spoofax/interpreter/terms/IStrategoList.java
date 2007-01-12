@@ -22,4 +22,6 @@ public interface IStrategoList extends IStrategoTerm {
     // FIXME this should go into the factory -- it may be a builder
     public IStrategoList tail();
 
+    public boolean isEmpty();
+
 }

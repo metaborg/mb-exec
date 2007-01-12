@@ -16,11 +16,12 @@ import aterm.ATermInt;
 public class WrappedATermInt extends WrappedATerm implements IStrategoInt {
 
     private ATermInt integer;
-    
-    WrappedATermInt(ATermInt integer) {
+
+    WrappedATermInt(WrappedATermFactory parent, ATermInt integer) {
+        super(parent);
         this.integer = integer;
     }
-    
+
     public int getValue() {
         return integer.getInt();
     }
@@ -43,17 +44,17 @@ public class WrappedATermInt extends WrappedATerm implements IStrategoInt {
 
     @Override
     public boolean equals(Object second) {
-        if(second instanceof WrappedATermInt)
-            return ((WrappedATermInt)second).integer == integer;
+        if (second instanceof WrappedATermInt)
+            return ((WrappedATermInt) second).integer == integer;
         return slowCompare(second);
     }
 
     protected boolean slowCompare(Object second) {
-        if(!(second instanceof IStrategoInt))
+        if (!(second instanceof IStrategoInt))
             return false;
-        return ((IStrategoInt)second).getValue() == getValue();
+        return ((IStrategoInt) second).getValue() == getValue();
     }
-    
+
     @Override
     public String toString() {
         return integer.toString();
@@ -62,5 +63,10 @@ public class WrappedATermInt extends WrappedATerm implements IStrategoInt {
     @Override
     ATerm getATerm() {
         return integer;
+    }
+
+    @Override
+    public int hashCode() {
+        return integer.hashCode();
     }
 }

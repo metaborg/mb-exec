@@ -18,7 +18,8 @@ public class WrappedATermAppl extends WrappedATerm implements IStrategoAppl {
 
     private ATermAppl appl;
     
-    public WrappedATermAppl(ATermAppl appl) {
+    public WrappedATermAppl(WrappedATermFactory parent, ATermAppl appl) {
+        super(parent);
         this.appl = appl;
     }
     
@@ -27,19 +28,17 @@ public class WrappedATermAppl extends WrappedATerm implements IStrategoAppl {
         IStrategoTerm[] ret = new IStrategoTerm[getSubtermCount()];
         ATerm[] args = appl.getArgumentArray();
         for(int i = 0; i < args.length; i++) {
-            ret[i] = WrappedATermFactory.wrapTerm(args[i]);
+            ret[i] = parent.wrapTerm(args[i]);
         }
         return ret;
     }
 
     public IStrategoConstructor getConstructor() {
-        // FIXME memoize
-        return new WrappedAFun(appl.getAFun());
+        return parent.wrapConstructor(appl.getAFun());
     }
 
     public IStrategoTerm getSubterm(int index) {
-        // FIXME memoize
-        return WrappedATermFactory.wrapTerm((ATerm)appl.getChildAt(index));
+        return parent.wrapTerm((ATerm)appl.getChildAt(index));
     }
 
     public int getSubtermCount() {
@@ -87,5 +86,10 @@ public class WrappedATermAppl extends WrappedATerm implements IStrategoAppl {
                 return false;
         }
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return appl.hashCode();
     }
 }

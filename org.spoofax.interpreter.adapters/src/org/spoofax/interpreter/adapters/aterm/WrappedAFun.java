@@ -20,7 +20,8 @@ public class WrappedAFun extends WrappedATerm implements IStrategoConstructor {
 
     private AFun afun;
     
-    WrappedAFun(AFun afun) {
+    WrappedAFun(WrappedATermFactory parent, AFun afun) {
+        super(parent);
         this.afun = afun;
     }
     
@@ -28,7 +29,8 @@ public class WrappedAFun extends WrappedATerm implements IStrategoConstructor {
         ATerm[] args = new ATerm[terms.getSubtermCount()];
         for(int i = 0; i < terms.getSubtermCount(); i++)
             args[i] = ((WrappedATerm)terms.get(i)).getATerm();
-        return new WrappedATermAppl(afun.getFactory().makeAppl(afun, args));
+        // FIXME memoize
+        return new WrappedATermAppl(parent, afun.getFactory().makeAppl(afun, args));
     }
     
     public IStrategoAppl instantiate(ITermFactory factory, IStrategoTerm... terms) {
@@ -36,7 +38,8 @@ public class WrappedAFun extends WrappedATerm implements IStrategoConstructor {
         for(int i = 0; i < terms.length; i++) {
             args[i] = ((WrappedATerm)terms[i]).getATerm();
         }
-        return new WrappedATermAppl(afun.getFactory().makeAppl(afun, args));
+        // FIXME memoize
+        return new WrappedATermAppl(parent, afun.getFactory().makeAppl(afun, args));
     }
 
     @Override
@@ -94,6 +97,11 @@ public class WrappedAFun extends WrappedATerm implements IStrategoConstructor {
         if(afun.getArity() != snd.getArity())
             return false;
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return afun.hashCode();
     }
 
 }

@@ -17,17 +17,18 @@ public class WrappedATermList extends WrappedATerm implements IStrategoList {
 
     private ATermList list;
     
-    WrappedATermList(ATermList list) {
+    WrappedATermList(WrappedATermFactory parent, ATermList list) {
+        super(parent);
         this.list = list;
     }
     
     public IStrategoTerm get(int i) {
-        return WrappedATermFactory.wrapTerm((ATerm)list.getChildAt(i));
+        return parent.wrapTerm((ATerm)list.getChildAt(i));
     }
 
     public IStrategoList prepend(IStrategoTerm prefix) {
         if(prefix instanceof WrappedATerm) {
-            return new WrappedATermList(list.insert(((WrappedATerm)prefix).getATerm()));
+            return (IStrategoList) parent.wrapTerm((list.insert(((WrappedATerm)prefix).getATerm())));
         }
         throw new WrapperException("Is " + prefix.getClass());    
        }
@@ -37,7 +38,7 @@ public class WrappedATermList extends WrappedATerm implements IStrategoList {
     }
 
     public IStrategoTerm getSubterm(int index) {
-        return WrappedATermFactory.wrapTerm((ATerm)list.getChildAt(index));
+        return parent.wrapTerm((ATerm)list.getChildAt(index));
     }
 
     public int getSubtermCount() {
@@ -75,11 +76,11 @@ public class WrappedATermList extends WrappedATerm implements IStrategoList {
 
     public IStrategoTerm head() {
         // FIXME should have a null check
-        return WrappedATermFactory.wrapTerm(list.getFirst());
+        return parent.wrapTerm(list.getFirst());
     }
 
     public IStrategoList tail() {
-        return new WrappedATermList(list.getNext());
+        return (IStrategoList) parent.wrapTerm(list.getNext());
     }
 
     @Override
@@ -93,5 +94,14 @@ public class WrappedATermList extends WrappedATerm implements IStrategoList {
             if(!getSubterm(i).equals(snd.getSubterm(i)))
                 return false;
         return true;
+    }
+    
+    @Override
+    public int hashCode() {
+        return list.hashCode();
+    }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
     }
 }
