@@ -34,11 +34,11 @@ public class One extends Strategy {
 
         switch (t.getTermType()) {
             case IStrategoTerm.INT:
-                return DebugUtil.traceReturn(true, env.current(), this);
+                return DebugUtil.traceReturn(false, env.current(), this);
             case IStrategoTerm.REAL:
-                return DebugUtil.traceReturn(true, env.current(), this);
+                return DebugUtil.traceReturn(false, env.current(), this);
             case IStrategoTerm.STRING:
-                return DebugUtil.traceReturn(true, env.current(), this);
+                return DebugUtil.traceReturn(false, env.current(), this);
             case IStrategoTerm.APPL:
                 return DebugUtil.traceReturn(evalOne(env, (IStrategoAppl)t), env.current(), this);
             case IStrategoTerm.LIST:

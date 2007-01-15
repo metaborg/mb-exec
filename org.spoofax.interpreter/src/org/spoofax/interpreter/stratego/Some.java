@@ -27,18 +27,18 @@ public class Some extends Strategy {
 
     public boolean eval(IContext env) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
-            debug("One.eval() - ", env.current());
+            debug("Some.eval() - ", env.current());
         }
 
         IStrategoTerm t = env.current();
 
         switch (t.getTermType()) {
             case IStrategoTerm.INT:
-                return DebugUtil.traceReturn(true, env.current(), this);
+                return DebugUtil.traceReturn(false, env.current(), this);
             case IStrategoTerm.REAL:
-                return DebugUtil.traceReturn(true, env.current(), this);
+                return DebugUtil.traceReturn(false, env.current(), this);
             case IStrategoTerm.STRING:
-                return DebugUtil.traceReturn(true, env.current(), this);
+                return DebugUtil.traceReturn(false, env.current(), this);
             case IStrategoTerm.APPL:
                 return DebugUtil.traceReturn(evalSome(env, (IStrategoAppl)t), env.current(), this);
             case IStrategoTerm.LIST:

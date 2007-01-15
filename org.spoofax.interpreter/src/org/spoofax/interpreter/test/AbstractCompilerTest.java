@@ -20,6 +20,6 @@ public abstract class AbstractCompilerTest extends TestCase {
 	protected void exec(String file) throws IOException, InterpreterException {
 		String[] strpath = { path };
 		intp.loadConcrete(path + "/" + file, strpath);
-		intp.invoke("main");
+		intp.invoke("main_0_0");
 	}
 }
