@@ -10,6 +10,7 @@ package org.spoofax.interpreter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.spoofax.DebugUtil;
@@ -299,19 +300,31 @@ public class StrategoCoreLoader {
 
     private GuardedLChoice parseGuardedLChoice(IStrategoAppl t) throws InterpreterException {
 
-        Strategy cond = parseStrategy(Tools.applAt(t, 0));
-        Strategy ifclause = parseStrategy(Tools.applAt(t, 1));
-        Strategy thenclause = parseStrategy(Tools.applAt(t, 2));
+    	LinkedList<Pair<Strategy,Strategy>> s = new LinkedList<Pair<Strategy,Strategy>>();
+        IStrategoConstructor ctor = context.getStrategoSignature().getGuardedLChoice();
 
-        return new GuardedLChoice(cond, ifclause, thenclause);
+    	while (t.getConstructor().equals(ctor)) {
+          s.add(new Pair<Strategy,Strategy>(parseStrategy(Tools.applAt(t, 0)), parseStrategy(Tools.applAt(t, 1))));
+          t = Tools.applAt(t, 2);
+    	}
+
+    	s.add(new Pair<Strategy,Strategy>(parseStrategy(t), null));
+
+        return new GuardedLChoice(s.toArray(new Pair[0]));
     }
 
     private Seq parseSeq(IStrategoAppl t) throws InterpreterException {
+    	LinkedList<Strategy> s = new LinkedList<Strategy>();
+        StrategoSignature sign = context.getStrategoSignature();
+    	
+    	while (t.getConstructor().equals(sign.getSeq())) {
+          s.add(parseStrategy(Tools.applAt(t, 0)));
+          t = Tools.applAt(t, 1);
+    	}
 
-        Strategy s0 = parseStrategy(Tools.applAt(t, 0));
-        Strategy s1 = parseStrategy(Tools.applAt(t, 1));
+    	s.add(parseStrategy(t));
 
-        return new Seq(s0, s1);
+        return new Seq(s.toArray(new Strategy[0]));
     }
 
     private Scope parseScope(IStrategoAppl t) throws InterpreterException {

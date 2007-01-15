@@ -12,30 +12,35 @@ import org.spoofax.interpreter.InterpreterException;
 
 public class Seq extends Strategy {
 
-    protected Strategy s0;
-    protected Strategy s1;
+    protected Strategy[] children;
+    
 
-    public Seq(Strategy s0, Strategy s1) {
-        this.s0 = s0;
-        this.s1 = s1;
-    }
+    public Seq(Strategy[] strategies) {
+    	children = strategies;
+	}
 
-    public boolean eval(IContext env) throws InterpreterException {
+	public boolean eval(IContext env) throws InterpreterException {
 
 //        if (Interpreter.isDebugging()) {
 //            debug("Seq.eval() - ", env.current());
 //        }
 
-        return s0.eval(env) && s1.eval(env);
+		for (int i = 0; i < children.length; i++) {
+			if (children[i].eval(env) == false)
+				return false;
+		}
+		return true;
     }
 
     public void prettyPrint(StupidFormatter sf) {
         sf.first("Seq(");
         sf.bump(4);
         sf.append("  ");
-        s0.prettyPrint(sf);
-        sf.append(", ");
-        s1.prettyPrint(sf);
+        for (int i = 0; i < (children.length - 1); i++) {
+        	children[i].prettyPrint(sf);
+        	sf.append(", ");
+        }
+        children[children.length - 1].prettyPrint(sf);
         sf.unbump(4);
         sf.line(")");
     }

@@ -11,36 +11,34 @@ import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.BindingInfo;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.Pair;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class GuardedLChoice extends Strategy {
 
-    protected Strategy cond;
-    protected Strategy ifClause;
-    protected Strategy thenClause;
+	private Pair<Strategy,Strategy>[] children;
     
-    public GuardedLChoice(Strategy cond, Strategy ifclause, Strategy thenclause) {
-        this.cond = cond;
-        ifClause = ifclause;
-        thenClause = thenclause;
+    public GuardedLChoice(Pair<Strategy,Strategy>[] strs) {
+    	children = strs;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
-
+    public Evaluator eval(IContext env) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             debug("GuardedLChoice.eval() - ", env.current());
         }
 
-        BindingInfo bi = env.getVarScope().saveUnboundVars();
-        IStrategoTerm oldCurrent = env.current();
+        for (int i = 0; i < (children.length - 1); i++) {
+        	BindingInfo bi = env.getVarScope().saveUnboundVars();
+        	IStrategoTerm oldCurrent = env.current();
 
-        if (cond.eval(env))
-            return DebugUtil.traceReturn(ifClause.eval(env), env.current(), this);
+        	if (children[i].first.eval(env))
+        		return DebugUtil.traceReturn(children[i].second.eval(env), env.current(), this);
 
-        env.setCurrent(oldCurrent);
-        env.getVarScope().restoreUnboundVars(bi);
-
-        return DebugUtil.traceReturn(thenClause.eval(env), env.current(), this);
+        	env.setCurrent(oldCurrent);
+        	env.getVarScope().restoreUnboundVars(bi);
+        }
+        
+        return DebugUtil.traceReturn(children[children.length - 1].first.eval(env), env.current(), this);
     }
 
     public void prettyPrint(StupidFormatter sf) {
@@ -48,15 +46,15 @@ public class GuardedLChoice extends Strategy {
         sf.bump(15);
         sf.append("  ");
         sf.bump(2);
-        cond.prettyPrint(sf);
+        //cond.prettyPrint(sf);
         sf.unbump(2);
         sf.append(", ");
         sf.bump(2);
-        ifClause.prettyPrint(sf);
+        //ifClause.prettyPrint(sf);
         sf.unbump(2);
         sf.append(", ");
         sf.bump(2);
-        thenClause.prettyPrint(sf);
+        //thenClause.prettyPrint(sf);
         sf.unbump(2);
         sf.unbump(15);
         sf.line(")");
