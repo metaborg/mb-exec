@@ -23,10 +23,12 @@ public class Main {
         }
 
         try {
+            long loadTime = System.nanoTime();
             for(String fn : files) {
                 System.out.println("Loading " + fn);
                 itp.load(fn);
             }
+            System.out.println("Load time: " + (System.nanoTime() - loadTime)/1000/1000 + "ms");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterpreterException e) {
@@ -34,15 +36,21 @@ public class Main {
         }
 
         try {
+            long runTime = System.nanoTime();
             itp.setCurrent(itp.getFactory().makeList());
             
             boolean r = itp.invoke("main_0_0");
+            
+            System.out.println("Run time: " + (System.nanoTime() - runTime)/1000/1000 + "ms");
+            
             if(r) {
                 System.out.println("" + itp.current());
             } else {
                 System.err.println("rewriting failed");
                 System.exit(-1);
             }
+        } catch (InterpreterExit e) {
+            System.out.println("Exit with status: "  + e.getValue());
         } catch (InterpreterException e) {
             e.printStackTrace();
         }

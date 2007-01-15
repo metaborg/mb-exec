@@ -140,6 +140,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_list_fold());
         add(new SSL_read_term_from_stream());
         add(new SSL_remove());
+        add(new SSL_exit());
      }
 
     protected Map<String, AbstractPrimitive> getRegistry() {
