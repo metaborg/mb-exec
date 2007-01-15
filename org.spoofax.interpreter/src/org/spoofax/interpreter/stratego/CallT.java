@@ -38,6 +38,8 @@ public class CallT extends Strategy {
         this.tvars = tvars.toArray(new IStrategoTerm[0]);
     }
 
+    static int depth = 0;
+    
     public boolean eval(IContext env) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
@@ -49,6 +51,10 @@ public class CallT extends Strategy {
         if (sdef == null)
             throw new InterpreterException("Not found '" + name + "'");
 
+        if(DebugUtil.tracing) {
+            System.err.println("[" + depth + "] - " + sdef.name);
+            depth++;
+        }
     
         List<String> formalTermArgs = sdef.getTermParams();
         List<SVar> formalStrategyArgs = sdef.getStrategyParams();
@@ -109,6 +115,7 @@ public class CallT extends Strategy {
         boolean r = sdef.eval(env);
         env.restoreVarScope(oldVarScope);
 
+        depth--;
         return DebugUtil.traceReturn(r, env.current(), this);
     }
 

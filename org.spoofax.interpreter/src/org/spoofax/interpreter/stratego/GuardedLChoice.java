@@ -22,7 +22,7 @@ public class GuardedLChoice extends Strategy {
     	children = strs;
     }
 
-    public Evaluator eval(IContext env) throws InterpreterException {
+    public boolean eval(IContext env) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             debug("GuardedLChoice.eval() - ", env.current());
         }
