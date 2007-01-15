@@ -112,13 +112,13 @@ public class Match extends Strategy {
 
 
         String c = Tools.javaStringAt(p, 0);
-        if(c.equals("")) {
-            return matchApplTuple(env, t, p);
+        if(c.equals("Cons")) {
+            return null; //matchApplCons(env, t, p);
         } else if(c.equals("Nil")) {
             return null; //matchApplNil(env, t);
-        } else if(c.equals("Cons")) {
-            return null; //matchApplCons(env, t, p);
-        }
+        } else if(c.equals("")) {
+            return matchApplTuple(env, t, p);
+        } 
 
         IStrategoList ctorArgs = Tools.listAt(p, 1);
 
