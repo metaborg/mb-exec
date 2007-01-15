@@ -80,7 +80,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     { interpTest("dynamic-rules-highlevel-test", "(10,0)"); }
 
     public void testSystemIOFile() throws IOException, InterpreterException {
-        interpTest("system-io-file-test", "(0,0)");
+        interpTest("system-io-file-test", "(104,0)");
     }
     
     public void testPOSIX() throws IOException, InterpreterException {
