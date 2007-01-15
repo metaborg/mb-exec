@@ -1,6 +1,11 @@
 module test1
+signature
+  constructors
+    Cons: Term * Term -> Term
+    Nil: Term
+
 strategies
 
   main =
     ![1, 2, 3]
-  ; rec x([] <+ [debug|x])
+  ; rec x([] <+ [id] <+ {?[a,b|c]; ![b,a|<x>c]})
