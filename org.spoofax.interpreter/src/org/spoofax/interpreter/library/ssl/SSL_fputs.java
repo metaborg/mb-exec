@@ -40,6 +40,8 @@ public class SSL_fputs extends AbstractPrimitive {
             throw new InterpreterException(e);
         }
         
+        env.setCurrent(targs[1]);
+        
         return true;
     }
 }
