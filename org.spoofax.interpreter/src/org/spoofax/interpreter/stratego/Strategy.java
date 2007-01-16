@@ -41,6 +41,7 @@ abstract public class Strategy implements IConstruct {
 //        return sf.toString();
 //    }
 
+
     protected String getTraceName() {
         return this.getClass().getSimpleName();
     }

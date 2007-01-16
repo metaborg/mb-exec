@@ -19,6 +19,8 @@ public class Main {
                 files = args[i + 1].split(",");
             } else if (args[i].equals("--wait-for-profiler")) {
                 waitForProfiler = true;
+            } else if (args[i].equals("/trace")) {
+                DebugUtil.tracing = true;
             }
         }
 

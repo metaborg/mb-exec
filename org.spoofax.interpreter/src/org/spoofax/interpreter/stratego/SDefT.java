@@ -9,6 +9,7 @@ package org.spoofax.interpreter.stratego;
 
 import java.util.List;
 
+import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
@@ -86,9 +87,11 @@ public class SDefT implements IConstruct {
         this.scope = scope;
     }
 
-    public boolean eval(IContext e) throws InterpreterException {
+    public boolean eval(IContext e, EvaluationStack es) throws InterpreterException {
         //e.getVarScope().dump("", true);
-        return body.eval(e);
+        es.addNext(body, e.getVarScope());
+        return true;
+        //return body.eval(e);
     }
 
     public String getName() {

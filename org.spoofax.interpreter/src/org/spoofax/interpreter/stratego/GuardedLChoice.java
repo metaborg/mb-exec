@@ -9,6 +9,7 @@ package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.BindingInfo;
+import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Pair;
@@ -22,7 +23,7 @@ public class GuardedLChoice extends Strategy {
     	children = strs;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public boolean eval(IContext env, EvaluationStack es) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             debug("GuardedLChoice.eval() - ", env.current());
         }
@@ -31,14 +32,18 @@ public class GuardedLChoice extends Strategy {
         	BindingInfo bi = env.getVarScope().saveUnboundVars();
         	IStrategoTerm oldCurrent = env.current();
 
-        	if (children[i].first.eval(env))
-        		return DebugUtil.traceReturn(children[i].second.eval(env), env.current(), this);
+        	if (CallT.callHelper(children[i].first, env)) {
+                es.addNext(children[i].second, env.getVarScope());
+                return true;
+        		//return DebugUtil.traceReturn(CallT.callHelper(children[i].second, env), env.current(), this);
+            }
 
         	env.setCurrent(oldCurrent);
         	env.getVarScope().restoreUnboundVars(bi);
         }
         
-        return DebugUtil.traceReturn(children[children.length - 1].first.eval(env), env.current(), this);
+        es.addNext(children[children.length - 1].first, env.getVarScope());
+        return true; // DebugUtil.traceReturn(CallT.callHelper(, env), env.current(), this);
     }
 
     public void prettyPrint(StupidFormatter sf) {

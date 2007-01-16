@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.stratego;
 
+import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 
@@ -19,15 +20,17 @@ public class Seq extends Strategy {
     	children = strategies;
 	}
 
-	public boolean eval(IContext env) throws InterpreterException {
+	public boolean eval(IContext env, EvaluationStack es) throws InterpreterException {
 
 //        if (Interpreter.isDebugging()) {
 //            debug("Seq.eval() - ", env.current());
 //        }
 
-		for (int i = 0; i < children.length; i++) {
-			if (children[i].eval(env) == false)
-				return false;
+        for (int i = 0; i < children.length; i++) {
+            //if(children[i].eval(env) == false)
+            //    return false;
+            es.addNext(children[children.length - i - 1], env.getVarScope());
+            //ns.addNext(children[i]);
 		}
 		return true;
     }

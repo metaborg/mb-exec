@@ -14,6 +14,7 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.stratego.CallT;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -36,7 +37,7 @@ public class SSL_get_appl_arguments_map extends AbstractPrimitive {
         IStrategoTerm[] result = new IStrategoTerm[arity];
         for(int i = 0; i < arity; i++) {
             env.setCurrent(a.getSubterm(i));
-            if(!c.eval(env))
+            if(!CallT.callHelper(c, env))
                 return false;
             result[i] = env.current();
         }

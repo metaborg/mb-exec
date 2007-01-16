@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.VarScope;
@@ -26,7 +27,7 @@ public class Let extends Strategy {
         this.body = body;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public boolean eval(IContext env, EvaluationStack es) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("Let.eval() - ", env.current());
@@ -48,11 +49,13 @@ public class Let extends Strategy {
         newScope.addSVars(newDefs);
         env.setVarScope(newScope);
 
-        boolean r = body.eval(env);
+        es.addNext(body, newScope);
+        //boolean r = body.eval(env);
 
         env.popVarScope();
 
-        return DebugUtil.traceReturn(r, env.current(), this);
+        return true;
+        //return DebugUtil.traceReturn(r, env.current(), this);
     }
 
     public void prettyPrint(StupidFormatter sf) {

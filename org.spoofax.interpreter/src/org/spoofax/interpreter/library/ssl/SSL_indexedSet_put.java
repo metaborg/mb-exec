@@ -15,6 +15,7 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.ssl.SSL_indexedSet_create.IndexedSet;
+import org.spoofax.interpreter.stratego.CallT;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_indexedSet_put extends AbstractPrimitive {
@@ -39,7 +40,7 @@ public class SSL_indexedSet_put extends AbstractPrimitive {
         
         if(is.containsKey(t)) {
             is.put(t);
-            return s.eval(env);
+            return CallT.callHelper(s, env);
         }
 
         env.setCurrent(env.getFactory().makeInt(is.put(t)));

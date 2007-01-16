@@ -8,6 +8,7 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
@@ -25,7 +26,7 @@ public class All extends Strategy {
         this.body = body;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public boolean eval(IContext env, EvaluationStack es) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("All.eval() - ", env.current());
@@ -58,7 +59,7 @@ public class All extends Strategy {
         
         for(int i = 0, sz = r.length; i < sz; i++) {
             env.setCurrent(list.get(i));
-            if(!body.eval(env)) {
+            if(!CallT.callHelper(body, env)) {
                 env.setCurrent(list);
                 debug("Child traversal failed at ", list.get(i), ", current = ", env.current());
                 return false;
@@ -79,7 +80,7 @@ public class All extends Strategy {
         
         for(int i = 0, sz = r.length; i < sz; i++) {
             env.setCurrent(tuple.get(i));
-            if(!body.eval(env)) {
+            if(!CallT.callHelper(body, env)) {
                 env.setCurrent(tuple);
                 debug("Child traversal failed at ", tuple.get(i), ", current = ", env.current());
                 return false;
@@ -101,7 +102,7 @@ public class All extends Strategy {
         
         for(int i = 0, sz = t.getSubtermCount(); i < sz; i++) {
             env.setCurrent(Tools.termAt(t, i));
-            if(!body.eval(env)) {
+            if(!CallT.callHelper(body, env)) {
                 env.setCurrent(t);
                 debug("Child traversal failed at ", Tools.termAt(t, i), ", current = ", env.current());
                 return false;

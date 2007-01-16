@@ -69,14 +69,6 @@ public class Context implements IContext {
         }
     }
 
-    public boolean invoke(String name, Object object, Object object2)
-            throws InterpreterException {
-
-        SDefT s = lookupSVar(name);
-
-        return s.getBody().eval(this);
-    }
-
     public IStrategoTerm lookupVar(String n) throws InterpreterException {
         return varScope.lookup(n);
     }

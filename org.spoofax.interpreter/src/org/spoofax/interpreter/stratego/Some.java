@@ -8,6 +8,7 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
@@ -25,7 +26,7 @@ public class Some extends Strategy {
         this.body = body;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public boolean eval(IContext env, EvaluationStack es) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             debug("Some.eval() - ", env.current());
         }
@@ -57,7 +58,7 @@ public class Some extends Strategy {
         for(int i = 0, sz = list.getSubtermCount(); i < sz; i++) {
         	l[i] = list.get(i);
         	env.setCurrent(Tools.termAt(list, i));
-            if(body.eval(env)) {
+            if(CallT.callHelper(body, env)) {
             	l[i] = env.current();
             	success = true;
             }
@@ -75,7 +76,7 @@ public class Some extends Strategy {
         for(int i = 0, sz = list.getSubtermCount(); i < sz; i++) {
         	l[i] = list.get(i);
         	env.setCurrent(Tools.termAt(list, i));
-            if(body.eval(env)) {
+            if(CallT.callHelper(body,env)) {
             	l[i] = env.current();
             	success = true;
             }
@@ -93,7 +94,7 @@ public class Some extends Strategy {
 
         for(int i = 0, sz = list.length; i < sz; i++) {
         	env.setCurrent(list[i]);
-            if(body.eval(env)) {
+            if(CallT.callHelper(body,env)) {
             	list[i] = env.current();
             	success = true;
             }

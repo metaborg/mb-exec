@@ -12,6 +12,7 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
@@ -32,7 +33,7 @@ public class Build extends Strategy {
         term = t;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public boolean eval(IContext env, EvaluationStack es) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             debug("Build.eval() - ", env.current(), " -> !", term);
         }

@@ -8,6 +8,7 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
@@ -25,7 +26,7 @@ public class One extends Strategy {
         this.body = body;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public boolean eval(IContext env, EvaluationStack es) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             debug("One.eval() - ", env.current());
         }
@@ -53,7 +54,7 @@ public class One extends Strategy {
     private boolean evalOne(IContext env, IStrategoTuple tuple) throws InterpreterException {
     	for(int i = 0, sz = tuple.getSubtermCount(); i < sz; i++) {
             env.setCurrent(Tools.termAt(tuple, i));
-            if(body.eval(env)) {
+            if(CallT.callHelper(body, env)) {
                 IStrategoTerm[] l = new IStrategoTerm[tuple.size()];
                 for (int j = 0; j < tuple.size(); j++)
                 	l[j] = tuple.get(j);
@@ -69,7 +70,7 @@ public class One extends Strategy {
 	private boolean evalOne(IContext env, IStrategoList list) throws InterpreterException {
         for(int i = 0, sz = list.getSubtermCount(); i < sz; i++) {
             env.setCurrent(Tools.termAt(list, i));
-            if(body.eval(env)) {
+            if(CallT.callHelper(body,env)) {
                 IStrategoTerm[] l = new IStrategoTerm[list.size()];
                 for (int j = 0; j < list.size(); j++)
                 	l[j] = list.get(j);
@@ -90,7 +91,7 @@ public class One extends Strategy {
         
         for(int i = 0, sz = t.getSubtermCount(); i < sz; i++) {
             env.setCurrent(Tools.termAt(t, i));
-            if(body.eval(env)) {
+            if(CallT.callHelper(body,env)) {
                 IStrategoTerm[] xt = t.getArguments();
                 xt[i] = env.current();
             	IStrategoAppl t2 = env.getFactory().makeAppl(ctor, xt);            
