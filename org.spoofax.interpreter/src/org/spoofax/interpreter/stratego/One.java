@@ -87,16 +87,14 @@ public class One extends Strategy {
 	}
 
 	private boolean evalOne(IContext env, IStrategoAppl t) throws InterpreterException {
-
         IStrategoConstructor ctor = t.getConstructor();
-        IStrategoTerm[] kids = t.getAllSubterms();
-        final int sz = kids.length;
         
-        for(int i = 0; i < sz; i++) {
-            env.setCurrent(kids[i]);
+        for(int i = 0, sz = t.getSubtermCount(); i < sz; i++) {
+            env.setCurrent(Tools.termAt(t, i));
             if(CallT.callHelper(body,env)) {
-                kids[i] = env.current();
-            	IStrategoAppl t2 = env.getFactory().makeAppl(ctor, kids);            
+                IStrategoTerm[] xt = t.getArguments();
+                xt[i] = env.current();
+            	IStrategoAppl t2 = env.getFactory().makeAppl(ctor, xt);            
                 env.setCurrent(t2);
                 return true;
             }
