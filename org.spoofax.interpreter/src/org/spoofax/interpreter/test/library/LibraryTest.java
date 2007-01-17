@@ -66,7 +66,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     { interpTest("substitution-test", "(1,0)");   }
 
     public void testTermCommon() throws IOException, InterpreterException {
-        interpTest("term-common-test", "(12,0)");
+        interpTest("term-common-test", "(14,0)");
     }
     
     public void testListBasic() throws IOException, InterpreterException 
