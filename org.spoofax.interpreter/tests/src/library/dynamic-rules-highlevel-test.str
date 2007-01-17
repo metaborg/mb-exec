@@ -20,6 +20,7 @@ strategies
   ; test-add-bagof
   ; test-dr-fork-and-union
   ; test-dr-ignore-state
+  ; test-dr-scope
   )
 
 // plain dynamic rule
@@ -254,3 +255,19 @@ strategies
       , !"failed"
       )
     |}
+
+
+  test-dr-scope =
+    apply-test(!"dr-scope",
+    {|D:
+      !"a" => n
+    ; rules(D: n)
+    ; <D> "a"
+    ; {|D:
+        id
+      ; {|D:
+          id
+        ; (<D> "a" <+ !"b")
+        |}
+      |}
+    |}, !"a", !"a")
