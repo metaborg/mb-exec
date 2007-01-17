@@ -5,12 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.adapters.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
@@ -38,7 +38,7 @@ public class JSGLR_parse_stratego extends AbstractPrimitive {
 	}
 	
 	@Override
-	public boolean call(IContext env, List<IConstruct> svars,
+	public boolean call(IContext env, List<Strategy> svars,
 			IStrategoTerm[] tvars) throws InterpreterException {
 		System.err.println("Reading: ");
 		if (!Tools.isTermString(tvars[0]))
@@ -48,7 +48,6 @@ public class JSGLR_parse_stratego extends AbstractPrimitive {
 		ATerm parsed = null;
 		try {
 			parsed = StrategoSGLR.parse(new FileInputStream(path));
-			System.err.println("Yes!");
 		} catch (FileNotFoundException e) {
 			System.err.println("File not found.");
 			return false;
@@ -59,7 +58,6 @@ public class JSGLR_parse_stratego extends AbstractPrimitive {
 			System.err.println("SGLR Exc");
 			return false;
 		}
-		System.err.println(parsed);
 		if (parsed == null)
 			return false;
         // FIXME this is dangerous!

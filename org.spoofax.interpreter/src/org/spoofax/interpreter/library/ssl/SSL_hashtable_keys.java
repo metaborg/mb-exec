@@ -8,8 +8,9 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.util.List;
+import java.util.Set;
 
-import org.spoofax.interpreter.IConstruct;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
@@ -23,7 +24,7 @@ public class SSL_hashtable_keys extends AbstractPrimitive {
         super("SSL_hashtable_keys", 0, 1);
     }
     
-    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         if(!(Tools.isTermInt(targs[0])))
             return false;
@@ -32,8 +33,13 @@ public class SSL_hashtable_keys extends AbstractPrimitive {
         Hashtable ath = or.getHashtable(Tools.javaInt(targs[0]));
         if(ath == null)
             return false;
-        
-        env.setCurrent(env.getFactory().makeList(ath.keySet()));
+        long launched = System.nanoTime();
+        Set<IStrategoTerm> s = ath.keySet();
+        long middle = System.nanoTime();
+        env.setCurrent(env.getFactory().makeList(s.toArray(new IStrategoTerm[0])));
+        long finished = System.nanoTime();
+        System.err.println("keySet(): " + ((middle - launched)/1000000.));
+        System.err.println("makeList(): " + ((finished - middle)/1000000.));
         return true;
     }
 }

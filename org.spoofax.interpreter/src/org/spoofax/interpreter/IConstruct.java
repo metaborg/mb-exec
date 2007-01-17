@@ -11,6 +11,7 @@ import org.spoofax.interpreter.stratego.StupidFormatter;
 
 public interface IConstruct {
 
-    boolean eval(IContext e) throws InterpreterException;
+    IConstruct eval(IContext e) throws InterpreterException;
     void prettyPrint(StupidFormatter fmt);
+	boolean evaluate(IContext env) throws InterpreterException;
 }

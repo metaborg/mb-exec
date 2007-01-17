@@ -24,7 +24,7 @@ public class CallT extends Strategy {
 
     protected String name;
 
-    protected List<IConstruct> svars;
+    protected List<Strategy> svars;
 
     protected IStrategoTerm[] tvars;
 
@@ -32,7 +32,7 @@ public class CallT extends Strategy {
 
     public CallT(String name, List<Strategy> svars, List<IStrategoTerm> tvars) {
         this.name = name;
-        this.svars = new ArrayList<IConstruct>();
+        this.svars = new ArrayList<Strategy>();
         for(Strategy s : svars)
             this.svars.add(s);
         this.tvars = tvars.toArray(new IStrategoTerm[0]);
@@ -40,7 +40,7 @@ public class CallT extends Strategy {
 
     static int depth = 0;
     
-    public boolean eval(IContext env) throws InterpreterException {
+    public IConstruct eval(final IContext env) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("CallT.eval() - ", env.current());
@@ -75,7 +75,7 @@ public class CallT extends Strategy {
 
         for (int i = 0; i < svars.size(); i++) {
             SVar formal = formalStrategyArgs.get(i);
-            IConstruct actual = svars.get(i);
+            Strategy actual = svars.get(i);
 
             SDefT target = null;
             if (actual instanceof CallT &&
@@ -109,17 +109,24 @@ public class CallT extends Strategy {
             newScope.add(formal, actual);
         }
 
-        VarScope oldVarScope = env.getVarScope();
+        final VarScope oldVarScope = env.getVarScope();
+        final CallT th = this;
+        Strategy body = sdef.getBody();
+        body.getHook().push(new Hook(){
+        	IConstruct onSuccess(IContext env) throws InterpreterException {
+                env.restoreVarScope(oldVarScope);
+        		return th.getHook().pop().onSuccess(env);
+        	}
+        	IConstruct onFailure() throws InterpreterException {
+        		env.restoreVarScope(oldVarScope);
+        		return th.getHook().pop().onFailure();
+        	}
+        });
         env.setVarScope(newScope);
-
-        boolean r = sdef.eval(env);
-        env.restoreVarScope(oldVarScope);
-
-        depth--;
-        return DebugUtil.traceReturn(r, env.current(), this);
+        return body;
     }
 
-    public boolean evalWithArgs(IContext env, List<IConstruct> actualSVars, IStrategoTerm[] actualTVars) throws InterpreterException {
+    public IConstruct evalWithArgs(IContext env, List<Strategy> actualSVars, IStrategoTerm[] actualTVars) throws InterpreterException {
 
         System.err.println(actualTVars.length);
         
@@ -152,7 +159,7 @@ public class CallT extends Strategy {
 
         for (int i = 0; i < actualSVars.size(); i++) {
             SVar formal = formalStrategyArgs.get(i);
-            IConstruct actual = actualSVars.get(i);
+            Strategy actual = actualSVars.get(i);
 
             SDefT target = null;
             if (actual instanceof CallT &&
@@ -182,13 +189,21 @@ public class CallT extends Strategy {
             newScope.add(formal, actualTVars[i]);
         }
 
-        VarScope oldVarScope = env.getVarScope();
+        final VarScope oldVarScope = env.getVarScope();
         env.setVarScope(newScope);
-
-        boolean r = sdef.eval(env);
-        env.restoreVarScope(oldVarScope);
-
-        return DebugUtil.traceReturn(r, env.current(), this);
+        final CallT th = this;
+        Strategy body = sdef.getBody();
+        body.getHook().push(new Hook(){
+        	IConstruct onSuccess(IContext env) throws InterpreterException {
+                env.restoreVarScope(oldVarScope);
+        		return th.getHook().pop().onSuccess(env);
+        	}
+        	IConstruct onFailure() throws InterpreterException {
+        		return th.getHook().pop().onFailure();
+        	}
+        });
+        env.setVarScope(newScope);
+        return body;
     }
 
     private IStrategoTerm[] getTermArguments() {
@@ -225,7 +240,7 @@ public class CallT extends Strategy {
      */
     /*package*/
     static void printStrategyCall(final String name,
-      final List<SVar> svarsFormal, final List<IConstruct> svarsActual,
+      final List<SVar> svarsFormal, final List<Strategy> svarsActual,
       final List<String> tvarsFormal, final IStrategoTerm[] tvarsActual) {
 
         // Print this at the same indentation with the associated scope.
@@ -259,7 +274,7 @@ public class CallT extends Strategy {
         return name;
     }
 
-    public List<IConstruct> getStrategyArguments() {
+    public List<Strategy> getStrategyArguments() {
         return svars;
     }
 
@@ -267,4 +282,8 @@ public class CallT extends Strategy {
     protected String getTraceName() {
         return "call of" + "(" + name + ")";
     }
+
+	public boolean evaluateWithArgs(IContext env, List<Strategy> sv, IStrategoTerm[] tv) throws InterpreterException {
+		return evalWithArgs(env, sv, tv).evaluate(env);
+	}
 }

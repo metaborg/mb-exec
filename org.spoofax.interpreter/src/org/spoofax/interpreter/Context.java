@@ -74,7 +74,7 @@ public class Context implements IContext {
 
         SDefT s = lookupSVar(name);
 
-        return s.getBody().eval(this);
+        return s.getBody().evaluate(this);
     }
 
     public IStrategoTerm lookupVar(String n) throws InterpreterException {

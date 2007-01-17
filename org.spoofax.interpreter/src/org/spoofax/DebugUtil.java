@@ -88,9 +88,16 @@ public class DebugUtil {
     }
 
     public static StringBuilder buildIndent(final int indentation) {
-        StringBuilder b = new StringBuilder(indentation);
-        b.append(indent, 0, indentation);
-        return b;
+    	StringBuilder b;
+    	if (indentation >= 0) {
+            b = new StringBuilder(indentation);
+            b.append(indent, 0, indentation);
+    	}
+    	else {
+    		b = new StringBuilder(0);
+    		b.append(indent, 0, 0);
+    	}
+    	return b;
     }
 
     public static boolean isDebugging() {

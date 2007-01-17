@@ -54,7 +54,7 @@ public class Interpreter {
             throw new InterpreterException("Definition '" + name + "' not found");
         }
 
-        return def.getBody().eval(context);
+        return def.getBody().evaluate(context);
     }
 
     public IContext getContext() {

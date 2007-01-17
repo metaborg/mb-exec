@@ -15,4 +15,8 @@ public class CompilerTest extends AbstractCompilerTest {
     {
     	exec("test1.str");
     }
+    public void testimport() throws IOException, InterpreterException
+    {
+    	exec("testimport.str");
+    }
 }

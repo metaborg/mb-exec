@@ -9,11 +9,11 @@ package org.spoofax.interpreter.library.ssl;
 
 import java.util.List;
 
-import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -23,7 +23,7 @@ public class SSL_addr extends AbstractPrimitive {
         super("SSL_addr", 0, 2);
     }
     
-    public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> svars, IStrategoTerm[] tvars) throws InterpreterException {
         
         if(!Tools.isTermReal(tvars[0]))
             return false;

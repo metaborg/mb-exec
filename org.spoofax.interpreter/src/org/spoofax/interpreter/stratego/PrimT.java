@@ -7,7 +7,6 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.spoofax.DebugUtil;
@@ -23,24 +22,21 @@ public class PrimT extends Strategy {
 
     protected String name;
 
-    protected List<IConstruct> svars;
+    protected List<Strategy> svars;
 
     protected IStrategoTerm[] tvars;
 
     public PrimT(String name, List<Strategy> svars, List<IStrategoTerm> tvars) {
         this.name = name;
-        this.svars = new ArrayList<IConstruct>();
-        for(Strategy s : svars)
-            this.svars.add(s);
+        this.svars = svars;
         this.tvars = tvars.toArray(new IStrategoTerm[0]);
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public IConstruct eval(IContext env) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("PrimT.eval() - ", env.current());
         }
-
         
         AbstractPrimitive prim = env.lookupOperator(name);
 
@@ -64,9 +60,12 @@ public class PrimT extends Strategy {
         if(DebugUtil.isDebugging()) {
             CallT.printStrategyCall(name, null, svars, null, vals);
         }
+        
         boolean r = prim.call(env, svars, vals);
-
-        return DebugUtil.traceReturn(r, env.current(), this);
+        if (r)
+        	return getHook().pop().onSuccess(env);
+        else
+        	return getHook().pop().onFailure();
     }
 
     public void prettyPrint(StupidFormatter sf) {

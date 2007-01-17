@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import org.spoofax.DebugUtil;
 import org.spoofax.NotImplementedException;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Pair;
@@ -33,7 +34,7 @@ public class Match extends Strategy {
         this.pattern = pattern;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public IConstruct eval(IContext env) throws InterpreterException {
         
         if (DebugUtil.isDebugging()) {
             debug("Match.eval() - ", " !", env.current(), " ; ?", pattern);
@@ -44,19 +45,14 @@ public class Match extends Strategy {
         Results r = match(env, current, pattern);
 
         if (r == null) {
-            if (DebugUtil.isDebugging()) {
-                return DebugUtil.traceReturn(false, env.current(), this);
-            }
-            return false;
+            return getHook().pop().onFailure();
         }
         else {
             boolean b = env.bindVars(r);
-
-            if (DebugUtil.isDebugging()) {
-                debug("Bindings: " + r); //todo: unclear
-                return DebugUtil.traceReturn(b, env.current(), this);
-            }
-            return b;
+            if (b)
+            	return getHook().pop().onSuccess(env);
+            else
+            	return getHook().pop().onFailure();
         }
     }
 
@@ -155,8 +151,34 @@ public class Match extends Strategy {
 //        throw new NotImplementedException();
 //    }
 
-    private Results matchApplTuple(IContext env, IStrategoAppl t, IStrategoAppl p) {
-        throw new NotImplementedException();
+    private Results matchApplTuple(IContext env, IStrategoAppl t, IStrategoAppl p) throws InterpreterException {
+        String c = Tools.javaStringAt(p, 0);
+
+        // Check that the pattern p is really against a tuple 
+        if(!c.equals(""))
+            return null;
+
+        IStrategoList ctorArgs = Tools.listAt(p, 1);
+        
+        IStrategoTerm[] args = t.getArguments();
+        
+        // Check that arity of pattern equals arity of tuple
+        if(ctorArgs.size() != args.length)
+            return null;
+        
+        // Match subterms of tuple against subpatterns of pattern 
+        Results r = emptyList();
+        for (int i = 0; i < ctorArgs.size(); i++) {
+            Results m = match(env, args[i],
+                              (IStrategoAppl) ctorArgs
+                              .getSubterm(i));
+            if (m != null)
+                r.addAll(m);
+            else
+                return null;
+        }
+
+        return r;
     }
 
     private Results emptyList() {

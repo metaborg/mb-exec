@@ -12,6 +12,7 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
@@ -32,26 +33,18 @@ public class Build extends Strategy {
         term = t;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public IConstruct eval(IContext env) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             debug("Build.eval() - ", env.current(), " -> !", term);
         }
 
         IStrategoTerm t = buildTerm(env, term);
         if (t == null) {
-            if(DebugUtil.isDebugging()) {
-                return DebugUtil.traceReturn(false, env.current(), this);
-            } else {
-                return false;
-            }
+        	return getHook().pop().onFailure();
         }
         env.setCurrent(t);
 
-        if(DebugUtil.isDebugging()) {
-            return DebugUtil.traceReturn(true, env.current(), this);
-        } else {
-            return true;
-        }
+        return getHook().pop().onSuccess(env);
     }
 
     public IStrategoTerm buildTerm(IContext env, IStrategoAppl t) throws InterpreterException {
@@ -286,6 +279,11 @@ public class Build extends Strategy {
         sf.first("Build(" + term.toString() + ")");
     }
 
+    @Override
+    public String toString() {
+    	return "Build(" + term.toString() + ")";
+    }
+    
     @Override
     protected String getTraceName() {
         return super.getTraceName() + "(" + term + ")";

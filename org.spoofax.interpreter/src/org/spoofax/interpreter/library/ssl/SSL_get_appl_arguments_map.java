@@ -9,7 +9,7 @@ package org.spoofax.interpreter.library.ssl;
 
 import java.util.List;
 
-import org.spoofax.interpreter.IConstruct;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
@@ -24,19 +24,19 @@ public class SSL_get_appl_arguments_map extends AbstractPrimitive {
     }
     
     @Override
-    public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, List<Strategy> svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
         if(!Tools.isTermAppl(tvars[0]))
             return false;
         
         IStrategoAppl a = (IStrategoAppl) tvars[0];
-        IConstruct c = svars.get(0);
+        Strategy c = svars.get(0);
         final int arity = a.getConstructor().getArity();
         IStrategoTerm[] result = new IStrategoTerm[arity];
         for(int i = 0; i < arity; i++) {
             env.setCurrent(a.getSubterm(i));
-            if(!c.eval(env))
+            if(!c.evaluate(env))
                 return false;
             result[i] = env.current();
         }

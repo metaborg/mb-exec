@@ -9,6 +9,7 @@ package org.spoofax.interpreter.stratego;
 
 import java.util.List;
 
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.VarScope;
@@ -23,7 +24,7 @@ public class Scope extends Strategy {
         this.body = body;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public IConstruct eval(final IContext env) throws InterpreterException {
 
 //        if (Interpreter.isDebugging()) {
 //            debug("Scope.eval() - ", env.current());
@@ -34,12 +35,21 @@ public class Scope extends Strategy {
         newScope.addVars(vars);
 
         env.setVarScope(newScope);
-
-        boolean r = body.eval(env);
-
-        env.popVarScope();
-
-        return r;
+        final Strategy th = this;
+        body.getHook().push(new Hook(){
+			@Override
+			IConstruct onFailure() throws InterpreterException {
+				env.popVarScope();
+				return th.getHook().pop().onFailure();
+			}
+			@Override
+			IConstruct onSuccess(IContext env) throws InterpreterException {
+		        env.popVarScope();
+				return th.getHook().pop().onSuccess(env);
+			}
+        	
+        });
+        return body;
     }
 
     public void prettyPrint(StupidFormatter sf) {

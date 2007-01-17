@@ -9,7 +9,7 @@ package org.spoofax.interpreter.library.ssl;
 
 import java.util.List;
 
-import org.spoofax.interpreter.IConstruct;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
@@ -24,7 +24,7 @@ public class SSL_implode_string extends AbstractPrimitive {
         super("SSL_implode_string", 0, 1);
     }
 
-    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         IStrategoTerm t = targs[0];
         if(!Tools.isTermList(t))

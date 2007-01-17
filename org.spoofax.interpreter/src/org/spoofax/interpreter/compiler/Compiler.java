@@ -3,9 +3,11 @@ package org.spoofax.interpreter.compiler;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.InterpreterExit;
 import org.spoofax.interpreter.library.jsglr.JSGLRLibrary;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -19,15 +21,19 @@ public class Compiler {
 	{
 		compiler = new Interpreter(factory);
 		compiler.addOperatorRegistry("SSL", new SSLLibrary());
+		long factoryTime = System.nanoTime();
 		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary(factory));
+		System.out.println("Factory time: " + (System.nanoTime() - factoryTime)/1000/1000 + "ms");
+		long loadTime = System.nanoTime();
 		compiler.load("data/libstratego-lib.ctree");
 		compiler.load("data/libsglr.ctree");
 		compiler.load("data/libstrc.ctree");
+		System.out.println("Load time: " + (System.nanoTime() - loadTime)/1000/1000 + "ms");
 	}
 	
 	IStrategoTerm compile(String file, String[] path) throws InterpreterException
 	{
-		Collection<IStrategoTerm> terms = new LinkedList<IStrategoTerm>();
+		List<IStrategoTerm> terms = new LinkedList<IStrategoTerm>();
 		for (String p : path) {
 			terms.add(compiler.getFactory().makeString(p));
 		}
@@ -39,7 +45,16 @@ public class Compiler {
 		compiler.setCurrent(
 		  compiler.getFactory().makeTuple(tuple)
 		);
-		if (!compiler.invoke("main_0_0"))
+		long execTime = System.nanoTime();
+		boolean r = false;
+		try {
+			r = compiler.invoke("main_0_0");
+		}
+		catch (InterpreterExit e) {
+			System.out.println("Return value: " + e.getValue());
+		}
+		System.out.println("Exec time: " + (System.nanoTime() - execTime)/1000/1000 + "ms");
+		if (!r)
 			return null;
 		return compiler.current();
 	}

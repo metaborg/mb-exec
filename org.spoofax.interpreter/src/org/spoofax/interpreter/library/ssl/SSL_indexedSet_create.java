@@ -8,21 +8,27 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Map.Entry;
 
-import org.spoofax.interpreter.IConstruct;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class SSL_indexedSet_create extends AbstractPrimitive {
 
@@ -64,7 +70,7 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
             map.clear();
         }
 
-        public Collection<IStrategoTerm> keySet() {
+        public List<IStrategoTerm> keySet() {
             // FIXME this could easily be more efficient
             class X implements Comparable<X> {
                 IStrategoTerm t;
@@ -77,15 +83,15 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
                     return i.compareTo(o.i);
                 }
             }
-            List<X> xs = new ArrayList<X>();
+            SortedSet<X> xs = new TreeSet<X>();
             for(Entry<IStrategoTerm,Integer> e : map.entrySet()) { 
                 xs.add(new X(e.getKey(), e.getValue()));
             }
-            Collections.sort(xs);
-            List<IStrategoTerm> r = new ArrayList<IStrategoTerm>();
-            for(X x : xs)
-                r.add(x.t);
-            return r;
+            List<IStrategoTerm> l = new ArrayList<IStrategoTerm>(xs.size());
+            for (X x : xs) {
+            	l.add(x.t);
+            }
+            return l;
         }
 
         public boolean containsKey(IStrategoTerm t) {
@@ -105,7 +111,7 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
         super("SSL_indexedSet_create", 0, 2);
     }
     
-    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
+    public boolean call(IContext env, List<Strategy> sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         if(!(Tools.isTermInt(targs[0])))
             return false;
