@@ -38,6 +38,10 @@ public class TestScoping extends AbstractLanguageTest {
         interpTest("unbinding_in_lchoice", "2", "3");
     }
 
+    public void testUnbinding3() throws IOException, InterpreterException {
+        interpTestFail("unbinding_3", "()");
+    }
+
     public void testLet1() throws IOException, InterpreterException {
         interpTest("let_test_1", "1", "2");
     }
