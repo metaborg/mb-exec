@@ -52,9 +52,19 @@ public class Some extends Strategy {
     }
 
 	private boolean evalSome(IContext env, IStrategoList list) throws InterpreterException {
-        IStrategoTerm[] l = new IStrategoTerm[list.size()];
-        boolean success = false;
+        
+	    IStrategoTerm[] kids = list.getAllSubterms();
+        
+	    if(updateChildren(env, kids)) {
+	        IStrategoList t2 = env.getFactory().makeList(l);            
+	        env.setCurrent(t2);
+            return true;
+        }
 
+	    return false;
+    }
+    
+private boolean updateChildren(IContext env, IStrategoTerm[] kids) throws InterpreterException {        
         for(int i = 0, sz = list.getSubtermCount(); i < sz; i++) {
         	l[i] = list.get(i);
         	env.setCurrent(Tools.termAt(list, i));
@@ -64,9 +74,6 @@ public class Some extends Strategy {
             }
         }
 
-    	IStrategoList t2 = env.getFactory().makeList(l);            
-        env.setCurrent(t2);
-        return success;
 	}
 
 	private boolean evalSome(IContext env, IStrategoTuple list) throws InterpreterException {
