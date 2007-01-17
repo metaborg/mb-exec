@@ -34,6 +34,14 @@ public class TestTraversals extends AbstractLanguageTest {
         interpTestFail("all_3", "(1,2,3)");
     }
 
+    public void testAll4() throws IOException, InterpreterException {
+        interpTest("all_4", "()", "()");
+    }
+
+    public void testAll4b() throws IOException, InterpreterException {
+        interpTestFail("all_4", "(1,2,3)");
+    }
+
     public void testSome1() throws IOException, InterpreterException {
         interpTest("some_1", "(1,2,3)", "(1,1,1)");
     }

@@ -52,56 +52,55 @@ public class Some extends Strategy {
     }
 
 	private boolean evalSome(IContext env, IStrategoList list) throws InterpreterException {
-        IStrategoTerm[] l = new IStrategoTerm[list.size()];
-        boolean success = false;
+        
+	    IStrategoTerm[] kids = list.getAllSubterms();
+        
+	    if(updateChildren(env, kids)) {
+	        IStrategoList t2 = env.getFactory().makeList(kids);            
+	        env.setCurrent(t2);
+            return true;
+        }
 
-        for(int i = 0, sz = list.getSubtermCount(); i < sz; i++) {
-        	l[i] = list.get(i);
-        	env.setCurrent(Tools.termAt(list, i));
+	    return false;
+    }
+
+    private boolean evalSome(IContext env, IStrategoAppl appl) throws InterpreterException {
+        
+        IStrategoTerm[] kids = appl.getAllSubterms();
+        
+        if(updateChildren(env, kids)) {
+            IStrategoConstructor ctor = appl.getConstructor();
+            env.setCurrent(env.getFactory().makeAppl(ctor, kids));            
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean evalSome(IContext env, IStrategoTuple tuple) throws InterpreterException {
+        
+        IStrategoTerm[] kids = tuple.getAllSubterms();
+        
+        if(updateChildren(env, kids)) {
+            env.setCurrent(env.getFactory().makeTuple(kids));            
+            return true;
+        }
+
+        return false;
+    }
+
+	private boolean updateChildren(IContext env, IStrategoTerm[] kids) throws InterpreterException {
+        final int sz = kids.length;
+        boolean success = false;
+        
+        for(int i = 0; i < sz; i++) {
+        	env.setCurrent(kids[i]);
             if(CallT.callHelper(body, env)) {
-            	l[i] = env.current();
+            	kids[i] = env.current();
             	success = true;
             }
         }
 
-    	IStrategoList t2 = env.getFactory().makeList(l);            
-        env.setCurrent(t2);
-        return success;
-	}
-
-	private boolean evalSome(IContext env, IStrategoTuple list) throws InterpreterException {
-        IStrategoTerm[] l = new IStrategoTerm[list.size()];
-        boolean success = false;
-
-        for(int i = 0, sz = list.getSubtermCount(); i < sz; i++) {
-        	l[i] = list.get(i);
-        	env.setCurrent(Tools.termAt(list, i));
-            if(CallT.callHelper(body,env)) {
-            	l[i] = env.current();
-            	success = true;
-            }
-        }
-
-    	IStrategoList t2 = env.getFactory().makeList(l);            
-        env.setCurrent(t2);
-        return success;
-	}
-
-	private boolean evalSome(IContext env, IStrategoAppl t) throws InterpreterException {
-		IStrategoConstructor ctor = t.getConstructor();
-		IStrategoTerm[] list = t.getArguments();
-        boolean success = false;
-
-        for(int i = 0, sz = list.length; i < sz; i++) {
-        	env.setCurrent(list[i]);
-            if(CallT.callHelper(body,env)) {
-            	list[i] = env.current();
-            	success = true;
-            }
-        }
-
-    	IStrategoAppl t2 = env.getFactory().makeAppl(ctor, list);            
-        env.setCurrent(t2);
         return success;
 	}
 
