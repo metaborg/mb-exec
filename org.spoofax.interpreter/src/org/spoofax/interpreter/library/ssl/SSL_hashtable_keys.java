@@ -33,13 +33,8 @@ public class SSL_hashtable_keys extends AbstractPrimitive {
         Hashtable ath = or.getHashtable(Tools.javaInt(targs[0]));
         if(ath == null)
             return false;
-        long launched = System.nanoTime();
         Set<IStrategoTerm> s = ath.keySet();
-        long middle = System.nanoTime();
         env.setCurrent(env.getFactory().makeList(s.toArray(new IStrategoTerm[0])));
-        long finished = System.nanoTime();
-        System.err.println("keySet(): " + ((middle - launched)/1000000.));
-        System.err.println("makeList(): " + ((finished - middle)/1000000.));
         return true;
     }
 }

@@ -1,7 +1,6 @@
 package org.spoofax.interpreter.compiler;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 

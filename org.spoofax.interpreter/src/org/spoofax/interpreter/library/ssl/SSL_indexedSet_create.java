@@ -8,15 +8,11 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Map.Entry;
@@ -28,7 +24,6 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class SSL_indexedSet_create extends AbstractPrimitive {
 
