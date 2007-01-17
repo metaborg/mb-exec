@@ -206,14 +206,13 @@ public class Build extends Strategy {
     private IStrategoTerm buildOp(String ctr, IContext env, IStrategoAppl t, ITermFactory factory) 
     throws  InterpreterException {
         
-        IStrategoList children = (IStrategoList) t.getSubterm(1);
+        IStrategoTerm[] children = t.getSubterm(1).getAllSubterms();
 
-        IStrategoConstructor ctor = factory.makeConstructor(ctr, children.size(), false);
+        IStrategoConstructor ctor = factory.makeConstructor(ctr, children.length, false);
         IStrategoList kids = factory.makeList();
 
-        // FIXME use IStrategoTerm[]
-        for (int i = children.size() -1 ; i >= 0; i--) {
-            IStrategoTerm kid = buildTerm(env, (IStrategoAppl) children.getSubterm(i));
+        for (int i = children.length -1 ; i >= 0; i--) {
+            IStrategoTerm kid = buildTerm(env, (IStrategoAppl) children[i]);
             if (kid == null) {
                 return null;
             }
@@ -265,11 +264,11 @@ public class Build extends Strategy {
 
     private IStrategoTerm buildTuple(IContext env, IStrategoAppl t) throws InterpreterException {
         
-        IStrategoList children = (IStrategoList) t.getSubterm(1);
-        IStrategoTerm[] kids = new IStrategoTerm[children.size()];
+        IStrategoTerm[] children = t.getSubterm(1).getAllSubterms();
+        IStrategoTerm[] kids = new IStrategoTerm[children.length];
 
-        for (int i = 0; i < children.size(); i++) {
-            IStrategoTerm kid = kids[i] = buildTerm(env, (IStrategoAppl) children.getSubterm(i));
+        for (int i = 0; i < children.length; i++) {
+            IStrategoTerm kid = kids[i] = buildTerm(env, (IStrategoAppl) children[i]);
             if (kid == null) {
                 return null;
             }

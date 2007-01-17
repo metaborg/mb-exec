@@ -18,11 +18,11 @@ import org.spoofax.interpreter.Pair;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoRef;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 
 public class Match extends Strategy {
@@ -121,11 +121,11 @@ public class Match extends Strategy {
             return matchApplTuple(env, t, p);
         } 
 
-        IStrategoList ctorArgs = Tools.listAt(p, 1);
+        IStrategoTerm[] ctorArgs = Tools.listAt(p, 1).getAllSubterms();
 
         // Check if arity of the pattern matches that
         // of the term
-        if (ctorArgs.getSubtermCount() != t.getSubtermCount())
+        if (ctorArgs.length != t.getSubtermCount())
             return null;
 
         // Check if the constructor name in the pattern
@@ -135,10 +135,11 @@ public class Match extends Strategy {
 
         // Recursively match all arguments to term
         Results r = emptyList();
-        for (int i = 0; i < ctorArgs.size(); i++) {
-            Results m = match(env, t.getSubterm(i),
-                              (IStrategoAppl) ctorArgs
-                              .getSubterm(i));
+        IStrategoTerm[] applArgs = t.getArguments();
+        
+        for (int i = 0; i < ctorArgs.length; i++) {
+            Results m = match(env, applArgs[i],
+                              (IStrategoAppl) ctorArgs[i]);
             if (m != null)
                 r.addAll(m);
             else
@@ -164,20 +165,19 @@ public class Match extends Strategy {
         if(!c.equals(""))
             return null;
 
-        IStrategoList ctorArgs = Tools.listAt(p, 1);
+        IStrategoTerm[] ctorArgs = Tools.listAt(p, 1).getAllSubterms();
         
         IStrategoTerm[] args = t.getArguments();
         
         // Check that arity of pattern equals arity of tuple
-        if(ctorArgs.size() != args.length)
+        if(ctorArgs.length != args.length)
             return null;
         
         // Match subterms of tuple against subpatterns of pattern 
         Results r = emptyList();
-        for (int i = 0; i < ctorArgs.size(); i++) {
+        for (int i = 0; i < ctorArgs.length; i++) {
             Results m = match(env, args[i],
-                              (IStrategoAppl) ctorArgs
-                              .getSubterm(i));
+                              (IStrategoAppl) ctorArgs[i]);
             if (m != null)
                 r.addAll(m);
             else
@@ -359,10 +359,7 @@ public class Match extends Strategy {
             return env.getFactory().makeList();
         case IStrategoTerm.TUPLE:
             IStrategoTuple tup = (IStrategoTuple) t;
-            IStrategoTerm[] args = new IStrategoTerm[tup.getSubtermCount()];
-            for(int i = 0; i < args.length; i++) 
-                args[i] = tup.get(i);
-            return env.getFactory().makeList(args); 
+            return env.getFactory().makeList(tup.getAllSubterms()); 
         }
             
         throw new InterpreterException("Unknown term '" + t + "'");
@@ -460,18 +457,19 @@ public class Match extends Strategy {
         if(!c.equals(""))
             return null;
 
-        IStrategoList ctorArgs = Tools.listAt(p, 1);
-        
+        IStrategoTerm[] ctorArgs = Tools.listAt(p, 1).getAllSubterms();
+
         // Check that arity of pattern equals arity of tuple
-        if(ctorArgs.size() != t.size())
+        if(ctorArgs.length != t.size())
             return null;
+        
+        IStrategoTerm[] tupleArgs = t.getAllSubterms();
         
         // Match subterms of tuple against subpatterns of pattern 
         Results r = emptyList();
-        for (int i = 0; i < ctorArgs.size(); i++) {
-            Results m = match(env, t.get(i),
-                              (IStrategoAppl) ctorArgs
-                              .getSubterm(i));
+        for (int i = 0; i < ctorArgs.length; i++) {
+            Results m = match(env, tupleArgs[i],
+                              (IStrategoAppl) ctorArgs[i]);
             if (m != null)
                 r.addAll(m);
             else
@@ -554,7 +552,7 @@ public class Match extends Strategy {
             IStrategoList tail = t.tail();
             
             IStrategoList pattern = Tools.listAt(p, 1);
-            
+
             Results r = match(env, head, (IStrategoAppl)pattern.get(0));
             if(r == null)
                 return null;

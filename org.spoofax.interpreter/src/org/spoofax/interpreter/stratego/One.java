@@ -11,9 +11,7 @@ import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoAppl;
-import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
@@ -52,15 +50,22 @@ public class One extends Strategy {
     }
 
     private boolean evalOne(IContext env, IStrategoTuple tuple) throws InterpreterException {
-        for (int i = 0, sz = tuple.getSubtermCount(); i < sz; i++) {
-            env.setCurrent(Tools.termAt(tuple, i));
+        IStrategoTerm[] kids = tuple.getAllSubterms();
+        
+        if(!updateChildren(env, kids))
+            return false;
+        
+        env.setCurrent(env.getFactory().makeTuple(kids));
+        return true;
+    }
+
+    private boolean updateChildren(IContext env, IStrategoTerm[] kids) throws InterpreterException {
+        final int sz = kids.length;
+
+        for(int i = 0; i < sz; i++) {
+            env.setCurrent(kids[i]);
             if (CallT.callHelper(body, env)) {
-                IStrategoTerm[] l = new IStrategoTerm[tuple.size()];
-                for (int j = 0; j < tuple.size(); j++)
-                    l[j] = tuple.get(j);
-                l[i] = env.current();
-                IStrategoTuple t2 = env.getFactory().makeTuple(l);
-                env.setCurrent(t2);
+                kids[i] = env.current();
                 return true;
             }
         }
@@ -68,43 +73,23 @@ public class One extends Strategy {
     }
 
     private boolean evalOne(IContext env, IStrategoList list) throws InterpreterException {
-        for (int i = 0, sz = list.getSubtermCount(); i < sz; i++) {
-            env.setCurrent(Tools.termAt(list, i));
-            if (CallT.callHelper(body, env)) {
-                IStrategoTerm[] l = new IStrategoTerm[list.size()];
-                for (int j = 0; j < list.size(); j++)
-                    l[j] = list.get(j);
-                l[i] = env.current();
-                IStrategoList t2 = env.getFactory().makeList(l);
-                env.setCurrent(t2);
-                return true;
-            }
-        }
-
-        env.setCurrent(list);
-
-        return false;
+        IStrategoTerm[] kids = list.getAllSubterms();
+        
+        if(!updateChildren(env, kids))
+            return false;
+        
+        env.setCurrent(env.getFactory().makeList(kids));
+        return true;
     }
 
-    private boolean evalOne(IContext env, IStrategoAppl t) throws InterpreterException {
-
-        IStrategoConstructor ctor = t.getConstructor();
-        IStrategoTerm[] kids = t.getAllSubterms();
-        final int sz = kids.length;
-
-        for (int i = 0; i < sz; i++) {
-            env.setCurrent(kids[i]);
-            if (CallT.callHelper(body, env)) {
-                kids[i] = env.current();
-                IStrategoAppl t2 = env.getFactory().makeAppl(ctor, kids);
-                env.setCurrent(t2);
-                return true;
-            }
-        }
-
-        env.setCurrent(t);
-
-        return false;
+    private boolean evalOne(IContext env, IStrategoAppl appl) throws InterpreterException {
+        IStrategoTerm[] kids = appl.getAllSubterms();
+        
+        if(!updateChildren(env, kids))
+            return false;
+        
+        env.setCurrent(env.getFactory().makeAppl(appl.getConstructor(), kids));
+        return true;
     }
 
     public void prettyPrint(StupidFormatter sf) {

@@ -48,14 +48,13 @@ public class Tools {
             return implode(factory, applAt(t, 0));
         } else if (ctor.equals(sign.getOp())) {
             String ctorName = javaStringAt(t, 0);
-            IStrategoList children = (IStrategoList) t.getSubterm(1);
+            IStrategoTerm[] children = t.getSubterm(1).getAllSubterms();
 
-            IStrategoConstructor ctr = factory.makeConstructor(ctorName, children.size(), false);
+            IStrategoConstructor ctr = factory.makeConstructor(ctorName, children.length, false);
             IStrategoList kids = factory.makeList();
 
-            for (int i = children.size() - 1; i >= 0; i--) {
-                kids = kids.prepend(implode(factory, (IStrategoAppl) children
-                        .getSubterm(i)));
+            for (int i = children.length - 1; i >= 0; i--) {
+                kids = kids.prepend(implode(factory, (IStrategoAppl) children[i]));
             }
             return factory.makeAppl(ctr, kids);
         } else if (ctor.equals(sign.getInt())) {

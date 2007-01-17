@@ -35,8 +35,9 @@ public class SSL_get_appl_arguments_map extends AbstractPrimitive {
         IConstruct c = svars.get(0);
         final int arity = a.getConstructor().getArity();
         IStrategoTerm[] result = new IStrategoTerm[arity];
+        IStrategoTerm[] applArgs = a.getAllSubterms();
         for(int i = 0; i < arity; i++) {
-            env.setCurrent(a.getSubterm(i));
+            env.setCurrent(applArgs[i]);
             if(!CallT.callHelper(c, env))
                 return false;
             result[i] = env.current();
