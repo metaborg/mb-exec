@@ -92,4 +92,12 @@ public class WrappedATermAppl extends WrappedATerm implements IStrategoAppl {
     public int hashCode() {
         return appl.hashCode();
     }
+
+	public void setSubterm(int i, IStrategoTerm term) {
+		appl = (ATermAppl)appl.setArgument(((WrappedATerm)term).getATerm(), i);
+	}
+
+	public IStrategoTerm[] getSubterms() {
+		return getArguments();
+	}
 }

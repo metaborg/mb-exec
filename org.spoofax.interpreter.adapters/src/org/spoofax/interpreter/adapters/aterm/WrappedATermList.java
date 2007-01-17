@@ -104,4 +104,18 @@ public class WrappedATermList extends WrappedATerm implements IStrategoList {
     public boolean isEmpty() {
         return list.isEmpty();
     }
+
+    public void setSubterm(int i, IStrategoTerm term) {
+		list = (ATermList)list.setChildAt(i, ((WrappedATerm)term).getATerm());
+	}
+
+	public IStrategoTerm[] getSubterms() {
+		IStrategoTerm[] ret = new IStrategoTerm[getSubtermCount()];
+		ATermList cur = list;
+		for (int i = 0; cur.getFirst() != null; i++) {
+			ret[i] = parent.wrapTerm(cur.getFirst());
+			cur = cur.getNext();
+		}
+		return ret;
+	}
 }

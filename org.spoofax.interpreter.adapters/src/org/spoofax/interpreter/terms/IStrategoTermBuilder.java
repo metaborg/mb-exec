@@ -8,6 +8,7 @@
 package org.spoofax.interpreter.terms;
 
 import java.util.Collection;
+import java.util.List;
 
 
 public interface IStrategoTermBuilder {
@@ -23,7 +24,7 @@ public interface IStrategoTermBuilder {
     public IStrategoTuple makeTuple(IStrategoTerm... terms);
     public IStrategoString makeString(String s);
     public IStrategoList makeList(IStrategoTerm... terms);
-    public IStrategoList makeList(Collection<IStrategoTerm> terms);
+    public IStrategoList makeList(List<IStrategoTerm> terms);
 
     public boolean hasConstructor(String s, int i);
     

@@ -73,4 +73,12 @@ class WrappedATermString extends WrappedATerm implements IStrategoString {
     public int hashCode() {
         return value.hashCode();
     }
+
+
+	public void setSubterm(int i, IStrategoTerm term) {	
+	}
+
+	public IStrategoTerm[] getSubterms() {
+		return new IStrategoTerm[0];
+	}
 }

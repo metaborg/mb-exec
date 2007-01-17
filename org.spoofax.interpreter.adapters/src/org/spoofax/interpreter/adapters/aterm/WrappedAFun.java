@@ -104,4 +104,11 @@ public class WrappedAFun extends WrappedATerm implements IStrategoConstructor {
         return afun.hashCode();
     }
 
+	public void setSubterm(int i, IStrategoTerm term) {
+	}
+
+	public IStrategoTerm[] getSubterms() {
+		return new IStrategoTerm[0];
+	}
+
 }

@@ -10,7 +10,7 @@ package org.spoofax.interpreter.adapters.aterm;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collection;
+import java.util.List;
 import java.util.WeakHashMap;
 
 import org.spoofax.NotImplementedException;
@@ -116,15 +116,10 @@ public class WrappedATermFactory implements ITermFactory {
 
     public IStrategoList makeList(IStrategoTerm... terms) {
         ATermList l = realFactory.makeList();
-        
-        for(IStrategoTerm t : terms) {
-            if(t instanceof WrappedATerm) {
-                l = l.append(((WrappedATerm)t).getATerm());
-            } else {
-                throw new WrapperException();
-            }
-        }
 
+        for (int i = terms.length - 1; i >= 0; i--)
+        	l = l.insert(((WrappedATerm)terms[i]).getATerm());
+        
         IStrategoList r = (IStrategoList) lookupTerm(l);
         if(r != null)
             return r;
@@ -136,18 +131,16 @@ public class WrappedATermFactory implements ITermFactory {
         return termCache.get(l);
     }
 
-    public IStrategoList makeList(Collection<IStrategoTerm> terms) {
-        ATermList l = realFactory.makeList();
-        
-        for(IStrategoTerm t : terms) {
-            if(t instanceof WrappedATerm) {
-                l = l.append(((WrappedATerm)t).getATerm());
-            } else {
-                throw new WrapperException();
-            }
-        }
-        
+    public IStrategoList makeList(List<IStrategoTerm> terms) {
+    	ATermList l = realFactory.makeList();
+   
+    	IStrategoTerm[] ll = terms.toArray(new IStrategoTerm[0]);
+    	for (int i = ll.length - 1; i >= 0; i--) {
+    		l = l.insert(((WrappedATerm)ll[i]).getATerm());
+    	}
+    	
         IStrategoList r = (IStrategoList) lookupTerm(l);
+        
         if(r != null)
             return r;
 

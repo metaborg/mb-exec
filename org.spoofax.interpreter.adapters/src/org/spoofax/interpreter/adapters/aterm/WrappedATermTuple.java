@@ -84,4 +84,16 @@ public class WrappedATermTuple extends WrappedATerm implements IStrategoTuple {
     public int hashCode() {
         return tuple.hashCode();
     }
+
+	public void setSubterm(int i, IStrategoTerm term) {
+		tuple = (ATermAppl)tuple.setArgument(((WrappedATerm)term).getATerm(), i);
+	}
+	
+	public IStrategoTerm[] getSubterms() {
+		ATerm[] args = tuple.getArgumentArray();
+		IStrategoTerm[] ret = new IStrategoTerm[args.length];
+		for (int i = 0; i < args.length; i++)
+			ret[i] = parent.wrapTerm(args[i]);
+		return ret;
+	}
 }

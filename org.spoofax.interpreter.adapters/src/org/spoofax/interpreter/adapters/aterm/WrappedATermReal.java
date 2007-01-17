@@ -72,4 +72,11 @@ public class WrappedATermReal extends WrappedATerm implements IStrategoReal {
     public int hashCode() {
         return real.hashCode();
     }
+
+	public void setSubterm(int i, IStrategoTerm term) {	
+	}
+
+	public IStrategoTerm[] getSubterms() {
+		return new IStrategoTerm[0];
+	}
 }
