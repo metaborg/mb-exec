@@ -57,6 +57,10 @@ public class WrappedAFun extends WrappedATerm implements IStrategoConstructor {
         return null;
     }
 
+    public IStrategoTerm[] getAllSubterms() {
+        return null;
+    }
+    
     public int getSubtermCount() {
         return 0;
     }

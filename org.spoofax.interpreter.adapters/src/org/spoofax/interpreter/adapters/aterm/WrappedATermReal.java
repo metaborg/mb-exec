@@ -29,6 +29,10 @@ public class WrappedATermReal extends WrappedATerm implements IStrategoReal {
     public IStrategoTerm getSubterm(int index) {
         return null;
     }
+    
+    public IStrategoTerm[] getAllSubterms() {
+        return null;
+    }
 
     public int getSubtermCount() {
         return 0;

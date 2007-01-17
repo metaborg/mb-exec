@@ -21,6 +21,7 @@ public interface IStrategoTerm {
 
     public int getSubtermCount();
     public IStrategoTerm getSubterm(int index);
+    public IStrategoTerm[] getAllSubterms();
     public int getTermType();
     
     public boolean match(IStrategoTerm second);

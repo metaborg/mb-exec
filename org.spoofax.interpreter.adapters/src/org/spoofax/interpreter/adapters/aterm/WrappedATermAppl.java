@@ -24,13 +24,7 @@ public class WrappedATermAppl extends WrappedATerm implements IStrategoAppl {
     }
     
     public IStrategoTerm[] getArguments() {
-        // FIXME memoize
-        IStrategoTerm[] ret = new IStrategoTerm[getSubtermCount()];
-        ATerm[] args = appl.getArgumentArray();
-        for(int i = 0; i < args.length; i++) {
-            ret[i] = parent.wrapTerm(args[i]);
-        }
-        return ret;
+        return getAllSubterms();
     }
 
     public IStrategoConstructor getConstructor() {
@@ -38,7 +32,16 @@ public class WrappedATermAppl extends WrappedATerm implements IStrategoAppl {
     }
 
     public IStrategoTerm getSubterm(int index) {
-        return parent.wrapTerm((ATerm)appl.getChildAt(index));
+        return parent.wrapTerm(appl.getArgument(index));
+    }
+    
+    public IStrategoTerm[] getAllSubterms() {
+        IStrategoTerm[] r = new IStrategoTerm[getSubtermCount()];
+        ATerm[] as = appl.getArgumentArray();
+        final int sz = as.length;
+        for(int i = 0; i < sz; i++) 
+            r[i] = parent.wrapTerm(as[i]);
+        return r;
     }
 
     public int getSubtermCount() {

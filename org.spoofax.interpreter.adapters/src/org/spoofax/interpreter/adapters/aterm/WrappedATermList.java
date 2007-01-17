@@ -40,7 +40,19 @@ public class WrappedATermList extends WrappedATerm implements IStrategoList {
     public IStrategoTerm getSubterm(int index) {
         return parent.wrapTerm((ATerm)list.getChildAt(index));
     }
-
+    
+    public IStrategoTerm[] getAllSubterms() {
+        final int sz = list.getLength();
+        IStrategoTerm[] r = new IStrategoTerm[sz];
+        int i = 0;
+        ATermList cur = list;
+        while(!cur.isEmpty()) {
+            r[i++] = parent.wrapTerm(cur.getFirst());
+            cur = cur.getNext();
+        }
+        return r;
+    }
+    
     public int getSubtermCount() {
         return list.getChildCount();
     }

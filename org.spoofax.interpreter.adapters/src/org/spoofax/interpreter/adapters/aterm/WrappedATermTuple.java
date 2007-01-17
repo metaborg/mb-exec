@@ -30,6 +30,15 @@ public class WrappedATermTuple extends WrappedATerm implements IStrategoTuple {
     public IStrategoTerm getSubterm(int index) {
         return parent.wrapTerm((ATerm)tuple.getChildAt(index));
     }
+    
+   public IStrategoTerm[] getAllSubterms() {
+       ATerm[] as = tuple.getArgumentArray();
+       final int sz = as.length;
+       IStrategoTerm[] r = new IStrategoTerm[sz];
+       for(int i = 0; i < sz; i++)
+           r[i] = parent.wrapTerm(as[i]);
+       return r;
+   }
 
     public int getSubtermCount() {
         return tuple.getChildCount();

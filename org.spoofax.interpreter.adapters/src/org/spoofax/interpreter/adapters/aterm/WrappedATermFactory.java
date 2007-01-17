@@ -117,9 +117,10 @@ public class WrappedATermFactory implements ITermFactory {
     public IStrategoList makeList(IStrategoTerm... terms) {
         ATermList l = realFactory.makeList();
         
-        for(IStrategoTerm t : terms) {
+        for(int i = terms.length - 1; i >= 0; i--) {
+            IStrategoTerm t = terms[i];
             if(t instanceof WrappedATerm) {
-                l = l.append(((WrappedATerm)t).getATerm());
+                l = l.insert(((WrappedATerm)t).getATerm());
             } else {
                 throw new WrapperException();
             }
@@ -137,21 +138,7 @@ public class WrappedATermFactory implements ITermFactory {
     }
 
     public IStrategoList makeList(Collection<IStrategoTerm> terms) {
-        ATermList l = realFactory.makeList();
-        
-        for(IStrategoTerm t : terms) {
-            if(t instanceof WrappedATerm) {
-                l = l.append(((WrappedATerm)t).getATerm());
-            } else {
-                throw new WrapperException();
-            }
-        }
-        
-        IStrategoList r = (IStrategoList) lookupTerm(l);
-        if(r != null)
-            return r;
-
-        return memoize(l, new WrappedATermList(this, l));
+        return makeList(terms.toArray(new IStrategoTerm[0]));
     }
 
     public IStrategoReal makeReal(double d) {
