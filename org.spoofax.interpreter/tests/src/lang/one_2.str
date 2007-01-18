@@ -5,7 +5,7 @@
  *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
-module one_1
+module one_2
 imports stratego-lib
 strategies
 
