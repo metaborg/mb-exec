@@ -172,6 +172,10 @@ public class Tools {
         return t.getConstructor().equals(env.getStrategoSignature().getConstType());
     }
 
+    public static String javaStringAt(IStrategoTerm t, int i) {
+        return Tools.stringAt(t, i).getValue();
+    }
+
     public static String javaStringAt(IStrategoAppl t, int i) {
         return Tools.stringAt(t, i).getValue();
     }

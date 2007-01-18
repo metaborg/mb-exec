@@ -59,8 +59,8 @@ public class StrategoCoreLoader {
             DebugUtil.debug("name  : ", name);
         }
 
-        List<SVar> realsvars = makeSVars(svars);
-        List<String> realtvars = makeVars(tvars);
+        SVar[] realsvars = makeSVars(svars);
+        String[] realtvars = makeVars(tvars);
 
         VarScope oldScope = context.getVarScope();
         VarScope newScope = new VarScope(oldScope);
@@ -131,11 +131,11 @@ public class StrategoCoreLoader {
 
     private Let parseLet(IStrategoAppl t) throws InterpreterException {
 
-        IStrategoList l = Tools.listAt(t, 0);
-        List<SDefT> defs = new ArrayList<SDefT>();
+        IStrategoTerm[] l = Tools.listAt(t, 0).getAllSubterms();
+        SDefT[] defs = new SDefT[l.length];
 
-        for (int i = 0; i < l.size(); i++) {
-            defs.add(parseSDefT(Tools.applAt(l, i)));
+        for (int i = 0; i < l.length; i++) {
+            defs[i] = parseSDefT((IStrategoAppl)l[i]);
         }
 
         Strategy body = parseStrategy(Tools.applAt(t, 1));
@@ -159,7 +159,7 @@ public class StrategoCoreLoader {
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" svars : ", svars);
         }
-        List<SVar> realsvars = makeSVars(svars);
+        SVar[] realsvars = makeSVars(svars);
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" svars : ", realsvars);
         }
@@ -167,7 +167,8 @@ public class StrategoCoreLoader {
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" tvars : ", tvars);
         }
-        List<String> realtvars = makeVars(tvars);
+        
+        String[] realtvars = makeVars(tvars);
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" tvars : ", realtvars);
         }
@@ -186,37 +187,39 @@ public class StrategoCoreLoader {
         return new SDefT(name, realsvars, realtvars, body, newScope);
     }
 
-    private List<String> makeVars(IStrategoList svars) {
+    private String[] makeVars(IStrategoList svars) {
 
-        List<String> realsvars = new ArrayList<String>(svars.size());
+        IStrategoTerm[] sv = svars.getAllSubterms();
+        String[] realsvars = new String[sv.length];
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" vars  : ", svars);
         }
 
         for (int j = 0; j < svars.size(); j++) {
-            realsvars.add(Tools.javaStringAt(Tools.applAt(svars, j), 0));
+            realsvars[j]  = Tools.javaStringAt(sv[j], 0);
         }
 
         return realsvars;
     }
 
-    private List<SVar> makeSVars(IStrategoList svars) {
+    private SVar[] makeSVars(IStrategoList svars) {
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug("makeSVars()");
         }
 
-        List<SVar> realsvars = new ArrayList<SVar>(svars.size());
+        IStrategoTerm[] sv = svars.getAllSubterms();
+        SVar[] realsvars = new SVar[sv.length];
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" vars  : ", svars);
         }
 
-        for (int j = 0; j < svars.size(); j++) {
-            IStrategoAppl t = Tools.applAt(svars, j);
+        for (int j = 0; j < sv.length; j++) {
+            IStrategoAppl t = (IStrategoAppl) sv[j];
             ArgType type = parseArgType(Tools.applAt(t, 1));
             String name = Tools.javaStringAt(t, 0);
-            realsvars.add(new SVar(name, type));
+            realsvars[j] = new SVar(name, type);
         }
 
         if (DebugUtil.isDebugging()) {
@@ -242,8 +245,8 @@ public class StrategoCoreLoader {
     private PrimT parsePrimT(IStrategoAppl t) throws InterpreterException {
 
         String name = Tools.javaStringAt(t, 0);
-        List<Strategy> svars = parseStrategyList(Tools.listAt(t, 1));
-        List<IStrategoTerm> tvars = parseTermList(Tools.listAt(t, 2));
+        Strategy[] svars = parseStrategyList(Tools.listAt(t, 1));
+        IStrategoTerm[] tvars = parseTermList(Tools.listAt(t, 2));
 
         return new PrimT(name, svars, tvars);
     }
@@ -260,9 +263,9 @@ public class StrategoCoreLoader {
         }
 
         IStrategoList svars = Tools.listAt(t, 1);
-        List<Strategy> realsvars = parseStrategyList(svars);
+        Strategy[] realsvars = parseStrategyList(svars);
 
-        List<IStrategoTerm> realtvars = parseTermList(Tools.listAt(t, 2));
+        IStrategoTerm[] realtvars = parseTermList(Tools.listAt(t, 2));
 
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" -svars : ", realsvars);
@@ -273,18 +276,23 @@ public class StrategoCoreLoader {
         return new CallT(name, realsvars, realtvars);
     }
 
-    private List<IStrategoTerm> parseTermList(IStrategoList tvars) {
-        List<IStrategoTerm> v = new ArrayList<IStrategoTerm>(tvars.size());
+    private IStrategoTerm[] parseTermList(IStrategoList tvars) {
+        return tvars.getAllSubterms();
+    }
+/*
+        IStrategoTerm[] tv = tvars.getAllSubterms()
+        List<IStrategoTerm> v = new IStrategoTerm[.size());
         for (int i = 0; i < tvars.size(); i++) {
             v.add(Tools.termAt(tvars, i));
         }
         return v;
     }
-
-    private List<Strategy> parseStrategyList(IStrategoList svars) throws InterpreterException {
-        List<Strategy> v = new ArrayList<Strategy>(svars.size());
-        for (int i = 0; i < svars.size(); i++) {
-            v.add(parseStrategy(Tools.applAt(svars, i)));
+*/
+    private Strategy[] parseStrategyList(IStrategoList svars) throws InterpreterException {
+        IStrategoTerm[] sv = svars.getAllSubterms();
+        Strategy[] v = new Strategy[sv.length];
+        for (int i = 0; i < sv.length; i++) {
+            v[i] = parseStrategy((IStrategoAppl)sv[i]);
         }
         return v;
     }

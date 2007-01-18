@@ -9,7 +9,6 @@ package org.spoofax.interpreter.library.ssl;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
@@ -25,7 +24,7 @@ public class SSL_write_term_to_stream_baf extends AbstractPrimitive {
         
     }
     @Override
-    public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
         // FIXME should we even bother with BAF? Now it's just text

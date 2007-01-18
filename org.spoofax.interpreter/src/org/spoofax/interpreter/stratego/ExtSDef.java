@@ -7,13 +7,11 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import java.util.List;
-
 import org.spoofax.interpreter.VarScope;
 
 public class ExtSDef extends SDefT {
 
-    public ExtSDef(String name, List<SVar> svars, List<String> tvars,
+    public ExtSDef(String name, SVar[] svars, String[] tvars,
             VarScope scope) {
         super(name, svars, tvars, null, scope);
     }

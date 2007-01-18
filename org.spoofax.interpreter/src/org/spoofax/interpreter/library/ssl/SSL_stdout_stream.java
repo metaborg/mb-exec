@@ -7,8 +7,6 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.util.List;
-
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
@@ -21,7 +19,7 @@ public class SSL_stdout_stream extends AbstractPrimitive {
         super("SSL_stdout_stream", 0, 0);
     }
     
-    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
+    public boolean call(IContext env, IConstruct[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         env.setCurrent(env.getFactory().makeInt(SSLLibrary.CONST_STDOUT));
         return true;

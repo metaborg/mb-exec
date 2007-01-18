@@ -7,8 +7,6 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.util.List;
-
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
@@ -23,7 +21,7 @@ public class SSL_fopen extends AbstractPrimitive {
     }
     
     @Override
-    public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
         if(!Tools.isTermString(tvars[0]))

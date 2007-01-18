@@ -7,9 +7,6 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
@@ -26,15 +23,15 @@ public class SSL_list_loop extends AbstractPrimitive {
     }
     
     @Override
-    public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
         if(!Tools.isTermList(tvars[0]))
             return false;
         
         IStrategoList l = (IStrategoList) tvars[0];
-        CallT s = (CallT) svars.get(0);
-        List<IConstruct> sv = new LinkedList<IConstruct>();
+        CallT s = (CallT) svars[0];
+        IConstruct[] sv = new IConstruct[0];
         IStrategoTerm[] tv = new IStrategoTerm[0];
         
         IStrategoTerm saved = env.current();

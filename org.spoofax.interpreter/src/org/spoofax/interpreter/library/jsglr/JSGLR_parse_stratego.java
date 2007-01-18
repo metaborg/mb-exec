@@ -3,7 +3,6 @@ package org.spoofax.interpreter.library.jsglr;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
@@ -38,7 +37,7 @@ public class JSGLR_parse_stratego extends AbstractPrimitive {
 	}
 	
 	@Override
-	public boolean call(IContext env, List<IConstruct> svars,
+	public boolean call(IContext env, IConstruct[] svars,
 			IStrategoTerm[] tvars) throws InterpreterException {
 		System.err.println("Reading: ");
 		if (!Tools.isTermString(tvars[0]))

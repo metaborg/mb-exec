@@ -7,8 +7,6 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.util.List;
-
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
@@ -24,7 +22,7 @@ public class SSL_printnl extends AbstractPrimitive {
         super("SSL_printnl", 0, 2);
     }
 
-    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
+    public boolean call(IContext env, IConstruct[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         // FIXME this is extremely heavy handed
 

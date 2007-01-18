@@ -7,8 +7,6 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.util.List;
-
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
@@ -21,7 +19,7 @@ public class SSL_table_hashtable extends AbstractPrimitive {
         super("SSL_table_hashtable", 0, 0);
     }
     
-    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
+    public boolean call(IContext env, IConstruct[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         int ref = SSLLibrary.instance(env).getTableTableRef();
         env.setCurrent(env.getFactory().makeInt(ref));

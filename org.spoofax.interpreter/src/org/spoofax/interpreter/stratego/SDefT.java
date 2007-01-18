@@ -17,9 +17,9 @@ import org.spoofax.interpreter.VarScope;
 public class SDefT implements IConstruct {
     protected String name;
 
-    protected List<SVar> strategyArgs;
+    protected SVar[] strategyArgs;
 
-    protected List<String> termArgs;
+    protected String[] termArgs;
 
     protected IConstruct body;
 
@@ -78,7 +78,7 @@ public class SDefT implements IConstruct {
         }
     }
 
-    public SDefT(String name, List<SVar> svars, List<String> tvars, IConstruct body, VarScope scope) {
+    public SDefT(String name, SVar[] svars, String[] tvars, IConstruct body, VarScope scope) {
         this.name = name;
         this.strategyArgs = svars;
         this.termArgs = tvars;
@@ -101,11 +101,11 @@ public class SDefT implements IConstruct {
         return body;
     }
 
-    public List<String> getTermParams() {
+    public String[] getTermParams() {
         return termArgs;
     }
 
-    public List<SVar> getStrategyParams() {
+    public SVar[] getStrategyParams() {
         return strategyArgs;
     }
 

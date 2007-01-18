@@ -7,9 +7,6 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
@@ -17,10 +14,10 @@ import org.spoofax.interpreter.VarScope;
 
 public class Let extends Strategy {
 
-    protected List<SDefT> defs;
+    protected SDefT[] defs;
     protected Strategy body;
 
-    public Let(List<SDefT> defs, Strategy body) {
+    public Let(SDefT[] defs, Strategy body) {
         assert defs != null;
         this.defs = defs;
         this.body = body;
@@ -34,24 +31,30 @@ public class Let extends Strategy {
 
         VarScope newScope = new VarScope(env.getVarScope());
 
-        List<SDefT> newDefs = new ArrayList<SDefT>(defs.size());
+        SDefT[] newDefs = new SDefT[defs.length];
 
-        for (SDefT def : defs) {
-            SDefT newDef = new SDefT(def.getName(),
+        for(int i = 0, sz = defs.length; i < sz; i++) {
+            SDefT def = defs[i];
+            newDefs[i] =  new SDefT(def.getName(),
               def.getStrategyParams(),
               def.getTermParams(),
               def.getBody(),
               newScope);
-            newDefs.add(newDef);
         }
 
         newScope.addSVars(newDefs);
-        env.setVarScope(newScope);
+        if(DebugUtil.debugging) {
+            DebugUtil.bump();
+        }
+        //env.setVarScope(newScope);
 
         env.getChoicePointStack().addNext(body, newScope);
         //boolean r = body.eval(env);
 
-        env.popVarScope();
+        if(DebugUtil.debugging) {
+            DebugUtil.unbump();
+        }
+        //env.popVarScope();
 
         return true;
         //return DebugUtil.traceReturn(r, env.current(), this);

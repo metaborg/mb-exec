@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.spoofax.DebugUtil;
-import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
@@ -114,31 +114,31 @@ public class Context implements IContext {
 
     public void setVarScope(VarScope newVarScope) {
         varScope = newVarScope;
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.bump(this);
-            debug("{ " + newVarScope.printVars());
-            DebugUtil.bump(this);
-        }
+//        if (DebugUtil.isDebugging()) {
+//            DebugUtil.bump();
+//            debug("{ " + newVarScope.printVars());
+//            DebugUtil.bump();
+//        }
     }
 
     public void popVarScope() {
-        VarScope current = varScope;
+        //VarScope current = varScope;
         varScope = varScope.getParent();
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.unbump(this);
-            debug("} " + current.printVars()); //todo: same vars?
-            DebugUtil.unbump(this);
-        }
+//        if (DebugUtil.isDebugging()) {
+//            DebugUtil.unbump();
+//            debug("} " + current.printVars()); //todo: same vars?
+//            DebugUtil.unbump();
+//        }
     }
 
     public void restoreVarScope(VarScope anotherVarScope) {
         VarScope current = varScope;
         varScope = anotherVarScope;
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.unbump(this);
-            debug("} " + current.printVars()); //todo: same vars?
-            DebugUtil.unbump(this);
-        }
+//        if (DebugUtil.isDebugging()) {
+//            DebugUtil.unbump();
+//            debug("} " + current.printVars()); //todo: same vars?
+//            DebugUtil.unbump();
+//        }
     }
 
     void addOpDecl(String name, OpDecl decl) {

@@ -8,7 +8,6 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.File;
-import java.util.List;
 
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
@@ -33,7 +32,7 @@ public class SSL_access extends AbstractPrimitive {
         super("SSL_access", 0, 2);
     }
 
-    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
+    public boolean call(IContext env, IConstruct[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         if (!Tools.isTermString(targs[0]))
             return false;

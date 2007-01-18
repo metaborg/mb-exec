@@ -8,7 +8,6 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
@@ -34,7 +33,7 @@ public class SSL_hashtable_create extends AbstractPrimitive {
         super("SSL_hashtable_create", 0, 2);
     }
 
-    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs)
+    public boolean call(IContext env, IConstruct[] sargs, IStrategoTerm[] targs)
             throws InterpreterException {
 
         if (!(Tools.isTermInt(targs[0])))

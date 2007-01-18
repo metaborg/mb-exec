@@ -8,7 +8,6 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.File;
-import java.util.List;
 
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
@@ -25,7 +24,7 @@ public class SSL_readdir extends AbstractPrimitive {
     }
 
     @Override
-    public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
         if(!Tools.isTermString(tvars[0]))

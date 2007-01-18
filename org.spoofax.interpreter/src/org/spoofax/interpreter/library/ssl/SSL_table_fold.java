@@ -7,8 +7,6 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map.Entry;
 
 import org.spoofax.interpreter.IConstruct;
@@ -27,7 +25,7 @@ public class SSL_table_fold extends AbstractPrimitive {
     }
 
     @Override
-    public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
         if(!Tools.isTermInt(tvars[1]))
@@ -37,8 +35,8 @@ public class SSL_table_fold extends AbstractPrimitive {
         Hashtable ht = or.getHashtable(Tools.asJavaInt(tvars[1]));
         
         IStrategoTerm result = tvars[0];
-        CallT sdef = (CallT) svars.get(0);
-        List<IConstruct> sv = new LinkedList<IConstruct>();
+        CallT sdef = (CallT) svars[0];
+        IConstruct[] sv = new IConstruct[0];
         IStrategoTerm[] tv = new IStrategoTerm[2];
 
         env.setCurrent(tvars[0]);

@@ -7,9 +7,6 @@ g * Created on 07.aug.2005
  */
 package org.spoofax.interpreter.stratego;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.ChoicePointStack;
 import org.spoofax.interpreter.IConstruct;
@@ -26,18 +23,16 @@ public class CallT extends Strategy {
 
     protected String name;
 
-    protected List<IConstruct> svars;
+    protected IConstruct[] svars;
 
     protected IStrategoTerm[] tvars;
 
     private static int counter = 0;
 
-    public CallT(String name, List<Strategy> svars, List<IStrategoTerm> tvars) {
+    public CallT(String name, IConstruct[] svars, IStrategoTerm[] tvars) {
         this.name = name;
-        this.svars = new ArrayList<IConstruct>();
-        for(Strategy s : svars)
-            this.svars.add(s);
-        this.tvars = tvars.toArray(new IStrategoTerm[0]);
+        this.svars = svars;
+        this.tvars = tvars;
     }
 
     static int depth = 0;
@@ -51,11 +46,16 @@ public class CallT extends Strategy {
         //VarScope oldVarScope = env.getVarScope();
         
         //boolean r = prepareCall(env).eval(env);
+        if(DebugUtil.debugging) {
+            DebugUtil.bump();
+        }
         prepareCall(env, env.getChoicePointStack());
         
+        if(DebugUtil.debugging) {
+            DebugUtil.unbump();
+        }
         //env.restoreVarScope(oldVarScope);
 
-        depth--;
         //return DebugUtil.traceReturn(r, env.current(), this);
         return true;
     }
@@ -69,33 +69,34 @@ public class CallT extends Strategy {
 
         if(DebugUtil.tracing) {
             System.err.println("[" + depth + "] - " + sdef.name);
-            depth++;
         }
+
+        depth++;
     
-        List<String> formalTermArgs = sdef.getTermParams();
-        List<SVar> formalStrategyArgs = sdef.getStrategyParams();
+        String[] formalTermArgs = sdef.getTermParams();
+        SVar[] formalStrategyArgs = sdef.getStrategyParams();
 
         if (DebugUtil.isDebugging()) {
             printStrategyCall(sdef.getName(), formalStrategyArgs, svars, formalTermArgs, tvars);
         }
 
-        if (svars.size() != formalStrategyArgs.size())
-            throw new InterpreterException("Incorrect strategy arguments, expected " + formalStrategyArgs.size()
-              + " got " + svars.size());
+        if (svars.length != formalStrategyArgs.length)
+            throw new InterpreterException("Incorrect strategy arguments, expected " + formalStrategyArgs.length
+              + " got " + svars.length);
 
-        if (tvars.length != formalTermArgs.size())
-            throw new InterpreterException("Incorrect aterm arguments, expected " + formalTermArgs.size()
+        if (tvars.length != formalTermArgs.length)
+            throw new InterpreterException("Incorrect aterm arguments, expected " + formalTermArgs.length
               + " got " + tvars.length);
 
         VarScope newScope = new VarScope(sdef.getScope());
 
-        for (int i = 0; i < svars.size(); i++) {
-            SVar formal = formalStrategyArgs.get(i);
-            IConstruct actual = svars.get(i);
+        for (int i = 0; i < svars.length; i++) {
+            SVar formal = formalStrategyArgs[i];
+            IConstruct actual = svars[i];
 
             SDefT target = null;
             if (actual instanceof CallT &&
-              ((CallT)actual).getStrategyArguments().size() == 0
+              ((CallT)actual).getStrategyArguments().length == 0
               && ((CallT)actual).getTermArguments().length == 0) {
                 String n = ((CallT)actual).getTargetStrategyName();
                 target = env.lookupSVar(n);
@@ -108,8 +109,8 @@ public class CallT extends Strategy {
                 }
             }
             else {
-                List<SVar> stratArgs = new ArrayList<SVar>(0);
-                List<String> termArgs = new ArrayList<String>(0);
+                SVar[] stratArgs = new SVar[0];
+                String[] termArgs = new String[0];
                 target = new SDefT(makeTempName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
             }
 
@@ -117,7 +118,7 @@ public class CallT extends Strategy {
         }
 
         for (int i = 0; i < tvars.length; i++) {
-            String formal = formalTermArgs.get(i);
+            String formal = formalTermArgs[i];
             IStrategoTerm actual = tvars[i];
             // FIXME: This should not be here
             if (Tools.isVar(((IStrategoAppl)actual), env))
@@ -129,13 +130,13 @@ public class CallT extends Strategy {
                 
         //env.setVarScope(newScope);
 
+        depth--;
+
         return sdef;
     }
     
-    public boolean evalWithArgs(IContext env, List<IConstruct> actualSVars, IStrategoTerm[] actualTVars) throws InterpreterException {
+    public boolean evalWithArgs(IContext env, IConstruct[] actualSVars, IStrategoTerm[] actualTVars) throws InterpreterException {
 
-        System.err.println(actualTVars.length);
-        
         if (DebugUtil.isDebugging()) {
             debug("CallT.eval() - ", env.current());
         }
@@ -146,30 +147,30 @@ public class CallT extends Strategy {
             throw new InterpreterException("Not found '" + name + "'");
 
     
-        List<String> formalTermArgs = sdef.getTermParams();
-        List<SVar> formalStrategyArgs = sdef.getStrategyParams();
+        String[] formalTermArgs = sdef.getTermParams();
+        SVar[] formalStrategyArgs = sdef.getStrategyParams();
 
         if (DebugUtil.isDebugging()) {
             printStrategyCall(sdef.getName(), formalStrategyArgs, actualSVars, formalTermArgs, actualTVars);
         }
 
-        if (actualSVars.size() != formalStrategyArgs.size())
-            throw new InterpreterException("Incorrect strategy arguments, expected " + formalStrategyArgs.size()
-              + " got " + actualSVars.size());
+        if (actualSVars.length != formalStrategyArgs.length)
+            throw new InterpreterException("Incorrect strategy arguments, expected " + formalStrategyArgs.length
+              + " got " + actualSVars.length);
 
-        if (actualTVars.length != formalTermArgs.size())
-            throw new InterpreterException("Incorrect aterm arguments, expected " + formalTermArgs.size()
+        if (actualTVars.length != formalTermArgs.length)
+            throw new InterpreterException("Incorrect aterm arguments, expected " + formalTermArgs.length
               + " got " + actualTVars.length);
 
         VarScope newScope = new VarScope(sdef.getScope());
 
-        for (int i = 0; i < actualSVars.size(); i++) {
-            SVar formal = formalStrategyArgs.get(i);
-            IConstruct actual = actualSVars.get(i);
+        for (int i = 0; i < actualSVars.length; i++) {
+            SVar formal = formalStrategyArgs[i];
+            IConstruct actual = actualSVars[i];
 
             SDefT target = null;
             if (actual instanceof CallT &&
-              ((CallT)actual).getStrategyArguments().size() == 0
+              ((CallT)actual).getStrategyArguments().length == 0
               && ((CallT)actual).getTermArguments().length == 0) {
                 String n = ((CallT)actual).getTargetStrategyName();
                 target = env.lookupSVar(n);
@@ -182,8 +183,8 @@ public class CallT extends Strategy {
                 }
             }
             else {
-                List<SVar> stratArgs = new ArrayList<SVar>(0);
-                List<String> termArgs = new ArrayList<String>(0);
+                SVar[] stratArgs = new SVar[0];
+                String[] termArgs = new String[0];
                 target = new SDefT(makeTempName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
             }
 
@@ -191,15 +192,23 @@ public class CallT extends Strategy {
         }
 
         for (int i = 0; i < actualTVars.length; i++) {
-            String formal = formalTermArgs.get(i);
-            newScope.add(formal, actualTVars[i]);
+            newScope.add(formalTermArgs[i], actualTVars[i]);
         }
 
         VarScope oldVarScope = env.getVarScope();
         env.setVarScope(newScope);
 
         //boolean r = sdef.eval(env);
+        if(DebugUtil.debugging) {
+            DebugUtil.bump();
+        }
+        
         boolean r = CallT.callHelper(sdef, env);
+        
+        if(DebugUtil.debugging) {
+            DebugUtil.unbump();
+        }
+        
         //es.addNext(sdef, newScope);
         env.restoreVarScope(oldVarScope);
 
@@ -240,8 +249,8 @@ public class CallT extends Strategy {
      */
     /*package*/
     static void printStrategyCall(final String name,
-      final List<SVar> svarsFormal, final List<IConstruct> svarsActual,
-      final List<String> tvarsFormal, final IStrategoTerm[] tvarsActual) {
+      final SVar[] svarsFormal, final IConstruct[] svarsActual,
+      final String[] tvarsFormal, final IStrategoTerm[] tvarsActual) {
 
         // Print this at the same indentation with the associated scope.
         StringBuilder sb = DebugUtil.buildIndent(DebugUtil.INDENT_STEP);
@@ -249,18 +258,18 @@ public class CallT extends Strategy {
         sb.append("call : ").append(name).append("( ");
 
         final String svarNoName = "<s_noname_";
-        for (int i = 0; i < svarsActual.size(); i++) {
-            String sVarName = svarsFormal != null ? svarsFormal.get(i).name : (svarNoName + i + ">");
+        for (int i = 0; i < svarsActual.length; i++) {
+            String sVarName = svarsFormal != null ? svarsFormal[i].name : (svarNoName + i + ">");
             if (i > 0) {
                 sb.append(", ");
             }
-            sb.append(sVarName).append(" = ").append(svarsActual.get(i));
+            sb.append(sVarName).append(" = ").append(svarsActual[i]);
         }
         sb.append(" | ");
 
         final String tNoName = "<t_noname_";
         for (int i = 0; i < tvarsActual.length; i++) {
-            String termName = tvarsFormal != null ? tvarsFormal.get(i) : (tNoName + i + ">");
+            String termName = tvarsFormal != null ? tvarsFormal[i] : (tNoName + i + ">");
             if (i > 0) {
                 sb.append(", ");
             }
@@ -274,7 +283,7 @@ public class CallT extends Strategy {
         return name;
     }
 
-    public List<IConstruct> getStrategyArguments() {
+    public IConstruct[] getStrategyArguments() {
         return svars;
     }
 

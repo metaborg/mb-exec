@@ -105,7 +105,7 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
         super("SSL_indexedSet_create", 0, 2);
     }
     
-    public boolean call(IContext env, List<IConstruct> sargs, IStrategoTerm[] targs) throws InterpreterException {
+    public boolean call(IContext env, IConstruct[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         if(!(Tools.isTermInt(targs[0])))
             return false;

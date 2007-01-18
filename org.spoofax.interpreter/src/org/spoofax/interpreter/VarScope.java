@@ -59,9 +59,9 @@ public class VarScope {
         svars.put(svar, strat);
     }
 
-    public void addSVars(List<SDefT> sdefs) {
-        for (SDefT def : sdefs)
-            svars.put(def.getName(), def);
+    public void addSVars(SDefT[] sdefs) {
+        for(int i = 0, sz = sdefs.length; i < sz; i++) 
+            svars.put(sdefs[i].getName(), sdefs[i]);
     }
 
     public void add(String var, IStrategoTerm t) {

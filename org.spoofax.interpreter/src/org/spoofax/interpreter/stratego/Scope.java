@@ -9,6 +9,7 @@ package org.spoofax.interpreter.stratego;
 
 import java.util.List;
 
+import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.VarScope;
@@ -34,10 +35,16 @@ public class Scope extends Strategy {
         newScope.addVars(vars);
 
         //env.setVarScope(newScope);
+        if(DebugUtil.debugging) {
+            DebugUtil.bump();
+        }
 
         env.getChoicePointStack().addNext(body, newScope);
         //boolean r = body.eval(env);
 
+        if(DebugUtil.debugging) {
+            DebugUtil.unbump();
+        }
         //env.popVarScope();
 
         //return r;

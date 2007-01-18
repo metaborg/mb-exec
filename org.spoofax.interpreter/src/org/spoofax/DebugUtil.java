@@ -68,11 +68,11 @@ public class DebugUtil {
         debugging = b;
     }
 
-    public static void bump(Context ctxt) {
+    public static void bump() {
         Context.indentation += INDENT_STEP;
     }
 
-    public static void unbump(Context ctxt) {
+    public static void unbump() {
         Context.indentation -= INDENT_STEP;
     }
 
