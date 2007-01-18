@@ -8,13 +8,12 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
-import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 
 public class Id extends Strategy {
 
-    public boolean eval(IContext e, EvaluationStack es) throws InterpreterException {
+    public boolean eval(IContext e) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("Id.eval() - ", e.current());

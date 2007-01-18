@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import org.spoofax.DebugUtil;
 import org.spoofax.NotImplementedException;
-import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Pair;
@@ -34,7 +33,7 @@ public class Match extends Strategy {
         this.pattern = pattern;
     }
 
-    public boolean eval(IContext env, EvaluationStack es) throws InterpreterException {
+    public boolean eval(IContext env) throws InterpreterException {
         
         if (DebugUtil.isDebugging()) {
             debug("Match.eval() - ", " !", env.current(), " ; ?", pattern);

@@ -7,14 +7,13 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 
 public class LGChoice implements IConstruct {
 
-    public boolean eval(IContext e, EvaluationStack es) throws InterpreterException {
+    public boolean eval(IContext e) throws InterpreterException {
         throw new InterpreterException("Unimplemented");
     }
 

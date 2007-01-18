@@ -8,7 +8,6 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
-import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
@@ -24,7 +23,7 @@ public class All extends Strategy {
         this.body = body;
     }
 
-    public boolean eval(IContext env, EvaluationStack es) throws InterpreterException {
+    public boolean eval(IContext env) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("All.eval() - ", env.current());

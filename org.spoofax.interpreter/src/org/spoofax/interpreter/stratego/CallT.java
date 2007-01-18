@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.spoofax.DebugUtil;
-import org.spoofax.interpreter.EvaluationStack;
+import org.spoofax.interpreter.ChoicePointStack;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.Pair;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.VarScope;
+import org.spoofax.interpreter.ChoicePointStack.Entry;
 import org.spoofax.interpreter.stratego.SDefT.SVar;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -42,25 +42,25 @@ public class CallT extends Strategy {
 
     static int depth = 0;
     
-    public boolean eval(IContext env, EvaluationStack es) throws InterpreterException {
+    public boolean eval(IContext env) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("CallT.eval() - ", env.current());
         }
 
-        VarScope oldVarScope = env.getVarScope();
+        //VarScope oldVarScope = env.getVarScope();
         
         //boolean r = prepareCall(env).eval(env);
-        prepareCall(env, es);
+        prepareCall(env, env.getChoicePointStack());
         
-        env.restoreVarScope(oldVarScope);
+        //env.restoreVarScope(oldVarScope);
 
         depth--;
         //return DebugUtil.traceReturn(r, env.current(), this);
         return true;
     }
 
-    private SDefT prepareCall(IContext env, EvaluationStack es) throws InterpreterException {
+    private SDefT prepareCall(IContext env, ChoicePointStack es) throws InterpreterException {
         
         SDefT sdef = env.lookupSVar(name);
 
@@ -127,7 +127,7 @@ public class CallT extends Strategy {
 
         es.addNext(sdef, newScope);
                 
-        env.setVarScope(newScope);
+        //env.setVarScope(newScope);
 
         return sdef;
     }
@@ -284,14 +284,16 @@ public class CallT extends Strategy {
     }
 
     public static boolean callHelper(IConstruct c, IContext env) throws InterpreterException {
-        EvaluationStack es = new EvaluationStack();
-        boolean r = c.eval(env, es);
+        ChoicePointStack cs = env.getChoicePointStack();
+        Entry old = cs.newChoicePoint();
+        boolean r = c.eval(env);
         VarScope vs = env.getVarScope();
-        while(r && es.hasMore()) {
-            Pair<IConstruct, VarScope> ev = es.getNext();
-            env.setVarScope(ev.second);
-            r = ev.first.eval(env, es);
+        while(r && cs.hasMore()) {
+            Entry e = cs.getNext();
+            env.setVarScope(e.getScope());
+            r = e.getConstruct().eval(env);
         }
+        cs.restoreChoicePoint(old);
         env.restoreVarScope(vs);
         return r;
     }

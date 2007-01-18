@@ -41,9 +41,12 @@ public class Context implements IContext {
 
     private Map<String, IOperatorRegistry> operatorRegistries;
 
+    private ChoicePointStack choicePointStack;
+
     public Context(ITermFactory factory, ITermFactory programFactory) {
         this.programFactory =  programFactory;
         this.factory = factory;
+        choicePointStack = new ChoicePointStack();
         opdecls = new HashMap<String, OpDecl>();
         varScope = new VarScope(null);
         strategoSignature = new StrategoSignature(programFactory);
@@ -169,5 +172,9 @@ public class Context implements IContext {
 
     public void addOperatorRegistry(String domain, IOperatorRegistry or) {
         operatorRegistries.put(domain, or);
+    }
+
+    public ChoicePointStack getChoicePointStack() {
+        return choicePointStack;
     }
 }

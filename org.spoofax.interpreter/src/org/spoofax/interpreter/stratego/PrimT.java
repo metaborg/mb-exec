@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.spoofax.DebugUtil;
-import org.spoofax.interpreter.EvaluationStack;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
@@ -36,7 +35,7 @@ public class PrimT extends Strategy {
         this.tvars = tvars.toArray(new IStrategoTerm[0]);
     }
 
-    public boolean eval(IContext env, EvaluationStack es) throws InterpreterException {
+    public boolean eval(IContext env) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("PrimT.eval() - ", env.current());
