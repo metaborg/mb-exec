@@ -221,7 +221,7 @@ public class Match extends Strategy {
             return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchAnyAs(t, p);
+            return matchAnyAs(env, t, p);
         } else if(Tools.isStr(p, env)) {
             return null;
         }
@@ -258,7 +258,7 @@ public class Match extends Strategy {
             return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchAnyAs(t, p);
+            return matchAnyAs(env, t, p);
         } else if (Tools.isStr(p, env)) {
             return null;
         }
@@ -297,9 +297,14 @@ public class Match extends Strategy {
         return null;
     }
 
-    protected Results matchAnyAs(IStrategoTerm t, IStrategoAppl p) {
+    protected Results matchAnyAs(IContext env, IStrategoTerm t, IStrategoAppl p) throws InterpreterException {
         String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
-        return newResult(new Binding(varName, t));
+        Results pre = newResult(new Binding(varName, t));
+        Results post = match(env, t, Tools.applAt(p, 1));
+        if(post == null)
+            return null;
+        pre.addAll(post);
+        return pre;
     }
 
     @SuppressWarnings("serial")
@@ -603,7 +608,7 @@ public class Match extends Strategy {
             return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchAnyAs(t, p);
+            return matchAnyAs(env, t, p);
         } 
 
         throw new InterpreterException("Unknown String case '" + p + "'");
