@@ -40,7 +40,7 @@ public class Build extends Strategy {
 
         IStrategoTerm t = buildTerm(env, term);
         if (t == null) {
-        	return getHook().pop().onFailure();
+        	return getHook().pop().onFailure(env);
         }
         env.setCurrent(t);
 

@@ -19,6 +19,7 @@ import org.spoofax.interpreter.test.language.TestDefinition;
 import org.spoofax.interpreter.test.language.TestGuard;
 import org.spoofax.interpreter.test.language.TestHigherOrderParameters;
 import org.spoofax.interpreter.test.language.TestMatch;
+import org.spoofax.interpreter.test.language.TestOneSome;
 import org.spoofax.interpreter.test.language.TestOverloading;
 import org.spoofax.interpreter.test.language.TestScoping;
 import org.spoofax.interpreter.test.language.TestTermConstruction;
@@ -41,7 +42,8 @@ public class AllLanguageTests {
         suite.addTestSuite(TestClosure.class);
         suite.addTestSuite(TestMatch.class);
         suite.addTestSuite(TestHigherOrderParameters.class);
-        suite.addTestSuite(Pause.class);
+        suite.addTestSuite(TestOneSome.class);
+//        suite.addTestSuite(Pause.class);
         //$JUnit-END$
         return suite;
     }

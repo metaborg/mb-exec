@@ -65,7 +65,7 @@ public class PrimT extends Strategy {
         if (r)
         	return getHook().pop().onSuccess(env);
         else
-        	return getHook().pop().onFailure();
+        	return getHook().pop().onFailure(env);
     }
 
     public void prettyPrint(StupidFormatter sf) {

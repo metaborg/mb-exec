@@ -29,8 +29,8 @@ public abstract class AbstractInterpreterTest extends TestCase {
         basePath = path;
         itp = new Interpreter();
         factory = itp.getFactory();
-        DebugUtil.setDebug(true);
-        DebugUtil.setTracing(true);
+        DebugUtil.setDebug(false);
+        DebugUtil.setTracing(false);
         unitTestDebug = true; 
     }
     

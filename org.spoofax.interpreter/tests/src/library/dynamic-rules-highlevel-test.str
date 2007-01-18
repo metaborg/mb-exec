@@ -260,6 +260,7 @@ strategies
   test-dr-scope =
     apply-test(!"dr-scope",
     {|D:
+      !"a"; ?a@b; !b; debug(!"Ouai!");
       !"a" => n
     ; rules(D: n)
     ; <D> "a"

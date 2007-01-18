@@ -1,0 +1,5 @@
+module test_one
+imports stratego-lib
+strategies
+
+  main = oncetd(inc)

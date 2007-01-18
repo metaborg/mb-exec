@@ -10,5 +10,5 @@ public abstract class Hook {
 	}
 	
 	abstract IConstruct onSuccess(IContext env) throws InterpreterException;
-	abstract IConstruct onFailure() throws InterpreterException;
+	abstract IConstruct onFailure(IContext env) throws InterpreterException;
 }

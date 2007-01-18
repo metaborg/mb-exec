@@ -40,11 +40,9 @@ public class JSGLR_parse_stratego extends AbstractPrimitive {
 	@Override
 	public boolean call(IContext env, List<Strategy> svars,
 			IStrategoTerm[] tvars) throws InterpreterException {
-		System.err.println("Reading: ");
 		if (!Tools.isTermString(tvars[0]))
 			return false;
 		String path = ((IStrategoString)tvars[0]).getValue();
-		System.err.println(path);
 		ATerm parsed = null;
 		try {
 			parsed = StrategoSGLR.parse(new FileInputStream(path));

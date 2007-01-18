@@ -31,7 +31,7 @@ public class GuardedLChoice extends Strategy {
         return eval(env, 0);
     }
 
-    private IConstruct eval(final IContext env, final int n) throws InterpreterException {
+    private IConstruct eval(IContext env, final int n) throws InterpreterException {
     	if (n == (children.length - 1)) {
     		Strategy s = children[n].first;
     		s.getHook().push(getHook().pop());
@@ -47,7 +47,7 @@ public class GuardedLChoice extends Strategy {
                 	second.getHook().push(getHook().pop());
     				return second;
     			}
-    			IConstruct onFailure() throws InterpreterException {
+    			IConstruct onFailure(IContext env) throws InterpreterException {
     	        	env.setCurrent(oldCurrent);
     	        	env.getVarScope().restoreUnboundVars(bi);    				
     				return eval(env, n+1);

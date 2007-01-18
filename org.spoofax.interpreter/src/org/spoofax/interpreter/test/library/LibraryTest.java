@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.test.AbstractInterpreterTest;
 
@@ -77,7 +78,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testDynamicRulesLowlevel() throws IOException, InterpreterException 
     { interpTest("dynamic-rules-lowlevel-test", "(46,0)"); }
     public void testDynamicRulesHighlevel() throws IOException, InterpreterException 
-    { interpTest("dynamic-rules-highlevel-test", "(10,0)"); }
+    { interpTest("dynamic-rules-highlevel-test", "(11,0)"); }
 
     public void testSystemIOFile() throws IOException, InterpreterException {
         interpTest("system-io-file-test", "(104,0)");

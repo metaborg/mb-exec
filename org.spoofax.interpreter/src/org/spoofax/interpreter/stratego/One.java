@@ -32,7 +32,7 @@ public class One extends Strategy {
             case IStrategoTerm.INT:
             case IStrategoTerm.REAL:
             case IStrategoTerm.STRING:
-                return getHook().pop().onFailure();
+                return getHook().pop().onFailure(env);
             case IStrategoTerm.APPL:
             case IStrategoTerm.LIST:
             case IStrategoTerm.TUPLE:
@@ -42,17 +42,17 @@ public class One extends Strategy {
         }
     }
 
-    private IConstruct eval(final IContext env, final int n, final IStrategoTerm[] list) throws InterpreterException
+    private IConstruct eval(IContext env, final int n, final IStrategoTerm[] list) throws InterpreterException
     {
     	final IStrategoTerm old = env.current();
     	if (n >= old.getSubtermCount()) {
-    		return getHook().pop().onFailure();
+    		return getHook().pop().onFailure(env);
     	}
     	final Strategy th = this;
     	env.setCurrent(list[n]);
     	body.getHook().push(new Hook(){
 			@Override
-			IConstruct onFailure() throws InterpreterException {
+			IConstruct onFailure(IContext env) throws InterpreterException {
 				env.setCurrent(old);
 				return eval(env, n+1, list);
 			}

@@ -9,7 +9,6 @@ package org.spoofax.interpreter.stratego;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
@@ -117,9 +116,9 @@ public class CallT extends Strategy {
                 env.restoreVarScope(oldVarScope);
         		return th.getHook().pop().onSuccess(env);
         	}
-        	IConstruct onFailure() throws InterpreterException {
+        	IConstruct onFailure(IContext env) throws InterpreterException {
         		env.restoreVarScope(oldVarScope);
-        		return th.getHook().pop().onFailure();
+        		return th.getHook().pop().onFailure(env);
         	}
         });
         env.setVarScope(newScope);
@@ -198,11 +197,11 @@ public class CallT extends Strategy {
                 env.restoreVarScope(oldVarScope);
         		return th.getHook().pop().onSuccess(env);
         	}
-        	IConstruct onFailure() throws InterpreterException {
-        		return th.getHook().pop().onFailure();
+        	IConstruct onFailure(IContext env) throws InterpreterException {
+        		env.restoreVarScope(oldVarScope);
+        		return th.getHook().pop().onFailure(env);
         	}
         });
-        env.setVarScope(newScope);
         return body;
     }
 
@@ -284,6 +283,35 @@ public class CallT extends Strategy {
     }
 
 	public boolean evaluateWithArgs(IContext env, List<Strategy> sv, IStrategoTerm[] tv) throws InterpreterException {
-		return evalWithArgs(env, sv, tv).evaluate(env);
+    	class Finished extends InterpreterException {
+			private static final long serialVersionUID = -3346010050685062946L;
+			boolean result;
+    		Finished(boolean b)
+    		{
+    			super("Finished");
+    			result = b;
+    		}
+    	}
+    	getHook().push(new Hook(){
+			@Override
+			IConstruct onFailure(IContext env) throws InterpreterException {
+				throw new Finished(false);
+			}
+			@Override
+			IConstruct onSuccess(IContext env) throws InterpreterException {
+				throw new Finished(true);
+			}
+    	});
+    	IConstruct c = evalWithArgs(env, sv, tv);
+    	boolean result = false;
+    	try {
+    		while (true) {
+    			c = c.eval(env);
+    		}
+    	}
+    	catch (Finished f) {
+    		result = f.result;
+    	}
+		return result;
 	}
 }

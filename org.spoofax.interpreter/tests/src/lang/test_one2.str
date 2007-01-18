@@ -1,0 +1,5 @@
+module test_one2
+imports stratego-lib
+strategies
+
+  main = rec x (oncetd(is-string < !1; x + inc))

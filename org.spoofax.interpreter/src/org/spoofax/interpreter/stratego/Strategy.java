@@ -61,29 +61,23 @@ abstract public class Strategy implements IConstruct {
     }
     
     public boolean evaluate(IContext env) throws InterpreterException {
-    	class Result implements  IConstruct {
-    		boolean result;
-    		Result(boolean result) {
-    			this.result = result;
+    	class Finished extends InterpreterException {
+			private static final long serialVersionUID = -857185250056951094L;
+			boolean result;
+    		Finished(boolean b)
+    		{
+    			super("Finished");
+    			result = b;
     		}
-			public IConstruct eval(IContext e) throws InterpreterException {
-				return null;
-			}
-			public void prettyPrint(StupidFormatter fmt) {
-			
-			}
-			public boolean evaluate(IContext env) throws InterpreterException {
-				return false;
-			}
     	}
     	getHook().push(new Hook(){
 			@Override
-			IConstruct onFailure() throws InterpreterException {
-				return new Result(false);
+			IConstruct onFailure(IContext env) throws InterpreterException {
+				throw new Finished(false);
 			}
 			@Override
 			IConstruct onSuccess(IContext env) throws InterpreterException {
-				return new Result(true);
+				throw new Finished(true);
 			}
     	});
     	Stack<Strategy> s = null;
@@ -91,10 +85,17 @@ abstract public class Strategy implements IConstruct {
     		 s = new Stack<Strategy>();
     	}
     	IConstruct c = this;
-    	while (!(c instanceof Result)) {
-    		if (DebugUtil.isDebugging())
-    			s.push((Strategy)c);
-        	c = c.eval(env);
+    	boolean debug = DebugUtil.isDebugging();
+    	boolean result = false;
+    	try {
+    		while (true) {
+    			if (debug)
+    				s.push((Strategy)c);
+    			c = c.eval(env);
+    		}
+    	}
+    	catch (Finished f) {
+    		result = f.result;
     	}
     	if (DebugUtil.isDebugging()) {
     		for (Strategy strat : s) {
@@ -103,6 +104,6 @@ abstract public class Strategy implements IConstruct {
     		}
     	}
     	
-		return ((Result)c).result;
+		return result;
     }
 }

@@ -1,0 +1,7 @@
+module test_downup
+imports stratego-lib
+strategies
+  downupaaa(s) =
+    debug(!"0 ");s; debug(!"1 "); all(debug(!"5 "); downupaaa(s); debug(!"6 ")); debug(!"2 "); s; debug(!"3 ")
+
+  main = downupaaa(try(inc))

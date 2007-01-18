@@ -45,14 +45,14 @@ public class Match extends Strategy {
         Results r = match(env, current, pattern);
 
         if (r == null) {
-            return getHook().pop().onFailure();
+            return getHook().pop().onFailure(env);
         }
         else {
             boolean b = env.bindVars(r);
             if (b)
             	return getHook().pop().onSuccess(env);
             else
-            	return getHook().pop().onFailure();
+            	return getHook().pop().onFailure(env);
         }
     }
 
@@ -215,7 +215,7 @@ public class Match extends Strategy {
             return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchAnyAs(t, p);
+            return matchCompoundAs(env, t, p);
         } else if(Tools.isStr(p, env)) {
             return null;
         }
@@ -252,7 +252,7 @@ public class Match extends Strategy {
             return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchAnyAs(t, p);
+            return matchCompoundAs(env, t, p);
         } else if (Tools.isStr(p, env)) {
             return null;
         }
@@ -291,10 +291,11 @@ public class Match extends Strategy {
         return null;
     }
 
+    /*
     protected Results matchAnyAs(IStrategoTerm t, IStrategoAppl p) {
         String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
         return newResult(new Binding(varName, t));
-    }
+    }*/
 
     @SuppressWarnings("serial")
     public static final class Results extends ArrayList<Binding> {
@@ -599,7 +600,7 @@ public class Match extends Strategy {
             return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchAnyAs(t, p);
+            return matchCompoundAs(env, t, p);
         } 
 
         throw new InterpreterException("Unknown String case '" + p + "'");

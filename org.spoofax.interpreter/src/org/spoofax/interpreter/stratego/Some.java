@@ -33,7 +33,7 @@ public class Some extends Strategy {
             case IStrategoTerm.INT:
             case IStrategoTerm.REAL:
             case IStrategoTerm.STRING:
-            	return getHook().pop().onFailure();
+            	return getHook().pop().onFailure(env);
             case IStrategoTerm.APPL:
             case IStrategoTerm.LIST:
             case IStrategoTerm.TUPLE:
@@ -61,12 +61,12 @@ public class Some extends Strategy {
     	    	return getHook().pop().onSuccess(env);
     		}
     		else
-    			return getHook().pop().onFailure();
+    			return getHook().pop().onFailure(env);
     	}
     	env.setCurrent(list[n]);
     	body.getHook().push(new Hook(){
 			@Override
-			IConstruct onFailure() throws InterpreterException {
+			IConstruct onFailure(IContext env) throws InterpreterException {
 				env.setCurrent(old);
 				return eval(env, n+1, hadsome, list);
 			}

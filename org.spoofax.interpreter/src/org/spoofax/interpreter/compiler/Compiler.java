@@ -20,14 +20,12 @@ public class Compiler {
 	{
 		compiler = new Interpreter(factory);
 		compiler.addOperatorRegistry("SSL", new SSLLibrary());
-		long factoryTime = System.nanoTime();
-		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary(factory));
-		System.out.println("Factory time: " + (System.nanoTime() - factoryTime)/1000/1000 + "ms");
 		long loadTime = System.nanoTime();
+		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary(factory));
 		compiler.load("data/libstratego-lib.ctree");
 		compiler.load("data/libsglr.ctree");
 		compiler.load("data/libstrc.ctree");
-		System.out.println("Load time: " + (System.nanoTime() - loadTime)/1000/1000 + "ms");
+		System.out.println("Loading time: " + (System.nanoTime() - loadTime)/1000/1000 + "ms");
 	}
 	
 	IStrategoTerm compile(String file, String[] path) throws InterpreterException

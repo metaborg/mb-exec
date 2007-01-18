@@ -26,7 +26,7 @@ public class CompileStratego {
 		IStrategoTerm out = compiler.compile("data/strc-core/dump-strc.str", path);
 
 		if (out == null)
-			System.err.println("Fucked up!");
+			System.err.println("Had an error!");
 		else {
 			FileOutputStream f = new FileOutputStream("data/out.ctree");
 			PrintStream fs = new PrintStream(f);

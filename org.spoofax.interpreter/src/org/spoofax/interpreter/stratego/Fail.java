@@ -20,7 +20,7 @@ public class Fail extends Strategy {
             debug("Fail.eval() - ", e.current());
         }
 
-        return getHook().pop().onFailure();
+        return getHook().pop().onFailure(e);
     }
 
     @Override

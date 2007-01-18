@@ -71,9 +71,9 @@ public class All extends Strategy {
     			env.setCurrent(oldterm);
     			return evalAll(env, i + 1, list);
     		}
-    		IConstruct onFailure() throws InterpreterException
+    		IConstruct onFailure(IContext env) throws InterpreterException
     		{
-    			return th.getHook().pop().onFailure();
+    			return th.getHook().pop().onFailure(env);
     		}
     	});
     	return body.eval(env);
