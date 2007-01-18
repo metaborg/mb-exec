@@ -174,6 +174,10 @@ public class TestMatch extends AbstractLanguageTest {
         interpTest("as_3", "(1, 2)", "((1, 2), 1)");
     }
 
+    public void testAs4() throws IOException, InterpreterException {
+        interpTest("as_4", "2", "(2,2)");
+    }
+
     public void testMatchAndBuild1() throws IOException, InterpreterException {
         interpTest("match_and_build_1", "1", "1");
     }
