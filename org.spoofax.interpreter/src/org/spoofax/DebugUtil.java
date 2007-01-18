@@ -43,10 +43,6 @@ public class DebugUtil {
 
     public static void debug(Object... strings) {
 
-        if (!debugging) {
-            return;
-        }
-
         String toPrint = "";
         if (strings.length > 1) {
             for (Object s : strings) {
