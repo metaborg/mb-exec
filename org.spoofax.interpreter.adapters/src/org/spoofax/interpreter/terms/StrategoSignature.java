@@ -1,5 +1,6 @@
 package org.spoofax.interpreter.terms;
 
+// FIXME should be moved to the interpreter
 public class StrategoSignature {
 
     private final IStrategoConstructor CTOR_Match;
