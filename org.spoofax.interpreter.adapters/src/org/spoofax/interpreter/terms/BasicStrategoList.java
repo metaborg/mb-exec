@@ -19,6 +19,10 @@ public abstract class BasicStrategoList implements IStrategoList {
         return kids[0];
     }
     
+    public boolean isEmpty() {
+        return kids.length == 0;
+    }
+    
     public abstract IStrategoList tail();
     
     protected IStrategoTerm[] doTail() {
@@ -42,7 +46,12 @@ public abstract class BasicStrategoList implements IStrategoList {
     public IStrategoTerm get(int index) {
         return kids[index];
     }
+    
+    public IStrategoTerm[] getAllSubterms() {
+        return kids;
+    }
 
+    
     public int size() {
         return kids.length;
     }

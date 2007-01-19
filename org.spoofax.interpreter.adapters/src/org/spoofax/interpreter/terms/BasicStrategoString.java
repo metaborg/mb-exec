@@ -19,6 +19,10 @@ public abstract class BasicStrategoString implements IStrategoString {
         return null;
     }
 
+    public IStrategoTerm[] getAllSubterms() {
+        return null;
+    }
+    
     public int getSubtermCount() {
         return 0;
     }

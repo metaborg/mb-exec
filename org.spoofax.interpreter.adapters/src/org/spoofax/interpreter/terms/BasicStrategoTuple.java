@@ -19,6 +19,10 @@ public abstract class BasicStrategoTuple implements IStrategoTuple {
         return kids[index];
     }
 
+    public IStrategoTerm[] getAllSubterms() {
+        return kids;
+    }
+    
     public int size() {
         return kids.length;
     }

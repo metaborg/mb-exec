@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Adapters
+Bundle-Name: Term Adapters for the Stratego Interpreter
 Bundle-SymbolicName: org.spoofax.interpreter.adapters
-Bundle-Version: 1.0.0
+Bundle-Version: 0.1.0
 Bundle-ClassPath: adapters.jar
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.jdt.core,
@@ -12,4 +12,5 @@ Require-Bundle: org.eclipse.jdt.core,
 Export-Package: org.spoofax,
  org.spoofax.interpreter.adapters.aterm,
  org.spoofax.interpreter.terms
+Bundle-Vendor: Spoofax.org
  
