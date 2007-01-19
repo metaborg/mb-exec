@@ -356,7 +356,7 @@ public class StrategoCoreLoader {
     }
     
     public void load(String path) throws IOException, InterpreterException {
-        doLoad(context.getFactory().parseFromFile(path));
+        doLoad(context.getProgramFactory().parseFromFile(path));
     }
     
     public void load(IStrategoTerm prg) throws InterpreterException {

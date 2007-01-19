@@ -3,9 +3,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.spoofax.aterm"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.spoofax.jsglr"/>
-	<classpathentry kind="lib" path="/org.spoofax.jsglr/ext/jjtraveler-0.4.3.jar"/>
-	<classpathentry kind="lib" path="/org.spoofax.jsglr/ext/shared-objects-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
