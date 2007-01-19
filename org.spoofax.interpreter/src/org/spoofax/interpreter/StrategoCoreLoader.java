@@ -306,6 +306,7 @@ public class StrategoCoreLoader {
         return new Match(u);
     }
 
+    @SuppressWarnings("unchecked")
     private GuardedLChoice parseGuardedLChoice(IStrategoAppl t) throws InterpreterException {
 
     	LinkedList<Pair<Strategy,Strategy>> s = new LinkedList<Pair<Strategy,Strategy>>();

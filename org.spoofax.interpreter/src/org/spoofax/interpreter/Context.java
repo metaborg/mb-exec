@@ -29,7 +29,6 @@ public class Context implements IContext {
 
     private IStrategoTerm current;
 
-    // FIXME deprecated?
     private Map<String, OpDecl> opdecls;
 
     private VarScope varScope;
@@ -114,31 +113,14 @@ public class Context implements IContext {
 
     public void setVarScope(VarScope newVarScope) {
         varScope = newVarScope;
-//        if (DebugUtil.isDebugging()) {
-//            DebugUtil.bump();
-//            debug("{ " + newVarScope.printVars());
-//            DebugUtil.bump();
-//        }
     }
 
     public void popVarScope() {
-        //VarScope current = varScope;
         varScope = varScope.getParent();
-//        if (DebugUtil.isDebugging()) {
-//            DebugUtil.unbump();
-//            debug("} " + current.printVars()); //todo: same vars?
-//            DebugUtil.unbump();
-//        }
     }
 
     public void restoreVarScope(VarScope anotherVarScope) {
-        VarScope current = varScope;
         varScope = anotherVarScope;
-//        if (DebugUtil.isDebugging()) {
-//            DebugUtil.unbump();
-//            debug("} " + current.printVars()); //todo: same vars?
-//            DebugUtil.unbump();
-//        }
     }
 
     void addOpDecl(String name, OpDecl decl) {
