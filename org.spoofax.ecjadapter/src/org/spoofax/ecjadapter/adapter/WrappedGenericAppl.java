@@ -34,6 +34,10 @@ public class WrappedGenericAppl implements IStrategoAppl {
     public IStrategoTerm getSubterm(int index) {
         return children[index];
     }
+    
+    public IStrategoTerm[] getAllSubterms() {
+        return children;
+    }
 
     public int getSubtermCount() {
         return children.length;

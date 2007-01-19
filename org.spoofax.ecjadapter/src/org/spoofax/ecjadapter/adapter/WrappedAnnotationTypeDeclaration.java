@@ -34,7 +34,7 @@ public class WrappedAnnotationTypeDeclaration extends WrappedAbstractTypeDeclara
         }
         throw new ArrayIndexOutOfBoundsException();
     }
-
+    
     @Override
     public ASTNode getWrappee() {
         return wrappee;

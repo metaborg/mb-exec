@@ -37,4 +37,7 @@ public class None extends WrappedASTNode {
         return EMPTY;
     }
 
+    public IStrategoTerm[] getAllSubterms() {
+        return null;
+    }
 }

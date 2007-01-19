@@ -6,13 +6,11 @@
  */
 package org.spoofax.ecjadapter.library;
 
-import java.util.List;
-
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.spoofax.ecjadapter.adapter.WrappedITypeBinding;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.ecjadapter.adapter.WrappedITypeBinding;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -23,7 +21,7 @@ public class ECJ_is_subtype_compatible extends AbstractPrimitive {
     }
 
     @Override
-    public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
         if(!(tvars[0] instanceof WrappedITypeBinding))

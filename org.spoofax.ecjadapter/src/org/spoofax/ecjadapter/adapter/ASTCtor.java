@@ -65,4 +65,8 @@ public class ASTCtor implements IStrategoConstructor {
         pp.print(name + "##" + arity);
     }
 
+    public IStrategoTerm[] getAllSubterms() {
+        throw new NotImplementedException();
+    }
+
 }

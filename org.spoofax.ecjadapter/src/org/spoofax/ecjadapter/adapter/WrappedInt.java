@@ -15,11 +15,11 @@ import org.spoofax.interpreter.terms.PrettyPrinter;
 public class WrappedInt implements IStrategoInt {
 
     private final int value;
-    
+
     WrappedInt(int value) {
         this.value = value;
     }
-    
+
     public int getValue() {
         return value;
     }
@@ -42,6 +42,10 @@ public class WrappedInt implements IStrategoInt {
 
     public void prettyPrint(PrettyPrinter pp) {
         pp.print("" + value);
+    }
+
+    public IStrategoTerm[] getAllSubterms() {
+        return null;
     }
 
 }

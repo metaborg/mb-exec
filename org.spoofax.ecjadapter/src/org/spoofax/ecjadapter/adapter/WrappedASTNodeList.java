@@ -75,6 +75,16 @@ public class WrappedASTNodeList implements IStrategoList {
         throw new NotImplementedException("Unsupported type : " + o.getClass());
     }
 
+    @SuppressWarnings("unchecked")
+    public IStrategoTerm[] getAllSubterms() {
+        IStrategoTerm[] r = new IStrategoTerm[wrappee.size()];
+        ASTNode[] s = (ASTNode[]) wrappee.toArray(new ASTNode[0]);
+        for(int i = 0; i< r.length; i++) {
+            r[i] = ECJFactory.genericWrap(s[i]);
+        }
+        return r;
+    }
+    
     public int getSubtermCount() {
         return wrappee.size();
     }
@@ -119,5 +129,9 @@ public class WrappedASTNodeList implements IStrategoList {
 
     public List getWrappee() {
         return wrappee;
+    }
+
+    public boolean isEmpty() {
+        return wrappee.isEmpty();
     }
 }

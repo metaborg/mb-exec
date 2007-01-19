@@ -70,4 +70,14 @@ public abstract class AbstractECJAppl extends AbstractECJNode implements IStrate
     }
     
     public abstract IStrategoTerm getSubterm(int index);
+
+    public IStrategoTerm[] getAllSubterms() {
+        final int sz = getConstructor().getArity();
+        IStrategoTerm[] r = new IStrategoTerm[sz];
+        for(int i = 0; i < sz; i++) {
+            r[i] = getSubterm(i);
+        }
+        return r;
+    }
+
 }

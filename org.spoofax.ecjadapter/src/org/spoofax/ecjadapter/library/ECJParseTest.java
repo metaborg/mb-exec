@@ -8,9 +8,9 @@ import java.io.IOException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.spoofax.ecjadapter.adapter.ECJFactory;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.ecjadapter.adapter.ECJFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 /*

@@ -23,4 +23,5 @@ public class WrappedString extends BasicStrategoString {
     public boolean match(IStrategoTerm second) {
         return doSlowMatch(second);
     }
+
 }

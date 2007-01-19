@@ -7,8 +7,6 @@
  */
 package org.spoofax.ecjadapter.library;
 
-import java.util.List;
-
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
@@ -23,7 +21,7 @@ public class ECJ_create_project extends AbstractPrimitive {
     }
 
     @Override
-    public boolean call(IContext env, List<IConstruct> svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         // TODO Auto-generated method stub
         throw new NotImplementedException();
