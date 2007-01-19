@@ -15,7 +15,7 @@ public class MatrixTest {
     }*/
     
     
-    private static void testMult() {
+    static void testMult() {
         Matrix a = new DenseMatrix(4,3);
         Totems.setTotem("a", "dim", 4,3);
         Matrix b = new DenseMatrix(3,4);
