@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -29,7 +28,7 @@ public class WrappedNumberLiteral extends WrappedExpression {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public NumberLiteral getWrappee() {
         return wrappee;
     }
 }

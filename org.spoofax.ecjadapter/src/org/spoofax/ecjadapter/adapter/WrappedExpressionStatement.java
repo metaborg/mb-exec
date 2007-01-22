@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -30,7 +29,7 @@ public class WrappedExpressionStatement extends WrappedStatement {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public ExpressionStatement getWrappee() {
         return wrappee;
     }
 }

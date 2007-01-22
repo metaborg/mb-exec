@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.SwitchStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -35,7 +34,7 @@ public class WrappedSwitchStatement extends WrappedStatement {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public SwitchStatement getWrappee() {
         return wrappee;
     }
 }

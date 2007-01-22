@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -39,7 +38,7 @@ public class WrappedSuperMethodInvocation extends WrappedExpression {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public SuperMethodInvocation getWrappee() {
         return wrappee;
     }
 }

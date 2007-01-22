@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -34,7 +33,7 @@ public class WrappedNormalAnnotation extends WrappedAnnotation {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public NormalAnnotation getWrappee() {
         return wrappee;
     }
 

@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -34,7 +33,7 @@ public class WrappedImportDeclaration extends WrappedASTNode {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public ImportDeclaration getWrappee() {
         return wrappee;
     }
 

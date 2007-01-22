@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.spoofax.NotImplementedException;
@@ -55,7 +54,7 @@ public class WrappedPrimitiveType extends WrappedType {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public PrimitiveType getWrappee() {
         return wrappee;
     }
 }

@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -37,7 +36,7 @@ public class WrappedVariableDeclarationFragment extends WrappedVariableDeclarati
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public VariableDeclarationFragment getWrappee() {
         return wrappee;
     }
 }

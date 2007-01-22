@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -33,7 +32,7 @@ public class WrappedMarkerAnnotation extends WrappedAnnotation {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public MarkerAnnotation getWrappee() {
         return wrappee;
     }
 

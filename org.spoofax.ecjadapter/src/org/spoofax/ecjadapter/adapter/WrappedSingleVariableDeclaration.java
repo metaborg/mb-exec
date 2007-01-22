@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -38,7 +37,7 @@ public class WrappedSingleVariableDeclaration extends WrappedVariableDeclaration
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public SingleVariableDeclaration getWrappee() {
         return wrappee;
     }
 }

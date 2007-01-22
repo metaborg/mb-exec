@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.TagElement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -37,7 +36,7 @@ public class WrappedTagElement extends WrappedASTNode {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public TagElement getWrappee() {
         return wrappee;
     }
 }

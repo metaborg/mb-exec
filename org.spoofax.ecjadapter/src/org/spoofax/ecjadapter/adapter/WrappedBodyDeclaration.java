@@ -7,6 +7,7 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
+import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 
 public abstract class WrappedBodyDeclaration extends WrappedASTNode {
@@ -15,4 +16,5 @@ public abstract class WrappedBodyDeclaration extends WrappedASTNode {
         super(constructor);
     }
 
+    public abstract BodyDeclaration getWrappee();
 }

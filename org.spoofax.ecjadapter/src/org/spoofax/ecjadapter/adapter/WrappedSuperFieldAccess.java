@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -35,7 +34,7 @@ public class WrappedSuperFieldAccess extends WrappedExpression {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public SuperFieldAccess getWrappee() {
         return wrappee;
     }
 }

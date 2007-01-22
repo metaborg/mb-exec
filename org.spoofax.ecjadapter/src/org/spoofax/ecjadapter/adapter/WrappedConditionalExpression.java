@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ConditionalExpression;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -37,7 +36,7 @@ public class WrappedConditionalExpression extends WrappedExpression {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public ConditionalExpression getWrappee() {
         return wrappee;
     }
 }

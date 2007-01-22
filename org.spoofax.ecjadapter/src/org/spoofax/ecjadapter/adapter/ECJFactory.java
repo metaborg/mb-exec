@@ -388,21 +388,49 @@ public class ECJFactory implements ITermFactory {
         int index = ctorNameToIndex(ctr);
         AST ast = AST.newAST(AST.JLS3);
         switch(index) {
-        case ANNOTATION_TYPE_DECLARATION:
-            break;
-        case ANNOTATION_TYPE_MEMBER_DECLARATION:
-            break;
-        case ARRAY_ACCESS: 
+        case ANNOTATION_TYPE_DECLARATION: {
+            AnnotationTypeDeclaration x = ast.newAnnotationTypeDeclaration();
+            if(!ensureModifierList(kids[0]) || !ensureSimpleName(kids[1]) || !ensureBodyDeclaration(kids[1]))
+                return null;
+            x.modifiers().addAll(asModifierList(kids[0]));
+            x.setName(asSimpleName(kids[1]));
+            x.bodyDeclarations().addAll(asBodyDeclarations(kids[2]));
+            return wrap(x);
+        }
+        case ANNOTATION_TYPE_MEMBER_DECLARATION: {
+            AnnotationTypeMemberDeclaration x = ast.newAnnotationTypeMemberDeclaration();
+            if(!ensureModifierList(kids[0]) || !ensureType(kids[1]) || !ensureSimpleName(kids[2]) || !ensureExpression(kids[3]))
+                return null;
+            x.modifiers().addAll(asModifierList(kids[0]));
+            x.setType(asType(kids[1]));
+            x.setName(asSimpleName(kids[2]));
+            x.setDefault(asExpression(kids[3]));
+            return wrap(x);
+        }
+        case ARRAY_ACCESS: { 
             ArrayAccess x = ast.newArrayAccess();
             if(!ensureExpression(kids[0]) || !ensureExpression(kids[1]))
                 return null;
             x.setArray(asExpression(kids[0]));
             x.setIndex(asExpression(kids[1]));
             return wrap(x);
-        case ARRAY_CREATION:
-            break;
-        case ARRAY_INITIALIZER:
-            break;
+        }
+        case ARRAY_CREATION: {
+            ArrayCreation x = ast.newArrayCreation();
+            if(!ensureArrayType(kids[0]) || !ensureExpressionList(kids[1]) || !ensureArrayInitializer(kids[2]))
+                return null;
+            x.setType(asArrayType(kids[0]));
+            x.dimensions().addAll(asExpressionList(kids[1]));
+            x.setInitializer(asArrayInitializer(kids[2]));
+            return wrap(x);
+        }
+        case ARRAY_INITIALIZER: {
+            ArrayInitializer x = ast.newArrayInitializer();
+            if(!ensureExpressionList(kids[0]))
+                return null;
+            x.expressions().addAll(asExpressionList(kids[0]));
+            return wrap(x);
+        }
         case ARRAY_TYPE:
             break;
         case ASSERT_STATEMENT:
@@ -501,7 +529,7 @@ public class ECJFactory implements ITermFactory {
             break;
         case NUMBER_LITERAL:
             break;
-        case PACKAGE_DECLARATION:
+        case PACKAGE_DECLARATION: {
             if(!(ensureJavadoc(kids[0]) || ensureNone(kids[0])))
                 return null;
             if(!ensureAnnotations(kids[1]))
@@ -514,6 +542,7 @@ public class ECJFactory implements ITermFactory {
             pd.annotations().addAll(getAnnotations(kids[1]));
             pd.setName(getName(kids[2]));
             return wrap(pd);
+        }
         case PARAMETERIZED_TYPE:
             break;
         case PARENTHESIZED_EXPRESSION:
@@ -584,17 +613,114 @@ public class ECJFactory implements ITermFactory {
         throw new NotImplementedException();
     }
 
+    @SuppressWarnings("unchecked")
+    private Collection asExpressionList(IStrategoTerm term) {
+        IStrategoTerm[] kids = term.getAllSubterms();
+        List r = new ArrayList(kids.length);
+        for(IStrategoTerm k : kids) {
+            r.add(asExpression(k));
+        }
+        return r;
+    }
+
+    private boolean ensureExpressionList(IStrategoTerm term) {
+        return term instanceof WrappedExpression;
+    }
+
+    private boolean ensureArrayInitializer(IStrategoTerm term) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+
+    private boolean ensureArrayType(IStrategoTerm term) {
+        return term instanceof WrappedArrayType;
+    }
+
+    private ArrayInitializer asArrayInitializer(IStrategoTerm term) {
+        return ((WrappedArrayInitializer)term).getWrappee();
+    }
+
+    private ArrayType asArrayType(IStrategoTerm term) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private Type asType(IStrategoTerm term) {
+        return ((WrappedType)term).getWrappee();
+    }
+
+    private boolean ensureSimpleName(IStrategoTerm term) {
+        return term instanceof SimpleName;
+    }
+
+    private boolean ensureType(IStrategoTerm term) {
+        return term instanceof WrappedType;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Collection asModifierList(IStrategoTerm term) {
+        IStrategoTerm[] kids = term.getAllSubterms();
+        List r = new ArrayList(kids.length);
+        for(IStrategoTerm k : kids) {
+            r.add(asModifier(k));
+        }
+        return r;
+    }
+
+    private boolean ensureModifierList(IStrategoTerm term) {
+        if(term instanceof IStrategoList) {
+            IStrategoList list = (IStrategoList)term;
+            if(list.size() > 0) 
+                return ensureModifier(list.get(0));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean ensureModifier(IStrategoTerm term) {
+        return term instanceof WrappedModifier;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Collection asBodyDeclarations(IStrategoTerm term) {
+        IStrategoTerm[] kids = term.getAllSubterms();
+        List r = new ArrayList(kids.length);
+        for(IStrategoTerm k : kids) {
+            r.add(asBodyDeclaration(k));
+        }
+        return r;
+    }
+
+    private BodyDeclaration asBodyDeclaration(IStrategoTerm k) {
+        return ((WrappedBodyDeclaration)k).getWrappee();
+    }
+
+    private SimpleName asSimpleName(IStrategoTerm term) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
+
+    private Modifier asModifier(IStrategoTerm term) {
+        if(term instanceof WrappedModifier) {
+            ((WrappedModifier)term).getWrappee();
+        }
+        return null;
+    }
+
+    private boolean ensureBodyDeclaration(IStrategoTerm term) {
+        return term instanceof WrappedBodyDeclaration;
+    }
+
     private boolean ensureExpression(IStrategoTerm term) {
         return term instanceof WrappedExpression;
     }
 
     private Expression asExpression(IStrategoTerm term) {
-        if(term instanceof WrappedASTNode) {
-            ASTNode n = ((WrappedASTNode) term).getWrappee(); 
-            if(n instanceof Expression)
-                return (Expression) n;
+        if(term instanceof WrappedExpression) {
+            return ((WrappedExpression) term).getWrappee(); 
         }
-        throw new NotImplementedException();
+        return null;
     }
 
     private int ctorNameToIndex(IStrategoConstructor ctr) {
@@ -799,7 +925,7 @@ public class ECJFactory implements ITermFactory {
         throw new NotImplementedException();
     }
 
-    private static IStrategoTerm wrap(AnnotationTypeMemberDeclaration declaration) {
+    private static IStrategoAppl wrap(AnnotationTypeMemberDeclaration declaration) {
         if(declaration == null)
             return None.INSTANCE;
         else
@@ -1433,14 +1559,14 @@ public class ECJFactory implements ITermFactory {
             return new WrappedAssignment(assignment);
     }
 
-    private static IStrategoTerm wrap(ArrayInitializer initializer) {
+    private static IStrategoAppl wrap(ArrayInitializer initializer) {
         if(initializer == null)
             return None.INSTANCE;
         else 
             return new WrappedArrayInitializer(initializer);
     }
 
-    private static IStrategoTerm wrap(ArrayCreation creation) {
+    private static IStrategoAppl wrap(ArrayCreation creation) {
         if(creation == null)
             return None.INSTANCE;
         else
@@ -1566,7 +1692,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedEnumDeclaration(declaration);
     }
 
-    private static IStrategoTerm wrap(AnnotationTypeDeclaration declaration) {
+    private static IStrategoAppl wrap(AnnotationTypeDeclaration declaration) {
         if(declaration == null)
             return None.INSTANCE;
         else

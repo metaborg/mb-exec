@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -34,7 +33,7 @@ public class WrappedSingleMemberAnnotation extends WrappedAnnotation {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public SingleMemberAnnotation getWrappee() {
         return wrappee;
     }
 

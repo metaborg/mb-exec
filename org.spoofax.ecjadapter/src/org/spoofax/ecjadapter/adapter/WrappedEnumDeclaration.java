@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -41,7 +40,7 @@ public class WrappedEnumDeclaration extends WrappedAbstractTypeDeclaration {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public EnumDeclaration getWrappee() {
         return wrappee;
     }
 

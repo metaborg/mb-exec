@@ -7,7 +7,6 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -28,7 +27,7 @@ public class WrappedEmptyStatement extends WrappedStatement {
     }
 
     @Override
-    public ASTNode getWrappee() {
+    public EmptyStatement getWrappee() {
         return wrappee;
     }
 }
