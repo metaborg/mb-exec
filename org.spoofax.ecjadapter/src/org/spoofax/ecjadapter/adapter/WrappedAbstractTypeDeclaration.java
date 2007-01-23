@@ -7,6 +7,7 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 
 public abstract class WrappedAbstractTypeDeclaration extends WrappedBodyDeclaration {
@@ -15,4 +16,5 @@ public abstract class WrappedAbstractTypeDeclaration extends WrappedBodyDeclarat
         super(constructor);
     }
 
+    public abstract AbstractTypeDeclaration getWrappee();
 }

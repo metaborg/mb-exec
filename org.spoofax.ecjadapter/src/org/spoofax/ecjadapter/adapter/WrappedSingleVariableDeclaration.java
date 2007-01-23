@@ -31,6 +31,8 @@ public class WrappedSingleVariableDeclaration extends WrappedVariableDeclaration
         case 2:
             return ECJFactory.wrap(wrappee.getName());
         case 3:
+            return ECJFactory.wrap(wrappee.getExtraDimensions());
+        case 4:
             return ECJFactory.wrapExpression(wrappee.getInitializer());
         }
         throw new ArrayIndexOutOfBoundsException();

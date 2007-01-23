@@ -35,4 +35,8 @@ public class WrappedModifierKeyword extends WrappedASTNode {
         throw new NotImplementedException();
     }
 
+    public Modifier.ModifierKeyword getModifier() {
+        return wrappee;
+    }
+
 }

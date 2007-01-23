@@ -23,7 +23,7 @@ public class WrappedNullLiteral extends WrappedExpression {
 
     @Override
     public IStrategoTerm getSubterm(int index) {
-        return null; 
+        throw new ArrayIndexOutOfBoundsException();
     }
 
     @Override

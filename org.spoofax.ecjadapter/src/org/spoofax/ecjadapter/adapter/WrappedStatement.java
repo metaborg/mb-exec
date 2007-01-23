@@ -7,6 +7,7 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
+import org.eclipse.jdt.core.dom.Statement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 
 public abstract class WrappedStatement extends WrappedASTNode {
@@ -14,4 +15,6 @@ public abstract class WrappedStatement extends WrappedASTNode {
     protected WrappedStatement(IStrategoConstructor constructor) {
         super(constructor);
     }
+    
+    public abstract Statement getWrappee();
 }

@@ -51,4 +51,8 @@ public class WrappedPrefixExpressionOperator extends WrappedASTNode {
         throw new NotImplementedException();
     }
 
+    public Operator getOperator() {
+        return wrappee;
+    }
+
 }
