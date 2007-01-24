@@ -10,7 +10,7 @@ package org.spoofax.ecjadapter.adapter;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.PrettyPrinter;
+import org.spoofax.interpreter.terms.ITermPrinter;
 
 public class WrappedGenericAppl implements IStrategoAppl {
 
@@ -64,7 +64,7 @@ public class WrappedGenericAppl implements IStrategoAppl {
         return true;
     }
 
-    public void prettyPrint(PrettyPrinter pp) {
+    public void prettyPrint(ITermPrinter pp) {
         pp.print(ctor.getName());
         
         int arity = ctor.getArity();

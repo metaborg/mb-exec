@@ -126,6 +126,7 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.interpreter.terms.InlinePrinter;
 import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class ECJFactory implements ITermFactory {
@@ -339,7 +340,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException {
-        PrettyPrinter pp = new PrettyPrinter();
+        InlinePrinter pp = new InlinePrinter();
         t.prettyPrint(pp);
         ous.write(pp.getString().getBytes());
     }

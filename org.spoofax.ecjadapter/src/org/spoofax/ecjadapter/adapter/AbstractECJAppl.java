@@ -11,7 +11,7 @@ import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.PrettyPrinter;
+import org.spoofax.interpreter.terms.ITermPrinter;
 
 public abstract class AbstractECJAppl extends AbstractECJNode implements IStrategoAppl {
 
@@ -46,7 +46,7 @@ public abstract class AbstractECJAppl extends AbstractECJNode implements IStrate
         throw new NotImplementedException();
     }
 
-    public void prettyPrint(PrettyPrinter pp) {
+    public void prettyPrint(ITermPrinter pp) {
         pp.print(constructor.getName());
         
         int arity = constructor.getArity();

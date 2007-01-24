@@ -13,6 +13,7 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class ASTCtor implements IStrategoConstructor {
@@ -61,7 +62,7 @@ public class ASTCtor implements IStrategoConstructor {
         throw new NotImplementedException();
     }
 
-    public void prettyPrint(PrettyPrinter pp) {
+    public void prettyPrint(ITermPrinter pp) {
         pp.print(name + "##" + arity);
     }
 

@@ -10,7 +10,7 @@ package org.spoofax.ecjadapter.adapter;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.PrettyPrinter;
+import org.spoofax.interpreter.terms.ITermPrinter;
 
 public class WrappedInt implements IStrategoInt {
 
@@ -40,7 +40,7 @@ public class WrappedInt implements IStrategoInt {
         throw new NotImplementedException();
     }
 
-    public void prettyPrint(PrettyPrinter pp) {
+    public void prettyPrint(ITermPrinter pp) {
         pp.print("" + value);
     }
 

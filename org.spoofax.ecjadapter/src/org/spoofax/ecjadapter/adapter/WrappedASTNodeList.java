@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.PrettyPrinter;
+import org.spoofax.interpreter.terms.ITermPrinter;
 
 public class WrappedASTNodeList implements IStrategoList {
 
@@ -109,7 +109,7 @@ public class WrappedASTNodeList implements IStrategoList {
         return false;
     }
 
-    public void prettyPrint(PrettyPrinter pp) {
+    public void prettyPrint(ITermPrinter pp) {
         int sz = size();
         if(sz > 0) {
             pp.println("[");
