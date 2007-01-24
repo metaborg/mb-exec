@@ -14,6 +14,7 @@ import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.InlinePrinter;
 import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class SSL_printnl extends AbstractPrimitive {
@@ -26,7 +27,7 @@ public class SSL_printnl extends AbstractPrimitive {
 
         // FIXME this is extremely heavy handed
 
-        PrettyPrinter pp = new PrettyPrinter();
+        InlinePrinter pp = new InlinePrinter();
         targs[0].prettyPrint(pp);
         String output = pp.getString();
 
