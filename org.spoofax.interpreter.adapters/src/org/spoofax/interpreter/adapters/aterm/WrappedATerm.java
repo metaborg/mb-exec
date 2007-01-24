@@ -9,6 +9,7 @@ package org.spoofax.interpreter.adapters.aterm;
 
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.interpreter.terms.PrettyPrinter;
 
 import aterm.ATerm;
@@ -32,7 +33,7 @@ public abstract class WrappedATerm implements IStrategoTerm {
          throw new NotImplementedException();
     }
     
-    public void prettyPrint(PrettyPrinter pp) {
+    public void prettyPrint(ITermPrinter pp) {
         pp.print(getATerm().toString());        
     }
     

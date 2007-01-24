@@ -45,7 +45,7 @@ public abstract class BasicStrategoString implements IStrategoString {
         return value;
     }
     
-    public void prettyPrint(PrettyPrinter pp) {
+    public void prettyPrint(ITermPrinter pp) {
         pp.print("\"" +  value + "\"");
     }        
 }

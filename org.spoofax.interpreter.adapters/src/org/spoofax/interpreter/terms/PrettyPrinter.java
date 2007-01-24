@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.terms;
 
-public class PrettyPrinter {
+public class PrettyPrinter implements ITermPrinter {
 
     private int indentationLevel;
     private char[] indentationPrefix;

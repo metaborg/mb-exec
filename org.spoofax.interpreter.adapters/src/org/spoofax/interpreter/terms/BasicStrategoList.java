@@ -92,7 +92,7 @@ public abstract class BasicStrategoList implements IStrategoList {
         return false;
     }
 
-    public void prettyPrint(PrettyPrinter pp) {
+    public void prettyPrint(ITermPrinter pp) {
         int sz = size();
         if(sz > 0) {
             pp.println("[");

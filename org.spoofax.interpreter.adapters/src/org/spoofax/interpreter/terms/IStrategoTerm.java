@@ -26,5 +26,5 @@ public interface IStrategoTerm {
     
     public boolean match(IStrategoTerm second);
     
-    public void prettyPrint(PrettyPrinter pp);
+    public void prettyPrint(ITermPrinter pp);
 }
