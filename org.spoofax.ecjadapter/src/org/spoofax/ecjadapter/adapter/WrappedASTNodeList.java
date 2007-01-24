@@ -18,10 +18,13 @@ import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class WrappedASTNodeList implements IStrategoList {
 
-    private List wrappee;
+    private List<ASTNode> wrappee;
     
-    public WrappedASTNodeList(List wrappee) {
-        this.wrappee = wrappee;
+    public WrappedASTNodeList(List<ASTNode> wrappee) {
+        for(Object n : wrappee)
+            if(!(n instanceof ASTNode))
+                throw new NotImplementedException();
+        this.wrappee = (List<ASTNode>)wrappee;
     }
     
     public IStrategoTerm get(int i) {
@@ -29,7 +32,7 @@ public class WrappedASTNodeList implements IStrategoList {
     }
 
     public IStrategoTerm head() {
-        return ECJFactory.genericWrap((ASTNode)wrappee.get(0));
+        return ECJFactory.genericWrap(wrappee.get(0));
     }
 
     @SuppressWarnings("unchecked")
@@ -41,13 +44,13 @@ public class WrappedASTNodeList implements IStrategoList {
             IStrategoTerm[] r = new IStrategoTerm[sz + 1];
             r[0] = prefix;
             for(int i = 0; i < sz; i++) {
-                r[i + 1] = (IStrategoTerm) wrappee.get(i);
+                r[i + 1] = ECJFactory.genericWrap(wrappee.get(i));
             }
             return new WrappedGenericList(r);
         }
         
-        List r = new ArrayList();
-        r.add(prefix);
+        List<ASTNode> r = new ArrayList<ASTNode>();
+        r.add(((WrappedASTNode)prefix).getWrappee());
         r.addAll(wrappee);
         return new WrappedASTNodeList(r);
     }
@@ -78,7 +81,7 @@ public class WrappedASTNodeList implements IStrategoList {
     @SuppressWarnings("unchecked")
     public IStrategoTerm[] getAllSubterms() {
         IStrategoTerm[] r = new IStrategoTerm[wrappee.size()];
-        ASTNode[] s = (ASTNode[]) wrappee.toArray(new ASTNode[0]);
+        ASTNode[] s =wrappee.toArray(new ASTNode[0]);
         for(int i = 0; i< r.length; i++) {
             r[i] = ECJFactory.genericWrap(s[i]);
         }
@@ -127,7 +130,7 @@ public class WrappedASTNodeList implements IStrategoList {
         }
     }
 
-    public List getWrappee() {
+    public List<ASTNode> getWrappee() {
         return wrappee;
     }
 

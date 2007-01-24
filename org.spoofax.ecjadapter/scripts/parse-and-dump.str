@@ -1,6 +1,6 @@
 module parse-and-dump
 imports
-  lib
+  stratego-lib
   ecj-adapter
   EclipseJava
   

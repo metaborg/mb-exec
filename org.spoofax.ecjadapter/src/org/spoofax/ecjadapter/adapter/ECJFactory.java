@@ -126,6 +126,7 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class ECJFactory implements ITermFactory {
 
@@ -338,7 +339,9 @@ public class ECJFactory implements ITermFactory {
     }
 
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException {
-        throw new NotImplementedException();
+        PrettyPrinter pp = new PrettyPrinter();
+        t.prettyPrint(pp);
+        ous.write(pp.getString().getBytes());
     }
 
     public boolean hasConstructor(String s, int i) {
@@ -1641,7 +1644,8 @@ public class ECJFactory implements ITermFactory {
     }
 
     private int ctorNameToIndex(IStrategoConstructor ctr) {
-        return ctorNameToIndexMap.get(ctr.getName());
+        Integer x = ctorNameToIndexMap.get(ctr.getName());
+        return x == null ? -1 : x.intValue();
     }
 
     public IStrategoConstructor makeConstructor(String string, int arity, boolean quoted) {
@@ -1664,9 +1668,9 @@ public class ECJFactory implements ITermFactory {
             return new WrappedGenericList(terms);
         }
         
-        List r = new ArrayList();
+        List<ASTNode> r = new ArrayList();
         for(IStrategoTerm t : terms)
-            r.add(t);
+            r.add(((WrappedASTNode)t).getWrappee());
         return new WrappedASTNodeList(r);
         //throw new NotImplementedException();
     }
@@ -1695,6 +1699,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedJavadoc(javadoc);
     }
 
+    @SuppressWarnings("unchecked")
     public static IStrategoTerm wrap(List list) {
         if(list == null)
             return None.INSTANCE;
