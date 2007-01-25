@@ -27,7 +27,7 @@ public abstract class BasicStrategoList implements IStrategoList {
     
     protected IStrategoTerm[] doTail() {
         IStrategoTerm[] r = new IStrategoTerm[kids.length - 1];
-        for(int i = 1, sz = r.length; i < sz; i++) {
+        for(int i = 1, sz = r.length+1; i < sz; i++) {
             r[i - 1] = kids[i];
         }
         return r;
