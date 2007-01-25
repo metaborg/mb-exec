@@ -7,14 +7,13 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PostfixExpression.Operator;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedPostfixExpressionOperator extends WrappedASTNode {
+public class WrappedPostfixExpressionOperator extends WrappedECJNode {
 
     private final PostfixExpression.Operator wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("PostfixExpressionOperator", 1);
@@ -38,12 +37,7 @@ public class WrappedPostfixExpressionOperator extends WrappedASTNode {
     }
 
     @Override
-    public ASTNode getWrappee() {
-        throw new NotImplementedException();
-    }
-
-    public Operator getOperator() {
+    public PostfixExpression.Operator getWrappee() {
         return wrappee;
     }
-
 }

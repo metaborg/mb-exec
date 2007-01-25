@@ -7,14 +7,13 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression.Operator;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedPrefixExpressionOperator extends WrappedASTNode {
+public class WrappedPrefixExpressionOperator extends WrappedECJNode {
 
     private final PrefixExpression.Operator wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("PrefixExpressionOperator", 1);
@@ -47,11 +46,7 @@ public class WrappedPrefixExpressionOperator extends WrappedASTNode {
     }
 
     @Override
-    public ASTNode getWrappee() {
-        throw new NotImplementedException();
-    }
-
-    public Operator getOperator() {
+    public PrefixExpression.Operator getWrappee() {
         return wrappee;
     }
 

@@ -33,8 +33,4 @@ public class WrappedModifierKeyword extends WrappedECJNode {
         return wrappee;
     }
 
-    public Modifier.ModifierKeyword getModifier() {
-        return wrappee;
-    }
-
 }

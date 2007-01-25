@@ -361,19 +361,19 @@ public class ECJFactory implements ITermFactory {
         throw new NotImplementedException();
     }
 
-    private boolean ensureNone(IStrategoTerm term) {
+    private boolean isNone(IStrategoTerm term) {
         return term instanceof None;
     }
 
-    private boolean ensureName(IStrategoTerm term) {
+    private boolean isName(IStrategoTerm term) {
         return term instanceof WrappedName;
     }
 
-    private boolean ensureAnnotations(IStrategoTerm term) {
+    private boolean isAnnotations(IStrategoTerm term) {
         return term instanceof WrappedASTNodeList;
     }
 
-    private boolean ensureJavadoc(IStrategoTerm term) {
+    private boolean isJavadoc(IStrategoTerm term) {
         return term instanceof WrappedJavadoc;
     }
 
@@ -413,7 +413,7 @@ public class ECJFactory implements ITermFactory {
         int index = ctorNameToIndex(ctr);
         switch(index) {
         case ANNOTATION_TYPE_DECLARATION: {
-            if(!ensureModifierList(kids[0]) || !ensureSimpleName(kids[1]) || !ensureBodyDeclarationList(kids[1]))
+            if(!isModifierList(kids[0]) || !isSimpleName(kids[1]) || !isBodyDeclarationList(kids[1]))
                 return null;
             AnnotationTypeDeclaration x = ast.newAnnotationTypeDeclaration();
             x.modifiers().addAll(asModifierList(kids[0]));
@@ -422,7 +422,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case ANNOTATION_TYPE_MEMBER_DECLARATION: {
-            if(!ensureModifierList(kids[0]) || !ensureType(kids[1]) || !ensureSimpleName(kids[2]) || !ensureExpression(kids[3]))
+            if(!isModifierList(kids[0]) || !isType(kids[1]) || !isSimpleName(kids[2]) || !isExpression(kids[3]))
                 return null;
             AnnotationTypeMemberDeclaration x = ast.newAnnotationTypeMemberDeclaration();
             x.modifiers().addAll(asModifierList(kids[0]));
@@ -432,7 +432,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case ARRAY_ACCESS: { 
-            if(!ensureExpression(kids[0]) || !ensureExpression(kids[1]))
+            if(!isExpression(kids[0]) || !isExpression(kids[1]))
                 return null;
             ArrayAccess x = ast.newArrayAccess();
             x.setArray(asExpression(kids[0]));
@@ -440,7 +440,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case ARRAY_CREATION: {
-            if(!ensureArrayType(kids[0]) || !ensureExpressionList(kids[1]) || !ensureArrayInitializer(kids[2]))
+            if(!isArrayType(kids[0]) || !isExpressionList(kids[1]) || !isArrayInitializer(kids[2]))
                 return null;
             ArrayCreation x = ast.newArrayCreation();
             x.setType(asArrayType(kids[0]));
@@ -449,21 +449,21 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case ARRAY_INITIALIZER: {
-            if(!ensureExpressionList(kids[0]))
+            if(!isExpressionList(kids[0]))
                 return null;
             ArrayInitializer x = ast.newArrayInitializer();
             x.expressions().addAll(asExpressionList(kids[0]));
             return wrap(x);
         }
         case ARRAY_TYPE: {
-            if(!ensureType(kids[0]) || !ensureInt(kids[1]) || !ensureType(kids[1]))
+            if(!isType(kids[0]) || !isInt(kids[1]) || !isType(kids[1]))
                 return null;
             ArrayType x = ast.newArrayType(asType(kids[2]), asInt(kids[1]));
             x.setComponentType(asType(kids[0]));
             return wrap(x);
         }
         case ASSERT_STATEMENT: {
-            if(!ensureExpression(kids[0]) || !ensureExpression(kids[1]))
+            if(!isExpression(kids[0]) || !isExpression(kids[1]))
                 return null;
             AssertStatement x = ast.newAssertStatement();
             x.setExpression(asExpression(kids[0]));
@@ -471,7 +471,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case ASSIGNMENT: {
-            if(!ensureExpression(kids[0]) || !ensureExpression(kids[1]))
+            if(!isExpression(kids[0]) || !isExpression(kids[1]))
                 return null;
             Assignment x = ast.newAssignment();
             x.setLeftHandSide(asExpression(kids[0]));
@@ -479,7 +479,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case BLOCK: {
-            if(!ensureStatementList(kids[0]))
+            if(!isStatementList(kids[0]))
                 return null;
             Block x = ast.newBlock();
             x.statements().addAll(asStatementList(kids[0]));
@@ -490,7 +490,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case BOOLEAN_LITERAL: {
-            if(!ensureInt(kids[0]))
+            if(!isInt(kids[0]))
                 return null;
             return wrap(ast.newBooleanLiteral(asInt(kids[0]) == 1));
         }
@@ -498,7 +498,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(ast.newPrimitiveType(PrimitiveType.BOOLEAN));
         }
         case BREAK_STATEMENT: {
-            if(!ensureSimpleName(kids[0]))
+            if(!isSimpleName(kids[0]))
                 return null;
             BreakStatement x = ast.newBreakStatement();
             x.setLabel(asSimpleName(kids[0]));
@@ -508,7 +508,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(ast.newPrimitiveType(PrimitiveType.BYTE));
         }
         case CAST_EXPRESSION: {
-            if(!ensureType(kids[0]) || !ensureExpression(kids[1]))
+            if(!isType(kids[0]) || !isExpression(kids[1]))
                 return null;
             CastExpression x = ast.newCastExpression();
             x.setType(asType(kids[0]));
@@ -516,7 +516,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case CATCH_CLAUSE: {
-            if(!ensureSingleVariableDeclaration(kids[0]) || !ensureBlock(kids[1]))
+            if(!isSingleVariableDeclaration(kids[0]) || !isBlock(kids[1]))
                 return null;
             CatchClause x = ast.newCatchClause();
             x.setException(asSingleVariableDeclaration(kids[0]));
@@ -524,29 +524,29 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case CHARACTER_LITERAL: {
-            if(!ensureInt(kids[0]))
+            if(!isInt(kids[0]))
                 return null;
             CharacterLiteral x = ast.newCharacterLiteral();
             x.setCharValue((char)asInt(kids[0]));
             return wrap(x);
         }
         case CLASS_INSTANCE_CREATION: {
-            if(!ensureExpression(kids[0]) || !ensureType(kids[1]) || !ensureAnonymousClassDeclaration(kids[2]) || !ensureExpressionList(kids[3]))
+            if(!isExpression(kids[0]) || !isType(kids[1]) || !isAnonymousClassDeclaration(kids[2]) || !isExpressionList(kids[3]))
                 return null;
             ClassInstanceCreation x = ast.newClassInstanceCreation();
             x.setExpression(asExpression(kids[0]));
             x.setType(asType(kids[1]));
             x.setAnonymousClassDeclaration(asAnonymousClassDeclaration(kids[2]));
             x.arguments().addAll(asExpressionList(kids[3]));
-            break;
+            return wrap(x);
         }
         case COMPILATION_UNIT: {
-            if((!ensurePackageDeclaration(kids[0]) && !ensureNone(kids[0])) 
-                    || !ensureImportDeclarationList(kids[1]) 
-                    || !ensureAbstractTypeDeclarationList(kids[2]))
+            if((!isPackageDeclaration(kids[0]) && !isNone(kids[0])) 
+                    || !isImportDeclarationList(kids[1]) 
+                    || !isAbstractTypeDeclarationList(kids[2]))
                 return null;
             CompilationUnit x = ast.newCompilationUnit();
-            if(ensureNone(kids[0]))
+            if(isNone(kids[0]))
                 x.setPackage(null);
             else 
                 x.setPackage(asPackageDeclaration(kids[0]));
@@ -555,7 +555,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case CONDITIONAL_EXPRESSION: {
-            if(!ensureExpression(kids[0]) || !ensureExpression(kids[1]) || !ensureExpression(kids[2]))
+            if(!isExpression(kids[0]) || !isExpression(kids[1]) || !isExpression(kids[2]))
                 return null;
             ConditionalExpression x = ast.newConditionalExpression();
             x.setExpression(asExpression(kids[0]));
@@ -564,14 +564,14 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case CONSTRUCTOR_INVOCATION: {
-            if(!ensureExpressionList(kids[0]))
+            if(!isExpressionList(kids[0]))
                 return null;
             ConstructorInvocation x = ast.newConstructorInvocation();
             x.arguments().addAll(asExpressionList(kids[0]));
             return wrap(x);
         }
         case CONTINUE_STATEMENT: {
-            if(!ensureSimpleName(kids[0]))
+            if(!isSimpleName(kids[0]))
                 return null;
             ContinueStatement x = ast.newContinueStatement();
             x.setLabel(asSimpleName(kids[0]));
@@ -590,9 +590,9 @@ public class ECJFactory implements ITermFactory {
             return wrap(ast.newEmptyStatement());
         }
         case ENHANCED_FOR_STATEMENT: {
-            if(!ensureSingleVariableDeclaration(kids[0]) 
-                    || !ensureExpression(kids[1])
-                    || !ensureStatement(kids[3]))
+            if(!isSingleVariableDeclaration(kids[0]) 
+                    || !isExpression(kids[1])
+                    || !isStatement(kids[3]))
                 return null;
             EnhancedForStatement x = ast.newEnhancedForStatement();
             x.setParameter(asSingleVariableDeclaration(kids[0]));
@@ -601,10 +601,10 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case ENUM_CONSTANT_DECLARATION: {
-            if(!ensureModifierList(kids[0]) 
-                    || !ensureSimpleName(kids[1]) 
-                    || !ensureExpressionList(kids[2]) 
-                    || !ensureAnonymousClassDeclaration(kids[3]))
+            if(!isModifierList(kids[0]) 
+                    || !isSimpleName(kids[1]) 
+                    || !isExpressionList(kids[2]) 
+                    || !isAnonymousClassDeclaration(kids[3]))
                 return null;
             EnumConstantDeclaration x = ast.newEnumConstantDeclaration();
             x.modifiers().addAll(asModifierList(kids[0]));
@@ -614,11 +614,11 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case ENUM_DECLARATION: {
-            if(!ensureModifierList(kids[0])
-                    || !ensureSimpleName(kids[1])
-                    || !ensureTypeList(kids[2])
-                    || !ensureEnumConstantDeclarationList(kids[3])
-                    || !ensureBodyDeclarationList(kids[4]))
+            if(!isModifierList(kids[0])
+                    || !isSimpleName(kids[1])
+                    || !isTypeList(kids[2])
+                    || !isEnumConstantDeclarationList(kids[3])
+                    || !isBodyDeclarationList(kids[4]))
                 return null;
             EnumDeclaration x = ast.newEnumDeclaration();
             x.modifiers().addAll(asModifierList(kids[0]));
@@ -629,7 +629,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case FIELD_ACCESS: {
-            if(!ensureExpression(kids[0]) || !ensureSimpleName(kids[1]))
+            if(!isExpression(kids[0]) || !isSimpleName(kids[1]))
                 return null;
             FieldAccess x = ast.newFieldAccess();
             x.setExpression(asExpression(kids[0]));
@@ -637,9 +637,9 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case FIELD_DECLARATION: {
-            if(!ensureModifierList(kids[0])
-                    || !ensureType(kids[1])
-                    || !ensureFragmentList(kids[1]))
+            if(!isModifierList(kids[0])
+                    || !isType(kids[1])
+                    || !isNonEmptyFragmentList(kids[1]))
                 return null;
             List y = asFragmentList(kids[2]);
             FieldDeclaration x = ast.newFieldDeclaration((VariableDeclarationFragment)y.remove(0));
@@ -652,10 +652,10 @@ public class ECJFactory implements ITermFactory {
             return wrap(ast.newPrimitiveType(PrimitiveType.FLOAT));
         }
         case FOR_STATEMENT: {
-            if(!ensureExpressionList(kids[0]) 
-                    || !ensureExpression(kids[1])
-                    || !ensureExpressionList(kids[2])
-                    || !ensureStatement(kids[3]))
+            if(!isExpressionList(kids[0]) 
+                    || !isExpression(kids[1])
+                    || !isExpressionList(kids[2])
+                    || !isStatement(kids[3]))
                 return null;
             ForStatement x = ast.newForStatement();
             x.initializers().addAll(asExpressionList(kids[0]));
@@ -665,9 +665,9 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case IF_STATEMENT: {
-            if(!ensureExpression(kids[0])
-                    || !ensureStatement(kids[1])
-                    || !ensureStatement(kids[2]))
+            if(!isExpression(kids[0])
+                    || !isStatement(kids[1])
+                    || !isStatement(kids[2]))
                 return null;
             IfStatement x = ast.newIfStatement();
             x.setExpression(asExpression(kids[0]));
@@ -676,16 +676,16 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case IMPORT_DECLARATION: {
-            if(!ensureName(kids[0]))
+            if(!isName(kids[0]))
                 return null;
             ImportDeclaration x = ast.newImportDeclaration();
             x.setName(asName(kids[0]));
             return wrap(x);
         }
         case INFIX_EXPRESSION: {
-            if(!ensureOperator(kids[0])
-                    || !ensureExpression(kids[1])
-                    || !ensureExpression(kids[2]))
+            if(!isOperator(kids[0])
+                    || !isExpression(kids[1])
+                    || !isExpression(kids[2]))
                 return null;
             InfixExpression x = ast.newInfixExpression();
             x.setOperator(asOperator(kids[0]));
@@ -693,22 +693,35 @@ public class ECJFactory implements ITermFactory {
             x.setRightOperand(asExpression(kids[1]));
             return wrap(x);
         }
-        case INITIALIZER:
-            break;
-        case INSTANCEOF_EXPRESSION:
-            break;
+        case INITIALIZER: {
+            if(!isBlock(kids[0]))
+                return null;
+            Initializer x = ast.newInitializer();
+            x.setBody(asBlock(kids[0]));
+            return wrap(x);
+            
+        }
+        case INSTANCEOF_EXPRESSION: {
+            if(!isExpression(kids[0])
+                    || !isType(kids[0]))
+                return null;
+            InstanceofExpression x = ast.newInstanceofExpression();
+            x.setLeftOperand(asExpression(kids[0]));
+            x.setRightOperand(asType(kids[1]));
+            return wrap(x);
+        }
         case INT_TYPE: {
             return wrap(ast.newPrimitiveType(PrimitiveType.INT));
         }
         case JAVADOC: {
-            if(!ensureTagElementList(kids[0]))
+            if(!isTagElementList(kids[0]))
                 return null;
             Javadoc x = ast.newJavadoc();
             x.tags().addAll(asTagElementList(kids[0]));
             return wrap(x);
         }
         case LABELED_STATEMENT: {
-            if(!ensureStatement(kids[0]))
+            if(!isStatement(kids[0]))
                 return null;
             LabeledStatement x = ast.newLabeledStatement();
             x.setBody(asStatement(kids[0]));
@@ -722,7 +735,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(ast.newPrimitiveType(PrimitiveType.INT));
         }
         case MARKER_ANNOTATION: {
-            if(!ensureName(kids[0]))
+            if(!isName(kids[0]))
                 return null;
             MarkerAnnotation x = ast.newMarkerAnnotation();
             x.setTypeName(asName(kids[0]));
@@ -730,7 +743,7 @@ public class ECJFactory implements ITermFactory {
             
         }
         case MEMBER_REF: {
-            if(!ensureSimpleName(kids[0]) || !ensureName(kids[1]))
+            if(!isSimpleName(kids[0]) || !isName(kids[1]))
                 return null;
             MemberRef x = ast.newMemberRef();
             x.setName(asSimpleName(kids[0]));
@@ -738,7 +751,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case MEMBER_VALUE_PAIR: {
-            if(!ensureSimpleName(kids[0]) || !ensureExpression(kids[1]))
+            if(!isSimpleName(kids[0]) || !isExpression(kids[1]))
                 return null;
             MemberValuePair x = ast.newMemberValuePair();
             x.setName(asSimpleName(kids[0]));
@@ -746,12 +759,12 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case METHOD_DECLARATION: {
-            if(!ensureModifierList(kids[0])
-                    || !ensureTypeParameterList(kids[1])
-                    || !ensureSimpleName(kids[2])
-                    || !ensureSingleVariableDeclarationList(kids[3])
-                    || !ensureNameList(kids[4])
-                    || !ensureBlock(kids[5]))
+            if(!isModifierList(kids[0])
+                    || !isTypeParameterList(kids[1])
+                    || !isSimpleName(kids[2])
+                    || !isSingleVariableDeclarationList(kids[3])
+                    || !isNameList(kids[4])
+                    || !isBlock(kids[5]))
                 return null;
             MethodDeclaration x = ast.newMethodDeclaration();
             x.modifiers().addAll(asModifierList(kids[0]));
@@ -763,10 +776,10 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case METHOD_INVOCATION: {
-            if(!ensureExpression(kids[0])
-                    || !ensureSimpleName(kids[1])
-                    || !ensureTypeList(kids[2])
-                    || !ensureExpressionList(kids[3]))
+            if(!isExpression(kids[0])
+                    || !isSimpleName(kids[1])
+                    || !isTypeList(kids[2])
+                    || !isExpressionList(kids[3]))
                 return null;
             MethodInvocation x = ast.newMethodInvocation();
             x.setExpression(asExpression(kids[0]));
@@ -776,9 +789,9 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case METHOD_REF: {
-            if(!ensureSimpleName(kids[0])
-                    || !ensureName(kids[1])
-                    || !ensureMethodRefParameterList(kids[2]))
+            if(!isSimpleName(kids[0])
+                    || !isName(kids[1])
+                    || !isMethodRefParameterList(kids[2]))
                 return null;
             MethodRef x = ast.newMethodRef();
             x.setName(asSimpleName(kids[0]));
@@ -787,8 +800,8 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case METHOD_REF_PARAMETER: {
-            if(!ensureType(kids[0])
-                    || !ensureSimpleName(kids[1]))
+            if(!isType(kids[0])
+                    || !isSimpleName(kids[1]))
                 return null;
             MethodRefParameter x = ast.newMethodRefParameter();
             x.setType(asType(kids[0]));
@@ -796,19 +809,19 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case MODIFIER: {
-            if(!ensureModifierKeyword(kids[0]))
+            if(!isModifierKeyword(kids[0]))
                 return null;
             return wrap(ast.newModifier(asModifierKeyword(kids[0])));
         }
         case MODIFIER_KEYWORD: {
-            if(!ensureInt(kids[0]))
+            if(!isInt(kids[0]))
                 return null;
             return wrap(Modifier.ModifierKeyword.fromFlagValue(asInt(kids[0])));
         }
         case NONE:
             return None.INSTANCE;
         case NORMAL_ANNOTATION: {
-            if(!ensureName(kids[0]) || !ensureMemberValuePairList(kids[1]))
+            if(!isName(kids[0]) || !isMemberValuePairList(kids[1]))
                 return null;
             NormalAnnotation x = ast.newNormalAnnotation();
             x.setTypeName(asName(kids[0]));
@@ -819,16 +832,16 @@ public class ECJFactory implements ITermFactory {
             return wrap(ast.newNullLiteral());
         }
         case NUMBER_LITERAL: {
-            if(!ensureString(kids[0]))
+            if(!isString(kids[0]))
                 return null;
             return wrap(ast.newNumberLiteral(asString(kids[0])));
         }
         case PACKAGE_DECLARATION: {
-            if(!(ensureJavadoc(kids[0]) || ensureNone(kids[0])))
+            if(!(isJavadoc(kids[0]) || isNone(kids[0])))
                 return null;
-            if(!ensureAnnotations(kids[1]))
+            if(!isAnnotations(kids[1]))
                 return null;
-            if(!ensureName(kids[2]))
+            if(!isName(kids[2]))
                 return null;
             
             PackageDeclaration pd = ast.newPackageDeclaration();
@@ -838,69 +851,74 @@ public class ECJFactory implements ITermFactory {
             return wrap(pd);
         }
         case PARAMETERIZED_TYPE: {
-            if(!ensureType(kids[0]) || !ensureTypeList(kids[1]))
+            if(!isType(kids[0]) || !isTypeList(kids[1]))
                 return null;
             ParameterizedType x = ast.newParameterizedType(asType(kids[0]));
             x.typeArguments().addAll(asTypeList(kids[1]));
             return wrap(x);
         }
         case PARENTHESIZED_EXPRESSION: {
-            if(!ensureExpression(kids[0]))
+            if(!isExpression(kids[0]))
                 return null;
             ParenthesizedExpression x = ast.newParenthesizedExpression();
             x.setExpression(asExpression(kids[0]));
             return wrap(x);
         }
         case POSTFIX_EXPRESSION: {
-            if(!ensurePostfixOperator(kids[0]) || !ensureExpression(kids[1]))
+            if(!isPostfixOperator(kids[0]) || !isExpression(kids[1]))
                 return null;
             PostfixExpression x = ast.newPostfixExpression();
             x.setOperator(asPostfixOperator(kids[0]));
             x.setOperand(asExpression(kids[1]));
             return wrap(x);
         }
-        case POSTFIX_EXPRESSION_OPERATOR:
-            // FIXME
-            break;
+        case POSTFIX_EXPRESSION_OPERATOR: {
+            if(!isString(kids[0]))
+                return null;
+            return wrap(PostfixExpression.Operator.toOperator(asString(kids[0])));
+        }
         case PREFIX_EXPRESSION: {
-            if(!ensurePrefixOperator(kids[0]) || !ensureExpression(kids[1]))
+            if(!isPrefixOperator(kids[0]) || !isExpression(kids[1]))
                 return null;
             PrefixExpression x = ast.newPrefixExpression();
             x.setOperator(asPrefixOperator(kids[0]));
             x.setOperand(asExpression(kids[1]));
             return wrap(x);
         }
-        case PREFIX_EXPRESSION_OPERATOR:
-            break;
+        case PREFIX_EXPRESSION_OPERATOR: {
+            if(!isString(kids[0]))
+                return null;
+            return wrap(PrefixExpression.Operator.toOperator(asString(kids[0])));
+        }
         case PRIMITIVE_TYPE: {
-            if(!ensureString(kids[0]))
+            if(!isString(kids[0]))
                 return null;
             return wrap(ast.newPrimitiveType(asTypeCode(kids[0])));
         }
         case QUALIFIED_NAME: {
-            if(!ensureName(kids[0]) || !ensureSimpleName(kids[1]))
+            if(!isName(kids[0]) || !isSimpleName(kids[1]))
                 return null;
             return wrap(ast.newQualifiedName(asName(kids[0]), asSimpleName(kids[1])));
         }
         case QUALIFIED_TYPE: {
-            if(!ensureType(kids[0]) || !ensureSimpleName(kids[1]))
+            if(!isType(kids[0]) || !isSimpleName(kids[1]))
                 return null;
             return wrap(ast.newQualifiedType(asType(kids[0]), asSimpleName(kids[1])));
         }
         case RETURN_STATEMENT: {
-            if(!ensureExpression(kids[0]))
+            if(!isExpression(kids[0]))
                 return null;
             ReturnStatement x = ast.newReturnStatement();
             x.setExpression(asExpression(kids[0]));
             return wrap(x);
         }
         case SIMPLE_NAME: {
-            if(!ensureString(kids[0]))
+            if(!isString(kids[0]))
                 return null;
             return wrap(ast.newSimpleName(asString(kids[0])));
         }
         case SIMPLE_TYPE: {
-            if(!ensureName(kids[0]))
+            if(!isName(kids[0]))
                 return null;
             
             Name n = asName(kids[0]);
@@ -911,7 +929,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(ast.newSimpleType(n));
         }
         case SINGLE_MEMBER_ANNOTATION: {
-            if(!ensureName(kids[0]) || !ensureExpression(kids[1]))
+            if(!isName(kids[0]) || !isExpression(kids[1]))
                 return null;
             SingleMemberAnnotation x = ast.newSingleMemberAnnotation();
             x.setTypeName(asName(kids[0]));
@@ -919,11 +937,11 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case SINGLE_VARIABLE_DECLARATION: {
-            if(!ensureModifierList(kids[0])
-                    || !ensureType(kids[1])
-                    || !ensureName(kids[2])
-                    || !ensureInt(kids[3])
-                    || !ensureExpression(kids[4]))
+            if(!isModifierList(kids[0])
+                    || !isType(kids[1])
+                    || !isName(kids[2])
+                    || !isInt(kids[3])
+                    || !isExpression(kids[4]))
                 return null;
             SingleVariableDeclaration x = ast.newSingleVariableDeclaration();
             x.modifiers().addAll(asModifierList(kids[0]));
@@ -934,14 +952,14 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case STRING_LITERAL: {
-            if(!ensureString(kids[0]))
+            if(!isString(kids[0]))
                 return null;
             StringLiteral x = ast.newStringLiteral();
             x.setLiteralValue(asString(kids[0]));
             return wrap(x);
         }
         case SUPER_CONSTRUCTOR_INVOCATION: {
-            if(!ensureExpression(kids[0]) || !ensureTypeList(kids[1]) || !ensureExpressionList(kids[2]))
+            if(!isExpression(kids[0]) || !isTypeList(kids[1]) || !isExpressionList(kids[2]))
                 return null;
             SuperConstructorInvocation x = ast.newSuperConstructorInvocation();
             x.setExpression(asExpression(kids[0]));
@@ -950,7 +968,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case SUPER_FIELD_ACCESS: {
-            if(!ensureName(kids[0]) || !ensureSimpleName(kids[1]))
+            if(!isName(kids[0]) || !isSimpleName(kids[1]))
                 return null;
             SuperFieldAccess x = ast.newSuperFieldAccess();
             x.setQualifier(asName(kids[0]));
@@ -958,10 +976,10 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case SUPER_METHOD_INVOCATION: {
-            if(!ensureName(kids[0]) 
-                    || !ensureTypeList(kids[1])
-                    || !ensureSimpleName(kids[2])
-                    || !ensureExpressionList(kids[3]))
+            if(!isName(kids[0]) 
+                    || !isTypeList(kids[1])
+                    || !isSimpleName(kids[2])
+                    || !isExpressionList(kids[3]))
                 return null;
             SuperMethodInvocation x = ast.newSuperMethodInvocation();
             x.setQualifier(asName(kids[0]));
@@ -971,7 +989,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case TAG_ELEMENT: {
-            if(!ensureString(kids[0]) || !ensureASTNodeList(kids[1]))
+            if(!isString(kids[0]) || !isASTNodeList(kids[1]))
                 return null;
             TagElement x = ast.newTagElement();
             x.setTagName(asString(kids[0]));
@@ -979,28 +997,28 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case TEXT_ELEMENT: {
-            if(!ensureString(kids[0]))
+            if(!isString(kids[0]))
                 return null;
             TextElement x = ast.newTextElement();
             x.setText(asString(kids[0]));
             return wrap(x);
         }
         case THIS_EXPRESSION: {
-            if(!ensureName(kids[0]))
+            if(!isName(kids[0]))
                 return null;
             ThisExpression x = ast.newThisExpression();
             x.setQualifier(asName(kids[1]));
-            break;
+            return wrap(x);
         }
         case THROW_STATEMENT: {
-            if(!ensureExpression(kids[0]))
+            if(!isExpression(kids[0]))
                 return null;
             ThrowStatement x = ast.newThrowStatement();
             x.setExpression(asExpression(kids[0]));
             return wrap(x);
         }
         case TRY_STATEMENT: {
-            if(!ensureBlock(kids[0]) || !ensureCatchClauseList(kids[1]) || !ensureBlock(kids[2]))
+            if(!isBlock(kids[0]) || !isCatchClauseList(kids[1]) || !isBlock(kids[2]))
                 return null;
             TryStatement x = ast.newTryStatement();
             x.setBody(asBlock(kids[0]));
@@ -1009,18 +1027,18 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case TYPE_DECLARATION: {
-            if(!ensureModifierList(kids[0])
-                    || !ensureSimpleName(kids[1])
-                    || !ensureTypeList(kids[2])
-                    || (!ensureType(kids[3]) && !ensureNone(kids[3]))
-                    || !ensureTypeList(kids[4])
-                    || !ensureBodyDeclarationList(kids[5]))
+            if(!isModifierList(kids[0])
+                    || !isSimpleName(kids[1])
+                    || !isTypeList(kids[2])
+                    || (!isType(kids[3]) && !isNone(kids[3]))
+                    || !isTypeList(kids[4])
+                    || !isBodyDeclarationList(kids[5]))
                 return null;
             TypeDeclaration x = ast.newTypeDeclaration();
             x.modifiers().addAll(asModifierList(kids[0]));
             x.setName(asSimpleName(kids[1]));
             x.typeParameters().addAll(asTypeList(kids[2]));
-            if(ensureNone(kids[3])) 
+            if(isNone(kids[3])) 
                 x.setSuperclassType(null);
             else 
                 x.setSuperclassType(asType(kids[3]));
@@ -1029,19 +1047,19 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case TYPE_DECLARATION_STATEMENT: {
-            if(!ensureTypeDecl(kids[0]))
+            if(!isTypeDecl(kids[0]))
                 return null;
             return wrap(ast.newTypeDeclarationStatement(asTypeDecl(kids[0])));
         }
         case TYPE_LITERAL: {
-            if(!ensureType(kids[0]))
+            if(!isType(kids[0]))
                 return null;
             TypeLiteral x = ast.newTypeLiteral();
             x.setType(asType(kids[0]));
             return wrap(x);
         }
         case TYPE_PARAMETER: {
-            if(!ensureSimpleName(kids[0]) || !ensureTypeList(kids[1]))
+            if(!isSimpleName(kids[0]) || !isTypeList(kids[1]))
                 return null;
             TypeParameter x = ast.newTypeParameter();
             x.setName(asSimpleName(kids[0]));
@@ -1049,7 +1067,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case VARIABLE_DECLARATION_EXPRESSION: {
-            if(!ensureModifierList(kids[0]) || !ensureType(kids[1]) || !ensureFragmentList(kids[2]))
+            if(!isModifierList(kids[0]) || !isType(kids[1]) || !isNonEmptyFragmentList(kids[2]))
                 return null;
             List y = asFragmentList(kids[2]);
             VariableDeclarationExpression x = ast.newVariableDeclarationExpression((VariableDeclarationFragment)y.remove(0));
@@ -1059,7 +1077,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case VARIABLE_DECLARATION_FRAGMENT: {
-            if(!ensureSimpleName(kids[0]) || !ensureInt(kids[1]) || !ensureExpression(kids[2]))
+            if(!isSimpleName(kids[0]) || !isInt(kids[1]) || !isExpression(kids[2]))
                 return null;
             VariableDeclarationFragment x = ast.newVariableDeclarationFragment();
             x.setName(asSimpleName(kids[0]));
@@ -1068,7 +1086,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case VARIABLE_DECLARATION_STATEMENT: {
-            if(!ensureModifierList(kids[0]) || !ensureType(kids[1]) || !ensureFragmentList(kids[2]))
+            if(!isModifierList(kids[0]) || !isType(kids[1]) || !isNonEmptyFragmentList(kids[2]))
                 return null;
             List y = asFragmentList(kids[2]);
             VariableDeclarationStatement x = ast.newVariableDeclarationStatement((VariableDeclarationFragment)y.remove(0));
@@ -1078,7 +1096,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case WHILE_STATEMENT: {
-            if(!ensureExpression(kids[0]) || !ensureStatement(kids[1]))
+            if(!isExpression(kids[0]) || !isStatement(kids[1]))
                 return null;
             WhileStatement x = ast.newWhileStatement();
             x.setExpression(asExpression(kids[0]));
@@ -1086,7 +1104,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case WILDCARD_TYPE: {
-            if(!ensureType(kids[0]))
+            if(!isType(kids[0]))
                 return null;
             WildcardType x = ast.newWildcardType();
             x.setBound(asType(kids[1]));
@@ -1095,7 +1113,6 @@ public class ECJFactory implements ITermFactory {
         default:
             return null;
         }
-        throw new NotImplementedException();
     }
 
     @SuppressWarnings("unchecked")
@@ -1113,17 +1130,17 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedAbstractTypeDeclaration)term).getWrappee();
     }
 
-    private boolean ensureAbstractTypeDeclarationList(IStrategoTerm term) {
+    private boolean isAbstractTypeDeclarationList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureAbstractTypeDeclaration(list.get(0));
+                return isAbstractTypeDeclaration(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureAbstractTypeDeclaration(IStrategoTerm term) {
+    private boolean isAbstractTypeDeclaration(IStrategoTerm term) {
         return term instanceof WrappedAbstractTypeDeclaration;
     }
 
@@ -1141,18 +1158,18 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedMethodRefParameter)term).getWrappee();
     }
 
-    private boolean ensureMethodRefParameterList(IStrategoTerm term) {
+    private boolean isMethodRefParameterList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureMethodRefParameter(list.get(0));
+                return isMethodRefParameter(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureMethodRefParameter(IStrategoTerm term) {
-        return term instanceof MethodRefParameter;
+    private boolean isMethodRefParameter(IStrategoTerm term) {
+        return term instanceof WrappedMethodRefParameter;
     }
 
     @SuppressWarnings("unchecked")
@@ -1185,37 +1202,37 @@ public class ECJFactory implements ITermFactory {
         return r;    
     }
 
-    private boolean ensureNameList(IStrategoTerm term) {
+    private boolean isNameList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureName(list.get(0));
+                return isName(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureSingleVariableDeclarationList(IStrategoTerm term) {
+    private boolean isSingleVariableDeclarationList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureSingleVariableDeclaration(list.get(0));
+                return isSingleVariableDeclaration(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureTypeParameterList(IStrategoTerm term) {
+    private boolean isTypeParameterList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureTypeParameter(list.get(0));
+                return isTypeParameter(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureTypeParameter(IStrategoTerm term) {
+    private boolean isTypeParameter(IStrategoTerm term) {
         return term instanceof TypeParameter;
     }
 
@@ -1229,17 +1246,17 @@ public class ECJFactory implements ITermFactory {
         return r;    
     }
 
-    private boolean ensureTagElementList(IStrategoTerm term) {
+    private boolean isTagElementList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureTagElement(list.get(0));
+                return isTagElement(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureTagElement(IStrategoTerm term) {
+    private boolean isTagElement(IStrategoTerm term) {
         return term instanceof WrappedTagElement;
     }
 
@@ -1247,7 +1264,7 @@ public class ECJFactory implements ITermFactory {
         return InfixExpression.Operator.toOperator(((IStrategoString)term).getValue());
     }
 
-    private boolean ensureOperator(IStrategoTerm term) {
+    private boolean isOperator(IStrategoTerm term) {
         return term instanceof IStrategoString 
         && InfixExpression.Operator.toOperator(((IStrategoString)term).getValue()) != null;
     }
@@ -1266,32 +1283,18 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedEnumConstantDeclaration)term).getWrappee();
     }
 
-    private boolean ensureEnumConstantDeclarationList(IStrategoTerm term) {
+    private boolean isEnumConstantDeclarationList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureEnumConstantDeclaration(list.get(0));
+                return isEnumConstantDeclaration(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureEnumConstantDeclaration(IStrategoTerm term) {
+    private boolean isEnumConstantDeclaration(IStrategoTerm term) {
         return term instanceof WrappedEnumConstantDeclaration;
-    }
-
-    @SuppressWarnings("unchecked")
-    private Collection asTypeDeclarationList(IStrategoTerm term) {
-        IStrategoTerm[] kids = term.getAllSubterms();
-        List r = new ArrayList(kids.length);
-        for(IStrategoTerm k : kids) {
-            r.add(asTypeDeclaration(k));
-        }
-        return r;    
-    }
-    
-    private TypeDeclaration asTypeDeclaration(IStrategoTerm term) {
-        return ((WrappedTypeDeclaration)term).getWrappee();
     }
 
     @SuppressWarnings("unchecked")
@@ -1312,35 +1315,21 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedPackageDeclaration)term).getWrappee();
     }
 
-    private boolean ensureTypeDeclarationList(IStrategoTerm term) {
+    private boolean isImportDeclarationList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureTypeDeclaration(list.get(0));
+                return isImportDeclaration(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureTypeDeclaration(IStrategoTerm term) {
-        return term instanceof TypeDeclaration;
-    }
-
-    private boolean ensureImportDeclarationList(IStrategoTerm term) {
-        if(term instanceof IStrategoList) {
-            IStrategoList list = (IStrategoList)term;
-            if(list.size() > 0) 
-                return ensureImportDeclaration(list.get(0));
-            return true;
-        }
-        return false;
-    }
-
-    private boolean ensureImportDeclaration(IStrategoTerm term) {
+    private boolean isImportDeclaration(IStrategoTerm term) {
         return term instanceof WrappedImportDeclaration;
     }
 
-    private boolean ensurePackageDeclaration(IStrategoTerm term) {
+    private boolean isPackageDeclaration(IStrategoTerm term) {
         return term instanceof WrappedPackageDeclaration;
     }
 
@@ -1358,25 +1347,25 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedMemberValuePair)term).getWrappee();
     }
 
-    private boolean ensureMemberValuePairList(IStrategoTerm term) {
+    private boolean isMemberValuePairList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureMemberValuePair(list.get(0));
+                return isMemberValuePair(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureMemberValuePair(IStrategoTerm term) {
+    private boolean isMemberValuePair(IStrategoTerm term) {
         return term instanceof MemberValuePair;
     }
 
     private ModifierKeyword asModifierKeyword(IStrategoTerm term) {
-        return ((WrappedModifierKeyword)term).getModifier();
+        return ((WrappedModifierKeyword)term).getWrappee();
     }
 
-    private boolean ensureModifierKeyword(IStrategoTerm term) {
+    private boolean isModifierKeyword(IStrategoTerm term) {
         return term instanceof ModifierKeyword;
     }
 
@@ -1394,7 +1383,7 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedASTNode)term).getWrappee();
     }
 
-    private boolean ensureASTNodeList(IStrategoTerm term) {
+    private boolean isASTNodeList(IStrategoTerm term) {
         return term instanceof WrappedASTNodeList;
     }
 
@@ -1423,7 +1412,7 @@ public class ECJFactory implements ITermFactory {
         return ((IStrategoString)term).getValue();
     }
 
-    private boolean ensureString(IStrategoTerm term) {
+    private boolean isString(IStrategoTerm term) {
         return term instanceof IStrategoString;
     }
 
@@ -1445,31 +1434,31 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedCatchClause)term).getWrappee();
     }
 
-    private boolean ensureCatchClauseList(IStrategoTerm term) {
+    private boolean isCatchClauseList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureCatchClause(list.get(0));
+                return isCatchClause(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureCatchClause(IStrategoTerm term) {
+    private boolean isCatchClause(IStrategoTerm term) {
         return term instanceof WrappedCatchClause;
     }
 
-    private boolean ensureBodyDeclarationList(IStrategoTerm term) {
+    private boolean isBodyDeclarationList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureBodyDeclaration(list.get(0));
+                return isBodyDeclaration(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureTypeDecl(IStrategoTerm term) {
+    private boolean isTypeDecl(IStrategoTerm term) {
         return term instanceof AbstractTypeDeclaration;
     }
 
@@ -1491,23 +1480,23 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedVariableDeclarationFragment)term).getWrappee();
     }
 
-    private boolean ensureFragmentList(IStrategoTerm term) {
+    private boolean isNonEmptyFragmentList(IStrategoTerm term) {
         // Must contain at least one element
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() < 0)
                 return false;
-            return ensureVariableDeclarationFragment(list.get(0));
+            return isVariableDeclarationFragment(list.get(0));
             
         }
         return false;
     }
 
-    private boolean ensureVariableDeclarationFragment(IStrategoTerm term) {
+    private boolean isVariableDeclarationFragment(IStrategoTerm term) {
         return term instanceof WrappedVariableDeclarationFragment;
     }
 
-    private boolean ensureAnonymousClassDeclaration(IStrategoTerm term) {
+    private boolean isAnonymousClassDeclaration(IStrategoTerm term) {
         return term instanceof WrappedAnonymousClassDeclaration;
     }
 
@@ -1515,11 +1504,11 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedAnonymousClassDeclaration)term).getWrappee();
     }
 
-    private boolean ensureBlock(IStrategoTerm term) {
+    private boolean isBlock(IStrategoTerm term) {
         return term instanceof WrappedBlock;
     }
 
-    private boolean ensureSingleVariableDeclaration(IStrategoTerm term) {
+    private boolean isSingleVariableDeclaration(IStrategoTerm term) {
         return term instanceof WrappedSingleVariableDeclaration;
     }
 
@@ -1532,18 +1521,18 @@ public class ECJFactory implements ITermFactory {
     }
 
     private PrefixExpression.Operator asPrefixOperator(IStrategoTerm term) {
-        return ((WrappedPrefixExpressionOperator)term).getOperator();
+        return ((WrappedPrefixExpressionOperator)term).getWrappee();
     }
 
-    private boolean ensurePrefixOperator(IStrategoTerm term) {
+    private boolean isPrefixOperator(IStrategoTerm term) {
         return term instanceof WrappedPrefixExpressionOperator;
     }
 
     private PostfixExpression.Operator asPostfixOperator(IStrategoTerm term) {
-        return ((WrappedPostfixExpressionOperator)term).getOperator();
+        return ((WrappedPostfixExpressionOperator)term).getWrappee();
     }
 
-    private boolean ensurePostfixOperator(IStrategoTerm term) {
+    private boolean isPostfixOperator(IStrategoTerm term) {
         return term instanceof WrappedPostfixExpressionOperator;
     }
 
@@ -1557,11 +1546,11 @@ public class ECJFactory implements ITermFactory {
         return r;    
     }
 
-    private boolean ensureTypeList(IStrategoTerm term) {
+    private boolean isTypeList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureType(list.get(0));
+                return isType(list.get(0));
             return true;
         }
         return false;
@@ -1581,17 +1570,17 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedStatement)term).getWrappee();
     }
 
-    private boolean ensureStatementList(IStrategoTerm term) {
+    private boolean isStatementList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureStatement(list.get(0));
+                return isStatement(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureStatement(IStrategoTerm term) {
+    private boolean isStatement(IStrategoTerm term) {
         return term instanceof WrappedStatement;
     }
 
@@ -1599,7 +1588,7 @@ public class ECJFactory implements ITermFactory {
         return ((IStrategoInt)term).getValue();
     }
 
-    private boolean ensureInt(IStrategoTerm term) {
+    private boolean isInt(IStrategoTerm term) {
         return term instanceof IStrategoInt;
     }
 
@@ -1613,16 +1602,16 @@ public class ECJFactory implements ITermFactory {
         return r;
     }
 
-    private boolean ensureExpressionList(IStrategoTerm term) {
+    private boolean isExpressionList(IStrategoTerm term) {
         return term instanceof WrappedExpression;
     }
 
-    private boolean ensureArrayInitializer(IStrategoTerm term) {
+    private boolean isArrayInitializer(IStrategoTerm term) {
         return term instanceof WrappedArrayInitializer;
     }
 
 
-    private boolean ensureArrayType(IStrategoTerm term) {
+    private boolean isArrayType(IStrategoTerm term) {
         return term instanceof WrappedArrayType;
     }
 
@@ -1638,11 +1627,11 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedType)term).getWrappee();
     }
 
-    private boolean ensureSimpleName(IStrategoTerm term) {
+    private boolean isSimpleName(IStrategoTerm term) {
         return term instanceof WrappedSimpleName;
     }
 
-    private boolean ensureType(IStrategoTerm term) {
+    private boolean isType(IStrategoTerm term) {
         return term instanceof WrappedType;
     }
 
@@ -1656,17 +1645,17 @@ public class ECJFactory implements ITermFactory {
         return r;
     }
 
-    private boolean ensureModifierList(IStrategoTerm term) {
+    private boolean isModifierList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
             if(list.size() > 0) 
-                return ensureModifier(list.get(0));
+                return isModifier(list.get(0));
             return true;
         }
         return false;
     }
 
-    private boolean ensureModifier(IStrategoTerm term) {
+    private boolean isModifier(IStrategoTerm term) {
         return term instanceof WrappedModifier;
     }
 
@@ -1695,11 +1684,11 @@ public class ECJFactory implements ITermFactory {
         return null;
     }
 
-    private boolean ensureBodyDeclaration(IStrategoTerm term) {
+    private boolean isBodyDeclaration(IStrategoTerm term) {
         return term instanceof WrappedBodyDeclaration;
     }
 
-    private boolean ensureExpression(IStrategoTerm term) {
+    private boolean isExpression(IStrategoTerm term) {
         return term instanceof WrappedExpression;
     }
 
@@ -1755,7 +1744,6 @@ public class ECJFactory implements ITermFactory {
 
     public IStrategoString makeString(String s) {
         return new WrappedString(s);
-        //throw new NotImplementedException();
     }
 
     public IStrategoTuple makeTuple(IStrategoTerm... terms) {
@@ -1937,7 +1925,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedFieldDeclaration(declaration);
     }
 
-    private static IStrategoTerm wrap(Initializer initializer) {
+    private static IStrategoAppl wrap(Initializer initializer) {
         if(initializer == null)
                 return None.INSTANCE;
         else
@@ -2401,7 +2389,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedTypeLiteral(literal);
     }
 
-    private static IStrategoTerm wrap(ThisExpression expression) {
+    private static IStrategoAppl wrap(ThisExpression expression) {
         if(expression == null)
             return None.INSTANCE;
         else
@@ -2471,7 +2459,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedMethodInvocation(invocation);
     }
 
-    private static IStrategoTerm wrap(InstanceofExpression expression) {
+    private static IStrategoAppl wrap(InstanceofExpression expression) {
         if(expression == null)
             return None.INSTANCE;
         else
@@ -2515,7 +2503,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedConditionalExpression(expression);
     }
 
-    private static IStrategoTerm wrap(ClassInstanceCreation creation) {
+    private static IStrategoAppl wrap(ClassInstanceCreation creation) {
         if(creation == null)
             return None.INSTANCE;
         else
@@ -2651,14 +2639,14 @@ public class ECJFactory implements ITermFactory {
             return new WrappedModifierKeyword(keyword);
     }
 
-    public static IStrategoTerm wrap(PostfixExpression.Operator operator) {
+    public static IStrategoAppl wrap(PostfixExpression.Operator operator) {
         if(operator == null)
             return None.INSTANCE;
         else
             return new WrappedPostfixExpressionOperator(operator);
     }
 
-    public static IStrategoTerm wrap(PrefixExpression.Operator operator) {
+    public static IStrategoAppl wrap(PrefixExpression.Operator operator) {
         if(operator == null)
             return None.INSTANCE;
         else
