@@ -25,7 +25,7 @@ public class WrappedTypeDeclaration extends WrappedAbstractTypeDeclaration {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return ECJFactory.wrap(wrappee.getModifiers());
+            return ECJFactory.wrap(wrappee.modifiers());
         case 1:
             return ECJFactory.wrap(wrappee.getName());
         case 2:

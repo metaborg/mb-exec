@@ -127,7 +127,6 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.InlinePrinter;
-import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class ECJFactory implements ITermFactory {
 
@@ -223,10 +222,21 @@ public class ECJFactory implements ITermFactory {
     private static final int SINGLE_VARIABLE_DECLARATION = 90;
     private static final int VARIABLE_DECLARATION_FRAGMENT = 91;
     private static final int BYTE_TYPE = 92;
+    private static final int IMPORT_REFERENCE = 93;
         
     private Map<String,Integer> ctorNameToIndexMap;
-
+    private AST ast;
+    
+    public ECJFactory(AST ast) {
+        this.ast = ast;
+        initCtorMap();
+    }
+    
     public ECJFactory() {
+        initCtorMap();
+    }
+    
+    private void initCtorMap() {
         ctorNameToIndexMap = new HashMap<String,Integer>();
         ctorNameToIndexMap.put("ArrayAccess", ARRAY_ACCESS);
         ctorNameToIndexMap.put("PackageDeclaration", PACKAGE_DECLARATION);
@@ -320,6 +330,8 @@ public class ECJFactory implements ITermFactory {
         ctorNameToIndexMap.put("TypeParameter", TYPE_PARAMETER);
         ctorNameToIndexMap.put("SingleVariableDeclaration", SINGLE_VARIABLE_DECLARATION);
         ctorNameToIndexMap.put("VariableDeclarationFragment", VARIABLE_DECLARATION_FRAGMENT);
+        ctorNameToIndexMap.put("None", NONE);
+        ctorNameToIndexMap.put("ImportReference", IMPORT_REFERENCE);
     }
     
     public IStrategoTerm parseFromFile(String path) throws IOException {
@@ -386,15 +398,19 @@ public class ECJFactory implements ITermFactory {
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... terms) {
         IStrategoAppl t = constructASTNode(ctr, terms);
-        if(t == null)
+        if(t == null) {
+            System.err.println("Generic fallback");
             return ctr.instantiate(this, terms);
+        }
         return t;
     }
 
     @SuppressWarnings("unchecked")
     private IStrategoAppl constructASTNode(IStrategoConstructor ctr, IStrategoTerm[] kids) {
+        System.err.println("Construct: " + ctr.getName() + "/" + ctr.getArity() + " with " + kids.length + " kids");
+        for(int i = 0; i < kids.length; i++) 
+            System.err.println("  " + kids[i]); 
         int index = ctorNameToIndex(ctr);
-        AST ast = AST.newAST(AST.JLS3);
         switch(index) {
         case ANNOTATION_TYPE_DECLARATION: {
             if(!ensureModifierList(kids[0]) || !ensureSimpleName(kids[1]) || !ensureBodyDeclarationList(kids[1]))
@@ -525,12 +541,17 @@ public class ECJFactory implements ITermFactory {
             break;
         }
         case COMPILATION_UNIT: {
-            if(!ensurePackageDeclaration(kids[0]) || !ensureImportDeclarationList(kids[1]) || !ensureTypeDeclarationList(kids[2]))
+            if((!ensurePackageDeclaration(kids[0]) && !ensureNone(kids[0])) 
+                    || !ensureImportDeclarationList(kids[1]) 
+                    || !ensureAbstractTypeDeclarationList(kids[2]))
                 return null;
             CompilationUnit x = ast.newCompilationUnit();
-            x.setPackage(asPackageDeclaration(kids[0]));
+            if(ensureNone(kids[0]))
+                x.setPackage(null);
+            else 
+                x.setPackage(asPackageDeclaration(kids[0]));
             x.imports().addAll(asImportDeclarationList(kids[1]));
-            x.types().addAll(asTypeDeclarationList(kids[1]));
+            x.types().addAll(asAbstractTypeDeclarationList(kids[2]));
             return wrap(x);
         }
         case CONDITIONAL_EXPRESSION: {
@@ -566,7 +587,7 @@ public class ECJFactory implements ITermFactory {
             return wrap(ast.newPrimitiveType(PrimitiveType.DOUBLE));
         }
         case EMPTY_STATEMENT: {
-            ast.newEmptyStatement();
+            return wrap(ast.newEmptyStatement());
         }
         case ENHANCED_FOR_STATEMENT: {
             if(!ensureSingleVariableDeclaration(kids[0]) 
@@ -881,7 +902,13 @@ public class ECJFactory implements ITermFactory {
         case SIMPLE_TYPE: {
             if(!ensureName(kids[0]))
                 return null;
-            return wrap(ast.newSimpleType(asName(kids[0])));
+            
+            Name n = asName(kids[0]);
+            System.out.println(n);
+            if(n.getParent() != null)
+                n = (Name) ASTNode.copySubtree(ast, n);
+            System.out.println(n);
+            return wrap(ast.newSimpleType(n));
         }
         case SINGLE_MEMBER_ANNOTATION: {
             if(!ensureName(kids[0]) || !ensureExpression(kids[1]))
@@ -892,6 +919,12 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case SINGLE_VARIABLE_DECLARATION: {
+            if(!ensureModifierList(kids[0])
+                    || !ensureType(kids[1])
+                    || !ensureName(kids[2])
+                    || !ensureInt(kids[3])
+                    || !ensureExpression(kids[4]))
+                return null;
             SingleVariableDeclaration x = ast.newSingleVariableDeclaration();
             x.modifiers().addAll(asModifierList(kids[0]));
             x.setType(asType(kids[1]));
@@ -979,7 +1012,7 @@ public class ECJFactory implements ITermFactory {
             if(!ensureModifierList(kids[0])
                     || !ensureSimpleName(kids[1])
                     || !ensureTypeList(kids[2])
-                    || !ensureType(kids[3])
+                    || (!ensureType(kids[3]) && !ensureNone(kids[3]))
                     || !ensureTypeList(kids[4])
                     || !ensureBodyDeclarationList(kids[5]))
                 return null;
@@ -987,9 +1020,13 @@ public class ECJFactory implements ITermFactory {
             x.modifiers().addAll(asModifierList(kids[0]));
             x.setName(asSimpleName(kids[1]));
             x.typeParameters().addAll(asTypeList(kids[2]));
-            x.setSuperclassType(asType(kids[3]));
+            if(ensureNone(kids[3])) 
+                x.setSuperclassType(null);
+            else 
+                x.setSuperclassType(asType(kids[3]));
             x.superInterfaceTypes().addAll(asTypeList(kids[4]));
             x.bodyDeclarations().addAll(asBodyDeclarationList(kids[5]));
+            return wrap(x);
         }
         case TYPE_DECLARATION_STATEMENT: {
             if(!ensureTypeDecl(kids[0]))
@@ -1059,6 +1096,35 @@ public class ECJFactory implements ITermFactory {
             return null;
         }
         throw new NotImplementedException();
+    }
+
+    @SuppressWarnings("unchecked")
+    private Collection asAbstractTypeDeclarationList(IStrategoTerm term) {
+        IStrategoTerm[] kids = term.getAllSubterms();
+        List r = new ArrayList(kids.length);
+        for(IStrategoTerm k : kids) {
+            r.add(asAbstractTypeDeclaration(k));
+        }
+        return r;    
+        
+    }
+
+    private AbstractTypeDeclaration asAbstractTypeDeclaration(IStrategoTerm term) {
+        return ((WrappedAbstractTypeDeclaration)term).getWrappee();
+    }
+
+    private boolean ensureAbstractTypeDeclarationList(IStrategoTerm term) {
+        if(term instanceof IStrategoList) {
+            IStrategoList list = (IStrategoList)term;
+            if(list.size() > 0) 
+                return ensureAbstractTypeDeclaration(list.get(0));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean ensureAbstractTypeDeclaration(IStrategoTerm term) {
+        return term instanceof WrappedAbstractTypeDeclaration;
     }
 
     @SuppressWarnings("unchecked")
@@ -1271,7 +1337,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     private boolean ensureImportDeclaration(IStrategoTerm term) {
-        return term instanceof ImportDeclaration;
+        return term instanceof WrappedImportDeclaration;
     }
 
     private boolean ensurePackageDeclaration(IStrategoTerm term) {
@@ -1526,7 +1592,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     private boolean ensureStatement(IStrategoTerm term) {
-        return term instanceof Statement;
+        return term instanceof WrappedStatement;
     }
 
     private int asInt(IStrategoTerm term) {
@@ -1573,7 +1639,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     private boolean ensureSimpleName(IStrategoTerm term) {
-        return term instanceof SimpleName;
+        return term instanceof WrappedSimpleName;
     }
 
     private boolean ensureType(IStrategoTerm term) {
@@ -1639,7 +1705,10 @@ public class ECJFactory implements ITermFactory {
 
     private Expression asExpression(IStrategoTerm term) {
         if(term instanceof WrappedExpression) {
-            return ((WrappedExpression) term).getWrappee(); 
+            Expression e = ((WrappedExpression) term).getWrappee();
+            if(e.getParent() != null)
+                return (Expression) ASTNode.copySubtree(ast, e);
+            return e;
         }
         return null;
     }
@@ -2040,7 +2109,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedEnhancedForStatement(statement);
     }
 
-    private static IStrategoTerm wrap(EmptyStatement statement) {   
+    private static IStrategoAppl wrap(EmptyStatement statement) {   
         if(statement == null)
             return None.INSTANCE;
         else
@@ -2174,7 +2243,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedMethodDeclaration(declaration);
     }
 
-    private static IStrategoTerm wrap(TypeDeclaration declaration) {
+    private static IStrategoAppl wrap(TypeDeclaration declaration) {
         if(declaration == null)
             return None.INSTANCE;
         else
@@ -2654,5 +2723,9 @@ public class ECJFactory implements ITermFactory {
             return None.INSTANCE;
         else
             return new WrappedIMethodBinding(mb);
+    }
+
+    public void setAST(AST ast) {
+        this.ast = ast;
     }
 }

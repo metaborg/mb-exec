@@ -1,0 +1,11 @@
+module rewrite-return
+imports
+  stratego-lib
+  EclipseJava
+  
+strategies
+
+  main = topdown(try(RewriteReturn))
+  
+  RewriteReturn:
+  ReturnStatement(_) -> EmptyStatement()

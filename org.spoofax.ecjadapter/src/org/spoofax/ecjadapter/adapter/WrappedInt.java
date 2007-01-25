@@ -14,6 +14,7 @@ import org.spoofax.interpreter.terms.ITermPrinter;
 
 public class WrappedInt implements IStrategoInt {
 
+    private static final IStrategoTerm[] NO_SUBTERMS = new IStrategoTerm[0];
     private final int value;
 
     WrappedInt(int value) {
@@ -45,7 +46,7 @@ public class WrappedInt implements IStrategoInt {
     }
 
     public IStrategoTerm[] getAllSubterms() {
-        return null;
+        return NO_SUBTERMS;
     }
 
 }

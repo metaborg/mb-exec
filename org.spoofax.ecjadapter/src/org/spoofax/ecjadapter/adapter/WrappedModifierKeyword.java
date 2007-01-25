@@ -7,13 +7,11 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Modifier;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedModifierKeyword extends WrappedASTNode {
+public class WrappedModifierKeyword extends WrappedECJNode {
 
     private final Modifier.ModifierKeyword wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ModifierKeyword", 1);
@@ -31,8 +29,8 @@ public class WrappedModifierKeyword extends WrappedASTNode {
     }
 
     @Override
-    public ASTNode getWrappee() {
-        throw new NotImplementedException();
+    public Modifier.ModifierKeyword getWrappee() {
+        return wrappee;
     }
 
     public Modifier.ModifierKeyword getModifier() {

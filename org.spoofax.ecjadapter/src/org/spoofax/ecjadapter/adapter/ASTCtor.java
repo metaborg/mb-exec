@@ -14,7 +14,6 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.ITermPrinter;
-import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class ASTCtor implements IStrategoConstructor {
 

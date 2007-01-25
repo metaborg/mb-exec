@@ -13,7 +13,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedImportDeclaration extends WrappedASTNode {
 
     private ImportDeclaration wrappee;
-    public final static ASTCtor CTOR = new ASTCtor("ImportReference", 1); 
+    public final static ASTCtor CTOR = new ASTCtor("ImportDeclaration", 1); 
     
     public WrappedImportDeclaration(ImportDeclaration wrappee) {
         super(CTOR);

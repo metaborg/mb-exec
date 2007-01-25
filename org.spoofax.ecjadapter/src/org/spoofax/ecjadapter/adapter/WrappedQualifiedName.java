@@ -25,9 +25,9 @@ public class WrappedQualifiedName extends WrappedName {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return ECJFactory.wrap(wrappee.getName());
-        case 1:
             return ECJFactory.wrapName(wrappee.getQualifier());
+        case 1:
+            return ECJFactory.wrap(wrappee.getName());
         }
         throw new ArrayIndexOutOfBoundsException();
     }

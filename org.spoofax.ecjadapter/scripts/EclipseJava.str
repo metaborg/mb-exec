@@ -1,5 +1,13 @@
 module EclipseJava
 signature
+  sorts
+   BodyDeclaration
+   Expression 
+   Modifier
+   Statement
+   Type
+   TypeParameter
+   VariableDeclarationFragment
   constructors
 
     AnnotationTypeDeclaration       : Term * Term * Term -> Term
@@ -36,12 +44,12 @@ signature
     FieldAccess                     : Term * Term -> Term 
     FieldDeclaration                : List(Modifier) * Type * List(VariableDeclarationFragment) -> Term
     FloatType                       : Term
-    ForStatement                    : Term * Term * Term * Term -> Term 
-    IfStatement                     : Term * Term * Term -> Term 
+    ForStatement                    : Term * Term * Term * Term -> Statement
+    IfStatement                     : Term * Term * Term -> Statement
     ImportReference                 : Term -> Term 
     InfixExpression                 : Term * Term * Term -> Term
     Initializer                     : Term -> Term
-    InstanceofExpression            : Term * Term -> Term
+    InstanceofExpression            : Term * Term -> Expression
     IntType                         : Term
     Javadoc                         : Term -> Term
     LabeledStatement                : Term * Term -> Term
@@ -55,7 +63,7 @@ signature
     MethodRef                       : Term * Term * Term -> Term
     MethodRefParameter              : Term * Term -> Term
     Minus                           : Term * Term -> Term
-    Modifier                        : Term -> Term
+    Modifier                        : Term -> Modifier
     ModifierKeyword                 : Term -> Term
     Name                            : Term -> Term
     NormalAnnotation                : Term * Term -> Term
@@ -63,16 +71,16 @@ signature
     NumberLiteral                   : Term -> Term
     PackageDeclaration              : Term * Term * Term -> Term 
     ParameterizedType               : Term * Term -> Term
-    ParenthesizedExpression         : Term -> Term
+    ParenthesizedExpression         : Term -> Expression
     Plus                            : Term * Term -> Term 
     PostfixExpression               : Term * Term -> Term
     PostfixExpressionOperator       : Term -> Term
-    PrefixExpression                : Term * Term -> Term
+    PrefixExpression                : Term * Term -> Expression
     PrefixExpressionOperator        : Term -> Term
     PrimitiveType                   : Term -> Term
     QualifiedName                   : Term * Term -> Term
     QualifiedType                   : Term * Term -> Term
-    ReturnStatement                 : Term -> Term
+    ReturnStatement                 : Expression -> Statement
     SimpleName                      : Term -> Term 
     SimpleType                      : Term -> Term
     SingleMemberAnnotation          : Term * Term -> Term
@@ -86,10 +94,10 @@ signature
     SynchronizedStatement           : Term * Term -> Term
     TagElement                      : Term * Term -> Term
     TextElement                     : Term -> Term
-    ThisExpression                  : Term -> Term
-    ThrowStatement                  : Term -> Term
+    ThisExpression                  : Term -> Expression
+    ThrowStatement                  : Term -> Statement
     Times                           : Term * Term -> Term
-    TryStatement                    : Term * Term * Term -> Term
+    TryStatement                    : Term * Term * Term -> Statement
     TypeDeclaration                 : List(Modifier) * Name * List(TypeParameter) * Type * List(Type) * List(BodyDeclaration) -> Term
     TypeDeclarationStatement        : Term -> Term
     TypeLiteral                     : Term -> Term
@@ -98,5 +106,5 @@ signature
     VariableDeclarationFragment     : Term * Term * Term -> Term 
     VariableDeclarationStatement    : Term * Term * Term -> Term 
     WhileStatement                  : Term * Term -> Term
-    WildcardType                    : Term -> Term
+    WildcardType                    : Term -> Type
   
