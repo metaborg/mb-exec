@@ -11,7 +11,7 @@ import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedBooleanLiteral extends WrappedASTNode {
+public class WrappedBooleanLiteral extends WrappedExpression {
 
     private final BooleanLiteral wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("BooleanLiteral", 1);

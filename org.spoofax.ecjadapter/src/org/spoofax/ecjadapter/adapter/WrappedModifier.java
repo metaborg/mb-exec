@@ -11,7 +11,7 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedModifier extends WrappedASTNode {
+public class WrappedModifier extends WrappedASTNode implements IWrappedExtendedModifier {
 
     private final Modifier wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("Modifier", 1);

@@ -7,12 +7,15 @@
  */
 package org.spoofax.ecjadapter.adapter;
 
+import org.eclipse.jdt.core.dom.Annotation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 
-public abstract class WrappedAnnotation extends WrappedExpression {
+public abstract class WrappedAnnotation extends WrappedExpression implements IWrappedExtendedModifier {
 
     protected WrappedAnnotation(IStrategoConstructor constructor) {
         super(constructor);
     }
 
+    @Override
+    public abstract Annotation getWrappee();
 }

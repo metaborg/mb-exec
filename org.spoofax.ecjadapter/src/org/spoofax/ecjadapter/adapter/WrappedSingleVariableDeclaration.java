@@ -14,7 +14,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedSingleVariableDeclaration extends WrappedVariableDeclaration {
 
     private final SingleVariableDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("SingleVariableDeclaration", 4);
+    private final static IStrategoConstructor CTOR = new ASTCtor("SingleVariableDeclaration", 5);
     
     WrappedSingleVariableDeclaration(SingleVariableDeclaration wrappee) {
         super(CTOR);
@@ -25,7 +25,7 @@ public class WrappedSingleVariableDeclaration extends WrappedVariableDeclaration
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return ECJFactory.wrap(wrappee.getModifiers());
+            return ECJFactory.wrap(wrappee.modifiers());
         case 1:
             return ECJFactory.wrapType(wrappee.getType());
         case 2:

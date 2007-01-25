@@ -25,7 +25,7 @@ public class WrappedVariableDeclarationStatement extends WrappedStatement {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return ECJFactory.wrap(wrappee.getModifiers());
+            return ECJFactory.wrap(wrappee.modifiers());
         case 1:
             return ECJFactory.wrapType(wrappee.getType());
         case 2:
