@@ -829,9 +829,9 @@ public class ECJFactory implements ITermFactory {
             return wrap(ast.newModifier(asModifierKeyword(kids[0])));
         }
         case MODIFIER_KEYWORD: {
-            if(!isInt(kids[0]))
+            if(!isString(kids[0]))
                 return null;
-            return wrap(Modifier.ModifierKeyword.fromFlagValue(asInt(kids[0])));
+            return wrap(Modifier.ModifierKeyword.toKeyword(asString(kids[0])));
         }
         case NONE:
             return None.INSTANCE;
