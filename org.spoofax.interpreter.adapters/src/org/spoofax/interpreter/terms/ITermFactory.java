@@ -20,4 +20,7 @@ public interface ITermFactory extends IStrategoTermBuilder {
     public IStrategoTerm parseFromString(String text);
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException;
 
+    // FIXME experiment
+    public IStrategoTerm replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids, IStrategoTerm old);
+
 }

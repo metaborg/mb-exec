@@ -10,7 +10,6 @@ package org.spoofax.interpreter.adapters.aterm;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
-import org.spoofax.interpreter.terms.PrettyPrinter;
 
 import aterm.ATerm;
 

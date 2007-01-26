@@ -185,4 +185,9 @@ public class WrappedATermFactory implements ITermFactory {
 //        if(c == null)
 //            System.out.println()
     }
+
+    public IStrategoTerm replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids, IStrategoTerm old) {
+        // TODO Auto-generated method stub
+        throw new NotImplementedException();
+    }
 }
