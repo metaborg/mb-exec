@@ -401,7 +401,7 @@ public class StrategoCoreLoader {
     }
 
     public void load(InputStream stream) throws InterpreterException, IOException {
-        doLoad(context.getFactory().parseFromStream(stream));
+        doLoad(context.getProgramFactory().parseFromStream(stream));
     }
 
 }
