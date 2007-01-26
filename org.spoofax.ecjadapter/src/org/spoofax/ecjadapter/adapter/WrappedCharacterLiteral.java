@@ -11,7 +11,7 @@ import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedCharacterLiteral extends WrappedASTNode {
+public class WrappedCharacterLiteral extends WrappedExpression {
 
     private final CharacterLiteral wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("CharacterLiteral", 1);

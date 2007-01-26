@@ -11,7 +11,7 @@ import org.eclipse.jdt.core.dom.BreakStatement;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedBreakStatement extends WrappedASTNode {
+public class WrappedBreakStatement extends WrappedStatement {
 
     private final BreakStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("BreakStatement", 1);

@@ -14,7 +14,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedMethodDeclaration extends WrappedBodyDeclaration {
 
     private final MethodDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("MethodDeclaration", 6); 
+    private final static IStrategoConstructor CTOR = new ASTCtor("MethodDeclaration", 7); 
     
     WrappedMethodDeclaration(MethodDeclaration wrappee) {
         super(CTOR);
@@ -27,14 +27,16 @@ public class WrappedMethodDeclaration extends WrappedBodyDeclaration {
         case 0:
             return ECJFactory.wrap(wrappee.modifiers());
         case 1:
-            return ECJFactory.wrap(wrappee.typeParameters());
+            return ECJFactory.wrapType(wrappee.getReturnType2());
         case 2:
-            return ECJFactory.wrap(wrappee.getName());
+            return ECJFactory.wrap(wrappee.typeParameters());
         case 3:
-            return ECJFactory.wrap(wrappee.parameters());
+            return ECJFactory.wrap(wrappee.getName());
         case 4:
-            return ECJFactory.wrap(wrappee.thrownExceptions());
+            return ECJFactory.wrap(wrappee.parameters());
         case 5:
+            return ECJFactory.wrap(wrappee.thrownExceptions());
+        case 6:
             return ECJFactory.wrap(wrappee.getBody());
         }
         throw new ArrayIndexOutOfBoundsException();

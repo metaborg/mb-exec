@@ -24,11 +24,16 @@ public class ScriptTest {
 
     private static void setupData(ECJFactory wef, Interpreter intp) {
         ASTParser parser = ASTParser.newParser(AST.JLS3);
-        parser.setSource("import java.util.List;\nclass X { int f() { return 0; } }\n".toCharArray());
+        parser.setSource("class Foo { void dataInvariant() {} int f() { return 0; } }".toCharArray());
         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
         System.out.println(cu);
         wef.setAST(cu.getAST());
-        intp.setCurrent(wef.parseFromTree(cu));
+        IStrategoTerm t = wef.parseFromTree(cu);
+        ITermPrinter pp = new PrettyPrinter();
+        t.prettyPrint(pp);
+        System.out.println(t.getClass());
+        System.out.println(pp.getString());
+        intp.setCurrent(t);
     }
     
     public static void main(String[] args) {
@@ -38,7 +43,11 @@ public class ScriptTest {
         try {
             interp.load("scripts/rewrite-return.ctree");
             setupData(factory, interp);
-            interp.invoke("main_0_0");
+            if(interp.invoke("main_0_0") == false) {
+                System.err.println("Rewriting failed");
+                return;
+            }
+            
             IStrategoTerm t = interp.current();
             ITermPrinter pp = new PrettyPrinter();
             t.prettyPrint(pp);

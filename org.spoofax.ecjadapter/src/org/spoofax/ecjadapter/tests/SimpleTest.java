@@ -19,7 +19,7 @@ public class SimpleTest {
 
     public static void main(String[] args) {
         ASTParser parser = ASTParser.newParser(AST.JLS3);
-        parser.setSource("import java.util.List;\nclass X { static void main(String[] args) { int x = 1 + 0; System.out.println(\"Hello, World!\"); } }\n".toCharArray());
+        parser.setSource("class Foo { void dataInvariant() { } }".toCharArray());
         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
         System.out.println(cu);
         ECJFactory wef = new ECJFactory();

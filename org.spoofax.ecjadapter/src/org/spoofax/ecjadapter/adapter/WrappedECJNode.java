@@ -9,6 +9,7 @@ package org.spoofax.ecjadapter.adapter;
 
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 
+
 public abstract class WrappedECJNode extends AbstractECJAppl {
 
     protected WrappedECJNode(IStrategoConstructor constructor) {
@@ -16,5 +17,4 @@ public abstract class WrappedECJNode extends AbstractECJAppl {
     }
 
     public abstract Object getWrappee();
-
 }

@@ -21,8 +21,6 @@ import org.spoofax.ecjadapter.adapter.WrappedASTNode;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.ITermPrinter;
-import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class RecursiveScriptTest {
 
@@ -45,19 +43,19 @@ public class RecursiveScriptTest {
         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
         System.out.println(cu);
         IStrategoTerm from = factory.parseFromTree(cu);
-        ITermPrinter pp = new PrettyPrinter();
+        //ITermPrinter pp = new PrettyPrinter();
         //t.prettyPrint(pp);
         //System.out.println(pp.getString());
         factory.setAST(cu.getAST());
         interp.setCurrent(from);
         interp.invoke("main_0_0");
         IStrategoTerm to = interp.current();
-        from.prettyPrint(pp);
-        to.prettyPrint(pp);
-        System.out.println(to.getClass());
-        System.out.println(pp.getString());
+        //from.prettyPrint(pp);
+        //to.prettyPrint(pp);
+        //System.out.println(to.getClass());
+        //System.out.println(pp.getString());
+        
         System.out.println(((WrappedASTNode)to).getWrappee().toString());
-
     }
     
     void recurse(File base) throws FileNotFoundException, IOException, InterpreterException {

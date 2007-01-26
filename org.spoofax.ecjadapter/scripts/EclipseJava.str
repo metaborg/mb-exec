@@ -58,7 +58,7 @@ signature
     MarkerAnnotation                : Term -> Term
     MemberRef                       : Term * Term -> Term
     MemberValuePair                 : Term * Term -> Term
-    MethodDeclaration               : Term * Term * Term * Term * Term * Term -> Term 
+    MethodDeclaration               : Term * Type * Term * Term * Term * Term * Term -> Term 
     MethodInvocation                : Term * Term * Term * Term -> Term
     MethodRef                       : Term * Term * Term -> Term
     MethodRefParameter              : Term * Term -> Term
