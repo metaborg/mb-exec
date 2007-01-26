@@ -17,6 +17,10 @@ import org.spoofax.interpreter.terms.IStrategoTuple;
 
 public class All extends Strategy {
 
+    private static final int FAILED = 0x0;
+    private static final int SUCCEEDED = 0x1;
+    private static final int MODIFIED = 0x2;
+    
     protected Strategy body;
 
     public All(Strategy body) {
@@ -52,50 +56,66 @@ public class All extends Strategy {
 
     private boolean evalAll(IContext env, IStrategoList list) throws InterpreterException {
 
+        IStrategoTerm old = env.current();
         IStrategoTerm[] kids = list.getAllSubterms();
         
-        if(!updateChildren(env, kids))
+        int r = updateChildren(env, kids);
+        if(r == FAILED)
             return false;
         
-        env.setCurrent(env.getFactory().makeList(kids));
+        if((r & MODIFIED) != 0)
+            env.setCurrent(env.getFactory().makeList(kids));
+        else
+            env.setCurrent(old);
         return true;
     }
 
     private boolean evalAll(IContext env, IStrategoTuple tuple) throws InterpreterException {
-
+        IStrategoTerm old = env.current();
         IStrategoTerm[] kids = tuple.getAllSubterms();
 
-        if(!updateChildren(env, kids))
+        int r = updateChildren(env, kids);
+        
+        if((r & SUCCEEDED) == 0)
             return false;
         
-        env.setCurrent(env.getFactory().makeTuple(kids));
+        if((r & MODIFIED) != 0)
+            env.setCurrent(env.getFactory().makeTuple(kids));
+        else
+            env.setCurrent(old);
         return true;
     }
 
     private boolean evalAll(IContext env, IStrategoAppl t) throws InterpreterException {
-        
+        IStrategoTerm old = env.current();
         IStrategoTerm[] kids = t.getArguments();
         
-        if(!updateChildren(env, kids))
+        int r = updateChildren(env, kids);
+        if(r == FAILED)
             return false;
         
-        env.setCurrent(env.getFactory().makeAppl(t.getConstructor(), kids));
+        if((r & MODIFIED) != 0)
+            env.setCurrent(env.getFactory().replaceAppl(t.getConstructor(), kids, old));
+        else
+            env.setCurrent(old);
         return true;
     }
 
-    private boolean updateChildren(IContext env, IStrategoTerm[] children) throws InterpreterException {
-        final int sz = children.length; 
+    private int updateChildren(IContext env, IStrategoTerm[] children) throws InterpreterException {
+        final int sz = children.length;
+        boolean modified = false; 
         for(int i = 0; i < sz; i++) {
             env.setCurrent(children[i]);
             if(!CallT.callHelper(body, env)) {
                 if(DebugUtil.isDebugging()) {
                     debug("Child traversal failed at ", children[i], ", current = ", env.current());
                 }
-                return false;
+                return FAILED;
             }
+            modified = modified | children[i] != env.current();
             children[i] = env.current(); 
         }
-        return true;
+        return SUCCEEDED | (modified ? MODIFIED : 0);
     }
     
     public void prettyPrint(StupidFormatter sf) {
