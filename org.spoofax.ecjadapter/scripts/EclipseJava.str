@@ -10,8 +10,8 @@ signature
    VariableDeclarationFragment
   constructors
 
-    AnnotationTypeDeclaration       : Term * Term * Term -> Term
-    AnnotationTypeMemberDeclaration : Term * Term * Term * Term -> Term
+    AnnotationTypeDeclaration       : Javadoc * Term * Term * Term -> Term
+    AnnotationTypeMemberDeclaration : Javadoc * Term * Term * Term * Term -> Term
     AnonymousClassDeclaration       : Term -> Term
     ArrayAccess                     : Term * Term -> Term
     ArrayCreation                   : Term * Term * Term -> Term
@@ -38,11 +38,11 @@ signature
     DoubleType                      : Term
     EmptyStatement                  : Term
     EnhancedForStatement            : Term * Term * Term -> Term
-    EnumConstantDeclaration         : Term * Term * Term * Term -> Term 
-    EnumDeclaration                 : Term * Term * Term * Term * Term -> Term 
+    EnumConstantDeclaration         : Javadoc * Term * Term * Term * Term -> Term 
+    EnumDeclaration                 : Javadoc * Term * Term * Term * Term * Term -> Term 
     ExpressionStatement             : Term -> Term
     FieldAccess                     : Term * Term -> Term 
-    FieldDeclaration                : List(Modifier) * Type * List(VariableDeclarationFragment) -> Term
+    FieldDeclaration                : Javadoc * List(Modifier) * Type * List(VariableDeclarationFragment) -> Term
     FloatType                       : Term
     ForStatement                    : Term * Term * Term * Term -> Statement
     IfStatement                     : Term * Term * Term -> Statement
@@ -58,7 +58,7 @@ signature
     MarkerAnnotation                : Term -> Term
     MemberRef                       : Term * Term -> Term
     MemberValuePair                 : Term * Term -> Term
-    MethodDeclaration               : Term * Type * Term * Term * Term * Term * Term -> Term 
+    MethodDeclaration               : Javadoc * Term * Type * Term * Term * Term * Term * Term -> Term 
     MethodInvocation                : Term * Term * Term * Term -> Term
     MethodRef                       : Term * Term * Term -> Term
     MethodRefParameter              : Term * Term -> Term

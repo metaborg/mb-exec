@@ -377,10 +377,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList terms) {
-        IStrategoTerm[] kids = new IStrategoTerm[terms.size()];
-        for(int i = 0; i < terms.size(); i++)
-            kids[i] = terms.get(i);
-        return makeAppl(ctr, kids);
+        return makeAppl(ctr, terms.getAllSubterms());
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... kids) {
@@ -398,7 +395,6 @@ public class ECJFactory implements ITermFactory {
                 } else
                     System.err.println("  " + kids[i]);
             }
-
             return ctr.instantiate(this, kids);
         }
         return t;
@@ -409,30 +405,37 @@ public class ECJFactory implements ITermFactory {
         int index = ctorNameToIndex(ctr);
         switch(index) {
         case ANNOTATION_TYPE_DECLARATION: {
-            if(!isExtendedModifierList(kids[0]) 
-                    || !isSimpleName(kids[1]) 
-                    || !isBodyDeclarationList(kids[2]))
+            if((!isJavadoc(kids[0]) && !isNone(kids[0]))
+                    || !isExtendedModifierList(kids[1]) 
+                    || !isSimpleName(kids[2]) 
+                    || !isBodyDeclarationList(kids[3]))
                 return null;
             AnnotationTypeDeclaration x = ast.newAnnotationTypeDeclaration();
-            x.modifiers().addAll(asExtendedModifierList(kids[0]));
-            x.setName(asSimpleName(kids[1]));
-            x.bodyDeclarations().addAll(asBodyDeclarationList(kids[2]));
+            if(isNone(kids[0]))
+                x.setJavadoc(null);
+            else
+                x.setJavadoc(asJavadoc(kids[0]));
+            x.modifiers().addAll(asExtendedModifierList(kids[1]));
+            x.setName(asSimpleName(kids[2]));
+            x.bodyDeclarations().addAll(asBodyDeclarationList(kids[3]));
             return wrap(x);
         }
         case ANNOTATION_TYPE_MEMBER_DECLARATION: {
-            if(!isModifierList(kids[0]) 
-                    || !isType(kids[1]) 
-                    || !isSimpleName(kids[2]) 
-                    || (!isExpression(kids[3]) && !isNone(kids[3])))
+            if((!isJavadoc(kids[0]) && !isNone(kids[0]))
+                    || !isModifierList(kids[1]) 
+                    || !isType(kids[2]) 
+                    || !isSimpleName(kids[3]) 
+                    || (!isExpression(kids[4]) && !isNone(kids[4])))
                 return null;
             AnnotationTypeMemberDeclaration x = ast.newAnnotationTypeMemberDeclaration();
-            x.modifiers().addAll(asModifierList(kids[0]));
-            x.setType(asType(kids[1]));
-            x.setName(asSimpleName(kids[2]));
-            if(isNone(kids[3]))
+            x.setJavadoc(asJavadoc(kids[0]));
+            x.modifiers().addAll(asModifierList(kids[1]));
+            x.setType(asType(kids[2]));
+            x.setName(asSimpleName(kids[3]));
+            if(isNone(kids[4]))
                 x.setDefault(null);
             else
-                x.setDefault(asExpression(kids[3]));
+                x.setDefault(asExpression(kids[4]));
             return wrap(x);
         }
         case ANONYMOUS_CLASS_DECLARATION: {
@@ -636,31 +639,41 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case ENUM_CONSTANT_DECLARATION: {
-            if(!isModifierList(kids[0]) 
-                    || !isSimpleName(kids[1]) 
-                    || !isExpressionList(kids[2]) 
-                    || !isAnonymousClassDeclaration(kids[3]))
+            if((!isJavadoc(kids[0]) && !isNone(kids[0]))
+                    || !isModifierList(kids[1]) 
+                    || !isSimpleName(kids[2]) 
+                    || !isExpressionList(kids[3]) 
+                    || !isAnonymousClassDeclaration(kids[4]))
                 return null;
             EnumConstantDeclaration x = ast.newEnumConstantDeclaration();
-            x.modifiers().addAll(asModifierList(kids[0]));
-            x.setName(asSimpleName(kids[1]));
-            x.arguments().addAll(asExpressionList(kids[2]));
-            x.setAnonymousClassDeclaration(asAnonymousClassDeclaration(kids[3]));
+            if(isNone(kids[0]))
+                x.setJavadoc(null);
+            else
+                x.setJavadoc(asJavadoc(kids[0]));
+            x.modifiers().addAll(asModifierList(kids[1]));
+            x.setName(asSimpleName(kids[2]));
+            x.arguments().addAll(asExpressionList(kids[3]));
+            x.setAnonymousClassDeclaration(asAnonymousClassDeclaration(kids[4]));
             return wrap(x);
         }
         case ENUM_DECLARATION: {
-            if(!isModifierList(kids[0])
-                    || !isSimpleName(kids[1])
-                    || !isTypeList(kids[2])
-                    || !isEnumConstantDeclarationList(kids[3])
-                    || !isBodyDeclarationList(kids[4]))
+            if((!isJavadoc(kids[0]) && !isNone(kids[0]))
+                    || !isModifierList(kids[1])
+                    || !isSimpleName(kids[2])
+                    || !isTypeList(kids[3])
+                    || !isEnumConstantDeclarationList(kids[4])
+                    || !isBodyDeclarationList(kids[5]))
                 return null;
             EnumDeclaration x = ast.newEnumDeclaration();
-            x.modifiers().addAll(asModifierList(kids[0]));
-            x.setName(asSimpleName(kids[1]));
-            x.superInterfaceTypes().addAll(asTypeList(kids[2]));
-            x.enumConstants().addAll(asEnumConstantDeclarationList(kids[3]));
-            x.bodyDeclarations().addAll(asBodyDeclarationList(kids[4]));
+            if(isNone(kids[0]))
+                x.setJavadoc(null);
+            else
+                x.setJavadoc(asJavadoc(kids[0]));
+            x.modifiers().addAll(asModifierList(kids[1]));
+            x.setName(asSimpleName(kids[2]));
+            x.superInterfaceTypes().addAll(asTypeList(kids[3]));
+            x.enumConstants().addAll(asEnumConstantDeclarationList(kids[4]));
+            x.bodyDeclarations().addAll(asBodyDeclarationList(kids[5]));
             return wrap(x);
         }
         case EXPRESSION_STATEMENT: {
@@ -677,14 +690,19 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case FIELD_DECLARATION: {
-            if(!isModifierList(kids[0])
-                    || !isType(kids[1])
-                    || !isNonEmptyVariableDeclarationFragmentList(kids[2]))
+            if((!isJavadoc(kids[0]) && !isNone(kids[0]))
+                    || !isModifierList(kids[1])
+                    || !isType(kids[2])
+                    || !isNonEmptyVariableDeclarationFragmentList(kids[3]))
                 return null;
-            List y = asFragmentList(kids[2]);
+            List y = asFragmentList(kids[3]);
             FieldDeclaration x = ast.newFieldDeclaration((VariableDeclarationFragment)y.remove(0));
-            x.modifiers().addAll(asModifierList(kids[0]));
-            x.setType(asType(kids[1]));
+            if(isNone(kids[0]))
+                x.setJavadoc(null);
+            else
+                x.setJavadoc(asJavadoc(kids[0]));
+            x.modifiers().addAll(asModifierList(kids[1]));
+            x.setType(asType(kids[2]));
             x.fragments().addAll(y);
             return wrap(x);
         }
@@ -807,28 +825,33 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case METHOD_DECLARATION: {
-            if(!isExtendedModifierList(kids[0])
-                    || (!isType(kids[1]) && !isNone(kids[1]))
-                    || !isTypeParameterList(kids[2])
-                    || !isSimpleName(kids[3])
-                    || !isSingleVariableDeclarationList(kids[4])
-                    || !isNameList(kids[5])
-                    || (!isBlock(kids[6]) && !isNone(kids[6])))
+            if((!isJavadoc(kids[0]) && !isNone(kids[0]))
+                    || !isExtendedModifierList(kids[1])
+                    || (!isType(kids[2]) && !isNone(kids[2]))
+                    || !isTypeParameterList(kids[3])
+                    || !isSimpleName(kids[4])
+                    || !isSingleVariableDeclarationList(kids[5])
+                    || !isNameList(kids[6])
+                    || (!isBlock(kids[7]) && !isNone(kids[7])))
                 return null;
             MethodDeclaration x = ast.newMethodDeclaration();
-            x.modifiers().addAll(asExtendedModifierList(kids[0]));
-            if(isNone(kids[1]))
+            if(isNone(kids[0]))
+                x.setJavadoc(null);
+            else
+                x.setJavadoc(asJavadoc(kids[0]));
+            x.modifiers().addAll(asExtendedModifierList(kids[1]));
+            if(isNone(kids[2]))
                 x.setReturnType2(null);
             else
-                x.setReturnType2(asType(kids[1]));
-            x.typeParameters().addAll(asTypeParameterList(kids[2]));
-            x.setName(asSimpleName(kids[3]));
-            x.parameters().addAll(asSingleVariableDeclarationList(kids[4]));
-            x.thrownExceptions().addAll(asNameList(kids[5]));
-            if(isNone(kids[6]))
+                x.setReturnType2(asType(kids[2]));
+            x.typeParameters().addAll(asTypeParameterList(kids[3]));
+            x.setName(asSimpleName(kids[4]));
+            x.parameters().addAll(asSingleVariableDeclarationList(kids[5]));
+            x.thrownExceptions().addAll(asNameList(kids[6]));
+            if(isNone(kids[7]))
                 x.setBody(null);
             else
-                x.setBody(asBlock(kids[6]));
+                x.setBody(asBlock(kids[7]));
             return wrap(x);
         }
         case METHOD_INVOCATION: {
@@ -1132,23 +1155,28 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case TYPE_DECLARATION: {
-            if(!isModifierList(kids[0])
-                    || !isSimpleName(kids[1])
-                    || !isTypeList(kids[2])
-                    || (!isType(kids[3]) && !isNone(kids[3]))
-                    || !isTypeList(kids[4])
-                    || !isBodyDeclarationList(kids[5]))
+            if((!isJavadoc(kids[0]) && !isNone(kids[0]))
+                    || !isModifierList(kids[1])
+                    || !isSimpleName(kids[2])
+                    || !isTypeList(kids[3])
+                    || (!isType(kids[4]) && !isNone(kids[4]))
+                    || !isTypeList(kids[5])
+                    || !isBodyDeclarationList(kids[6]))
                 return null;
             TypeDeclaration x = ast.newTypeDeclaration();
-            x.modifiers().addAll(asModifierList(kids[0]));
-            x.setName(asSimpleName(kids[1]));
-            x.typeParameters().addAll(asTypeList(kids[2]));
-            if(isNone(kids[3])) 
+            if(isNone(kids[0]))
+                x.setJavadoc(null);
+            else
+                x.setJavadoc(asJavadoc(kids[0]));
+            x.modifiers().addAll(asModifierList(kids[1]));
+            x.setName(asSimpleName(kids[2]));
+            x.typeParameters().addAll(asTypeList(kids[3]));
+            if(isNone(kids[4])) 
                 x.setSuperclassType(null);
             else 
-                x.setSuperclassType(asType(kids[3]));
-            x.superInterfaceTypes().addAll(asTypeList(kids[4]));
-            x.bodyDeclarations().addAll(asBodyDeclarationList(kids[5]));
+                x.setSuperclassType(asType(kids[4]));
+            x.superInterfaceTypes().addAll(asTypeList(kids[5]));
+            x.bodyDeclarations().addAll(asBodyDeclarationList(kids[6]));
             return wrap(x);
         }
         case TYPE_DECLARATION_STATEMENT: {
@@ -1172,7 +1200,9 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case VARIABLE_DECLARATION_EXPRESSION: {
-            if(!isModifierList(kids[0]) || !isType(kids[1]) || !isNonEmptyVariableDeclarationFragmentList(kids[2]))
+            if(!isModifierList(kids[0]) 
+                    || !isType(kids[1]) 
+                    || !isNonEmptyVariableDeclarationFragmentList(kids[2]))
                 return null;
             List y = asFragmentList(kids[2]);
             VariableDeclarationExpression x = ast.newVariableDeclarationExpression((VariableDeclarationFragment)y.remove(0));
@@ -1230,6 +1260,11 @@ public class ECJFactory implements ITermFactory {
         }
     }
 
+    private Javadoc asJavadoc(IStrategoTerm term) {
+        Javadoc x = ((WrappedJavadoc)term).getWrappee();
+        return x.getParent() == null ? x : (Javadoc)ASTNode.copySubtree(ast, x);
+    }
+
     @SuppressWarnings("unchecked")
     private Collection asExtendedModifierList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
@@ -1269,7 +1304,8 @@ public class ECJFactory implements ITermFactory {
     }
 
     private TypeParameter asTypeParameter(IStrategoTerm term) {
-        return ((WrappedTypeParameter)term).getWrappee();
+        TypeParameter x = ((WrappedTypeParameter)term).getWrappee();
+        return x.getParent() == null ? x : (TypeParameter)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1346,11 +1382,13 @@ public class ECJFactory implements ITermFactory {
     }
 
     private ImportDeclaration asImportDeclaration(IStrategoTerm term) {
-        return ((WrappedImportDeclaration)term).getWrappee();
+        ImportDeclaration x = ((WrappedImportDeclaration)term).getWrappee();
+        return x.getParent() == null ? x : (ImportDeclaration)ASTNode.copySubtree(ast, x);
     }
 
     private PackageDeclaration asPackageDeclaration(IStrategoTerm term) {
-        return ((WrappedPackageDeclaration)term).getWrappee();
+        PackageDeclaration x = ((WrappedPackageDeclaration)term).getWrappee();
+        return x.getParent() == null ? x : (PackageDeclaration)ASTNode.copySubtree(ast, x);
     }
 
 
@@ -1365,7 +1403,8 @@ public class ECJFactory implements ITermFactory {
     }
 
     private EnumConstantDeclaration asEnumConstantDeclaration(IStrategoTerm term) {
-        return ((WrappedEnumConstantDeclaration)term).getWrappee();
+        EnumConstantDeclaration x = ((WrappedEnumConstantDeclaration)term).getWrappee();
+        return x.getParent() == null ? x : (EnumConstantDeclaration)ASTNode.copySubtree(ast, x);
     }
 
 
@@ -1384,7 +1423,8 @@ public class ECJFactory implements ITermFactory {
     }
 
     private MethodRefParameter asMethodRefParameter(IStrategoTerm term) {
-        return ((WrappedMethodRefParameter)term).getWrappee();
+        MethodRefParameter x = ((WrappedMethodRefParameter)term).getWrappee();
+        return x.getParent() == null ? x : (MethodRefParameter)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1398,7 +1438,8 @@ public class ECJFactory implements ITermFactory {
     }
 
     private MemberValuePair asMemberValuePair(IStrategoTerm term) {
-        return ((WrappedMemberValuePair)term).getWrappee();
+        MemberValuePair x = ((WrappedMemberValuePair)term).getWrappee();
+        return x.getParent() == null ? x : (MemberValuePair)ASTNode.copySubtree(ast, x);
     }
 
     private Code asTypeCode(IStrategoTerm term) {
@@ -1410,7 +1451,8 @@ public class ECJFactory implements ITermFactory {
     }
 
     private Name asName(IStrategoTerm term) {
-        return ((WrappedName)term).getWrappee();
+        Name x = ((WrappedName)term).getWrappee();
+        return x.getParent() == null ? x : (Name)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1424,7 +1466,8 @@ public class ECJFactory implements ITermFactory {
     }
 
     private AbstractTypeDeclaration asTypeDecl(IStrategoTerm term) {
-        return ((WrappedAbstractTypeDeclaration)term).getWrappee();
+        AbstractTypeDeclaration x = ((WrappedAbstractTypeDeclaration)term).getWrappee();
+        return x.getParent() == null ? x : (AbstractTypeDeclaration)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1438,11 +1481,13 @@ public class ECJFactory implements ITermFactory {
     }
 
     private ArrayInitializer asArrayInitializer(IStrategoTerm term) {
-        return ((WrappedArrayInitializer)term).getWrappee();
+        ArrayInitializer x = ((WrappedArrayInitializer)term).getWrappee();
+        return x.getParent() == null ? x : (ArrayInitializer)ASTNode.copySubtree(ast, x);
     }
 
     private ArrayType asArrayType(IStrategoTerm term) {
-        return ((WrappedArrayType)term).getWrappee();
+        ArrayType x = ((WrappedArrayType)term).getWrappee();
+        return x.getParent() == null ? x : (ArrayType)ASTNode.copySubtree(ast, x);
     }
 
     private Type asType(IStrategoTerm term) {
@@ -1451,7 +1496,8 @@ public class ECJFactory implements ITermFactory {
     }
 
     private SingleVariableDeclaration asSingleVariableDeclaration(IStrategoTerm term) {
-        return ((WrappedSingleVariableDeclaration)term).getWrappee();
+        SingleVariableDeclaration x = ((WrappedSingleVariableDeclaration)term).getWrappee();
+        return x.getParent() == null ? x : (SingleVariableDeclaration)ASTNode.copySubtree(ast, x);
     }
 
     private Block asBlock(IStrategoTerm term) {
@@ -1723,9 +1769,10 @@ public class ECJFactory implements ITermFactory {
 
     private boolean isBodyDeclarationList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
-            IStrategoList list = (IStrategoList)term;
-            if(list.size() > 0) 
-                return isBodyDeclaration(list.head());
+            IStrategoTerm[] kids = ((IStrategoList)term).getAllSubterms();
+            for(int i = 0; i < kids.length; i++)
+                if(!isBodyDeclaration(kids[i]))
+                    return false;
             return true;
         }
         return false;

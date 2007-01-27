@@ -25,7 +25,7 @@ public class None extends WrappedASTNode {
     
     @Override
     public IStrategoTerm getSubterm(int index) {
-        return null;
+        throw new ArrayIndexOutOfBoundsException();
     }
 
     @Override
@@ -38,6 +38,6 @@ public class None extends WrappedASTNode {
     }
 
     public IStrategoTerm[] getAllSubterms() {
-        return null;
+        return EMPTY;
     }
 }

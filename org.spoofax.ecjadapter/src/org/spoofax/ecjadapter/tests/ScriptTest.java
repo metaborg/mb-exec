@@ -24,7 +24,7 @@ public class ScriptTest {
 
     private static void setupData(ECJFactory wef, Interpreter intp) {
         ASTParser parser = ASTParser.newParser(AST.JLS3);
-        parser.setSource("class Foo { void dataInvariant() {} int f() { return 0; } }".toCharArray());
+        parser.setSource("class Foo { /** foo */ void dataInvariant() {} int f() { return 0; } }".toCharArray());
         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
         System.out.println(cu);
         wef.setAST(cu.getAST());
@@ -42,6 +42,7 @@ public class ScriptTest {
         Interpreter interp = new Interpreter(factory);
         try {
             interp.load("scripts/rewrite-return.ctree");
+            //deconstructor.ctree");
             setupData(factory, interp);
             if(interp.invoke("main_0_0") == false) {
                 System.err.println("Rewriting failed");

@@ -8,7 +8,7 @@ strategies
   main = where(not(collect(is-datainvariant-method) => [])) ; bottomup(try(RewriteReturn))
   
   is-datainvariant-method =
-   ?MethodDeclaration(_,_,_,SimpleName("dataInvariant"),_,_,_)
+   ?MethodDeclaration(_,_,_,_,SimpleName("dataInvariant"),_,_,_)
    
   RewriteReturn:
   r@ReturnStatement(_) -> Block([ExpressionStatement(MethodInvocation(

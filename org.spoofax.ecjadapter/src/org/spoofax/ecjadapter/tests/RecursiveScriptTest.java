@@ -17,7 +17,6 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.spoofax.ecjadapter.adapter.ECJFactory;
-import org.spoofax.ecjadapter.adapter.WrappedASTNode;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -41,21 +40,22 @@ public class RecursiveScriptTest {
         System.out.println("Reading " + file);
         parser.setSource(getBytes(file));
         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-        System.out.println(cu);
+        //System.out.println(cu);
         IStrategoTerm from = factory.parseFromTree(cu);
         //ITermPrinter pp = new PrettyPrinter();
-        //t.prettyPrint(pp);
+        //from.prettyPrint(pp);
         //System.out.println(pp.getString());
         factory.setAST(cu.getAST());
         interp.setCurrent(from);
-        interp.invoke("main_0_0");
+        if(interp.invoke("main_0_0") == false)
+            System.out.println("Rewriting failed");
         IStrategoTerm to = interp.current();
         //from.prettyPrint(pp);
         //to.prettyPrint(pp);
         //System.out.println(to.getClass());
         //System.out.println(pp.getString());
         
-        System.out.println(((WrappedASTNode)to).getWrappee().toString());
+        //System.out.println(((WrappedASTNode)to).getWrappee().toString());
     }
     
     void recurse(File base) throws FileNotFoundException, IOException, InterpreterException {
@@ -73,7 +73,7 @@ public class RecursiveScriptTest {
     }
     
     public static void main(String[] args) throws FileNotFoundException, IOException, InterpreterException {
-        RecursiveScriptTest rst = new RecursiveScriptTest("scripts/rewrite-return.ctree");
+        RecursiveScriptTest rst = new RecursiveScriptTest("scripts/allid.ctree");
         rst.recurse(new File(args[0]));
         System.out.println("Finished");
     }

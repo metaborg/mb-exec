@@ -14,7 +14,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedMethodDeclaration extends WrappedBodyDeclaration {
 
     private final MethodDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("MethodDeclaration", 7); 
+    private final static IStrategoConstructor CTOR = new ASTCtor("MethodDeclaration", 8); 
     
     WrappedMethodDeclaration(MethodDeclaration wrappee) {
         super(CTOR);
@@ -25,18 +25,20 @@ public class WrappedMethodDeclaration extends WrappedBodyDeclaration {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return ECJFactory.wrap(wrappee.modifiers());
+            return ECJFactory.wrap(wrappee.getJavadoc());
         case 1:
-            return ECJFactory.wrapType(wrappee.getReturnType2());
+            return ECJFactory.wrap(wrappee.modifiers());
         case 2:
-            return ECJFactory.wrap(wrappee.typeParameters());
+            return ECJFactory.wrapType(wrappee.getReturnType2());
         case 3:
-            return ECJFactory.wrap(wrappee.getName());
+            return ECJFactory.wrap(wrappee.typeParameters());
         case 4:
-            return ECJFactory.wrap(wrappee.parameters());
+            return ECJFactory.wrap(wrappee.getName());
         case 5:
-            return ECJFactory.wrap(wrappee.thrownExceptions());
+            return ECJFactory.wrap(wrappee.parameters());
         case 6:
+            return ECJFactory.wrap(wrappee.thrownExceptions());
+        case 7:
             return ECJFactory.wrap(wrappee.getBody());
         }
         throw new ArrayIndexOutOfBoundsException();
