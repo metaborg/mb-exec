@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Adapter for the Eclipse Compiler for Java
-Bundle-SymbolicName: org.spoofax.interpreter.ecjadapter;singleton:=true
+Bundle-SymbolicName: org.spoofax.interpreter.adapter.ecj;singleton:=true
 Bundle-Version: 0.1.0
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.jdt.core,
@@ -11,4 +11,4 @@ Require-Bundle: org.eclipse.jdt.core,
  org.spoofax.interpreter,
  org.spoofax.interpreter.adapter.aterm
 Bundle-Vendor: Spoofax.org
-Export-Package: org.spoofax.ecjadapter.adapter
+Export-Package: org.spoofax.interpreter.adapter.ecj
