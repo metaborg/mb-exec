@@ -1,4 +1,4 @@
-package org.spoofax.interpreter.compiler;
+package org.spoofax.compiler;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.library.jsglr.JSGLRLibrary;
-import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.jsglr.InvalidParseTableException;
@@ -18,7 +17,6 @@ public class Compiler {
 	Compiler(ITermFactory factory) throws IOException, InterpreterException, InvalidParseTableException
 	{
 		compiler = new Interpreter(factory);
-		compiler.addOperatorRegistry("SSL", new SSLLibrary());
 		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary(factory));
 		compiler.load("data/libstratego-lib.ctree");
 		compiler.load("data/libsglr.ctree");

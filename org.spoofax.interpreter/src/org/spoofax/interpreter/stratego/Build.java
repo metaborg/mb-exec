@@ -133,12 +133,7 @@ public class Build extends Strategy {
         }
 
         String n = ((IStrategoString)actualCtor).getValue();
-        IStrategoList argList = (IStrategoList)actualArgs;
-        IStrategoTerm[] realArgs = new IStrategoTerm[argList.size()];
-        
-        for(int i = 0; i < argList.size(); i++) {
-            realArgs[i] = argList.get(i);
-        }
+        IStrategoTerm[] realArgs = ((IStrategoList)actualArgs).getAllSubterms();
         
         if (n.equals(""))
             return factory.makeTuple(realArgs);
@@ -153,7 +148,7 @@ public class Build extends Strategy {
             return factory.makeString(n);
         }
         
-        IStrategoConstructor afun = factory.makeConstructor(n, argList.size(), quoted);
+        IStrategoConstructor afun = factory.makeConstructor(n, realArgs.length, quoted);
         return factory.makeAppl(afun, realArgs);
     }
 

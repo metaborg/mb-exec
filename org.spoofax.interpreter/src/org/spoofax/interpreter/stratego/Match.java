@@ -284,7 +284,7 @@ public class Match extends Strategy {
         if(DebugUtil.isDebugging()) {
             DebugUtil.debug("  pattern is Anno");
         }
-        // FIXME: Do real match of annotations
+
         return match(env, t, Tools.applAt(p, 0));
     }
 

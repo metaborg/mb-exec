@@ -1,6 +1,7 @@
 module ecj-adapter
 imports
   stratego-lib
+  EclipseJava
   
 signature
   constructors
@@ -83,9 +84,9 @@ strategies
 strategies
 
   ecj-is-TypeDeclaration = 
-      ?AnnotationTypeDeclaration(_, _, _)
-    + ?EnumDeclaration(_, _, _, _, _)
-    + ?TypeDeclaration(_, _, _, _, _ ,_)
+      ?AnnotationTypeDeclaration(_, _, _, _)
+    + ?EnumDeclaration(_, _, _, _, _, _)
+    + ?TypeDeclaration(_, _, _, _, _, _ ,_)
       
   ecj-is-Type = 
       ?ArrayType(_, _, _)

@@ -187,7 +187,6 @@ public class WrappedATermFactory implements ITermFactory {
     }
 
     public IStrategoTerm replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids, IStrategoTerm old) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        return makeAppl(constructor, kids);
     }
 }

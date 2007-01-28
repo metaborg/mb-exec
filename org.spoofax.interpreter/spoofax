@@ -20,7 +20,7 @@ function run-interpreter() {
 
 function invoke-interpreter() {
 	java ${VM_OPTS} \
-		-cp ${bp}/../org.spoofax.aterm/bin:${bp}/bin:${bp}/ext/jjtraveler-0.4.3.jar:${bp}/ext/shared-objects-1.4.jar:${bp}/../org.spoofax.interpreter.adapters/bin \
+		-cp ${bp}/../org.spoofax.aterm/bin:${bp}/bin:${bp}/../org.spoofax.aterm/lib/jjtraveler-0.4.3.jar:${bp}/../org.spoofax.aterm/lib/shared-objects-1.4.jar:${bp}/../org.spoofax.interpreter.adapters/bin \
 		-Dspoofax.lib.path=../xlet/src \
 		-Dspoofax.xlet.path=../org.spoofax.interpreter/bin/xlets \
 		$@

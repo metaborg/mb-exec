@@ -1,8 +1,8 @@
-package org.spoofax.interpreter.test;
+package org.spoofax.test;
 
 import java.io.IOException;
 
-import org.spoofax.interpreter.test.compiler.CompilerTest;
+import org.spoofax.test.CompilerTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

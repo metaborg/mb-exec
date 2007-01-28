@@ -10,11 +10,11 @@ package org.spoofax.interpreter;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.spoofax.interpreter.adapters.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.stratego.CallT;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.StupidFormatter;
+import org.spoofax.interpreter.terms.BasicTermFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
@@ -24,24 +24,22 @@ public class Interpreter {
     private StrategoCoreLoader loader;
 
     public Interpreter() {
-        doInit(new WrappedATermFactory());
+        ITermFactory f = new BasicTermFactory();
+        doInit(f,f);
     }
 
     public Interpreter(ITermFactory factory) {
-        doInit(factory);
+        doInit(factory, factory);
     }
 
-    private void doInit(ITermFactory factory) {
+    public Interpreter(ITermFactory termFactory, ITermFactory programFactory) {
+        doInit(termFactory, programFactory);
+    }
+
+    private void doInit(ITermFactory termFactory, ITermFactory programFactory) {
         
         Context.indentation = 0;
-        // FIXME this is a hack -- improve factory interop
-        ITermFactory programFactory = null; 
-        if(factory instanceof WrappedATermFactory) {
-            programFactory = factory;
-        } else {
-            programFactory = new WrappedATermFactory();
-        }
-        context = new Context(factory, programFactory);
+        context = new Context(termFactory, programFactory);
         
         loader = new StrategoCoreLoader(context);
     }

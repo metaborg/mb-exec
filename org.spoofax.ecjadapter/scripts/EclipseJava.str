@@ -29,7 +29,7 @@ signature
     CatchClause                     : Term * Term -> Term
     CharacterLiteral                : Term -> Term
     ClassInstanceCreation           : Term * Term * Term * Term -> Term
-    CompilationUnit                 : Term * Term * Term -> Term 
+    CompilationUnit                 : PackageDeclaration * List(ImportDeclaration) * List(AbstractTypeDeclaration) -> Term 
     ConditionalExpression           : Term * Term * Term -> Term
     ConstructorInvocation           : Term -> Term
     ContinueStatement               : Term -> Term
@@ -98,7 +98,7 @@ signature
     ThrowStatement                  : Term -> Statement
     Times                           : Term * Term -> Term
     TryStatement                    : Term * Term * Term -> Statement
-    TypeDeclaration                 : List(Modifier) * Name * List(TypeParameter) * Type * List(Type) * List(BodyDeclaration) -> Term
+    TypeDeclaration                 : Javadoc * List(Modifier) * Name * List(TypeParameter) * Type * List(Type) * List(BodyDeclaration) -> Term
     TypeDeclarationStatement        : Term -> Term
     TypeLiteral                     : Term -> Term
     TypeParameter                   : Term * Term -> Term

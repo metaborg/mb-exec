@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Incremental Stratego Compiler
+Bundle-SymbolicName: org.spoofax.compiler
+Bundle-Version: 0.3.9
+Bundle-Vendor: Spoofax.org
+Bundle-Localization: plugin
+Require-Bundle: org.spoofax.interpreter,
+ org.spoofax.interpreter.library.jsglr,
+ org.spoofax.jsglr,
+ org.spoofax.interpreter.adapter.aterm,
+ org.junit
+Eclipse-LazyStart: true

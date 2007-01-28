@@ -106,6 +106,8 @@ public class LibraryTest extends AbstractInterpreterTest {
     public void testPlaceholder() throws IOException, InterpreterException 
     {  interpTest("placeholder-test", "(0,0)");   }
 */
+    public void testAnnotation() throws IOException, InterpreterException 
+    { interpTest("annotation-test", "(10,0)"); }
 
     public void testString() throws IOException, InterpreterException 
     { interpTest("string-test", "(71,0)"); }

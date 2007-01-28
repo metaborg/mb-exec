@@ -54,8 +54,9 @@ public abstract class BasicStrategoTuple implements IStrategoTuple {
             IStrategoTuple snd = (IStrategoTuple) second;
             if(size() != snd.size())
                 return false;
-            for(int i = 0, sz = size(); i < sz; i++) {
-                if(!kids[i].match(second.getSubterm(i)))
+            IStrategoTerm[] otherkids = snd.getAllSubterms(); 
+            for(int i = 0, sz = kids.length; i < sz; i++) {
+                if(!kids[i].match(otherkids[i]))
                     return false;
             }
             return true;

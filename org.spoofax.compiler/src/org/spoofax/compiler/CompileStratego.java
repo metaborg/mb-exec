@@ -1,4 +1,4 @@
-package org.spoofax.interpreter.compiler;
+package org.spoofax.compiler;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

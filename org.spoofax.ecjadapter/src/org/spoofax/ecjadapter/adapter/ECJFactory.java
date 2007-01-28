@@ -117,6 +117,7 @@ import org.eclipse.jdt.core.dom.WildcardType;
 import org.eclipse.jdt.core.dom.InfixExpression.Operator;
 import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
+import org.spoofax.DebugUtil;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
@@ -383,17 +384,19 @@ public class ECJFactory implements ITermFactory {
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... kids) {
         IStrategoAppl t = constructASTNode(ctr, kids);
         if(t == null) {
-            System.err.println("Generic fallback for:");
-            System.err.println("Construct: " + ctr.getName() + "/" + ctr.getArity() + " with " + kids.length + " kids");
-            for(int i = 0; i < kids.length; i++) {
-                if(kids[i] instanceof WrappedASTNodeList) {
-                    WrappedASTNodeList l = (WrappedASTNodeList)kids[i];
-                    if(!l.isEmpty()) 
-                        System.err.println("  [" + l.get(0) + "]");
-                    else
-                        System.err.println("  " + l + " - empty");
-                } else
-                    System.err.println("  " + kids[i]);
+            if(DebugUtil.isDebugging()) {
+                System.err.println("Generic fallback for:");
+                System.err.println("Construct: " + ctr.getName() + "/" + ctr.getArity() + " with " + kids.length + " kids");
+                for(int i = 0; i < kids.length; i++) {
+                    if(kids[i] instanceof WrappedASTNodeList) {
+                        WrappedASTNodeList l = (WrappedASTNodeList)kids[i];
+                        if(!l.isEmpty()) 
+                            System.err.println("  [" + l.get(0) + "]");
+                        else
+                            System.err.println("  " + l + " - empty");
+                    } else
+                        System.err.println("  " + kids[i]);
+                }
             }
             return ctr.instantiate(this, kids);
         }

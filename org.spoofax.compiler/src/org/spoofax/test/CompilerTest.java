@@ -1,10 +1,9 @@
-package org.spoofax.interpreter.test.compiler;
+package org.spoofax.test;
 
 import java.io.IOException;
 
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.test.AbstractCompilerTest;
 
 public class CompilerTest extends AbstractCompilerTest {
     @Override
