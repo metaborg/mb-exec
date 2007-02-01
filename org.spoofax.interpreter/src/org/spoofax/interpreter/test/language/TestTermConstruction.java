@@ -20,7 +20,7 @@ public class TestTermConstruction extends AbstractLanguageTest {
     }
 
     public void testTermConstr2() throws IOException, InterpreterException {
-        interpTest("term_constr_2", "()", "(1, 2, 3)");
+        interpTest("term_constr_2", "()", "(1,2,3)");
     }
 
     public void testTermConstr3() throws IOException, InterpreterException {
@@ -36,20 +36,20 @@ public class TestTermConstruction extends AbstractLanguageTest {
     }
 
     public void testTermConstr6() throws IOException, InterpreterException {
-        interpTest("term_constr_6", "(\"Pair\", [3, 4]))", "Pair(3,4)");
+        interpTest("term_constr_6", "(\"Pair\",[3,4]))", "Pair(3,4)");
     }
 
     public void testTermConstr6b() throws IOException, InterpreterException {
         interpTest("term_constr_6", 
-                   "(1,[1, 2, 3, 4])",
+                   "(1,[1,2,3,4])",
                    "1");
     }
 
     public void testTermConstr6c() throws IOException, InterpreterException {
-        interpTest("term_constr_6", "(\"foo\", [])", "foo");
+        interpTest("term_constr_6", "(\"foo\",[])", "foo");
     }
 
     public void testTermConstr6d() throws IOException, InterpreterException {
-        interpTest("term_constr_6", "(\"\\\"foo\\\"\", [])", "\"foo\"");
+        interpTest("term_constr_6", "(\"\\\"foo\\\"\",[])", "\"foo\"");
     }
 }

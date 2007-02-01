@@ -47,11 +47,11 @@ public class TestMatch extends AbstractLanguageTest {
     }
 
     public void testMatchTuple1() throws IOException, InterpreterException {
-        interpTest("match_tuple_1", "(1, 2)", "1");
+        interpTest("match_tuple_1", "(1,2)", "1");
     }
 
     public void testMatchTuple1b() throws IOException, InterpreterException {
-        interpTestFail("match_tuple_1", "[1, 2]");
+        interpTestFail("match_tuple_1", "[1,2]");
     }
 
     public void testMatchTuple1c() throws IOException, InterpreterException {
@@ -67,15 +67,15 @@ public class TestMatch extends AbstractLanguageTest {
     }
 
     public void testMatchTuple2() throws IOException, InterpreterException {
-        interpTest("match_tuple_2", "(1, 2)", "2");
+        interpTest("match_tuple_2", "(1,2)", "2");
     }
 
     public void testMatchTuple3() throws IOException, InterpreterException {
-        interpTest("match_tuple_3", "(2, 2)", "2");
+        interpTest("match_tuple_3", "(2,2)", "2");
     }
 
     public void testMatchTuple4() throws IOException, InterpreterException {
-        interpTestFail("match_tuple_4", "(2, 3)");
+        interpTestFail("match_tuple_4", "(2,3)");
     }
 
     public void testMatchInt1() throws IOException, InterpreterException {
@@ -87,31 +87,31 @@ public class TestMatch extends AbstractLanguageTest {
     }
 
     public void testMatchList1() throws IOException, InterpreterException {
-        interpTest("match_list_1", "[1, 2]", "1");
+        interpTest("match_list_1", "[1,2]", "1");
     }
     
     public void testMatchList1b() throws IOException, InterpreterException {
-        interpTestFail("match_list_1", "Cons(1, Cons(2, Nil))");
+        interpTestFail("match_list_1", "Cons(1,Cons(2,Nil))");
     }
 
     public void testMatchList2() throws IOException, InterpreterException {
-        interpTest("match_list_2", "[1, 2]", "2");
+        interpTest("match_list_2", "[1,2]", "2");
     }
 
     public void testMatchList2b() throws IOException, InterpreterException {
-        interpTestFail("match_list_2", "Cons(1, Cons(2, Nil))");
+        interpTestFail("match_list_2", "Cons(1,Cons(2,Nil))");
     }
 
     public void testMatchList3() throws IOException, InterpreterException {
-        interpTest("match_list_3", "[2, 2]", "2");
+        interpTest("match_list_3", "[2,2]", "2");
     }
 
     public void testMatchList3b() throws IOException, InterpreterException {
-        interpTestFail("match_list_3", "Cons(2, Cons(2, Nil))");
+        interpTestFail("match_list_3", "Cons(2,Cons(2,Nil))");
     }
 
     public void testMatchList4() throws IOException, InterpreterException {
-        interpTestFail("match_list_4", "Cons(2, Cons(3, Nil))");
+        interpTestFail("match_list_4", "Cons(2,Cons(3,Nil))");
     }
 
 //    public void testMatchList4b() throws IOException, InterpreterException {
@@ -143,15 +143,15 @@ public class TestMatch extends AbstractLanguageTest {
     }
 
     public void testMatchListTuple1() throws IOException, InterpreterException {
-        interpTest("match_list_tuple_1", "([1,2,3,4], [2,3,4,5])", "([2,3,4], [3,4,5])");
+        interpTest("match_list_tuple_1", "([1,2,3,4],[2,3,4,5])", "([2,3,4],[3,4,5])");
     }
 
     public void testMatchListTuple2() throws IOException, InterpreterException {
-        interpTest("match_list_tuple_2", "([1,2,3,4], [1,3,4,5])", "([2,3,4], [3,4,5])");
+        interpTest("match_list_tuple_2", "([1,2,3,4],[1,3,4,5])", "([2,3,4],[3,4,5])");
     }
 
     public void testMatchListTuple2b() throws IOException, InterpreterException {
-        interpTestFail("match_list_tuple_2", "([1,2,3,4], [2,3,4,5])");
+        interpTestFail("match_list_tuple_2", "([1,2,3,4],[2,3,4,5])");
     }
 
     public void testMatchReal1() throws IOException, InterpreterException {
@@ -163,15 +163,15 @@ public class TestMatch extends AbstractLanguageTest {
     }
 
     public void testAs1() throws IOException, InterpreterException {
-        interpTest("as_1", "(1, 2)", "((1, 2), (1, 2))");
+        interpTest("as_1", "(1,2)", "((1,2),(1,2))");
     }
 
     public void testAs2() throws IOException, InterpreterException {
-        interpTest("as_2", "(1, 2)", "(1, 1)");
+        interpTest("as_2", "(1,2)", "(1,1)");
     }
 
     public void testAs3() throws IOException, InterpreterException {
-        interpTest("as_3", "(1, 2)", "((1, 2), 1)");
+        interpTest("as_3", "(1,2)", "((1,2),1)");
     }
 
     public void testAs4() throws IOException, InterpreterException {
@@ -187,11 +187,11 @@ public class TestMatch extends AbstractLanguageTest {
     }
 
     public void testProject1() throws IOException, InterpreterException {
-        interpTest("project_1", "(2, 3)", "2");
+        interpTest("project_1", "(2,3)", "2");
     }
 
     public void testProject2() throws IOException, InterpreterException {
-        interpTest("project_2", "(2, 3)", "3");
+        interpTest("project_2", "(2,3)", "3");
     }
 
     public void testMatchAppl1() throws IOException, InterpreterException {

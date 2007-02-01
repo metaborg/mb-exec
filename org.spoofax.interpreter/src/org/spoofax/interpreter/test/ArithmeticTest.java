@@ -14,7 +14,7 @@ import org.spoofax.interpreter.InterpreterException;
 public class ArithmeticTest extends AbstractLanguageTest {
 
     public void testAddInt1() throws IOException, InterpreterException {
-        interpTest("add_int_1", factory.parseFromString("(1, 2)"), factory.parseFromString("3"));
+        interpTest("add_int_1", factory.parseFromString("(1,2)"), factory.parseFromString("3"));
     }
 
     public void testAddInt2() throws IOException, InterpreterException {
@@ -22,7 +22,7 @@ public class ArithmeticTest extends AbstractLanguageTest {
     }
 
     public void testGtInt1() throws IOException, InterpreterException {
-        interpTest("gt_int_1", factory.parseFromString("[]"), factory.parseFromString("(2, 1)"));
+        interpTest("gt_int_1", factory.parseFromString("[]"), factory.parseFromString("(2,1)"));
     }
 
     public void testGtInt2() throws IOException, InterpreterException {
@@ -42,7 +42,7 @@ public class ArithmeticTest extends AbstractLanguageTest {
     }
 
     public void testMulInt() throws IOException, InterpreterException {
-        interpTest("mul_int", factory.parseFromString("(2, 3)"), factory.parseFromString("6"));
+        interpTest("mul_int", factory.parseFromString("(2,3)"), factory.parseFromString("6"));
     }
 
     public void testSumOfIntList1() throws IOException, InterpreterException {

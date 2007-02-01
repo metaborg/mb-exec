@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.terms;
 
-public abstract class BasicStrategoList implements IStrategoList {
+public class BasicStrategoList implements IStrategoList {
 
     protected final IStrategoTerm[] kids;
     
@@ -23,7 +23,9 @@ public abstract class BasicStrategoList implements IStrategoList {
         return kids.length == 0;
     }
     
-    public abstract IStrategoList tail();
+    public IStrategoList tail() {
+        return new BasicStrategoList(doTail());
+    }
     
     protected IStrategoTerm[] doTail() {
         IStrategoTerm[] r = new IStrategoTerm[kids.length - 1];
@@ -33,7 +35,9 @@ public abstract class BasicStrategoList implements IStrategoList {
         return r;
     }
     
-    public abstract IStrategoList prepend(IStrategoTerm prefix);
+    public IStrategoList prepend(IStrategoTerm prefix) {
+        return new BasicStrategoList(doPrepend(prefix));
+    }
     
     protected IStrategoTerm[] doPrepend(IStrategoTerm prefix) {
         IStrategoTerm[] r = new IStrategoTerm[kids.length + 1];
@@ -68,7 +72,9 @@ public abstract class BasicStrategoList implements IStrategoList {
         return IStrategoTerm.LIST;
     }
 
-    public abstract boolean match(IStrategoTerm second);
+    public boolean match(IStrategoTerm second) {
+        return doSlowMatch(second);
+    }
     
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second instanceof BasicStrategoList) {

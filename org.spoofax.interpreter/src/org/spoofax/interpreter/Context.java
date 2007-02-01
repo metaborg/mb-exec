@@ -20,7 +20,6 @@ import org.spoofax.interpreter.stratego.Match.Binding;
 import org.spoofax.interpreter.stratego.Match.Results;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
-import org.spoofax.interpreter.terms.StrategoSignature;
 
 
 public class Context implements IContext {

@@ -7,11 +7,11 @@
  */
 package org.spoofax.interpreter.terms;
 
-public abstract class BasicStrategoTuple implements IStrategoTuple {
+public class BasicStrategoTuple implements IStrategoTuple {
 
     protected final IStrategoTerm[] kids;
     
-    protected BasicStrategoTuple(IStrategoTerm[] kids) {
+    BasicStrategoTuple(IStrategoTerm[] kids) {
         this.kids = kids;
     }
     
@@ -39,7 +39,9 @@ public abstract class BasicStrategoTuple implements IStrategoTuple {
         return IStrategoTerm.TUPLE;
     }
 
-    public abstract boolean match(IStrategoTerm second);
+    public boolean match(IStrategoTerm second) {
+        return doSlowMatch(second);
+    }
     
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second instanceof BasicStrategoTuple) {
@@ -84,4 +86,12 @@ public abstract class BasicStrategoTuple implements IStrategoTuple {
             pp.print("()");
         }
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof IStrategoTerm))
+            return false;
+        return match((IStrategoTerm) obj);
+    }
+
 }

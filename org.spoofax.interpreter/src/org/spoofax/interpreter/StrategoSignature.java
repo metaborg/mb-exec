@@ -1,4 +1,7 @@
-package org.spoofax.interpreter.terms;
+package org.spoofax.interpreter;
+
+import org.spoofax.interpreter.terms.IStrategoConstructor;
+import org.spoofax.interpreter.terms.ITermFactory;
 
 // FIXME should be moved to the interpreter
 public class StrategoSignature {

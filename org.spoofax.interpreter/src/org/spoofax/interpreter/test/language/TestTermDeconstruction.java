@@ -24,23 +24,23 @@ public class TestTermDeconstruction extends AbstractLanguageTest {
 
     public void testTermDeconstr2a() throws IOException, InterpreterException {
         interpTest("term_deconstr_1", 
-                   "Plus(1, 2)", "\"Plus\"");
+                   "Plus(1,2)", "\"Plus\"");
     }
 
     public void testTermDeconstr2b() throws IOException, InterpreterException {
-        interpTest("term_deconstr_3", "Plus(1, 2)", "[1, 2]");
+        interpTest("term_deconstr_3", "Plus(1,2)", "[1,2]");
     }
 
     public void testTermDeconstr3() throws IOException, InterpreterException {
-        interpTest("term_deconstr_2", "Plus(1, 2)", "[2]");
+        interpTest("term_deconstr_2", "Plus(1,2)", "[2]");
     }
 
     public void testTermDeconstr4() throws IOException, InterpreterException {
-        interpTest("term_deconstr_4", "Plus(1, 2)", "[1, 2]");
+        interpTest("term_deconstr_4", "Plus(1,2)", "[1,2]");
     }
 
     public void testTermDeconstr5() throws IOException, InterpreterException {
-        interpTest("term_deconstr_5", "Pair(1, 2)", "Pair(1, 2)");
+        interpTest("term_deconstr_5", "Pair(1,2)", "Pair(1,2)");
     }
 
     public void testTermDeconstr6a() throws IOException, InterpreterException {

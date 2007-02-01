@@ -13,7 +13,6 @@ import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.Match.Results;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
-import org.spoofax.interpreter.terms.StrategoSignature;
 
 // FIXME aggregate IStrategoTermBuilder instead
 

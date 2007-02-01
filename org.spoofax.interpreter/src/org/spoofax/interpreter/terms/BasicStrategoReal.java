@@ -1,5 +1,5 @@
 /*
- * Created on 9. okt.. 2006
+ * Created on 28. jan.. 2007
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -7,28 +7,34 @@
  */
 package org.spoofax.interpreter.terms;
 
-public class BasicStrategoString implements IStrategoString {
+import org.spoofax.NotImplementedException;
 
-    protected final String value;
+public class BasicStrategoReal implements IStrategoReal {
+
+    final double value;
     
-    protected BasicStrategoString(String value) {
+    BasicStrategoReal(double value) {
         this.value = value;
     }
     
-    public IStrategoTerm getSubterm(int index) {
-        throw new ArrayIndexOutOfBoundsException();
+    public double getValue() {
+        return value;
     }
 
     public IStrategoTerm[] getAllSubterms() {
         return BasicTermFactory.EMPTY;
     }
-    
+
+    public IStrategoTerm getSubterm(int index) {
+        throw new ArrayIndexOutOfBoundsException();
+    }
+
     public int getSubtermCount() {
         return 0;
     }
 
     public int getTermType() {
-        return IStrategoTerm.STRING;
+        return IStrategoTerm.REAL;
     }
 
     public boolean match(IStrategoTerm second) {
@@ -36,30 +42,20 @@ public class BasicStrategoString implements IStrategoString {
     }
     
     protected boolean doSlowMatch(IStrategoTerm second) {
-        if(second.getTermType() != IStrategoTerm.STRING)
+        if(second.getTermType() != IStrategoTerm.REAL)
             return false;
-        
-        IStrategoString snd = (IStrategoString) second;
-        return value.equals(snd.getValue());
+        IStrategoReal o = (IStrategoReal)second;
+        return value == o.getValue();
     }
 
-    public String getValue() {
-        return value;
-    }
-    
     public void prettyPrint(ITermPrinter pp) {
-        pp.print("\"" +  value + "\"");
+        throw new NotImplementedException();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if(!(obj instanceof IStrategoTerm))
             return false;
-        return match((IStrategoTerm)obj);
-    }
-    
-    @Override
-    public String toString() {
-        return value; 
+        return match((IStrategoTerm) obj);
     }
 }

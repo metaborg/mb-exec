@@ -16,7 +16,7 @@ public class BasicLibraryTest extends AbstractLanguageTest {
 
     public void testCollectOm1() throws IOException, InterpreterException {
         interpTest("collect-om_1", 
-                   "[1, (2,3), 3]",
+                   "[1,(2,3),3]",
                    "[1,2,3]");
     }
 
@@ -99,7 +99,7 @@ public class BasicLibraryTest extends AbstractLanguageTest {
     }
 
     public void testTestMap3() throws IOException, InterpreterException {
-        interpTest("map_test_3", "(5, [1,2,3])", "[6,7,8]");
+        interpTest("map_test_3", "(5,[1,2,3])", "[6,7,8]");
     }
 
     public void testTestMap4() throws IOException, InterpreterException {

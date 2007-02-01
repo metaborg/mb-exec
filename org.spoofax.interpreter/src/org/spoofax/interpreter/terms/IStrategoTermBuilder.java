@@ -25,7 +25,7 @@ public interface IStrategoTermBuilder {
     public IStrategoList makeList(IStrategoTerm... terms);
     public IStrategoList makeList(Collection<IStrategoTerm> terms);
 
-    public boolean hasConstructor(String s, int i);
+    public boolean hasConstructor(String ctorName, int arity);
     
 }
 

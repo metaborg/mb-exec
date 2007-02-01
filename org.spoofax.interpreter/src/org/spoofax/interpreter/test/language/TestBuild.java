@@ -27,7 +27,7 @@ public class TestBuild extends AbstractLanguageTest {
     }
 
     public void testBuildTuple() throws IOException, InterpreterException {
-        interpTest("build_tuple", "()", "(2, 3)");
+        interpTest("build_tuple", "()", "(2,3)");
     }
 
     public void testBuildList1() throws IOException, InterpreterException {
