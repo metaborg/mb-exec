@@ -1,6 +1,9 @@
 module EclipseJava
 signature
   sorts
+   AbstractTypeDeclaration
+   Annotation
+   ASTNode
    BodyDeclaration
    Expression 
    Modifier
@@ -8,67 +11,68 @@ signature
    Type
    TypeParameter
    VariableDeclarationFragment
+   Comment
   constructors
-
-    AnnotationTypeDeclaration       : Javadoc * Term * Term * Term -> Term
+                                    : Expression -> ASTNode
+                                    : Javadoc -> Comment
+                                    : AbstractTypeDeclaration -> BodyDeclaration
+    AnnotationTypeDeclaration       : Javadoc * Term * Term * Term -> AbstractTypeDeclaration
     AnnotationTypeMemberDeclaration : Javadoc * Term * Term * Term * Term -> Term
-    AnonymousClassDeclaration       : Term -> Term
-    ArrayAccess                     : Term * Term -> Term
-    ArrayCreation                   : Term * Term * Term -> Term
-    ArrayInitializer                : Term -> Term
-    ArrayType                       : Term * Term * Term -> Term
-    AssertStatement                 : Term * Term -> Term
+    AnonymousClassDeclaration       : Term -> ASTNode
+    ArrayAccess                     : Term * Term -> Expression
+    ArrayCreation                   : Term * Term * Term -> Expression
+    ArrayInitializer                : Term -> Expression
+    ArrayType                       : Term * Term * Term -> Type
+    AssertStatement                 : Term * Term -> Statement
     Assignment                      : Expression * Expression -> Expression
-    BlockComment                    : Term
-    Block                           : Term -> Term 
-    BooleanLiteral                  : Term -> Term
-    BooleanType                     : Term
-    BreakStatement                  : Term -> Term
-    ByteType                        : Term
-    CastExpression                  : Term * Term -> Term
-    CatchClause                     : Term * Term -> Term
-    CharacterLiteral                : Term -> Term
-    ClassInstanceCreation           : Term * Term * Term * Term -> Term
-    CompilationUnit                 : PackageDeclaration * List(ImportDeclaration) * List(AbstractTypeDeclaration) -> Term 
-    ConditionalExpression           : Term * Term * Term -> Term
-    ConstructorInvocation           : Term -> Term
-    ContinueStatement               : Term -> Term
-    Divide                          : Term * Term -> Term
-    DoStatement                     : Term * Term -> Term
-    DoubleType                      : Term
-    EmptyStatement                  : Term
-    EnhancedForStatement            : Term * Term * Term -> Term
-    EnumConstantDeclaration         : Javadoc * Term * Term * Term * Term -> Term 
-    EnumDeclaration                 : Javadoc * Term * Term * Term * Term * Term -> Term 
-    ExpressionStatement             : Term -> Term
-    FieldAccess                     : Term * Term -> Term 
-    FieldDeclaration                : Javadoc * List(Modifier) * Type * List(VariableDeclarationFragment) -> Term
-    FloatType                       : Term
+    BlockComment                    : Comment
+    Block                           : List(Statement) -> Statement 
+    BooleanLiteral                  : Term -> Expression
+    BooleanType                     : Type
+    BreakStatement                  : Term -> Statement
+    ByteType                        : Type
+    CastExpression                  : Term * Term -> Expression
+    CatchClause                     : Term * Term -> ASTNode
+    CharacterLiteral                : Term -> Expression
+    ClassInstanceCreation           : Term * Term * Term * Term -> Expression
+    CompilationUnit                 : PackageDeclaration * List(ImportDeclaration) * List(AbstractTypeDeclaration) -> ASTNode
+    ConditionalExpression           : Term * Term * Term -> Expression
+    ConstructorInvocation           : Term -> Statement
+    ContinueStatement               : Term -> Statement
+    DoStatement                     : Term * Term -> Statement
+    DoubleType                      : Type
+    EmptyStatement                  : Statement
+    EnhancedForStatement            : Term * Term * Term -> Statement
+    EnumConstantDeclaration         : Javadoc * Term * Term * Term * Term -> BodyDeclaration
+    EnumDeclaration                 : Javadoc * Term * Term * Term * Term * Term -> AbstractTypeDeclaration
+    ExpressionStatement             : Term -> Statement
+    FieldAccess                     : Term * Term -> Expression
+    FieldDeclaration                : Javadoc * List(Modifier) * Type * List(VariableDeclarationFragment) -> BodyDeclaration
+    FloatType                       : Type
     ForStatement                    : Term * Term * Term * Term -> Statement
     IfStatement                     : Term * Term * Term -> Statement
-    ImportReference                 : Term -> Term 
-    InfixExpression                 : Term * Term * Term -> Term
-    Initializer                     : Term -> Term
+    ImportDeclaration               : Term -> ASTNode 
+    InfixExpression                 : Term * Term * Term -> Expression
+    Initializer                     : Term -> BodyDeclaration
     InstanceofExpression            : Term * Term -> Expression
-    IntType                         : Term
-    Javadoc                         : Term -> Term
-    LabeledStatement                : Term * Term -> Term
-    LineComment                     : Term
-    LongType                        : Term
-    MarkerAnnotation                : Term -> Term
-    MemberRef                       : Term * Term -> Term
-    MemberValuePair                 : Term * Term -> Term
-    MethodDeclaration               : Javadoc * Term * Type * Term * Term * Term * Term * Term -> Term 
-    MethodInvocation                : Term * Term * Term * Term -> Term
-    MethodRef                       : Term * Term * Term -> Term
-    MethodRefParameter              : Term * Term -> Term
-    Minus                           : Term * Term -> Term
+    IntType                         : Type
+    Javadoc                         : Term -> Comment
+    LabeledStatement                : Term * Term -> Statement
+    LineComment                     : Comment
+    LongType                        : Type
+    MarkerAnnotation                : Term -> Annotation
+    MemberRef                       : Term * Term -> ASTNode
+    MemberValuePair                 : Term * Term -> ASTNode
+    MethodDeclaration               : Javadoc * Term * Type * Term * Term * Term * Term * Term -> BodyDeclaration
+    MethodInvocation                : Term * Term * Term * Term -> Expression
+    MethodRef                       : Term * Term * Term -> ASTNode
+    MethodRefParameter              : Term * Term -> ASTNode
     Modifier                        : Term -> Modifier
-    ModifierKeyword                 : Term -> Term
-    Name                            : Term -> Term
-    NormalAnnotation                : Term * Term -> Term
-    NullLiteral                     : Term
-    NumberLiteral                   : Term -> Term
+    ModifierKeyword                 : Term -> ModifierKeyword
+/*    Name                            : Term -> Term*/
+    NormalAnnotation                : Term * Term -> Annotation
+    NullLiteral                     : Expression
+    NumberLiteral                   : Term -> Expression
     PackageDeclaration              : Term * Term * Term -> Term 
     ParameterizedType               : Term * Term -> Term
     ParenthesizedExpression         : Term -> Expression
