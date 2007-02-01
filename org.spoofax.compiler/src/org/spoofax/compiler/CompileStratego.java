@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.adapters.aterm.WrappedATermFactory;
+import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.InvalidParseTableException;
 
