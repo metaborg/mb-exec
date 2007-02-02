@@ -45,4 +45,9 @@ public class BasicStrategoReal extends BasicStrategoTerm implements IStrategoRea
     public void prettyPrint(ITermPrinter pp) {
         pp.print("" + value);
     }
+
+    @Override
+    public int hashCode() {
+        return (int)(449 * value) ^ 7841;
+    }
 }

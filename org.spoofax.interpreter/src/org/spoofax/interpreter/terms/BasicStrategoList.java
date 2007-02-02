@@ -127,4 +127,12 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
         return sb.toString();
     }
 
+    @Override
+    public int hashCode() {
+        long hc = 4787;
+        for(int i=0; i<kids.length;i++) {
+            hc *= kids[i].hashCode();
+        }
+        return (int)(hc >> 2);
+    }
 }

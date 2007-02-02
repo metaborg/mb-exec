@@ -22,4 +22,7 @@ public abstract class BasicStrategoTerm implements IStrategoTerm {
             return false;
         return match((IStrategoTerm)obj);
     }
+    
+    @Override
+    public abstract int hashCode();
 }

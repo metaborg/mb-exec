@@ -67,4 +67,9 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
         // TODO Auto-generated method stub
         throw new NotImplementedException();
     }
+    
+    @Override
+    public int hashCode() {
+        return name.hashCode() + 5407 * arity; 
+    }
 }

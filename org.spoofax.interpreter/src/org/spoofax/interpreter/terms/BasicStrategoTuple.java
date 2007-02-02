@@ -92,4 +92,14 @@ public class BasicStrategoTuple extends BasicStrategoTerm implements IStrategoTu
         sb.append(")");
         return sb.toString();
     }
+    
+    @Override
+    public int hashCode() {
+        long hc = 4831;
+        for(int i=0; i<kids.length;i++) {
+            hc *= kids[i].hashCode();
+        }
+        return (int)(hc >> 10);
+    }
+
 }

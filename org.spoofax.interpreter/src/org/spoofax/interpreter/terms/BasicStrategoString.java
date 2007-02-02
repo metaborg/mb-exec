@@ -52,4 +52,10 @@ public class BasicStrategoString extends BasicStrategoTerm implements IStrategoS
     public String toString() {
         return "\"" + value + "\""; 
     }
+    
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+    
 }
