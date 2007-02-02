@@ -94,13 +94,13 @@ public class BasicStrategoAppl extends BasicStrategoTerm implements IStrategoApp
 
     @Override
     public int hashCode() {
-        int r = ctor.hashCode();
+        long r = ctor.hashCode();
         int accum = 6673;
         for(int i = 0; i < kids.length; i++) {
             r += kids[i].hashCode() * accum;
             accum *= 7703;
         }
-        return r;
+        return (int)(r >> 12);
     }
     
     
