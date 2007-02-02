@@ -52,7 +52,10 @@ public class BasicStrategoList implements IStrategoList {
     }
     
     public IStrategoTerm[] getAllSubterms() {
-        return kids;
+        IStrategoTerm[] r = new IStrategoTerm[kids.length];
+        for(int i=0; i<kids.length; i++)
+            r[i] = kids[i];
+        return r;
     }
 
     
@@ -77,25 +80,18 @@ public class BasicStrategoList implements IStrategoList {
     }
     
     protected boolean doSlowMatch(IStrategoTerm second) {
-        if(second instanceof BasicStrategoList) {
-            BasicStrategoList snd = (BasicStrategoList) second;
-            if(kids.length != snd.kids.length)
+        if(second.getTermType() != IStrategoTerm.LIST)
+            return false;
+        
+        IStrategoList snd = (IStrategoList) second;
+        if(size() != snd.size())
+            return false;
+        IStrategoTerm[] otherkids = second.getAllSubterms();
+        for(int i = 0, sz = size(); i < sz; i++) {
+            if(!kids[i].match(otherkids[i]))
                 return false;
-            for(int i = 0, sz = kids.length; i < sz; i++)
-                if(!kids[i].match(snd.kids[i]))
-                    return false;
-            return true;
-        } else if(second instanceof IStrategoList) {
-            IStrategoList snd = (IStrategoList) second;
-            if(size() != snd.size())
-                return false;
-            for(int i = 0, sz = size(); i < sz; i++) {
-                if(!kids[i].match(second.getSubterm(i)))
-                    return false;
-            }
-            return true;
         }
-        return false;
+        return true;
     }
 
     public void prettyPrint(ITermPrinter pp) {
@@ -117,5 +113,27 @@ public class BasicStrategoList implements IStrategoList {
         } else {
             pp.print("[]");
         }
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        if(kids.length > 0) {
+            sb.append(kids[0].toString());
+            for(int i=1; i<kids.length; i++) {
+                sb.append(",");
+                sb.append(kids[i].toString());
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof IStrategoList))
+            return false;
+        return match((IStrategoList)obj);
     }
 }

@@ -14,7 +14,6 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
 
 public class Tools {
@@ -92,7 +91,7 @@ public class Tools {
     }
 
     public static boolean isTermString(IStrategoTerm t) {
-        return t instanceof IStrategoString;
+        return t.getTermType() == IStrategoTerm.STRING;
     }
 
     public static String javaString(IStrategoTerm t) {
@@ -100,7 +99,7 @@ public class Tools {
     }
 
     public static boolean isTermList(IStrategoTerm t) {
-        return t instanceof IStrategoList;
+        return t.getTermType() == IStrategoTerm.LIST;
     }
 
     public static boolean isNil(IStrategoAppl t, IContext env) {
@@ -116,7 +115,7 @@ public class Tools {
     }
 
     public static boolean isTermInt(IStrategoTerm t) {
-        return t instanceof IStrategoInt;
+        return t.getTermType() == IStrategoTerm.INT;
     }
 
     public static boolean isAnno(IStrategoAppl t, IContext env) {
@@ -156,11 +155,11 @@ public class Tools {
     }
 
     public static boolean isTermReal(IStrategoTerm t) {
-        return t instanceof IStrategoReal;
+        return t.getTermType() == IStrategoTerm.REAL;
     }
 
     public static boolean isTermAppl(IStrategoTerm t) {
-        return t instanceof IStrategoAppl;
+        return t.getTermType() == IStrategoTerm.APPL;
     }
 
     public static boolean isFunType(IStrategoAppl t, IContext env) {
@@ -192,7 +191,7 @@ public class Tools {
     }
 
     public static boolean isTermTuple(IStrategoTerm t) {
-        return t instanceof IStrategoTuple;
+        return t.getTermType() == IStrategoTerm.TUPLE;
     }
 
     public static int asJavaInt(IStrategoTerm term) {

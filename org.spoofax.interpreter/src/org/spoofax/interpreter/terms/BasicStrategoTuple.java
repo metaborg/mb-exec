@@ -20,7 +20,10 @@ public class BasicStrategoTuple implements IStrategoTuple {
     }
 
     public IStrategoTerm[] getAllSubterms() {
-        return kids;
+        IStrategoTerm[] r = new IStrategoTerm[kids.length];
+        for(int i=0; i<kids.length; i++)
+            r[i] = kids[i];
+        return r;
     }
     
     public int size() {
@@ -44,26 +47,18 @@ public class BasicStrategoTuple implements IStrategoTuple {
     }
     
     protected boolean doSlowMatch(IStrategoTerm second) {
-        if(second instanceof BasicStrategoTuple) {
-            BasicStrategoTuple snd = (BasicStrategoTuple) second;
-            if(kids.length != snd.kids.length)
+        if(second.getTermType() != IStrategoTerm.TUPLE)
+            return false;
+
+        IStrategoTuple snd = (IStrategoTuple) second;
+        if(size() != snd.size())
+            return false;
+        IStrategoTerm[] otherkids = snd.getAllSubterms(); 
+        for(int i = 0, sz = kids.length; i < sz; i++) {
+            if(!kids[i].match(otherkids[i]))
                 return false;
-            for(int i = 0, sz = kids.length; i < sz; i++)
-                if(!kids[i].match(snd.kids[i]))
-                    return false;
-            return true;
-        } else if(second instanceof IStrategoTuple) {
-            IStrategoTuple snd = (IStrategoTuple) second;
-            if(size() != snd.size())
-                return false;
-            IStrategoTerm[] otherkids = snd.getAllSubterms(); 
-            for(int i = 0, sz = kids.length; i < sz; i++) {
-                if(!kids[i].match(otherkids[i]))
-                    return false;
-            }
-            return true;
         }
-        return false;
+        return true;
     }
 
     public void prettyPrint(ITermPrinter pp) {
@@ -94,4 +89,18 @@ public class BasicStrategoTuple implements IStrategoTuple {
         return match((IStrategoTerm) obj);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("(");
+        if(kids.length > 0) {
+            sb.append(kids[0].toString());
+            for(int i=1; i<kids.length; i++) {
+                sb.append(",");
+                sb.append(kids[i].toString());
+            }
+        }
+        sb.append(")");
+        return sb.toString();
+    }
 }

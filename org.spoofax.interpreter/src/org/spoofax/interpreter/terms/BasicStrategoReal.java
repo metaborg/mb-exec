@@ -7,7 +7,6 @@
  */
 package org.spoofax.interpreter.terms;
 
-import org.spoofax.NotImplementedException;
 
 public class BasicStrategoReal implements IStrategoReal {
 
@@ -44,12 +43,11 @@ public class BasicStrategoReal implements IStrategoReal {
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.REAL)
             return false;
-        IStrategoReal o = (IStrategoReal)second;
-        return value == o.getValue();
+        return value == ((IStrategoReal)second).getValue();
     }
 
     public void prettyPrint(ITermPrinter pp) {
-        throw new NotImplementedException();
+        pp.print("" + value);
     }
 
     @Override

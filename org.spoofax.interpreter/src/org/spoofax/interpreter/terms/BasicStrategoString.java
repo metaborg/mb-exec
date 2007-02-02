@@ -60,6 +60,6 @@ public class BasicStrategoString implements IStrategoString {
     
     @Override
     public String toString() {
-        return value; 
+        return "\"" + value + "\""; 
     }
 }

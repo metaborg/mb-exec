@@ -7,7 +7,6 @@
  */
 package org.spoofax.interpreter.terms;
 
-import org.spoofax.NotImplementedException;
 
 public class BasicStrategoInt implements IStrategoInt {
 
@@ -56,5 +55,10 @@ public class BasicStrategoInt implements IStrategoInt {
         if(!(obj instanceof IStrategoTerm))
             return false;
         return match((IStrategoTerm) obj);
+    }
+    
+    @Override
+    public String toString() {
+        return "" + value;
     }
 }

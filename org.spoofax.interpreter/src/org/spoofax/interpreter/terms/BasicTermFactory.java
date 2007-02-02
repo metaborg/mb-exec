@@ -16,13 +16,20 @@ import java.io.StringBufferInputStream;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.spoofax.NotImplementedException;
 
 public class BasicTermFactory implements ITermFactory {
 
     public static final IStrategoTerm[] EMPTY = new IStrategoTerm[0];
+    private Map<String,Integer> ctorCache;
 
+    public BasicTermFactory() {
+        ctorCache = new WeakHashMap<String,Integer>();
+    }
+    
     public IStrategoTerm parseFromFile(String path) throws IOException {
         return parseFromStream(new FileInputStream(path));
     }
@@ -55,28 +62,64 @@ public class BasicTermFactory implements ITermFactory {
         int ch = bis.read();
         if(ch == '"')
             return new BasicStrategoString("");
-        int prev = ch;
+        boolean escaped = false;
         do {
+            escaped = false;
             if(ch == '\\') {
-            } else if(prev != '\\') {
-                sb.append((char)ch);
-            } else {
-                switch(ch) {
-                case '"': 
-                    sb.append((char)ch);
-                    break;
-                default:
-                    sb.append(new String(new char[] { (char)prev, (char)ch }));
-                }
+                escaped = true;
+                ch = bis.read();
             }
-            prev = ch;
-            ch = bis.read();
-        } while(!(ch == '\"' && prev != '\\'));
+            if(escaped) {
+                switch(ch) {
+                case 'n':
+                    sb.append('\n');
+                    break;
+                case 't':
+                    sb.append('\t');
+                    break;
+                case 'b':
+                    sb.append('\b');
+                    break;
+                case 'f':
+                    sb.append('\f');
+                    break;
+                case 'r':
+                    sb.append('\r');
+                    break;
+                case '\\':
+                    sb.append('\\');
+                    break;
+                case '\'':
+                    sb.append('\'');
+                    break;
+                case '\"':
+                    sb.append('\"');
+                    break;
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    throw new NotImplementedException();
+                default:
+                    sb.append("\\" + (char)ch); 
+                }
+                ch = bis.read();
+            } else if(ch != '\"') {
+                sb.append((char)ch);
+                ch = bis.read();
+            }
+        } while(escaped || ch != '\"');
         return new BasicStrategoString(sb.toString());
     }
 
     private IStrategoTerm parseAppl(PushbackInputStream bis) throws IOException {
-        System.err.println("appl");
+        //System.err.println("appl");
         StringBuilder sb = new StringBuilder();
         int ch;
         
@@ -86,7 +129,7 @@ public class BasicTermFactory implements ITermFactory {
             ch = bis.read();
         } while(Character.isLetter(ch));
         
-        System.err.println(" - " + sb.toString());
+        //System.err.println(" - " + sb.toString());
 
         if(ch == '(') {
             List<IStrategoTerm> l = parseTermSequence(bis, ')');
@@ -100,12 +143,12 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     private IStrategoTerm parseTuple(PushbackInputStream bis) throws IOException {
-        System.err.println("tuple");
+        //System.err.println("tuple");
         return makeTuple(parseTermSequence(bis, ')').toArray(new IStrategoTerm[0]));
     }
 
     private List<IStrategoTerm> parseTermSequence(PushbackInputStream bis, char endChar) throws IOException {
-        System.err.println("sequence");
+        //System.err.println("sequence");
         List<IStrategoTerm> els = new LinkedList<IStrategoTerm>();
         int ch = bis.read();
         if(ch == endChar)
@@ -123,12 +166,12 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     private IStrategoTerm parseList(PushbackInputStream bis) throws IOException {
-        System.err.println("list");
+        //System.err.println("list");
         return makeList(parseTermSequence(bis, ']'));
     }
 
     private IStrategoTerm parseNumber(PushbackInputStream bis) throws IOException {
-        System.err.println("number");
+        //System.err.println("number");
         String whole = parseDigitSequence(bis);
         
         int ch = bis.read();
@@ -180,9 +223,8 @@ public class BasicTermFactory implements ITermFactory {
         ous.write(tp.getString().getBytes());
     }
 
-    public boolean hasConstructor(String s, int i) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+    public boolean hasConstructor(String ctorName, int arity) {
+        return ctorCache.get(ctorName) != null;
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
@@ -195,6 +237,7 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoConstructor makeConstructor(String name, int arity, boolean quoted) {
+        ctorCache.put(name, arity);
         return new BasicStrategoConstructor(name, arity, quoted);
     }
 
