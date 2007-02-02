@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.terms;
 
-public class BasicStrategoList implements IStrategoList {
+public class BasicStrategoList extends BasicStrategoTerm implements IStrategoList {
 
     protected final IStrategoTerm[] kids;
     
@@ -29,7 +29,7 @@ public class BasicStrategoList implements IStrategoList {
     
     protected IStrategoTerm[] doTail() {
         IStrategoTerm[] r = new IStrategoTerm[kids.length - 1];
-        for(int i = 1, sz = r.length+1; i < sz; i++) {
+        for(int i = 1, sz = kids.length; i < sz; i++) {
             r[i - 1] = kids[i];
         }
         return r;
@@ -52,10 +52,10 @@ public class BasicStrategoList implements IStrategoList {
     }
     
     public IStrategoTerm[] getAllSubterms() {
-        IStrategoTerm[] r = new IStrategoTerm[kids.length];
-        for(int i=0; i<kids.length; i++)
-            r[i] = kids[i];
-        return r;
+        IStrategoTerm[] clone = new IStrategoTerm[kids.length];
+        for(int i = 0; i < kids.length; i++)
+            clone[i] = kids[i];
+        return clone;
     }
 
     
@@ -75,10 +75,7 @@ public class BasicStrategoList implements IStrategoList {
         return IStrategoTerm.LIST;
     }
 
-    public boolean match(IStrategoTerm second) {
-        return doSlowMatch(second);
-    }
-    
+    @Override
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.LIST)
             return false;
@@ -130,10 +127,4 @@ public class BasicStrategoList implements IStrategoList {
         return sb.toString();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof IStrategoList))
-            return false;
-        return match((IStrategoList)obj);
-    }
 }

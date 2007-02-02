@@ -9,7 +9,7 @@ package org.spoofax.interpreter.terms;
 
 import org.spoofax.NotImplementedException;
 
-public class BasicStrategoConstructor implements IStrategoConstructor {
+public class BasicStrategoConstructor extends BasicStrategoTerm implements IStrategoConstructor {
 
     private final String name;
     private final int arity;
@@ -55,30 +55,16 @@ public class BasicStrategoConstructor implements IStrategoConstructor {
         return IStrategoTerm.CTOR;
     }
 
-    public boolean match(IStrategoTerm second) {
-        return doSlowMatch(second);
-    }
-
+    @Override
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.CTOR)
             return false;
         IStrategoConstructor o = (IStrategoConstructor)second;
-        if(arity != o.getArity())
-            return false;
-        if(!name.equals(o.getName()))
-            return false;
-        return true;
+        return arity == o.getArity() && name.equals(o.getName());
     }
 
     public void prettyPrint(ITermPrinter pp) {
         // TODO Auto-generated method stub
         throw new NotImplementedException();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof IStrategoTerm))
-            return false;
-        return match((IStrategoTerm)obj);
     }
 }

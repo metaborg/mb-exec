@@ -8,12 +8,12 @@
 package org.spoofax.interpreter.terms;
 
 
-public class BasicStrategoAppl implements IStrategoAppl {
+public class BasicStrategoAppl extends BasicStrategoTerm implements IStrategoAppl {
 
     private final IStrategoTerm[] kids;
     private final IStrategoConstructor ctor;
     
-    BasicStrategoAppl(IStrategoConstructor ctor, IStrategoTerm[] kids) {
+    protected BasicStrategoAppl(IStrategoConstructor ctor, IStrategoTerm[] kids) {
         this.ctor = ctor;
         this.kids = kids;
     }
@@ -45,10 +45,7 @@ public class BasicStrategoAppl implements IStrategoAppl {
         return IStrategoTerm.APPL;
     }
 
-    public boolean match(IStrategoTerm second) {
-        return doSlowMatch(second);
-    }
-
+    @Override
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.APPL)
             return false;
@@ -79,13 +76,6 @@ public class BasicStrategoAppl implements IStrategoAppl {
         }
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof IStrategoTerm))
-            return false;
-        return match((IStrategoTerm) obj);
-    }
-    
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();

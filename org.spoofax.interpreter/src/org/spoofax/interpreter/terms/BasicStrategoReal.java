@@ -8,11 +8,11 @@
 package org.spoofax.interpreter.terms;
 
 
-public class BasicStrategoReal implements IStrategoReal {
+public class BasicStrategoReal extends BasicStrategoTerm implements IStrategoReal {
 
-    final double value;
+    private final double value;
     
-    BasicStrategoReal(double value) {
+    protected BasicStrategoReal(double value) {
         this.value = value;
     }
     
@@ -36,10 +36,6 @@ public class BasicStrategoReal implements IStrategoReal {
         return IStrategoTerm.REAL;
     }
 
-    public boolean match(IStrategoTerm second) {
-        return doSlowMatch(second);
-    }
-    
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.REAL)
             return false;
@@ -48,12 +44,5 @@ public class BasicStrategoReal implements IStrategoReal {
 
     public void prettyPrint(ITermPrinter pp) {
         pp.print("" + value);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof IStrategoTerm))
-            return false;
-        return match((IStrategoTerm) obj);
     }
 }

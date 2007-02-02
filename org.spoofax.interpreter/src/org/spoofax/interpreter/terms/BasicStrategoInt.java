@@ -8,11 +8,11 @@
 package org.spoofax.interpreter.terms;
 
 
-public class BasicStrategoInt implements IStrategoInt {
+public class BasicStrategoInt extends BasicStrategoTerm implements IStrategoInt {
 
-    final int value;
+    private final int value;
     
-    BasicStrategoInt(int value) {
+    protected BasicStrategoInt(int value) {
         this.value = value;
     }
     
@@ -36,11 +36,8 @@ public class BasicStrategoInt implements IStrategoInt {
         return IStrategoTerm.INT;
     }
 
-    public boolean match(IStrategoTerm second) {
-        return doSlowMatch(second);
-    }
-
-    private boolean doSlowMatch(IStrategoTerm second) {
+    @Override
+    protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.INT)
             return false;
         return value == ((IStrategoInt)second).getValue(); 
@@ -50,13 +47,6 @@ public class BasicStrategoInt implements IStrategoInt {
         pp.print("" + value);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof IStrategoTerm))
-            return false;
-        return match((IStrategoTerm) obj);
-    }
-    
     @Override
     public String toString() {
         return "" + value;

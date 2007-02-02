@@ -7,9 +7,9 @@
  */
 package org.spoofax.interpreter.terms;
 
-public class BasicStrategoString implements IStrategoString {
+public class BasicStrategoString extends BasicStrategoTerm implements IStrategoString {
 
-    protected final String value;
+    private final String value;
     
     protected BasicStrategoString(String value) {
         this.value = value;
@@ -31,10 +31,7 @@ public class BasicStrategoString implements IStrategoString {
         return IStrategoTerm.STRING;
     }
 
-    public boolean match(IStrategoTerm second) {
-        return doSlowMatch(second);
-    }
-    
+    @Override
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.STRING)
             return false;
@@ -50,14 +47,7 @@ public class BasicStrategoString implements IStrategoString {
     public void prettyPrint(ITermPrinter pp) {
         pp.print("\"" +  value + "\"");
     }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof IStrategoTerm))
-            return false;
-        return match((IStrategoTerm)obj);
-    }
-    
+ 
     @Override
     public String toString() {
         return "\"" + value + "\""; 
