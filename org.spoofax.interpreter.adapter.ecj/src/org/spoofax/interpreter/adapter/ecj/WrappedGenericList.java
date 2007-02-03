@@ -22,10 +22,6 @@ public class WrappedGenericList extends BasicStrategoList {
         return new WrappedGenericList(doTail());
     }
     
-    public boolean match(IStrategoTerm second) {
-        return doSlowMatch(second);
-    }
-
     @Override
     public IStrategoList prepend(IStrategoTerm prefix) {
         return new WrappedGenericList(doPrepend(prefix)); 

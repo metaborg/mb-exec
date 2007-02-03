@@ -8,7 +8,6 @@
 package org.spoofax.interpreter.adapter.ecj;
 
 import org.spoofax.interpreter.terms.BasicStrategoString;
-import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedString extends BasicStrategoString {
 
@@ -18,10 +17,6 @@ public class WrappedString extends BasicStrategoString {
 
     WrappedString(char[] wrappee) {
         super(String.valueOf(wrappee));
-    }
-
-    public boolean match(IStrategoTerm second) {
-        return doSlowMatch(second);
     }
 
 }
