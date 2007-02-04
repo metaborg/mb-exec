@@ -1,0 +1,9 @@
+module allid
+imports
+  stratego-lib
+  ecj-adapter
+
+strategies
+
+
+  main = topdown(id)
