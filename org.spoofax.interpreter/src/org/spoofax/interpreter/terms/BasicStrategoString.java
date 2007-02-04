@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.terms;
 
+
 public class BasicStrategoString extends BasicStrategoTerm implements IStrategoString {
 
     private final String value;
@@ -45,7 +46,8 @@ public class BasicStrategoString extends BasicStrategoTerm implements IStrategoS
     }
     
     public void prettyPrint(ITermPrinter pp) {
-        pp.print("\"" +  value + "\"");
+        // The abundance of backslashes are required by the RE compiler
+        pp.print("\"" + value.replaceAll("\"", "\\\\\\\"") + "\"");
     }
  
     @Override
