@@ -1603,9 +1603,11 @@ public class ECJFactory implements ITermFactory {
 
     private boolean isAbstractTypeDeclarationList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
-            IStrategoList list = (IStrategoList)term;
-            if(list.size() > 0) 
-                return isAbstractTypeDeclaration(list.head());
+            IStrategoTerm[] kids = ((IStrategoList)term).getAllSubterms();
+            for(IStrategoTerm k : kids) {
+                if(!isAbstractTypeDeclaration(k))
+                    return false;
+            }
             return true;
         }
         return false;
@@ -1633,9 +1635,11 @@ public class ECJFactory implements ITermFactory {
 
     private boolean isMethodRefParameterList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
-            IStrategoList list = (IStrategoList)term;
-            if(list.size() > 0) 
-                return isMethodRefParameter(list.head());
+            IStrategoTerm[] kids = ((IStrategoList)term).getAllSubterms();
+            for(IStrategoTerm k : kids) { 
+                if(isMethodRefParameter(k))
+                    return false;
+            }
             return true;
         }
         return false;
@@ -1834,8 +1838,10 @@ public class ECJFactory implements ITermFactory {
     private boolean isStatementList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
             IStrategoList list = (IStrategoList)term;
-            for(IStrategoTerm t : list.getAllSubterms()) 
-                return isStatement(t);
+            for(IStrategoTerm t : list.getAllSubterms()) { 
+                if(!isStatement(t))
+                    return false;
+            }
             return true;
         }
         return false;
@@ -1852,9 +1858,11 @@ public class ECJFactory implements ITermFactory {
 
     private boolean isExpressionList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
-            IStrategoList list = (IStrategoList)term;
-            if(list.size() > 0) 
-                return isExpression(list.head());
+            IStrategoTerm[] kids = ((IStrategoList)term).getAllSubterms();
+            for(IStrategoTerm k : kids) {
+                if(!isExpression(k))
+                    return false;
+            }
             return true;
         }
         return false;
@@ -1889,9 +1897,11 @@ public class ECJFactory implements ITermFactory {
 
     private boolean isModifierList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
-            IStrategoList list = (IStrategoList)term;
-            if(list.size() > 0) 
-                return isModifier(list.head());
+            IStrategoTerm[] kids = ((IStrategoList)term).getAllSubterms();
+            for(IStrategoTerm k : kids) {
+                if(!isModifier(k))
+                    return false;
+            }
             return true;
         }
         return false;
