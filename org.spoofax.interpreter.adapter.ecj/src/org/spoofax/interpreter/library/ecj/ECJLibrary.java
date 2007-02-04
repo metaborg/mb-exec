@@ -12,7 +12,7 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
 
     public static final String REGISTRY_NAME = "ECJ";
 
-    ECJLibrary() {
+    public ECJLibrary() {
         init();
     }
     
