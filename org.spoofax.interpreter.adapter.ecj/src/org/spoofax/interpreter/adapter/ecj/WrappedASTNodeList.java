@@ -85,7 +85,7 @@ public class WrappedASTNodeList implements IStrategoList {
     @SuppressWarnings("unchecked")
     public IStrategoTerm[] getAllSubterms() {
         IStrategoTerm[] r = new IStrategoTerm[wrappee.size()];
-        ASTNode[] s =wrappee.toArray(new ASTNode[0]);
+        ASTNode[] s = wrappee.toArray(new ASTNode[0]);
         for(int i = 0; i< r.length; i++) {
             r[i] = ECJFactory.genericWrap(s[i]);
         }

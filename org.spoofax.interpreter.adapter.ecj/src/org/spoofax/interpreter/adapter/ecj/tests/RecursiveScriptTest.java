@@ -18,7 +18,9 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
+import org.spoofax.interpreter.library.ecj.ECJLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class RecursiveScriptTest {
@@ -41,11 +43,11 @@ public class RecursiveScriptTest {
         parser.setSource(getBytes(file));
         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
         //System.out.println(cu);
-        IStrategoTerm from = factory.parseFromTree(cu);
+        IStrategoTerm from = dataFactory.parseFromTree(cu);
         //ITermPrinter pp = new PrettyPrinter();
         //from.prettyPrint(pp);
         //System.out.println(pp.getString());
-        factory.setAST(cu.getAST());
+        dataFactory.setAST(cu.getAST());
         interp.setCurrent(from);
         if(interp.invoke("main_0_0") == false)
             System.out.println("Rewriting failed");
@@ -73,18 +75,21 @@ public class RecursiveScriptTest {
     }
     
     public static void main(String[] args) throws FileNotFoundException, IOException, InterpreterException {
-        RecursiveScriptTest rst = new RecursiveScriptTest("scripts/allid.ctree");
+        RecursiveScriptTest rst = new RecursiveScriptTest("scripts/for-check.ctree");
         rst.recurse(new File(args[0]));
         System.out.println("Finished");
     }
 
-    private ECJFactory factory;
+    private ECJFactory dataFactory;
+    private WrappedATermFactory programFactory;
     private Interpreter interp;
     private ASTParser parser; 
     
     RecursiveScriptTest(String script) {
-        factory = new ECJFactory();
-        interp = new Interpreter(factory);
+        programFactory = new WrappedATermFactory();
+        dataFactory = new ECJFactory();
+        interp = new Interpreter(dataFactory, programFactory);
+        interp.addOperatorRegistry(ECJLibrary.REGISTRY_NAME, new ECJLibrary());
         parser = ASTParser.newParser(AST.JLS3);
         try {
             interp.load(script);
