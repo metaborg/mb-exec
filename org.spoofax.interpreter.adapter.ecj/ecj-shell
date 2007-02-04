@@ -11,5 +11,6 @@ java -cp \
 	org.spoofax.ecjadapter.Main \
 	$@
 
+#	org.spoofax.interpreter.adapter.ecj.tests.RecursiveScriptTest \
 
 
