@@ -8,12 +8,16 @@
 package org.spoofax.ecjadapter;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
+import org.spoofax.interpreter.library.ecj.ECJLibrary;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.interpreter.terms.InlinePrinter;
@@ -23,6 +27,7 @@ public class Main {
     public static void main(String[] args) throws IOException, InterpreterException {
         
         String[] files = null;
+        List<String> actualArgs = new LinkedList<String>();
         
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("--debug")) {
@@ -31,6 +36,8 @@ public class Main {
                 files = args[i + 1].split(",");
             } else if (args[i].equals("/trace")) {
                 DebugUtil.tracing = true;
+            } else {
+                actualArgs.add(args[i]);
             }
         }
 
@@ -42,8 +49,15 @@ public class Main {
         ITermFactory data = new ECJFactory();
         ITermFactory program = new WrappedATermFactory();
         Interpreter intp = new Interpreter(data, program);
+        intp.addOperatorRegistry(ECJLibrary.REGISTRY_NAME, new ECJLibrary());
         for(String f : files)
             intp.load(f);
+        
+        // Compute parameters
+        IStrategoTerm[] finalArgs = new IStrategoTerm[actualArgs.size()];
+        for(int i = 0; i < actualArgs.size(); i++)
+            finalArgs[i] = data.makeString(actualArgs.get(i));
+        intp.setCurrent(data.makeList(finalArgs));
         
         if(!intp.invoke("main_0_0")) {
             System.err.println("Rewriting failed");
