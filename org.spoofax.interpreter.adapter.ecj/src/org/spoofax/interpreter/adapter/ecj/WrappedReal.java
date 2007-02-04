@@ -1,5 +1,5 @@
 /*
- * Created on 29. sep.. 2006
+ * Created on 3. feb.. 2007
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -7,11 +7,11 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import org.spoofax.interpreter.terms.BasicStrategoInt;
+import org.spoofax.interpreter.terms.BasicStrategoReal;
 
-public class WrappedInt extends BasicStrategoInt {
+public class WrappedReal extends BasicStrategoReal {
 
-    WrappedInt(int value) {
+    WrappedReal(double value) {
         super(value);
     }
 }

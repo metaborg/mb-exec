@@ -1946,7 +1946,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     public IStrategoReal makeReal(double d) {
-        throw new NotImplementedException();
+        return new WrappedReal(d);
     }
 
     public IStrategoString makeString(String s) {
@@ -2055,6 +2055,9 @@ public class ECJFactory implements ITermFactory {
             return wrap((TypeParameter) node);
         if(node instanceof VariableDeclaration)
             return wrapVarDecl((VariableDeclaration) node);
+        
+        if(node == null)
+            return None.INSTANCE;
         
         throw new NotImplementedException("Unknown ASTNode type" + node.getClass());
     }

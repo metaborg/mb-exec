@@ -21,9 +21,10 @@ public class WrappedASTNodeList implements IStrategoList {
     private List<ASTNode> wrappee;
     
     public WrappedASTNodeList(List<ASTNode> wrappee) {
-        for(Object n : wrappee)
-            if(!(n instanceof ASTNode))
-                throw new NotImplementedException();
+        
+        for(Object n : wrappee) 
+            if(!(n instanceof ASTNode) && n != null)
+                throw new ClassCastException();
         this.wrappee = (List<ASTNode>)wrappee;
     }
     
@@ -38,8 +39,14 @@ public class WrappedASTNodeList implements IStrategoList {
     @SuppressWarnings("unchecked")
     public IStrategoList prepend(IStrategoTerm prefix) {
         
-        // Trying to build a hybrid list. Do on-the-fly conversion. 
-        if(!(prefix instanceof WrappedASTNode)) {
+        // Trying to build a hybrid list. Do on-the-fly conversion.
+        if(prefix instanceof WrappedASTNode) {
+            List<ASTNode> r = new ArrayList<ASTNode>();
+            ASTNode n = ((WrappedASTNode)prefix).getWrappee();
+            r.add(n);
+            r.addAll(wrappee);
+            return new WrappedASTNodeList(r);
+        } else { 
             final int sz = wrappee.size();
             IStrategoTerm[] r = new IStrategoTerm[sz + 1];
             r[0] = prefix;
@@ -48,11 +55,6 @@ public class WrappedASTNodeList implements IStrategoList {
             }
             return new WrappedGenericList(r);
         }
-        
-        List<ASTNode> r = new ArrayList<ASTNode>();
-        r.add(((WrappedASTNode)prefix).getWrappee());
-        r.addAll(wrappee);
-        return new WrappedASTNodeList(r);
     }
 
     public int size() {
@@ -74,6 +76,8 @@ public class WrappedASTNodeList implements IStrategoList {
             return (IStrategoTerm)o;
         if(o instanceof ASTNode)
             return ECJFactory.genericWrap((ASTNode)o);
+        if(o == null)
+            return None.INSTANCE;
         
         throw new NotImplementedException("Unsupported type : " + o.getClass());
     }
