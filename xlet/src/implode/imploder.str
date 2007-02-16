@@ -50,6 +50,7 @@ strategies
     in id
     ; ?parsetree(<id>, _)
     ; <add-pos> (0, <id>) => (_, <id>)
+    ; rec x(amb(map(x)) <+ is-int <+ replace-layout; appl(id, map(x)) <+ appl(id, map(x)))
     ; rec x({begin, end: id
       ; if ?_{begin, end} then
           implode-step(x)
@@ -58,7 +59,16 @@ strategies
           implode-step(x)
       end
       })
-    ; rec x(alltd(amb(map(x)) <+ process-annos; all(x) <+ debug(!"failed on: ")))
+    ; rec x(alltd(amb(map(x)) <+ process-annos; all(x)))
     end
+
+   //FIXME: attach the preceeding comment to the first element of the list.
+   replace-layout =
+     appl(prod([cf(iter-sep(id,id)), id, id, id, cf(iter-sep(id,id))], cf(iter-sep(id,id)), id),
+          [id, id, id, where(get-annotations => [begin, _]), appl(id, [id{[!begin, id]}])])
+
+   replace-layout =
+     appl(prod([cf(iter(id)), id, cf(iter(id))], cf(iter(id)), id),
+          [id, where(get-annotations => [begin, _]), appl(id, [id{[!begin, id]}])])
 
    imploder = io-wrap(implode)
