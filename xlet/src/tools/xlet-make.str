@@ -1,22 +1,23 @@
 /**
  * xlet-make creates a deployable xlet. It requires an xlet as
- * an .rtree-core file. You can build one using strc -F from
+ * a .ctree file. You can build one using strc -F from
  * a .str file. The .str-file must follow the xlet scheme,
  * define its own -meta-info strategy that builds a valid XLet
  * term.
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  *
- * Licensed under the GNU General Public License, v2
+ * Licensed under the GNU Lesser General Public License, v2.1
  *
  * @author Karl Trygve Kalleberg <karltk@ii.uib.no>
  */
 module xlet-make
 imports
-  spoofax
+  stratego-lib
+  spoofax/transformlet/-
+  spoofax/core/-
   Stratego
- 
-    
+
 strategies
 
   main = io-wrap(doit) 
@@ -26,6 +27,7 @@ strategies
     ; collect(?SDefT("meta_info_0_0", _, _, _)) => x
     ; strip-anno
     ; map(\ SDefT(_, _, _, b) -> b \)
+    ; ( !x => [] < <debug> "Meta info is missing" ; fail + id )
     ; {x: \ [x] -> x \ }
     ; eval-build
     ; \ XLet(t, _) -> XLet(t, prog) \ 

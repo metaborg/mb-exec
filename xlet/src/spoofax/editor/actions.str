@@ -1,0 +1,20 @@
+/*
+ * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * 
+ * Licensed under the GNU General Public License, v2.0
+ */
+module spoofax/editor/actions
+
+strategies
+
+  action-outline = <spoofax-popup> ("Not implemented", "Outline not implemented")
+  
+  action-goto-sdef = <spoofax-popup> ("Not implemented", "Goto Definition not implemented")
+  
+  // strategy + rule def = sdef
+  action-lookup-sdef = <spoofax-popup> ("Not implemented", "Lookup strategy/rule definition not implemented")
+  
+  // overlay + constructor def = cdef
+  action-lookup-cdef = <spoofax-popup> ("Not implemented", "Lookup overlay/constructor definition not implemented")
+  
+  

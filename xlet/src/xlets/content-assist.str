@@ -13,9 +13,9 @@ strategies
   
   content-assist-register-actions = id
   
-  content-assist-meta-info = ![]
+  content-assist-meta-info = <spoofax-popup> ("Not implemented", "Content assist meta info not implemented")
   
-strategies
+  strategies
 
   /**
    *

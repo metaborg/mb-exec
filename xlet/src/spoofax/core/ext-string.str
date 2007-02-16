@@ -3,9 +3,9 @@
  * 
  * Licensed under the GNU General Public License, v2.0
  */
-module ext-string
+module spoofax/ext-string
 imports
-  spoofax/core
+  spoofax/core/common
   term/string
   
 strategies

@@ -3,9 +3,9 @@
  *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
-module path	
+module spoofax/path	
 imports
-  spoofax/core
+  spoofax/core/common
   
 signature
   constructors

@@ -3,13 +3,13 @@
  * 
  * Licensed under the GNU General Public License, v2.0
  */
-module core
+module spoofax/ext-list
 imports
-  list-cons
-  tuple-cons
-
+  spoofax/core/common
+  
 strategies
 
-  unimpl = fail
+  list-first-elements(|n) = unimpl
+  list-last-elements(|n) = unimpl
+  list-last-element = unimpl
   
-  tc(s) = s
