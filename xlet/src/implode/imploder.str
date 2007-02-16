@@ -1,0 +1,64 @@
+module imploder
+imports libstratego-sglr libstratego-lib
+
+strategies
+
+  add-pos =
+    ?(begin, <is-int>)
+  ; !(<inc => end> begin, <id>{begin, end})
+
+  add-pos =
+    ?(begin, <id>)
+  ; amb(map(<add-pos> (begin, <id>) => (end, <id>)))
+  ; !(end, <id>{begin, end})
+
+  add-pos =
+    let
+      list-add-pos =
+        rec x({?(b, [l|ls])
+             ; <add-pos> (b, l) => (e, l')
+             ; <x> (e, ls) => (e', ls')
+             ; !(e', [l'|ls'])
+             <+ ?(_, [])})
+    in
+      ?(begin, <id>)
+    ; appl(id, <list-add-pos> (begin, <id>) => (end, <id>))
+    ; !(end, <id>{begin, end})
+    end
+
+  process-annos = id
+  ; ?a@_#(<map(try(?amb([<id>|_])))>){begin, end}
+  ; map(\ _{b,e} -> [b, e] \)
+  ; <concat> [[begin], <concat>, [end]]
+  ; rec x([] <+ \ [a, b|c] -> [(a, b)|<x>c] \) => annos
+  ; !a
+  ; id{!annos}
+
+  implode =
+    let
+      implode-step(x) =
+	         ImplodeLexical
+        <+ appl(id, filter(not(is-ignorable-syntax)))
+           ; ( ImplodeOptionalList; x
+            <+ ReplCons(x)
+            <+ ImplodeInjection; x
+            <+ ImplodeTuple; x
+            <+ ImplodeAlternative; x)
+      <+ amb(map(x))
+      <+ all(x)
+
+    in id
+    ; ?parsetree(<id>, _)
+    ; <add-pos> (0, <id>) => (_, <id>)
+    ; rec x({begin, end: id
+      ; if ?_{begin, end} then
+          implode-step(x)
+        ; !<id>{begin, end}
+      else
+          implode-step(x)
+      end
+      })
+    ; rec x(alltd(amb(map(x)) <+ process-annos; all(x) <+ debug(!"failed on: ")))
+    end
+
+   imploder = io-wrap(implode)

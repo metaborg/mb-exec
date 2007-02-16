@@ -24,5 +24,6 @@ AC_CONFIG_FILES([
   src/Makefile
   src/xlets/Makefile
   src/tools/Makefile
+  src/implode/Makefile
 ])
 AC_OUTPUT

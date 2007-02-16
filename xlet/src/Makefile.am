@@ -7,7 +7,7 @@ pkgdata_DATA      = spoofax.rtree-core
 
 SCFLAGS           = -F --library
 
-SUBDIRS           = xlets
+SUBDIRS           = xlets implode
 BOOTCLEAN_SUBDIRS = $(SUBDIRS)
 DIST_SUBDIRS      = $(SUBDIRS)
 EXTRA_DIST        =
