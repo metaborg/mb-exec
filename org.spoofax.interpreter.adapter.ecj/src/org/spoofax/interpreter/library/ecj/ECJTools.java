@@ -7,12 +7,58 @@
  */
 package org.spoofax.interpreter.library.ecj;
 
-import org.spoofax.interpreter.adapter.ecj.WrappedProject;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
+import org.spoofax.interpreter.adapter.ecj.WrappedICompilationUnit;
+import org.spoofax.interpreter.adapter.ecj.WrappedIJavaElement;
+import org.spoofax.interpreter.adapter.ecj.WrappedIJavaProject;
+import org.spoofax.interpreter.adapter.ecj.WrappedIProject;
+import org.spoofax.interpreter.adapter.ecj.WrappedIType;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJTools {
 
     public static boolean isProject(IStrategoTerm t) {
-        return t instanceof WrappedProject;
+        return t instanceof WrappedIProject;
     }
+
+    public static boolean isIJavaElement(IStrategoTerm term) {
+        return term instanceof WrappedIJavaElement;
+    }
+
+    public static boolean isIJavaProject(IStrategoTerm term) {
+        return term instanceof WrappedIJavaProject;
+    }
+
+    public static IJavaElement asIJavaElement(IStrategoTerm term) {
+        return ((WrappedIJavaElement)term).getWrappee();
+    }
+
+    public static IProject asIProject(IStrategoTerm term) {
+        return ((WrappedIProject)term).getWrappee();
+    }
+
+    public static IJavaProject asIJavaProject(IStrategoTerm term) {
+        return ((WrappedIJavaProject)term).getWrappee();
+    }
+
+    public static boolean isIType(IStrategoTerm term) {
+        return term instanceof WrappedIType;
+    }
+
+    public static IType asIType(IStrategoTerm term) {
+        return ((WrappedIType)term).getWrappee();
+    }
+
+    public static boolean isICompilationUnit(IStrategoTerm term) {
+        return term instanceof WrappedICompilationUnit;
+    }
+
+    public static ICompilationUnit asICompilationUnit(IStrategoTerm term) {
+        return ((WrappedICompilationUnit)term).getWrappee();
+    }
+
 }

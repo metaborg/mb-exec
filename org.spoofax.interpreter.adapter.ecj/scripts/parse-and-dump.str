@@ -1,9 +1,8 @@
 module parse-and-dump
 imports
   stratego-lib
-  ecj-adapter
-  EclipseJava
-  
+  spoofax/bindings/eclipse/eclipse-compiler-ffi
+ 
 strategies
 
   main = debug

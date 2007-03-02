@@ -11,20 +11,24 @@ import org.eclipse.core.resources.IProject;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedProject extends AbstractECJAppl {
+public class WrappedIProject extends AbstractECJAppl {
 
     private final IProject wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ECJProject", 1);
+    private final static IStrategoConstructor CTOR = new ASTCtor("ECJProject", 2);
     
-    WrappedProject(IProject wrappee) {
+    WrappedIProject(IProject wrappee) {
         super(CTOR);
         this.wrappee = wrappee;
     }
     
     @Override
     public IStrategoTerm getSubterm(int index) {
-        if(index == 0)
+        switch(index) {
+        case 0:
             return ECJFactory.wrap(wrappee.getName());
+        case 1:
+            return ECJFactory.wrap(wrappee.hashCode());
+        }
         throw new ArrayIndexOutOfBoundsException();
     }
 

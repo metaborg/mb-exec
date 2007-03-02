@@ -11,4 +11,5 @@ Require-Bundle: org.eclipse.jdt.core,
  org.spoofax.interpreter,
  org.spoofax.interpreter.adapter.aterm
 Bundle-Vendor: Spoofax.org
-Export-Package: org.spoofax.interpreter.adapter.ecj
+Export-Package: org.spoofax.interpreter.adapter.ecj,
+ org.spoofax.interpreter.library.ecj

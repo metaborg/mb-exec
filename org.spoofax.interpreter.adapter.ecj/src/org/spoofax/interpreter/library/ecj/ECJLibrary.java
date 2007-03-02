@@ -6,11 +6,15 @@
  */
 package org.spoofax.interpreter.library.ecj;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.IJavaProject;
 import org.spoofax.interpreter.library.AbstractStrategoOperatorRegistry;
 
 public class ECJLibrary extends AbstractStrategoOperatorRegistry {
 
     public static final String REGISTRY_NAME = "ECJ";
+    public IProject currentProject;
+    private IJavaProject currentJavaProject;
 
     public ECJLibrary() {
         init();
@@ -34,5 +38,29 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
         add(new ECJ_type_of_expr());
         add(new ECJ_is_cast_compatible());
         add(new ECJ_is_subtype_compatible());
+        add(new ECJ_current_project());
+        add(new ECJ_search_for_type());
+        add(new ECJ_search_project_for_type());
+        add(new ECJ_current_java_project());
+        add(new ECJ_compilation_unit_for_type());
+        add(new ECJ_ast_for_compilation_unit());
+        add(new ECJ_is_valid_ast_node());
+        add(new ECJ_is_valid_ast_nodelist());
+    }
+    
+    public IProject getCurrentProject() {
+        return currentProject;
+    }
+    
+    public void setCurrentProject(IProject currentProject) {
+        this.currentProject = currentProject;
+    }
+
+    public IJavaProject getCurrentJavaProject() {
+        return currentJavaProject;
+    }
+    
+    public void setCurrentJavaProject(IJavaProject currentJavaProject) {
+        this.currentJavaProject = currentJavaProject;
     }
 }

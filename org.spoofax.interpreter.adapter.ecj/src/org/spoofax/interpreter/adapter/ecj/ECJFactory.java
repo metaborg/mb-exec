@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
@@ -843,9 +846,10 @@ public class ECJFactory implements ITermFactory {
             else
                 x.setJavadoc(asJavadoc(kids[0]));
             x.modifiers().addAll(asExtendedModifierList(kids[1]));
-            if(isNone(kids[2]))
+            if(isNone(kids[2])) {
                 x.setReturnType2(null);
-            else
+                x.setConstructor(true);
+            } else
                 x.setReturnType2(asType(kids[2]));
             x.typeParameters().addAll(asTypeParameterList(kids[3]));
             x.setName(asSimpleName(kids[4]));
@@ -1112,10 +1116,14 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case TAG_ELEMENT: {
-            if(!isString(kids[0]) || !isASTNodeList(kids[1]))
+            if((!isString(kids[0]) && !isNone(kids[0])) 
+                    || !isASTNodeList(kids[1]))
                 return null;
             TagElement x = ast.newTagElement();
-            x.setTagName(asString(kids[0]));
+            if(isNone(kids[0]))
+                x.setTagName(null);
+            else 
+                x.setTagName(asString(kids[0]));
             x.fragments().addAll(asASTNodeList(kids[1]));
             return wrap(x);
         }
@@ -1316,11 +1324,15 @@ public class ECJFactory implements ITermFactory {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
         for(IStrategoTerm k : kids) {
-            r.add(asEnumConstantDeclaration(k));
+            r.add(asTagElement(k));
         }
         return r;    
     }
 
+
+    private TagElement asTagElement(IStrategoTerm term) {
+        return ((WrappedTagElement)term).getWrappee();
+    }
 
     @SuppressWarnings("unchecked")
     private Collection asAbstractTypeDeclarationList(IStrategoTerm term) {
@@ -1685,12 +1697,12 @@ public class ECJFactory implements ITermFactory {
 
     private boolean isTagElementList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
-            IStrategoList list = (IStrategoList)term;
-            if(list.size() > 0) 
-                return isTagElement(list.head());
-            return true;
+            IStrategoTerm[] kids = term.getAllSubterms();
+            for(int i = 0; i < kids.length; i++)
+                if(!isTagElement(kids[i]))
+                    return false;
         }
-        return false;
+        return true;
     }
 
     private boolean isTagElement(IStrategoTerm term) {
@@ -1948,7 +1960,6 @@ public class ECJFactory implements ITermFactory {
         for(IStrategoTerm t : terms)
             r.add(((WrappedASTNode)t).getWrappee());
         return new WrappedASTNodeList(r);
-        //throw new NotImplementedException();
     }
 
     public IStrategoList makeList(Collection<IStrategoTerm> terms) {
@@ -2458,7 +2469,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedTypeDeclaration(declaration);
     }
 
-    static IStrategoAppl wrap(CompilationUnit unit) {
+    public static IStrategoAppl wrap(CompilationUnit unit) {
         if(unit == null)
             return None.INSTANCE;
         else
@@ -2916,7 +2927,7 @@ public class ECJFactory implements ITermFactory {
         if(proj == null)
             return None.INSTANCE;
         else
-            return new WrappedProject(proj);
+            return new WrappedIProject(proj);
     }
 
     public static IStrategoTerm wrap(String[] strs) {
@@ -2945,6 +2956,27 @@ public class ECJFactory implements ITermFactory {
             n.getWrappee().setSourceRange(o.getWrappee().getStartPosition(), o.getWrappee().getLength());
         }
         return r;
+    }
+
+    public static IStrategoTerm wrap(IType t) {
+        if(t == null)
+            return None.INSTANCE;
+        else
+            return new WrappedIType(t);
+    }
+
+    public static IStrategoTerm wrap(IJavaProject jp) {
+        if(jp == null)
+            return None.INSTANCE;
+        else
+            return new WrappedIJavaProject(jp);
+    }
+
+    public static IStrategoTerm wrap(ICompilationUnit cu) {
+        if(cu == null)
+            return None.INSTANCE;
+        else
+            return new WrappedICompilationUnit(cu);
     }
     
     

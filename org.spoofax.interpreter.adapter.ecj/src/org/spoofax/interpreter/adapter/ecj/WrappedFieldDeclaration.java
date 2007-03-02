@@ -14,7 +14,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedFieldDeclaration extends WrappedBodyDeclaration {
 
     private final FieldDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("FieldDeclaration", 3);
+    private final static IStrategoConstructor CTOR = new ASTCtor("FieldDeclaration", 4);
     
     WrappedFieldDeclaration(FieldDeclaration wrappee) {
         super(CTOR);
@@ -25,10 +25,12 @@ public class WrappedFieldDeclaration extends WrappedBodyDeclaration {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return ECJFactory.wrap(wrappee.modifiers());
+            return ECJFactory.wrap(wrappee.getJavadoc());
         case 1:
-            return ECJFactory.wrapType(wrappee.getType());
+            return ECJFactory.wrap(wrappee.modifiers());
         case 2:
+            return ECJFactory.wrapType(wrappee.getType());
+        case 3:
             return ECJFactory.wrap(wrappee.fragments());
         }
         throw new ArrayIndexOutOfBoundsException();

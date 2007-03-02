@@ -1,4 +1,4 @@
-module EclipseJava
+module spoofax/bindings/eclipse/EclipseJava
 signature
   sorts
    AbstractTypeDeclaration
@@ -12,6 +12,7 @@ signature
    TypeParameter
    VariableDeclarationFragment
    Comment
+   BodyDeclaration
   constructors
                                     : Expression -> ASTNode
                                     : Javadoc -> Comment
@@ -63,7 +64,7 @@ signature
     MarkerAnnotation                : Term -> Annotation
     MemberRef                       : Term * Term -> ASTNode
     MemberValuePair                 : Term * Term -> ASTNode
-    MethodDeclaration               : Javadoc * Term * Type * Term * Term * Term * Term * Term -> BodyDeclaration
+    MethodDeclaration               : Javadoc * List(Modifier) * Type * List(TypeParameter) * SimpleName * List(SingleVariableDeclaration) * List(Name) * Block -> BodyDeclaration
     MethodInvocation                : Term * Term * Term * Term -> Expression
     MethodRef                       : Term * Term * Term -> ASTNode
     MethodRefParameter              : Term * Term -> ASTNode
@@ -88,7 +89,7 @@ signature
     SimpleName                      : Term -> Term 
     SimpleType                      : Term -> Term
     SingleMemberAnnotation          : Term * Term -> Term
-    SingleVariableDeclaration       : Term -> Term
+    SingleVariableDeclaration       : List(Modifier) * Type * SimpleName * Int * Expression -> SingleVariableDeclaration
     StringLiteral                   : Term -> Term 
     SuperConstructorInvocation      : Term * Term * Term -> Term
     SuperFieldAccess                : Term * Term -> Term

@@ -1,8 +1,8 @@
-module ecj-adapter
+module spoofax/bindings/eclipse/eclipse-compiler-ffi
 imports
   stratego-lib
-  EclipseJava
-  
+  spoofax/bindings/eclipse/EclipseJava
+
 signature
   constructors
   FILE : Term -> FILE
@@ -22,6 +22,12 @@ strategies
   ecj-add-jar(|project) = ?path ; prim("ECJ_add_jar", path, project)
     
   ecj-parse-and-resolve(|project) = ?FILE(name) ; prim("ECJ_parse_and_resolve", project, name) 
+  
+  ecj-is-valid-ast-node = 
+       (?t ; prim("ECJ_is_valid_ast_node", t))
+    <+ (?t ; prim("ECJ_is_valid_ast_nodelist", t))
+    <+ is-string
+    <+ is-int
   
   ecj-type-of =
      ecj-is-Name
@@ -128,6 +134,30 @@ strategies
     + ?SuperMethodInvocation(_, _, _, _)
     + ?ThisExpression(_)
     + ?TypeLiteral(_)
-    + ?VariableDeclarationExpression(_, _, _)
-     
-  
+    + ?VariableDeclarationExpression(_, _, _)     
+    
+strategies
+
+  ecj-current-project =
+      prim("ECJ_current_project")
+
+  ecj-current-java-project =
+      prim("ECJ_current_java_project")
+
+  ecj-search-for-type(|scope) = 
+    ?typename
+    ; prim("ECJ_search_for_type", scope, typename)      
+
+  ecj-search-project-for-type(|project) = 
+    ?typename
+    ; prim("ECJ_search_project_for_type", project, typename)      
+      
+  ecj-compilation-unit-for-type =
+    ?type
+    ; prim("ECJ_compilation_unit_for_type", type)
+   
+   ecj-ast-for-compilation-unit =
+    ?cu
+    ; prim("ECJ_ast_for_compilation_unit", cu)
+    
+    

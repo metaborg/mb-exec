@@ -19,7 +19,7 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
-import org.spoofax.interpreter.adapter.ecj.WrappedProject;
+import org.spoofax.interpreter.adapter.ecj.WrappedIProject;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -40,7 +40,7 @@ public class ECJ_parse_and_resolve extends AbstractPrimitive {
         
         String path = ((IStrategoString)tvars[1]).getValue();
         
-        IProject project = ((WrappedProject)tvars[0]).getWrappee();
+        IProject project = ((WrappedIProject)tvars[0]).getWrappee();
         if(project == null)
             return false;
         
