@@ -12,7 +12,6 @@ import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
-import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_concat_strings extends AbstractPrimitive {
@@ -23,14 +22,16 @@ public class SSL_concat_strings extends AbstractPrimitive {
 
     public boolean call(IContext env, IConstruct[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        IStrategoTerm t = targs[0];
-        if(!Tools.isTermList(t))
+        
+        if(!Tools.isTermList(targs[0]))
             return false;
-
-        IStrategoList l = (IStrategoList) t;
+        IStrategoTerm[] kids = targs[0].getAllSubterms();
+        
         StringBuffer sb = new StringBuffer();
-        for(int i=0;i<l.size();i++) {
-            sb.append(Tools.javaStringAt(l, i));
+        for(int i = 0; i < kids.length; i++) {
+            if(!Tools.isTermString(kids[i]))
+                return false;
+            sb.append(Tools.asJavaString(kids[i]));
         }
         env.setCurrent(env.getFactory().makeString(sb.toString()));
         return true;
