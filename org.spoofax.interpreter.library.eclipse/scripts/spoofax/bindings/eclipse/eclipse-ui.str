@@ -1,0 +1,5 @@
+module spoofax/bindings/eclipse/eclipse-ui
+strategies
+
+  eclipse-ui-show-popup = 
+    ?(title, body) ; prim("EFI_ui_show_popup", title, body)
