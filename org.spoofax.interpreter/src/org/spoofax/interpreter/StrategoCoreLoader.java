@@ -39,7 +39,6 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.PrettyPrinter;
 
 public class StrategoCoreLoader {
 
@@ -396,7 +395,7 @@ public class StrategoCoreLoader {
             } else if(Tools.isExtSDef(t, context)) {
                 ExtSDef def = parseExtSDef(t);
                 context.addSVar(def.getName(), def);
-                int x = 0;
+                // int x = 0;
                 // FIXME: Come up with a good solution for external
                 // definitions
                 throw new InterpreterException("Illegal ExtSDef in StrategoCore file");

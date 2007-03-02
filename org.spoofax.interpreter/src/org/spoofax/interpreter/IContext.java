@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter;
 
+import java.util.Collection;
+
 import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.SDefT;
@@ -38,5 +40,6 @@ public interface IContext {
     public StrategoSignature getStrategoSignature();
     public AbstractPrimitive lookupOperator(String name);
     public ChoicePointStack getChoicePointStack();
+    public Collection<String> getStrategyNames();
     
 }

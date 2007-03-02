@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -164,5 +165,9 @@ public class VarScope {
 
     private void resetVar(String name) {
         vars.put(name, null);
+    }
+
+    public Collection<SDefT> getStrategyDefinitions() {
+        return svars.values();
     }
 }

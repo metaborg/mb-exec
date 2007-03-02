@@ -7,7 +7,9 @@
  */
 package org.spoofax.interpreter;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.spoofax.DebugUtil;
@@ -157,5 +159,16 @@ public class Context implements IContext {
 
     public ChoicePointStack getChoicePointStack() {
         return choicePointStack;
+    }
+    
+    public Collection<String> getStrategyNames() {
+        VarScope v = getVarScope();
+        while(v.getParent() != null) 
+            v = v.getParent();
+        
+        Collection<String> r = new HashSet<String>();
+        for(SDefT s : v.getStrategyDefinitions())
+            r.add(s.getName());
+        return r;
     }
 }

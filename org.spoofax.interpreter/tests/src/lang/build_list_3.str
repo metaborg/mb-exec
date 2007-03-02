@@ -9,4 +9,4 @@ module build_list_3
 imports stratego-lib
 strategies
 
-  main = !Cons(1, Cons(2, Cons(3, Nil()))) 
+  main = !Cons(1, Cons(2, Cons(3, Nil())))
