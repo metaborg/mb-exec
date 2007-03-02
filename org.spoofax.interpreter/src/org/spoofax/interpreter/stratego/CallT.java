@@ -81,11 +81,11 @@ public class CallT extends Strategy {
         }
 
         if (svars.length != formalStrategyArgs.length)
-            throw new InterpreterException("Incorrect strategy arguments, expected " + formalStrategyArgs.length
+            throw new InterpreterException("Incorrect strategy arguments to '" + name + "', expected " + formalStrategyArgs.length
               + " got " + svars.length);
 
         if (tvars.length != formalTermArgs.length)
-            throw new InterpreterException("Incorrect aterm arguments, expected " + formalTermArgs.length
+            throw new InterpreterException("Incorrect aterm arguments to '" + name + "', expected " + formalTermArgs.length
               + " got " + tvars.length);
 
         VarScope newScope = new VarScope(sdef.getScope());
