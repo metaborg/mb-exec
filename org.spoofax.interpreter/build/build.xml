@@ -39,7 +39,9 @@
     <!-- ############################ Jar ############################ -->
     <target name="jar" depends="compile">
         <jar jarfile="${build.dir}/${jar.file}"
-             basedir="${classes.dir}"/>
+             basedir="${classes.dir}"
+             includes="org/spoofax/**"
+             excludes="org/spoofax/interpreter/test/**"/>
     </target>
 
     <!-- ############################ Clean ############################ -->
