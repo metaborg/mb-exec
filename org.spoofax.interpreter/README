@@ -1,0 +1,26 @@
+
+ Stratego/J
+============
+
+Stratego/J is an interpreter for the Stratego language, written in Java. It
+allows you to execute programs compiled with the Stratego compiler on the Java
+runtime. It is compliant with version 0.17 of the Stratego language. 
+
+A notable feature of the Stratego/J interpreter is that it can supports
+rewriting of any tree-like or graph-like structure, if you provide it with a
+proper adapter.
+
+ Installation 
+==============
+
+For compilation and installation instructions, please read the INSTALL file.
+
+
+ Authors and Maintainers
+=========================
+
+Stratego/J was designed, implemented by Karl Trygve Kalleberg. See AUTHORS
+for additional contributors.
+
+
+

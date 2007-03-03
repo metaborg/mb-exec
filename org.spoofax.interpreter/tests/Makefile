@@ -11,7 +11,7 @@ LIB_TEST_CTREE=$(patsubst src/library/%.str,data/library/%.ctree,$(LIB_TEST_SRC)
 all: $(LANG_TEST_CTREE) $(LIB_TEST_CTREE)
 
 data/lang/%.ctree : src/lang/%.str
-	strc -i $< -F -o $@
+	strc -i $< -F | baffle -wt -o $@
 
 data/library/%.ctree : src/library/%.str
 	strc -i $< -F -o $@

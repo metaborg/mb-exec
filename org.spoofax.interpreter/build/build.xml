@@ -2,23 +2,21 @@
 
     <property name="compiler.debug" value="on"/>
 
+    <property file="build.properties"/>
+
     <property name="src.dir" value="../src"/>
     <property name="lib.dir" value="../ext"/>
     <property name="build.dir" value=".."/>
     <property name="classes.dir" value="${build.dir}/bin"/>
-    <property name="version" value="0.1"/>
     <property name="jar.file" value="interpreter-${version}.jar"/>
-    <property name="test.out.dir" value="../testout"/>
+    <property name="test.out.dir" value="../tests/output"/>
+    <property name="haltunittest" value="no"/>
 
     <path id="classpath">
         <fileset dir="${lib.dir}">
-            <include name="jjtraveler-0.4.3.jar"/>
-            <include name="shared-objects-1.4.jar"/>
             <include name="junit-3.8.1.jar"/>
             <include name="ant-junit-1.6.5.jar"/>
         </fileset>
-        <!-- todo: better idea? -->
-        <pathelement location="../../org.spoofax.aterm/aterm-1.6.jar"/>
     </path>
 
     <target name="init">
@@ -49,44 +47,42 @@
         <delete dir="${classes.dir}"/>
     </target>
 
-    <target name="clean.full" depends="clean">
+    <target name="fullclean" depends="clean">
         <delete file="${build.dir}/${jar.file}"/>
         <delete dir="${test.out.dir}"/>
     </target>
 
 
     <!-- ############################ Tests ############################ -->
-<!--
-	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
         <classpath refid="classpath"/>
     </taskdef>
--->
 	
-    <target name="run.tests" depends="jar">
+    <target name="check" depends="jar">
         <mkdir dir="${test.out.dir}"/>
         <junit printsummary="yes" fork="no" haltonfailure="no">
             <classpath>
                 <path refid="classpath"/>
                 <pathelement location="${build.dir}/${jar.file}"/>
-                <!--<pathelement location="../../../shared-objects-JJTraveler-bundle/shared-objects-1.4.2/classes"/>-->
             </classpath>
             <formatter type="plain"/>
-            <test name="org.spoofax.interpreter.test.LibraryTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.BasicLibraryTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.ClosureTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.HigherOrderParamTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.GuardTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.ScopingTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.TermDeconstructionTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.BuildTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.TermConstructionTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.ArithmeticTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.CongruenceTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.OverloadingTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.DefinitionTest" todir="${test.out.dir}" haltonfailure="yes"/>
-            <test name="org.spoofax.interpreter.test.MatchTest" todir="${test.out.dir}" haltonfailure="yes"/>
+            <test name="org.spoofax.interpreter.test.language.TestBuild" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.language.TestClosure" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.language.TestCongruence" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.language.TestDefinition" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.language.TestGuard" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.language.TestHigherOrderParameters" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.language.TestMatch" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.language.TestOverloading" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.language.TestScoping" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.language.TestTermConstruction" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.language.TestTermDeconstruction" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.language.TestTraversals" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.library.LibraryTest" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
+            <test name="org.spoofax.interpreter.test.library.BasicLibraryTest" todir="${test.out.dir}" haltonfailure="${haltunittest}"/>
         </junit>
     </target>
 
 </project>
+
 
