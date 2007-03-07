@@ -7,23 +7,28 @@
  */
 package org.spoofax.interpreter.library.ecj;
 
-import org.spoofax.NotImplementedException;
+import org.eclipse.core.resources.IFile;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_add_jar extends ECJPrimitive {
+public class ECJ_file_exists extends ECJPrimitive {
 
-    public ECJ_add_jar() {
-        super("ECJ_add_jar", 0, 2);
+    public ECJ_file_exists() {
+        super("ECJ_file_exists", 0, 1);
     }
     
     @Override
     public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        
+        if(!ECJTools.isIFile(tvars[0]))
+            return false;
+        
+        IFile file = ECJTools.asIFile(tvars[0]);
+        
+        return file.exists();
     }
 
 }

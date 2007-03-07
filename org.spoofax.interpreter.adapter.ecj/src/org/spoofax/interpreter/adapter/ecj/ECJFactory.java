@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
@@ -2977,6 +2978,13 @@ public class ECJFactory implements ITermFactory {
             return None.INSTANCE;
         else
             return new WrappedICompilationUnit(cu);
+    }
+
+    public static IStrategoTerm wrap(IFile file) {
+        if(file == null)
+            return None.INSTANCE;
+        else
+            return new WrappedIFile(file);
     }
     
     

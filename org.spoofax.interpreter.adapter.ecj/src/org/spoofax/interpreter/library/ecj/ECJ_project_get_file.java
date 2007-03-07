@@ -7,32 +7,36 @@
  */
 package org.spoofax.interpreter.library.ecj;
 
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_ast_for_compilation_unit extends ECJPrimitive {
+public class ECJ_project_get_file extends ECJPrimitive {
 
-    public ECJ_ast_for_compilation_unit() {
-        super("ECJ_ast_for_compilation_unit", 0, 1);
+    public ECJ_project_get_file() {
+        super("ECJ_project_get_file", 0, 2);
     }
     
     @Override
     public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-        if(!ECJTools.isICompilationUnit(tvars[0]))
+        
+        if(!ECJTools.isProject(tvars[0]))
+            return false;
+        if(!Tools.isTermString(tvars[1]))
             return false;
         
-        ICompilationUnit t = ECJTools.asICompilationUnit(tvars[0]);
-        ASTParser parser = ASTParser.newParser(AST.JLS3);
-        parser.setSource(t);
-        env.setCurrent(ECJFactory.wrap((CompilationUnit)parser.createAST(null)));
+        IProject project = ECJTools.asIProject(tvars[0]);
+        
+        IFile file = project.getFile(Tools.asJavaString(tvars[1]));
+        
+        env.setCurrent(ECJFactory.wrap(file));
+        
         return true;
     }
 

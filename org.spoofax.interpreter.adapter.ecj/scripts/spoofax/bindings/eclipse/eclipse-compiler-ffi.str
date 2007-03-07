@@ -161,21 +161,6 @@ strategies
     ; prim("ECJ_ast_for_compilation_unit", cu)
 
 strategies
-    
-  /**
-   * Transitively compute all interfaces implemented by this class or any of its
-   * parents.
-   *
-   * @type TypeDeclaration -> List(Type)
-   */
-  ecj-all-interfaces-of = 
-    where(interfaces-of => local-ifaces)
-    ; where((supertype-of 
-        ; name-of ; as-fqn
-        ; ecj-search-project-for-type(|<ecj-current-java-project>())
-        ; ecj-compilation-unit-for-type
-        ; ecj-ast-for-compilation-unit
-        ; ?CompilationUnit(_,_,<map(ecj-all-interfaces-of) ; concat>)
-        <+ ![]) => parent-ifaces)
-    ; <conc> (local-ifaces, parent-ifaces)
+
+
     

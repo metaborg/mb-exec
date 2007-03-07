@@ -8,13 +8,14 @@
 package org.spoofax.interpreter.adapter.ecj;
 
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedIType extends WrappedECJNode {
 
     private final IType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("IType", 2);
+    private final static IStrategoConstructor CTOR = new ASTCtor("IType", 5);
 
     WrappedIType(IType wrappee) {
         super(CTOR);
@@ -28,8 +29,22 @@ public class WrappedIType extends WrappedECJNode {
             return ECJFactory.wrap(wrappee.getElementName());
         case 1:
             return ECJFactory.wrap(wrappee.hashCode());
-//        case 2:
-//            return ECJFactory.wrap(wrappee.getSuperInterfaceNames());
+        case 2:
+            return ECJFactory.wrap(wrappee.getDeclaringType());
+        case 3:
+            try {
+                return ECJFactory.wrap(wrappee.getSuperclassName());
+            } catch(JavaModelException e) {
+                e.printStackTrace();
+                return None.INSTANCE;
+            }
+        case 4:
+            try {
+                return ECJFactory.wrap(wrappee.getSuperInterfaceTypeSignatures());
+            } catch(JavaModelException e) {
+                e.printStackTrace();
+                return None.INSTANCE;
+            }
         }
         throw new ArrayIndexOutOfBoundsException();
     }

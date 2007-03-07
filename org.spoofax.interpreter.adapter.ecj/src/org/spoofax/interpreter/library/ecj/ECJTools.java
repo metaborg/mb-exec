@@ -7,12 +7,16 @@
  */
 package org.spoofax.interpreter.library.ecj;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.spoofax.interpreter.adapter.ecj.WrappedASTNode;
 import org.spoofax.interpreter.adapter.ecj.WrappedICompilationUnit;
+import org.spoofax.interpreter.adapter.ecj.WrappedIFile;
 import org.spoofax.interpreter.adapter.ecj.WrappedIJavaElement;
 import org.spoofax.interpreter.adapter.ecj.WrappedIJavaProject;
 import org.spoofax.interpreter.adapter.ecj.WrappedIProject;
@@ -59,6 +63,22 @@ public class ECJTools {
 
     public static ICompilationUnit asICompilationUnit(IStrategoTerm term) {
         return ((WrappedICompilationUnit)term).getWrappee();
+    }
+
+    public static boolean isASTNode(IStrategoTerm term) {
+        return term instanceof WrappedASTNode;
+    }
+
+    public static ASTNode asASTNode(IStrategoTerm term) {
+        return ((WrappedASTNode)term).getWrappee();
+    }
+
+    public static boolean isIFile(IStrategoTerm term) {
+        return term instanceof WrappedIFile;
+    }
+
+    public static IFile asIFile(IStrategoTerm term) {
+        return ((WrappedIFile)term).getWrappee();
     }
 
 }

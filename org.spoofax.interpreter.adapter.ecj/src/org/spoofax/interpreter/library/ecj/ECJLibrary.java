@@ -46,6 +46,9 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
         add(new ECJ_ast_for_compilation_unit());
         add(new ECJ_is_valid_ast_node());
         add(new ECJ_is_valid_ast_nodelist());
+        add(new ECJ_create_compilation_unit_buffer());
+        add(new ECJ_project_get_file());
+        add(new ECJ_file_exists());
     }
     
     public IProject getCurrentProject() {
