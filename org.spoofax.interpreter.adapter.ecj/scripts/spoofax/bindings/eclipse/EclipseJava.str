@@ -1,3 +1,11 @@
+/**
+ * Signature for the Eclipse JDT Abstract Syntax Tree.
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ *
+ * @author Karl Trygve Kalleberg <karltk@ii.uib.no>
+ */
+
 module spoofax/bindings/eclipse/EclipseJava
 signature
   sorts

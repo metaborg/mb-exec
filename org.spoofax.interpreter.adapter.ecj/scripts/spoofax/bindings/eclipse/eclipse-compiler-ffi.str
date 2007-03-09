@@ -1,3 +1,11 @@
+/**
+ * Foreign function interface to the Eclipse Compiler for Java.
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ *
+ * @author Karl Trygve Kalleberg <karltk@ii.uib.no>
+ */
+
 module spoofax/bindings/eclipse/eclipse-compiler-ffi
 imports
   stratego-lib
@@ -162,5 +170,21 @@ strategies
 
 strategies
 
+  /** 
+   * Compute the fully qualitified name.
+   * @type SimpleName -> String
+   */
+  ecj-as-fqn = ?SimpleName(<id>)
+
+  ecj-name-of = ?TypeDeclaration(_, _, <id>, _, _, _, _)   
+
+  ecj-name-of = ?SimpleType(<id>)
+
+  ecj-name-of = ?MethodDeclaration(_, _, _, _, <id>, _, _, _)
+
+  ecj-name-of = ?VariableDeclarationFragment(<id>, _, _)
+
+  ecj-name-of = ?ArrayType(_, _, <ecj-name-of>)
+  
 
     
