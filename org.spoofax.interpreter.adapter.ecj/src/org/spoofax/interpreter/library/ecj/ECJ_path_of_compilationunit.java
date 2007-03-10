@@ -7,43 +7,39 @@
  */
 package org.spoofax.interpreter.library.ecj;
 
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
-import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_search_project_for_type extends AbstractPrimitive {
+public class ECJ_path_of_compilationunit extends ECJPrimitive {
 
-    public ECJ_search_project_for_type() {
-        super("ECJ_search_project_for_type", 0, 2);
+    public ECJ_path_of_compilationunit() {
+        super("ECJ_path_of_compilationunit", 0, 1);
     }
     
     @Override
     public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-        if(!ECJTools.isIJavaProject(tvars[0]))
-            return false;
-        if(!Tools.isTermString(tvars[1]))
+        if(!ECJTools.isCompilationUnit(tvars[0]))
             return false;
         
-        IJavaProject proj = ECJTools.asIJavaProject(tvars[0]);
+        CompilationUnit n = ECJTools.asCompilationUnit(tvars[0]);
+        
+        IJavaElement je = n.getJavaElement();
+        if(je == null)
+            return false;
         
         try {
-            IType t = proj.findType(Tools.asJavaString(tvars[1]));
-            if(t == null)
-                return false;
-            env.setCurrent(ECJFactory.wrap(t));
-        } catch(JavaModelException e) {
+            env.setCurrent(ECJFactory.wrap(je.getCorrespondingResource().getProjectRelativePath().toString()));
+        } catch (JavaModelException e) {
             return false;
         }
-        
         return true;
     }
 

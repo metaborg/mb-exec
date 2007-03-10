@@ -58,6 +58,7 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
@@ -367,10 +368,6 @@ public class ECJFactory implements ITermFactory {
 
     public boolean hasConstructor(String s, int i) {
         throw new NotImplementedException();
-    }
-
-    private Name getName(IStrategoTerm term) {
-        return ((WrappedName)term).getWrappee();
     }
 
     private List getAnnotations(IStrategoTerm term) {
@@ -938,7 +935,7 @@ public class ECJFactory implements ITermFactory {
             else
                 pd.setJavadoc(getJavadoc(kids[0]));
             pd.annotations().addAll(getAnnotations(kids[1]));
-            pd.setName(getName(kids[2]));
+            pd.setName(asName(kids[2]));
             return wrap(pd);
         }
         case PARAMETERIZED_TYPE: {
@@ -2985,6 +2982,13 @@ public class ECJFactory implements ITermFactory {
             return None.INSTANCE;
         else
             return new WrappedIFile(file);
+    }
+
+    public static IStrategoTerm wrap(IBinding binding) {
+        if(binding == null)
+            return None.INSTANCE;
+        else
+            return new WrappedIBinding(binding);
     }
     
     

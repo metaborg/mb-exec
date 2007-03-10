@@ -16,7 +16,10 @@ signature
   FILE : Term -> FILE
   
   Project : Term -> Project
-    
+  Binding : Int * Int * String -> Binding
+  TypeBinding : List(String) * String * List(TypeBinding) * TypeBinding * List(TypeBinding) * Int * ITypeBinding -> TypeBinding
+  DottedName : String -> DottedName
+  
 strategies
 
   ecj-parse-only = ?FILE(name) ; prim("ECJ_parse_only", name)
@@ -37,12 +40,15 @@ strategies
     <+ is-string
     <+ is-int
   
-  ecj-type-of =
+  /**
+   * @type Name -> Binding
+   */
+  ecj-binding-of =
      ecj-is-Name
    ; ?name
    ; prim("ECJ_binding_of_name", name)
    
-  ecj-type-of = 
+  ecj-binding-of = 
      ecj-is-TypeDeclaration
    ; ?type
    ; prim("ECJ_type_of_typedecl", type)
@@ -62,7 +68,10 @@ strategies
     ; ?expr
     ; prim("ECJ_type_of_expr", expr)
 
-  ecj-type-of =
+  /**
+   * @type Type -> TypeBinding
+   */
+  ecj-binding-of =
       ecj-is-Type
     ; ?expr
     ; prim("ECJ_type_of_type", expr)
@@ -143,6 +152,14 @@ strategies
     + ?ThisExpression(_)
     + ?TypeLiteral(_)
     + ?VariableDeclarationExpression(_, _, _)     
+
+  ecj-is-CompilationUnit = ?CompilationUnit(_, _, _)
+
+  ecj-is-DottedName = ?DottedName(_)
+  
+  ecj-is-MethodDeclaration = ?MethodDeclaration(_, _, _, _, _, _, _, _)
+
+  ecj-is-FieldDeclaration = ?FieldDeclaration(_, _, _, _)
     
 strategies
 
@@ -152,30 +169,41 @@ strategies
   ecj-current-java-project =
       prim("ECJ_current_java_project")
 
+  /** @type DottedName -> IType */
   ecj-search-for-type(|scope) = 
-    ?typename
+      DottedName(?typename)
     ; prim("ECJ_search_for_type", scope, typename)      
 
+  /** @type DottedName -> IType */
   ecj-search-project-for-type(|project) = 
-    ?typename
+      DottedName(?typename)
     ; prim("ECJ_search_project_for_type", project, typename)      
       
   ecj-compilation-unit-for-type =
     ?type
     ; prim("ECJ_compilation_unit_for_type", type)
    
-   ecj-ast-for-compilation-unit =
+  ecj-ast-for-compilation-unit =
     ?cu
-    ; prim("ECJ_ast_for_compilation_unit", cu)
+    ; prim("ECJ_ast_for_compilation_unit", cu, 0)
+
+  ecj-typed-ast-for-compilation-unit =
+    ?cu
+    ; prim("ECJ_ast_for_compilation_unit", cu,1)
 
 strategies
 
   /** 
-   * Compute the fully qualitified name.
+   * Compute the fully qualified, dotted name as a string.
+   *
    * @type SimpleName -> String
    */
-  ecj-as-fqn = ?SimpleName(<id>)
+  ecj-as-dotted-name = ?SimpleName(<id>)
 
+  ecj-as-dotted-name = 
+      ?QualifiedName(SimpleName(n), <ecj-as-dotted-name>) => rest
+    ; <concat-strings> [n, ".", rest]
+  
   ecj-name-of = ?TypeDeclaration(_, _, <id>, _, _, _, _)   
 
   ecj-name-of = ?SimpleType(<id>)
@@ -186,5 +214,126 @@ strategies
 
   ecj-name-of = ?ArrayType(_, _, <ecj-name-of>)
   
+  ecj-name-of = ?PackageDeclaration(_, _, <id>)
 
+  ecj-name-of = ?SingleVariableDeclaration(_, _, <id>, _, _)
+
+  /**
+   * Computes the dotted name of an AST node, if is relevant.
+   * 
+   * @type ASTNode -> DottedName
+   */
+  ecj-dotted-name-of = !DottedName(<ecj-name-of ; ecj-as-dotted-name>)
+
+  /**
+   * Obtains the dotted name of a type binding.
+   * 
+   * @type TypeBinding -> String
+   */
+  ecj-dotted-name-of = ?TypeBinding(_, <!DottedName(<id>)>, _, _, _, _, _)
     
+  ecj-package-of = ?CompilationUnit(<id>, _, _)
+  
+  ecj-types-of = ?CompilationUnit(_, _, <id>)
+  
+  ecj-imports-of = ?CompilationUnit(_, <id>, _)
+
+strategies
+  
+  /**
+   * Obtain the project-relative path for a compilation unit.
+   *
+   * @type CompilationUnit -> String
+   */
+  ecj-project-path-of = ?node ; prim("ECJ_path_of_compilationunit", node)
+  
+  /**
+   * @param IProject - project
+   * @type Tuple(IProject, String) -> IFile 
+   */
+  ecj-project-get-file(|project) =
+      ?filename
+    ; prim("ECJ_project_get_file", project, filename)
+
+  /**
+   * @type IFile -> IFile 
+   */
+  ecj-file-exists =
+      ?file
+    ; prim("ECJ_file_exists", file)
+
+  
+  /** @type SimpleName -> SimpleName */
+  ecj-simplename-of = ?SimpleName(_)
+
+  /** @type QualifiedName -> SimpleName */
+  ecj-simplename-of = ?QualifiedName(_, <ecj-simplename-of>)
+  
+  /** @type DottedName -> Name */
+  ecj-as-qualified-name =
+    ?DottedName(<ecj-as-qualified-name>)
+
+  /** @type String -> Name */      
+  ecj-as-qualified-name =
+      is-string
+    ; string-tokenize(|['.'])
+    ; let f = \ (el, tl) -> QualifiedName(tl, SimpleName(el)) \
+          g = \ (el, 0) -> SimpleName(el) \
+      in 
+        <foldl(g <+ f)> (<id>, 0)
+      end
+
+  /**
+   * Returns true if the supplied Type is a primitive type
+   * @type Type -> Type
+   */
+  ecj-is-primitive-type = ?PrimitiveType(_)
+  
+  /** @type ASTNode -> ASTNode */
+  ecj-is-valid-ast = 
+    bottomup(
+      ecj-is-valid-ast-node 
+      <+ where(<debug> ("Not an ECJ appl: ", <id>)))
+      
+  /** 
+   * @type MethodDeclaration -> MethodDeclaration
+   */
+  ecj-is-static = 
+    where(?MethodDeclaration(_, <not(filter(?Modifier(ModifierKeyword(8))) => [])>, _, _, _, _, _, _))
+
+  /**
+   * Create a new file containing an ugly printed string of the given
+   * AST node. First member of the tuple is the project relative path.
+   * Second argument is the AST node to print. Result is the project
+   * relative path.
+   *
+   * @type Tuple(String,ASTNode) -> String
+   */
+  ecj-create-compilation-unit-buffer =
+      ?(filename, typedecl) 
+    ; where(<ecj-is-valid-ast> typedecl)
+    ; prim("ECJ_create_compilation_unit_buffer", filename, typedecl)
+
+  /** 
+   * Compute all named types implemented by superclasses and interfaces of this
+   * this. This set is all superclasses, and all interfaces, transitively,
+   * but not the type itself.
+   *
+   * @type TypeBinding -> List(DottedName)
+   */
+  ecj-all-supertypes-of = 
+      ?TypeBinding(_,_,_,superclass,superifaces,_,_)
+    ; <collect-all(?TypeBinding(_,<id>,_,_,_,_,_))> [ superclass | superifaces ]
+    ; map(!DottedName(<id>))
+  
+  /** 
+   * Compute all named types implemented by the type of this typebinding.
+   * This is the type itself, all superclasses, and all interfaces, 
+   * transitively.
+   *
+   * @type TypeBinding -> List(DottedName)
+   */
+  ecj-all-types-of = 
+      collect-all(\ TypeBinding(_,x,_,_,_,_,_) -> x \)
+    ; map(!DottedName(<id>))
+  

@@ -14,13 +14,17 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Name;
 import org.spoofax.interpreter.adapter.ecj.WrappedASTNode;
+import org.spoofax.interpreter.adapter.ecj.WrappedCompilationUnit;
 import org.spoofax.interpreter.adapter.ecj.WrappedICompilationUnit;
 import org.spoofax.interpreter.adapter.ecj.WrappedIFile;
 import org.spoofax.interpreter.adapter.ecj.WrappedIJavaElement;
 import org.spoofax.interpreter.adapter.ecj.WrappedIJavaProject;
 import org.spoofax.interpreter.adapter.ecj.WrappedIProject;
 import org.spoofax.interpreter.adapter.ecj.WrappedIType;
+import org.spoofax.interpreter.adapter.ecj.WrappedName;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJTools {
@@ -79,6 +83,22 @@ public class ECJTools {
 
     public static IFile asIFile(IStrategoTerm term) {
         return ((WrappedIFile)term).getWrappee();
+    }
+
+    public static boolean isCompilationUnit(IStrategoTerm term) {
+        return term instanceof WrappedCompilationUnit;
+    }
+
+    public static CompilationUnit asCompilationUnit(IStrategoTerm term) {
+        return ((WrappedCompilationUnit)term).getWrappee();
+    }
+
+    public static boolean isName(IStrategoTerm term) {
+        return term instanceof WrappedName;
+    }
+
+    public static Name asName(IStrategoTerm term) {
+        return ((WrappedName)term).getWrappee();
     }
 
 }

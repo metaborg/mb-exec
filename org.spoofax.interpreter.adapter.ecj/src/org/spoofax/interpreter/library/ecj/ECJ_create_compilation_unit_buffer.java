@@ -25,29 +25,29 @@ public class ECJ_create_compilation_unit_buffer extends ECJPrimitive {
     public ECJ_create_compilation_unit_buffer() {
         super("ECJ_create_compilation_unit_buffer", 0, 2);
     }
-    
+
     @Override
     public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-        
-        if(!Tools.isTermString(tvars[0]))
+
+        if (!Tools.isTermString(tvars[0]))
             return false;
-        if(!ECJTools.isASTNode(tvars[1]))
+        if (!ECJTools.isASTNode(tvars[1]))
             return false;
-        
+
         IProject project = getLibrary(env).getCurrentProject();
-        
+
         IFile file = project.getFile(Tools.asJavaString(tvars[0]));
-        
+
         final String text = ECJTools.asASTNode(tvars[1]).toString();
         InputStream source = new ByteArrayInputStream(text.getBytes());
         try {
-        if (!file.exists()) {
-            file.create(source, IResource.NONE, null);
-         } else {
-             file.setContents(source, IFile.FORCE, null);
-         }
-        } catch(CoreException e) {
+            if (!file.exists()) {
+                file.create(source, IResource.NONE, null);
+            } else {
+                file.setContents(source, IFile.FORCE, null);
+            }
+        } catch (CoreException e) {
             e.printStackTrace();
             return false;
         }

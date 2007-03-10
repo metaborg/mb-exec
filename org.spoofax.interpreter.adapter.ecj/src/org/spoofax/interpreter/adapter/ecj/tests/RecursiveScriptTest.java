@@ -51,7 +51,7 @@ public class RecursiveScriptTest {
         interp.setCurrent(from);
         if(interp.invoke("main_0_0") == false)
             System.out.println("Rewriting failed");
-        IStrategoTerm to = interp.current();
+        //IStrategoTerm to = interp.current();
         //from.prettyPrint(pp);
         //to.prettyPrint(pp);
         //System.out.println(to.getClass());

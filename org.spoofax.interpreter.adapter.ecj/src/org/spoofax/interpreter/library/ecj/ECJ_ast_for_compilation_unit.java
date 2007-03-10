@@ -14,13 +14,14 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJ_ast_for_compilation_unit extends ECJPrimitive {
 
     public ECJ_ast_for_compilation_unit() {
-        super("ECJ_ast_for_compilation_unit", 0, 1);
+        super("ECJ_ast_for_compilation_unit", 0, 2);
     }
     
     @Override
@@ -28,9 +29,14 @@ public class ECJ_ast_for_compilation_unit extends ECJPrimitive {
             throws InterpreterException {
         if(!ECJTools.isICompilationUnit(tvars[0]))
             return false;
+        if(!Tools.isTermInt(tvars[1]))
+            return false;
+        
+        final int resolveTypes = Tools.asJavaInt(tvars[1]);
         
         ICompilationUnit t = ECJTools.asICompilationUnit(tvars[0]);
         ASTParser parser = ASTParser.newParser(AST.JLS3);
+        parser.setResolveBindings(resolveTypes == 1);
         parser.setSource(t);
         env.setCurrent(ECJFactory.wrap((CompilationUnit)parser.createAST(null)));
         return true;
