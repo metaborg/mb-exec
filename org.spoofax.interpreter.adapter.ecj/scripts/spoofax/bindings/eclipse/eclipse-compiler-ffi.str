@@ -121,7 +121,7 @@ strategies
 
   ecj-is-Name =
       ?SimpleName(_)
-    ; ?QualifiedName(_, _)
+    + ?QualifiedName(_, _)
    
   ecj-is-Expression =
       ?MarkerAnnotation(_)
