@@ -301,6 +301,12 @@ strategies
   ecj-is-static = 
     where(?MethodDeclaration(_, <not(filter(?Modifier(ModifierKeyword(8))) => [])>, _, _, _, _, _, _))
 
+  /** 
+   * @type MethodDeclaration -> MethodDeclaration
+   */
+  ecj-is-public = 
+    where(?MethodDeclaration(_, <not(filter(?Modifier(ModifierKeyword(1))) => [])>, _, _, _, _, _, _))
+
   /**
    * Create a new file containing an ugly printed string of the given
    * AST node. First member of the tuple is the project relative path.
