@@ -294,7 +294,11 @@ strategies
     bottomup(
       ecj-is-valid-ast-node 
       <+ where(<debug> ("Not an ECJ appl: ", <id>)))
-      
+  
+  /** @type MethodDeclaration -> MethodDeclaration */
+  ecj-is-constructor =
+    ?MethodDeclaration(_, _, None(), _, _, _ ,_ ,_)
+        
   /** 
    * @type MethodDeclaration -> MethodDeclaration
    */
