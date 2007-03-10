@@ -13,12 +13,10 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
 
     private final String name;
     private final int arity;
-    private boolean quoted;
 
     BasicStrategoConstructor(String name, int arity, boolean quoted) {
         this.name = name;
         this.arity = arity;
-        this.quoted = quoted;
     }
     
     public int getArity() {
