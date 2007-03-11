@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.library.jsglr.JSGLRLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
@@ -13,9 +14,17 @@ import org.spoofax.jsglr.InvalidParseTableException;
 
 public class Compiler {
 	private Interpreter compiler;
-	
-	Compiler(ITermFactory factory) throws IOException, InterpreterException, InvalidParseTableException
-	{
+
+    public Compiler() throws IOException, InterpreterException, InvalidParseTableException {
+        init(new WrappedATermFactory());
+    }
+    
+	Compiler(ITermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
+        init(factory);
+    }
+    
+    private void init(ITermFactory factory) throws IOException, InterpreterException, InvalidParseTableException
+    {
 		compiler = new Interpreter(factory);
 		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary(factory));
 		compiler.load("data/libstratego-lib.ctree");

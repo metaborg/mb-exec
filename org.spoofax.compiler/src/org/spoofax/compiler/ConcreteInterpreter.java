@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.jsglr.InvalidParseTableException;
 
 public class ConcreteInterpreter extends Interpreter {
@@ -11,7 +12,7 @@ public class ConcreteInterpreter extends Interpreter {
 
 	public ConcreteInterpreter() throws IOException, InterpreterException, InvalidParseTableException
 	{
-		super();
+		super(new WrappedATermFactory());
 		compiler = new Compiler(this.getFactory());
 	}
 	
