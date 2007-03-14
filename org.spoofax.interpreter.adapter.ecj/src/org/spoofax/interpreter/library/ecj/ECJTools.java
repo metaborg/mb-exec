@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Name;
 import org.spoofax.interpreter.adapter.ecj.WrappedASTNode;
 import org.spoofax.interpreter.adapter.ecj.WrappedCompilationUnit;
@@ -24,6 +25,7 @@ import org.spoofax.interpreter.adapter.ecj.WrappedIJavaElement;
 import org.spoofax.interpreter.adapter.ecj.WrappedIJavaProject;
 import org.spoofax.interpreter.adapter.ecj.WrappedIProject;
 import org.spoofax.interpreter.adapter.ecj.WrappedIType;
+import org.spoofax.interpreter.adapter.ecj.WrappedITypeBinding;
 import org.spoofax.interpreter.adapter.ecj.WrappedName;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -100,5 +102,13 @@ public class ECJTools {
     public static Name asName(IStrategoTerm term) {
         return ((WrappedName)term).getWrappee();
     }
+
+	public static boolean isITypeBinding(IStrategoTerm term) {
+		return term instanceof WrappedITypeBinding;
+	}
+
+	public static ITypeBinding asITypeBinding(IStrategoTerm term) {
+		return ((WrappedITypeBinding)term).getWrappee();
+	}
 
 }

@@ -160,7 +160,11 @@ strategies
   ecj-is-MethodDeclaration = ?MethodDeclaration(_, _, _, _, _, _, _, _)
 
   ecj-is-FieldDeclaration = ?FieldDeclaration(_, _, _, _)
-    
+
+  ecj-is-SimpleName = ?SimpleName(_)    
+  
+  ecj-is-Javadoc = ?Javadoc(_)
+  
 strategies
 
   ecj-current-project =
@@ -217,7 +221,7 @@ strategies
   ecj-name-of = ?PackageDeclaration(_, _, <id>)
 
   ecj-name-of = ?SingleVariableDeclaration(_, _, <id>, _, _)
-
+  
   /**
    * Computes the dotted name of an AST node, if is relevant.
    * 
@@ -225,19 +229,34 @@ strategies
    */
   ecj-dotted-name-of = !DottedName(<ecj-name-of ; ecj-as-dotted-name>)
 
-  /**
-   * Obtains the dotted name of a type binding.
-   * 
-   * @type TypeBinding -> String
-   */
+   
   ecj-dotted-name-of = ?TypeBinding(_, <!DottedName(<id>)>, _, _, _, _, _)
-    
+
+  /**
+   * Obtains the dotted name of a primitive type. This is the same as
+   * they keyword.
+   *
+   * @type PrimitiveType -> DottedName
+   */
+  ecj-dotted-name-of = \ PrimitiveType(x) -> DottedName(x) \
+      
   ecj-package-of = ?CompilationUnit(<id>, _, _)
   
   ecj-types-of = ?CompilationUnit(_, _, <id>)
   
   ecj-imports-of = ?CompilationUnit(_, <id>, _)
 
+  /** 
+   * Obtain the fully qualified name of a type. The AST must have been
+   * constructed with full type information.
+   *
+   * @type Type -> Name 
+   */
+  ecj-qualified-name-of = 
+      ecj-binding-of 
+    ; ecj-dotted-name-of 
+    ; ecj-as-qualified-name
+  
 strategies
   
   /**
@@ -288,7 +307,7 @@ strategies
    * @type Type -> Type
    */
   ecj-is-primitive-type = ?PrimitiveType(_)
-  
+
   /** @type ASTNode -> ASTNode */
   ecj-is-valid-ast = 
     bottomup(
@@ -311,6 +330,11 @@ strategies
   ecj-is-public = 
     where(?MethodDeclaration(_, <not(filter(?Modifier(ModifierKeyword(1))) => [])>, _, _, _, _, _, _))
 
+  /** @type TypeBinding -> TypeBinding */
+  ecj-is-binding-for-primitive = 
+    ?tb
+    ; prim("ECJ_is_binding_primitive_type", tb)
+    
   /**
    * Create a new file containing an ugly printed string of the given
    * AST node. First member of the tuple is the project relative path.
