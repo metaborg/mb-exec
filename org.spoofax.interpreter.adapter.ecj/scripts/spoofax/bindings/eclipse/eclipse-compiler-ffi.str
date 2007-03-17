@@ -78,10 +78,18 @@ strategies
 
 strategies
 
+  /**
+   * @param target - TypeBinding
+   * @type TypeBinding -> TypeBinding 
+   */
   ecj-is-cast-compatible(|target) =
      ?source
    ; prim("ECJ_is_cast_compatible", target, source)
 
+  /**
+   * @param target - TypeBinding
+   * @type TypeBinding -> TypeBinding 
+   */
   ecj-is-subtype-compatible(|target) =
      ?source
    ; prim("ECJ_is_subtype_compatible", target, source)
@@ -89,16 +97,19 @@ strategies
     
 strategies
 
+  /** @type MethodInvocation -> MethodBinding */
   ecj-method-of =
       ?MethodInvocation(_, _, _, _)
     ; ?meth
     ; prim("ECJ_method_of_methodinvoc", meth)
 
+  /** @type SuperMethodInvocation -> MethodBinding */
   ecj-method-of =
       ?SuperMethodInvocation(_, _, _, _)
     ; ?meth
     ; prim("ECJ_method_of_supermethodinvoc", meth)
 
+  /** @type SuperConstructorInvocation -> MethodBinding */
   ecj-method-of =
       ?SuperConstructorInvocation(_, _, _)
     ; ?meth
@@ -167,9 +178,11 @@ strategies
   
 strategies
 
+  /** @type Term -> ECJProject */
   ecj-current-project =
       prim("ECJ_current_project")
 
+  /** @type Term -> ECJJavaProject */
   ecj-current-java-project =
       prim("ECJ_current_java_project")
 
@@ -182,15 +195,18 @@ strategies
   ecj-search-project-for-type(|project) = 
       DottedName(?typename)
     ; prim("ECJ_search_project_for_type", project, typename)      
-      
+  
+  /** @type IType -> ICompilationUnit */    
   ecj-compilation-unit-for-type =
     ?type
     ; prim("ECJ_compilation_unit_for_type", type)
-   
+
+  /** @type ICompilationUnit -> CompilationUnit */   
   ecj-ast-for-compilation-unit =
     ?cu
     ; prim("ECJ_ast_for_compilation_unit", cu, 0)
 
+  /** @type ICompilationUnit -> CompilationUnit */
   ecj-typed-ast-for-compilation-unit =
     ?cu
     ; prim("ECJ_ast_for_compilation_unit", cu,1)
@@ -370,4 +386,16 @@ strategies
   ecj-all-types-of = 
       collect-all(\ TypeBinding(_,x,_,_,_,_,_) -> x \)
     ; map(!DottedName(<id>))
+
+strategies
+
+  /**
+   * @type PrimitiveType -> String
+   */
+  ecj-string-name-of = ?PrimitiveType(<id>)
+  
+  /**
+   * @type ASTNode -> String
+   */
+  ecj-string-name-of = ecj-name-of ; ?SimpleType(<id>)
   
