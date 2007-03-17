@@ -7,12 +7,12 @@
  */
 package org.spoofax.interpreter.terms;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
-import java.io.StringBufferInputStream;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -206,7 +206,7 @@ public class BasicTermFactory implements ITermFactory {
 
     public IStrategoTerm parseFromString(String text) {
         try {
-            return parseFromStream(new StringBufferInputStream(text));
+            return parseFromStream(new ByteArrayInputStream(text.getBytes()));
         } catch(IOException e) {
             return null;
         }
