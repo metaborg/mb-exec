@@ -7,8 +7,13 @@
  * @author Karl Trygve Kalleberg <karltk@ii.uib.no>
  */
 
-module spoofax/bindings/eclipse/eclipse-ui
+module org/spoofax/bindings/eclipse/eclipse-ui
+imports
+  stratego-lib
 strategies
 
   eclipse-ui-show-popup = 
-    ?(title, body) ; prim("EFI_ui_show_popup", title, body)
+    ?(title, body) 
+    ; if <is-list> body then concat-strings else id end
+    ; ?realbody
+    ; prim("EFI_ui_show_popup", title, realbody)
