@@ -25,6 +25,7 @@ public class EFI_ui_show_popup extends AbstractPrimitive {
     @Override
     public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
+    	
         if(!Tools.isTermString(tvars[0]))
             return false;
         if(!Tools.isTermString(tvars[1]))

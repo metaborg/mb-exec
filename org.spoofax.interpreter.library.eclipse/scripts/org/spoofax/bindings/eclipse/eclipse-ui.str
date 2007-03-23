@@ -14,6 +14,6 @@ strategies
 
   eclipse-ui-show-popup = 
     ?(title, body) 
-    ; if <is-list> body then concat-strings else id end
+    ; if <is-list> body then concat-strings else !body end
     ; ?realbody
     ; prim("EFI_ui_show_popup", title, realbody)
