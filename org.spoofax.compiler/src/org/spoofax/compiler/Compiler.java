@@ -26,7 +26,7 @@ public class Compiler {
     private void init(ITermFactory factory) throws IOException, InterpreterException, InvalidParseTableException
     {
 		compiler = new Interpreter(factory);
-		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary(factory));
+		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary((WrappedATermFactory)factory));
 		compiler.load("data/libstratego-lib.ctree");
 		compiler.load("data/libsglr.ctree");
 		compiler.load("data/libstrc.ctree");
