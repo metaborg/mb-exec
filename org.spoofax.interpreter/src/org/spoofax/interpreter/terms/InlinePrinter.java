@@ -1,21 +1,21 @@
 package org.spoofax.interpreter.terms;
 
 public class InlinePrinter implements ITermPrinter {
-	String out;
+	StringBuffer out;
 	
 	public InlinePrinter() {
-		out = "";
+		out = new StringBuffer();
 	}
 	
 	public String getString() {
-		return out;
+		return out.toString();
 	}
 
 	public void print(String string) {
 		if (string.matches("^ *$")) {
 			return ;
 		}
-		out += string;
+		out.append(string);
 	}
 
 	public void indent(int i) {
@@ -31,10 +31,10 @@ public class InlinePrinter implements ITermPrinter {
 		if (string.matches("^ *$")) {
 			return ;
 		}
-		out += string;
+		out.append(string);
 	}
 
 	public void println(String string) {
-		out += string;
+		out.append(string);
 	}
 }
