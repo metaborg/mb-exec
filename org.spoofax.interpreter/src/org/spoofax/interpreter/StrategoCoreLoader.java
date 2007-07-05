@@ -381,8 +381,10 @@ public class StrategoCoreLoader {
 
     private void loadConstructors(IStrategoList list) {
         for (int i = 0; i < list.size(); i++) {
-            String name = Tools.javaStringAt(Tools.applAt(list, i), 0);
-            context.addOpDecl(name, new OpDecl(name));
+        	if (!Tools.applAt(list, i).getConstructor().getName().equals("OpDeclInj")) {
+        		String name = Tools.javaStringAt(Tools.applAt(list, i), 0);
+        		context.addOpDecl(name, new OpDecl(name));
+        	}
         }
     }
 
