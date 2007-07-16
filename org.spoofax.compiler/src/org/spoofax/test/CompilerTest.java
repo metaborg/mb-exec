@@ -2,7 +2,6 @@ package org.spoofax.test;
 
 import java.io.IOException;
 
-import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.InterpreterException;
 
 public class CompilerTest extends AbstractCompilerTest {
@@ -13,7 +12,6 @@ public class CompilerTest extends AbstractCompilerTest {
 
     public void test1() throws IOException, InterpreterException
     {
-        DebugUtil.tracing = true;
     	exec("test1.str");
     }
 }

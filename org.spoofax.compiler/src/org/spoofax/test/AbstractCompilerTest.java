@@ -18,8 +18,10 @@ public abstract class AbstractCompilerTest extends TestCase {
 	}
 	
 	protected void exec(String file) throws IOException, InterpreterException {
-		String[] strpath = { path };
-		intp.loadConcrete(path + "/" + file, strpath);
+		String[] strpath = { path, "data/trunk/stratego-libraries/lib/spec" };
+		intp.load("data/libstratego-lib.ctree");
+		intp.loadConcrete(path + "/" + file, strpath, false);
+		intp.setCurrent(intp.getFactory().parseFromString("Tree(Test(\"a\", \"b\"),1)"));
 		intp.invoke("main_0_0");
 	}
 }

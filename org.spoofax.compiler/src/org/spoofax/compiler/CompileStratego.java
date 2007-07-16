@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.InvalidParseTableException;
+
+import aterm.pure.StrATermFactory;
 
 public class CompileStratego {
 
@@ -18,14 +19,15 @@ public class CompileStratego {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException, InterpreterException, InvalidParseTableException {
-		Compiler compiler = new Compiler(new WrappedATermFactory());
-		String[] path = { "data/sglr", "data/sig",
-					      "data/libstrlib", "data/xtc",
-				          "data/c-tools", "data/gpp",
-						  "data/rtg", "data/xtc-tools" };
+		Compiler compiler = new Compiler(new StrATermFactory());
+		String[] path = { "data/trunk/stratego-libraries/sglr/lib", "data/trunk/stratego-front/sig",
+				"data/trunk/strc-core/lib", "data/trunk/stratego-libraries/lib/spec",
+				"data/trunk/stratego-libraries/xtc/lib", "data/trunk/c-tools/sig",
+				"data/trunk/stratego-libraries/gpp/lib", "data/trunk/stratego-libraries/rtg/lib",
+				"data/trunk/xtc/tools"};
 		IStrategoTerm out = null;
 		try {
-		  out = compiler.compile("data/strc-core/dump-strc.str", path);
+		  out = compiler.compile("data/jstrc.str", path, false);
 		}
 		catch (StackOverflowError e) {
 			System.err.println("Size of the stack: " + e.getStackTrace().length);
@@ -33,9 +35,19 @@ public class CompileStratego {
 		}
 		
 		if (out == null)
-			System.err.println("Fucked up!");
+			System.err.println("Compilation of jstrc failed!");
 		else {
-			FileOutputStream f = new FileOutputStream("data/out.ctree");
+			FileOutputStream f = new FileOutputStream("data/comp-jstrc.ctree");
+			PrintStream fs = new PrintStream(f);
+			fs.print(out);
+			f.close();
+		}
+		
+		compiler.compile("data/trunk/strc-core/lib/strc.str", path, true);
+		if (out == null)
+			System.err.println("Compilation of libstrc failed!");
+		else {
+			FileOutputStream f = new FileOutputStream("data/comp-libstrc.ctree");
 			PrintStream fs = new PrintStream(f);
 			fs.print(out);
 			f.close();

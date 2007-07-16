@@ -6,17 +6,18 @@ import java.util.LinkedList;
 
 import org.spoofax.interpreter.Interpreter;
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.library.jsglr.JSGLRLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.jsglr.InvalidParseTableException;
 
+import aterm.pure.StrATermFactory;
+
 public class Compiler {
 	private Interpreter compiler;
 
     public Compiler() throws IOException, InterpreterException, InvalidParseTableException {
-        init(new WrappedATermFactory());
+        init(new StrATermFactory());
     }
     
 	Compiler(ITermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
@@ -26,13 +27,14 @@ public class Compiler {
     private void init(ITermFactory factory) throws IOException, InterpreterException, InvalidParseTableException
     {
 		compiler = new Interpreter(factory);
-		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary((WrappedATermFactory)factory));
+		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary((StrATermFactory)factory));
 		compiler.load("data/libstratego-lib.ctree");
-		compiler.load("data/libsglr.ctree");
+		compiler.load("data/libstratego-sglr.ctree");
 		compiler.load("data/libstrc.ctree");
+		compiler.load("data/jstrc.ctree");
 	}
 	
-	IStrategoTerm compile(String file, String[] path) throws InterpreterException
+	IStrategoTerm compile(String file, String[] path, boolean lib) throws InterpreterException
 	{
 		Collection<IStrategoTerm> terms = new LinkedList<IStrategoTerm>();
 		for (String p : path) {
@@ -41,7 +43,8 @@ public class Compiler {
 		IStrategoTerm tp = compiler.getFactory().makeList(terms);
 		IStrategoTerm[] tuple = {
 		  compiler.getFactory().makeString(file),
-		  tp
+		  tp,
+		  compiler.getFactory().makeInt(lib?1:0)
 		};
 		compiler.setCurrent(
 		  compiler.getFactory().makeTuple(tuple)
