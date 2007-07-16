@@ -8,20 +8,26 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 
 public class Fail extends Strategy {
 
-    public boolean eval(IContext e) throws InterpreterException {
+    public IConstruct eval(IContext e) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("Fail.eval() - ", e.current());
         }
 
-        return DebugUtil.traceReturn(false, e.current(), this);
+        return getHook().pop().onFailure(e);
     }
 
+    @Override
+    public String toString() {
+    	return "Fail()";
+    }
+    
     public void prettyPrint(StupidFormatter sf) {
         sf.append("fail");
     }

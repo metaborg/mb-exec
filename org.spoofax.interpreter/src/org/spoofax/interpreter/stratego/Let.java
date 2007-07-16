@@ -8,6 +8,7 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.VarScope;
@@ -17,13 +18,13 @@ public class Let extends Strategy {
     protected SDefT[] defs;
     protected Strategy body;
 
-    public Let(SDefT[] defs, Strategy body) {
-        assert defs != null;
-        this.defs = defs;
+    public Let(SDefT[] defs2, Strategy body) {
+        assert defs2 != null;
+        this.defs = defs2;
         this.body = body;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public IConstruct eval(final IContext env) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("Let.eval() - ", env.current());
@@ -33,31 +34,33 @@ public class Let extends Strategy {
 
         SDefT[] newDefs = new SDefT[defs.length];
 
-        for(int i = 0, sz = defs.length; i < sz; i++) {
-            SDefT def = defs[i];
-            newDefs[i] =  new SDefT(def.getName(),
+        for (int i = 0; i < defs.length; ++i) {
+        	SDefT def = defs[i];
+            SDefT newDef = new SDefT(def.getName(),
               def.getStrategyParams(),
               def.getTermParams(),
               def.getBody(),
               newScope);
+            newDefs[i] = newDef;
         }
 
         newScope.addSVars(newDefs);
-        if(DebugUtil.debugging) {
-            DebugUtil.bump();
-        }
-        //env.setVarScope(newScope);
-
-        env.getChoicePointStack().addNext(body, newScope);
-        //boolean r = body.eval(env);
-
-        if(DebugUtil.debugging) {
-            DebugUtil.unbump();
-        }
-        //env.popVarScope();
-
-        return true;
-        //return DebugUtil.traceReturn(r, env.current(), this);
+        env.setVarScope(newScope);
+        final Strategy th = this;
+        body.getHook().push(new Hook(){
+			@Override
+			IConstruct onFailure(IContext env) throws InterpreterException {
+				env.popVarScope();
+				return th.getHook().pop().onFailure(env);
+			}
+			@Override
+			IConstruct onSuccess(IContext env) throws InterpreterException {
+		        env.popVarScope();
+				return th.getHook().pop().onSuccess(env);
+			}
+        	
+        });
+        return body;
     }
 
     public void prettyPrint(StupidFormatter sf) {

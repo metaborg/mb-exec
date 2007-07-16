@@ -8,27 +8,21 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
-import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTuple;
 
 public class All extends Strategy {
 
-    private static final int FAILED = 0x0;
-    private static final int SUCCEEDED = 0x1;
-    private static final int MODIFIED = 0x2;
-    
     protected Strategy body;
 
     public All(Strategy body) {
         this.body = body;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
-
+    public IConstruct eval(IContext env) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             debug("All.eval() - ", env.current());
         }
@@ -37,85 +31,56 @@ public class All extends Strategy {
 
         switch (t.getTermType()) {
             case IStrategoTerm.INT:
-                return DebugUtil.traceReturn(true, env.current(), this);
             case IStrategoTerm.REAL:
-                return DebugUtil.traceReturn(true, env.current(), this);
             case IStrategoTerm.STRING:
-                return DebugUtil.traceReturn(true, env.current(), this);
+                return getHook().pop().onSuccess(env);
             case IStrategoTerm.APPL:
-                return DebugUtil.traceReturn(evalAll(env, (IStrategoAppl)t), env.current(), this);
             case IStrategoTerm.LIST:
-                return DebugUtil.traceReturn(evalAll(env, (IStrategoList)t), env.current(), this);
             case IStrategoTerm.TUPLE:
-                return DebugUtil.traceReturn(evalAll(env, (IStrategoTuple)t), env.current(), this);
+                return evalAll(env, 0, t.getAllSubterms());
             default:
                 throw new InterpreterException("Unknown ATerm type " + t.getTermType());
         }
 
     }
-
-    private boolean evalAll(IContext env, IStrategoList list) throws InterpreterException {
-
-        IStrategoTerm old = env.current();
-        IStrategoTerm[] kids = list.getAllSubterms();
-        
-        int r = updateChildren(env, kids);
-        if(r == FAILED)
-            return false;
-        
-        if((r & MODIFIED) != 0)
-            env.setCurrent(env.getFactory().makeList(kids));
-        else
-            env.setCurrent(old);
-        return true;
+    
+    private IConstruct evalAll(IContext env, final int i, final IStrategoTerm[] list) throws InterpreterException
+    {
+    	final IStrategoTerm old = env.current();
+    	if (i >= old.getSubtermCount()) {
+    		switch (old.getTermType()) {
+    		case IStrategoTerm.APPL:
+    			env.setCurrent(env.getFactory().replaceAppl(((IStrategoAppl)old).getConstructor(), list, old));
+    			break ;
+    		case IStrategoTerm.LIST:
+    			env.setCurrent(env.getFactory().makeList(list));
+    			break ;
+    		case IStrategoTerm.TUPLE:
+    			env.setCurrent(env.getFactory().makeTuple(list));        			
+    		}
+    		return getHook().pop().onSuccess(env);
+    	}
+    	IStrategoTerm child = list[i];
+    	env.setCurrent(child);
+    	final All th = this;
+    	body.getHook().push(new Hook(){
+    		IStrategoTerm oldterm = old;
+    		IConstruct onSuccess(IContext env) throws InterpreterException
+    		{
+    			list[i] = env.current();
+    			env.setCurrent(oldterm);
+    			return evalAll(env, i + 1, list);
+    		}
+    		IConstruct onFailure(IContext env) throws InterpreterException
+    		{
+    			return th.getHook().pop().onFailure(env);
+    		}
+    	});
+    	return body.eval(env);
     }
 
-    private boolean evalAll(IContext env, IStrategoTuple tuple) throws InterpreterException {
-        IStrategoTerm old = env.current();
-        IStrategoTerm[] kids = tuple.getAllSubterms();
-
-        int r = updateChildren(env, kids);
-        
-        if((r & SUCCEEDED) == 0)
-            return false;
-        
-        if((r & MODIFIED) != 0)
-            env.setCurrent(env.getFactory().makeTuple(kids));
-        else
-            env.setCurrent(old);
-        return true;
-    }
-
-    private boolean evalAll(IContext env, IStrategoAppl t) throws InterpreterException {
-        IStrategoTerm old = env.current();
-        IStrategoTerm[] kids = t.getArguments();
-        
-        int r = updateChildren(env, kids);
-        if(r == FAILED)
-            return false;
-        
-        if((r & MODIFIED) != 0)
-            env.setCurrent(env.getFactory().replaceAppl(t.getConstructor(), kids, old));
-        else
-            env.setCurrent(old);
-        return true;
-    }
-
-    private int updateChildren(IContext env, IStrategoTerm[] children) throws InterpreterException {
-        final int sz = children.length;
-        boolean modified = false; 
-        for(int i = 0; i < sz; i++) {
-            env.setCurrent(children[i]);
-            if(!CallT.callHelper(body, env)) {
-                if(DebugUtil.isDebugging()) {
-                    debug("Child traversal failed at ", children[i], ", current = ", env.current());
-                }
-                return FAILED;
-            }
-            modified = modified | children[i] != env.current();
-            children[i] = env.current(); 
-        }
-        return SUCCEEDED | (modified ? MODIFIED : 0);
+    public String toString(){
+    	return "All(" + body.toString() + ")";
     }
     
     public void prettyPrint(StupidFormatter sf) {

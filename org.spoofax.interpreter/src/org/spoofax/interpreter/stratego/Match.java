@@ -11,17 +11,18 @@ import java.util.ArrayList;
 
 import org.spoofax.DebugUtil;
 import org.spoofax.NotImplementedException;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Pair;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoInt;
-import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoRef;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 
 public class Match extends Strategy {
@@ -33,7 +34,7 @@ public class Match extends Strategy {
         this.pattern = pattern;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public IConstruct eval(IContext env) throws InterpreterException {
         
         if (DebugUtil.isDebugging()) {
             debug("Match.eval() - ", " !", env.current(), " ; ?", pattern);
@@ -44,19 +45,14 @@ public class Match extends Strategy {
         Results r = match(env, current, pattern);
 
         if (r == null) {
-            if (DebugUtil.isDebugging()) {
-                return DebugUtil.traceReturn(false, env.current(), this);
-            }
-            return false;
+            return getHook().pop().onFailure(env);
         }
         else {
             boolean b = env.bindVars(r);
-
-            if (DebugUtil.isDebugging()) {
-                debug("Bindings: " + r); //todo: unclear
-                return DebugUtil.traceReturn(b, env.current(), this);
-            }
-            return b;
+            if (b)
+            	return getHook().pop().onSuccess(env);
+            else
+            	return getHook().pop().onFailure(env);
         }
     }
 
@@ -120,11 +116,11 @@ public class Match extends Strategy {
             return matchApplTuple(env, t, p);
         } 
 
-        IStrategoTerm[] ctorArgs = Tools.listAt(p, 1).getAllSubterms();
+        IStrategoList ctorArgs = Tools.listAt(p, 1);
 
         // Check if arity of the pattern matches that
         // of the term
-        if (ctorArgs.length != t.getSubtermCount())
+        if (ctorArgs.getSubtermCount() != t.getSubtermCount())
             return null;
 
         // Check if the constructor name in the pattern
@@ -134,11 +130,10 @@ public class Match extends Strategy {
 
         // Recursively match all arguments to term
         Results r = emptyList();
-        IStrategoTerm[] applArgs = t.getArguments();
-        
-        for (int i = 0; i < ctorArgs.length; i++) {
-            Results m = match(env, applArgs[i],
-                              (IStrategoAppl) ctorArgs[i]);
+        for (int i = 0; i < ctorArgs.size(); i++) {
+            Results m = match(env, t.getSubterm(i),
+                              (IStrategoAppl) ctorArgs
+                              .getSubterm(i));
             if (m != null)
                 r.addAll(m);
             else
@@ -157,26 +152,26 @@ public class Match extends Strategy {
 //    }
 
     private Results matchApplTuple(IContext env, IStrategoAppl t, IStrategoAppl p) throws InterpreterException {
-        
         String c = Tools.javaStringAt(p, 0);
 
         // Check that the pattern p is really against a tuple 
         if(!c.equals(""))
             return null;
 
-        IStrategoTerm[] ctorArgs = Tools.listAt(p, 1).getAllSubterms();
+        IStrategoList ctorArgs = Tools.listAt(p, 1);
         
         IStrategoTerm[] args = t.getArguments();
         
         // Check that arity of pattern equals arity of tuple
-        if(ctorArgs.length != args.length)
+        if(ctorArgs.size() != args.length)
             return null;
         
         // Match subterms of tuple against subpatterns of pattern 
         Results r = emptyList();
-        for (int i = 0; i < ctorArgs.length; i++) {
+        for (int i = 0; i < ctorArgs.size(); i++) {
             Results m = match(env, args[i],
-                              (IStrategoAppl) ctorArgs[i]);
+                              (IStrategoAppl) ctorArgs
+                              .getSubterm(i));
             if (m != null)
                 r.addAll(m);
             else
@@ -220,7 +215,7 @@ public class Match extends Strategy {
             return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchAnyAs(env, t, p);
+            return matchCompoundAs(env, t, p);
         } else if(Tools.isStr(p, env)) {
             return null;
         }
@@ -257,7 +252,7 @@ public class Match extends Strategy {
             return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchAnyAs(env, t, p);
+            return matchCompoundAs(env, t, p);
         } else if (Tools.isStr(p, env)) {
             return null;
         }
@@ -284,7 +279,7 @@ public class Match extends Strategy {
         if(DebugUtil.isDebugging()) {
             DebugUtil.debug("  pattern is Anno");
         }
-
+        // FIXME: Do real match of annotations
         return match(env, t, Tools.applAt(p, 0));
     }
 
@@ -296,15 +291,11 @@ public class Match extends Strategy {
         return null;
     }
 
-    protected Results matchAnyAs(IContext env, IStrategoTerm t, IStrategoAppl p) throws InterpreterException {
+    /*
+    protected Results matchAnyAs(IStrategoTerm t, IStrategoAppl p) {
         String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
-        Results pre = newResult(new Binding(varName, t));
-        Results post = match(env, t, Tools.applAt(p, 1));
-        if(post == null)
-            return null;
-        pre.addAll(post);
-        return pre;
-    }
+        return newResult(new Binding(varName, t));
+    }*/
 
     @SuppressWarnings("serial")
     public static final class Results extends ArrayList<Binding> {
@@ -363,7 +354,10 @@ public class Match extends Strategy {
             return env.getFactory().makeList();
         case IStrategoTerm.TUPLE:
             IStrategoTuple tup = (IStrategoTuple) t;
-            return env.getFactory().makeList(tup.getAllSubterms()); 
+            IStrategoTerm[] args = new IStrategoTerm[tup.getSubtermCount()];
+            for(int i = 0; i < args.length; i++) 
+                args[i] = tup.get(i);
+            return env.getFactory().makeList(args); 
         }
             
         throw new InterpreterException("Unknown term '" + t + "'");
@@ -393,6 +387,9 @@ public class Match extends Strategy {
     public Results match(IContext env, IStrategoTerm t, IStrategoAppl p)
     throws InterpreterException {
 
+    	if (t == null) {
+    		System.err.println("boo!");
+    	}
         switch (t.getTermType()) {
         case IStrategoTerm.APPL:
             return matchAppl(env, (IStrategoAppl) t, p);
@@ -461,19 +458,18 @@ public class Match extends Strategy {
         if(!c.equals(""))
             return null;
 
-        IStrategoTerm[] ctorArgs = Tools.listAt(p, 1).getAllSubterms();
-
-        // Check that arity of pattern equals arity of tuple
-        if(ctorArgs.length != t.size())
-            return null;
+        IStrategoList ctorArgs = Tools.listAt(p, 1);
         
-        IStrategoTerm[] tupleArgs = t.getAllSubterms();
+        // Check that arity of pattern equals arity of tuple
+        if(ctorArgs.size() != t.size())
+            return null;
         
         // Match subterms of tuple against subpatterns of pattern 
         Results r = emptyList();
-        for (int i = 0; i < ctorArgs.length; i++) {
-            Results m = match(env, tupleArgs[i],
-                              (IStrategoAppl) ctorArgs[i]);
+        for (int i = 0; i < ctorArgs.size(); i++) {
+            Results m = match(env, t.get(i),
+                              (IStrategoAppl) ctorArgs
+                              .getSubterm(i));
             if (m != null)
                 r.addAll(m);
             else
@@ -556,7 +552,7 @@ public class Match extends Strategy {
             IStrategoList tail = t.tail();
             
             IStrategoList pattern = Tools.listAt(p, 1);
-
+            
             Results r = match(env, head, (IStrategoAppl)pattern.get(0));
             if(r == null)
                 return null;
@@ -607,7 +603,7 @@ public class Match extends Strategy {
             return matchAnyWld(p);
         }
         else if (Tools.isAs(p, env)) {
-            return matchAnyAs(env, t, p);
+            return matchCompoundAs(env, t, p);
         } 
 
         throw new InterpreterException("Unknown String case '" + p + "'");

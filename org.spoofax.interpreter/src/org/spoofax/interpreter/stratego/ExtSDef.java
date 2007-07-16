@@ -11,9 +11,9 @@ import org.spoofax.interpreter.VarScope;
 
 public class ExtSDef extends SDefT {
 
-    public ExtSDef(String name, SVar[] svars, String[] tvars,
+    public ExtSDef(String name, SVar[] realsvars, String[] realtvars,
             VarScope scope) {
-        super(name, svars, tvars, null, scope);
+        super(name, realsvars, realtvars, null, scope);
     }
 
     @Override

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.spoofax.interpreter.library.IOperatorRegistry;
-import org.spoofax.interpreter.stratego.CallT;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.StupidFormatter;
 import org.spoofax.interpreter.terms.BasicTermFactory;
@@ -53,7 +52,7 @@ public class Interpreter {
             throw new InterpreterException("Definition '" + name + "' not found");
         }
 
-        return CallT.callHelper(def, context);
+        return def.getBody().evaluate(context);
     }
 
     public IContext getContext() {

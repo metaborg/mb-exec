@@ -13,11 +13,15 @@ import org.spoofax.interpreter.InterpreterException;
 
 public class BagOf implements IConstruct {
 
-    public boolean eval(IContext e) throws InterpreterException {
+    public IConstruct eval(IContext e) throws InterpreterException {
         throw new InterpreterException("Unimplemented");
     }
 
     public void prettyPrint(StupidFormatter sf) {
        sf.append("BAGOF");
     }
+
+	public boolean evaluate(IContext env) throws InterpreterException {
+		throw new InterpreterException("Unimplemented");
+	}
 }

@@ -9,6 +9,7 @@ package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.BindingInfo;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Pair;
@@ -22,29 +23,40 @@ public class GuardedLChoice extends Strategy {
     	children = strs;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public IConstruct eval(IContext env) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             debug("GuardedLChoice.eval() - ", env.current());
         }
 
-        for (int i = 0; i < (children.length - 1); i++) {
-        	BindingInfo bi = env.getVarScope().saveUnboundVars();
-        	IStrategoTerm oldCurrent = env.current();
-
-        	if (CallT.callHelper(children[i].first, env)) {
-                env.getChoicePointStack().addNext(children[i].second, env.getVarScope());
-                return true;
-        		//return DebugUtil.traceReturn(CallT.callHelper(children[i].second, env), env.current(), this);
-            }
-
-        	env.setCurrent(oldCurrent);
-        	env.getVarScope().restoreUnboundVars(bi);
-        }
-        
-        env.getChoicePointStack().addNext(children[children.length - 1].first, env.getVarScope());
-        return true; // DebugUtil.traceReturn(CallT.callHelper(, env), env.current(), this);
+        return eval(env, 0);
     }
 
+    private IConstruct eval(IContext env, final int n) throws InterpreterException {
+    	if (n == (children.length - 1)) {
+    		Strategy s = children[n].first;
+    		s.getHook().push(getHook().pop());
+    		return s;
+    	}
+    	else {
+    		final BindingInfo bi = env.getVarScope().saveUnboundVars();
+        	final IStrategoTerm oldCurrent = env.current();
+        	final Strategy second = children[n].second;
+        	Strategy first = children[n].first;
+        	first.getHook().push(new Hook(){
+        		IConstruct onSuccess(IContext env) {
+                	second.getHook().push(getHook().pop());
+    				return second;
+    			}
+    			IConstruct onFailure(IContext env) throws InterpreterException {
+    	        	env.setCurrent(oldCurrent);
+    	        	env.getVarScope().restoreUnboundVars(bi);    				
+    				return eval(env, n+1);
+    			}
+        	});
+        	return first;
+    	}
+    }
+    
     public void prettyPrint(StupidFormatter sf) {
         sf.first("GuardedLChoice(");
         sf.bump(15);

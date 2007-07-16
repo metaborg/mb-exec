@@ -14,7 +14,7 @@ data/lang/%.ctree : src/lang/%.str
 	strc -i $< -F | baffle -wt -o $@
 
 data/library/%.ctree : src/library/%.str
-	strc -i $< -F -o $@
+	strc -i $< -F | baffle -wt -o $@
 
 data/library/system-io-file-test.str:
 	touch data/library/system-io-file-test.str

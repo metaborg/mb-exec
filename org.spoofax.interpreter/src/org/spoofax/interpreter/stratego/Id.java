@@ -8,18 +8,19 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
+import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 
 public class Id extends Strategy {
 
-    public boolean eval(IContext e) throws InterpreterException {
+    public IConstruct eval(IContext e) throws InterpreterException {
 
         if (DebugUtil.isDebugging()) {
             debug("Id.eval() - ", e.current());
         }
 
-        return DebugUtil.traceReturn(true, e.current(), this);
+        return getHook().pop().onSuccess(e);
     }
 
     public void prettyPrint(StupidFormatter sf) {

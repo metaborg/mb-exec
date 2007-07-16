@@ -39,7 +39,6 @@ public interface IContext {
     
     public StrategoSignature getStrategoSignature();
     public AbstractPrimitive lookupOperator(String name);
-    public ChoicePointStack getChoicePointStack();
     public Collection<String> getStrategyNames();
     
 }

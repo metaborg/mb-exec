@@ -1,9 +1,9 @@
 package org.spoofax.interpreter.library.ssl;
 
-import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_checksum extends AbstractPrimitive {
@@ -13,7 +13,7 @@ public class SSL_checksum extends AbstractPrimitive {
 	}
 
     @Override
-    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars) throws InterpreterException {
+    public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException {
         env.setCurrent(env.getFactory().makeString(Integer.toString(tvars[0].hashCode())));
         return true;
     }

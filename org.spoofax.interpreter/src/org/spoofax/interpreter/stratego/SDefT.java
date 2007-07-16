@@ -21,7 +21,7 @@ public class SDefT implements IConstruct {
 
     protected String[] termArgs;
 
-    protected IConstruct body;
+    protected Strategy body;
 
     protected VarScope scope;
 
@@ -78,26 +78,24 @@ public class SDefT implements IConstruct {
         }
     }
 
-    public SDefT(String name, SVar[] svars, String[] tvars, IConstruct body, VarScope scope) {
+    public SDefT(String name, SVar[] realsvars, String[] realtvars, Strategy actual, VarScope scope) {
         this.name = name;
-        this.strategyArgs = svars;
-        this.termArgs = tvars;
-        this.body = body;
+        this.strategyArgs = realsvars;
+        this.termArgs = realtvars;
+        this.body = actual;
         this.scope = scope;
     }
 
-    public boolean eval(IContext env) throws InterpreterException {
+    public  IConstruct eval(IContext e) throws InterpreterException {
         //e.getVarScope().dump("", true);
-        env.getChoicePointStack().addNext(body, env.getVarScope());
-        return true;
-        //return body.eval(e);
+    	return body;
     }
 
     public String getName() {
         return name;
     }
 
-    public IConstruct getBody() {
+    public Strategy getBody() {
         return body;
     }
 
@@ -135,4 +133,8 @@ public class SDefT implements IConstruct {
         sf.append(")");
         sf.unbump(6);
     }
+
+	public boolean evaluate(IContext env) throws InterpreterException {
+		return body.evaluate(env);
+	}
 }

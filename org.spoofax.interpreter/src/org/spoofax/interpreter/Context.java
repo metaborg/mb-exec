@@ -41,12 +41,9 @@ public class Context implements IContext {
 
     private Map<String, IOperatorRegistry> operatorRegistries;
 
-    private ChoicePointStack choicePointStack;
-
     public Context(ITermFactory factory, ITermFactory programFactory) {
         this.programFactory =  programFactory;
         this.factory = factory;
-        choicePointStack = new ChoicePointStack();
         opdecls = new HashMap<String, OpDecl>();
         varScope = new VarScope(null);
         strategoSignature = new StrategoSignature(programFactory);
@@ -157,10 +154,6 @@ public class Context implements IContext {
         operatorRegistries.put(domain, or);
     }
 
-    public ChoicePointStack getChoicePointStack() {
-        return choicePointStack;
-    }
-    
     public Collection<String> getStrategyNames() {
         VarScope v = getVarScope();
         while(v.getParent() != null) 

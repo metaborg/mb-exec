@@ -7,13 +7,12 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.ssl.SSL_indexedSet_create.IndexedSet;
-import org.spoofax.interpreter.stratego.CallT;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_indexedSet_put extends AbstractPrimitive {
@@ -22,7 +21,7 @@ public class SSL_indexedSet_put extends AbstractPrimitive {
         super("SSL_indexedSet_put", 1, 2);
     }
 
-    public boolean call(IContext env, IConstruct[] sargs, IStrategoTerm[] targs)
+    public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
             throws InterpreterException {
 
         if (!(Tools.isTermInt(targs[0])))
@@ -34,11 +33,11 @@ public class SSL_indexedSet_put extends AbstractPrimitive {
             return false;
         
         IStrategoTerm t = targs[1];
-        IConstruct s = sargs[0];
+        Strategy s = sargs[0];
         
         if(is.containsKey(t)) {
             is.put(t);
-            return CallT.callHelper(s, env);
+            return s.evaluate(env);
         }
 
         env.setCurrent(env.getFactory().makeInt(is.put(t)));

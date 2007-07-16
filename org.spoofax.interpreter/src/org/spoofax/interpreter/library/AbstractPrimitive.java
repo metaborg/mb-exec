@@ -8,9 +8,9 @@
 package org.spoofax.interpreter.library;
 
 import org.spoofax.DebugUtil;
-import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public abstract class AbstractPrimitive {
@@ -29,7 +29,7 @@ public abstract class AbstractPrimitive {
     public int getTArity() { return tvars; }
     public int getSArity() { return svars; }
     
-    public abstract boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars) throws InterpreterException;
+    public abstract boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException;
     
     protected static void debug(String s) {
         DebugUtil.debug("[ " + s + " ]");

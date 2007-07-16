@@ -9,13 +9,13 @@ package org.spoofax.interpreter.library.ssl;
 
 import java.util.Map.Entry;
 
-import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.ssl.SSL_hashtable_create.Hashtable;
 import org.spoofax.interpreter.stratego.CallT;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_table_fold extends AbstractPrimitive {
@@ -25,7 +25,7 @@ public class SSL_table_fold extends AbstractPrimitive {
     }
 
     @Override
-    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
         if(!Tools.isTermInt(tvars[1]))
@@ -36,7 +36,7 @@ public class SSL_table_fold extends AbstractPrimitive {
         
         IStrategoTerm result = tvars[0];
         CallT sdef = (CallT) svars[0];
-        IConstruct[] sv = new IConstruct[0];
+        Strategy[] sv = new Strategy[0];
         IStrategoTerm[] tv = new IStrategoTerm[2];
 
         env.setCurrent(tvars[0]);
@@ -44,7 +44,7 @@ public class SSL_table_fold extends AbstractPrimitive {
         for(Entry<IStrategoTerm,IStrategoTerm> e : ht.entrySet()) {
             tv[0] = e.getKey();
             tv[1] = e.getValue();
-            if(!sdef.evalWithArgs(env, sv, tv))
+            if(!sdef.evaluateWithArgs(env, sv, tv))
                 return false;
             result = env.current();  
         }

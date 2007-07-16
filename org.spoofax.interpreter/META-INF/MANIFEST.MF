@@ -8,6 +8,7 @@ Require-Bundle: org.junit
 Eclipse-LazyStart: true
 Export-Package: org.spoofax,
  org.spoofax.interpreter,
+ org.spoofax.interpreter.stratego,
  org.spoofax.interpreter.library,
  org.spoofax.interpreter.terms
 Bundle-Vendor: Spoofax.org
