@@ -14,10 +14,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.Tools;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJ_create_compilation_unit_buffer extends ECJPrimitive {
@@ -27,7 +27,7 @@ public class ECJ_create_compilation_unit_buffer extends ECJPrimitive {
     }
 
     @Override
-    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
 
         if (!Tools.isTermString(tvars[0]))

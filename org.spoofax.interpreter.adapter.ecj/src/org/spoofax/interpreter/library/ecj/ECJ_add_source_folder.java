@@ -8,9 +8,9 @@
 package org.spoofax.interpreter.library.ecj;
 
 import org.spoofax.NotImplementedException;
-import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJ_add_source_folder extends ECJPrimitive {
@@ -20,7 +20,7 @@ public class ECJ_add_source_folder extends ECJPrimitive {
     }
     
     @Override
-    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         // TODO Auto-generated method stub
         throw new NotImplementedException();

@@ -7,11 +7,11 @@
  */
 package org.spoofax.interpreter.library.ecj;
 
-import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJ_current_project extends AbstractPrimitive {
@@ -21,7 +21,7 @@ public class ECJ_current_project extends AbstractPrimitive {
     }
     
     @Override
-    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         ECJLibrary ecj = (ECJLibrary) env.getOperatorRegistry(ECJLibrary.REGISTRY_NAME);
         if(ecj == null)

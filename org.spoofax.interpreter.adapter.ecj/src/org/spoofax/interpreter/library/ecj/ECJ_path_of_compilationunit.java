@@ -10,10 +10,10 @@ package org.spoofax.interpreter.library.ecj;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.spoofax.interpreter.IConstruct;
 import org.spoofax.interpreter.IContext;
 import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJ_path_of_compilationunit extends ECJPrimitive {
@@ -23,7 +23,7 @@ public class ECJ_path_of_compilationunit extends ECJPrimitive {
     }
     
     @Override
-    public boolean call(IContext env, IConstruct[] svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
         if(!ECJTools.isCompilationUnit(tvars[0]))
