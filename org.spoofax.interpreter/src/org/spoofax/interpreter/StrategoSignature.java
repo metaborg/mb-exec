@@ -64,36 +64,36 @@ public class StrategoSignature {
 
     public StrategoSignature(ITermFactory factory) {
 
-        CTOR_Op = factory.makeConstructor("Op", 2, false);
-        CTOR_Cons = factory.makeConstructor("Cons", 2, false);
-        CTOR_Nil = factory.makeConstructor("Nil", 0, false);
-        CTOR_Anno = factory.makeConstructor("Anno", 2, false);
-        CTOR_Int = factory.makeConstructor("Int", 1, false);
-        CTOR_Real = factory.makeConstructor("Real", 1, false);
-        CTOR_Str = factory.makeConstructor("Str", 1, false);
-        CTOR_Var = factory.makeConstructor("Var", 1, false);
-        CTOR_Explode = factory.makeConstructor("Explode", 2, false);
-        CTOR_ConstType = factory.makeConstructor("ConstType", 1, false);// todo
-        CTOR_FunType = factory.makeConstructor("FunType", 2, false);// todo
-        CTOR_SDefT = factory.makeConstructor("SDefT", 4, false);// todo
-        CTOR_As = factory.makeConstructor("As", 2, false);// todo
-        CTOR_Wld = factory.makeConstructor("Wld", 0, false);// todo
-        CTOR_Build = factory.makeConstructor("Build", 1, false);
-        CTOR_ExtSDef = factory.makeConstructor("ExtSDefT", 3, false);
-        CTOR_Scope = factory.makeConstructor("Scope", 2, false);
-        CTOR_Seq = factory.makeConstructor("Seq", 2, false);
+        CTOR_Op = factory.makeConstructor("Op", 2);
+        CTOR_Cons = factory.makeConstructor("Cons", 2);
+        CTOR_Nil = factory.makeConstructor("Nil", 0);
+        CTOR_Anno = factory.makeConstructor("Anno", 2);
+        CTOR_Int = factory.makeConstructor("Int", 1);
+        CTOR_Real = factory.makeConstructor("Real", 1);
+        CTOR_Str = factory.makeConstructor("Str", 1);
+        CTOR_Var = factory.makeConstructor("Var", 1);
+        CTOR_Explode = factory.makeConstructor("Explode", 2);
+        CTOR_ConstType = factory.makeConstructor("ConstType", 1);// todo
+        CTOR_FunType = factory.makeConstructor("FunType", 2);// todo
+        CTOR_SDefT = factory.makeConstructor("SDefT", 4);// todo
+        CTOR_As = factory.makeConstructor("As", 2);// todo
+        CTOR_Wld = factory.makeConstructor("Wld", 0);// todo
+        CTOR_Build = factory.makeConstructor("Build", 1);
+        CTOR_ExtSDef = factory.makeConstructor("ExtSDefT", 3);
+        CTOR_Scope = factory.makeConstructor("Scope", 2);
+        CTOR_Seq = factory.makeConstructor("Seq", 2);
         
-        CTOR_GuardedLChoice = factory.makeConstructor("GuardedLChoice", 3, false);
-        CTOR_CallT = factory.makeConstructor("CallT", 3, false);
-        CTOR_Fail = factory.makeConstructor("Fail", 0, false);
-        CTOR_Id = factory.makeConstructor("Id", 0, false);
-        CTOR_Let = factory.makeConstructor("Let", 2, false);
-        CTOR_Match = factory.makeConstructor("Match", 1, false);
-        CTOR_PrimT = factory.makeConstructor("PrimT", 3, false);
+        CTOR_GuardedLChoice = factory.makeConstructor("GuardedLChoice", 3);
+        CTOR_CallT = factory.makeConstructor("CallT", 3);
+        CTOR_Fail = factory.makeConstructor("Fail", 0);
+        CTOR_Id = factory.makeConstructor("Id", 0);
+        CTOR_Let = factory.makeConstructor("Let", 2);
+        CTOR_Match = factory.makeConstructor("Match", 1);
+        CTOR_PrimT = factory.makeConstructor("PrimT", 3);
         
-        CTOR_All = factory.makeConstructor("All", 1, false);
-        CTOR_Some = factory.makeConstructor("Some", 1, false);
-        CTOR_One = factory.makeConstructor("One", 1, false);
+        CTOR_All = factory.makeConstructor("All", 1);
+        CTOR_Some = factory.makeConstructor("Some", 1);
+        CTOR_One = factory.makeConstructor("One", 1);
 
     }
 

@@ -1934,7 +1934,7 @@ public class ECJFactory implements ITermFactory {
         return x == null ? -1 : x.intValue();
     }
 
-    public IStrategoConstructor makeConstructor(String string, int arity, boolean quoted) {
+    public IStrategoConstructor makeConstructor(String string, int arity) {
         return new ASTCtor(string, arity);
     }
 

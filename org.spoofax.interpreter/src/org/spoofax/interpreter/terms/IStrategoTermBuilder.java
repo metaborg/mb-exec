@@ -12,8 +12,7 @@ import java.util.Collection;
 
 public interface IStrategoTermBuilder {
     
-    // FIXME remote quotation param: use IStrategoString instead
-    public IStrategoConstructor makeConstructor(String string, int arity, boolean quoted);
+    public IStrategoConstructor makeConstructor(String string, int arity);
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids);
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... terms);

@@ -133,11 +133,11 @@ public class BasicTermFactory implements ITermFactory {
 
         if(ch == '(') {
             List<IStrategoTerm> l = parseTermSequence(bis, ')');
-            IStrategoConstructor c = makeConstructor(sb.toString(), l.size(), false);
+            IStrategoConstructor c = makeConstructor(sb.toString(), l.size());
             return makeAppl(c, l.toArray(new IStrategoTerm[0]));
         } else {
             bis.unread(ch);
-            IStrategoConstructor c = makeConstructor(sb.toString(), 0, false);
+            IStrategoConstructor c = makeConstructor(sb.toString(), 0);
             return makeAppl(c, new IStrategoTerm[0]);
         }
     }
@@ -236,9 +236,9 @@ public class BasicTermFactory implements ITermFactory {
         return new BasicStrategoAppl(ctr, terms);
     }
 
-    public IStrategoConstructor makeConstructor(String name, int arity, boolean quoted) {
+    public IStrategoConstructor makeConstructor(String name, int arity) {
         ctorCache.put(name, arity);
-        return new BasicStrategoConstructor(name, arity, quoted);
+        return new BasicStrategoConstructor(name, arity);
     }
 
     public IStrategoInt makeInt(int i) {

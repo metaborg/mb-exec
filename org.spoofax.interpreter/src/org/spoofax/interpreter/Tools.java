@@ -48,7 +48,7 @@ public class Tools {
             String ctorName = javaStringAt(t, 0);
             IStrategoTerm[] children = t.getSubterm(1).getAllSubterms();
 
-            IStrategoConstructor ctr = factory.makeConstructor(ctorName, children.length, false);
+            IStrategoConstructor ctr = factory.makeConstructor(ctorName, children.length);
             IStrategoList kids = factory.makeList();
 
             for (int i = children.length - 1; i >= 0; i--) {

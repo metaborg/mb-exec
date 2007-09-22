@@ -28,10 +28,10 @@ signature
     AnnotationTypeDeclaration       : Javadoc * Term * Term * Term -> AbstractTypeDeclaration
     AnnotationTypeMemberDeclaration : Javadoc * Term * Term * Term * Term -> Term
     AnonymousClassDeclaration       : Term -> ASTNode
-    ArrayAccess                     : Term * Term -> Expression
+    ArrayAccess                     : Expression * Expression -> Expression
     ArrayCreation                   : Term * Term * Term -> Expression
     ArrayInitializer                : Term -> Expression
-    ArrayType                       : Term * Term * Term -> Type
+    ArrayType                       : Type * Int * Type -> Type
     AssertStatement                 : Term * Term -> Statement
     Assignment                      : Expression * Expression -> Expression
     BlockComment                    : Comment
@@ -61,7 +61,7 @@ signature
     ForStatement                    : Term * Term * Term * Term -> Statement
     IfStatement                     : Term * Term * Term -> Statement
     ImportDeclaration               : Term -> ASTNode 
-    InfixExpression                 : Term * Term * Term -> Expression
+    InfixExpression                 : String * Expression * Expression -> Expression
     Initializer                     : Term -> BodyDeclaration
     InstanceofExpression            : Term * Term -> Expression
     IntType                         : Type
@@ -69,11 +69,11 @@ signature
     LabeledStatement                : Term * Term -> Statement
     LineComment                     : Comment
     LongType                        : Type
-    MarkerAnnotation                : Term -> Annotation
+    MarkerAnnotation                : Name -> Annotation
     MemberRef                       : Term * Term -> ASTNode
     MemberValuePair                 : Term * Term -> ASTNode
     MethodDeclaration               : Javadoc * List(Modifier) * Type * List(TypeParameter) * SimpleName * List(SingleVariableDeclaration) * List(Name) * Block -> BodyDeclaration
-    MethodInvocation                : Term * Term * Term * Term -> Expression
+    MethodInvocation                : Expression * Name * List(Type) * List(Expression) -> Expression
     MethodRef                       : Term * Term * Term -> ASTNode
     MethodRefParameter              : Term * Term -> ASTNode
     Modifier                        : Term -> Modifier
@@ -81,8 +81,8 @@ signature
 /*    Name                            : Term -> Term*/
     NormalAnnotation                : Term * Term -> Annotation
     NullLiteral                     : Expression
-    NumberLiteral                   : Term -> Expression
-    PackageDeclaration              : Term * Term * Term -> Term 
+    NumberLiteral                   : String -> Expression
+    PackageDeclaration              : Javadoc * List(Annotation) * Name -> ASTNode
     ParameterizedType               : Term * Term -> Term
     ParenthesizedExpression         : Term -> Expression
     Plus                            : Term * Term -> Term 
@@ -111,7 +111,7 @@ signature
     ThrowStatement                  : Term -> Statement
     Times                           : Term * Term -> Term
     TryStatement                    : Term * Term * Term -> Statement
-    TypeDeclaration                 : Javadoc * List(Modifier) * Name * List(TypeParameter) * Type * List(Type) * List(BodyDeclaration) -> Term
+    TypeDeclaration                 : Javadoc * List(Modifier) * Name * List(TypeParameter) * Type * List(Type) * List(BodyDeclaration) -> AbstractTypeDeclaration
     TypeDeclarationStatement        : Term -> Term
     TypeLiteral                     : Term -> Term
     TypeParameter                   : Term * Term -> Term

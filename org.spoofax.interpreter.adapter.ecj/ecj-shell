@@ -8,9 +8,10 @@ ep=${HOME}/apps/eclipse/plugins
 bp=$(dirname $0)
 java -cp \
 	${bp}/bin:${bp}/../org.spoofax.aterm/bin:${bp}/../org.spoofax.interpreter.adapter.aterm/bin:${bp}/../org.spoofax.interpreter/bin:${bp}/../org.spoofax.aterm/lib/shared-objects-1.4.jar:${bp}/../org.spoofax.aterm/lib/jjtraveler-0.4.3.jar:${ep}/org.eclipse.core.runtime_3.2.0.v20060603.jar:${ep}/org.eclipse.equinox.common_3.2.0.v20060603.jar:${ep}/org.eclipse.core.jobs_3.2.0.v20060603.jar:${ep}/org.eclipse.core.contenttype_3.2.0.v20060603.jar:${ep}/org.eclipse.equinox.registry_3.2.0.v20060601.jar:${ep}/org.eclipse.equinox.preferences_3.2.1.R32x_v20060717.jar:${ep}/org.eclipse.jdt.core_3.2.1.v_677_R32x.jar:${ep}/org.eclipse.osgi_3.2.1.R32x_v20060919.jar:${ep}/org.eclipse.core.resources_3.2.1.R32x_v20060914.jar \
-	org.spoofax.interpreter.adapter.ecj.tests.RecursiveScriptTest \
+	org.spoofax.ecjadapter.Main \
 	$@
-#	org.spoofax.ecjadapter.Main \
+#	org.spoofax.interpreter.adapter.ecj.tests.RecursiveScriptTest \
+
 
 
 

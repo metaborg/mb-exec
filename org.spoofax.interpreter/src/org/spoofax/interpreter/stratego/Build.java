@@ -141,7 +141,7 @@ public class Build extends Strategy {
             return factory.makeString(n);
         }
         
-        IStrategoConstructor afun = factory.makeConstructor(n, realArgs.length, quoted);
+        IStrategoConstructor afun = factory.makeConstructor(n, realArgs.length);
         return factory.makeAppl(afun, realArgs);
     }
 
@@ -195,7 +195,7 @@ public class Build extends Strategy {
         
         IStrategoList children = (IStrategoList) t.getSubterm(1);
 
-        IStrategoConstructor ctor = factory.makeConstructor(ctr, children.size(), false);
+        IStrategoConstructor ctor = factory.makeConstructor(ctr, children.size());
         IStrategoList kids = factory.makeList();
 
         // FIXME use IStrategoTerm[]
