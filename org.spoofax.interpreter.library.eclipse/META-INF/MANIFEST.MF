@@ -4,7 +4,6 @@ Bundle-Name: Eclipse Bindings for Stratego/J
 Bundle-SymbolicName: org.spoofax.interpreter.library.eclipse
 Bundle-Version: 0.1.1
 Bundle-Vendor: Spoofax.org
-Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.spoofax.interpreter
 Export-Package: org.spoofax.interpreter.library.eclipse

@@ -9,7 +9,6 @@ import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.library.jsglr.JSGLRLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.jsglr.InvalidParseTableException;
 
 public class Compiler {

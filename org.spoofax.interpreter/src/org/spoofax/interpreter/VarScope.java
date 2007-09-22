@@ -77,7 +77,7 @@ public class VarScope {
 
     public String printVars() {
         StringBuilder sb = new StringBuilder("");
-        Iterator it = vars.keySet().iterator();
+        Iterator<String> it = vars.keySet().iterator();
         while (it.hasNext()) {
             sb.append(it.next());
             if(it.hasNext()) {

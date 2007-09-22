@@ -13,7 +13,8 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPlatformRunnable;
+import org.eclipse.equinox.app.IApplication;
+import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
@@ -22,16 +23,9 @@ import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 
-public class SpoofaxDemo implements IPlatformRunnable {
+public class SpoofaxDemo implements IApplication {
 
-    public Object run(Object args) throws Exception {
-        ResourcesPlugin p = ResourcesPlugin.getPlugin();
-        System.out.println(p);
-        System.out.println("Hello from Eclipse application");
-        test();
-        return EXIT_OK;
-    }
-
+	
     private void test() {
         try {
             IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -52,6 +46,21 @@ public class SpoofaxDemo implements IPlatformRunnable {
             e.printStackTrace();
         }
     }
+
+	@Override
+	public Object start(IApplicationContext context) throws Exception {
+        ResourcesPlugin p = ResourcesPlugin.getPlugin();
+        System.out.println(p);
+        System.out.println("Hello from Eclipse application");
+        test();
+        return EXIT_OK;
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
 
     /*
     private void test() {

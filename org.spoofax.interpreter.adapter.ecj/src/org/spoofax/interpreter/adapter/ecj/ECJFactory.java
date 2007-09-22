@@ -370,7 +370,7 @@ public class ECJFactory implements ITermFactory {
         throw new NotImplementedException();
     }
 
-    private List getAnnotations(IStrategoTerm term) {
+    private List<ASTNode> getAnnotations(IStrategoTerm term) {
         return ((WrappedASTNodeList)term).getWrappee();
     }
 
@@ -2018,7 +2018,8 @@ public class ECJFactory implements ITermFactory {
             return new WrappedQualifiedName(name);
     }
 
-    public static IStrategoTerm genericWrap(ASTNode node) {
+    @SuppressWarnings("unchecked")
+	public static IStrategoTerm genericWrap(ASTNode node) {
         
         if(node instanceof ImportDeclaration)
             return wrap((ImportDeclaration) node);
