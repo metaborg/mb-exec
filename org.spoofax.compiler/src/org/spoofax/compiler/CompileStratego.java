@@ -5,10 +5,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.InvalidParseTableException;
-
-import aterm.pure.StrATermFactory;
 
 public class CompileStratego {
 
@@ -19,7 +18,7 @@ public class CompileStratego {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException, InterpreterException, InvalidParseTableException {
-		Compiler compiler = new Compiler(new StrATermFactory());
+		Compiler compiler = new Compiler(new WrappedATermFactory());
 		String[] path = { "data/trunk/stratego-libraries/sglr/lib", "data/trunk/stratego-front/sig",
 				"data/trunk/strc-core/lib", "data/trunk/stratego-libraries/lib/spec",
 				"data/trunk/stratego-libraries/xtc/lib", "data/trunk/c-tools/sig",
