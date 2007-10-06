@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Asm
+Bundle-SymbolicName: org.spoofax.interpreter.adapter.asm
+Bundle-Version: 1.0.0
+Bundle-ClassPath: asm.jar,
+ lib/asm-3.0.jar,
+ lib/asm-tree-3.0.jar
+Export-Package: org.objectweb.asm,
+ org.objectweb.asm.signature,
+ org.objectweb.asm.tree,
+ org.spoofax.interpreter.adapter.asm
+Require-Bundle: org.spoofax.interpreter
