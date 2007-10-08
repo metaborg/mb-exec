@@ -14,7 +14,7 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
     private final String name;
     private final int arity;
 
-    BasicStrategoConstructor(String name, int arity) {
+    protected BasicStrategoConstructor(String name, int arity) {
         this.name = name;
         this.arity = arity;
     }
