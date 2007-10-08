@@ -9,10 +9,21 @@ import java.util.List;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.IntInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LineNumberNode;
+import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MemberNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TypeInsnNode;
+import org.objectweb.asm.tree.VarInsnNode;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.BasicStrategoInt;
 import org.spoofax.interpreter.terms.BasicStrategoList;
@@ -127,12 +138,95 @@ public class ASMFactory implements ITermFactory {
 			return wrap((MemberNode)node);
 		} else if(node instanceof String) {
 			return wrap((String)node);
+		} else if(node instanceof LocalVariableNode) {
+			return wrap((LocalVariableNode) node);
+		} else if(node instanceof LabelNode) {
+			return wrap((LabelNode) node);
+		} else if(node instanceof LineNumberNode) {
+			return wrap((LineNumberNode) node);
+		} else if(node instanceof VarInsnNode) {
+			return wrap((VarInsnNode) node);
+		} else if(node instanceof MethodInsnNode) {
+			return wrap((MethodInsnNode) node);
+		} else if(node instanceof InsnNode) {
+			return wrap((InsnNode) node);
+		} else if(node instanceof TypeInsnNode) {
+		 	return wrap((TypeInsnNode) node);
+		} else if(node instanceof LdcInsnNode) {
+			return wrap((LdcInsnNode) node);
+		} else if(node instanceof IntInsnNode) {
+			return wrap((IntInsnNode) node);
+		} else if(node instanceof FieldInsnNode) {
+			return wrap((FieldInsnNode) node);
 		}
-		
+		 
 		if(node == null)
 			return None.INSTANCE;
 		
         throw new NotImplementedException("Unknown ASM node type " + node.getClass());
+	}
+
+	private static IStrategoTerm wrap(FieldInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new WrappedFieldInsnNode(node);
+	}
+
+	private static IStrategoTerm wrap(IntInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new WrappedIntInsnNode(node);
+	}
+
+	private static IStrategoTerm wrap(LdcInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new WrappedLdcInsnNode(node);
+	}
+
+	private static IStrategoTerm wrap(TypeInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new WrappedTypeInsnNode(node);
+	}
+
+	private static IStrategoTerm wrap(InsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new WrappedInsnNode(node);
+	}
+
+	private static IStrategoTerm wrap(MethodInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new WrappedMethodInsnNode(node);
+	}
+
+	private static IStrategoTerm wrap(VarInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new WrappedVarInsnNode(node);
+	}
+
+	private static IStrategoTerm wrap(LineNumberNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new WrappedLineNumberNode(node);
+	}
+
+	private static IStrategoTerm wrap(LocalVariableNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new WrappedLocalVariable(node);
 	}
 
 	private static IStrategoTerm wrap(MethodNode node) {
@@ -169,6 +263,20 @@ public class ASMFactory implements ITermFactory {
 			return None.INSTANCE;
 		else
 			return new WrappedASMArray(node);
+	}
+
+	public static IStrategoTerm wrap(LabelNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new WrappedLabelNode(node);
+	}
+
+	public static IStrategoTerm wrap(Label node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new WrappedLabel(node);
 	}
 
 }

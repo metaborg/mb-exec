@@ -1,5 +1,6 @@
 package org.spoofax.interpreter.adapter.asm;
 
+import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
@@ -52,6 +53,10 @@ public abstract class WrappedASMNode implements IStrategoTerm {
         return r;
     }
 
+    public boolean match(IStrategoTerm second) {
+    	throw new NotImplementedException();
+    }
+    
     public int getSubtermCount() {
     	return constructor.getSubtermCount();
     }

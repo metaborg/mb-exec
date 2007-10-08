@@ -10,9 +10,9 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class Test {
 
 	public static void main(String[] args) throws IOException {
-		ClassReader cr = new ClassReader(new FileInputStream("AFun.class"));
+		ClassReader cr = new ClassReader(new FileInputStream("bin/org/spoofax/interpreter/adapter/asm/Test.class"));
 		ClassNode cn = new ClassNode();
-		cr.accept(cn, 0);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 		//ASMFactory af = new ASMFactory();
 		IStrategoTerm term = ASMFactory.genericWrap(cn);
 		

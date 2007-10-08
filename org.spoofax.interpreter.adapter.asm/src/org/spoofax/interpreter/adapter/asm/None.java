@@ -29,7 +29,6 @@ public class None extends BasicStrategoTerm {
     	return second == INSTANCE;
     }
     
-    @Override
     public IStrategoTerm getSubterm(int index) {
         throw new ArrayIndexOutOfBoundsException();
     }
