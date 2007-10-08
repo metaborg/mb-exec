@@ -25,7 +25,6 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 
 public class SpoofaxDemo implements IApplication {
 
-	
     private void test() {
         try {
             IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -46,8 +45,8 @@ public class SpoofaxDemo implements IApplication {
             e.printStackTrace();
         }
     }
+    
 
-	@Override
 	public Object start(IApplicationContext context) throws Exception {
         ResourcesPlugin p = ResourcesPlugin.getPlugin();
         System.out.println(p);
@@ -56,7 +55,6 @@ public class SpoofaxDemo implements IApplication {
         return EXIT_OK;
 	}
 
-	@Override
 	public void stop() {
 		// TODO Auto-generated method stub
 		
