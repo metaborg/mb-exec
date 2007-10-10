@@ -1,6 +1,11 @@
-module jstrc
-imports libstrc libstratego-lib libstratego-sglr
+module org/spoofax/compiler/jstrc
+imports
+  libstrc 
+  libstratego-lib 
+  libstratego-sglr
+
 strategies
+
   main =
      ?(file, path, lib)
    ; if	!lib => 1 then

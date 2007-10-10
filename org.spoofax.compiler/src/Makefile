@@ -6,7 +6,7 @@ REPOS=https://$(REPOSHOST):12443/repos/StrategoXT/strategoxt/trunk
 
 all: libstratego-lib.ctree libstratego-sglr.ctree libstrc.ctree Stratego.tbl jstrc.ctree
 
-jstrc.ctree: jstrc.str
+jstrc.ctree: str/org/spoofax/compiler/jstrc.str
 	strc -F -i $< -o $@
 
 trunk/configure.ac:

@@ -13,23 +13,27 @@ import org.spoofax.jsglr.InvalidParseTableException;
 
 public class Compiler {
 	private Interpreter compiler;
-
-    public Compiler() throws IOException, InterpreterException, InvalidParseTableException {
+	private String strategoBase;
+	private String spoofaxBase;
+	
+    public Compiler(String strcBasepath, String spoofaxBase) throws IOException, InterpreterException, InvalidParseTableException {
+    	this.strategoBase = strcBasepath;
+    	this.spoofaxBase = spoofaxBase;
         init(new WrappedATermFactory());
     }
     
-	Compiler(WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
-        init(factory);
-    }
+//	Compiler(WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
+//        init(factory);
+//    }
     
     private void init(WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException
     {
 		compiler = new Interpreter(factory);
 		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary(factory));
-		compiler.load("data/libstratego-lib.ctree");
-		compiler.load("data/libstratego-sglr.ctree");
-		compiler.load("data/libstrc.ctree");
-		compiler.load("data/jstrc.ctree");
+		compiler.load(strategoBase + "/share/stratego-lib/libstratego-lib.ctree");
+		compiler.load(strategoBase + "/share/libstratego-sglr.ctree");
+		compiler.load(strategoBase + "/share/libstrc.ctree");
+		compiler.load(spoofaxBase + "/share/jstrc.ctree");
 	}
 	
 	IStrategoTerm compile(String file, String[] path, boolean lib) throws InterpreterException
@@ -50,5 +54,15 @@ public class Compiler {
 		if (!compiler.invoke("main_0_0"))
 			return null;
 		return compiler.current();
+	}
+
+	public static String strategoPath() {
+		String path = System.getProperty("stratego.dir");
+		return path == null ? System.getProperty("user.dir") + "/.nix-profile" : path;
+	}
+
+	public static String spoofaxPath() {
+		String path = System.getProperty("spoofax.dir");
+		return path == null ? "." : path; //System.getProperty("user.dir") + "/.nix-profile" : path;
 	}
 }

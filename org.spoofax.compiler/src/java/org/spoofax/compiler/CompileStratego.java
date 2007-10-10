@@ -19,6 +19,10 @@ public class CompileStratego {
 	 */
 	public static void main(String[] args) throws IOException, InterpreterException, InvalidParseTableException {
 		Compiler compiler = new Compiler(new WrappedATermFactory());
+		String strcBasepath = System.getProperty("strc.basepath");
+		if(strcBasepath == null)
+			strcBasepath = System.getProperty("user.dir") + "/.nix-profile"; 
+				
 		String[] path = { "data/trunk/stratego-libraries/sglr/lib", "data/trunk/stratego-front/sig",
 				"data/trunk/strc-core/lib", "data/trunk/stratego-libraries/lib/spec",
 				"data/trunk/stratego-libraries/xtc/lib", "data/trunk/c-tools/sig",
