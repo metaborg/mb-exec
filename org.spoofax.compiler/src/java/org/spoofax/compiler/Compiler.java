@@ -16,15 +16,13 @@ public class Compiler {
 	private String strategoBase;
 	private String spoofaxBase;
 	
-    public Compiler(String strcBasepath, String spoofaxBase) throws IOException, InterpreterException, InvalidParseTableException {
-    	this.strategoBase = strcBasepath;
-    	this.spoofaxBase = spoofaxBase;
-        init(new WrappedATermFactory());
+    public Compiler() throws IOException, InterpreterException, InvalidParseTableException {
+    	this(strategoPath(), spoofaxPath(), new WrappedATermFactory());
     }
     
-//	Compiler(WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
-//        init(factory);
-//    }
+	Compiler(String strcBasepath, String spoofaxBase, WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
+		init(factory);
+    }
     
     private void init(WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException
     {

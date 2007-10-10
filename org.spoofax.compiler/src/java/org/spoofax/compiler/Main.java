@@ -44,7 +44,7 @@ public class Main {
             
         }
         
-        Compiler c = new Compiler(Compiler.strategoPath(), Compiler.spoofaxPath());
+        Compiler c = new Compiler();
         
         IStrategoTerm t = c.compile(toCompile, includes.toArray(new String[0]), false);
         InlinePrinter ip = new InlinePrinter();

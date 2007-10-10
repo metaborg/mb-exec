@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.InvalidParseTableException;
 
@@ -18,15 +17,19 @@ public class CompileStratego {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException, InterpreterException, InvalidParseTableException {
-		Compiler compiler = new Compiler(new WrappedATermFactory());
+		Compiler compiler = new Compiler();
 		String strcBasepath = System.getProperty("strc.basepath");
 		if(strcBasepath == null)
 			strcBasepath = System.getProperty("user.dir") + "/.nix-profile"; 
 				
-		String[] path = { "data/trunk/stratego-libraries/sglr/lib", "data/trunk/stratego-front/sig",
-				"data/trunk/strc-core/lib", "data/trunk/stratego-libraries/lib/spec",
-				"data/trunk/stratego-libraries/xtc/lib", "data/trunk/c-tools/sig",
-				"data/trunk/stratego-libraries/gpp/lib", "data/trunk/stratego-libraries/rtg/lib",
+		String[] path = { "data/trunk/stratego-libraries/sglr/lib", 
+				"data/trunk/stratego-front/sig",
+				"data/trunk/strc-core/lib", 
+				"data/trunk/stratego-libraries/lib/spec",
+				"data/trunk/stratego-libraries/xtc/lib", 
+				"data/trunk/c-tools/sig",
+				"data/trunk/stratego-libraries/gpp/lib", 
+				"data/trunk/stratego-libraries/rtg/lib",
 				"data/trunk/xtc/tools"};
 		IStrategoTerm out = null;
 		try {

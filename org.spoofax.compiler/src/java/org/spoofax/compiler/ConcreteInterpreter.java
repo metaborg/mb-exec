@@ -13,7 +13,7 @@ public class ConcreteInterpreter extends Interpreter {
 	public ConcreteInterpreter() throws IOException, InterpreterException, InvalidParseTableException
 	{
 		super(new WrappedATermFactory());
-		compiler = new Compiler(this.getFactory());
+		compiler = new Compiler(Compiler.spoofaxPath(), Compiler.strategoPath(), this.getFactory());
 	}
 	
     public void loadConcrete(String file, String[] path, boolean lib) throws IOException, InterpreterException {
