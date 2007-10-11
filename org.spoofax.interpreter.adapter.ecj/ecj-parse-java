@@ -21,22 +21,20 @@ function latest() {
 		tail -n 1
 }
 
+function compute-eclipse-plugins() {
+	local e=""
+	for x in ${eclipse_plugins} ; do
+		e="${e}:$(latest $x)"
+	done
+	echo $e
+}
+
 ep=${ECLIPSE_HOME:-${HOME}/apps/eclipse/plugins}
-
-eclipsejars=""
-for x in ${eclipse_plugins} ; do
-	eclipsejars="${eclipsejars}:$(latest $x)"
-done
-
-echo ${eclipsejars}
 bp=$(dirname $0)
+eclipsejars="$(compute-eclipse-plugins)"
+
 java -cp \
 	${bp}/bin:${bp}/../org.spoofax.aterm/bin:${bp}/../org.spoofax.interpreter.adapter.aterm/bin:${bp}/../org.spoofax.interpreter/bin:${bp}/../org.spoofax.aterm/lib/shared-objects-1.4.jar:${bp}/../org.spoofax.aterm/lib/jjtraveler-0.4.3.jar:${eclipsejars} \
-	org.spoofax.ecjadapter.Main \
-	$@ \
-	org.spoofax.interpreter.adapter.ecj.tests.RecursiveScriptTest \
-
-
-
-
+	org.spoofax.ecjadapter.ParseJava \
+	$@
 
