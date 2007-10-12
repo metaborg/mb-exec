@@ -1,0 +1,8 @@
+<ivy-module version="1.3">
+    <info organisation="spoofax" 
+          module="spoofax-interpreter"
+          revision="0.3.10"/>
+    <dependencies>
+      <dependency org="junit" name="junit" rev="3.8.2"/>
+    </dependencies>
+</ivy-module>
