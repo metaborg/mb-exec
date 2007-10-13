@@ -40,7 +40,7 @@
 	</target>
 
     <target name="jar" depends="compile">
-        <jar destfile="${build.dir}/spoofax-interpreter-${version}.jar" basedir="${build.dir}/classes" />
+        <jar destfile="${build.dir}/${jarname}-${version}.jar" basedir="${build.dir}/classes" />
     </target>
 
     <target name="clean" depends="clean-lib,clean-build" description="--> clean the project">
