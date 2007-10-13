@@ -9,5 +9,9 @@
           artpattern="[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
       <ibiblio name="ibiblio" />
     </chain>
+  <ssh name="shared" user="karltk" host="login.ii.uib.no">
+    <ivy pattern="/Home/stip/karltk/public_html/spoofax/ivy-repo/[organisation]/[module]/[revision]/ivy.xml"/>
+    <artifact pattern="/Home/stip/karltk/public_html/spoofax/ivy-repo/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+  </ssh> 
   </resolvers>
 </ivysettings>
