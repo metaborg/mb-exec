@@ -1,6 +1,6 @@
 <ivy-module version="1.3">
     <info organisation="spoofax" 
-          module="spoofax-asm-wrapper"
+          module="spoofax-asm-adapter"
           revision="0.1.0"/>
     <dependencies>
       <dependency org="junit" name="junit" rev="3.8.2"/>
