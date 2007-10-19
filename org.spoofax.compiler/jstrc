@@ -1,16 +1,21 @@
 #!/bin/bash
 
+
+
+base=$(dirname $0)
+
 interp_jar=../org.spoofax.interpreter/bin
 jsglr_jar=../org.spoofax.jsglr/bin
 jsglrlib_jar=../org.spoofax.interpreter.library.jsglr/bin
 atermadapter_jar=../org.spoofax.interpreter.adapter.aterm/bin
 aterm_jar=../org.spoofax.aterm/bin:../org.spoofax.aterm/lib/jjtraveler-0.4.3.jar:../org.spoofax.aterm/lib/shared-objects-1.4.jar
 
-echo ${STRATEGO_HOME}
 stratego_dir=${STRATEGO_HOME:-$HOME/.nix-profile}
-echo ${stratego_dir}
+spoofax_dir=${SPOOFAX_HOME:-${base}}
 
 java -Dstratego.dir=${stratego_dir} \
 	-cp bin:${interp_jar}:${jsglr_jar}:${atermadapter_jar}:${aterm_jar}:${jsglrlib_jar} \
+	-Dstratego.dir=${stratego_dir}	\
+	-Dspoofax.dir=${spoofax_dir} \
 	org.spoofax.compiler.Main \
 	$*

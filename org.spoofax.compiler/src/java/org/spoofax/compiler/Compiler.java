@@ -21,6 +21,8 @@ public class Compiler {
     }
     
 	Compiler(String strcBasepath, String spoofaxBase, WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
+		this.strategoBase = strcBasepath;
+		this.spoofaxBase = spoofaxBase;
 		init(factory);
     }
     
