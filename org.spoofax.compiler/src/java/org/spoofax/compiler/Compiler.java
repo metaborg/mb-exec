@@ -13,16 +13,14 @@ import org.spoofax.jsglr.InvalidParseTableException;
 
 public class Compiler {
 	private Interpreter compiler;
-	private String strategoBase;
-	private String spoofaxBase;
+	private String sharePath;
 	
     public Compiler() throws IOException, InterpreterException, InvalidParseTableException {
-    	this(strategoPath(), spoofaxPath(), new WrappedATermFactory());
+    	this(sharePath(), new WrappedATermFactory());
     }
     
-	Compiler(String strcBasepath, String spoofaxBase, WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
-		this.strategoBase = strcBasepath;
-		this.spoofaxBase = spoofaxBase;
+	Compiler(String sharePath, WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
+		this.sharePath = sharePath;
 		init(factory);
     }
     
@@ -30,10 +28,10 @@ public class Compiler {
     {
 		compiler = new Interpreter(factory);
 		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary(factory));
-		compiler.load(strategoBase + "/share/stratego-lib/libstratego-lib.ctree");
-		compiler.load(strategoBase + "/share/libstratego-sglr.ctree");
-		compiler.load(strategoBase + "/share/libstrc.ctree");
-		compiler.load(spoofaxBase + "/share/jstrc.ctree");
+		compiler.load(sharePath + "/libstratego-lib.ctree");
+		compiler.load(sharePath + "/libstratego-sglr.ctree");
+		compiler.load(sharePath + "/libstrc.ctree");
+		compiler.load(sharePath + "/jstrc.ctree");
 	}
 	
 	IStrategoTerm compile(String file, String[] path, boolean lib) throws InterpreterException
@@ -56,13 +54,9 @@ public class Compiler {
 		return compiler.current();
 	}
 
-	public static String strategoPath() {
-		String path = System.getProperty("stratego.dir");
+	public static String sharePath() {
+		String path = System.getProperty("share.dir");
+		System.out.println("share.dir = " + path);
 		return path == null ? System.getProperty("user.dir") + "/.nix-profile" : path;
-	}
-
-	public static String spoofaxPath() {
-		String path = System.getProperty("spoofax.dir");
-		return path == null ? "." : path; //System.getProperty("user.dir") + "/.nix-profile" : path;
 	}
 }
