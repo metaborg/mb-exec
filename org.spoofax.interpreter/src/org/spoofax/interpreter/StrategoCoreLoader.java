@@ -21,6 +21,7 @@ import org.spoofax.interpreter.stratego.ExtSDef;
 import org.spoofax.interpreter.stratego.Fail;
 import org.spoofax.interpreter.stratego.GuardedLChoice;
 import org.spoofax.interpreter.stratego.Id;
+import org.spoofax.interpreter.stratego.ImportTerm;
 import org.spoofax.interpreter.stratego.Let;
 import org.spoofax.interpreter.stratego.Match;
 import org.spoofax.interpreter.stratego.One;
@@ -38,6 +39,7 @@ import org.spoofax.interpreter.stratego.SDefT.SVar;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class StrategoCoreLoader {
@@ -100,12 +102,19 @@ public class StrategoCoreLoader {
             return makeOne(appl);
         } else if (ctor.equals(sign.getSome())) {
             return makeSome(appl);
+        } else if (ctor.equals(sign.getImportTerm())) {
+        	return makeImportTerm(appl);
         }
 
         throw new InterpreterException("Unknown op '" + ctor + "'");
     }
 
-    private Strategy makeId(IStrategoAppl appl) {
+    private Strategy makeImportTerm(IStrategoAppl appl) {
+    	IStrategoString str = Tools.stringAt(appl, 0);
+    	return new ImportTerm(str.getValue());
+	}
+
+	private Strategy makeId(IStrategoAppl appl) {
         return new Id();
     }
 

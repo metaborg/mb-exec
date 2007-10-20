@@ -62,6 +62,8 @@ public class StrategoSignature {
 
     private final IStrategoConstructor CTOR_Some;
 
+    private final IStrategoConstructor CTOR_ImportTerm;
+
     public StrategoSignature(ITermFactory factory) {
 
         CTOR_Op = factory.makeConstructor("Op", 2);
@@ -90,6 +92,8 @@ public class StrategoSignature {
         CTOR_Let = factory.makeConstructor("Let", 2);
         CTOR_Match = factory.makeConstructor("Match", 1);
         CTOR_PrimT = factory.makeConstructor("PrimT", 3);
+
+        CTOR_ImportTerm = factory.makeConstructor("ImportTerm", 1);
         
         CTOR_All = factory.makeConstructor("All", 1);
         CTOR_Some = factory.makeConstructor("Some", 1);
@@ -212,5 +216,9 @@ public class StrategoSignature {
     public IStrategoConstructor getSome() {
         return CTOR_Some;
     }
+
+	public Object getImportTerm() {
+		return CTOR_ImportTerm;
+	}
 
 }
