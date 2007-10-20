@@ -45,11 +45,14 @@ public class Main {
         }
         
         Compiler c = new Compiler();
-        
+        if(toCompile == null) {
+        	System.err.println("No files to compile");
+        	return;
+        }
         IStrategoTerm t = c.compile(toCompile, includes.toArray(new String[0]), false);
         InlinePrinter ip = new InlinePrinter();
         t.prettyPrint(ip);
         OutputStream os = outFile == null ? System.out : new FileOutputStream(outFile);
-        os.write(ip.toString().getBytes());
+        os.write(ip.getString().getBytes());
     }
 }

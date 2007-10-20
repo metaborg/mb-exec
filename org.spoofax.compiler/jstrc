@@ -17,5 +17,6 @@ java -Dstratego.dir=${stratego_dir} \
 	-cp bin:${interp_jar}:${jsglr_jar}:${atermadapter_jar}:${aterm_jar}:${jsglrlib_jar} \
 	-Dstratego.dir=${stratego_dir}	\
 	-Dspoofax.dir=${spoofax_dir} \
+	-Xmx1024m -Xss2m \
 	org.spoofax.compiler.Main \
 	$*
