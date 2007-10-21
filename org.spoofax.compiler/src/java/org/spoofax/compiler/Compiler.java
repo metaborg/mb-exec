@@ -19,7 +19,7 @@ public class Compiler {
     	this(sharePath(), new WrappedATermFactory());
     }
     
-	Compiler(String sharePath, WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
+	public Compiler(String sharePath, WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
 		this.sharePath = sharePath;
 		init(factory);
     }
@@ -34,7 +34,7 @@ public class Compiler {
 		compiler.load(sharePath + "/jstrc.ctree");
 	}
 	
-	IStrategoTerm compile(String file, String[] path, boolean lib) throws InterpreterException
+	public IStrategoTerm compile(String file, String[] path, boolean lib) throws InterpreterException
 	{
 		Collection<IStrategoTerm> terms = new LinkedList<IStrategoTerm>();
 		for (String p : path) {

@@ -5,5 +5,5 @@ Bundle-SymbolicName: org.spoofax.interpreter.library.eclipse
 Bundle-Version: 0.1.1
 Bundle-Vendor: Spoofax.org
 Require-Bundle: org.eclipse.ui,
- org.spoofax.interpreter
+ org.spoofax.interpreter.core
 Export-Package: org.spoofax.interpreter.library.eclipse

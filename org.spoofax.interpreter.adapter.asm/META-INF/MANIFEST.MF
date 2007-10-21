@@ -10,4 +10,4 @@ Export-Package: org.objectweb.asm,
  org.objectweb.asm.signature,
  org.objectweb.asm.tree,
  org.spoofax.interpreter.adapter.asm
-Require-Bundle: org.spoofax.interpreter
+Require-Bundle: org.spoofax.interpreter.core

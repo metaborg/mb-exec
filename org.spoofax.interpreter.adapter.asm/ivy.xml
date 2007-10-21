@@ -4,7 +4,7 @@
           revision="0.1.0"/>
     <dependencies>
       <dependency org="junit" name="junit" rev="3.8.2"/>
-      <dependency org="spoofax" name="spoofax-interpreter" rev="0.3.10" />
+      <dependency org="spoofax" name="spoofax-interpreter-core" rev="0.3.10" />
       <dependency org="asm" name="asm" rev="3.0"/>
       <dependency org="asm" name="asm-tree" rev="3.0"/>
     </dependencies>
