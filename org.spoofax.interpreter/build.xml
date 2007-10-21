@@ -1,0 +1,50 @@
+<project name="spoofax-aterm" default="jar" xmlns:ivy="antlib:org.apache.ivy.ant">
+	
+    <import file="../common.xml" />
+
+    <available property="ctrees" file="share/libstrc.ctree" />
+    <available property="tbl" file="share/Stratego.tbl" />
+
+    <target name="compile" depends="resolve" description="--> compile the project">
+        <mkdir dir="${build.dir}/classes" />
+        <javac srcdir="${src.dir}" destdir="${build.dir}/classes" classpathref="lib.path.id">
+            <exclude name="org/spoofax/interpreter/test/**" />
+        </javac>
+    </target>
+
+   <target name="foo">
+      <echo message="${ctrees}" />
+   </target>
+
+   <target name="gather-ctrees" description="--> gather .ctree files from Stratego installation">
+       <mkdir dir="share" />
+       <copy file="${stratego.dir}/share/libstrc.ctree" todir="share" />
+       <copy file="${stratego.dir}/share/libstratego-sglr.ctree" todir="share" />
+       <copy file="${stratego.dir}/share/stratego-lib/libstratego-lib.ctree" todir="share" />
+   </target>
+
+   <target name="gather-tbl" description="--> gather .ctree files from Stratego installation">
+       <mkdir dir="share" />
+       <copy file="${stratego.dir}/share/sdf/stratego-front/Stratego.tbl" todir="share" />
+   </target>
+
+   <target name="install" depends="jar,gather-ctrees,gather-tbl" description="--> install the project into prefix">
+        <mkdir dir="${prefix}/bin" />
+        <mkdir dir="${prefix}/share/java" />
+        <mkdir dir="${prefix}/share/spoofax-interpreter" />
+
+        <copy todir="${prefix}/share/spoofax-interpreter" >
+            <fileset dir="share" />
+        </copy>
+
+        <copy todir="${prefix}/share/java">
+            <fileset dir="${lib.dir}/" />
+        </copy>
+
+        <copy file="build/${jarname}-${version}.jar" todir="${prefix}/share/java" />
+
+        <copy file="jstri" todir="${prefix}/bin" />
+        <chmod perm="a+x" file="${prefix}/bin/jstri" />
+   </target>
+
+</project>
