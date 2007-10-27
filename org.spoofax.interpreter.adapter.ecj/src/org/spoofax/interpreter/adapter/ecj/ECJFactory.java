@@ -1285,7 +1285,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     private IExtendedModifier asExtendedModifier(IStrategoTerm term) {
-        return ((IWrappedExtendedModifier)term).getWrappee();
+        return ((IWrappedExtendedModifier)term).getModifierWrappee();
     }
 
     private boolean isExtendedModifierList(IStrategoTerm term) {

@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
+import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -35,6 +36,10 @@ public class WrappedNormalAnnotation extends WrappedAnnotation {
     @Override
     public NormalAnnotation getWrappee() {
         return wrappee;
+    }
+    
+    public IExtendedModifier getModifierWrappee() {
+    	return wrappee;
     }
 
 }

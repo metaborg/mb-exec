@@ -11,6 +11,6 @@ import org.eclipse.jdt.core.dom.IExtendedModifier;
 
 public interface IWrappedExtendedModifier {
 
-    public IExtendedModifier getWrappee();
+    public IExtendedModifier getModifierWrappee();
 
 }

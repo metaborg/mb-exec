@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
+import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -36,4 +37,7 @@ public class WrappedMarkerAnnotation extends WrappedAnnotation {
         return wrappee;
     }
 
+    public IExtendedModifier getModifierWrappee() {
+    	return wrappee;
+    }
 }
