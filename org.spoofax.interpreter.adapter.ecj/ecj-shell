@@ -4,34 +4,29 @@
 #
 #  Licensed under the GNU General Public License, v2
 
-eclipse_plugins="
-    org.eclipse.core.runtime
-    org.eclipse.equinox.common
-    org.eclipse.core.jobs
-    org.eclipse.core.contenttype
-    org.eclipse.equinox.registry
-    org.eclipse.equinox.preferences
-    org.eclipse.jdt.core
-    org.eclipse.osgi
-    org.eclipse.core.resources"
+jars="
+jdtcore-3.2.0.v_658.jar                                   org.eclipse.equinox.registry_3.2.1.R32x_v20060814.jar
+jjtraveler-0.4.3.jar                                      org.eclipse.jdt.core_3.2.3.v_686_R32x.jar
+junit-3.8.2.jar                                           org.eclipse.osgi_3.2.2.R32x_v20070118.jar
+org.eclipse.core.contenttype_3.2.0.v20060603.jar          shared-objects-1.4.jar
+org.eclipse.core.jobs_3.2.0.v20060603.jar                 spoofax-aterm-0.2.0.jar
+org.eclipse.core.resources_3.2.2.R32x_v20061218.jar       spoofax-aterm-adapter-0.1.1.jar
+org.eclipse.core.runtime_3.2.0.v20060603.jar              spoofax-interpreter-0.3.10.jar
+org.eclipse.equinox.common_3.2.0.v20060603.jar            spoofax-interpreter-core-0.3.10.jar
+org.eclipse.equinox.preferences_3.2.1.R32x_v20060717.jar
+spoofax-ecj-adapter-0.1.0.jar
+"
 
-function latest() {
-	ls ${ep}/${1}_*.jar | \
-		sort | \
-		tail -n 1
-}
+bp=$(dirname $0)
+jp=${bp}/../share/java
 
-ep=${ECLIPSE_HOME:-${HOME}/apps/eclipse/plugins}
-
-eclipsejars=""
-for x in ${eclipse_plugins} ; do
-	eclipsejars="${eclipsejars}:$(latest $x)"
+absjars=""
+for x in ${jars} ; do
+	absjars="${absjars}:${jp}/$x"
 done
 
-echo ${eclipsejars}
-bp=$(dirname $0)
-java -cp \
-	${bp}/bin:${bp}/../org.spoofax.aterm/bin:${bp}/../org.spoofax.interpreter.adapter.aterm/bin:${bp}/../org.spoofax.interpreter/bin:${bp}/../org.spoofax.aterm/lib/shared-objects-1.4.jar:${bp}/../org.spoofax.aterm/lib/jjtraveler-0.4.3.jar:${eclipsejars} \
+#echo ${absjars}
+java -cp ${absjars} \
 	org.spoofax.ecjadapter.Main \
 	$@ \
 	org.spoofax.interpreter.adapter.ecj.tests.RecursiveScriptTest \
