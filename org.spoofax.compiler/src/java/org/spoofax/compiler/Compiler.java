@@ -57,6 +57,6 @@ public class Compiler {
 	public static String sharePath() {
 		String path = System.getProperty("share.dir");
 		System.out.println("share.dir = " + path);
-		return path == null ? System.getProperty("user.dir") + "/.nix-profile" : path;
+		return path == null ? System.getProperty("user.home") + "/.nix-profile" : path;
 	}
 }

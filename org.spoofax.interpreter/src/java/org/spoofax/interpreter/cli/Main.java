@@ -44,19 +44,11 @@ public class Main {
             
         }
         
-//        Compiler c = new Compiler();
-//        if(toCompile == null) {
-//        	System.err.println("No files to compile");
-//        	return;
-//        }
-//        IStrategoTerm t = c.compile(toCompile, includes.toArray(new String[0]), false);
-//        InlinePrinter ip = new InlinePrinter();
-//        t.prettyPrint(ip);
-//        OutputStream os = outFile == null ? System.out : new FileOutputStream(outFile);
-//        os.write(ip.getString().getBytes());
-        
-//		String[] strpath = { path, "data/trunk/stratego-libraries/lib/spec" };
-        includes.add(System.getProperty("user.dir") + "/share/");
+        if(toCompile == null) {
+        	System.err.println("No files to compile");
+        	return;
+        }
+        includes.add(System.getProperty("user.home") + ".nix-profile/share/");
         
         intp.load(System.getProperty("share.dir") + "/libstratego-lib.ctree");
 		intp.loadConcrete(toCompile, includes.toArray(new String[0]), false);
