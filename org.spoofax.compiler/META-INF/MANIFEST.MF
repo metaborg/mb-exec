@@ -10,3 +10,4 @@ Require-Bundle: org.spoofax.interpreter.core,
  org.spoofax.interpreter.adapter.aterm,
  org.junit
 Eclipse-LazyStart: true
+Export-Package: org.spoofax.compiler
