@@ -54,5 +54,9 @@ public class Main {
 		intp.loadConcrete(toCompile, includes.toArray(new String[0]), false);
 		intp.setCurrent(intp.getFactory().makeList());
 		intp.invoke("main_0_0");
+		
+		if(outFile != null) {
+			
+		}
 	}
 }
