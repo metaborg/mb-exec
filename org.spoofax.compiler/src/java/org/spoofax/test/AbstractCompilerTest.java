@@ -8,12 +8,12 @@ import junit.framework.TestCase;
 import org.spoofax.interpreter.InterpreterException;
 
 public abstract class AbstractCompilerTest extends TestCase {
-	private String path;
+	//private String path;
 //	private ConcreteInterpreter intp;
 	
 	public void setUp(String string) throws Exception {
 		super.setUp();
-		path = string;
+		//path = string;
 //		intp = new ConcreteInterpreter();
 	}
 	
