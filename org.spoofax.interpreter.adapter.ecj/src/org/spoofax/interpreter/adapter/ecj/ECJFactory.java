@@ -383,6 +383,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... kids) {
+    	System.out.println("!" + ctr.getName() + "/" + kids.length);
         IStrategoAppl t = constructASTNode(ctr, kids);
         if(t == null) {
             if(DebugUtil.isDebugging()) {
@@ -1285,7 +1286,8 @@ public class ECJFactory implements ITermFactory {
     }
 
     private IExtendedModifier asExtendedModifier(IStrategoTerm term) {
-        return ((IWrappedExtendedModifier)term).getModifierWrappee();
+    	final IExtendedModifier x = ((IWrappedExtendedModifier)term).getModifierWrappee();
+    	return ((ASTNode)x).getParent() == null ? x : (IExtendedModifier)ASTNode.copySubtree(ast, (ASTNode)x);
     }
 
     private boolean isExtendedModifierList(IStrategoTerm term) {
@@ -2948,11 +2950,23 @@ public class ECJFactory implements ITermFactory {
     }
 
     public IStrategoTerm replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids, IStrategoTerm old) {
-        IStrategoTerm r = makeAppl(constructor, kids);
+    	System.out.println("R : " + constructor.getName() + "/" + kids.length);
+    	for(IStrategoTerm t : kids) {
+    		if(t instanceof WrappedASTNode) {
+    			if(((WrappedASTNode)t).getWrappee() != null) {
+    				System.out.println(t + " => " + ((WrappedASTNode)t).getWrappee().getParent());
+    			}
+    		}
+    	}
+        final IStrategoTerm r = makeAppl(constructor, kids);
+        // FIXME None should be in a different hierarchy than other WrappedASTNodes
         if(r instanceof WrappedASTNode && old instanceof WrappedASTNode) {
-            WrappedASTNode n = (WrappedASTNode)r;
-            WrappedASTNode o = (WrappedASTNode)old;
-            n.getWrappee().setSourceRange(o.getWrappee().getStartPosition(), o.getWrappee().getLength());
+            final WrappedASTNode n = (WrappedASTNode)r;
+            final WrappedASTNode o = (WrappedASTNode)old;
+            final ASTNode nn = n.getWrappee();
+            final ASTNode on = o.getWrappee();
+            if(nn != null && on != null)
+            	nn.setSourceRange(on.getStartPosition(), on.getLength());
         }
         return r;
     }
