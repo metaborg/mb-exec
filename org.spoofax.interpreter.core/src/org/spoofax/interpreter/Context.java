@@ -15,6 +15,7 @@ import java.util.Map;
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.IOperatorRegistry;
+import org.spoofax.interpreter.library.java.JFFLibrary;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
@@ -50,6 +51,7 @@ public class Context implements IContext {
         operatorRegistries = new HashMap<String, IOperatorRegistry>();
         
         operatorRegistries.put(SSLLibrary.REGISTRY_NAME, new SSLLibrary());
+        operatorRegistries.put(JFFLibrary.REGISTRY_NAME, new JFFLibrary(factory));
     }
 
     public IStrategoTerm current() {
