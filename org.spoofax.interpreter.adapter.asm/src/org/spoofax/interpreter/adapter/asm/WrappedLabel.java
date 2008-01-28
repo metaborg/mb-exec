@@ -22,4 +22,7 @@ public class WrappedLabel extends WrappedASMNode {
 		throw new ArrayIndexOutOfBoundsException();
 	}
 
+	public Label getWrappee() {
+		return wrappee;
+	}
 }

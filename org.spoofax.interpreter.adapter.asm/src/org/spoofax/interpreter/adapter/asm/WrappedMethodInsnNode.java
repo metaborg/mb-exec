@@ -4,8 +4,6 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-import com.sun.jmx.remote.internal.ArrayNotificationBuffer;
-
 public class WrappedMethodInsnNode extends WrappedASMNode {
 	
 	private final static IStrategoConstructor CTOR = new ASMConstructor("MethodInsnNode", 5); 

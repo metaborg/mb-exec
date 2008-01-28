@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
@@ -25,9 +24,6 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 import org.spoofax.NotImplementedException;
-import org.spoofax.interpreter.terms.BasicStrategoInt;
-import org.spoofax.interpreter.terms.BasicStrategoList;
-import org.spoofax.interpreter.terms.BasicStrategoString;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
@@ -126,7 +122,7 @@ public class ASMFactory implements ITermFactory {
 		return new WrappedInt(access);
 	}
 
-	public static IStrategoTerm wrap(List list) {
+	public static IStrategoTerm wrap(List<Object> list) {
 		if(list == null)
 			return None.INSTANCE;
 		else 
@@ -258,7 +254,7 @@ public class ASMFactory implements ITermFactory {
 			return new WrappedInsnList(instructions);
 	}
 
-	public static IStrategoTerm wrap(List[] node) {
+	public static IStrategoTerm wrap(List<Object>[] node) {
 		if(node == null)
 			return None.INSTANCE;
 		else

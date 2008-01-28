@@ -4,8 +4,6 @@ import org.objectweb.asm.tree.LocalVariableNode;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-import com.sun.jmx.remote.internal.ArrayNotificationBuffer;
-
 public class WrappedLocalVariable extends WrappedASMNode {
 
 	private LocalVariableNode wrappee;
