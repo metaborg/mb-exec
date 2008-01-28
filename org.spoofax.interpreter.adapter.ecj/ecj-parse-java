@@ -5,15 +5,23 @@
 #  Licensed under the GNU General Public License, v2
 
 jars="
-jdtcore-3.2.0.v_658.jar                                   org.eclipse.equinox.registry_3.2.1.R32x_v20060814.jar
-jjtraveler-0.4.3.jar                                      org.eclipse.jdt.core_3.2.3.v_686_R32x.jar
-junit-3.8.2.jar                                           org.eclipse.osgi_3.2.2.R32x_v20070118.jar
-org.eclipse.core.contenttype_3.2.0.v20060603.jar          shared-objects-1.4.jar
-org.eclipse.core.jobs_3.2.0.v20060603.jar                 spoofax-aterm-0.2.0.jar
-org.eclipse.core.resources_3.2.2.R32x_v20061218.jar       spoofax-aterm-adapter-0.1.1.jar
-org.eclipse.core.runtime_3.2.0.v20060603.jar              spoofax-interpreter-0.3.10.jar
-org.eclipse.equinox.common_3.2.0.v20060603.jar            spoofax-interpreter-core-0.3.10.jar
-org.eclipse.equinox.preferences_3.2.1.R32x_v20060717.jar
+jdtcore-3.2.0.v_658.jar
+jjtraveler-0.4.3.jar
+junit-3.8.2.jar
+org.eclipse.core.contenttype_3.2.100.v20070319.jar
+org.eclipse.core.jobs_3.3.1.R33x_v20070709.jar
+org.eclipse.core.resources_3.3.0.v20070604.jar
+org.eclipse.core.runtime_3.3.100.v20070530.jar
+org.eclipse.equinox.common_3.3.0.v20070426.jar
+org.eclipse.equinox.preferences_3.2.100.v20070522.jar
+org.eclipse.equinox.registry_3.3.1.R33x_v20070802.jar
+org.eclipse.jdt.core_3.3.1.v_780_R33x.jar
+org.eclipse.osgi_3.3.1.R33x_v20070828.jar
+shared-objects-1.4.jar
+spoofax-aterm-0.2.0.jar
+spoofax-aterm-adapter-0.1.1.jar
+spoofax-interpreter-0.3.10.jar
+spoofax-interpreter-core-0.3.10.jar
 spoofax-ecj-adapter-0.1.0.jar
 "
 
