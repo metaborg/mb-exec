@@ -1,0 +1,8 @@
+module reflection-test
+imports
+  libstratego-lib
+  libstratego-java-list
+
+strategies
+
+  main = 

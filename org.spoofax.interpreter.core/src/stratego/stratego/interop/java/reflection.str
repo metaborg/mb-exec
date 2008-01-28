@@ -1,0 +1,20 @@
+/**
+ * This module contains strategies which provide rudimentary reflection capabilities
+ * when Stratego is hosted on the Java Virtual Machine. This allows Stratego code to
+ * create Java objects and invoke methods on these objects.
+ *
+ * @author Karl Trygve Kalleberg
+ *
+ */
+module stratego/interop/java/reflection
+  
+strategies
+
+  java-find-class = ?name ; prim("JFF_find_class", name)
+
+  java-new-instance = ?(ctor, args) ; prim("JFF_new_instance", ctor, args)
+
+  java-get-constructor = ?(obj, argtypes) ; prim("JFF_get_constructor", obj, argtypes)
+
+  java-invoke-method = ?(meth, obj, args) ; prim("JFF_invoke_method", meth, obj, args)
+  
