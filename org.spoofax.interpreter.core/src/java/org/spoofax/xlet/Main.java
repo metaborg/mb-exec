@@ -9,7 +9,7 @@ package org.spoofax.xlet;
 
 import java.io.IOException;
 
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterException;
 
 /**
  * @author Karl Trygve Kalleberg <karltk@ii.uib.no>

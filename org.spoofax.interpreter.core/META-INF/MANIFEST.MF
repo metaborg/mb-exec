@@ -1,14 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Stratego Interpreter Core
-Bundle-SymbolicName: org.spoofax.interpreter.core
+Bundle-SymbolicName: org.spoofax.interpreter.core;singleton=true
 Bundle-Version: 0.3.11
-Bundle-Localization: plugin
 Require-Bundle: org.junit
-Eclipse-LazyStart: true
+Eclipse-LazyStart: false
 Export-Package: org.spoofax,
- org.spoofax.interpreter,
- org.spoofax.interpreter.stratego,
+ org.spoofax.interpreter.core,
  org.spoofax.interpreter.library,
+ org.spoofax.interpreter.stratego,
  org.spoofax.interpreter.terms
 Bundle-Vendor: Spoofax.org

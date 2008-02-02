@@ -9,8 +9,8 @@ package org.spoofax.xlet;
 
 import java.io.IOException;
 
-import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.Interpreter;
+import org.spoofax.interpreter.core.Interpreter;
+import org.spoofax.interpreter.core.InterpreterException;
 
 public class Instance {
     

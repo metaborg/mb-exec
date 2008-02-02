@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test;
 
 import java.io.IOException;
 
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterException;
 
 public class QuickTest extends AbstractLanguageTest {
 

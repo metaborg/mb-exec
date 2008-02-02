@@ -9,8 +9,8 @@ package org.spoofax.interpreter.test;
 
 import java.io.IOException;
 
-import org.spoofax.interpreter.Interpreter;
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.Interpreter;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SpeedTest {

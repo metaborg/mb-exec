@@ -3,7 +3,7 @@ package org.spoofax.interpreter.library.java;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractStrategoOperatorRegistry;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
@@ -35,6 +35,7 @@ public class JFFLibrary extends AbstractStrategoOperatorRegistry {
 		add(new JFF_new_instance());
 		add(new JFF_get_constructor());
 		add(new JFF_invoke_method());
+		add(new JFF_get_method());
 	}
 	
 	public void init() {

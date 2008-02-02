@@ -1,8 +1,12 @@
 module reflection-test
 imports
   libstratego-lib
-  libstratego-java-list
+  stratego/interop/java/reflection
 
 strategies
 
   main = 
+      <java-find-class> "java.lang.Integer" => int
+    ; <java-new-instance> (int, [42]) => fortytwo
+    ; <java-get-method> (fortytwo, "toString", []) => toString
+    ; <java-invoke-method> (fourtytwo, toString, [])

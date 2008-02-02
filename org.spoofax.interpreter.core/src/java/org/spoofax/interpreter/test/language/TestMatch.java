@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test.language;
 
 import java.io.IOException;
 
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.test.AbstractLanguageTest;
 
 public class TestMatch extends AbstractLanguageTest {

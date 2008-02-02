@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.test.AbstractInterpreterTest;
 
 public class LibraryTest extends AbstractInterpreterTest {

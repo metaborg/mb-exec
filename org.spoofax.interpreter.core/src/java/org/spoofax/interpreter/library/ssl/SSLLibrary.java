@@ -15,8 +15,8 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.IContext;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.AbstractStrategoOperatorRegistry;
 import org.spoofax.interpreter.library.ssl.SSL_hashtable_create.Hashtable;
@@ -158,7 +158,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
     /**
      * Resets the entire state of the SSL. <br>
      * Should be called once per interpreter.
-     * todo: this state should be scoped inside {@link org.spoofax.interpreter.Context}
+     * todo: this state should be scoped inside {@link org.spoofax.interpreter.core.Context}
      */
     public void init() {
 

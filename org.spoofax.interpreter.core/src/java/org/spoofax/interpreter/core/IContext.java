@@ -5,7 +5,7 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter;
+package org.spoofax.interpreter.core;
 
 import java.util.Collection;
 

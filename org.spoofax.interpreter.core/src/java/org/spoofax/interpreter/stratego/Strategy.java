@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Stack;
 
 import org.spoofax.DebugUtil;
-import org.spoofax.interpreter.Context;
-import org.spoofax.interpreter.IConstruct;
-import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.Context;
+import org.spoofax.interpreter.core.IConstruct;
+import org.spoofax.interpreter.core.IContext;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.SDefT.ArgType;
 import org.spoofax.interpreter.stratego.SDefT.ConstType;
 import org.spoofax.interpreter.stratego.SDefT.FunType;

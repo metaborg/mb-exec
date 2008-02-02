@@ -1,6 +1,6 @@
 package org.spoofax;
 
-import org.spoofax.interpreter.Context;
+import org.spoofax.interpreter.core.Context;
 import org.spoofax.interpreter.stratego.CallT;
 import org.spoofax.interpreter.stratego.Let;
 import org.spoofax.interpreter.stratego.Scope;

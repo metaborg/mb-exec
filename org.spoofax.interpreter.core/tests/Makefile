@@ -16,5 +16,8 @@ data/lang/%.ctree : src/lang/%.str
 data/library/%.ctree : src/library/%.str
 	strc -i $< -F | baffle -wt -o $@
 
+data/java-library/%.ctree : src/java-library/%.str
+	strc -i $< -F | baffle -wt -o $@
+
 data/library/system-io-file-test.str:
 	touch data/library/system-io-file-test.str

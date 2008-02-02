@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.VarScope;
+import org.spoofax.interpreter.core.VarScope;
 
 public class ExtSDef extends SDefT {
 

@@ -9,7 +9,7 @@ package org.spoofax.interpreter.test.language;
 
 import java.io.IOException;
 
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.test.AbstractLanguageTest;

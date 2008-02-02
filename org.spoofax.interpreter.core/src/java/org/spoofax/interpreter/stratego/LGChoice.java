@@ -7,9 +7,9 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.IConstruct;
-import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.IConstruct;
+import org.spoofax.interpreter.core.IContext;
+import org.spoofax.interpreter.core.InterpreterException;
 
 public class LGChoice implements IConstruct {
 

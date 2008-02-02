@@ -9,10 +9,10 @@ package org.spoofax.interpreter.stratego;
 
 import java.util.List;
 
-import org.spoofax.interpreter.IConstruct;
-import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.VarScope;
+import org.spoofax.interpreter.core.IConstruct;
+import org.spoofax.interpreter.core.IContext;
+import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.VarScope;
 
 public class Scope extends Strategy {
 

@@ -12,10 +12,10 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
-import org.spoofax.interpreter.IConstruct;
-import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.Tools;
+import org.spoofax.interpreter.core.IConstruct;
+import org.spoofax.interpreter.core.IContext;
+import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;

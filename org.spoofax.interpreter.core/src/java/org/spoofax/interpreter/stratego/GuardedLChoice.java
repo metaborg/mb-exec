@@ -8,11 +8,11 @@
 package org.spoofax.interpreter.stratego;
 
 import org.spoofax.DebugUtil;
-import org.spoofax.interpreter.BindingInfo;
-import org.spoofax.interpreter.IConstruct;
-import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.Pair;
+import org.spoofax.interpreter.core.BindingInfo;
+import org.spoofax.interpreter.core.IConstruct;
+import org.spoofax.interpreter.core.IContext;
+import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.Pair;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class GuardedLChoice extends Strategy {
