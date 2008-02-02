@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.library.ecj;
 
-import org.spoofax.interpreter.IContext;
+import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 
 public abstract class ECJPrimitive extends AbstractPrimitive {

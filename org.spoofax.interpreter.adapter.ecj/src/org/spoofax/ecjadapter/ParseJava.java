@@ -16,8 +16,8 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.spoofax.DebugUtil;
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.InlinePrinter;
 

@@ -995,10 +995,13 @@ public class ECJFactory implements ITermFactory {
             return wrap(ast.newQualifiedType(asType(kids[0]), asSimpleName(kids[1])));
         }
         case RETURN_STATEMENT: {
-            if(!isExpression(kids[0]))
+            if(!(isExpression(kids[0]) || isNone(kids[0])))
                 return null;
             ReturnStatement x = ast.newReturnStatement();
-            x.setExpression(asExpression(kids[0]));
+            if(isNone(kids[0]))
+            	x.setExpression(null);
+            else 
+            	x.setExpression(asExpression(kids[0]));
             return wrap(x);
         }
         case SIMPLE_NAME: {

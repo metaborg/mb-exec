@@ -7,12 +7,12 @@
  */
 package org.spoofax.interpreter.library.ecj;
 
-import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapter.ecj.WrappedASTNode;
 import org.spoofax.interpreter.adapter.ecj.WrappedModifierKeyword;
 import org.spoofax.interpreter.adapter.ecj.WrappedPostfixExpressionOperator;
 import org.spoofax.interpreter.adapter.ecj.WrappedPrefixExpressionOperator;
+import org.spoofax.interpreter.core.IContext;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;

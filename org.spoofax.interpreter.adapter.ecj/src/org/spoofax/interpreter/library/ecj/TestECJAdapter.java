@@ -18,9 +18,9 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.spoofax.interpreter.Interpreter;
-import org.spoofax.interpreter.InterpreterException;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
+import org.spoofax.interpreter.core.Interpreter;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class TestECJAdapter extends TestCase {
