@@ -367,7 +367,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     public boolean hasConstructor(String s, int i) {
-        throw new NotImplementedException();
+    	return ctorNameToIndexMap.containsKey(s);
     }
 
     private List<ASTNode> getAnnotations(IStrategoTerm term) {
@@ -383,7 +383,6 @@ public class ECJFactory implements ITermFactory {
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... kids) {
-    	System.out.println("!" + ctr.getName() + "/" + kids.length);
         IStrategoAppl t = constructASTNode(ctr, kids);
         if(t == null) {
             if(DebugUtil.isDebugging()) {
@@ -2953,14 +2952,6 @@ public class ECJFactory implements ITermFactory {
     }
 
     public IStrategoTerm replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids, IStrategoTerm old) {
-    	System.out.println("R : " + constructor.getName() + "/" + kids.length);
-    	for(IStrategoTerm t : kids) {
-    		if(t instanceof WrappedASTNode) {
-    			if(((WrappedASTNode)t).getWrappee() != null) {
-    				System.out.println(t + " => " + ((WrappedASTNode)t).getWrappee().getParent());
-    			}
-    		}
-    	}
         final IStrategoTerm r = makeAppl(constructor, kids);
         // FIXME None should be in a different hierarchy than other WrappedASTNodes
         if(r instanceof WrappedASTNode && old instanceof WrappedASTNode) {
