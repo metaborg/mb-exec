@@ -367,6 +367,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     public boolean hasConstructor(String s, int i) {
+    	// FIXME also check generic factory
     	return ctorNameToIndexMap.containsKey(s);
     }
 

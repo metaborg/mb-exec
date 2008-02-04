@@ -9,9 +9,9 @@ package org.spoofax.interpreter.library.eclipse;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.spoofax.interpreter.IContext;
-import org.spoofax.interpreter.InterpreterException;
-import org.spoofax.interpreter.Tools;
+import org.spoofax.interpreter.core.IContext;
+import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -43,4 +43,15 @@ public class EFI_ui_show_popup extends AbstractPrimitive {
         return true;
     }
 
+    void test() {
+    	
+    	/*
+    	 * ObjWrap(id)
+    	 * prims
+    	eclipse-find-class = Class.forName
+    	eclipse-new-instance = Constructor.newInstance()
+    	eclipse-get-constructor = Class.getConstructor(typesig)
+    	eclipse-invoke-method = Method.invoke()
+    	*/
+    }
 }
