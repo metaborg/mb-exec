@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
@@ -2925,6 +2926,20 @@ public class ECJFactory implements ITermFactory {
         for(int i = 0, sz = bindings.length; i < sz; i++)
             terms[i] = ECJFactory.wrap(bindings[i]);
         return new WrappedGenericList(terms);
+    }
+
+    public static IStrategoTerm wrap(ITypeParameter[] parameters) {
+        final IStrategoTerm[] terms = new IStrategoTerm[parameters.length];
+        for(int i = 0, sz = parameters.length; i < sz; i++)
+            terms[i] = ECJFactory.wrap(parameters[i]);
+        return new WrappedGenericList(terms);
+    }
+
+    public static IStrategoTerm wrap(ITypeParameter binding) {
+        if(binding == null)
+            return None.INSTANCE;
+        else
+            return new WrappedITypeParameter(binding);
     }
 
     public static IStrategoTerm wrap(IProject proj) {

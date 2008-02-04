@@ -18,6 +18,7 @@ signature
   Project : Term -> Project
   Binding : Int * Int * String -> Binding
   TypeBinding : List(String) * String * List(TypeBinding) * TypeBinding * List(TypeBinding) * Int * ITypeBinding -> TypeBinding
+  TypeParameter : List(String) -> TypeParameter
   DottedName : String -> DottedName
   
 strategies

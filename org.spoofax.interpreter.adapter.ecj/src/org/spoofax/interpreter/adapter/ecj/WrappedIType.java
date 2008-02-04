@@ -15,7 +15,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedIType extends WrappedECJNode {
 
     private final IType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("IType", 5);
+    private final static IStrategoConstructor CTOR = new ASTCtor("IType", 6);
 
     WrappedIType(IType wrappee) {
         super(CTOR);
@@ -45,6 +45,13 @@ public class WrappedIType extends WrappedECJNode {
                 e.printStackTrace();
                 return None.INSTANCE;
             }
+        case 5:
+        	try {
+        		return ECJFactory.wrap(wrappee.getTypeParameters());
+        	} catch(JavaModelException e) {
+        		e.printStackTrace();
+        		return None.INSTANCE;
+        	}
         }
         throw new ArrayIndexOutOfBoundsException();
     }
