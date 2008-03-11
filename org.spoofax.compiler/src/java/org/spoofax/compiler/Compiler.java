@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.spoofax.interpreter.Interpreter;
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.Interpreter;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.library.jsglr.JSGLRLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;

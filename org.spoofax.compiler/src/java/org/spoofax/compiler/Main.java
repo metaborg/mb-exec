@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.InlinePrinter;
 import org.spoofax.jsglr.InvalidParseTableException;

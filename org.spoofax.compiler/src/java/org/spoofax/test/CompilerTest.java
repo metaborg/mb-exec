@@ -2,7 +2,7 @@ package org.spoofax.test;
 
 import java.io.IOException;
 
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterException;
 
 public class CompilerTest extends AbstractCompilerTest {
     @Override

@@ -5,7 +5,7 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 //import org.spoofax.compiler.ConcreteInterpreter;
-import org.spoofax.interpreter.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterException;
 
 public abstract class AbstractCompilerTest extends TestCase {
 	//private String path;
