@@ -1,7 +1,7 @@
 /*
  * Created on Jul 21, 2004
  *
- * Copyright (c) 2004, Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * Copyright (c) 2004, Karl Trygve Kalleberg <karltk near strategoxt.org>
  * 
  * Licensed under the GNU General Public License, v2
  */
@@ -12,7 +12,7 @@ import java.io.IOException;
 import org.spoofax.interpreter.core.InterpreterException;
 
 /**
- * @author Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * @author Karl Trygve Kalleberg <karltk near strategoxt.org>
  *
  * Part of spoofax
  */

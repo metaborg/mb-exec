@@ -9,7 +9,7 @@ import org.spoofax.interpreter.stratego.Strategy;
 /*
  * Created on 28.mar.2006
  *
- * Copyright (c) 2006-2007, Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * Copyright (c) 2006-2007, Karl Trygve Kalleberg <karltk near strategoxt.org>
  *
  * Licensed under the GNU General Public License, v2
  */
