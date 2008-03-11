@@ -14,7 +14,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedTypeDeclaration extends WrappedAbstractTypeDeclaration {
 
     private final TypeDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("TypeDeclaration", 7); 
+    private final static IStrategoConstructor CTOR = new ASTCtor("TypeDeclaration", 8); 
     
     protected WrappedTypeDeclaration(TypeDeclaration wrappee) {
         super(CTOR);
@@ -38,6 +38,8 @@ public class WrappedTypeDeclaration extends WrappedAbstractTypeDeclaration {
             return ECJFactory.wrap(wrappee.superInterfaceTypes());
         case 6:
             return ECJFactory.wrap(wrappee.bodyDeclarations());
+        case 7:
+        	return ECJFactory.wrap(wrappee.isInterface() ? 1 : 0);
         }
         throw new ArrayIndexOutOfBoundsException();
     }

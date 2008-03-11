@@ -121,7 +121,7 @@ strategies
   ecj-is-TypeDeclaration = 
       ?AnnotationTypeDeclaration(_, _, _, _)
     + ?EnumDeclaration(_, _, _, _, _, _)
-    + ?TypeDeclaration(_, _, _, _, _, _ ,_)
+    + ?TypeDeclaration(_, _, _, _, _, _ ,_,_)
       
   ecj-is-Type = 
       ?ArrayType(_, _, _)
@@ -142,7 +142,7 @@ strategies
     + ?ArrayAccess(_, _)
     + ?ArrayCreation(_, _, _)
     + ?ArrayInitializer(_)
-    + ?Assignment(_, _)
+    + ?Assignment(_, _, _)
     + ?BooleanLiteral(_)
     + ?CastExpression(_, _)
     + ?CharacterLiteral(_)
@@ -225,7 +225,7 @@ strategies
       ?QualifiedName(SimpleName(n), <ecj-as-dotted-name>) => rest
     ; <concat-strings> [n, ".", rest]
   
-  ecj-name-of = ?TypeDeclaration(_, _, <id>, _, _, _, _)   
+  ecj-name-of = ?TypeDeclaration(_, _, <id>, _, _, _, _, _)   
 
   ecj-name-of = ?SimpleType(<id>)
 
@@ -399,4 +399,14 @@ strategies
    * @type ASTNode -> String
    */
   ecj-string-name-of = ecj-name-of ; ?SimpleType(<id>)
+  
+overlays
+
+  PublicMod    = Modifier(ModifierKeyword(1))
+  PrivateMod   = Modifier(ModifierKeyword(2))
+  ProtectedMod = Modifier(ModifierKeyword(4))
+  StaticMod    = Modifier(ModifierKeyword(8))
+  FinalMod     = Modifier(ModifierKeyword(16))
+  TransientMod = Modifier(ModifierKeyword(128))
+  
   

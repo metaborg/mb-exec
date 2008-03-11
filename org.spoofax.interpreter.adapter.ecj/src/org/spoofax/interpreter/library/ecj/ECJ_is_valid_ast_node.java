@@ -8,6 +8,7 @@
 package org.spoofax.interpreter.library.ecj;
 
 import org.spoofax.interpreter.adapter.ecj.WrappedASTNode;
+import org.spoofax.interpreter.adapter.ecj.WrappedAssignmentOperator;
 import org.spoofax.interpreter.adapter.ecj.WrappedModifierKeyword;
 import org.spoofax.interpreter.adapter.ecj.WrappedPostfixExpressionOperator;
 import org.spoofax.interpreter.adapter.ecj.WrappedPrefixExpressionOperator;
@@ -31,7 +32,8 @@ public class ECJ_is_valid_ast_node extends AbstractPrimitive {
         return t instanceof WrappedASTNode
             || t instanceof WrappedModifierKeyword
             || t instanceof WrappedPostfixExpressionOperator
-            || t instanceof WrappedPrefixExpressionOperator;
+            || t instanceof WrappedPrefixExpressionOperator
+            || t instanceof WrappedAssignmentOperator;
     }
 
 }

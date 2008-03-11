@@ -14,7 +14,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedAssignment extends WrappedExpression {
 
     private final Assignment wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("Assignment", 2);
+    private final static IStrategoConstructor CTOR = new ASTCtor("Assignment", 3);
     
     WrappedAssignment(Assignment wrappee) {
         super(CTOR);
@@ -25,8 +25,10 @@ public class WrappedAssignment extends WrappedExpression {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return ECJFactory.wrapExpression(wrappee.getLeftHandSide());
+        	return ECJFactory.wrap(wrappee.getOperator());
         case 1:
+            return ECJFactory.wrapExpression(wrappee.getLeftHandSide());
+        case 2:
             return ECJFactory.wrapExpression(wrappee.getRightHandSide());
         }
 

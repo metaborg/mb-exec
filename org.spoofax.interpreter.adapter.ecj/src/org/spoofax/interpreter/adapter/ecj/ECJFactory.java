@@ -232,6 +232,7 @@ public class ECJFactory implements ITermFactory {
     private static final int BYTE_TYPE = 92;
     private static final int IMPORT_REFERENCE = 93;
     private static final int ANONYMOUS_CLASS_DECLARATION = 94;
+    private static final int ASSIGNMENT_OPERATOR = 95;
         
     private Map<String,Integer> ctorNameToIndexMap;
     private AST ast;
@@ -342,6 +343,7 @@ public class ECJFactory implements ITermFactory {
         ctorNameToIndexMap.put("None", NONE);
         ctorNameToIndexMap.put("ImportReference", IMPORT_REFERENCE);
         ctorNameToIndexMap.put("AnonymousClassDeclaration", ANONYMOUS_CLASS_DECLARATION);
+        ctorNameToIndexMap.put("AssignmentOperator", ASSIGNMENT_OPERATOR);
     }
     
     public IStrategoTerm parseFromFile(String path) throws IOException {
@@ -490,20 +492,31 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case ASSERT_STATEMENT: {
-            if(!isExpression(kids[0]) || !isExpression(kids[1]))
+            if(!isExpression(kids[0]) || !(isExpression(kids[1]) || isNone(kids[1])))
                 return null;
             AssertStatement x = ast.newAssertStatement();
             x.setExpression(asExpression(kids[0]));
-            x.setMessage(asExpression(kids[1]));
+            if(isNone(kids[1]))
+            	x.setMessage(null);
+            else 
+            	x.setMessage(asExpression(kids[1]));
             return wrap(x);
         }
         case ASSIGNMENT: {
-            if(!isExpression(kids[0]) || !isExpression(kids[1]))
+            if(!isAssignmentOperator(kids[0])
+            		|| !isExpression(kids[1]) 
+            		|| !isExpression(kids[2]))
                 return null;
             Assignment x = ast.newAssignment();
-            x.setLeftHandSide(asExpression(kids[0]));
-            x.setRightHandSide(asExpression(kids[1]));
+            x.setOperator(asAssignmentOperator(kids[0]));
+            x.setLeftHandSide(asExpression(kids[1]));
+            x.setRightHandSide(asExpression(kids[2]));
             return wrap(x);
+        }
+        case ASSIGNMENT_OPERATOR: {
+            if(!isString(kids[0]))
+                return null;
+            return wrap(Assignment.Operator.toOperator(asString(kids[0])));
         }
         case BLOCK: {
             if(!isStatementList(kids[0]))
@@ -890,11 +903,14 @@ public class ECJFactory implements ITermFactory {
         }
         case METHOD_REF_PARAMETER: {
             if(!isType(kids[0])
-                    || !isSimpleName(kids[1]))
+                    || !(isSimpleName(kids[1]) || isNone(kids[1])))
                 return null;
             MethodRefParameter x = ast.newMethodRefParameter();
             x.setType(asType(kids[0]));
-            x.setName(asSimpleName(kids[1]));
+            if(isNone(kids[1]))
+            	x.setName(null);
+            else
+            	x.setName(asSimpleName(kids[1]));
             return wrap(x);
         }
         case MODIFIER: {
@@ -1175,7 +1191,8 @@ public class ECJFactory implements ITermFactory {
                     || !isTypeList(kids[3])
                     || (!isType(kids[4]) && !isNone(kids[4]))
                     || !isTypeList(kids[5])
-                    || !isBodyDeclarationList(kids[6]))
+                    || !isBodyDeclarationList(kids[6])
+                    || !isInt(kids[7]))
                 return null;
             TypeDeclaration x = ast.newTypeDeclaration();
             if(isNone(kids[0]))
@@ -1191,6 +1208,7 @@ public class ECJFactory implements ITermFactory {
                 x.setSuperclassType(asType(kids[4]));
             x.superInterfaceTypes().addAll(asTypeList(kids[5]));
             x.bodyDeclarations().addAll(asBodyDeclarationList(kids[6]));
+            x.setInterface(asInt(kids[7]) == 1);
             return wrap(x);
         }
         case TYPE_DECLARATION_STATEMENT: {
@@ -1571,6 +1589,10 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedPostfixExpressionOperator)term).getWrappee();
     }
 
+    private Assignment.Operator asAssignmentOperator(IStrategoTerm term) {
+        return ((WrappedAssignmentOperator)term).getWrappee();
+    }
+
     private BodyDeclaration asBodyDeclaration(IStrategoTerm k) {
         BodyDeclaration x = ((WrappedBodyDeclaration)k).getWrappee();
         return x.getParent() == null ? x : (BodyDeclaration)ASTNode.copySubtree(ast, x);
@@ -1653,7 +1675,7 @@ public class ECJFactory implements ITermFactory {
         if(term instanceof IStrategoList) {
             IStrategoTerm[] kids = ((IStrategoList)term).getAllSubterms();
             for(IStrategoTerm k : kids) { 
-                if(isMethodRefParameter(k))
+                if(!isMethodRefParameter(k))
                     return false;
             }
             return true;
@@ -1839,6 +1861,10 @@ public class ECJFactory implements ITermFactory {
 
     private boolean isPostfixOperator(IStrategoTerm term) {
         return term instanceof WrappedPostfixExpressionOperator;
+    }
+
+    private boolean isAssignmentOperator(IStrategoTerm term) {
+        return term instanceof WrappedAssignmentOperator;
     }
 
     private boolean isTypeList(IStrategoTerm term) {
@@ -3015,6 +3041,13 @@ public class ECJFactory implements ITermFactory {
         else
             return new WrappedIBinding(binding);
     }
+
+	public static IStrategoAppl wrap(Assignment.Operator operator) {
+		if(operator == null)
+			return None.INSTANCE;
+		else
+			return new WrappedAssignmentOperator(operator);
+	}
     
     
 }

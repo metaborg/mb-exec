@@ -33,7 +33,7 @@ signature
     ArrayInitializer                : Term -> Expression
     ArrayType                       : Type * Int * Type -> Type
     AssertStatement                 : Term * Term -> Statement
-    Assignment                      : Expression * Expression -> Expression
+    Assignment                      : AssignmentOperator * Expression * Expression -> Expression
     BlockComment                    : Comment
     Block                           : List(Statement) -> Statement 
     BooleanLiteral                  : Term -> Expression
@@ -75,7 +75,7 @@ signature
     MethodDeclaration               : Javadoc * List(Modifier) * Type * List(TypeParameter) * SimpleName * List(SingleVariableDeclaration) * List(Name) * Block -> BodyDeclaration
     MethodInvocation                : Expression * Name * List(Type) * List(Expression) -> Expression
     MethodRef                       : Term * Term * Term -> ASTNode
-    MethodRefParameter              : Term * Term -> ASTNode
+    MethodRefParameter              : Type * SimpleName -> ASTNode
     Modifier                        : Term -> Modifier
     ModifierKeyword                 : Term -> ModifierKeyword
 /*    Name                            : Term -> Term*/
@@ -111,7 +111,7 @@ signature
     ThrowStatement                  : Term -> Statement
     Times                           : Term * Term -> Term
     TryStatement                    : Term * Term * Term -> Statement
-    TypeDeclaration                 : Javadoc * List(Modifier) * Name * List(TypeParameter) * Type * List(Type) * List(BodyDeclaration) -> AbstractTypeDeclaration
+    TypeDeclaration                 : Javadoc * List(Modifier) * Name * List(TypeParameter) * Type * List(Type) * List(BodyDeclaration) * Int -> AbstractTypeDeclaration
     TypeDeclarationStatement        : Term -> Term
     TypeLiteral                     : Term -> Term
     TypeParameter                   : Term * Term -> Term
