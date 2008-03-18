@@ -28,7 +28,7 @@ public class SSL_hashtable_destroy extends AbstractPrimitive {
             return false;
 
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        boolean res = or.removeHashtable(((IStrategoInt)targs[0]).getValue());
+        boolean res = or.removeHashtable(((IStrategoInt)targs[0]).intValue());
         env.setCurrent(targs[0]);
         return res;
     }

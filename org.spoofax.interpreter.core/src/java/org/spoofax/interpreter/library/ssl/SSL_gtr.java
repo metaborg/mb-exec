@@ -30,6 +30,6 @@ public class SSL_gtr extends AbstractPrimitive {
 
         IStrategoReal a = (IStrategoReal) targs[0];
         IStrategoReal b = (IStrategoReal) targs[1];
-        return a.getValue() > b.getValue();
+        return a.realValue() > b.realValue();
     }
 }

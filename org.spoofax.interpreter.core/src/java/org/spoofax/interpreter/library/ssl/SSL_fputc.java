@@ -36,7 +36,7 @@ public class SSL_fputc extends AbstractPrimitive {
         OutputStream s = or.getOutputStream(Tools.asJavaInt(targs[1]));
         
         try {
-            s.write(((IStrategoInt)targs[0]).getValue());
+            s.write(((IStrategoInt)targs[0]).intValue());
         } catch(IOException e) {
             throw new InterpreterException(e);
         }

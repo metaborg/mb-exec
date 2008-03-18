@@ -27,7 +27,7 @@ public class SSL_cos extends AbstractPrimitive {
             return false;
 
         IStrategoReal a = (IStrategoReal) targs[0];
-        env.setCurrent(env.getFactory().makeReal(Math.cos(a.getValue())));
+        env.setCurrent(env.getFactory().makeReal(Math.cos(a.realValue())));
         return true;
     }
 }

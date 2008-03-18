@@ -57,7 +57,7 @@ public class Tools {
             return factory.makeAppl(ctr, kids);
         } else if (ctor.equals(sign.getInt())) {
             IStrategoString x = (IStrategoString) t.getSubterm(0);
-            return factory.makeInt(new Integer(x.getValue()).intValue());
+            return factory.makeInt(new Integer(x.stringValue()).intValue());
         } else if (ctor.equals(sign.getStr())) {
             IStrategoAppl x = (IStrategoAppl) t.getSubterm(0);
             return x;
@@ -95,7 +95,7 @@ public class Tools {
     }
 
     public static String javaString(IStrategoTerm t) {
-        return ((IStrategoString)t).getValue();
+        return ((IStrategoString)t).stringValue();
     }
 
     public static boolean isTermList(IStrategoTerm t) {
@@ -171,19 +171,19 @@ public class Tools {
     }
 
     public static String javaStringAt(IStrategoTerm t, int i) {
-        return Tools.stringAt(t, i).getValue();
+        return Tools.stringAt(t, i).stringValue();
     }
 
     public static String javaStringAt(IStrategoAppl t, int i) {
-        return Tools.stringAt(t, i).getValue();
+        return Tools.stringAt(t, i).stringValue();
     }
 
     public static String javaStringAt(IStrategoList t, int i) {
-        return Tools.stringAt(t, i).getValue();
+        return Tools.stringAt(t, i).stringValue();
     }
 
     public static int javaInt(IStrategoTerm term) {
-        return ((IStrategoInt)term).getValue();
+        return ((IStrategoInt)term).intValue();
     }
 
     public static boolean hasConstructor(IStrategoAppl t, String ctorName) {
@@ -195,11 +195,11 @@ public class Tools {
     }
 
     public static int asJavaInt(IStrategoTerm term) {
-        return ((IStrategoInt)term).getValue();
+        return ((IStrategoInt)term).intValue();
     }
 
     public static String asJavaString(IStrategoTerm term) {
-        return ((IStrategoString)term).getValue();
+        return ((IStrategoString)term).stringValue();
     }
 
 }

@@ -1368,7 +1368,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     private Operator asOperator(IStrategoTerm term) {
-        String s = ((IStrategoString)term).getValue();
+        String s = ((IStrategoString)term).getStringValue();
         return InfixExpression.Operator.toOperator(s);
     }
 
@@ -1480,7 +1480,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     private Code asTypeCode(IStrategoTerm term) {
-        return PrimitiveType.toCode(((IStrategoString)term).getValue());
+        return PrimitiveType.toCode(((IStrategoString)term).getStringValue());
     }
 
     private ModifierKeyword asModifierKeyword(IStrategoTerm term) {
@@ -1572,7 +1572,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     private int asInt(IStrategoTerm term) {
-        return ((IStrategoInt)term).getValue();
+        return ((IStrategoInt)term).getIntValue();
     }
 
     @SuppressWarnings("unchecked")
@@ -1621,7 +1621,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     private String asString(IStrategoTerm term) {
-        return ((IStrategoString)term).getValue();
+        return ((IStrategoString)term).getStringValue();
     }
 
     @SuppressWarnings("unchecked")
@@ -1737,7 +1737,7 @@ public class ECJFactory implements ITermFactory {
 
     private boolean isOperator(IStrategoTerm term) {
         return term instanceof IStrategoString 
-        && InfixExpression.Operator.toOperator(((IStrategoString)term).getValue()) != null;
+        && InfixExpression.Operator.toOperator(((IStrategoString)term).getStringValue()) != null;
     }
 
     private boolean isEnumConstantDeclarationList(IStrategoTerm term) {

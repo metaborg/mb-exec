@@ -16,7 +16,7 @@ public class BasicStrategoReal extends BasicStrategoTerm implements IStrategoRea
         this.value = value;
     }
     
-    public double getValue() {
+    public double realValue() {
         return value;
     }
 
@@ -39,11 +39,16 @@ public class BasicStrategoReal extends BasicStrategoTerm implements IStrategoRea
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.REAL)
             return false;
-        return value == ((IStrategoReal)second).getValue();
+        return value == ((IStrategoReal)second).realValue();
     }
 
     public void prettyPrint(ITermPrinter pp) {
         pp.print("" + value);
+    }
+    
+    @Override
+    public String toString() {
+        return "" + value;
     }
 
     @Override

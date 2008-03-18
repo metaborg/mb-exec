@@ -38,7 +38,7 @@ public class Interpreter {
     private void doInit(ITermFactory termFactory, ITermFactory programFactory) {
         
         Context.indentation = 0;
-        context = new Context(termFactory, programFactory);
+        context = createContext(termFactory, programFactory);
         
         loader = new StrategoCoreLoader(context);
     }
@@ -58,6 +58,11 @@ public class Interpreter {
     public IContext getContext() {
         return context;
     }
+    
+    protected Context createContext(ITermFactory termFactory, ITermFactory programFactory) {
+       return new Context(termFactory, programFactory);
+    }
+
 
     public void setCurrent(IStrategoTerm inp) {
         context.setCurrent(inp);

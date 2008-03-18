@@ -27,7 +27,7 @@ public class SSL_sqrt extends AbstractPrimitive {
             return false;
 
         IStrategoReal a = (IStrategoReal) targs[0];
-        env.setCurrent(env.getFactory().makeReal(Math.sqrt(a.getValue())));
+        env.setCurrent(env.getFactory().makeReal(Math.sqrt(a.realValue())));
         return true;
     }
 }

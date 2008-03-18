@@ -30,7 +30,7 @@ public class SSL_modr extends AbstractPrimitive {
 
         IStrategoReal a = (IStrategoReal) targs[0];
         IStrategoReal b = (IStrategoReal) targs[1];
-        env.setCurrent(env.getFactory().makeReal(a.getValue() % b.getValue()));
+        env.setCurrent(env.getFactory().makeReal(a.realValue() % b.realValue()));
         return true;
     }
 }

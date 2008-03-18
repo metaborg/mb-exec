@@ -125,7 +125,7 @@ public class Build extends Strategy {
             throw new InterpreterException("");
         }
 
-        String n = ((IStrategoString)actualCtor).getValue();
+        String n = ((IStrategoString)actualCtor).stringValue();
         IStrategoTerm[] realArgs = ((IStrategoList)actualArgs).getAllSubterms();
         
         if (n.equals(""))

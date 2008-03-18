@@ -9,6 +9,6 @@ package org.spoofax.interpreter.terms;
 
 public interface IStrategoString extends IStrategoTerm {
 
-    public String getValue();
+    public String stringValue();
 
 }

@@ -64,18 +64,18 @@ public class JFFLibrary extends AbstractStrategoOperatorRegistry {
 		IStrategoTerm t = term.getSubterm(0);
 		if(!(t instanceof IStrategoInt))
 			return null;
-		return objectWrappers.get(((IStrategoInt)t).getValue());
+		return objectWrappers.get(((IStrategoInt)t).intValue());
 	}
 
 
 	public Object unpackTerm(IStrategoTerm term) {
 		switch(term.getTermType()) {
 		case IStrategoTerm.INT:
-			return ((IStrategoInt)term).getValue();
+			return ((IStrategoInt)term).intValue();
 		case IStrategoTerm.REAL:
-			return ((IStrategoReal)term).getValue();
+			return ((IStrategoReal)term).realValue();
 		case IStrategoTerm.STRING:
-			return ((IStrategoString)term).getValue();
+			return ((IStrategoString)term).stringValue();
 		case IStrategoTerm.APPL:
 			return unwrapObject((IStrategoAppl)term);
 		default:

@@ -28,7 +28,7 @@ public class SSL_hashtable_get extends AbstractPrimitive {
             return false;
 
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        Hashtable ath = or.getHashtable(((IStrategoInt)targs[0]).getValue());
+        Hashtable ath = or.getHashtable(((IStrategoInt)targs[0]).intValue());
         if(ath == null)
             return false;
         

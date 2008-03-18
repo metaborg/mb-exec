@@ -264,7 +264,7 @@ public class Match extends Strategy {
 
         Double realVal = new Double(Tools.javaStringAt(p, 0));
 
-        if (realVal == t.getValue())
+        if (realVal == t.realValue())
             return emptyList();
 
         return null;
@@ -285,7 +285,7 @@ public class Match extends Strategy {
 
     protected Results matchIntInt(IStrategoInt t, IStrategoAppl p) {
         Integer intVal = new Integer(Tools.javaStringAt(p, 0));
-        if (intVal == t.getValue())
+        if (intVal == t.intValue())
             return emptyList();
 
         return null;
@@ -368,7 +368,7 @@ public class Match extends Strategy {
         if (Tools.isTermInt(t) || Tools.isTermReal(t)) {
             return t;
         } else if (Tools.isTermString(t)) {
-            return env.getFactory().makeString("\"" + ((IStrategoString)t).getValue() + "\"");
+            return env.getFactory().makeString("\"" + ((IStrategoString)t).stringValue() + "\"");
         } else if (Tools.isTermAppl(t)) {
             IStrategoAppl a = (IStrategoAppl)t;
             if (Tools.isCons(a, env) || Tools.isNil(a, env))

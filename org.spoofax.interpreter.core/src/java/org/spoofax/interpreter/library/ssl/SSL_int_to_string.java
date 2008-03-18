@@ -27,7 +27,7 @@ public class SSL_int_to_string extends AbstractPrimitive {
             return false;
 
         IStrategoInt a = (IStrategoInt) tvars[0];
-        Integer i = new Integer(a.getValue());
+        Integer i = new Integer(a.intValue());
         env.setCurrent(env.getFactory().makeString(i.toString()));
         return true;
     }

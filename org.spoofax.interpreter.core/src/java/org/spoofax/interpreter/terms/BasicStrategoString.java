@@ -38,10 +38,10 @@ public class BasicStrategoString extends BasicStrategoTerm implements IStrategoS
             return false;
         
         IStrategoString snd = (IStrategoString) second;
-        return value.equals(snd.getValue());
+        return value.equals(snd.stringValue());
     }
 
-    public String getValue() {
+    public String stringValue() {
         return value;
     }
     

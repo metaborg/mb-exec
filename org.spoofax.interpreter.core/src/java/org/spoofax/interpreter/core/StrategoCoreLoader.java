@@ -111,7 +111,7 @@ public class StrategoCoreLoader {
 
     private Strategy makeImportTerm(IStrategoAppl appl) {
     	IStrategoString str = Tools.stringAt(appl, 0);
-    	return new ImportTerm(str.getValue());
+    	return new ImportTerm(str.stringValue());
 	}
 
 	private Strategy makeId(IStrategoAppl appl) {

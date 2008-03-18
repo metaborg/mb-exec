@@ -30,7 +30,7 @@ public class SSL_mod extends AbstractPrimitive {
 
         IStrategoInt a = (IStrategoInt) targs[0];
         IStrategoInt b = (IStrategoInt) targs[1];
-        env.setCurrent(env.getFactory().makeInt(a.getValue() % b.getValue()));
+        env.setCurrent(env.getFactory().makeInt(a.intValue() % b.intValue()));
         return true;
     }
 }

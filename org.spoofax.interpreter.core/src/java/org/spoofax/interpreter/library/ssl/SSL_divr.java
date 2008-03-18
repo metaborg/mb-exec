@@ -1,10 +1,3 @@
-/*
- * Created on 08.aug.2005
- *
- * Copyright (c) 2005, Karl Trygve Kalleberg <karltk near strategoxt.org>
- * 
- * Licensed under the GNU General Public License, v2
- */
 package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
@@ -16,14 +9,17 @@ import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_addr extends AbstractPrimitive {
+public class SSL_divr extends AbstractPrimitive {
 
-    protected SSL_addr() {
-        super("SSL_addr", 0, 2);
+    protected SSL_divr() {
+        super("SSL_divr", 0, 2);
     }
     
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException {
         double a, b;
+        
+        // TODO: Factor out syntactic noise
+        // TODO: Apply this pattern to other primitives; many (all?) real operations also work on ints
         
         if(Tools.isTermReal(tvars[0])) {
             a = ((IStrategoReal) tvars[0]).realValue();     
@@ -41,7 +37,7 @@ public class SSL_addr extends AbstractPrimitive {
             return false;
         }
 
-        env.setCurrent(env.getFactory().makeReal(a + b));
+        env.setCurrent(env.getFactory().makeReal(a / b));
         return true;
     }
 }

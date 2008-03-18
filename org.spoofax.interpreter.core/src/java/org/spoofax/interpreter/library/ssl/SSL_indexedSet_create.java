@@ -112,8 +112,8 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
         if(!(Tools.isTermInt(targs[1])))
             return false;
 
-        int initialSize = ((IStrategoInt)targs[0]).getValue();
-        int maxLoad = ((IStrategoInt)targs[1]).getValue();
+        int initialSize = ((IStrategoInt)targs[0]).intValue();
+        int maxLoad = ((IStrategoInt)targs[1]).intValue();
 
         int ref = SSLLibrary.instance(env).registerIndexedSet(new IndexedSet(initialSize, maxLoad));
         env.setCurrent(env.getFactory().makeInt(ref));

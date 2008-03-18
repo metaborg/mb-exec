@@ -59,9 +59,11 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         stderrStream = System.err;
         
         add(new SSL_is_int());
+        add(new SSL_is_real());
         add(new SSL_addi());
         add(new SSL_addr());
         add(new SSL_divi());
+        add(new SSL_divr());
         add(new SSL_gti());
         add(new SSL_gtr());
         add(new SSL_muli());

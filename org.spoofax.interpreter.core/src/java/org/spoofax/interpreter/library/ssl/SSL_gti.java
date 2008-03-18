@@ -30,6 +30,6 @@ public class SSL_gti extends AbstractPrimitive {
 
         IStrategoInt a = (IStrategoInt) targs[0];
         IStrategoInt b = (IStrategoInt) targs[1];
-        return a.getValue() > b.getValue();
+        return a.intValue() > b.intValue();
     }
 }

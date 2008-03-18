@@ -30,7 +30,7 @@ public class SSL_subtr extends AbstractPrimitive {
 
         IStrategoReal a = (IStrategoReal) tvars[0];
         IStrategoReal b = (IStrategoReal) tvars[1];
-        env.setCurrent(env.getFactory().makeReal(a.getValue() - b.getValue()));
+        env.setCurrent(env.getFactory().makeReal(a.realValue() - b.realValue()));
         return true;
     }
 }

@@ -27,7 +27,7 @@ public class SSL_sin extends AbstractPrimitive {
             return false;
 
         IStrategoReal a = (IStrategoReal) targs[0];
-        env.setCurrent(env.getFactory().makeReal(Math.sin(a.getValue())));
+        env.setCurrent(env.getFactory().makeReal(Math.sin(a.realValue())));
         return true;
     }
 }

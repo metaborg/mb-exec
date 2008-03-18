@@ -16,7 +16,7 @@ public class BasicStrategoInt extends BasicStrategoTerm implements IStrategoInt 
         this.value = value;
     }
     
-    public int getValue() {
+    public int intValue() {
         return value;
     }
 
@@ -40,7 +40,7 @@ public class BasicStrategoInt extends BasicStrategoTerm implements IStrategoInt 
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.INT)
             return false;
-        return value == ((IStrategoInt)second).getValue(); 
+        return value == ((IStrategoInt)second).intValue(); 
     }
 
     public void prettyPrint(ITermPrinter pp) {

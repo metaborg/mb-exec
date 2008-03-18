@@ -9,5 +9,5 @@ package org.spoofax.interpreter.terms;
 
 public interface IStrategoInt extends IStrategoTerm {
 
-    public int getValue();
+    public int intValue();
 }

@@ -29,7 +29,7 @@ public class SSL_hashtable_reset extends AbstractPrimitive {
             return false;
 
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        Hashtable ht = or.getHashtable(((IStrategoInt)tvars[0]).getValue());
+        Hashtable ht = or.getHashtable(((IStrategoInt)tvars[0]).intValue());
         ht.clear();
         return true;
     }

@@ -31,7 +31,7 @@ public class SSL_real_to_string_precision extends AbstractPrimitive {
 
         IStrategoReal a = (IStrategoReal) targs[0];
         IStrategoInt b = (IStrategoInt) targs[1];
-        String s = String.format("%." + b.getValue() + "f", a.getValue());
+        String s = String.format("%." + b.intValue() + "f", a.realValue());
         env.setCurrent(env.getFactory().makeString(s));
         return true;
     }

@@ -9,6 +9,6 @@ package org.spoofax.interpreter.terms;
 
 public interface IStrategoReal extends IStrategoTerm {
 
-    public double getValue();
+    public double realValue();
 
 }
