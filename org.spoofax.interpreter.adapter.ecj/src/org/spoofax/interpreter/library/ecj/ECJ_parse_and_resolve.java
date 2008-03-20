@@ -38,7 +38,7 @@ public class ECJ_parse_and_resolve extends AbstractPrimitive {
         if(!Tools.isTermString(tvars[1]))
             return false;
         
-        String path = ((IStrategoString)tvars[1]).getStringValue();
+        String path = ((IStrategoString)tvars[1]).stringValue();
         
         IProject project = ((WrappedIProject)tvars[0]).getWrappee();
         if(project == null)
