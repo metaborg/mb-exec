@@ -1,5 +1,0 @@
-module out_of_scope_3
-imports stratego-lib
-strategies
-
-  main = id // {x: ?x } ; {x: !x } FIXME compiler

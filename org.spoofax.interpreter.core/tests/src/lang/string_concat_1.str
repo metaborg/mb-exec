@@ -1,5 +1,0 @@
-module string_concat_1
-imports stratego-lib
-strategies
-
-  main = !["a", "b", "c" ] ; concat-strings
