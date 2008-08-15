@@ -4,7 +4,7 @@
           revision="0.3.9"/>
     <dependencies>
       <dependency org="junit" name="junit" rev="3.8.2"/>
-      <dependency org="spoofax" name="spoofax-interpreter-core" rev="0.3.11"/>
+      <dependency org="spoofax" name="spoofax-interpreter-core" rev="0.3.10"/>
       <dependency org="spoofax" name="spoofax-aterm-adapter" rev="0.1.1"/>
       <dependency org="spoofax" name="spoofax-library-jsglr" rev="0.3.9"/>
     </dependencies>
