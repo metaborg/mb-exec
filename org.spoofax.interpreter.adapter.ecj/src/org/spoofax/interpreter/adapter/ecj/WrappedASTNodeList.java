@@ -36,7 +36,6 @@ public class WrappedASTNodeList implements IStrategoList {
         return ECJFactory.genericWrap(wrappee.get(0));
     }
 
-    @SuppressWarnings("unchecked")
     public IStrategoList prepend(IStrategoTerm prefix) {
         
         // Trying to build a hybrid list. Do on-the-fly conversion.
@@ -82,7 +81,6 @@ public class WrappedASTNodeList implements IStrategoList {
         throw new NotImplementedException("Unsupported type : " + o.getClass());
     }
 
-    @SuppressWarnings("unchecked")
     public IStrategoTerm[] getAllSubterms() {
         IStrategoTerm[] r = new IStrategoTerm[wrappee.size()];
         ASTNode[] s = wrappee.toArray(new ASTNode[0]);
