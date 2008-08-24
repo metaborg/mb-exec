@@ -388,7 +388,7 @@ public class Match extends Strategy {
     throws InterpreterException {
 
     	if (t == null) {
-    		System.err.println("boo!");
+    	    throw new InterpreterException("Null term while matching: term library is defective");
     	}
         switch (t.getTermType()) {
         case IStrategoTerm.APPL:

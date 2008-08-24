@@ -1,3 +1,6 @@
+- filter(pred) som gir to lister, ([filter-is-true], [filter-is-false])
+
+---------
 
 Language-independent view:
 
