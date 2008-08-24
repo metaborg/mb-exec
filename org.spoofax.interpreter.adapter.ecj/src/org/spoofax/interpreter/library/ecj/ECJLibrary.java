@@ -8,6 +8,8 @@ package org.spoofax.interpreter.library.ecj;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
 import org.spoofax.interpreter.library.AbstractStrategoOperatorRegistry;
 
 public class ECJLibrary extends AbstractStrategoOperatorRegistry {
@@ -15,6 +17,7 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
     public static final String REGISTRY_NAME = "ECJ";
     public IProject currentProject;
     private IJavaProject currentJavaProject;
+	private ASTParser astParser = null;
 
     public ECJLibrary() {
         init();
@@ -51,6 +54,8 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
         add(new ECJ_file_exists());
         add(new ECJ_path_of_compilationunit());
         add(new ECJ_is_binding_primitive_type());
+        add(new ECJ_hierarchy_for_type());
+        add(new ECJ_rewrite_compilation_unit());
     }
     
     public IProject getCurrentProject() {
@@ -68,4 +73,14 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
     public void setCurrentJavaProject(IJavaProject currentJavaProject) {
         this.currentJavaProject = currentJavaProject;
     }
+
+	public void log(String string) {
+		System.err.println("FIXME logger");
+	}
+
+	public ASTParser getParser() {
+		if(astParser  == null)
+			astParser = ASTParser.newParser(AST.JLS3);
+		return astParser;
+	}
 }

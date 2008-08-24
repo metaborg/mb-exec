@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -1993,7 +1994,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     public IStrategoList makeList(Collection<IStrategoTerm> terms) {
-        throw new NotImplementedException();
+    	return makeList(terms.toArray(new IStrategoTerm[0]));
     }
 
     public IStrategoReal makeReal(double d) {
@@ -2493,7 +2494,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedMethodDeclaration(declaration);
     }
 
-    private static IStrategoAppl wrap(TypeDeclaration declaration) {
+    public static IStrategoAppl wrap(TypeDeclaration declaration) {
         if(declaration == null)
             return None.INSTANCE;
         else
@@ -3047,6 +3048,37 @@ public class ECJFactory implements ITermFactory {
 			return None.INSTANCE;
 		else
 			return new WrappedAssignmentOperator(operator);
+	}
+
+	public static IStrategoTerm wrap(ITypeHierarchy th) {
+		if(th == null)
+			return None.INSTANCE;
+		else
+			return new WrappedITypeHierarchy(th);
+	}
+
+	public static IStrategoTerm wrapAmbName(String name) {
+		if(name == null)
+			return None.INSTANCE;
+		else 
+			return new AmbName(name);
+	}
+
+	public static IStrategoTerm wrapDottedName(String name) {
+		if(name == null)
+			return None.INSTANCE;
+		else 
+			return new DottedName(name);
+	}
+
+	public static IStrategoTerm fullyGenericWrap(Object o) {
+		if(o instanceof String)
+			return wrap((String)o);
+		if(o instanceof Integer)
+			return wrap((Integer)o);
+		if(o instanceof ASTNode)
+			return genericWrap((ASTNode)o);
+		return null;
 	}
     
     

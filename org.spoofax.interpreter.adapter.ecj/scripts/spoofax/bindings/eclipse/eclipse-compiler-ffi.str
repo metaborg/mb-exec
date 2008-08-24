@@ -15,11 +15,13 @@ signature
   constructors
   FILE : Term -> FILE
   
-  Project : Term -> Project
-  Binding : Int * Int * String -> Binding
-  TypeBinding : List(String) * String * List(TypeBinding) * TypeBinding * List(TypeBinding) * Int * ITypeBinding -> TypeBinding
-  TypeParameter : List(String) -> TypeParameter
-  DottedName : String -> DottedName
+  Project        : Term -> Project
+  Binding        : Int * Int * String -> Binding
+  TypeBinding    : List(String) * String * List(TypeBinding) * TypeBinding * List(TypeBinding) * Int * ITypeBinding -> TypeBinding
+  TypeParameter  : List(String) -> TypeParameter
+  DottedName     : String -> DottedName
+  IType          : DottedName * Int * IType * DottedName * List(DottedName) * List(TypeParameter) -> IType
+  ITypeHierarchy : IType * List(IType) -> ITypeHierarchy
   
 strategies
 
@@ -129,7 +131,7 @@ strategies
     + ?PrimitiveType(_)
     + ?QualifiedType(_, _)
     + ?SimpleType(_)
-    + ?WildcardType
+    + ?WildcardType(_)
 
   ecj-is-Name =
       ?SimpleName(_)
@@ -196,7 +198,12 @@ strategies
   ecj-search-project-for-type(|project) = 
       DottedName(?typename)
     ; prim("ECJ_search_project_for_type", project, typename)      
-  
+
+  /** @type IType -> ITypeHierarchy */
+  ecj-hierarchy-for-type = 
+    ?type
+    ; prim("ECJ_hierarchy_for_type", type)
+    
   /** @type IType -> ICompilationUnit */    
   ecj-compilation-unit-for-type =
     ?type
@@ -210,8 +217,12 @@ strategies
   /** @type ICompilationUnit -> CompilationUnit */
   ecj-typed-ast-for-compilation-unit =
     ?cu
-    ; prim("ECJ_ast_for_compilation_unit", cu,1)
+    ; prim("ECJ_ast_for_compilation_unit", cu, 1)
 
+  ecj-rewrite-compilation-unit(s) = 
+    ?cu
+    ; prim("ECJ_rewrite_compilation_unit", s | cu)
+    
 strategies
 
   /** 
@@ -240,7 +251,7 @@ strategies
   ecj-name-of = ?SingleVariableDeclaration(_, _, <id>, _, _)
   
   /**
-   * Computes the dotted name of an AST node, if is relevant.
+   * Computes the dotted name of an AST node, if this is possible
    * 
    * @type ASTNode -> DottedName
    */

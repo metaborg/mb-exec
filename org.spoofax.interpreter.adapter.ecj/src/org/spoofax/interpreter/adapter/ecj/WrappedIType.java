@@ -26,21 +26,21 @@ public class WrappedIType extends WrappedECJNode {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-            return ECJFactory.wrap(wrappee.getElementName());
+            return ECJFactory.wrapDottedName(wrappee.getFullyQualifiedName());
         case 1:
             return ECJFactory.wrap(wrappee.hashCode());
         case 2:
             return ECJFactory.wrap(wrappee.getDeclaringType());
         case 3:
             try {
-                return ECJFactory.wrap(wrappee.getSuperclassName());
+            	return resolveDottedName(wrappee.getSuperclassName());
             } catch(JavaModelException e) {
                 e.printStackTrace();
                 return None.INSTANCE;
             }
         case 4:
             try {
-                return ECJFactory.wrap(wrappee.getSuperInterfaceTypeSignatures());
+                return resolveDottedNames(wrappee.getSuperInterfaceNames());
             } catch(JavaModelException e) {
                 e.printStackTrace();
                 return None.INSTANCE;
@@ -57,7 +57,25 @@ public class WrappedIType extends WrappedECJNode {
     }
 
     
-    @Override
+    private IStrategoTerm resolveDottedNames(String[] names) throws JavaModelException {
+    	final IStrategoTerm[] resolved = new IStrategoTerm[names.length];
+    	for(int i = 0; i < names.length; i++)
+    		resolved[i] = resolveDottedName(names[i]);
+    	return new WrappedGenericList(resolved);
+	}
+
+	private IStrategoTerm resolveDottedName(final String name) throws JavaModelException {
+    	if(name == null)
+    		return ECJFactory.wrap((String)name);
+    	String[][] candidates = wrappee.resolveType(name);
+    	if(candidates == null)
+    		return ECJFactory.wrap((String)null);
+    	if(candidates.length == 1 && candidates[0].length == 2)
+    		return ECJFactory.wrapDottedName(candidates[0][0] + "." + candidates[0][1]);
+    	return ECJFactory.wrapAmbName(candidates[0][0] + "." + candidates[0][1]);
+	}
+
+	@Override
     public IType getWrappee() {
         return wrappee;
     }
