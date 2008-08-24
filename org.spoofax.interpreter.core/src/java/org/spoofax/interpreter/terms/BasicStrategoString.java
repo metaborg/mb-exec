@@ -12,7 +12,7 @@ public class BasicStrategoString extends BasicStrategoTerm implements IStrategoS
 
     private final String value;
     
-    protected BasicStrategoString(String value) {
+    public BasicStrategoString(String value) {
         this.value = value;
     }
     
