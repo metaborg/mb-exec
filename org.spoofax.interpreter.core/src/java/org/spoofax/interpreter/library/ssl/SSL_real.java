@@ -13,6 +13,7 @@ import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_real extends AbstractPrimitive {
@@ -24,7 +25,11 @@ public class SSL_real extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException {
         // If already real skip
         if(Tools.isTermReal(tvars[0]))
+        {
+            IStrategoReal a = (IStrategoReal) tvars[0];
+            env.setCurrent(env.getFactory().makeReal(a.realValue()));   // TODO Not sure this is required (maybe this way I am creating a real in the env environment 
             return true;
+        }
         // If int, do regular conversion
         if(Tools.isTermInt(tvars[0]))
         {
