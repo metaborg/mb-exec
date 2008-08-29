@@ -1,7 +1,8 @@
 /*
  * Created on 29.aug.2008
  *
- * Copyright (c) 2005, Sander Vermolen <sandervermolen near gmail.com>
+ * Copyright (c) 2008, Sander Vermolen <sandervermolen near gmail.com>
+ * Copyright (c) 2008, Karl Trygve Kalleberg <karltk near strategoxt dot org> 
  * 
  * Licensed under the GNU General Public License, v2
  */
@@ -13,7 +14,6 @@ import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoInt;
-import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_real extends AbstractPrimitive {
@@ -23,13 +23,13 @@ public class SSL_real extends AbstractPrimitive {
     }
 
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException {
+        
         // If already real skip
-        if(Tools.isTermReal(tvars[0]))
-        {
-            IStrategoReal a = (IStrategoReal) tvars[0];
-            env.setCurrent(env.getFactory().makeReal(a.realValue()));   // TODO Not sure this is required (maybe this way I am creating a real in the env environment 
+        if(Tools.isTermReal(tvars[0])) {
+            env.setCurrent(tvars[0]);
             return true;
         }
+
         // If int, do regular conversion
         if(Tools.isTermInt(tvars[0]))
         {
@@ -37,6 +37,7 @@ public class SSL_real extends AbstractPrimitive {
             env.setCurrent(env.getFactory().makeReal((double) a.intValue()));
             return true;
         }
+        
         // If something else, try parsing the toString (in a desperate attempt)
         try {
             double d = Double.parseDouble(tvars[0].toString());
