@@ -67,7 +67,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_gti());
         add(new SSL_gtr());
         add(new SSL_muli());
-        add(new SSL_muli());
+        add(new SSL_mulr());
         add(new SSL_modi());
         add(new SSL_modr());
         add(new SSL_int_to_string());
