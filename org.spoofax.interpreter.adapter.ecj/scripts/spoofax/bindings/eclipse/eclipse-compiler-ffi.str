@@ -233,9 +233,10 @@ strategies
   ecj-as-dotted-name = ?SimpleName(<id>)
 
   ecj-as-dotted-name = 
-      ?QualifiedName(SimpleName(n), <ecj-as-dotted-name>) => rest
-    ; <concat-strings> [n, ".", rest]
+      ?QualifiedName(<ecj-as-dotted-name>, SimpleName(n)) => rest
+    ; <concat-strings> [rest, ".", n]
   
+  /** @type _ -> SimpleName / QualifiedName */
   ecj-name-of = ?TypeDeclaration(_, _, <id>, _, _, _, _, _)   
 
   ecj-name-of = ?SimpleType(<id>)

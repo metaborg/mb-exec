@@ -64,6 +64,8 @@ public class ECJ_rewrite_compilation_unit extends AbstractPrimitive {
 						newTds.add(((WrappedASTNode)term).getWrappee());
 					else 
 						ecj.log("Rewriting resulted in an invalid tree");
+				} else {
+					newTds.add(td);
 				}
 			}
 			root.types().clear();

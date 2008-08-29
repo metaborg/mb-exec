@@ -3076,9 +3076,12 @@ public class ECJFactory implements ITermFactory {
 			return wrap((String)o);
 		if(o instanceof Integer)
 			return wrap((Integer)o);
+		if(o instanceof Boolean)
+			return wrap(((Boolean)o) ? 1 : 0);
 		if(o instanceof ASTNode)
 			return genericWrap((ASTNode)o);
-		return null;
+		
+		throw new NotImplementedException(" " + o.getClass());
 	}
     
     
