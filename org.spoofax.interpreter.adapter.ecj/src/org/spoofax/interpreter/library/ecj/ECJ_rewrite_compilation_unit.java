@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -37,6 +38,9 @@ public class ECJ_rewrite_compilation_unit extends AbstractPrimitive {
 
 		final ICompilationUnit cu = ECJTools.asICompilationUnit(tvars[0]);
 		final ECJLibrary ecj = (ECJLibrary) env.getOperatorRegistry(ECJLibrary.REGISTRY_NAME);
+		final ECJFactory factory = (ECJFactory)env.getFactory();
+
+		AST oldAST = factory.getAST();
 
 		ecj.setCurrentProject(cu.getJavaProject().getProject());
 		ecj.setCurrentJavaProject(cu.getJavaProject());
@@ -49,13 +53,14 @@ public class ECJ_rewrite_compilation_unit extends AbstractPrimitive {
 			ASTParser p = ecj.getParser();
 			p.setSource(cu);
 			CompilationUnit root = (CompilationUnit) p.createAST(null);
+			factory.setAST(root.getAST());
 
 			//System.out.println("before: " + root);
 			root.recordModifications();
 			List newTds = new ArrayList();
 			for(Object ob : root.types()) {
 				TypeDeclaration td = (TypeDeclaration) ob;
-				((ECJFactory)env.getFactory()).setAST(td.getAST());
+
 				CallT s = (CallT)svars[0];
 				env.setCurrent(ECJFactory.wrap(td));
 				if(s.evaluate(env)) {
@@ -85,6 +90,7 @@ public class ECJ_rewrite_compilation_unit extends AbstractPrimitive {
 			e.printStackTrace();
 			ecj.log("Bad location exception");
 		}
+		factory.setAST(oldAST);
 		return true;
 	}
 

@@ -71,8 +71,15 @@ public class WrappedIType extends WrappedECJNode {
     	if(candidates == null)
     		return ECJFactory.wrap((String)null);
     	if(candidates.length == 1 && candidates[0].length == 2)
-    		return ECJFactory.wrapDottedName(candidates[0][0] + "." + candidates[0][1]);
-    	return ECJFactory.wrapAmbName(candidates[0][0] + "." + candidates[0][1]);
+    		return ECJFactory.wrapDottedName(saneConcat(candidates[0][0], candidates[0][1]));
+    	return ECJFactory.wrapAmbName(saneConcat(candidates[0][0], candidates[0][1]));
+	}
+	
+	private static String saneConcat(final String prefix, final String name) {
+		if(prefix.length() > 0) {
+			return prefix + "." + name;
+		} else 
+			return name;
 	}
 
 	@Override

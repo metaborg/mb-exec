@@ -1354,7 +1354,8 @@ public class ECJFactory implements ITermFactory {
 
 
     private TagElement asTagElement(IStrategoTerm term) {
-        return ((WrappedTagElement)term).getWrappee();
+    	TagElement x = ((WrappedTagElement)term).getWrappee(); 
+        return x.getParent() == null ? x : (TagElement)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1457,7 +1458,8 @@ public class ECJFactory implements ITermFactory {
     }
 
     private ASTNode asASTNode(IStrategoTerm term) {
-        return ((WrappedASTNode)term).getWrappee();
+        ASTNode x = ((WrappedASTNode)term).getWrappee();
+        return x.getParent() == null ? x : ASTNode.copySubtree(ast, x);
     }
 
     private MethodRefParameter asMethodRefParameter(IStrategoTerm term) {
@@ -1610,15 +1612,18 @@ public class ECJFactory implements ITermFactory {
     }
 
     private VariableDeclarationFragment asVariableDeclarationFragment(IStrategoTerm term) {
-        return ((WrappedVariableDeclarationFragment)term).getWrappee();
+    	VariableDeclarationFragment x = ((WrappedVariableDeclarationFragment)term).getWrappee();
+    	return x.getParent() == null ? x : (VariableDeclarationFragment) ASTNode.copySubtree(ast, x);
     }
 
     private AnonymousClassDeclaration asAnonymousClassDeclaration(IStrategoTerm term) {
-        return ((WrappedAnonymousClassDeclaration)term).getWrappee();
+        AnonymousClassDeclaration x = ((WrappedAnonymousClassDeclaration)term).getWrappee();
+        return x.getParent() == null ? x : (AnonymousClassDeclaration) ASTNode.copySubtree(ast, x);
     }
 
     private CatchClause asCatchClause(IStrategoTerm term) {
-        return ((WrappedCatchClause)term).getWrappee();
+    	CatchClause x = ((WrappedCatchClause)term).getWrappee();
+    	return x.getParent() == null ? x : (CatchClause) ASTNode.copySubtree(ast, x);
     }
 
     private String asString(IStrategoTerm term) {
@@ -3082,6 +3087,10 @@ public class ECJFactory implements ITermFactory {
 			return genericWrap((ASTNode)o);
 		
 		throw new NotImplementedException(" " + o.getClass());
+	}
+
+	public AST getAST() {
+		return ast;
 	}
     
     
