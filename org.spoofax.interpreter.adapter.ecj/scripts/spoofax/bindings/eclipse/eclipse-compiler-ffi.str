@@ -194,10 +194,28 @@ strategies
       DottedName(?typename)
     ; prim("ECJ_search_for_type", scope, typename)      
 
-  /** @type DottedName -> IType */
+  /** 
+   * Check compilation units with the given type name for the presence of a type
+   * with the given name. This is a shallow check.
+   * @param project : IProject
+   * @type DottedName -> IType 
+   *
+   * @see ecj-search-project-for-type-deep
+   */
   ecj-search-project-for-type(|project) = 
       DottedName(?typename)
-    ; prim("ECJ_search_project_for_type", project, typename)      
+    ; prim("ECJ_search_project_for_type", project, typename, 0)      
+
+  /** 
+   * Check all compilation units for the given type name, also those with different
+   * names than the type name. This takes longer than a shallow check.
+   *
+   * @param project : IProject
+   * @type DottedName -> IType
+   */
+  ecj-search-project-for-type-deep(|project) = 
+      DottedName(?typename)
+    ; prim("ECJ_search_project_for_type", project, typename, 1)      
 
   /** @type IType -> ITypeHierarchy */
   ecj-hierarchy-for-type = 

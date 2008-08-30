@@ -21,7 +21,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class ECJ_search_project_for_type extends AbstractPrimitive {
 
     public ECJ_search_project_for_type() {
-        super("ECJ_search_project_for_type", 0, 2);
+        super("ECJ_search_project_for_type", 0, 3);
     }
     
     @Override
@@ -32,11 +32,19 @@ public class ECJ_search_project_for_type extends AbstractPrimitive {
             return false;
         if(!Tools.isTermString(tvars[1]))
             return false;
+        if(!Tools.isTermInt(tvars[2]))
+        	return false;
         
+        final boolean checkDeeply = Tools.asJavaInt(tvars[2]) != 0 ? true : false;
+        ECJLibrary ecj = (ECJLibrary)env.getOperatorRegistry(ECJLibrary.REGISTRY_NAME);
         IJavaProject proj = ECJTools.asIJavaProject(tvars[0]);
         
         try {
-            IType t = proj.findType(Tools.asJavaString(tvars[1]));
+            IType t = null;
+            if(checkDeeply)
+            	t = proj.findType(Tools.asJavaString(tvars[1]), ecj.getNullProgressMonitor());
+            else
+            	t = proj.findType(Tools.asJavaString(tvars[1]));
             if(t == null)
                 return false;
             env.setCurrent(ECJFactory.wrap(t));

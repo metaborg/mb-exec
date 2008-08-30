@@ -7,6 +7,8 @@
 package org.spoofax.interpreter.library.ecj;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -18,6 +20,7 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
     public IProject currentProject;
     private IJavaProject currentJavaProject;
 	private ASTParser astParser = null;
+	private NullProgressMonitor nullProgressMonitor;
 
     public ECJLibrary() {
         init();
@@ -82,5 +85,11 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
 		if(astParser  == null)
 			astParser = ASTParser.newParser(AST.JLS3);
 		return astParser;
+	}
+
+	public IProgressMonitor getNullProgressMonitor() {
+		if(nullProgressMonitor == null)
+			nullProgressMonitor = new NullProgressMonitor();
+		return nullProgressMonitor;
 	}
 }
