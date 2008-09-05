@@ -125,6 +125,8 @@ strategies
     + ?EnumDeclaration(_, _, _, _, _, _)
     + ?TypeDeclaration(_, _, _, _, _, _ ,_,_)
       
+  ecj-is-IType = ?"IType"#(_)
+  
   ecj-is-Type = 
       ?ArrayType(_, _, _)
     + ?ParameterizedType(_, _)
@@ -193,6 +195,11 @@ strategies
   ecj-search-for-type(|scope) = 
       DottedName(?typename)
     ; prim("ECJ_search_for_type", scope, typename)      
+
+  /** @type DottedName -> List(IType) */
+  ecj-search-for-supertype-type-refs(|scope) = 
+      DottedName(?typename)
+    ; prim("ECJ_search_for_supertype_type_refs", scope, typename)      
 
   /** 
    * Check compilation units with the given type name for the presence of a type
@@ -279,6 +286,8 @@ strategies
    
   ecj-dotted-name-of = ?TypeBinding(_, <!DottedName(<id>)>, _, _, _, _, _)
 
+  ecj-dotted-name-of = ?IType(<id>, _, _, _, _, _)
+  
   /**
    * Obtains the dotted name of a primitive type. This is the same as
    * they keyword.

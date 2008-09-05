@@ -46,6 +46,7 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
         add(new ECJ_is_subtype_compatible());
         add(new ECJ_current_project());
         add(new ECJ_search_for_type());
+        add(new ECJ_search_for_supertype_type_refs());
         add(new ECJ_search_project_for_type());
         add(new ECJ_current_java_project());
         add(new ECJ_compilation_unit_for_type());

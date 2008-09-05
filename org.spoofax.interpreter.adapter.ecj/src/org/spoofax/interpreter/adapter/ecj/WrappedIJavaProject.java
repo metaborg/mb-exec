@@ -11,13 +11,13 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedIJavaProject extends AbstractECJAppl {
+public class WrappedIJavaProject extends WrappedIJavaElement {
 
     private final IJavaProject wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ECJJavaProject", 2);
     
     WrappedIJavaProject(IJavaProject wrappee) {
-        super(CTOR);
+        super(CTOR, wrappee);
         this.wrappee = wrappee;
     }
     

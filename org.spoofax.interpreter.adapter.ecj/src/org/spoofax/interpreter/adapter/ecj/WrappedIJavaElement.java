@@ -21,7 +21,12 @@ public class WrappedIJavaElement extends AbstractECJAppl {
         this.wrappee = wrappee;
     }
     
-    public IJavaElement getWrappee() {
+    protected WrappedIJavaElement(IStrategoConstructor ctor, IJavaElement wrappee) {
+    	super(ctor);
+    	this.wrappee = wrappee;
+	}
+
+	public IJavaElement getWrappee() {
         return wrappee;
     }
 
