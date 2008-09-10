@@ -1,10 +1,10 @@
 package org.spoofax.interpreter.terms;
 
 public class InlinePrinter implements ITermPrinter {
-	StringBuffer out;
+	private final StringBuilder out;
 	
 	public InlinePrinter() {
-		out = new StringBuffer();
+		out = new StringBuilder();
 	}
 	
 	public String getString() {

@@ -127,7 +127,7 @@ public class BasicTermFactory implements ITermFactory {
         do {
             sb.append((char)ch);
             ch = bis.read();
-        } while(Character.isLetter(ch));
+        } while(Character.isLetter(ch) || ch == '-');
         
         //System.err.println(" - " + sb.toString());
 
