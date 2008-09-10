@@ -32,7 +32,7 @@ public class SSL_fputs extends AbstractPrimitive {
 
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         
-        OutputStream ous = or.getOutputStream(Tools.asJavaInt(targs[1]));
+        OutputStream ous = or.getIOAgent().getOutputStream(Tools.asJavaInt(targs[1]));
         try {
             ous.write(Tools.javaString(targs[0]).getBytes());
         } catch(IOException e) {

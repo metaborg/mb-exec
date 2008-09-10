@@ -8,36 +8,24 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.spoofax.interpreter.core.IContext;
-import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.AbstractStrategoOperatorRegistry;
+import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.library.ssl.SSL_hashtable_create.Hashtable;
 import org.spoofax.interpreter.library.ssl.SSL_indexedSet_create.IndexedSet;
 
 // FIXME: The function registry should probably be shared between instances
 public class SSLLibrary extends AbstractStrategoOperatorRegistry {
 
-    public final static int CONST_STDIN = 0;
-    public final static int CONST_STDOUT = 1;
-    public final static int CONST_STDERR = 2;
     public static final String REGISTRY_NAME = "SSL";
 
     // FIXME: Move these into environment
-
-    InputStream stdinStream;
-    OutputStream stdoutStream;
-    OutputStream stderrStream;
     
-    private Map<Integer, RandomAccessFile> fileMap;
-    private int fileCounter;
+    private IOAgent ioAgent = new IOAgent();
     
     private Map<Integer, IndexedSet> indexedSetMap;
     private int indexedSetCounter;
@@ -54,14 +42,11 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
     }
     
     private void initRegistry() {
-        stdinStream = System.in;
-        stdoutStream = System.out;
-        stderrStream = System.err;
-        
         add(new SSL_is_int());
         add(new SSL_is_real());
         add(new SSL_addi());
         add(new SSL_addr());
+        add(new SSL_chdir());
         add(new SSL_divi());
         add(new SSL_divr());
         add(new SSL_gti());
@@ -157,7 +142,6 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         return get(s);
     }
 
-
     /**
      * Resets the entire state of the SSL. <br>
      * Should be called once per interpreter.
@@ -182,9 +166,11 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         dynruleHashtableRef = registerHashtable(new Hashtable(128, 75));
         tableTableRef = registerHashtable(new Hashtable(128, 75));
         
-        fileMap = new HashMap<Integer, RandomAccessFile>();
-        fileCounter = 3;
-        
+        try {
+            getIOAgent().setWorkingDir(".");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e); // silly checked exceptions...
+        }
     }
     
 
@@ -210,51 +196,12 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         return tableTableRef;
     }
     
-    public OutputStream getOutputStream(int fd) {
-        if(fd == CONST_STDOUT) {
-            return stdoutStream;
-        } else if (fd == CONST_STDERR) {
-            return stderrStream;
-        }
-        RandomAccessFile raf = fileMap.get(fd);
-        if(raf == null)
-            return null;
-        
-        return new RandomAccessOutputStream(raf);
+    public IOAgent getIOAgent() {
+        return ioAgent;
     }
-
-    public boolean closeRandomAccessFile(int fd) throws InterpreterException {
-        RandomAccessFile raf = fileMap.get(fd);
-        if(raf == null)
-            return false;
-        try {
-            raf.close();
-        } catch(IOException e) {
-            throw new InterpreterException(e);
-        }
-        fileMap.remove(fd);
-        return true;
-    }
-
-    public int openRandomAccessFile(String fn, String mode) throws InterpreterException {
-        String m = mode.indexOf('w') >= 0 ? "rw" : "r";
-        try {
-            fileMap.put(fileCounter, new RandomAccessFile(fn, m));
-        } catch(FileNotFoundException e) {
-            throw new InterpreterException(e); 
-        }
-        return fileCounter++;
-    }
-
-    public InputStream getInputStream(int fd) {
-        if(fd == CONST_STDIN) {
-            return stdinStream;
-        }
-        RandomAccessFile raf = fileMap.get(fd);
-        if(raf == null)
-            return null;
-        
-        return new RandomAccessInputStream(raf);
+    
+    public void setIOAgent(IOAgent ioAgent) {
+        this.ioAgent = ioAgent;
     }
 
     public static SSLLibrary instance(IContext env) {

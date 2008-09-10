@@ -58,7 +58,7 @@ public class Context implements IContext {
         return current;
     }
 
-   public void setCurrent(IStrategoTerm term) {
+    public void setCurrent(IStrategoTerm term) {
         current = term;
     }
 

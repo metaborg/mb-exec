@@ -29,7 +29,7 @@ public class SSL_close extends AbstractPrimitive {
         
         SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         int fd = Tools.asJavaInt(tvars[0]);
-        return op.closeRandomAccessFile(fd);
+        return op.getIOAgent().closeRandomAccessFile(fd);
     }
 
 }

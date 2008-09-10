@@ -29,7 +29,7 @@ public class SSL_fclose extends AbstractPrimitive {
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         env.setCurrent(env.getFactory().makeTuple());
-        return or.closeRandomAccessFile(Tools.asJavaInt(tvars[0]));
+        return or.getIOAgent().closeRandomAccessFile(Tools.asJavaInt(tvars[0]));
         
     }
 

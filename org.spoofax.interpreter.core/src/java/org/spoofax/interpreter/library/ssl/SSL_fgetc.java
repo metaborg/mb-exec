@@ -30,7 +30,7 @@ public class SSL_fgetc extends AbstractPrimitive {
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        InputStream is = or.getInputStream(Tools.asJavaInt(tvars[0]));
+        InputStream is = or.getIOAgent().getInputStream(Tools.asJavaInt(tvars[0]));
 
         int r = -1;
         

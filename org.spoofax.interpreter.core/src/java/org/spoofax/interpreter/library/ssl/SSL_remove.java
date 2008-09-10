@@ -7,8 +7,6 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.io.File;
-
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
@@ -29,9 +27,11 @@ public class SSL_remove extends AbstractPrimitive {
         if(!Tools.isTermString(tvars[0]))
             return false;
         
+        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
+        
         String fn = Tools.asJavaString(tvars[0]);
         
-        return new File(fn).delete();
+        return or.getIOAgent().openFile(fn).delete();
     }
 
 }

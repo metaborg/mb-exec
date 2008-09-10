@@ -33,7 +33,7 @@ public class SSL_write_term_to_stream_baf extends AbstractPrimitive {
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        OutputStream os = or.getOutputStream(Tools.asJavaInt(tvars[0]));
+        OutputStream os = or.getIOAgent().getOutputStream(Tools.asJavaInt(tvars[0]));
         if(os == null)
             return false;
 

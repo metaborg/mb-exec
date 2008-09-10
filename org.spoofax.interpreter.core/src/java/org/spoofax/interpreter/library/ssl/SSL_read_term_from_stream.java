@@ -33,7 +33,7 @@ public class SSL_read_term_from_stream extends AbstractPrimitive {
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        InputStream is = or.getInputStream(Tools.asJavaInt(tvars[0]));
+        InputStream is = or.getIOAgent().getInputStream(Tools.asJavaInt(tvars[0]));
         if(is == null)
             return false;
 

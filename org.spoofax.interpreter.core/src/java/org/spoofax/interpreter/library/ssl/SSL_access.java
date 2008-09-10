@@ -38,10 +38,12 @@ public class SSL_access extends AbstractPrimitive {
             return false;
         if (!(Tools.isTermList(targs[1])))
             return false;
-
+        
+        SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
+        
         String path = Tools.javaString(targs[0]);
         int permissions = permissions_from_term((IStrategoList)targs[1]);
-        File f = new File(path);
+        File f = op.getIOAgent().openFile(path);
 
         if ((permissions & R_OK) != 0) {
             if (!f.canRead())

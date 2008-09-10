@@ -10,29 +10,16 @@ package org.spoofax.interpreter.core;
 public class InterpreterException extends Exception {
 
     private static final long serialVersionUID = -3622131518420023392L;
-    private String error;
-    private Exception nested;
-
-    public InterpreterException(String s) {
-        this.error = s;
+    
+    public InterpreterException(String message, Exception cause) {
+        super(message, cause);
     }
 
-    public InterpreterException(Exception nested) {
-        this.nested = nested;
+    public InterpreterException(String message) {
+        super(message);
     }
 
-    public String toString() {
-        if(error != null)
-            return "InterpreterException: " + error;
-        else
-            return "InterpreterException: " + nested.toString();
-    }
-
-    public String getReason() {
-        return error;
-    }
-
-    public Exception getNestedException() {
-        return nested;
+    public InterpreterException(Exception cause) {
+        super(cause);
     }
 }

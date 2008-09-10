@@ -30,9 +30,11 @@ public class SSL_readdir extends AbstractPrimitive {
         if(!Tools.isTermString(tvars[0]))
             return false;
         
+        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
+        
         String dir = Tools.javaString(tvars[0]);
         
-        File f = new File(dir);
+        File f = or.getIOAgent().openFile(dir);
         if(f == null)
             return false;
         

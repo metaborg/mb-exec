@@ -15,7 +15,7 @@ public class RandomAccessOutputStream extends OutputStream {
 
     private RandomAccessFile raf;
 
-    RandomAccessOutputStream(RandomAccessFile raf) {
+    public RandomAccessOutputStream(RandomAccessFile raf) {
         this.raf = raf;
     }
     

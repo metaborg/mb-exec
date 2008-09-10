@@ -7,9 +7,9 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -33,13 +33,15 @@ public class SSL_copy extends AbstractPrimitive {
         
         if(!Tools.isTermString(tvars[1]))
             return false;
+        
+        SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
 
         byte[] bs = new byte[1024];
         int read;
 
         try {
-            FileInputStream fis = new FileInputStream(Tools.javaString(tvars[0]));
-            FileOutputStream fos = new FileOutputStream(Tools.javaString(tvars[1]));
+            InputStream fis = op.getIOAgent().openInputStream(Tools.javaString(tvars[0]));
+            OutputStream fos =  op.getIOAgent().openFileOutputStream(Tools.javaString(tvars[1]));
         
             read = fis.read(bs, 0, 1024);
             while(read != -1) {

@@ -29,9 +29,11 @@ public class SSL_modification_time extends AbstractPrimitive {
         if(!Tools.isTermString(tvars[0]))
             return false;
         
+        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
+        
         String fn = Tools.javaString(tvars[0]);
         
-        File f = new File(fn);
+        File f = or.getIOAgent().openFile(fn);
         if(f == null)
             return false;
         
