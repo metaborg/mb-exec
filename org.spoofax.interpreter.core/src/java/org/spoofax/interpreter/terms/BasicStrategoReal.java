@@ -12,8 +12,13 @@ public class BasicStrategoReal extends BasicStrategoTerm implements IStrategoRea
 
     private final double value;
     
-    protected BasicStrategoReal(double value) {
+    protected BasicStrategoReal(double value, IStrategoList annotations) {
+        super(annotations);
         this.value = value;
+    }
+    
+    protected BasicStrategoReal(double value) {
+        this(value, null);
     }
     
     public double realValue() {
@@ -36,10 +41,13 @@ public class BasicStrategoReal extends BasicStrategoTerm implements IStrategoRea
         return IStrategoTerm.REAL;
     }
 
+    @Override
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.REAL)
             return false;
-        return value == ((IStrategoReal)second).realValue();
+        if (value != ((IStrategoReal)second).realValue())
+            return false;
+        return getAnnotations().match(second.getAnnotations());
     }
 
     public void prettyPrint(ITermPrinter pp) {

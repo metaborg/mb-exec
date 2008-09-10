@@ -24,6 +24,8 @@ public interface IStrategoTerm {
     public IStrategoTerm[] getAllSubterms();
     public int getTermType();
     
+    public IStrategoList getAnnotations();
+    
     public boolean match(IStrategoTerm second);
     
     public void prettyPrint(ITermPrinter pp);

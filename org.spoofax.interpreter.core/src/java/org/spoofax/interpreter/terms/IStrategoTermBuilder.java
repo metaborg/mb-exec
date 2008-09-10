@@ -23,6 +23,8 @@ public interface IStrategoTermBuilder {
     public IStrategoString makeString(String s);
     public IStrategoList makeList(IStrategoTerm... terms);
     public IStrategoList makeList(Collection<IStrategoTerm> terms);
+    
+    public IStrategoTerm annotate(IStrategoTerm term, IStrategoList annotations);
 
     public boolean hasConstructor(String ctorName, int arity);
     

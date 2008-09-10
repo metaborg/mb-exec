@@ -12,8 +12,13 @@ public class BasicStrategoString extends BasicStrategoTerm implements IStrategoS
 
     private final String value;
     
-    public BasicStrategoString(String value) {
+    public BasicStrategoString(String value, IStrategoList annotations) {
+        super(annotations);
         this.value = value;
+    }
+    
+    public BasicStrategoString(String value) {
+        this(value, null);
     }
     
     public IStrategoTerm getSubterm(int index) {
@@ -38,7 +43,10 @@ public class BasicStrategoString extends BasicStrategoTerm implements IStrategoS
             return false;
         
         IStrategoString snd = (IStrategoString) second;
-        return value.equals(snd.stringValue());
+        if (!value.equals(snd.stringValue()))
+            return false;
+        
+        return getAnnotations().match(second.getAnnotations());
     }
 
     public String stringValue() {

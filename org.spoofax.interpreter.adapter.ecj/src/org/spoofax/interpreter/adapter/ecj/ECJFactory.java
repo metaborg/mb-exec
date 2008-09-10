@@ -386,6 +386,13 @@ public class ECJFactory implements ITermFactory {
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList terms) {
         return makeAppl(ctr, terms.getAllSubterms());
     }
+    
+    public IStrategoTerm annotate(IStrategoTerm term, IStrategoList annotations) {
+    	throw new NotImplementedException();
+    	// FIXME: annotations on ECJ terms..?
+    	//        (possibly using the techique in
+    	//         org.strategoxt.imp.runtime.stratego.adapter.AnnotatedAstNode)
+    }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... kids) {
         IStrategoAppl t = constructASTNode(ctr, kids);

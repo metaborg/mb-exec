@@ -7,11 +7,16 @@
  */
 package org.spoofax.interpreter.terms;
 
-public abstract class BasicStrategoTerm implements IStrategoTerm {
+public abstract class BasicStrategoTerm implements IStrategoTerm, Cloneable {
 
+    private IStrategoList annotations;
+    
+    protected BasicStrategoTerm(IStrategoList annotations) {
+        this.annotations = annotations;
+    }
 
     public boolean match(IStrategoTerm second) {
-        return doSlowMatch(second);
+        return this == second || doSlowMatch(second);
     }
 
     protected abstract boolean doSlowMatch(IStrategoTerm second);
@@ -25,4 +30,21 @@ public abstract class BasicStrategoTerm implements IStrategoTerm {
     
     @Override
     public abstract int hashCode();
+    
+    @Override
+    protected BasicStrategoTerm clone() {
+        try {
+            return (BasicStrategoTerm) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e); // silly checked exceptions...
+        }
+    }
+    
+    public IStrategoList getAnnotations() {
+        return annotations == null ? BasicTermFactory.EMPTY_LIST : annotations;
+    }
+    
+    protected void internalSetAnnotations(IStrategoList annotations) {
+        this.annotations = annotations;
+    }
 }

@@ -69,4 +69,7 @@ public class ASTCtor implements IStrategoConstructor {
         throw new NotImplementedException();
     }
 
+    public IStrategoList getAnnotations() {
+    	throw new UnsupportedOperationException();
+    }
 }

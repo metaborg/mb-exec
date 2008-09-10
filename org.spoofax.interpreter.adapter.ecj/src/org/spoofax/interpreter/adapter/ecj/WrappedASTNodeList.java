@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.spoofax.NotImplementedException;
+import org.spoofax.interpreter.terms.BasicTermFactory;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
@@ -138,5 +139,9 @@ public class WrappedASTNodeList implements IStrategoList {
 
     public boolean isEmpty() {
         return wrappee.isEmpty();
+    }
+    
+    public IStrategoList getAnnotations() {
+    	return BasicTermFactory.EMPTY_LIST;
     }
 }

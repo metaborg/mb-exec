@@ -24,6 +24,7 @@ import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import static org.spoofax.interpreter.core.Tools.*;
 
 public class Build extends Strategy {
 
@@ -267,7 +268,25 @@ public class Build extends Strategy {
 
     private IStrategoTerm buildAnno(IContext env, IStrategoAppl t) throws InterpreterException {
         // FIXME: Actually build annotation
-        return buildTerm(env, Tools.applAt(t, 0));
+        
+        IStrategoTerm term = buildTerm(env, applAt(t, 0));
+        
+        IStrategoAppl annos = applAt(t, 1);
+        if ("Op".equals(annos.getConstructor().getName())
+                && "Nil".equals(stringAt(annos, 0).stringValue())) {
+            return term;
+        } else {
+            IStrategoTerm annoList = buildTerm(env, annos);
+            if (annoList instanceof IStrategoList) { 
+                if (((IStrategoList) annoList).isEmpty()) {
+                    return term;
+                } else {
+                    return env.getFactory().annotate(term, (IStrategoList) annoList);
+                }
+            } else {
+                throw new InterpreterException("Trying to build an annotation list that is not a list");
+            }
+        }
     }
 
     public void prettyPrint(StupidFormatter sf) {

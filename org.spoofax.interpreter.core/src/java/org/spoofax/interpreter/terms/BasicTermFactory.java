@@ -24,7 +24,11 @@ import org.spoofax.NotImplementedException;
 public class BasicTermFactory implements ITermFactory {
 
     public static final IStrategoTerm[] EMPTY = new IStrategoTerm[0];
+
+    public static final IStrategoList EMPTY_LIST = new BasicTermFactory().makeList(EMPTY); 
+
     private Map<String,Integer> ctorCache;
+    
 
     public BasicTermFactory() {
         ctorCache = new WeakHashMap<String,Integer>();
@@ -61,7 +65,7 @@ public class BasicTermFactory implements ITermFactory {
         StringBuffer sb = new StringBuffer();
         int ch = bis.read();
         if(ch == '"')
-            return new BasicStrategoString("");
+            return new BasicStrategoString("", null);
         boolean escaped = false;
         do {
             escaped = false;
@@ -115,7 +119,7 @@ public class BasicTermFactory implements ITermFactory {
                 ch = bis.read();
             }
         } while(escaped || ch != '\"');
-        return new BasicStrategoString(sb.toString());
+        return new BasicStrategoString(sb.toString(), null);
     }
 
     private IStrategoTerm parseAppl(PushbackInputStream bis) throws IOException {
@@ -228,12 +232,12 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
-        return new BasicStrategoAppl(ctr, kids.getAllSubterms());
+        return new BasicStrategoAppl(ctr, kids.getAllSubterms(), null);
         
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... terms) {
-        return new BasicStrategoAppl(ctr, terms);
+        return new BasicStrategoAppl(ctr, terms, null);
     }
 
     public IStrategoConstructor makeConstructor(String name, int arity) {
@@ -242,27 +246,38 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoInt makeInt(int i) {
-        return new BasicStrategoInt(i);
+        return new BasicStrategoInt(i, null);
     }
 
     public IStrategoList makeList(IStrategoTerm... terms) {
-        return new BasicStrategoList(terms);
+        return new BasicStrategoList(terms, null);
     }
 
     public IStrategoList makeList(Collection<IStrategoTerm> terms) {
-        return new BasicStrategoList(terms.toArray(new IStrategoTerm[0]));
+        return new BasicStrategoList(terms.toArray(new IStrategoTerm[0]), null);
     }
 
     public IStrategoReal makeReal(double d) {
-        return new BasicStrategoReal(d);
+        return new BasicStrategoReal(d, null);
     }
 
     public IStrategoString makeString(String s) {
-        return new BasicStrategoString(s);
+        return new BasicStrategoString(s, null);
     }
 
     public IStrategoTuple makeTuple(IStrategoTerm... terms) {
-        return new BasicStrategoTuple(terms);
+        return new BasicStrategoTuple(terms, null);
+    }
+    
+    public IStrategoTerm annotate(IStrategoTerm term, IStrategoList annotations) {
+        if (term instanceof BasicStrategoTerm) {
+            BasicStrategoTerm result = ((BasicStrategoTerm) term).clone();
+            result.internalSetAnnotations(annotations);
+            return result;
+        } else {
+            // TODO: Use sdf2imp style annotation wrapper class?
+            throw new NotImplementedException();
+        }
     }
 
 }

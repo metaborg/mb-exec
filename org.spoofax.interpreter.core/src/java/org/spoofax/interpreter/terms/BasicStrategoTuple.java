@@ -11,8 +11,13 @@ public class BasicStrategoTuple extends BasicStrategoTerm implements IStrategoTu
 
     protected final IStrategoTerm[] kids;
     
-    protected BasicStrategoTuple(IStrategoTerm[] kids) {
+    protected BasicStrategoTuple(IStrategoTerm[] kids, IStrategoList annotations) {
+        super(annotations);
         this.kids = kids;
+    }
+    
+    protected BasicStrategoTuple(IStrategoTerm[] kids) {
+        this(kids, null);
     }
     
     public IStrategoTerm get(int index) {
@@ -42,6 +47,7 @@ public class BasicStrategoTuple extends BasicStrategoTerm implements IStrategoTu
         return IStrategoTerm.TUPLE;
     }
 
+    @Override
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.TUPLE)
             return false;
@@ -49,6 +55,10 @@ public class BasicStrategoTuple extends BasicStrategoTerm implements IStrategoTu
         IStrategoTuple snd = (IStrategoTuple) second;
         if(size() != snd.size())
             return false;
+
+        if (!getAnnotations().match(second.getAnnotations()))
+            return false;
+        
         IStrategoTerm[] otherkids = snd.getAllSubterms(); 
         for(int i = 0, sz = kids.length; i < sz; i++) {
             if(!kids[i].match(otherkids[i]))

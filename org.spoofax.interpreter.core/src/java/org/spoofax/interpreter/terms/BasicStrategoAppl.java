@@ -13,9 +13,14 @@ public class BasicStrategoAppl extends BasicStrategoTerm implements IStrategoApp
     private final IStrategoTerm[] kids;
     private final IStrategoConstructor ctor;
     
-    protected BasicStrategoAppl(IStrategoConstructor ctor, IStrategoTerm[] kids) {
+    protected BasicStrategoAppl(IStrategoConstructor ctor, IStrategoTerm[] kids, IStrategoList annotations) {
+        super(annotations);
         this.ctor = ctor;
         this.kids = kids;
+    }
+    
+    public BasicStrategoAppl(IStrategoConstructor ctor, IStrategoTerm[] kids) {
+        this(ctor, kids, null);
     }
     
     public IStrategoTerm[] getArguments() {
@@ -51,6 +56,8 @@ public class BasicStrategoAppl extends BasicStrategoTerm implements IStrategoApp
             return false;
         IStrategoAppl o = (IStrategoAppl)second;
         if(!ctor.match(o.getConstructor()))
+            return false;
+        if (!getAnnotations().match(second.getAnnotations()))
             return false;
         IStrategoTerm[] otherkids = o.getAllSubterms();
         for(int i = 0, sz = kids.length; i < sz; i++) {

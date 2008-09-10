@@ -24,6 +24,7 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTuple;
+import static org.spoofax.interpreter.core.Tools.*;
 
 public class Match extends Strategy {
 
@@ -279,8 +280,15 @@ public class Match extends Strategy {
         if(DebugUtil.isDebugging()) {
             DebugUtil.debug("  pattern is Anno");
         }
-        // FIXME: Do real match of annotations
-        return match(env, t, Tools.applAt(p, 0));
+        
+        Results r1 = matchList(env, t.getAnnotations(), applAt(p, 1));
+        if (r1 == null) return null;
+        
+        Results r2 = match(env, t, applAt(p, 0));
+        if (r2 == null) return null;
+        
+        r2.addAll(r1);
+        return r2;
     }
 
     protected Results matchIntInt(IStrategoInt t, IStrategoAppl p) {

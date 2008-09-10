@@ -15,6 +15,7 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
     private final int arity;
 
     public BasicStrategoConstructor(String name, int arity) {
+        super(null);
         this.name = name;
         this.arity = arity;
     }
@@ -39,6 +40,11 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
 
     public IStrategoTerm[] getAllSubterms() {
         return BasicTermFactory.EMPTY;
+    }
+    
+    @Override
+    public IStrategoList getAnnotations() {
+        throw new UnsupportedOperationException();
     }
 
     public IStrategoTerm getSubterm(int index) {

@@ -11,8 +11,13 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
 
     protected final IStrategoTerm[] kids;
     
-    protected BasicStrategoList(IStrategoTerm[] kids) {
+    protected BasicStrategoList(IStrategoTerm[] kids, IStrategoList annotations) {
+        super(annotations);
         this.kids = kids;
+    }
+    
+    protected BasicStrategoList(IStrategoTerm[] kids) {
+        this(kids, BasicTermFactory.EMPTY_LIST);
     }
     
     public IStrategoTerm head() {
@@ -24,7 +29,7 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
     }
     
     public IStrategoList tail() {
-        return new BasicStrategoList(doTail());
+        return new BasicStrategoList(doTail(), null);
     }
     
     protected IStrategoTerm[] doTail() {
@@ -36,7 +41,7 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
     }
     
     public IStrategoList prepend(IStrategoTerm prefix) {
-        return new BasicStrategoList(doPrepend(prefix));
+        return new BasicStrategoList(doPrepend(prefix), null);
     }
     
     protected IStrategoTerm[] doPrepend(IStrategoTerm prefix) {
@@ -82,6 +87,8 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
         
         IStrategoList snd = (IStrategoList) second;
         if(size() != snd.size())
+            return false;
+        if (!getAnnotations().match(second.getAnnotations()))
             return false;
         IStrategoTerm[] otherkids = second.getAllSubterms();
         for(int i = 0, sz = size(); i < sz; i++) {

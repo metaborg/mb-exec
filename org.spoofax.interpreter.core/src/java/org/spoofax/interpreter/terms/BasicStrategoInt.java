@@ -12,8 +12,13 @@ public class BasicStrategoInt extends BasicStrategoTerm implements IStrategoInt 
 
     private final int value;
     
-    protected BasicStrategoInt(int value) {
+    protected BasicStrategoInt(int value, IStrategoList annotations) {
+        super(annotations);
         this.value = value;
+    }
+    
+    protected BasicStrategoInt(int value) {
+        this(value, null);
     }
     
     public int intValue() {
@@ -39,6 +44,8 @@ public class BasicStrategoInt extends BasicStrategoTerm implements IStrategoInt 
     @Override
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.INT)
+            return false;
+        if (!getAnnotations().match(second.getAnnotations()))
             return false;
         return value == ((IStrategoInt)second).intValue(); 
     }

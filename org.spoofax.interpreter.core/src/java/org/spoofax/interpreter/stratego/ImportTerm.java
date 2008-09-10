@@ -8,10 +8,13 @@
 package org.spoofax.interpreter.stratego;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.library.IOAgent;
+import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ImportTerm extends Strategy {
@@ -23,12 +26,16 @@ public class ImportTerm extends Strategy {
 	}
 
 	public IConstruct eval(IContext env) throws InterpreterException {
-
 		try {
-			final IStrategoTerm t = env.getFactory().parseFromFile(path);
-			env.setCurrent(t);
+		    SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
+		    IOAgent io = op.getIOAgent();
+		    
+		    InputStream input = io.openInputStream(path, true);
+			IStrategoTerm result = env.getFactory().parseFromStream(input);
+			
+			env.setCurrent(result);
 		} catch (IOException e) {
-			throw new InterpreterException(e);
+			throw new InterpreterException("import-term failed", e);
 		}
 		
 		return getHook().pop().onSuccess(env);

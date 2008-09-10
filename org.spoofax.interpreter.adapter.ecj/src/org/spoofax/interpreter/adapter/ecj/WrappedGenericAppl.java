@@ -7,8 +7,10 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
+import org.spoofax.interpreter.terms.BasicTermFactory;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
 
@@ -25,6 +27,10 @@ public class WrappedGenericAppl implements IStrategoAppl {
     
     public IStrategoTerm[] getArguments() {
         return children;
+    }
+    
+    public IStrategoList getAnnotations() {
+    	return BasicTermFactory.EMPTY_LIST;
     }
 
     public IStrategoConstructor getConstructor() {
