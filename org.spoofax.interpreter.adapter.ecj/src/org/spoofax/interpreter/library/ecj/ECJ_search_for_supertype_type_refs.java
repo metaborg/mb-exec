@@ -20,7 +20,6 @@ import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
-import org.eclipse.jdt.core.search.TypeReferenceMatch;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -44,10 +43,12 @@ public class ECJ_search_for_supertype_type_refs extends AbstractPrimitive {
         if(!Tools.isTermString(tvars[1]))
             return false;
         
+        // TODO: This only works in 3.4, what to do for other versions? 
+        
         final String className = Tools.asJavaString(tvars[1]);
         SearchPattern sp = SearchPattern.createPattern(className, 
         		IJavaSearchConstants.TYPE, 
-        		IJavaSearchConstants.SUPERTYPE_TYPE_REFERENCE, 
+        		512, // Eclipse 3.4: IJavaSearchConstants.SUPERTYPE_TYPE_REFERENCE, 
         		SearchPattern.R_PATTERN_MATCH | SearchPattern.R_CASE_SENSITIVE);
         IJavaSearchScope ss = SearchEngine.createJavaSearchScope(new IJavaElement[] { ECJTools.asIJavaElement(tvars[0]) });
         
