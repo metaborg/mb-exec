@@ -138,7 +138,7 @@ public class BasicTermFactory implements ITermFactory {
         if(ch == '(') {
             List<IStrategoTerm> l = parseTermSequence(bis, ')');
             IStrategoConstructor c = makeConstructor(sb.toString(), l.size());
-            return makeAppl(c, l.toArray(new IStrategoTerm[0]));
+            return makeAppl(c, l.toArray(EMPTY));
         } else {
             bis.unread(ch);
             IStrategoConstructor c = makeConstructor(sb.toString(), 0);
@@ -148,7 +148,7 @@ public class BasicTermFactory implements ITermFactory {
 
     private IStrategoTerm parseTuple(PushbackInputStream bis) throws IOException {
         //System.err.println("tuple");
-        return makeTuple(parseTermSequence(bis, ')').toArray(new IStrategoTerm[0]));
+        return makeTuple(parseTermSequence(bis, ')').toArray(EMPTY));
     }
 
     private List<IStrategoTerm> parseTermSequence(PushbackInputStream bis, char endChar) throws IOException {
@@ -231,9 +231,9 @@ public class BasicTermFactory implements ITermFactory {
         return ctorCache.get(ctorName) != null;
     }
 
-    public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids,
+    public final IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids,
             IStrategoList annotations) {
-        return new BasicStrategoAppl(ctr, kids.getAllSubterms(), annotations);
+        return makeAppl(ctr, kids.getAllSubterms(), annotations);
     }
 
     public final IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
@@ -263,7 +263,7 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoList makeList(Collection<IStrategoTerm> terms) {
-        return new BasicStrategoList(terms.toArray(new IStrategoTerm[0]), null);
+        return new BasicStrategoList(terms.toArray(EMPTY), null);
     }
 
     public IStrategoReal makeReal(double d) {

@@ -79,6 +79,7 @@ public class All extends Strategy {
     	return body.eval(env);
     }
 
+    @Override
     public String toString(){
     	return "All(" + body.toString() + ")";
     }
