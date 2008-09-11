@@ -32,6 +32,35 @@ public abstract class BasicStrategoTerm implements IStrategoTerm, Cloneable {
     public abstract int hashCode();
     
     @Override
+    public abstract String toString();
+    
+    protected void appendAnnotations(StringBuilder sb) {
+        IStrategoList annos = getAnnotations();
+        if (annos.size() == 0) return;
+        
+        sb.append('{');
+        sb.append(annos.get(0));
+        for (int i = 1; i < annos.size(); i++) {
+            sb.append(",");
+            sb.append(annos.toString());
+        }
+        sb.append('}');
+    }
+    
+    protected void printAnnotations(ITermPrinter pp) {
+        IStrategoList annos = getAnnotations();
+        if (annos.size() == 0) return;
+        
+        pp.print("{");
+        annos.get(0).prettyPrint(pp);
+        for (int i = 1; i < annos.size(); i++) {
+            pp.print(", ");
+            pp.print(annos.toString());
+        }
+        pp.print("}");
+    }
+    
+    @Override
     protected BasicStrategoTerm clone() {
         try {
             return (BasicStrategoTerm) super.clone();

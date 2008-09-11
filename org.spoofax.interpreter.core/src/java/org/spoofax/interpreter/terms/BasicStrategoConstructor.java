@@ -73,6 +73,11 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
     }
     
     @Override
+    public String toString() {
+        return name + "/" + arity;
+    }
+    
+    @Override
     public int hashCode() {
         return name.hashCode() + 5407 * arity; 
     }

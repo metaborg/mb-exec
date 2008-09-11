@@ -51,12 +51,16 @@ public class BasicStrategoInt extends BasicStrategoTerm implements IStrategoInt 
     }
 
     public void prettyPrint(ITermPrinter pp) {
-        pp.print("" + value);
+        pp.print("" + intValue());
+        printAnnotations(pp);
     }
 
     @Override
     public String toString() {
-        return "" + value;
+        StringBuilder result = new StringBuilder();
+        result.append(intValue());
+        appendAnnotations(result);
+        return result.toString();
     }
     
     @Override

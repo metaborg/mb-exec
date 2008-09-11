@@ -218,7 +218,7 @@ public class BasicTermFactory implements ITermFactory {
 
     public IStrategoTerm replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids,
             IStrategoTerm old) {
-        return makeAppl(constructor, kids);
+        return makeAppl(constructor, kids, old.getAnnotations());
     }
 
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException {
@@ -231,13 +231,22 @@ public class BasicTermFactory implements ITermFactory {
         return ctorCache.get(ctorName) != null;
     }
 
-    public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
-        return new BasicStrategoAppl(ctr, kids.getAllSubterms(), null);
-        
+    public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids,
+            IStrategoList annotations) {
+        return new BasicStrategoAppl(ctr, kids.getAllSubterms(), annotations);
     }
 
-    public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... terms) {
-        return new BasicStrategoAppl(ctr, terms, null);
+    public final IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
+        return makeAppl(ctr, kids, null);
+    }
+
+    public IStrategoAppl makeAppl(IStrategoConstructor ctr,
+            IStrategoTerm[] terms, IStrategoList annotations) {
+        return new BasicStrategoAppl(ctr, terms, annotations);
+    }
+
+    public final IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... terms) {
+        return makeAppl(ctr, terms, null);
     }
 
     public IStrategoConstructor makeConstructor(String name, int arity) {
@@ -269,7 +278,7 @@ public class BasicTermFactory implements ITermFactory {
         return new BasicStrategoTuple(terms, null);
     }
     
-    public IStrategoTerm annotate(IStrategoTerm term, IStrategoList annotations) {
+    public IStrategoTerm annotateTerm(IStrategoTerm term, IStrategoList annotations) {
         if (term instanceof BasicStrategoTerm) {
             BasicStrategoTerm result = ((BasicStrategoTerm) term).clone();
             result.internalSetAnnotations(annotations);

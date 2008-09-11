@@ -117,6 +117,7 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
         } else {
             pp.print("[]");
         }
+        printAnnotations(pp);
     }
     
     @Override
@@ -131,6 +132,7 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
             }
         }
         sb.append("]");
+        appendAnnotations(sb);
         return sb.toString();
     }
 

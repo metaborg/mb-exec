@@ -107,7 +107,7 @@ public class LibraryTest extends AbstractInterpreterTest {
     {  interpTest("placeholder-test", "(0,0)");   }
 */
     public void testAnnotation() throws IOException, InterpreterException 
-    { interpTest("annotation-test", "(10,0)"); }
+    { interpTest("annotation-test", "(24,0)"); }
 
     public void testString() throws IOException, InterpreterException 
     { interpTest("string-test", "(71,0)"); }

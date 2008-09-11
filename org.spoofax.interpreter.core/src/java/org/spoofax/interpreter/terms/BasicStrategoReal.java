@@ -51,12 +51,16 @@ public class BasicStrategoReal extends BasicStrategoTerm implements IStrategoRea
     }
 
     public void prettyPrint(ITermPrinter pp) {
-        pp.print("" + value);
+        pp.print("" + realValue());
+        printAnnotations(pp);
     }
-    
+
     @Override
     public String toString() {
-        return "" + value;
+        StringBuilder result = new StringBuilder();
+        result.append(realValue());
+        appendAnnotations(result);
+        return result.toString();
     }
 
     @Override

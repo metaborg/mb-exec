@@ -218,7 +218,7 @@ public class Build extends Strategy {
         IStrategoAppl headPattern = (IStrategoAppl) children.get(0);
         IStrategoAppl tailPattern = (IStrategoAppl) children.get(1);
         
-        IStrategoList tail = (IStrategoList) buildList(env, tailPattern); 
+        IStrategoList tail = buildList(env, tailPattern); 
         IStrategoTerm head = buildTerm(env, headPattern);
         
         if(tail == null || head == null)
@@ -267,21 +267,20 @@ public class Build extends Strategy {
     }
 
     private IStrategoTerm buildAnno(IContext env, IStrategoAppl t) throws InterpreterException {
-        // FIXME: Actually build annotation
-        
         IStrategoTerm term = buildTerm(env, applAt(t, 0));
         
         IStrategoAppl annos = applAt(t, 1);
-        if ("Op".equals(annos.getConstructor().getName())
+        if (term.getAnnotations().size() == 0
+                && "Op".equals(annos.getConstructor().getName())
                 && "Nil".equals(stringAt(annos, 0).stringValue())) {
             return term;
         } else {
             IStrategoTerm annoList = buildTerm(env, annos);
             if (annoList instanceof IStrategoList) { 
-                if (((IStrategoList) annoList).isEmpty()) {
+                if (((IStrategoList) annoList).equals(term.getAnnotations())) {
                     return term;
                 } else {
-                    return env.getFactory().annotate(term, (IStrategoList) annoList);
+                    return env.getFactory().annotateTerm(term, (IStrategoList) annoList);
                 }
             } else {
                 throw new InterpreterException("Trying to build an annotation list that is not a list");

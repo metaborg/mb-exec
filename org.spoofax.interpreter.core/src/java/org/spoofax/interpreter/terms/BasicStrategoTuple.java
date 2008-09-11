@@ -86,6 +86,7 @@ public class BasicStrategoTuple extends BasicStrategoTerm implements IStrategoTu
         } else {
             pp.print("()");
         }
+        printAnnotations(pp);
     }
     
     @Override
@@ -100,6 +101,7 @@ public class BasicStrategoTuple extends BasicStrategoTerm implements IStrategoTu
             }
         }
         sb.append(")");
+        appendAnnotations(sb);
         return sb.toString();
     }
     

@@ -49,7 +49,7 @@ strategies
 	);
     apply-test(!"test3b"
 	, where(new-counter => c2)
-          ; topdown(\ t -> t{<next-counter> c2} \ )
+          ; topdown(\ t -> t{<next-counter> c2} \; debug )
 	, !F(G(B,F(A,B)),F(B,A))
 	, !F(G(B{3},F(A{5},B{6}){4}){2},F(B{8},A{9}){7}){1}
 	)

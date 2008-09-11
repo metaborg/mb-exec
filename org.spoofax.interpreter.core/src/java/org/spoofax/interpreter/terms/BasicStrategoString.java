@@ -54,13 +54,18 @@ public class BasicStrategoString extends BasicStrategoTerm implements IStrategoS
     }
     
     public void prettyPrint(ITermPrinter pp) {
-        // The abundance of backslashes are required by the RE compiler
-        pp.print("\"" + value.replaceAll("\"", "\\\\\\\"") + "\"");
+        pp.print("\"" + value.replace("\"", "\\\""));
+        printAnnotations(pp);
     }
  
     @Override
     public String toString() {
-        return "\"" + value + "\""; 
+        StringBuilder result = new StringBuilder();
+        result.append("\"");
+        result.append(value.replace("\"", "\\\""));
+        result.append("\"");
+        appendAnnotations(result);
+        return result.toString();
     }
     
     @Override

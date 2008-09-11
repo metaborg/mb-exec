@@ -81,6 +81,7 @@ public class BasicStrategoAppl extends BasicStrategoTerm implements IStrategoApp
             pp.println(")");
             pp.outdent(ctor.getName().length());
         }
+        printAnnotations(pp);
     }
 
     @Override
@@ -96,6 +97,7 @@ public class BasicStrategoAppl extends BasicStrategoTerm implements IStrategoApp
             }
         }
         sb.append(")");
+        appendAnnotations(sb);
         return sb.toString();
     }
 

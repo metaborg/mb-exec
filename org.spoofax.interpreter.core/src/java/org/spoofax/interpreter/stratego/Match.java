@@ -277,9 +277,6 @@ public class Match extends Strategy {
 
     protected Results matchAnyAnno(IContext env, IStrategoTerm t,
             IStrategoAppl p) throws InterpreterException {
-        if(DebugUtil.isDebugging()) {
-            DebugUtil.debug("  pattern is Anno");
-        }
         
         Results r1 = matchList(env, t.getAnnotations(), applAt(p, 1));
         if (r1 == null) return null;
