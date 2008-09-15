@@ -68,8 +68,7 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
     }
 
     public void prettyPrint(ITermPrinter pp) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     @Override

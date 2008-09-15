@@ -9,7 +9,11 @@ package org.spoofax.interpreter.terms;
 
 public class BasicStrategoList extends BasicStrategoTerm implements IStrategoList {
 
+    // TODO: Use a head/tail BasicStrategoList implementation instead?
+    
     protected final IStrategoTerm[] kids;
+    
+    private IStrategoList tailAnnotations;
     
     protected BasicStrategoList(IStrategoTerm[] kids, IStrategoList annotations) {
         super(annotations);
@@ -29,7 +33,7 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
     }
     
     public IStrategoList tail() {
-        return new BasicStrategoList(doTail(), null);
+        return new BasicStrategoList(doTail(), tailAnnotations);
     }
     
     protected IStrategoTerm[] doTail() {
@@ -41,7 +45,9 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
     }
     
     public IStrategoList prepend(IStrategoTerm prefix) {
-        return new BasicStrategoList(doPrepend(prefix), null);
+        BasicStrategoList result = new BasicStrategoList(doPrepend(prefix), null);
+        result.tailAnnotations = getAnnotations();
+        return result;
     }
     
     protected IStrategoTerm[] doPrepend(IStrategoTerm prefix) {
@@ -90,9 +96,9 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
             return false;
         if (!getAnnotations().match(second.getAnnotations()))
             return false;
-        IStrategoTerm[] otherkids = second.getAllSubterms();
+        
         for(int i = 0, sz = size(); i < sz; i++) {
-            if(!kids[i].match(otherkids[i]))
+            if(!kids[i].match(snd.get(i)))
                 return false;
         }
         return true;

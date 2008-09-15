@@ -181,7 +181,7 @@ public class Build extends Strategy {
         } else if(ctr.equals("Nil")) {
             return buildNil(env);
         } else if(ctr.equals("Cons")) {
-            return buildCons(env, t);
+            return buildCons(env, t, factory);
         } else {
             return buildOp(ctr, env, t, factory);
         }
@@ -205,29 +205,29 @@ public class Build extends Strategy {
             if (kid == null) {
                 return null;
             }
-            kids = kids.prepend(kid);
+            kids = factory.makeList(kid, kids);
         }
 
         return factory.makeAppl(ctor, kids);
     }
 
-    private IStrategoList buildCons(IContext env, IStrategoAppl t) throws InterpreterException {
+    private IStrategoList buildCons(IContext env, IStrategoAppl t, ITermFactory factory) throws InterpreterException {
 
         IStrategoList children = (IStrategoList) t.getSubterm(1);
         
         IStrategoAppl headPattern = (IStrategoAppl) children.get(0);
         IStrategoAppl tailPattern = (IStrategoAppl) children.get(1);
         
-        IStrategoList tail = buildList(env, tailPattern); 
+        IStrategoList tail = buildList(env, tailPattern, factory); 
         IStrategoTerm head = buildTerm(env, headPattern);
         
         if(tail == null || head == null)
             return null;
         
-        return tail.prepend(head);
+        return factory.makeList(head, tail);
     }
 
-    private IStrategoList buildList(IContext env, IStrategoAppl t) throws InterpreterException {
+    private IStrategoList buildList(IContext env, IStrategoAppl t, ITermFactory factory) throws InterpreterException {
         
         // FIXME improve! this is an Anno!
         if(Tools.isAnno(t, env)) {
@@ -237,7 +237,7 @@ public class Build extends Strategy {
             if(c.equals("Nil")) 
                 return buildNil(env);
             else if(c.equals("Cons"))
-                return buildCons(env, t);
+                return buildCons(env, t, factory);
         }
         else if(Tools.isVar(t, env)) {
             IStrategoTerm r = buildVar(env, t);
@@ -272,18 +272,17 @@ public class Build extends Strategy {
         IStrategoAppl annos = applAt(t, 1);
         if (term.getAnnotations().size() == 0
                 && "Op".equals(annos.getConstructor().getName())
-                && "Nil".equals(stringAt(annos, 0).stringValue())) {
+                && "Nil".equals(javaStringAt(annos, 0))) {
             return term;
         } else {
             IStrategoTerm annoList = buildTerm(env, annos);
-            if (annoList instanceof IStrategoList) { 
-                if (((IStrategoList) annoList).equals(term.getAnnotations())) {
-                    return term;
-                } else {
-                    return env.getFactory().annotateTerm(term, (IStrategoList) annoList);
-                }
+            if (!(annoList instanceof IStrategoList))
+                annoList = env.getFactory().makeList(annoList);
+            
+            if (annoList.equals(term.getAnnotations())) {
+                return term;
             } else {
-                throw new InterpreterException("Trying to build an annotation list that is not a list");
+                return env.getFactory().annotateTerm(term, (IStrategoList) annoList);
             }
         }
     }

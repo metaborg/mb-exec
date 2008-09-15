@@ -2005,6 +2005,12 @@ public class ECJFactory implements ITermFactory {
     public IStrategoList makeList(Collection<IStrategoTerm> terms) {
     	return makeList(terms.toArray(new IStrategoTerm[0]));
     }
+    
+    @Override
+    public IStrategoList makeList(IStrategoTerm head, IStrategoList tail) {
+        // TODO: handle list prepending in ECJFactory
+    	return tail.prepend(head);
+    }
 
     public IStrategoReal makeReal(double d) {
         return new WrappedReal(d);

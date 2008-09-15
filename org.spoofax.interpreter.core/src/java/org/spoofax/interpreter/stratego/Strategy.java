@@ -49,6 +49,7 @@ abstract public class Strategy implements IConstruct {
         return this.getClass().getSimpleName();
     }
 
+    @Override
     public String toString() {
         return getTraceName();
     }

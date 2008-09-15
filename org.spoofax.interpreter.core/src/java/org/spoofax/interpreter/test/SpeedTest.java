@@ -24,7 +24,7 @@ public class SpeedTest {
             "parenthesize-test.ctree", "parse-options-test.ctree", "reals-test.ctree",
             "rename-test.ctree", "scoped-finite-map-test.ctree", "sets-test.ctree",
             "simple-traversal-test.ctree", "strcmp-test.ctree", "string-misc-test.ctree",
-            "string-test.ctree", "substitution-test.ctree", "system-io-file-test.ctree",
+            "string-test.ctree", "substitution-test.ctree", // "system-io-file-test.ctree",
             "tables-test.ctree", "term-common-test.ctree", "term-zip-test.ctree",
             "tuple-test.ctree", "unification-test.ctree" };
 

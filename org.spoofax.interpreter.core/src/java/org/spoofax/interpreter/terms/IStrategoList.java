@@ -14,7 +14,12 @@ public interface IStrategoList extends IStrategoTerm {
 
     public int size();
 
-    // FIXME this must go into the factory -- it is a builder
+    /**
+     * @deprecated Use
+     *             {@link IStrategoTermBuilder#makeList(IStrategoTerm, IStrategoList)}
+     *             instead.
+     */
+    @Deprecated
     public IStrategoList prepend(IStrategoTerm prefix);
 
     public IStrategoTerm head();

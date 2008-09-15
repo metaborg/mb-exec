@@ -85,7 +85,8 @@ public class Context implements IContext {
 
     public boolean bindVars(Results r) {
 
-        for (Binding x : r) {
+        for (int i = 0; i < r.size(); i++) {
+            Binding x = r.get(i);
 
             VarScope s = varScope.scopeOf(x.first);
 

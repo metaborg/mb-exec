@@ -52,7 +52,7 @@ public class Tools {
             IStrategoList kids = factory.makeList();
 
             for (int i = children.length - 1; i >= 0; i--) {
-                kids = kids.prepend(implode(factory, (IStrategoAppl) children[i]));
+                kids = factory.makeList(implode(factory, (IStrategoAppl) children[i]), kids);
             }
             return factory.makeAppl(ctr, kids);
         } else if (ctor.equals(sign.getInt())) {

@@ -265,6 +265,11 @@ public class BasicTermFactory implements ITermFactory {
     public IStrategoList makeList(Collection<IStrategoTerm> terms) {
         return new BasicStrategoList(terms.toArray(EMPTY), null);
     }
+    
+    public IStrategoList makeList(IStrategoTerm head, IStrategoList tail) {
+        // TODO: handle list prepending in BasicTermFactory
+        return ((IStrategoList) tail).prepend(head);
+    }
 
     public IStrategoReal makeReal(double d) {
         return new BasicStrategoReal(d, null);
@@ -284,7 +289,7 @@ public class BasicTermFactory implements ITermFactory {
             result.internalSetAnnotations(annotations);
             return result;
         } else {
-            // TODO: Use sdf2imp style annotation wrapper class?
+            // TODO: Use a generic annotation wrapper class?
             throw new NotImplementedException();
         }
     }

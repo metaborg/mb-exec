@@ -73,7 +73,7 @@ public abstract class BasicStrategoTerm implements IStrategoTerm, Cloneable {
         return annotations == null ? BasicTermFactory.EMPTY_LIST : annotations;
     }
     
-    protected void internalSetAnnotations(IStrategoList annotations) {
+    void internalSetAnnotations(IStrategoList annotations) {
         this.annotations = annotations;
     }
 }
