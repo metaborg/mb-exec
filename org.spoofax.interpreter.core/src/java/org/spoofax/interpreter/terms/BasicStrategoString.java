@@ -54,7 +54,7 @@ public class BasicStrategoString extends BasicStrategoTerm implements IStrategoS
     }
     
     public void prettyPrint(ITermPrinter pp) {
-        pp.print("\"" + value.replace("\"", "\\\""));
+        pp.print("\"" + value.replace("\"", "\\\"") + "\"");
         printAnnotations(pp);
     }
  

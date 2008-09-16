@@ -19,9 +19,12 @@ public class SSL_getcwd extends AbstractPrimitive {
         super("SSL_getcwd", 0, 0);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        
-        String cwd = System.getProperty("user.dir");
+
+        SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
+
+        String cwd = op.getIOAgent().openFile(op.getIOAgent().getWorkingDir()).getAbsolutePath();
         
         env.setCurrent(env.getFactory().makeString(cwd));
         return true;
