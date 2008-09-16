@@ -2006,7 +2006,6 @@ public class ECJFactory implements ITermFactory {
     	return makeList(terms.toArray(new IStrategoTerm[0]));
     }
     
-    @Override
     public IStrategoList makeList(IStrategoTerm head, IStrategoList tail) {
         // TODO: handle list prepending in ECJFactory
     	return tail.prepend(head);

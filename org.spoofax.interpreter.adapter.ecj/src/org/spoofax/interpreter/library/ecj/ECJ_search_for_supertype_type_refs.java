@@ -1,7 +1,7 @@
 /*
- * Created on 9. okt.. 2006
+ * Created on 9. sep. 2008
  *
- * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * Copyright (c) 2005-2008, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
  * Licensed under the GNU General Public License, v2
  */
@@ -45,11 +45,16 @@ public class ECJ_search_for_supertype_type_refs extends AbstractPrimitive {
         
         // TODO: This only works in 3.4, what to do for other versions? 
         
+        // FIXME this method will currently only return exact type matches
+        //       it is unclear whether searches for the supertype Foo<Object>
+        //       should also allow Foo<Bar> to be returned; for now, it's explicitly
+        //       forbidden
+        
         final String className = Tools.asJavaString(tvars[1]);
         SearchPattern sp = SearchPattern.createPattern(className, 
         		IJavaSearchConstants.TYPE, 
-        		512, // Eclipse 3.4: IJavaSearchConstants.SUPERTYPE_TYPE_REFERENCE, 
-        		SearchPattern.R_PATTERN_MATCH | SearchPattern.R_CASE_SENSITIVE);
+        		IJavaSearchConstants.SUPERTYPE_TYPE_REFERENCE, 
+        		SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
         IJavaSearchScope ss = SearchEngine.createJavaSearchScope(new IJavaElement[] { ECJTools.asIJavaElement(tvars[0]) });
         
         final Collection<IType> results = new LinkedList<IType>();
@@ -59,7 +64,13 @@ public class ECJ_search_for_supertype_type_refs extends AbstractPrimitive {
             @Override
             public void acceptSearchMatch(SearchMatch match) throws CoreException {
             	System.out.println(match.getElement() + "/" + match.getClass().toString() + "/" + match.getElement().getClass().toString());
-            	results.add((IType)match.getElement());
+            	IType t = (IType)match.getElement();
+            	System.out.println(t.getFullyQualifiedName());
+            	for(String s : t.getSuperInterfaceNames())
+            		if(s.equals(className)) {
+            			results.add(t);
+            			return;
+            		}
             }
             
         };

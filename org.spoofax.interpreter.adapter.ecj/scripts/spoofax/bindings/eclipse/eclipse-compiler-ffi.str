@@ -181,6 +181,8 @@ strategies
   
   ecj-is-Javadoc = ?Javadoc(_)
   
+  ecj-is-TypeBinding = ?TypeBinding(_, _, _, _, _, _, _)
+  
 strategies
 
   /** @type Term -> ECJProject */
@@ -357,6 +359,7 @@ strategies
       in 
         <foldl(g <+ f)> (<id>, 0)
       end
+    ; not(is-int)
 
   /**
    * Returns true if the supplied Type is a primitive type
