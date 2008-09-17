@@ -12,7 +12,9 @@ import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTuple;
 
 public class One extends Strategy {
 
@@ -63,16 +65,16 @@ public class One extends Strategy {
 				kids[n] = env.current();
 				switch (old.getTermType()) {
 				case IStrategoTerm.LIST: {
-					env.setCurrent(env.getFactory().makeList(kids));
+					env.setCurrent(env.getFactory().replaceList(kids, (IStrategoList)old));
 					break ;
 				}
 				case IStrategoTerm.APPL: {
 					IStrategoAppl appl = (IStrategoAppl)old;
-					env.setCurrent(env.getFactory().replaceAppl(appl.getConstructor(), kids, old));
+					env.setCurrent(env.getFactory().replaceAppl(appl.getConstructor(), kids, (IStrategoAppl)old));
 					break ;
 				}
 				case IStrategoTerm.TUPLE: {
-					env.setCurrent(env.getFactory().makeTuple(kids));
+					env.setCurrent(env.getFactory().replaceTuple(kids, (IStrategoTuple) old));
 					break ;
 				}
 				default: {

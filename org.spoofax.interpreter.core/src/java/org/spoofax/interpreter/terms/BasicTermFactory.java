@@ -216,9 +216,17 @@ public class BasicTermFactory implements ITermFactory {
         }
     }
 
-    public IStrategoTerm replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids,
-            IStrategoTerm old) {
+    public IStrategoAppl replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids,
+            IStrategoAppl old) {
         return makeAppl(constructor, kids, old.getAnnotations());
+    }
+
+    public IStrategoTuple replaceTuple(IStrategoTerm[] kids, IStrategoTuple old) {
+        return makeTuple(kids);
+    }
+    
+    public IStrategoList replaceList(IStrategoTerm[] kids, IStrategoList old) {
+        return makeList(kids);
     }
 
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException {

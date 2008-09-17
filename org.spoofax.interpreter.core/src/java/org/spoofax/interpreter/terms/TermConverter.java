@@ -41,7 +41,7 @@ public class TermConverter {
     public IStrategoAppl convert(IStrategoAppl term) {
         IStrategoTerm[] subTerms = convertAll(term.getAllSubterms());
         IStrategoConstructor ctor = convert(term.getConstructor());
-        return factory.makeAppl(ctor, subTerms);
+        return annotate(factory.makeAppl(ctor, subTerms), term);
     }
 
     public IStrategoConstructor convert(IStrategoConstructor constructor) {
@@ -49,25 +49,35 @@ public class TermConverter {
     }
 
     public IStrategoInt convert(IStrategoInt term) {
-        return factory.makeInt(term.intValue());
+        return annotate(factory.makeInt(term.intValue()), term);
     }
 
     public IStrategoList convert(IStrategoList term) {
         IStrategoTerm[] subterms = convertAll(term.getAllSubterms());
-        return factory.makeList(subterms);
+        return annotate(factory.makeList(subterms), term);
     }
 
     public IStrategoReal convert(IStrategoReal term) {
-        return factory.makeReal(term.realValue());
+        return annotate(factory.makeReal(term.realValue()), term);
     }
 
     public IStrategoString convert(IStrategoString term) {
-        return factory.makeString(term.stringValue());
+        return annotate(factory.makeString(term.stringValue()), term);
     }
 
     public IStrategoTuple convert(IStrategoTuple term) {
         IStrategoTerm[] subterms = convertAll(term.getAllSubterms());
-        return factory.makeTuple(subterms);
+        return annotate(factory.makeTuple(subterms), term);
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected<T extends IStrategoTerm> T annotate(T term, T input) {
+        IStrategoList annotations = input.getAnnotations();
+        if (annotations.isEmpty()) {
+            return term;
+        } else {
+            return (T) factory.annotateTerm(term, convert(annotations));
+        }
     }
 
 }

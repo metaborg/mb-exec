@@ -3008,8 +3008,13 @@ public class ECJFactory implements ITermFactory {
         this.ast = ast;
     }
 
-    public IStrategoTerm replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids, IStrategoTerm old) {
-        final IStrategoTerm r = makeAppl(constructor, kids);
+    @Deprecated
+    public IStrategoAppl replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids, IStrategoTerm old) {
+        return replaceAppl(constructor, kids, (IStrategoAppl)old);
+    }
+    
+    public IStrategoAppl replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids, IStrategoAppl old) {
+        final IStrategoAppl r = makeAppl(constructor, kids);
         // FIXME None should be in a different hierarchy than other WrappedASTNodes
         if(r instanceof WrappedASTNode && old instanceof WrappedASTNode) {
             final WrappedASTNode n = (WrappedASTNode)r;
@@ -3017,9 +3022,17 @@ public class ECJFactory implements ITermFactory {
             final ASTNode nn = n.getWrappee();
             final ASTNode on = o.getWrappee();
             if(nn != null && on != null)
-            	nn.setSourceRange(on.getStartPosition(), on.getLength());
+                nn.setSourceRange(on.getStartPosition(), on.getLength());
         }
         return r;
+    }
+    
+    public IStrategoTuple replaceTuple(IStrategoTerm[] kids, IStrategoTuple old) {
+        return makeTuple(kids);
+    }
+    
+    public IStrategoList replaceList(IStrategoTerm[] kids, IStrategoList old) {
+        return makeList(kids);
     }
 
     public static IStrategoTerm wrap(IType t) {
