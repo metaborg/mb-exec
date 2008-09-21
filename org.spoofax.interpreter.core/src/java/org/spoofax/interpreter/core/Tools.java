@@ -40,6 +40,7 @@ public class Tools {
 
     public IStrategoTerm implode(ITermFactory factory, IStrategoAppl t) throws InterpreterException {
         IStrategoConstructor ctor = t.getConstructor();
+        // TODO get an instance of the Stratego signature from the interpreter instance. 
         StrategoSignature sign = null;
         
         if (ctor.equals(sign.getAnno())) {
