@@ -62,7 +62,7 @@ signature
     ForStatement                    : Term * Term * Term * Term -> Statement
     IfStatement                     : Term * Term * Term -> Statement
     ImportDeclaration               : Term -> ASTNode 
-    InfixExpression                 : String * Expression * Expression -> Expression
+    InfixExpression                 : String * Expression * Expression * List(Expresssion) -> Expression
     Initializer                     : Term -> BodyDeclaration
     InstanceofExpression            : Term * Term -> Expression
     IntType                         : Type

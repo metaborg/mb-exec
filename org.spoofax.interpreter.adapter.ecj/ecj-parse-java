@@ -5,23 +5,24 @@
 #  Licensed under the GNU General Public License, v2
 
 jars="
-jdtcore-3.2.0.v_658.jar
 jjtraveler-0.4.3.jar
 junit-3.8.2.jar
-org.eclipse.core.contenttype_3.2.0.v20060603.jar
-org.eclipse.core.jobs_3.2.0.v20060603.jar
-org.eclipse.core.resources_3.2.2.R32x_v20061218.jar
-org.eclipse.core.runtime_3.2.0.v20060603.jar
-org.eclipse.equinox.common_3.2.0.v20060603.jar
-org.eclipse.equinox.preferences_3.2.1.R32x_v20060717.jar
-org.eclipse.equinox.registry_3.2.1.R32x_v20060814.jar
-org.eclipse.jdt.core_3.2.3.v_686_R32x.jar
-org.eclipse.osgi_3.2.2.R32x_v20070118.jar
+org.eclipse.core.contenttype_3.3.0.v20080604-1400.jar
+org.eclipse.core.jobs_3.4.0.v20080512.jar
+org.eclipse.core.resources_3.4.0.v20080604-1400.jar
+org.eclipse.core.runtime_3.4.0.v20080512.jar
+org.eclipse.equinox.common_3.4.0.v20080421-2006.jar
+org.eclipse.equinox.preferences_3.2.200.v20080421-2006.jar
+org.eclipse.equinox.registry_3.4.0.v20080516-0950.jar
+org.eclipse.jdt.core_3.4.0.v_874.jar
+org.eclipse.jface.text_3.4.0.v20080603-2000.jar
+org.eclipse.osgi_3.4.0.v20080605-1900.jar
+org.eclipse.text_3.4.0.v20080605-1800.jar
 shared-objects-1.4.jar
 spoofax-aterm-0.2.0.jar
 spoofax-aterm-adapter-0.1.1.jar
-spoofax-interpreter-core-0.3.11.jar
-spoofax-ecj-adapter-0.1.0.jar
+spoofax-interpreter-core-0.3.12.jar
+spoofax-ecj-adapter-0.1.3.jar
 "
 
 bp=$(dirname $0)
@@ -35,12 +36,4 @@ done
 #echo ${absjars}
 java -cp ${absjars} \
 	org.spoofax.ecjadapter.ParseJava \
-	$@ \
-
-
-
-
-
-
-
-
+	$@

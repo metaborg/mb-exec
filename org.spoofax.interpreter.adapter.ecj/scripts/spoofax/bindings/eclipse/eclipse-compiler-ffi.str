@@ -433,14 +433,9 @@ strategies
 strategies
 
   /**
-   * @type PrimitiveType -> String
-   */
-  ecj-string-name-of = ?PrimitiveType(<id>)
-  
-  /**
    * @type ASTNode -> String
    */
-  ecj-string-name-of = ecj-name-of ; ?SimpleType(<id>)
+  ecj-string-name-of = ecj-dotted-name-of ; ?DottedName(<id>)
   
 overlays
 

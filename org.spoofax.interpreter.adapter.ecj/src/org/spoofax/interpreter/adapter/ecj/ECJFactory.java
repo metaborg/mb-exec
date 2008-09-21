@@ -773,12 +773,14 @@ public class ECJFactory implements ITermFactory {
         case INFIX_EXPRESSION: {
             if(!isOperator(kids[0])
                     || !isExpression(kids[1])
-                    || !isExpression(kids[2]))
+                    || !isExpression(kids[2])
+                    || !isExpressionList(kids[3]))
                 return null;
             InfixExpression x = ast.newInfixExpression();
             x.setOperator(asOperator(kids[0]));
             x.setLeftOperand(asExpression(kids[1]));
             x.setRightOperand(asExpression(kids[2]));
+            x.extendedOperands().addAll(asExpressionList(kids[3]));
             return wrap(x);
         }
         case INITIALIZER: {

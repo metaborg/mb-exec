@@ -1,9 +1,9 @@
 #!/bin/bash
 
-ECLIPSE_HOME=${ECLIPSE_HOME:-${HOME}/apps/eclipse-3.3}
+ECLIPSE_HOME=${ECLIPSE_HOME:-${HOME}/apps/eclipse}
 
 if [ ! -f ${ECLIPSE_HOME}/eclipse ] ; then
-	echo "The env var ECLIPSE_HOME must point to the directory of an Eclipse 3.3 installation " 2>&1
+	echo "The env var ECLIPSE_HOME must point to the directory of an Eclipse 3.4 installation " 2>&1
 	exit 1
 fi
 
@@ -15,6 +15,8 @@ jars="org.eclipse.core.contenttype
 	org.eclipse.jdt.core
 	org.eclipse.core.runtime
 	org.eclipse.osgi
+	org.eclipse.jface.text
+	org.eclipse.text
 	org.eclipse.equinox.common"
 
 function latest() {

@@ -14,7 +14,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedInfixExpression extends WrappedExpression {
 
     private final InfixExpression wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("InfixExpression", 3);
+    private final static IStrategoConstructor CTOR = new ASTCtor("InfixExpression", 4);
     
     WrappedInfixExpression(InfixExpression wrappee) {
         super(CTOR);
@@ -31,6 +31,8 @@ public class WrappedInfixExpression extends WrappedExpression {
             return ECJFactory.wrapExpression(wrappee.getLeftOperand());
         case 2:
             return ECJFactory.wrapExpression(wrappee.getRightOperand());
+        case 3: 
+        	return ECJFactory.wrap(wrappee.extendedOperands());
             
         }
         
