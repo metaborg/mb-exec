@@ -16,7 +16,7 @@ public class BasicStrategoTuple extends BasicStrategoTerm implements IStrategoTu
         this.kids = kids;
     }
     
-    protected BasicStrategoTuple(IStrategoTerm[] kids) {
+    public BasicStrategoTuple(IStrategoTerm[] kids) {
         this(kids, null);
     }
     
