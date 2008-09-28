@@ -2524,7 +2524,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedCompilationUnit(unit);
     }
 
-    static IStrategoAppl wrap(PackageDeclaration declaration) {
+    public static IStrategoAppl wrap(PackageDeclaration declaration) {
         if(declaration == null)
             return None.INSTANCE;
         else

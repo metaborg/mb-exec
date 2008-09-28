@@ -153,7 +153,7 @@ strategies
     + ?ClassInstanceCreation(_, _, _, _)
     + ?ConditionalExpression(_, _, _)
     + ?FieldAccess(_, _)
-    + ?InfixExpression(_, _, _)
+    + ?InfixExpression(_, _, _, _)
     + ?InstanceofExpression(_, _)
     + ?MethodInvocation(_, _, _, _)
     + ?QualifiedName(_, _)
