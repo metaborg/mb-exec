@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.spoofax.interpreter.core_feature"
+      label="Stratego/J Interpreter Core"
+      version="0.1.0.qualifier"
+      provider-name="Spoofax.org">
+
+   <description url="http://spoofax.org/strategoj.html">
+      Stratego/J Core is an execution engine for the Stratego language, implemented in Java. It allows the execution of the full Stratego language on the Java virtual machine.
+It may be easiest to think of Stratego/J as the implementation of an abstract Stratego machine. The Stratego compiler can, using the -F option, output a compiled Stratego program in a high-level Stratego-specific format which Stratego/J can execute. It is
+currently not possible to interactively evaluate Stratego source code on Stratego/J -- for that, use Stratego Shell.
+   </description>
+
+   <copyright>
+      Copyright (c) 2006-2008 Karl Trygve Kalleberg &lt;karltk near strategoxt dot org&gt;
+   </copyright>
+
+   <license>
+      Licensed under the GNU Lesser General Public License v3.0
+   </license>
+
+   <plugin
+         id="org.spoofax.interpreter.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
