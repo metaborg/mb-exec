@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.spoofax.interpreter.adapter.ecj_feature"
+      label="Stratego/J Adapter for the Eclipse JDT AST"
+      version="0.1.3.qualifier"
+      provider-name="Spoofax.org">
+
+   <description>
+      Adapter for the Eclipse JDT AST. This allows Stratego/J to rewrite on Eclipse Java ASTs.
+   </description>
+
+   <copyright>
+      Copyright (c) 2006-2008 Karl Trygve Kalleberg &lt;karltk near strategoxt dot org&gt;
+   </copyright>
+
+   <license>
+      Licensed under the GNU Lesser General Public License v3.0
+   </license>
+
+   <plugin
+         id="org.spoofax.interpreter.adapter.ecj"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.spoofax.interpreter.library.eclipse"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
