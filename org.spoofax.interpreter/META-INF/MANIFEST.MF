@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Stratego Interpreter
 Bundle-SymbolicName: org.spoofax.interpreter
-Bundle-Version: 0.3.11
+Bundle-Version: 0.3.11.qualifier
 Bundle-Localization: plugin
 Require-Bundle: org.junit,
  org.spoofax.interpreter.core,
