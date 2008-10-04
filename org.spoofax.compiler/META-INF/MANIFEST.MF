@@ -11,4 +11,4 @@ Require-Bundle: org.spoofax.interpreter.core,
  org.junit
 Bundle-ActivationPolicy: lazy
 Export-Package: org.spoofax.compiler
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
