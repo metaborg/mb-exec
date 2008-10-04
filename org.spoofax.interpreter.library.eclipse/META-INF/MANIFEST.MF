@@ -7,3 +7,4 @@ Bundle-Vendor: Spoofax.org
 Require-Bundle: org.eclipse.ui,
  org.spoofax.interpreter.core
 Export-Package: org.spoofax.interpreter.library.eclipse
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
