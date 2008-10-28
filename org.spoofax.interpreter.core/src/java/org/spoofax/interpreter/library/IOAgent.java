@@ -93,9 +93,10 @@ public class IOAgent {
     /**
      * Opens an input stream given a file path.
      * 
-     * @param isSourceRelative  Indicates the path is relative to the Stratego source tree or imports.
+     * @param isInternalFile  Indicates the path is relative to the Stratego source tree or imports,
+     *                        e.g., a .pp.af file included by import-term.
      */
-    public InputStream openInputStream(String fn, boolean isSourceRelative) throws FileNotFoundException {
+    public InputStream openInputStream(String fn, boolean isInternalFile) throws FileNotFoundException {
         // TODO: Handle isSourceRelative paths (for import-term)
         return new FileInputStream(adaptFilePath(fn));
     }

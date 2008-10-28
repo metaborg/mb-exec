@@ -34,7 +34,7 @@ public class SSL_real extends AbstractPrimitive {
         if(Tools.isTermInt(tvars[0]))
         {
             IStrategoInt a = (IStrategoInt) tvars[0];
-            env.setCurrent(env.getFactory().makeReal((double) a.intValue()));
+            env.setCurrent(env.getFactory().makeReal(a.intValue()));
             return true;
         }
         

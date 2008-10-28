@@ -276,7 +276,7 @@ public class BasicTermFactory implements ITermFactory {
     
     public IStrategoList makeList(IStrategoTerm head, IStrategoList tail) {
         // TODO: handle list prepending in BasicTermFactory
-        return ((IStrategoList) tail).prepend(head);
+        return tail.prepend(head);
     }
 
     public IStrategoReal makeReal(double d) {

@@ -241,7 +241,7 @@ public class Build extends Strategy {
         }
         else if(Tools.isVar(t, env)) {
             IStrategoTerm r = buildVar(env, t);
-            if(r instanceof IStrategoList) {
+            if(r.getTermType() == IStrategoTerm.LIST) {
                 return (IStrategoList) r;
             }
             throw new InterpreterException("List tail must always be a list -- got " + r);
@@ -276,7 +276,7 @@ public class Build extends Strategy {
             return term;
         } else {
             IStrategoTerm annoList = buildTerm(env, annos);
-            if (!(annoList instanceof IStrategoList))
+            if (annoList.getTermType() != IStrategoTerm.LIST)
                 annoList = env.getFactory().makeList(annoList);
             
             if (annoList.equals(term.getAnnotations())) {

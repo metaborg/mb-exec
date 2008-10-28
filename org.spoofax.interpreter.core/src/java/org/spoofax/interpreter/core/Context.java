@@ -113,11 +113,12 @@ public class Context implements IContext {
     }
 
     public void setVarScope(VarScope newVarScope) {
+        assert newVarScope != null;
         varScope = newVarScope;
     }
 
     public void popVarScope() {
-        varScope = varScope.getParent();
+        setVarScope(varScope.getParent());
     }
 
     public void restoreVarScope(VarScope anotherVarScope) {
