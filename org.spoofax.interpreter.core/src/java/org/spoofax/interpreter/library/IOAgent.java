@@ -113,7 +113,14 @@ public class IOAgent {
         return new File(adaptFilePath(fn));
     }
     
+    public boolean mkDirs(String fn) {
+        return openFile(fn).mkdirs();
+    }
+    
     protected String adaptFilePath(String fn) {
+        File f = new File(fn);
+        if(f.isAbsolute())
+            return f.getAbsolutePath();
         return new File(getWorkingDir(), fn).getAbsolutePath();
     }
     
@@ -122,9 +129,10 @@ public class IOAgent {
     }
     
     public void setWorkingDir(String workingDir) throws FileNotFoundException {
-        if (!new File(workingDir).exists()) {
+        File workingDirFile = new File(adaptFilePath(workingDir));
+        if (!workingDirFile.exists()) {
             throw new FileNotFoundException(workingDir);
         }
-        this.workingDir = workingDir;
+        this.workingDir = workingDirFile.getAbsolutePath();
     }
 }
