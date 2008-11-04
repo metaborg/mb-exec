@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.spoofax.interpreter.core.Context;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.AbstractStrategoOperatorRegistry;
@@ -147,7 +148,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
     /**
      * Resets the entire state of the SSL. <br>
      * Should be called once per interpreter.
-     * todo: this state should be scoped inside {@link org.spoofax.interpreter.core.Context}
+     * todo: this state should be scoped inside {@link Context}
      */
     public void init() {
 
@@ -169,9 +170,11 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         tableTableRef = registerHashtable(new Hashtable(128, 75));
         
         try {
-            getIOAgent().setWorkingDir(".");
+            String dir = System.getProperty("user.dir");
+            if (dir == null) dir = ".";
+            getIOAgent().setWorkingDir(dir);
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e); // silly checked exceptions...
+            throw new RuntimeException(e);
         }
     }
     

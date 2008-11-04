@@ -6,12 +6,12 @@
 base=$(dirname $0)
 jars=${base}/../share/java
 compiler_jar=${jars}/spoofax-compiler-0.3.9.jar
-interpcore_jar=${jars}/spoofax-interpreter-core-0.3.10.jar
+interpcore_jar=${jars}/spoofax-interpreter-core-0.3.11.jar
 interp_jar=${jars}/spoofax-interpreter-0.1.1.jar
 jsglr_jar=${jars}/jsglr-0.2.0.jar
 jsglrlib_jar=${jars}/spoofax-library-jsglr-0.3.9.jar
 atermadapter_jar=${jars}/spoofax-aterm-adapter-0.1.1.jar
-aterm_jar=${jars}/spoofax-aterm-0.2.0.jar:${jars}/jjtraveler-0.4.3.jar:${jars}/shared-objects-1.4.jar
+aterm_jar=${jars}/spoofax-aterm-0.2.1.jar:${jars}/jjtraveler-0.4.3.jar:${jars}/shared-objects-1.4.jar
 cp=${compiler_jar}:${interp_jar}:${interpcore_jar}:${jsglr_jar}:${jsglrlib_jar}:${atermadapter_jar}:${aterm_jar}
 share_dir=${base}/../share/spoofax-interpreter
 
@@ -19,4 +19,4 @@ java	-cp ${cp}                 \
 	-Xmx1024m -Xss2m          \
 	-Dshare.dir=${share_dir}  \
 	org.spoofax.interpreter.cli.Main \
-	$*
+	"$@"

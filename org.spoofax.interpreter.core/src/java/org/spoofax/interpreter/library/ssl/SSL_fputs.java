@@ -23,6 +23,7 @@ public class SSL_fputs extends AbstractPrimitive {
         super("SSL_fputs", 0, 2);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         if(!Tools.isTermString(targs[0]))
