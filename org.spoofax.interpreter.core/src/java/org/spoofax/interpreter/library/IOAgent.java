@@ -130,7 +130,7 @@ public class IOAgent {
     
     public void setWorkingDir(String workingDir) throws FileNotFoundException {
         File workingDirFile = new File(adaptFilePath(workingDir));
-        if (!workingDirFile.exists()) {
+        if (!workingDirFile.exists() || !workingDirFile.isDirectory()) {
             throw new FileNotFoundException(workingDir);
         }
         this.workingDir = workingDirFile.getAbsolutePath();
