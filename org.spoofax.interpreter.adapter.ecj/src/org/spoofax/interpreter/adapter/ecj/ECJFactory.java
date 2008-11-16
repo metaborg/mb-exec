@@ -19,6 +19,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
@@ -388,7 +389,11 @@ public class ECJFactory implements ITermFactory {
     }
     
     public IStrategoTerm annotateTerm(IStrategoTerm term, IStrategoList annotations) {
-    	throw new NotImplementedException(); // FIXME: annotations on ECJ terms..?
+    	if(term instanceof ECJAnnoWrapper) {
+    		return new ECJAnnoWrapper(((ECJAnnoWrapper)term).getWrappee(), annotations);
+    	} else {
+    		return new ECJAnnoWrapper(term, annotations);
+    	}
     }
 
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... kids) {
@@ -2977,8 +2982,23 @@ public class ECJFactory implements ITermFactory {
             terms[i] = ECJFactory.wrap(parameters[i]);
         return new WrappedGenericList(terms);
     }
+    
+    public static IStrategoTerm wrap(IField[] fields) {
+        IStrategoTerm[] terms = new IStrategoTerm[fields.length];
+        for(int i = 0, sz = fields.length; i < sz; i++)
+            terms[i] = ECJFactory.wrap(fields[i]);
+        return new WrappedGenericList(terms);
+    }
 
-    public static IStrategoTerm wrap(ITypeParameter binding) {
+
+    private static IStrategoTerm wrap(IField field) {
+    	if(field == null)
+    		return None.INSTANCE;
+    	else
+    		return new WrappedIField(field);
+	}
+
+	public static IStrategoTerm wrap(ITypeParameter binding) {
         if(binding == null)
             return None.INSTANCE;
         else
@@ -3116,6 +3136,5 @@ public class ECJFactory implements ITermFactory {
 	public AST getAST() {
 		return ast;
 	}
-    
     
 }

@@ -14,10 +14,14 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.Type;
+import org.spoofax.interpreter.adapter.ecj.ECJAnnoWrapper;
 import org.spoofax.interpreter.adapter.ecj.WrappedASTNode;
+import org.spoofax.interpreter.adapter.ecj.WrappedAbstractTypeDeclaration;
 import org.spoofax.interpreter.adapter.ecj.WrappedCompilationUnit;
 import org.spoofax.interpreter.adapter.ecj.WrappedICompilationUnit;
 import org.spoofax.interpreter.adapter.ecj.WrappedIFile;
@@ -27,36 +31,43 @@ import org.spoofax.interpreter.adapter.ecj.WrappedIProject;
 import org.spoofax.interpreter.adapter.ecj.WrappedIType;
 import org.spoofax.interpreter.adapter.ecj.WrappedITypeBinding;
 import org.spoofax.interpreter.adapter.ecj.WrappedName;
+import org.spoofax.interpreter.adapter.ecj.WrappedType;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJTools {
 
     public static boolean isProject(IStrategoTerm t) {
-        return t instanceof WrappedIProject;
+        return unannotate(t) instanceof WrappedIProject;
     }
 
-    public static boolean isIJavaElement(IStrategoTerm term) {
-        return term instanceof WrappedIJavaElement;
+    private static IStrategoTerm unannotate(IStrategoTerm t) {
+    	if(t instanceof ECJAnnoWrapper) 
+    		return ((ECJAnnoWrapper)t).getWrappee();
+    	return t;
+	}
+
+	public static boolean isIJavaElement(IStrategoTerm term) {
+        return unannotate(term) instanceof WrappedIJavaElement;
     }
 
     public static boolean isIJavaProject(IStrategoTerm term) {
-        return term instanceof WrappedIJavaProject;
+        return unannotate(term) instanceof WrappedIJavaProject;
     }
 
     public static IJavaElement asIJavaElement(IStrategoTerm term) {
-        return ((WrappedIJavaElement)term).getWrappee();
+        return ((WrappedIJavaElement)unannotate(term)).getWrappee();
     }
 
     public static IProject asIProject(IStrategoTerm term) {
-        return ((WrappedIProject)term).getWrappee();
+        return ((WrappedIProject)unannotate(term)).getWrappee();
     }
 
     public static IJavaProject asIJavaProject(IStrategoTerm term) {
-        return ((WrappedIJavaProject)term).getWrappee();
+        return ((WrappedIJavaProject)unannotate(term)).getWrappee();
     }
 
     public static boolean isIType(IStrategoTerm term) {
-        return term instanceof WrappedIType;
+        return unannotate(term) instanceof WrappedIType;
     }
 
     public static IType asIType(IStrategoTerm term) {
@@ -64,51 +75,68 @@ public class ECJTools {
     }
 
     public static boolean isICompilationUnit(IStrategoTerm term) {
-        return term instanceof WrappedICompilationUnit;
+        return unannotate(term) instanceof WrappedICompilationUnit;
     }
 
     public static ICompilationUnit asICompilationUnit(IStrategoTerm term) {
-        return ((WrappedICompilationUnit)term).getWrappee();
+        return ((WrappedICompilationUnit)unannotate(term)).getWrappee();
     }
 
     public static boolean isASTNode(IStrategoTerm term) {
-        return term instanceof WrappedASTNode;
+        return unannotate(term) instanceof WrappedASTNode;
     }
 
     public static ASTNode asASTNode(IStrategoTerm term) {
-        return ((WrappedASTNode)term).getWrappee();
+        return ((WrappedASTNode)unannotate(term)).getWrappee();
     }
 
     public static boolean isIFile(IStrategoTerm term) {
-        return term instanceof WrappedIFile;
+        return unannotate(term) instanceof WrappedIFile;
     }
 
     public static IFile asIFile(IStrategoTerm term) {
-        return ((WrappedIFile)term).getWrappee();
+        return ((WrappedIFile)unannotate(term)).getWrappee();
     }
 
     public static boolean isCompilationUnit(IStrategoTerm term) {
-        return term instanceof WrappedCompilationUnit;
+        return unannotate(term) instanceof WrappedCompilationUnit;
     }
 
     public static CompilationUnit asCompilationUnit(IStrategoTerm term) {
-        return ((WrappedCompilationUnit)term).getWrappee();
+        return ((WrappedCompilationUnit)unannotate(term)).getWrappee();
     }
 
     public static boolean isName(IStrategoTerm term) {
-        return term instanceof WrappedName;
+        return unannotate(term) instanceof WrappedName;
     }
 
     public static Name asName(IStrategoTerm term) {
-        return ((WrappedName)term).getWrappee();
+        return ((WrappedName)unannotate(term)).getWrappee();
     }
 
 	public static boolean isITypeBinding(IStrategoTerm term) {
-		return term instanceof WrappedITypeBinding;
+		return unannotate(term) instanceof WrappedITypeBinding;
 	}
 
 	public static ITypeBinding asITypeBinding(IStrategoTerm term) {
-		return ((WrappedITypeBinding)term).getWrappee();
+		return ((WrappedITypeBinding)unannotate(term)).getWrappee();
+	}
+
+	public static AbstractTypeDeclaration asAbstractTypeDeclaration(
+			IStrategoTerm term) {
+		return ((WrappedAbstractTypeDeclaration)unannotate(term)).getWrappee();
+	}
+
+	public static boolean isAbstractTypeDeclaration(IStrategoTerm term) {
+		return unannotate(term) instanceof WrappedAbstractTypeDeclaration;
+	}
+
+	public static boolean isType(IStrategoTerm term) {
+		return unannotate(term) instanceof WrappedType;
+	}
+
+	public static Type asType(IStrategoTerm term) {
+		return ((WrappedType)unannotate(term)).getWrappee();
 	}
 
 }

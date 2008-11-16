@@ -10,7 +10,6 @@ package org.spoofax.interpreter.library.ecj;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Type;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
-import org.spoofax.interpreter.adapter.ecj.WrappedASTNode;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -27,16 +26,11 @@ public class ECJ_type_of_type extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-        if(!(tvars[0] instanceof WrappedASTNode))
+        if(!ECJTools.isType(tvars[0]))
             return false;
         
-        WrappedASTNode n = (WrappedASTNode) tvars[0];
-        if(!(n.getWrappee() instanceof Type))
-            return false;
-        
-        Type e = (Type) n.getWrappee();
-        
-        ITypeBinding tb = e.resolveBinding();
+        final Type e = ECJTools.asType(tvars[0]);
+        final ITypeBinding tb = e.resolveBinding();
         if(tb == null)
             return false;
         

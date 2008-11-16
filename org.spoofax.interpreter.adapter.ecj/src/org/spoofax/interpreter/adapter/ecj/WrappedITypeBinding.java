@@ -34,10 +34,13 @@ public class WrappedITypeBinding extends AbstractWrappedBinding {
             else 
                 return ECJFactory.wrap(wrappee.getPackage().getNameComponents());
         case 1:
-            // FIXME should become a QualifiedName
             return ECJFactory.wrap(wrappee.getQualifiedName());
         case 2:
-            return ECJFactory.wrap(wrappee.getTypeArguments());
+        	final ITypeBinding[] tb = wrappee.getTypeArguments();
+        	final String[] ss = new String[tb.length];
+        	for(int i = 0; i < tb.length; i++)
+        		ss[i] = tb[i].getQualifiedName();
+            return ECJFactory.wrap(ss);
         case 3:
             if(wrappee.getSuperclass() == null)
                 return None.INSTANCE;

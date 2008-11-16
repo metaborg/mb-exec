@@ -22,11 +22,14 @@ signature
   DottedName     : String -> DottedName
   IType          : DottedName * Int * IType * DottedName * List(DottedName) * List(TypeParameter) -> IType
   ITypeHierarchy : IType * List(IType) -> ITypeHierarchy
+  PrimitiveName  : String -> Name
   
 strategies
 
+  /** @type FILE -> ASTNode */
   ecj-parse-only = ?FILE(name) ; prim("ECJ_parse_only", name)
 
+  /** @type String -> ECJProject */
   ecj-open-project = ?path ; prim("ECJ_open_project", path)
   
   ecj-create-project = ?path ; prim("ECJ_create_project", path)
@@ -43,41 +46,42 @@ strategies
     <+ is-string
     <+ is-int
   
-  /**
-   * @type Name -> Binding
-   */
+  /** @type Name -> TypeBinding */
   ecj-binding-of =
      ecj-is-Name
    ; ?name
    ; prim("ECJ_binding_of_name", name)
    
+  /** @type Name -> TypeBinding */
   ecj-binding-of = 
      ecj-is-TypeDeclaration
    ; ?type
-   ; prim("ECJ_type_of_typedecl", type)
+   ; prim("ECJ_type_of_typedecl", type) // FIXME ECJ_binding_of_typedecl
 
-  ecj-type-of =
+  /** @type Type -> TypeBinding */
+  ecj-binding-of =
+      ecj-is-Type
+    ; ?expr
+    ; prim("ECJ_type_of_type", expr) // FIXME ECJ_binding_of_type
+
+  /** @type Name -> TypeBinding */
+  ecj-binding-of =
      ?TypeDeclarationStatement(_)
    ; ?stmt
    ; prim("ECJ_type_of_typedeclstmt", stmt)
   
-  ecj-type-of =
+  /** @type Name -> TypeBinding */
+  ecj-binding-of =
      ?TypeParameter(_,_)
    ; ?param
    ; prim("ECJ_type_of_typeparameter", param)
-   
-  ecj-type-of =
+
+  /** @type Name -> TypeBinding */
+  ecj-binding-of =
       ecj-is-Expression
     ; ?expr
     ; prim("ECJ_type_of_expr", expr)
 
-  /**
-   * @type Type -> TypeBinding
-   */
-  ecj-binding-of =
-      ecj-is-Type
-    ; ?expr
-    ; prim("ECJ_type_of_type", expr)
 
 strategies
 
@@ -138,6 +142,7 @@ strategies
   ecj-is-Name =
       ?SimpleName(_)
     + ?QualifiedName(_, _)
+    + ?PrimitiveName(_)
    
   ecj-is-Expression =
       ?MarkerAnnotation(_)
@@ -198,10 +203,19 @@ strategies
       DottedName(?typename)
     ; prim("ECJ_search_for_type", scope, typename)      
 
-  /** @type DottedName -> List(IType) */
+  /** @param scope - IJavaElement
+    * @type DottedName -> List(IType) 
+    */
   ecj-search-for-supertype-type-refs(|scope) = 
       DottedName(?typename)
     ; prim("ECJ_search_for_supertype_type_refs", scope, typename)      
+
+  /** @param scope - IType
+    * @type DottedName -> List(IType) 
+    */
+  ecj-search-for-supertype-type-refs-in-hierarchy(|scope) = 
+      DottedName(?typename)
+    ; prim("ECJ_search_for_supertype_type_refs_in_hierarchy", scope, typename)      
 
   /** 
    * Check compilation units with the given type name for the presence of a type
@@ -232,9 +246,14 @@ strategies
     ; prim("ECJ_hierarchy_for_type", type)
     
   /** @type IType -> ICompilationUnit */    
-  ecj-compilation-unit-for-type =
+  ecj-icompilation-unit-for-type =
     ?type
-    ; prim("ECJ_compilation_unit_for_type", type)
+    ; prim("ECJ_icompilation_unit_for_type", type)
+
+  /** @type IType -> CompilationUnit */    
+  ecj-unbacked-compilation-unit-for-type =
+    ?type
+    ; prim("ECJ_unbacked_compilation_unit_for_type", type)
 
   /** @type ICompilationUnit -> CompilationUnit */   
   ecj-ast-for-compilation-unit =
@@ -246,9 +265,15 @@ strategies
     ?cu
     ; prim("ECJ_ast_for_compilation_unit", cu, 1)
 
+  /** @type CompilationUnit -> CompilationUnit */
   ecj-rewrite-compilation-unit(s) = 
     ?cu
     ; prim("ECJ_rewrite_compilation_unit", s | cu)
+
+  /** @type IFile -> IFile */
+  ecj-rewrite-file(s) = 
+    ?cu
+    ; prim("ECJ_rewrite_file", s | cu)
     
 strategies
 
@@ -257,51 +282,63 @@ strategies
    *
    * @type SimpleName -> String
    */
-  ecj-as-dotted-name = ?SimpleName(<id>)
+  ecj-as-dotted-string = ?SimpleName(<id>)
 
-  ecj-as-dotted-name = 
-      ?QualifiedName(<ecj-as-dotted-name>, SimpleName(n)) => rest
+  /** @type QualifiedName -> String */
+  ecj-as-dotted-string = 
+      ?QualifiedName(<ecj-as-dotted-string>, SimpleName(n)) => rest
     ; <concat-strings> [rest, ".", n]
+
+  /** @type PrimitiveName -> String */
+  ecj-as-dotted-string = ?PrimitiveName(<id>)
   
   /** @type _ -> SimpleName / QualifiedName */
   ecj-name-of = ?TypeDeclaration(_, _, <id>, _, _, _, _, _)   
 
+  /** @type _ -> SimpleName / QualifiedName */
   ecj-name-of = ?SimpleType(<id>)
 
+  /** @type _ -> SimpleName / QualifiedName */
   ecj-name-of = ?MethodDeclaration(_, _, _, _, <id>, _, _, _)
 
+  /** @type _ -> SimpleName / QualifiedName */
   ecj-name-of = ?VariableDeclarationFragment(<id>, _, _)
 
+  /** @type _ -> SimpleName / QualifiedName */
   ecj-name-of = ?ArrayType(_, _, <ecj-name-of>)
   
+  /** @type _ -> SimpleName / QualifiedName */
   ecj-name-of = ?PackageDeclaration(_, _, <id>)
 
+  /** @type _ -> SimpleName / QualifiedName */
   ecj-name-of = ?SingleVariableDeclaration(_, _, <id>, _, _)
+  
+  /** @type -> PrimitiveName */
+  ecj-name-of = ?PrimitiveType(<id>) ; !PrimitiveName(<id>)
   
   /**
    * Computes the dotted name of an AST node, if this is possible
    * 
    * @type ASTNode -> DottedName
    */
-  ecj-dotted-name-of = !DottedName(<ecj-name-of ; ecj-as-dotted-name>)
-
+  ecj-dotted-name-of = !DottedName(<ecj-name-of ; ecj-as-dotted-string>)
    
+  /** @type ASTNode -> DottedName */
   ecj-dotted-name-of = ?TypeBinding(_, <!DottedName(<id>)>, _, _, _, _, _)
 
+  /** @type ASTNode -> DottedName */
   ecj-dotted-name-of = ?IType(<id>, _, _, _, _, _)
   
-  /**
-   * Obtains the dotted name of a primitive type. This is the same as
-   * they keyword.
-   *
-   * @type PrimitiveType -> DottedName
-   */
-  ecj-dotted-name-of = \ PrimitiveType(x) -> DottedName(x) \
-      
+  /** @type PrimitiveType -> DottedName  */
+  ecj-dotted-name-of = ?PrimitiveType(x); !DottedName(x)
+  
+  /** @type */    
   ecj-package-of = ?CompilationUnit(<id>, _, _)
   
+  /** @type CompilationUnit -> List(TypeDeclaration) */    
   ecj-types-of = ?CompilationUnit(_, _, <id>)
   
+  /** @type CompilationUnit -> List(ImportDeclaration) */    
   ecj-imports-of = ?CompilationUnit(_, <id>, _)
 
   /** 
@@ -346,9 +383,20 @@ strategies
   /** @type QualifiedName -> SimpleName */
   ecj-simplename-of = ?QualifiedName(_, <ecj-simplename-of>)
   
+  /** @type DottedName -> SimpleName */
+  ecj-simplename-of = ?DottedName(<id>) ; string-tokenize(|['.']) ; last ; !SimpleName(<id>)
+  
+  /** @type DottedName -> SimpleName */
+  ecj-simplename-of = is-string ; string-tokenize(|['.']) ; last ; !SimpleName(<id>)
+  
+  /** @type ASTNode -> SimpleName */
+  ecj-simplename-of = ecj-name-of ; ecj-simplename-of
+
+  /** @type Name -> String */
+  ecj-simplename-of-as-string = ?PrimitiveType(<id>) <+ ecj-simplename-of ; ?SimpleName(<id>)
+    
   /** @type DottedName -> Name */
-  ecj-as-qualified-name =
-    ?DottedName(<ecj-as-qualified-name>)
+  ecj-as-qualified-name =  ?DottedName(<ecj-as-qualified-name>)
 
   /** @type String -> Name */      
   ecj-as-qualified-name =
@@ -362,10 +410,16 @@ strategies
     ; not(is-int)
 
   /**
-   * Returns true if the supplied Type is a primitive type
-   * @type Type -> Type
+   * Returns true iff the supplied Type is a primitive type
+   * @type ASTNode -> PrimitiveType
    */
   ecj-is-primitive-type = ?PrimitiveType(_)
+
+  /** @type ASTNode -> PrimitiveType */
+  ecj-is-PrimitiveType = ?PrimitiveType(_)
+
+  /** @type ASTNode -> ParameterizedType */
+  ecj-is-ParameterizedType = ?ParameterizedType(_, _)
 
   /** @type ASTNode -> ASTNode */
   ecj-is-valid-ast = 
@@ -415,7 +469,7 @@ strategies
    * @type TypeBinding -> List(DottedName)
    */
   ecj-all-supertypes-of = 
-      ?TypeBinding(_,_,_,superclass,superifaces,_,_)
+      ?TypeBinding(_,_,_,superclass, superifaces,_,_)
     ; <collect-all(?TypeBinding(_,<id>,_,_,_,_,_))> [ superclass | superifaces ]
     ; map(!DottedName(<id>))
   

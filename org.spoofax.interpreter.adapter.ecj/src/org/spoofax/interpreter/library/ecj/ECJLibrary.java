@@ -49,7 +49,7 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
         add(new ECJ_search_for_supertype_type_refs());
         add(new ECJ_search_project_for_type());
         add(new ECJ_current_java_project());
-        add(new ECJ_compilation_unit_for_type());
+        add(new ECJ_icompilation_unit_for_type());
         add(new ECJ_ast_for_compilation_unit());
         add(new ECJ_is_valid_ast_node());
         add(new ECJ_is_valid_ast_nodelist());
@@ -60,6 +60,9 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
         add(new ECJ_is_binding_primitive_type());
         add(new ECJ_hierarchy_for_type());
         add(new ECJ_rewrite_compilation_unit());
+        add(new ECJ_rewrite_file());
+        add(new ECJ_search_for_supertype_type_refs_in_hierarchy());
+        add(new ECJ_unbacked_compilation_unit_for_type());
     }
     
     public IProject getCurrentProject() {

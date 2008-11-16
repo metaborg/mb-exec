@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
@@ -52,7 +53,7 @@ public class ECJ_create_compilation_unit_buffer extends ECJPrimitive {
             return false;
         }
 
-        env.setCurrent(tvars[0]);
+        env.setCurrent(ECJFactory.wrap(file));
         return true;
     }
 

@@ -52,6 +52,15 @@ public class WrappedIType extends WrappedECJNode {
         		e.printStackTrace();
         		return None.INSTANCE;
         	}
+/*        	
+        case 6:
+        	try {
+        		return ECJFactory.wrap(wrappee.getFields());
+        	} catch(JavaModelException e) {
+        		e.printStackTrace();
+        		return None.INSTANCE;
+        	}
+*/        	
         }
         throw new ArrayIndexOutOfBoundsException();
     }
