@@ -1,4 +1,4 @@
-module org/spoofax/compiler/faststrc
+module org/spoofax/compiler/fastpack
 imports
   libstrc 
   libstratego-lib 
@@ -7,19 +7,16 @@ imports
 strategies
 
   main =
-     ?(file, path, lib)
-   ; if	!lib => 1 then
+     debug
+   ; ?[file, path, lib]
+   ; if	!lib => "1" then
        <set-config> ("--library", ())
      end
    ; where (<set-config> ("program", "jstrc"))
-   ; !(file, path)
+   ; !(file, <string-tokenize(|[':'])> path)
+   ; debug(!"pack ")
    ; jstratego-pack-stratego
-   ; strategoj-simplify
-   
 
-  strategoj-simplify = 
-  
-  
   stratego-file-to-term =
      ?file
    ; prim("JSGLR_parse_stratego", file)

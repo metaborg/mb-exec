@@ -1,13 +1,19 @@
 STRATEGOXT_BASELINE=
 
 SVN=svn
-REPOSHOST=svn.cs.uu.nl
-REPOS=https://$(REPOSHOST):12443/repos/StrategoXT/strategoxt/trunk
+REPOSHOST=svn.strategoxt.org
+REPOS=https://$(REPOSHOST)/repos/StrategoXT/strategoxt/trunk
 
 all: libstratego-lib.ctree libstratego-sglr.ctree libstrc.ctree Stratego.tbl jstrc.ctree
 
 jstrc.ctree: str/org/spoofax/compiler/jstrc.str
 	strc -F -i $< -o $@
+
+faststrc.ctree: str/org/spoofax/compiler/faststrc.str
+	strc -F -i $< | baffle -wt -o $@
+
+fastpack.ctree: str/org/spoofax/compiler/fastpack.str
+	strc -F -i $< | baffle -wt -o $@
 
 trunk/configure.ac:
 	svn co $(REPOS)
