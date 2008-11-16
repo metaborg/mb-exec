@@ -28,6 +28,10 @@ public class JFFLibrary extends AbstractStrategoOperatorRegistry {
 		init();
 	}
 	
+	public String getOperatorRegistryName() {
+    	 return REGISTRY_NAME;
+	}
+	
 	private void initRegistry() {
 		
 		add(new JFF_find_class());

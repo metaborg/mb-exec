@@ -42,6 +42,10 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         init();
     }
     
+    public String getOperatorRegistryName() {
+        return REGISTRY_NAME;
+    }
+    
     private void initRegistry() {
         add(new SSL_is_int());
         add(new SSL_is_real());
