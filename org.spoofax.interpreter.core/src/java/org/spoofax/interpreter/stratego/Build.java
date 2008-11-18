@@ -228,25 +228,28 @@ public class Build extends Strategy {
     }
 
     private IStrategoList buildList(IContext env, IStrategoAppl t, ITermFactory factory) throws InterpreterException {
-        
+    	
         // FIXME improve! this is an Anno!
         if(Tools.isAnno(t, env)) {
             t = Tools.applAt(t, 0);
         
             String c = Tools.javaStringAt(t, 0);
-            if(c.equals("Nil")) 
+            
+            if(c.equals("Nil")) {
                 return buildNil(env);
-            else if(c.equals("Cons"))
+            } else if(c.equals("Cons")) {
                 return buildCons(env, t, factory);
+            }
         }
-        else if(Tools.isVar(t, env)) {
+        
+        if(Tools.isVar(t, env)) {
             IStrategoTerm r = buildVar(env, t);
             if(r.getTermType() == IStrategoTerm.LIST) {
                 return (IStrategoList) r;
             }
             throw new InterpreterException("List tail must always be a list -- got " + r);
         }
-
+        
         throw new InterpreterException("List tail must always be a list!");
     }
 
