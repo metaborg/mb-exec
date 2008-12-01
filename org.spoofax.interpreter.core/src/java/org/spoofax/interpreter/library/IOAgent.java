@@ -69,13 +69,9 @@ public class IOAgent {
         return true;
     }
 
-    public int openRandomAccessFile(String fn, String mode) throws InterpreterException {
+    public int openRandomAccessFile(String fn, String mode) throws FileNotFoundException {
         String m = mode.indexOf('w') >= 0 ? "rw" : "r";
-        try {
-            fileMap.put(fileCounter, new RandomAccessFile(adaptFilePath(fn), m));
-        } catch(FileNotFoundException e) {
-            throw new InterpreterException(e); 
-        }
+        fileMap.put(fileCounter, new RandomAccessFile(adaptFilePath(fn), m));
         return fileCounter++;
     }
 
@@ -97,7 +93,7 @@ public class IOAgent {
      *                        e.g., a .pp.af file included by import-term.
      */
     public InputStream openInputStream(String fn, boolean isInternalFile) throws FileNotFoundException {
-        // TODO: Handle isSourceRelative paths (for import-term)
+        // TODO: Implement default isInternalFile path handling (used by import-term)
         return new FileInputStream(adaptFilePath(fn));
     }
     

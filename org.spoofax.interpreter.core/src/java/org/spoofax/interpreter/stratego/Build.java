@@ -271,6 +271,7 @@ public class Build extends Strategy {
 
     private IStrategoTerm buildAnno(IContext env, IStrategoAppl t) throws InterpreterException {
         IStrategoTerm term = buildTerm(env, applAt(t, 0));
+        if (term == null) return null;
         
         IStrategoAppl annos = applAt(t, 1);
         if (term.getAnnotations().size() == 0

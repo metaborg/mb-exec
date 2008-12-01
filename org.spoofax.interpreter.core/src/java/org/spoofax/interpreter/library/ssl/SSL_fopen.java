@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import java.io.FileNotFoundException;
+
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
@@ -33,9 +35,13 @@ public class SSL_fopen extends AbstractPrimitive {
         String mode = Tools.javaString(tvars[1]);
         
         SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        int ref = op.getIOAgent().openRandomAccessFile(fn, mode);
-        env.setCurrent(env.getFactory().makeInt(ref));
-        return true;
+        try {
+            int ref = op.getIOAgent().openRandomAccessFile(fn, mode);
+            env.setCurrent(env.getFactory().makeInt(ref));
+            return true;
+        } catch (FileNotFoundException e) {
+            return false;
+        }
     }
 
 }

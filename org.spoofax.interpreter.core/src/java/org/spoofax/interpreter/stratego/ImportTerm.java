@@ -21,23 +21,27 @@ public class ImportTerm extends Strategy {
 
     private final String path;
     
+    private IStrategoTerm result;
+    
 	public ImportTerm(String path) {
     	this.path = path;
 	}
 
 	public IConstruct eval(IContext env) throws InterpreterException {
-		try {
-		    SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-		    IOAgent io = op.getIOAgent();
-		    
-		    InputStream input = io.openInputStream(path, true);
-			IStrategoTerm result = env.getFactory().parseFromStream(input);
-			
-			env.setCurrent(result);
-		} catch (IOException e) {
-			throw new InterpreterException("import-term failed", e);
-		}
-		
+        if (result == null) {
+            try {
+                SSLLibrary op = (SSLLibrary) env
+                        .getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
+                IOAgent io = op.getIOAgent();
+
+                InputStream input = io.openInputStream(path, true);
+                result = env.getFactory().parseFromStream(input);
+            } catch (IOException e) {
+                throw new InterpreterException("import-term failed", e);
+            }
+        }
+
+        env.setCurrent(result);
 		return getHook().pop().onSuccess(env);
     }
 
