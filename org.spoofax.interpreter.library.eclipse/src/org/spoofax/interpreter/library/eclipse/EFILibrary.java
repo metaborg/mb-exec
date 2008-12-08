@@ -21,4 +21,8 @@ public class EFILibrary extends AbstractStrategoOperatorRegistry {
         add(new EFI_ui_show_popup());
     }
     
+    @Override
+    public String getOperatorRegistryName() {
+        return REGISTRY_NAME;
+    }
 }
