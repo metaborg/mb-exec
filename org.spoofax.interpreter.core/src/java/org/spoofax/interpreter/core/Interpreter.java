@@ -152,4 +152,8 @@ public class Interpreter {
     public void addOperatorRegistry(String domainName, IOperatorRegistry or) {
         context.addOperatorRegistry(domainName, or);
     }
+
+    public void addOperatorRegistry(IOperatorRegistry or) {
+        context.addOperatorRegistry(or.getOperatorRegistryName(), or);
+    }
 }

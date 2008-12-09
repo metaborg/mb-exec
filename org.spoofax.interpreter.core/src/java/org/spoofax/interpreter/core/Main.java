@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.library.IOperatorRegistry;
-import org.spoofax.interpreter.terms.BasicTermFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 

@@ -17,8 +17,8 @@ import org.spoofax.interpreter.library.ssl.RandomAccessOutputStream;
 
 /**
  * The IOAgent class provides access to filesystem from Stratego programs,
- * handles the notion of a current directory, and may provide for caching
- * or 
+ * handles the notion of a current directory, and may be overridden
+ * to redirect console or file I/O streams. 
  * 
  * @author Lennart Kats <lennart add lclnet.nl>
  * @author Karl Trygve Kalleberg <karltk near strategoxt.org>
@@ -71,7 +71,7 @@ public class IOAgent {
 
     public int openRandomAccessFile(String fn, String mode) throws FileNotFoundException {
         String m = mode.indexOf('w') >= 0 ? "rw" : "r";
-        fileMap.put(fileCounter, new RandomAccessFile(adaptFilePath(fn), m));
+        fileMap.put(fileCounter, new RandomAccessFile(getAbsolutePath(fn), m));
         return fileCounter++;
     }
 
@@ -94,7 +94,7 @@ public class IOAgent {
      */
     public InputStream openInputStream(String fn, boolean isInternalFile) throws FileNotFoundException {
         // TODO: Implement default isInternalFile path handling (used by import-term)
-        return new FileInputStream(adaptFilePath(fn));
+        return new FileInputStream(getAbsolutePath(fn));
     }
     
     public final InputStream openInputStream(String fn) throws FileNotFoundException {
@@ -102,18 +102,27 @@ public class IOAgent {
     }
     
     public OutputStream openFileOutputStream(String fn) throws FileNotFoundException {
-        return new FileOutputStream(adaptFilePath(fn));
+        return new FileOutputStream(getAbsolutePath(fn));
     }
     
     public File openFile(String fn) {
-        return new File(adaptFilePath(fn));
+        return new File(getAbsolutePath(fn));
     }
     
     public boolean mkDirs(String fn) {
         return openFile(fn).mkdirs();
     }
     
+    @Deprecated
     protected String adaptFilePath(String fn) {
+        return getAbsolutePath(fn);
+    }
+    
+    /**
+     * Converts a path relative to this IOAgent's working directory
+     * to an absolute path.
+     */
+    protected String getAbsolutePath(String fn) {
         File f = new File(fn);
         if(f.isAbsolute())
             return f.getAbsolutePath();
@@ -125,7 +134,7 @@ public class IOAgent {
     }
     
     public void setWorkingDir(String workingDir) throws FileNotFoundException {
-        File workingDirFile = new File(adaptFilePath(workingDir));
+        File workingDirFile = new File(getAbsolutePath(workingDir));
         if (!workingDirFile.exists() || !workingDirFile.isDirectory()) {
             throw new FileNotFoundException(workingDir);
         }
