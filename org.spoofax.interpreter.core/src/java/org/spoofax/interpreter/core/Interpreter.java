@@ -12,6 +12,7 @@ import java.io.InputStream;
 
 import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.library.IOperatorRegistry;
+import org.spoofax.interpreter.library.LoggingIOAgent;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.StupidFormatter;
@@ -65,12 +66,15 @@ public class Interpreter {
         if (def == null) {
             throw new InterpreterException("Definition '" + name + "' not found");
         }
+        
+        if (getIOAgent() instanceof LoggingIOAgent)
+            ((LoggingIOAgent) getIOAgent()).clearLog();
 
         return def.getBody().evaluate(context);
     }
     
     /**
-     * Return a strategy name based on the C naming conventions,
+     * Rewrite a strategy name based on the C naming conventions,
      * following the stratego-lib term/string/cify strategy.
      */
     public static String cify(String input) {
