@@ -420,6 +420,9 @@ public class StrategoCoreLoader {
     }
 
     public void load(InputStream stream) throws InterpreterException, IOException {
+        if (stream == null)
+            throw new IOException("Could not load Stratego core input from null stream");
+            
         doLoad(context.getProgramFactory().parseFromStream(stream));
     }
 

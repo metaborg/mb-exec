@@ -109,11 +109,16 @@ public class IOAgent {
         return new File(getAbsolutePath(fn));
     }
     
+    public boolean mkdir(String fn) {
+        return openFile(fn).mkdir();
+    }
+    
+    @Deprecated // this is not a Stratego primitive; use mkdir instead
     public boolean mkDirs(String fn) {
         return openFile(fn).mkdirs();
     }
     
-    @Deprecated
+    @Deprecated // use getAbsolutePath instead
     protected String adaptFilePath(String fn) {
         return getAbsolutePath(fn);
     }
