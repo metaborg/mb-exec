@@ -41,7 +41,7 @@ public class CallT extends Strategy {
             debug("CallT.eval() - ", env.current());
         }
 
-    	SDefT sdef = env.lookupSVar(name); // TODO: Memoize called sdefs?
+    	SDefT sdef = env.lookupSVar(name);
     	
         if (sdef == null)
             throw new InterpreterException("Not found '" + name + "'");

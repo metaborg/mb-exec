@@ -118,6 +118,10 @@ public class IOAgent {
         return openFile(fn).mkdirs();
     }
     
+    public String getTempDir() {
+        return System.getProperty("java.io.tmpdir");
+    }
+    
     @Deprecated // use getAbsolutePath instead
     protected String adaptFilePath(String fn) {
         return getAbsolutePath(fn);
