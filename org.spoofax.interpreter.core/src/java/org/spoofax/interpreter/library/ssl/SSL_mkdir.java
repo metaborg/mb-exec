@@ -20,8 +20,7 @@ public class SSL_mkdir extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
 
-        if (!Tools.isTermString(tvars[0]))
-            return false;
+        if (!Tools.isTermString(tvars[0])) return false;
         
         SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         AbstractPrimitive access = op.get("SSL_access");

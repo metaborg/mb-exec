@@ -34,13 +34,21 @@ public class IOAgent {
     
     private Map<Integer, RandomAccessFile> fileMap = new HashMap<Integer, RandomAccessFile>();
     
-    private String workingDir = ".";
+    private String dir;
     private int fileCounter = 3;
     
     public IOAgent() {
         stdinStream = System.in;
         stdoutStream = System.out;
         stderrStream = System.err;
+        
+        try {
+            dir = System.getProperty("user.dir");
+            if (dir == null) setWorkingDir(".");
+            else setWorkingDir(dir);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     public OutputStream getOutputStream(int fd) {
@@ -122,6 +130,10 @@ public class IOAgent {
         return System.getProperty("java.io.tmpdir");
     }
     
+    public String createTempFile(String prefix) throws IOException {
+        return File.createTempFile(prefix, null).getPath(); 
+    }
+    
     @Deprecated // use getAbsolutePath instead
     protected String adaptFilePath(String fn) {
         return getAbsolutePath(fn);
@@ -139,7 +151,7 @@ public class IOAgent {
     }
     
     public String getWorkingDir() {
-        return workingDir;
+        return dir;
     }
     
     public void setWorkingDir(String workingDir) throws FileNotFoundException {
@@ -147,6 +159,6 @@ public class IOAgent {
         if (!workingDirFile.exists() || !workingDirFile.isDirectory()) {
             throw new FileNotFoundException(workingDir);
         }
-        this.workingDir = workingDirFile.getAbsolutePath();
+        this.dir = workingDirFile.getAbsolutePath();
     }
 }

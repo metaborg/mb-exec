@@ -54,6 +54,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_chdir());
         add(new SSL_mkdir());
         add(new SSL_P_tmpdir());
+        add(new SSL_mkstemp());
         add(new SSL_S_ISDIR());
         add(new SSL_divi());
         add(new SSL_divr());
@@ -174,14 +175,6 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         // FIXME initialize on-demand
         dynruleHashtableRef = registerHashtable(new Hashtable(128, 75));
         tableTableRef = registerHashtable(new Hashtable(128, 75));
-        
-        try {
-            String dir = System.getProperty("user.dir");
-            if (dir == null) dir = ".";
-            getIOAgent().setWorkingDir(dir);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
     
 
