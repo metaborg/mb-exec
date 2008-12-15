@@ -66,7 +66,8 @@ public class LoggingIOAgent extends IOAgent {
         
         @Override
         public void close() throws IOException {
-            stream.close();
+            if (stream != System.out && stream != System.err)
+                stream.close();
         }
     }
 }

@@ -34,7 +34,8 @@ public class IOAgent {
     
     private Map<Integer, RandomAccessFile> fileMap = new HashMap<Integer, RandomAccessFile>();
     
-    private String dir;
+    private String workingDir;
+    private String definitionDir;
     private int fileCounter = 3;
     
     public IOAgent() {
@@ -43,13 +44,62 @@ public class IOAgent {
         stderrStream = System.err;
         
         try {
-            dir = System.getProperty("user.dir");
-            if (dir == null) setWorkingDir(".");
-            else setWorkingDir(dir);
+            String dir = System.getProperty("user.dir");
+            if (dir == null) dir = ".";
+            setWorkingDir(dir);
+            setDefinitionDir(dir);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
+    
+    // DIRECTORIES AND PATHS
+    
+    public String getWorkingDir() {
+        return workingDir;
+    }
+    
+    public String getDefinitionDir() {
+        return definitionDir;
+    }
+    
+    public String getTempDir() {
+        return System.getProperty("java.io.tmpdir");
+    }
+    
+    public void setWorkingDir(String workingDir) throws FileNotFoundException {
+        File workingDirFile = new File(getAbsolutePath(getWorkingDir(), workingDir));
+        if (!workingDirFile.exists() || !workingDirFile.isDirectory()) {
+            throw new FileNotFoundException(workingDir);
+        }
+        this.workingDir = workingDirFile.getAbsolutePath();
+    }
+    
+    public void setDefinitionDir(String definitionDir) throws FileNotFoundException {
+        File definitionDirFile = new File(getAbsolutePath(getDefinitionDir(), definitionDir));
+        if (!definitionDirFile.exists() || !definitionDirFile.isDirectory()) {
+            throw new FileNotFoundException(definitionDir);
+        }
+        this.definitionDir = definitionDirFile.getAbsolutePath();
+    }
+    
+    @Deprecated // use getAbsolutePath instead
+    protected String adaptFilePath(String fn) {
+        return getAbsolutePath(getWorkingDir(), fn);
+    }
+    
+    /**
+     * Converts a path relative to a given directory
+     * to an absolute path.
+     */
+    protected String getAbsolutePath(String dir, String fn) {
+        File f = new File(fn);
+        return f.isAbsolute()
+            ? f.getAbsolutePath()
+            : new File(dir, fn).getAbsolutePath();
+    }
+    
+    // OPENING, MANIPULATING FILES
     
     public OutputStream getOutputStream(int fd) {
         if(fd == CONST_STDOUT) {
@@ -79,7 +129,7 @@ public class IOAgent {
 
     public int openRandomAccessFile(String fn, String mode) throws FileNotFoundException {
         String m = mode.indexOf('w') >= 0 ? "rw" : "r";
-        fileMap.put(fileCounter, new RandomAccessFile(getAbsolutePath(fn), m));
+        fileMap.put(fileCounter, new RandomAccessFile(getAbsolutePath(getWorkingDir(), fn), m));
         return fileCounter++;
     }
 
@@ -97,12 +147,13 @@ public class IOAgent {
     /**
      * Opens an input stream given a file path.
      * 
-     * @param isInternalFile  Indicates the path is relative to the Stratego source tree or imports,
-     *                        e.g., a .pp.af file included by import-term.
+     * @param isDefinitionFile
+     *            Indicates the path is relative to the Stratego source tree or
+     *            imports, e.g., a .pp.af file included by import-term.
      */
-    public InputStream openInputStream(String fn, boolean isInternalFile) throws FileNotFoundException {
-        // TODO: Implement default isInternalFile path handling (used by import-term)
-        return new FileInputStream(getAbsolutePath(fn));
+    public InputStream openInputStream(String fn, boolean isDefinitionFile) throws FileNotFoundException {
+        String dir = isDefinitionFile ? getDefinitionDir() : getWorkingDir();
+        return new FileInputStream(getAbsolutePath(dir, fn));
     }
     
     public final InputStream openInputStream(String fn) throws FileNotFoundException {
@@ -110,11 +161,15 @@ public class IOAgent {
     }
     
     public OutputStream openFileOutputStream(String fn) throws FileNotFoundException {
-        return new FileOutputStream(getAbsolutePath(fn));
+        return new FileOutputStream(getAbsolutePath(getWorkingDir(), fn));
     }
     
     public File openFile(String fn) {
-        return new File(getAbsolutePath(fn));
+        return new File(getAbsolutePath(getWorkingDir(), fn));
+    }
+    
+    public String createTempFile(String prefix) throws IOException {
+        return File.createTempFile(prefix, null).getPath(); 
     }
     
     public boolean mkdir(String fn) {
@@ -124,41 +179,5 @@ public class IOAgent {
     @Deprecated // this is not a Stratego primitive; use mkdir instead
     public boolean mkDirs(String fn) {
         return openFile(fn).mkdirs();
-    }
-    
-    public String getTempDir() {
-        return System.getProperty("java.io.tmpdir");
-    }
-    
-    public String createTempFile(String prefix) throws IOException {
-        return File.createTempFile(prefix, null).getPath(); 
-    }
-    
-    @Deprecated // use getAbsolutePath instead
-    protected String adaptFilePath(String fn) {
-        return getAbsolutePath(fn);
-    }
-    
-    /**
-     * Converts a path relative to this IOAgent's working directory
-     * to an absolute path.
-     */
-    protected String getAbsolutePath(String fn) {
-        File f = new File(fn);
-        if(f.isAbsolute())
-            return f.getAbsolutePath();
-        return new File(getWorkingDir(), fn).getAbsolutePath();
-    }
-    
-    public String getWorkingDir() {
-        return dir;
-    }
-    
-    public void setWorkingDir(String workingDir) throws FileNotFoundException {
-        File workingDirFile = new File(getAbsolutePath(workingDir));
-        if (!workingDirFile.exists() || !workingDirFile.isDirectory()) {
-            throw new FileNotFoundException(workingDir);
-        }
-        this.dir = workingDirFile.getAbsolutePath();
     }
 }

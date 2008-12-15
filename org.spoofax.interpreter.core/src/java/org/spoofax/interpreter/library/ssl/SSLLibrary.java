@@ -7,7 +7,6 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
