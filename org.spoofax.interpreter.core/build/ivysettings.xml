@@ -1,0 +1,19 @@
+<ivysettings>
+  <settings defaultResolver="spoofax" />
+  <resolvers>
+    <chain name="spoofax">
+      <ivyrep name="spoofax-ivy-repo"
+          ivyroot="http://releases.spoofax.org/spoofax/ivy-repo/"
+          ivypattern="[organisation]/[module]/[revision]/ivy.xml"
+          artroot="http://releases.spoofax.org/spoofax/ivy-repo/"
+          artpattern="[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+      <url name="maven-repo" m2compatible="true">
+          <artifact pattern="http://repo1.maven.org/maven2/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+      </url>
+    </chain>
+  <ssh name="shared" user="karltk" host="spoofax.org">
+    <ivy pattern="/var/www/http/releases.spoofax.org/htdocs/spoofax/ivy-repo/[organisation]/[module]/[revision]/ivy.xml"/>
+    <artifact pattern="/var/www/http/releases.spoofax.org/htdocs/spoofax/ivy-repo/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+  </ssh> 
+  </resolvers>
+</ivysettings>
