@@ -11,7 +11,7 @@ function die() {
 
 function usage() {
 	echo "[xlet       ] $(basename $0) -x <action> <project-path> <file>"
-	echo "[interpreter] $(basename $0) -i <file>.rtree-core"
+	echo "[interpreter] $(basename $0) -i <file>.ctree"
 }
 
 function run-xlet() {
