@@ -6,7 +6,6 @@ import java.io.OutputStream;
 
 /**
  * An IO Agent class that logs all console output.
- * By default, the log is cleared for every <ref>Interpreter#invoke(String)</ref> call.
  * 
  * @author Lennart Kats <lennart add lclnet.nl>
  */

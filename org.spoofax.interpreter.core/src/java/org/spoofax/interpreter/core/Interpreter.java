@@ -70,10 +70,6 @@ public class Interpreter {
         if (def == null) {
             throw new InterpreterException("Definition '" + name + "' not found");
         }
-        
-        // Clear the I/O log, if applicable
-        if (getIOAgent() instanceof LoggingIOAgent)
-            ((LoggingIOAgent) getIOAgent()).clearLog();
 
         return def.getBody().evaluate(context);
     }
