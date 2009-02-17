@@ -45,7 +45,7 @@ public class Interpreter {
         
         loader = new StrategoCoreLoader(context);
     }
-    
+
     /**
      * Invokes a strategy.
      * 
@@ -55,8 +55,12 @@ public class Interpreter {
      *            If this fails, the strategy is looked up using C-based
      *            naming conventions (e.g., strategy_name_0_0").
      * 
+     * @throws InterpreterExit
+     *             If the interpreter is exited.
+     * @throws InterpreterException
+     *             In case of an internal error or other interpreter exception.
      */
-    public boolean invoke(String name) throws InterpreterException {
+    public boolean invoke(String name) throws InterpreterExit, InterpreterException {
         SDefT def = context.lookupSVar(cify(name) + "_0_0");
         
         if (def == null) {
@@ -67,6 +71,7 @@ public class Interpreter {
             throw new InterpreterException("Definition '" + name + "' not found");
         }
         
+        // Clear the I/O log, if applicable
         if (getIOAgent() instanceof LoggingIOAgent)
             ((LoggingIOAgent) getIOAgent()).clearLog();
 

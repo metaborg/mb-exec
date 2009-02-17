@@ -16,7 +16,7 @@ public class LoggingIOAgent extends IOAgent {
     private final ByteArrayOutputStream bytes = new ByteArrayOutputStream(); 
     
     public String getLog() {
-        return bytes.toString();
+    	return bytes.toString();
     }
     
     public void clearLog() {
@@ -53,6 +53,7 @@ public class LoggingIOAgent extends IOAgent {
             stream.write(b);
             bytes.write(b);
         }
+        
         @Override
         public void write(byte[] b, int off, int len) throws IOException {
             stream.write(b, off, len);
