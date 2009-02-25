@@ -10,6 +10,7 @@ package org.spoofax.interpreter.core;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.spoofax.DebugUtil;
@@ -48,7 +49,7 @@ public class Context implements IContext {
         opdecls = new HashMap<String, OpDecl>();
         varScope = new VarScope(null);
         strategoSignature = new StrategoSignature(programFactory);
-        operatorRegistries = new HashMap<String, IOperatorRegistry>();
+        operatorRegistries = new LinkedHashMap<String, IOperatorRegistry>();
         
         operatorRegistries.put(SSLLibrary.REGISTRY_NAME, new SSLLibrary());
         operatorRegistries.put(JFFLibrary.REGISTRY_NAME, new JFFLibrary(factory));
@@ -145,7 +146,7 @@ public class Context implements IContext {
         return operatorRegistries.get(domain);
     }
 
-    public AbstractPrimitive lookupOperator(String name) {
+    public AbstractPrimitive lookupOperator(String name) {        
         for(IOperatorRegistry or : operatorRegistries.values()) {
             AbstractPrimitive t = or.get(name);
             if(t != null)

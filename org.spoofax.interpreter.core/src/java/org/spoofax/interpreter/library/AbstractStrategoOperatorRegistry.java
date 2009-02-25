@@ -24,7 +24,7 @@ public abstract class AbstractStrategoOperatorRegistry implements IOperatorRegis
         registry.put(name, prim);
     }
 
-    protected void add(AbstractPrimitive prim) {
+    public void add(AbstractPrimitive prim) {
         registry.put(prim.getName(), prim);
     }
     
