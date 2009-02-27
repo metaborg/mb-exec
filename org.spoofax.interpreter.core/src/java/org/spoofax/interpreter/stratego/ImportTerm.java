@@ -38,6 +38,8 @@ public class ImportTerm extends Strategy {
                 result = env.getFactory().parseFromStream(input);
             } catch (IOException e) {
                 throw new InterpreterException("import-term failed", e);
+            } catch (RuntimeException e) {
+                throw new InterpreterException("import-term failed", e);
             }
         }
 
