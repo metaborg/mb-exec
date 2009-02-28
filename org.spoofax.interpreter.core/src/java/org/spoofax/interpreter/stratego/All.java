@@ -39,6 +39,8 @@ public class All extends Strategy {
             case IStrategoTerm.APPL:
             case IStrategoTerm.LIST:
             case IStrategoTerm.TUPLE:
+                // TODO: Optimize - treat IStrategoList as linked list or use iterator?
+                //       (same for some, all)
                 return evalAll(env, 0, t.getAllSubterms());
             default:
                 throw new InterpreterException("Unknown ATerm type " + t.getTermType());

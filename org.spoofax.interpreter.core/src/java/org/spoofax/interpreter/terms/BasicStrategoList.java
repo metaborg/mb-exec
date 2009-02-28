@@ -7,79 +7,83 @@
  */
 package org.spoofax.interpreter.terms;
 
+import java.util.NoSuchElementException;
+
+/**
+ * A basic stratego list implementation using a linked-list data structure.
+ */
 public class BasicStrategoList extends BasicStrategoTerm implements IStrategoList {
 
     // TODO: Use a head/tail BasicStrategoList implementation instead?
     
-    protected final IStrategoTerm[] kids;
+    private final IStrategoTerm head;
     
-    private IStrategoList tailAnnotations;
-    
-    protected BasicStrategoList(IStrategoTerm[] kids, IStrategoList annotations) {
+    private final IStrategoList tail;
+
+    /**
+     * Creates a new list.
+     * 
+     * @see #prepend(IStrategoTerm) Adds a new head element to a list.
+     */
+    protected BasicStrategoList(IStrategoTerm head, IStrategoList tail, IStrategoList annotations) {
         super(annotations);
-        this.kids = kids;
-    }
-    
-    protected BasicStrategoList(IStrategoTerm[] kids) {
-        this(kids, BasicTermFactory.EMPTY_LIST);
+        this.head = head;
+        this.tail = tail;
     }
     
     public IStrategoTerm head() {
-        return kids[0];
+        if (isEmpty())
+            throw new NoSuchElementException();
+        return head;
     }
     
     public boolean isEmpty() {
-        return kids.length == 0;
+        return head == null;
     }
     
     public IStrategoList tail() {
-        return new BasicStrategoList(doTail(), tailAnnotations);
+        if (tail == null)
+            throw new NoSuchElementException();
+        return tail;
     }
     
-    protected IStrategoTerm[] doTail() {
-        IStrategoTerm[] r = new IStrategoTerm[kids.length - 1];
-        for(int i = 1, sz = kids.length; i < sz; i++) {
-            r[i - 1] = kids[i];
-        }
-        return r;
-    }
-    
+    @Deprecated
     public IStrategoList prepend(IStrategoTerm prefix) {
-        BasicStrategoList result = new BasicStrategoList(doPrepend(prefix), null);
-        result.tailAnnotations = getAnnotations();
-        return result;
+        return new BasicStrategoList(prefix, this, null);
     }
     
-    protected IStrategoTerm[] doPrepend(IStrategoTerm prefix) {
-        IStrategoTerm[] r = new IStrategoTerm[kids.length + 1];
-        r[0] = prefix;
-        for(int i = 0, sz = kids.length; i < sz; i++)
-            r[i + 1] = kids[i];
-        return r;
-    }
-    
-    public IStrategoTerm get(int index) {
-        return kids[index];
+    public final IStrategoTerm get(int index) {
+        return getSubterm(index);
     }
     
     public IStrategoTerm[] getAllSubterms() {
-        IStrategoTerm[] clone = new IStrategoTerm[kids.length];
-        for(int i = 0; i < kids.length; i++)
-            clone[i] = kids[i];
+        int size = size();
+        IStrategoTerm[] clone = new IStrategoTerm[size];
+        IStrategoList list = this;
+        for (int i = 0; i < size; i++) {
+            clone[i] = list.head();
+            list = list.tail();
+        }
         return clone;
     }
 
     
-    public int size() {
-        return kids.length;
+    public final int size() {
+        return getSubtermCount();
     }
 
     public IStrategoTerm getSubterm(int index) {
-        return kids[index];
+        IStrategoList list = this;
+        for (int i = 0; i < index; i++)
+            list = list.tail();
+        return list.head();
     }
 
     public int getSubtermCount() {
-        return kids.length;
+        int result = 0;
+        for (IStrategoList cur = this; !cur.isEmpty(); cur = cur.tail())
+            result++;
+        return result;
     }
 
     public int getTermType() {
@@ -97,23 +101,23 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
         if (!getAnnotations().match(second.getAnnotations()))
             return false;
         
-        for(int i = 0, sz = size(); i < sz; i++) {
-            if(!kids[i].match(snd.get(i)))
+        
+        for (IStrategoList cur = this; !cur.isEmpty(); cur = cur.tail(), snd = snd.tail()) {
+            if(!cur.head().match(snd.head()))
                 return false;
         }
         return true;
     }
 
     public void prettyPrint(ITermPrinter pp) {
-        int sz = size();
-        if(sz > 0) {
+        if(!isEmpty()) {
             pp.println("[");
             pp.indent(2);
-            get(0).prettyPrint(pp);
-            for(int i = 1; i < sz; i++) {
+            head().prettyPrint(pp);
+            for (IStrategoList cur = tail(); !cur.isEmpty(); cur = cur.tail()) {
                 pp.print(", ");
                 pp.nextIndentOff();
-                get(i).prettyPrint(pp);
+                cur.head().prettyPrint(pp);
                 pp.println("");
             }
             pp.println("");
@@ -130,11 +134,11 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        if(kids.length > 0) {
-            sb.append(kids[0].toString());
-            for(int i=1; i<kids.length; i++) {
+        if(!isEmpty()) {
+            sb.append(head().toString());
+            for (IStrategoList cur = tail(); !cur.isEmpty(); cur = cur.tail()) {
                 sb.append(",");
-                sb.append(kids[i].toString());
+                sb.append(cur.head().toString());
             }
         }
         sb.append("]");
@@ -145,8 +149,8 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
     @Override
     public int hashCode() {
         long hc = 4787;
-        for(int i=0; i<kids.length;i++) {
-            hc *= kids[i].hashCode();
+        for (IStrategoList cur = this; !cur.isEmpty(); cur = cur.tail()) {
+            hc *= cur.head().hashCode();
         }
         return (int)(hc >> 2);
     }

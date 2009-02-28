@@ -53,6 +53,7 @@ public class TermConverter {
     }
 
     public IStrategoList convert(IStrategoList term) {
+        // TODO: Optimize - use iterator to copy list items efficiently for both linked- and array-lists
         IStrategoTerm[] subterms = convertAll(term.getAllSubterms());
         return annotate(factory.makeList(subterms), term);
     }

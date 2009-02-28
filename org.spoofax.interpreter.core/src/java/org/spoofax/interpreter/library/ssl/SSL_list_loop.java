@@ -28,6 +28,8 @@ public class SSL_list_loop extends AbstractPrimitive {
         if(!Tools.isTermList(tvars[0]))
             return false;
         
+        // TODO: Optimize - treat IStrategoList as linked list or use iterator?
+        
         IStrategoTerm[] list = tvars[0].getAllSubterms();
         CallT s = (CallT) svars[0];
         Strategy[] sv = new Strategy[0];

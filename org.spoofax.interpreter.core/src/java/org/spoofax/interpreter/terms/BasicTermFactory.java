@@ -25,10 +25,9 @@ public class BasicTermFactory implements ITermFactory {
 
     public static final IStrategoTerm[] EMPTY = new IStrategoTerm[0];
 
-    public static final IStrategoList EMPTY_LIST = new BasicTermFactory().makeList(EMPTY); 
+    public static final IStrategoList EMPTY_LIST = new BasicStrategoList(null, null, null); 
 
     private Map<String,Integer> ctorCache;
-    
 
     public BasicTermFactory() {
         ctorCache = new WeakHashMap<String,Integer>();
@@ -267,16 +266,19 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoList makeList(IStrategoTerm... terms) {
-        return new BasicStrategoList(terms, null);
+        IStrategoList result = EMPTY_LIST;
+        for (int i = terms.length - 1; i >= 0; i--) {
+            result = new BasicStrategoList(terms[i], result, null);
+        }
+        return result;
     }
 
     public IStrategoList makeList(Collection<IStrategoTerm> terms) {
-        return new BasicStrategoList(terms.toArray(EMPTY), null);
+        return makeList(terms.toArray(EMPTY));
     }
     
     public IStrategoList makeList(IStrategoTerm head, IStrategoList tail) {
-        // TODO: handle list prepending in BasicTermFactory
-        return tail.prepend(head);
+        return new BasicStrategoList(head, tail, null);
     }
 
     public IStrategoReal makeReal(double d) {
