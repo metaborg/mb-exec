@@ -10,12 +10,12 @@ package org.spoofax.interpreter.stratego;
 public class StupidFormatter {
     
     private int indentation;
-    private StringBuffer sb;
+    private StringBuilder sb;
     private static char[] dummySpace = null;
     
     public StupidFormatter() {
         indentation = 0;
-        sb = new StringBuffer();
+        sb = new StringBuilder();
         if(dummySpace == null) {
             String s = "                                      ";
             dummySpace = new char[s.length()];

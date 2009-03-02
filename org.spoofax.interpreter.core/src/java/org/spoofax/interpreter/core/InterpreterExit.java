@@ -12,6 +12,8 @@ public class InterpreterExit extends InterpreterException {
     private static final long serialVersionUID = 7198021396619788526L;
     private final int value;
     
+    public static final int SUCCESS = 0;
+    
     public InterpreterExit(int value) {
         super("Legal exit");
         this.value = value;

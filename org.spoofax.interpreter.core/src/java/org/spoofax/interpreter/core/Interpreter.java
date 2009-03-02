@@ -69,7 +69,7 @@ public class Interpreter {
         if (def == null) {
             throw new InterpreterException("Definition '" + name + "' not found");
         }
-
+        
         return def.getBody().evaluate(context);
     }
     

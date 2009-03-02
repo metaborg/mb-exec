@@ -1,6 +1,6 @@
 package org.spoofax.interpreter.library.ssl;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -34,7 +34,7 @@ public class SSL_chdir extends AbstractPrimitive {
             io.setWorkingDir(Tools.asJavaString(tvars[0]));
         
             env.setCurrent(env.getFactory().makeInt(0));
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             env.setCurrent(env.getFactory().makeInt(-1));
         }
         

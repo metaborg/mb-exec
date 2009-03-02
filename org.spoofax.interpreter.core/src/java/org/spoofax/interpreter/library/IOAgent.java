@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +30,8 @@ public class IOAgent {
     public final static int CONST_STDERR = 2;
     
     private InputStream stdinStream;
-    private OutputStream stdoutStream;
-    private OutputStream stderrStream;
+    private PrintStream stdoutStream;
+    private PrintStream stderrStream;
     
     private Map<Integer, RandomAccessFile> fileMap = new HashMap<Integer, RandomAccessFile>();
     
@@ -48,7 +49,7 @@ public class IOAgent {
             if (dir == null) dir = ".";
             setWorkingDir(dir);
             setDefinitionDir(dir);
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -67,12 +68,12 @@ public class IOAgent {
         return System.getProperty("java.io.tmpdir");
     }
     
-    public void setWorkingDir(String workingDir) throws FileNotFoundException {
+    public void setWorkingDir(String workingDir) throws FileNotFoundException, IOException {
         File workingDirFile = new File(getAbsolutePath(getWorkingDir(), workingDir));
         if (!workingDirFile.exists() || !workingDirFile.isDirectory()) {
             throw new FileNotFoundException(workingDir);
         }
-        this.workingDir = workingDirFile.getAbsolutePath();
+        this.workingDir = workingDirFile.getCanonicalPath();
     }
     
     public void setDefinitionDir(String definitionDir) throws FileNotFoundException {
@@ -101,7 +102,7 @@ public class IOAgent {
     
     // OPENING, MANIPULATING FILES
     
-    public OutputStream getOutputStream(int fd) {
+    public PrintStream getOutputStream(int fd) {
         if(fd == CONST_STDOUT) {
             return stdoutStream;
         } else if (fd == CONST_STDERR) {
@@ -111,7 +112,7 @@ public class IOAgent {
         if(raf == null)
             return null;
         
-        return new RandomAccessOutputStream(raf);
+        return new PrintStream(new RandomAccessOutputStream(raf), true);
     }
 
     public boolean closeRandomAccessFile(int fd) throws InterpreterException {
@@ -173,7 +174,7 @@ public class IOAgent {
     }
     
     public boolean mkdir(String fn) {
-        return openFile(fn).mkdir();
+        return openFile(getAbsolutePath(getWorkingDir(), fn)).mkdir();
     }
     
     @Deprecated // this is not a Stratego primitive; use mkdir instead

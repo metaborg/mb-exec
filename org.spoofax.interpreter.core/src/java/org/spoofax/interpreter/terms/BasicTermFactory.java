@@ -25,7 +25,7 @@ public class BasicTermFactory implements ITermFactory {
 
     public static final IStrategoTerm[] EMPTY = new IStrategoTerm[0];
 
-    public static final IStrategoList EMPTY_LIST = new BasicStrategoList(null, null, null); 
+    public static final BasicStrategoList EMPTY_LIST = new BasicStrategoList(null, null, null); 
 
     private Map<String,Integer> ctorCache;
 
@@ -61,7 +61,7 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     private IStrategoTerm parseString(PushbackInputStream bis) throws IOException {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int ch = bis.read();
         if(ch == '"')
             return new BasicStrategoString("", null);
@@ -266,7 +266,7 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoList makeList(IStrategoTerm... terms) {
-        IStrategoList result = EMPTY_LIST;
+        BasicStrategoList result = EMPTY_LIST;
         for (int i = terms.length - 1; i >= 0; i--) {
             result = new BasicStrategoList(terms[i], result, null);
         }

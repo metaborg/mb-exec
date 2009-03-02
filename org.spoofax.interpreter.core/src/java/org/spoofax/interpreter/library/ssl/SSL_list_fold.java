@@ -13,6 +13,7 @@ import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.CallT;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_list_fold extends AbstractPrimitive {
@@ -28,15 +29,13 @@ public class SSL_list_fold extends AbstractPrimitive {
         if(!Tools.isTermList(tvars[1]))
             return false;
         
-        IStrategoTerm[] list = tvars[1].getAllSubterms();
         CallT s = (CallT) svars[0];
         Strategy[] sv = new Strategy[0];
-        IStrategoTerm[] tv = new IStrategoTerm[1];
-        tv[0] = tvars[0];
+        IStrategoTerm[] tv = { tvars[0] };
         
         env.setCurrent(tv[0]);
-        for(int i = 0, sz = list.length; i < sz; i++) {
-            env.setCurrent(list[i]);
+        for (IStrategoList list = (IStrategoList) tvars[0]; !list.isEmpty(); list = list.tail()) {
+            env.setCurrent(list.head());
             if(!s.evaluateWithArgs(env, sv, tv))
                 return false;
             tv[0] = env.current();

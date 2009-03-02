@@ -27,7 +27,7 @@ public class SSL_concat_strings extends AbstractPrimitive {
             return false;
         IStrategoTerm[] kids = targs[0].getAllSubterms();
         
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i = 0; i < kids.length; i++) {
             if(!Tools.isTermString(kids[i]))
                 return false;

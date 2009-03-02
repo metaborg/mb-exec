@@ -14,8 +14,6 @@ import java.util.NoSuchElementException;
  */
 public class BasicStrategoList extends BasicStrategoTerm implements IStrategoList {
 
-    // TODO: Use a head/tail BasicStrategoList implementation instead?
-    
     private final IStrategoTerm head;
     
     private final IStrategoList tail;

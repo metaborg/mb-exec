@@ -123,7 +123,7 @@ public class CallT extends Strategy {
 
     public Strategy evalWithArgs(IContext env, Strategy[] sv, IStrategoTerm[] actualTVars) throws InterpreterException {
 
-        System.err.println(actualTVars.length);
+        // System.err.println(actualTVars.length);
         
         if (DebugUtil.isDebugging()) {
             debug("CallT.eval() - ", env.current());
@@ -279,35 +279,26 @@ public class CallT extends Strategy {
     }
 
 	public boolean evaluateWithArgs(IContext env, Strategy[] sv, IStrategoTerm[] tv) throws InterpreterException {
-    	class Finished extends InterpreterException {
-			private static final long serialVersionUID = -3346010050685062946L;
-			boolean result;
-    		Finished(boolean b)
-    		{
-    			super("Finished");
-    			result = b;
-    		}
-    	}
-    	getHook().push(new Hook(){
-			@Override
-			IConstruct onFailure(IContext env) throws InterpreterException {
-				throw new Finished(false);
-			}
-			@Override
-			IConstruct onSuccess(IContext env) throws InterpreterException {
-				throw new Finished(true);
-			}
-    	});
+	    class WithArgsHook extends Hook {
+	        boolean result;
+            @Override
+            IConstruct onFailure(IContext env) throws InterpreterException {
+                result = false;
+                return null;
+            }
+            @Override
+            IConstruct onSuccess(IContext env) throws InterpreterException {
+                result = false;
+                return null;
+            }
+	    }
+	    WithArgsHook hook = new WithArgsHook();
+    	getHook().push(hook);
+
     	IConstruct c = evalWithArgs(env, sv, tv);
-    	boolean result = false;
-    	try {
-    		while (true) {
-    			c = c.eval(env);
-    		}
+    	while (c != null) {
+    		c = c.eval(env);
     	}
-    	catch (Finished f) {
-    		result = f.result;
-    	}
-		return result;
+		return hook.result;
 	}
 }

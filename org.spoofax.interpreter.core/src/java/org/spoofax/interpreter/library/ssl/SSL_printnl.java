@@ -11,6 +11,7 @@ import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -33,7 +34,7 @@ public class SSL_printnl extends AbstractPrimitive {
 
         IStrategoList l = (IStrategoList) targs[1]; 
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i = 0; i < l.size(); i++) {
             IStrategoTerm t = Tools.termAt(l, i);
 //            if (Tools.isTermAppl(t)) {
@@ -50,13 +51,16 @@ public class SSL_printnl extends AbstractPrimitive {
             sb.append(p.getString());
         }
 
+        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
+        IOAgent agent = or.getIOAgent();
         
-        if(output.equals("stderr"))
-            System.err.println(sb);
-        else if(output.equals("stdout"))
-            System.out.println(sb);
-        else
+        if(output.equals("stderr")) {
+            agent.getOutputStream(IOAgent.CONST_STDERR).println(sb);
+        } else if(output.equals("stdout")) {
+            agent.getOutputStream(IOAgent.CONST_STDOUT).println(sb);
+        } else {
             throw new InterpreterException("Unknown output : " + output);
+        }
         
         return true;
     }

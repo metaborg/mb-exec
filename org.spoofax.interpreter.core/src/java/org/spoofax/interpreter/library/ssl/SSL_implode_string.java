@@ -28,15 +28,13 @@ public class SSL_implode_string extends AbstractPrimitive {
         if(!Tools.isTermList(t))
             return false;
 
-        IStrategoList l = (IStrategoList) t;
+        StringBuilder result = new StringBuilder();
 
-        StringBuffer sb = new StringBuffer();
-
-        for(int i = 0; i < l.size(); i++) {
-            IStrategoInt v = Tools.intAt(l, i);
-            sb.append(new Character((char)v.intValue()));
+        for (IStrategoList l = (IStrategoList) t; !l.isEmpty(); l = l.tail()) {
+            IStrategoInt v = (IStrategoInt) l.head();
+            result.append(new Character((char)v.intValue()));
         }
-        env.setCurrent(env.getFactory().makeString(sb.toString()));
+        env.setCurrent(env.getFactory().makeString(result.toString()));
         return true;
     }
 }
