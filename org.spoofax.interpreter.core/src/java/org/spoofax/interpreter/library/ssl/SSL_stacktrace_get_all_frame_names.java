@@ -20,10 +20,14 @@ public class SSL_stacktrace_get_all_frame_names extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-        // FIXME: stacktracing API
-        
         ITermFactory factory = env.getFactory();
-        env.setCurrent(factory.makeList(factory.makeString("stacktraces_not_supported_yet_0_0")));
+
+        String[] trace = env.getStackTracer().getTrace();
+        IStrategoTerm[] traceTerms = new IStrategoTerm[trace.length];
+        for (int i = 0; i < trace.length; i++)
+            traceTerms[i] = factory.makeString(trace[i]);
+        
+        env.setCurrent(factory.makeList(traceTerms));
         return true;
     }
 

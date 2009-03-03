@@ -29,23 +29,27 @@ import org.spoofax.interpreter.terms.ITermFactory;
 public class Context implements IContext {
 
     public static int indentation = 0; // TODO should this be non static?
+    
+    private final StackTracer stackTracer;
+    
+    private final ITermFactory factory;
+
+    private final ITermFactory programFactory;
+
+    private final Map<String, IOperatorRegistry> operatorRegistries;
+
+    private final Map<String, OpDecl> opdecls;
+
+    private final StrategoSignature strategoSignature;
 
     private IStrategoTerm current;
 
-    private Map<String, OpDecl> opdecls;
-
     private VarScope varScope;
-
-    private StrategoSignature strategoSignature;
-    
-    private ITermFactory factory;
-    private ITermFactory programFactory;
-
-    private Map<String, IOperatorRegistry> operatorRegistries;
 
     public Context(ITermFactory factory, ITermFactory programFactory) {
         this.programFactory =  programFactory;
         this.factory = factory;
+        stackTracer = new StackTracer();
         opdecls = new HashMap<String, OpDecl>();
         varScope = new VarScope(null);
         strategoSignature = new StrategoSignature(programFactory);
@@ -57,6 +61,10 @@ public class Context implements IContext {
 
     public IStrategoTerm current() {
         return current;
+    }
+    
+    public StackTracer getStackTracer() {
+        return stackTracer;
     }
 
     public void setCurrent(IStrategoTerm term) {

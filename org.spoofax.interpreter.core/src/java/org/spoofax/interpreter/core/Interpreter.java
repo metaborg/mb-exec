@@ -60,6 +60,7 @@ public class Interpreter {
      *             In case of an internal error or other interpreter exception.
      */
     public boolean invoke(String name) throws InterpreterExit, InterpreterException {
+        StackTracer stackTracer = getContext().getStackTracer();
         SDefT def = context.lookupSVar(cify(name) + "_0_0");
         
         if (def == null) {
@@ -70,7 +71,14 @@ public class Interpreter {
             throw new InterpreterException("Definition '" + name + "' not found");
         }
         
-        return def.getBody().evaluate(context);
+        stackTracer.push(def.getName());
+        
+        boolean success = def.getBody().evaluate(context);
+        
+        if (success) stackTracer.popOnSuccess();
+        else stackTracer.popOnFailure();
+            
+        return success;
     }
     
     /**

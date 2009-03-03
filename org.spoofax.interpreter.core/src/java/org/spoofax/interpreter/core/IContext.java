@@ -41,4 +41,5 @@ public interface IContext {
     public AbstractPrimitive lookupOperator(String name);
     public Collection<String> getStrategyNames();
     
+    public StackTracer getStackTracer();
 }

@@ -11,6 +11,7 @@ import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.StackTracer;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.core.VarScope;
 import org.spoofax.interpreter.stratego.SDefT.SVar;
@@ -19,11 +20,11 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class CallT extends Strategy {
 
-    protected String name;
+    protected final String name;
 
-    protected Strategy[] svars;
+    protected final Strategy[] svars;
 
-    protected IStrategoTerm[] tvars;
+    protected final IStrategoTerm[] tvars;
 
     private static int counter = 0;
 
@@ -40,6 +41,8 @@ public class CallT extends Strategy {
         if (DebugUtil.isDebugging()) {
             debug("CallT.eval() - ", env.current());
         }
+        
+        env.getStackTracer().push(name);
 
     	SDefT sdef = env.lookupSVar(name);
     	
@@ -110,10 +113,12 @@ public class CallT extends Strategy {
         body.getHook().push(new Hook(){
         	IConstruct onSuccess(IContext env) throws InterpreterException {
                 env.restoreVarScope(oldVarScope);
+                env.getStackTracer().popOnSuccess();
         		return th.getHook().pop().onSuccess(env);
         	}
         	IConstruct onFailure(IContext env) throws InterpreterException {
         		env.restoreVarScope(oldVarScope);
+        		env.getStackTracer().popOnFailure();
         		return th.getHook().pop().onFailure(env);
         	}
         });
@@ -128,6 +133,8 @@ public class CallT extends Strategy {
         if (DebugUtil.isDebugging()) {
             debug("CallT.eval() - ", env.current());
         }
+        
+        env.getStackTracer().push(name);
 
         SDefT sdef = env.lookupSVar(name); //getsdef(env);
     	
@@ -191,10 +198,12 @@ public class CallT extends Strategy {
         body.getHook().push(new Hook(){
         	IConstruct onSuccess(IContext env) throws InterpreterException {
                 env.restoreVarScope(oldVarScope);
+                env.getStackTracer().popOnSuccess();
         		return th.getHook().pop().onSuccess(env);
         	}
         	IConstruct onFailure(IContext env) throws InterpreterException {
         		env.restoreVarScope(oldVarScope);
+        		env.getStackTracer().popOnFailure();
         		return th.getHook().pop().onFailure(env);
         	}
         });
