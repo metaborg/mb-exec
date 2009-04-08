@@ -16,7 +16,7 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
 
     public BasicStrategoConstructor(String name, int arity) {
         super(null);
-        this.name = name;
+        this.name = name.intern();
         this.arity = arity;
     }
     
@@ -24,7 +24,10 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
         return arity;
     }
 
-    public String getName() {
+    /**
+     * Returns the (interned string) name of this constructor.
+     */
+    public final String getName() {
         return name;
     }
 
@@ -63,8 +66,13 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
     protected boolean doSlowMatch(IStrategoTerm second) {
         if(second.getTermType() != IStrategoTerm.CTOR)
             return false;
-        IStrategoConstructor o = (IStrategoConstructor)second;
-        return arity == o.getArity() && name.equals(o.getName());
+        if (second instanceof BasicStrategoConstructor) {
+            IStrategoConstructor o = (BasicStrategoConstructor)second;
+            return arity == o.getArity() && name == o.getName();
+        } else {
+            IStrategoConstructor o = (IStrategoConstructor)second;
+            return arity == o.getArity() && name.equals(o.getName());
+        }
     }
 
     public void prettyPrint(ITermPrinter pp) {

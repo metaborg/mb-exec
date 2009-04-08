@@ -1,6 +1,8 @@
 package org.spoofax.interpreter.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,5 +43,13 @@ public class StackTracer {
         for (int i = 0; i < failureDepth; i++)
             results[results.length - i - 1] = items.get(i);
         return results;
+    }
+    
+    public void printStackTrace() {
+        List<String> reverseTrace = Arrays.asList(getTrace());
+        Collections.reverse(reverseTrace);
+        for (String s : reverseTrace) {
+            System.err.println("\t" + s);
+        }
     }
 }
