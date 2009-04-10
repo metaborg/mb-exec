@@ -769,10 +769,12 @@ public class ECJFactory implements ITermFactory {
             return wrap(x);
         }
         case IMPORT_DECLARATION: {
-            if(!isName(kids[0]))
+            if(!isName(kids[0]) && !isInt(kids[1]) && !isInt(kids[2]))
                 return null;
             ImportDeclaration x = ast.newImportDeclaration();
             x.setName(asName(kids[0]));
+            x.setStatic(((IStrategoInt)kids[1]).intValue() > 0);
+            x.setOnDemand(((IStrategoInt)kids[2]).intValue() > 0);
             return wrap(x);
         }
         case INFIX_EXPRESSION: {

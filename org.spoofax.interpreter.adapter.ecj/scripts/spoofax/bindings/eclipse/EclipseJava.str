@@ -61,7 +61,7 @@ signature
     FloatType                       : Type
     ForStatement                    : Term * Term * Term * Term -> Statement
     IfStatement                     : Term * Term * Term -> Statement
-    ImportDeclaration               : Term -> ASTNode 
+    ImportDeclaration               : Name * Int * Int -> ASTNode
     InfixExpression                 : String * Expression * Expression * List(Expresssion) -> Expression
     Initializer                     : Term -> BodyDeclaration
     InstanceofExpression            : Term * Term -> Expression

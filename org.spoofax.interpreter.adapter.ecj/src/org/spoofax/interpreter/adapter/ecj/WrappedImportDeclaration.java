@@ -13,7 +13,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class WrappedImportDeclaration extends WrappedASTNode {
 
     private ImportDeclaration wrappee;
-    public final static ASTCtor CTOR = new ASTCtor("ImportDeclaration", 1); 
+    public final static ASTCtor CTOR = new ASTCtor("ImportDeclaration", 3); 
     
     public WrappedImportDeclaration(ImportDeclaration wrappee) {
         super(CTOR);
@@ -22,14 +22,20 @@ public class WrappedImportDeclaration extends WrappedASTNode {
     
     @Override
     public IStrategoTerm getSubterm(int index) {
-        if(index == 0)
-            return ECJFactory.wrapName(wrappee.getName());
+        switch(index) {
+        case 0:
+        	return ECJFactory.wrapName(wrappee.getName());
+        case 1:
+        	return ECJFactory.wrap(wrappee.isStatic() ? 1 : 0);
+        case 2: 
+        	return ECJFactory.wrap(wrappee.isOnDemand() ? 1 : 0);
+        }
         throw new ArrayIndexOutOfBoundsException();
     }
 
     @Override
     public int getSubtermCount() {
-        return 1;
+        return 3;
     }
 
     @Override
