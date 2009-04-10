@@ -7,11 +7,11 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import org.spoofax.interpreter.terms.BasicStrategoList;
+import org.spoofax.interpreter.terms.BasicStrategoArrayList;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedGenericList extends BasicStrategoList {
+public class WrappedGenericList extends BasicStrategoArrayList {
 
     WrappedGenericList(IStrategoTerm[] kids) {
         super(kids);

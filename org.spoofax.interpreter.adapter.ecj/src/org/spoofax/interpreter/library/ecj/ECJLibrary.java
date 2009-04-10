@@ -96,4 +96,8 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
 			nullProgressMonitor = new NullProgressMonitor();
 		return nullProgressMonitor;
 	}
+
+	public String getOperatorRegistryName() {
+		return REGISTRY_NAME;
+	}
 }
