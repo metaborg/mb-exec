@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
@@ -3137,6 +3138,13 @@ public class ECJFactory implements ITermFactory {
 
 	public AST getAST() {
 		return ast;
+	}
+
+	public static IStrategoTerm wrap(IJavaElement el) {
+		if(el == null)
+			return None.INSTANCE;
+		else
+			return new WrappedIJavaElement(el);
 	}
     
 }

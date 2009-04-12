@@ -14,6 +14,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -37,7 +40,7 @@ public class ECJ_create_compilation_unit_buffer extends ECJPrimitive {
             return false;
 
         IProject project = getLibrary(env).getCurrentProject();
-
+        
         IFile file = project.getFile(Tools.asJavaString(tvars[0]));
 
         final String text = ECJTools.asASTNode(tvars[1]).toString();

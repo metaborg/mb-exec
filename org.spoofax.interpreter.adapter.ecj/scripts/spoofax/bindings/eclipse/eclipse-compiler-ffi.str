@@ -461,6 +461,17 @@ strategies
     ; where(<ecj-is-valid-ast> typedecl)
     ; prim("ECJ_create_compilation_unit_buffer", filename, typedecl)
 
+  /**
+   * Creates a given dotted package name in the currently active project, in
+   * inside the given base path.
+   *
+   * @type Tuple(String, String) -> ()
+   */
+  ecj-create-package =
+      ?(basepath, packagename)
+    ; prim("ECJ_create_package", basepath, packagename)
+    ; !()
+
   /** 
    * Compute all named types implemented by superclasses and interfaces of this
    * this. This set is all superclasses, and all interfaces, transitively,
