@@ -11,14 +11,14 @@ import java.util.List;
  * @author Lennart Kats <lennart add lclnet.nl>
  */
 public class StackTracer {
-    private static final List<String> items = new ArrayList<String>();
+    private final ArrayList<String> items = new ArrayList<String>();
     
-    int currentDepth;
+    private int currentDepth;
     
-    int failureDepth;
+    private int failureDepth;
     
     public void push(String name) {
-        if (items.size() == currentDepth)
+        if (items.size() <= currentDepth)
             items.add(name);
         else
             items.set(currentDepth, name);

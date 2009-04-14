@@ -23,6 +23,8 @@ public interface IStrategoTermBuilder {
     public IStrategoString makeString(String s);
     public IStrategoList makeList(IStrategoTerm... terms);
     public IStrategoList makeList(Collection<IStrategoTerm> terms);
+    
+    // TODO: Rename makeList() head/tail overload to avoid accidental invocation
     public IStrategoList makeList(IStrategoTerm head, IStrategoList tail);
     
     public IStrategoTerm annotateTerm(IStrategoTerm term, IStrategoList annotations);

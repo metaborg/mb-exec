@@ -295,9 +295,13 @@ public class BasicTermFactory implements ITermFactory {
     
     public IStrategoTerm annotateTerm(IStrategoTerm term, IStrategoList annotations) {
         if (term instanceof BasicStrategoTerm) {
-            BasicStrategoTerm result = ((BasicStrategoTerm) term).clone();
-            result.internalSetAnnotations(annotations);
-            return result;
+            if (term.getAnnotations() == annotations) { // cheap check
+                return term;
+            } else {
+                BasicStrategoTerm result = ((BasicStrategoTerm) term).clone();
+                result.internalSetAnnotations(annotations);
+                return result;
+            }
         } else {
             // TODO: Use a generic annotation wrapper class?
             throw new NotImplementedException();

@@ -11,7 +11,6 @@ import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.StackTracer;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.core.VarScope;
 import org.spoofax.interpreter.stratego.SDefT.SVar;
