@@ -29,6 +29,7 @@ public class SSL_get_arguments extends AbstractPrimitive {
             env.setCurrent(env.getFactory().makeList(a.getArguments()));
             return true;
         case IStrategoTerm.INT:
+        case IStrategoTerm.STRING:
         case IStrategoTerm.REAL:
             env.setCurrent(env.getFactory().makeList());
             return true;

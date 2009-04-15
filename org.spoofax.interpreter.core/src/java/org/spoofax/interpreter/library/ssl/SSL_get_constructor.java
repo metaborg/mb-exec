@@ -12,7 +12,9 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
 
 public class SSL_get_constructor extends AbstractPrimitive {
 
@@ -24,22 +26,25 @@ public class SSL_get_constructor extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
 
+        ITermFactory factory = env.getFactory();
         switch(tvars[0].getTermType()) {
         case IStrategoTerm.APPL:
             IStrategoAppl a = (IStrategoAppl) tvars[0];
-            env.setCurrent(env.getFactory().makeString(a.getConstructor().getName()));
+            env.setCurrent(factory.makeString(a.getConstructor().getName()));
             return true;
         case IStrategoTerm.INT:
             return true;
         case IStrategoTerm.REAL:
             return true;
         case IStrategoTerm.LIST:
-            env.setCurrent(env.getFactory().makeList());
+            env.setCurrent(factory.makeList());
             return true;
         case IStrategoTerm.STRING:
+            IStrategoString current = (IStrategoString) factory.annotateTerm(tvars[0], factory.makeList());
+            env.setCurrent(factory.makeString(current.toString()));
             return true;
         case IStrategoTerm.TUPLE:
-            env.setCurrent(env.getFactory().makeString(""));
+            env.setCurrent(factory.makeString(""));
             return true;
         default:
             return false;
