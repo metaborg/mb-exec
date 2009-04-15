@@ -40,10 +40,11 @@ public class BasicTermFactory implements ITermFactory {
     public IStrategoTerm parseFromStream(InputStream inputStream) throws IOException {
         PushbackInputStream bis = new PushbackInputStream(inputStream);
         
-        return parse(bis);
+        return parseFromStream(bis);
     }
 
-    private IStrategoTerm parse(PushbackInputStream bis) throws IOException {
+    protected IStrategoTerm parseFromStream(PushbackInputStream bis) throws IOException {
+        parseSkip(bis);
         final int ch = bis.read();
         switch(ch) {
         case '[': return parseList(bis);
@@ -133,6 +134,10 @@ public class BasicTermFactory implements ITermFactory {
         } while(Character.isLetter(ch) || ch == '-');
         
         //System.err.println(" - " + sb.toString());
+        
+        bis.unread(ch);
+        parseSkip(bis);
+        ch = bis.read();
 
         if(ch == '(') {
             List<IStrategoTerm> l = parseTermSequence(bis, ')');
@@ -153,15 +158,23 @@ public class BasicTermFactory implements ITermFactory {
     private List<IStrategoTerm> parseTermSequence(PushbackInputStream bis, char endChar) throws IOException {
         //System.err.println("sequence");
         List<IStrategoTerm> els = new LinkedList<IStrategoTerm>();
+        parseSkip(bis);
         int ch = bis.read();
         if(ch == endChar)
             return els;
         bis.unread(ch);
         do {
-            els.add(parse(bis));
+            els.add(parseFromStream(bis));
+            parseSkip(bis);
             ch = bis.read();
         } while(ch == ',');
         
+        if (ch != endChar) {
+            bis.unread(ch);
+            parseSkip(bis);
+            ch = bis.read();
+        }
+
         if(ch != endChar)
             throw new ParseError("Sequence must end with '" + endChar + "',saw '" + (char)ch + "'");
         
@@ -204,14 +217,23 @@ public class BasicTermFactory implements ITermFactory {
         bis.unread(ch);
         return sb.toString(); 
     }
-    
-
 
     public IStrategoTerm parseFromString(String text) {
         try {
             return parseFromStream(new ByteArrayInputStream(text.getBytes()));
         } catch(IOException e) {
             return null;
+        }
+    }
+    
+    private void parseSkip(PushbackInputStream input) throws IOException {
+        int b = input.read();
+        switch (b) {
+            case ' ': case '\t': case '\n':
+                parseSkip(input);
+                return;
+            default:
+                input.unread(b);
         }
     }
 
