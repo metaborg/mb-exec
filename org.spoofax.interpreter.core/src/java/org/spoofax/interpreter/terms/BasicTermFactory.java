@@ -245,11 +245,19 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoTuple replaceTuple(IStrategoTerm[] kids, IStrategoTuple old) {
-        return makeTuple(kids);
+        IStrategoTuple result = makeTuple(kids);
+        IStrategoList annos = old.getAnnotations();
+        return annos.isEmpty()
+            ? result
+            : (IStrategoTuple) annotateTerm(result, annos);
     }
     
     public IStrategoList replaceList(IStrategoTerm[] kids, IStrategoList old) {
-        return makeList(kids);
+        IStrategoList result = makeList(kids);
+        IStrategoList annos = old.getAnnotations();
+        return annos.isEmpty()
+            ? result
+            : (IStrategoList) annotateTerm(result, annos);
     }
 
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException {
