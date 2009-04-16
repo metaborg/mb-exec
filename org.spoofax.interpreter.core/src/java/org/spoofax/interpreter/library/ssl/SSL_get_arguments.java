@@ -35,6 +35,7 @@ public class SSL_get_arguments extends AbstractPrimitive {
             env.setCurrent(env.getFactory().makeList());
             return true;
         case IStrategoTerm.LIST:
+            env.setCurrent(tvars[0]);
             return true;
         case IStrategoTerm.TUPLE:
             IStrategoTuple tuple = (IStrategoTuple) tvars[0];

@@ -326,9 +326,11 @@ public class BasicTermFactory implements ITermFactory {
                 result.internalSetAnnotations(annotations);
                 return result;
             }
+        } else if (term == null) {
+            throw new IllegalArgumentException("Term to annotate cannot be null");
         } else {
             // TODO: Use a generic annotation wrapper class?
-            throw new NotImplementedException();
+            throw new NotImplementedException("Annotating term of type " + term.getClass().getName() + " in " + getClass().getSimpleName());
         }
     }
 

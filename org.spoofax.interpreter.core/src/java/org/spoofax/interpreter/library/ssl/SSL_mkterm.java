@@ -41,6 +41,7 @@ public class SSL_mkterm extends AbstractPrimitive {
                 if (tvars[1].getTermType() != IStrategoTerm.LIST)
                     return false;
                 env.setCurrent(tvars[1]);
+                return true;
             default:
                 return false;
         }
