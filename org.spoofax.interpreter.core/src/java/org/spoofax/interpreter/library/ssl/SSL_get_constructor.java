@@ -47,7 +47,7 @@ public class SSL_get_constructor extends AbstractPrimitive {
             env.setCurrent(factory.makeString(""));
             return true;
         default:
-            return false;
+            throw new IllegalStateException("SSL_get_constructor failed for " + tvars[0]);
         }
     }
 

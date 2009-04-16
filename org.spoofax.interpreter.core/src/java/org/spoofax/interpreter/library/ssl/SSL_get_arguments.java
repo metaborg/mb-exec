@@ -13,6 +13,7 @@ import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTuple;
 
 public class SSL_get_arguments extends AbstractPrimitive {
 
@@ -35,8 +36,12 @@ public class SSL_get_arguments extends AbstractPrimitive {
             return true;
         case IStrategoTerm.LIST:
             return true;
+        case IStrategoTerm.TUPLE:
+            IStrategoTuple tuple = (IStrategoTuple) tvars[0];
+            env.setCurrent(env.getFactory().makeList(tuple.getAllSubterms()));
+            return true;
         default:
-            return false;
+            throw new IllegalStateException("SSL_get_arguments failed for " + tvars[0]);
         }
     }
 
