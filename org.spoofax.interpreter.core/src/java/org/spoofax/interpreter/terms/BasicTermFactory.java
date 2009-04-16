@@ -115,6 +115,8 @@ public class BasicTermFactory implements ITermFactory {
                 }
                 ch = bis.read();
             } else if(ch != '\"') {
+                if (ch == -1)
+                    throw new ParseError("Unterminated string: " + sb);
                 sb.append((char)ch);
                 ch = bis.read();
             }

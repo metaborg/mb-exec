@@ -31,14 +31,8 @@ public class SSL_mkterm extends AbstractPrimitive {
         
         switch (tvars[0].getTermType()) {
             case IStrategoTerm.STRING:
-                // TODO: Handle string cases
-                if (tvars[1].getTermType() != IStrategoTerm.LIST)
-                    return false;
-                IStrategoString name = (IStrategoString) tvars[0];
-                IStrategoList args = (IStrategoList) tvars[1];
-                IStrategoConstructor cons = env.getFactory().makeConstructor(name.stringValue(), args.size());
-                env.setCurrent(env.getFactory().makeAppl(cons, args));
-                return true;
+                IStrategoString string = (IStrategoString) tvars[0];
+                return makeString(env, string) || makeAppl(env, string, tvars[1]);
             case IStrategoTerm.INT:
             case IStrategoTerm.REAL:
                 env.setCurrent(tvars[0]);
@@ -50,6 +44,40 @@ public class SSL_mkterm extends AbstractPrimitive {
             default:
                 return false;
         }
+    }
+
+    private boolean makeString(IContext env, IStrategoString input) {
+        String value = input.stringValue();
+        if (!value.startsWith("\""))
+            return false;
+        
+        env.setCurrent(env.getFactory().parseFromString(value + "\""));
+        
+        return true;
+    }
+
+    private boolean makeAppl(IContext env, IStrategoString nameTerm, IStrategoTerm argsTerm) {
+        if (argsTerm.getTermType() != IStrategoTerm.LIST)
+            return false;
+        
+        String name = nameTerm.stringValue();
+        for (int i = 0; i < name.length(); i++) {
+            char c = name.charAt(i);
+            if (!(Character.isLetter(c) || c == '-')) {
+                name = name.substring(0, i);
+                break;
+            }
+        }
+        
+        IStrategoList args = (IStrategoList) argsTerm;
+        
+        if (name.length() == 0) { // tuple
+            env.setCurrent(env.getFactory().makeTuple(args));
+        } else {
+            IStrategoConstructor cons = env.getFactory().makeConstructor(name, args.size());
+            env.setCurrent(env.getFactory().makeAppl(cons, args));
+        }        
+        return true;
     }
 
 }
