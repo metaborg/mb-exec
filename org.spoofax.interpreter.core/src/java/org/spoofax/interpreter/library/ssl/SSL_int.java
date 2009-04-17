@@ -16,6 +16,10 @@ import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
+/**
+ * @author Lennart Kats <lennart add lclnet.nl>
+ * @author Sander Vermolen <sandervermolen near gmail.com>
+ */
 public class SSL_int extends AbstractPrimitive {
 
     protected SSL_int() {
