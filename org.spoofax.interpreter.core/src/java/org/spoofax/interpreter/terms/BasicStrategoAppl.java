@@ -59,6 +59,8 @@ public class BasicStrategoAppl extends BasicStrategoTerm implements IStrategoApp
             return false;
         if (!getAnnotations().match(second.getAnnotations()))
             return false;
+        if (o.getSubtermCount() != getSubtermCount())
+            return false;
         IStrategoTerm[] otherkids = o.getAllSubterms();
         for(int i = 0, sz = kids.length; i < sz; i++) {
             if(!kids[i].match(otherkids[i])) {

@@ -27,11 +27,8 @@ public class BasicTermFactory implements ITermFactory {
 
     public static final BasicStrategoList EMPTY_LIST = new BasicStrategoList(null, null, null); 
 
-    private Map<String,Integer> ctorCache;
-
-    public BasicTermFactory() {
-        ctorCache = new WeakHashMap<String,Integer>();
-    }
+    private final Map<BasicStrategoConstructor, BasicStrategoConstructor> ctorCache =
+        new WeakHashMap<BasicStrategoConstructor,BasicStrategoConstructor>();
     
     public IStrategoTerm parseFromFile(String path) throws IOException {
         return parseFromStream(new FileInputStream(path));
@@ -266,8 +263,8 @@ public class BasicTermFactory implements ITermFactory {
         ous.write(tp.getString().getBytes());
     }
 
-    public boolean hasConstructor(String ctorName, int arity) {
-        return ctorCache.get(ctorName) != null;
+    public boolean hasConstructor(String name, int arity) {
+        return ctorCache.get(new BasicStrategoConstructor(name, arity)) != null;
     }
 
     public final IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids,
@@ -289,8 +286,14 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoConstructor makeConstructor(String name, int arity) {
-        ctorCache.put(name, arity);
-        return new BasicStrategoConstructor(name, arity);
+        BasicStrategoConstructor result = new BasicStrategoConstructor(name, arity);
+        BasicStrategoConstructor cached = ctorCache.get(result);
+        if (cached == null) {
+            ctorCache.put(result, result);
+        } else {
+            result = cached;
+        }
+        return result;
     }
 
     public IStrategoInt makeInt(int i) {
