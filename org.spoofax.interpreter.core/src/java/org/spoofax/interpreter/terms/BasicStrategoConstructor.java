@@ -20,7 +20,7 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
         this.arity = arity;
     }
     
-    public int getArity() {
+    public final int getArity() {
         return arity;
     }
 
@@ -51,10 +51,10 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
     }
 
     public IStrategoTerm getSubterm(int index) {
-        throw new ArrayIndexOutOfBoundsException();
+        throw new UnsupportedOperationException();
     }
 
-    public int getSubtermCount() {
+    public final int getSubtermCount() {
         return 0;
     }
 
@@ -71,7 +71,7 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
             if (second.getTermType() != IStrategoTerm.CTOR)
                 return false;
             IStrategoConstructor o = (IStrategoConstructor)second;
-            return arity == o.getArity() && name == o.getName();
+            return arity == o.getArity() && name.equals(o.getName());
         }
     }
 
@@ -83,13 +83,9 @@ public class BasicStrategoConstructor extends BasicStrategoTerm implements IStra
     public String toString() {
         return name + "/" + arity;
     }    
-    public IStrategoConstructor getConstructor() {
-        return this;
-    }
-
     
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return name.hashCode() + 5407 * arity; 
     }
 

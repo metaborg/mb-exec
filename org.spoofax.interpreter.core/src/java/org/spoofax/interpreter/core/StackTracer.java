@@ -1,6 +1,5 @@
 package org.spoofax.interpreter.core;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -11,18 +10,20 @@ import java.util.List;
  * @author Lennart Kats <lennart add lclnet.nl>
  */
 public class StackTracer {
-    private final ArrayList<String> items = new ArrayList<String>();
+    private String[] items = new String[50];
     
     private int currentDepth;
     
     private int failureDepth;
     
     public void push(String name) {
-        if (items.size() <= currentDepth)
-            items.add(name);
-        else
-            items.set(currentDepth, name);
-        failureDepth = ++currentDepth;
+        if (items.length == currentDepth) {
+            String[] oldItems = items;
+            items = new String[items.length * 2];
+            System.arraycopy(oldItems, 0, items, 0, oldItems.length);
+        }
+        items[currentDepth++] = name;
+        failureDepth = currentDepth;
     }
     
     public void popOnFailure() {
@@ -41,7 +42,7 @@ public class StackTracer {
     public String[] getTrace() {
         String[] results = new String[failureDepth];
         for (int i = 0; i < failureDepth; i++)
-            results[results.length - i - 1] = items.get(i);
+            results[results.length - i - 1] = items[i];
         return results;
     }
     
