@@ -29,6 +29,8 @@ public class SSL_times extends AbstractPrimitive {
         
         ITermFactory factory = env.getFactory();
         
+        // TODO: Higher precision clock? See SSL_TicksToSeconds
+        
         int utime = (int) (getUserTime() / 1000000000);
         int stime = (int) (getSystemTime() / 1000000000);
         
