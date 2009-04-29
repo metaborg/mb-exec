@@ -23,7 +23,9 @@ public class SSL_real_to_string extends AbstractPrimitive {
     
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        if(!(Tools.isTermReal(targs[0])))
+        if (Tools.isTermInt(targs[0]))
+            return new SSL_int_to_string().call(env, sargs, targs);
+        if (!(Tools.isTermReal(targs[0])))
             return false;
 
         IStrategoReal a = (IStrategoReal) targs[0];

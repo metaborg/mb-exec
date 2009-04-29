@@ -4,6 +4,8 @@ import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 /**
@@ -19,10 +21,17 @@ public class SSL_TicksToSeconds extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-        if (tvars[0].getTermType() != IStrategoTerm.INT)
+        IStrategoTerm time = tvars[0];
+        int timeValue; 
+        
+        if (time.getTermType() == IStrategoTerm.REAL)
+            timeValue = (int) ((IStrategoReal) time).realValue();
+        else if (time.getTermType() == IStrategoTerm.INT)
+            timeValue = ((IStrategoInt) time).intValue();
+        else
             return false;
         
-        env.setCurrent(tvars[0]);
+        env.setCurrent(env.getFactory().makeReal(timeValue / SSL_times.TICKS_PER_SECOND));
         return true;
     }
 

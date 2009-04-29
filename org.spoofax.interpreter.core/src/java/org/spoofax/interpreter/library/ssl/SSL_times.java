@@ -14,6 +14,8 @@ import org.spoofax.interpreter.terms.ITermFactory;
  * @author Lennart Kats <lennart add lclnet.nl>
  */
 public class SSL_times extends AbstractPrimitive {
+    
+    public static final int TICKS_PER_SECOND = 100;
 
     protected SSL_times() {
         super("SSL_times", 0, 0);
@@ -29,10 +31,8 @@ public class SSL_times extends AbstractPrimitive {
         
         ITermFactory factory = env.getFactory();
         
-        // TODO: Higher precision clock? See SSL_TicksToSeconds
-        
-        int utime = (int) (getUserTime() / 1000000000);
-        int stime = (int) (getSystemTime() / 1000000000);
+        int utime = (int) (getUserTime() / 1000000000 * TICKS_PER_SECOND);
+        int stime = (int) (getSystemTime() / 1000000000 * TICKS_PER_SECOND);
         
         IStrategoTerm utimeTerm = factory.makeInt(utime);
         IStrategoTerm stimeTerm = factory.makeInt(stime);
