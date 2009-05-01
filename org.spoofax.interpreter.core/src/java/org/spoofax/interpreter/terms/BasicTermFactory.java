@@ -14,9 +14,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.spoofax.NotImplementedException;
@@ -27,8 +30,11 @@ public class BasicTermFactory implements ITermFactory {
 
     public static final BasicStrategoList EMPTY_LIST = new BasicStrategoList(null, null, null); 
 
-    private final Map<BasicStrategoConstructor, BasicStrategoConstructor> ctorCache =
-        new WeakHashMap<BasicStrategoConstructor,BasicStrategoConstructor>();
+    private static final Map<BasicStrategoConstructor, BasicStrategoConstructor> ctorCache =
+        Collections.synchronizedMap(new WeakHashMap<BasicStrategoConstructor,BasicStrategoConstructor>());
+    
+    private static final Set<String> stringPool =
+        Collections.synchronizedSet(new HashSet<String>());
     
     public IStrategoTerm parseFromFile(String path) throws IOException {
         return parseFromStream(new FileInputStream(path));
@@ -62,7 +68,7 @@ public class BasicTermFactory implements ITermFactory {
         StringBuilder sb = new StringBuilder();
         int ch = bis.read();
         if(ch == '"')
-            return new BasicStrategoString("", null);
+            return makeString("");
         boolean escaped = false;
         do {
             escaped = false;
@@ -118,7 +124,7 @@ public class BasicTermFactory implements ITermFactory {
                 ch = bis.read();
             }
         } while(escaped || ch != '\"');
-        return new BasicStrategoString(sb.toString(), null);
+        return makeString(sb.toString());
     }
 
     private IStrategoTerm parseAppl(PushbackInputStream bis) throws IOException {
@@ -264,7 +270,9 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public boolean hasConstructor(String name, int arity) {
-        return ctorCache.get(new BasicStrategoConstructor(name, arity)) != null;
+        return arity == 0
+            ? stringPool.contains(name)
+            : ctorCache.get(new BasicStrategoConstructor(name, arity)) != null;
     }
 
     public final IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids,
@@ -290,6 +298,7 @@ public class BasicTermFactory implements ITermFactory {
         BasicStrategoConstructor cached = ctorCache.get(result);
         if (cached == null) {
             ctorCache.put(result, result);
+            if (arity == 0) stringPool.add(name);
         } else {
             result = cached;
         }
@@ -321,6 +330,7 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoString makeString(String s) {
+        stringPool.add(s);
         return new BasicStrategoString(s, null);
     }
 
