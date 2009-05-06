@@ -1,9 +1,5 @@
 package org.spoofax.interpreter.core;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Stack tracing support.
  * 
@@ -35,8 +31,13 @@ public class StackTracer {
         failureDepth = --currentDepth;
     }
     
-    public void popOnExit() {
+    public void popOnExit(boolean success) {
         currentDepth = 0;
+        if (success) failureDepth = 0;
+    }
+    
+    public int getTraceDepth() {
+        return failureDepth;
     }
     
     public String[] getTrace() {
@@ -47,10 +48,8 @@ public class StackTracer {
     }
     
     public void printStackTrace() {
-        List<String> reverseTrace = Arrays.asList(getTrace());
-        Collections.reverse(reverseTrace);
-        for (String s : reverseTrace) {
-            System.err.println("\t" + s);
+        for (int i = 0; i < failureDepth; i++) {
+            System.err.println("\t" + items[i]);
         }
     }
 }
