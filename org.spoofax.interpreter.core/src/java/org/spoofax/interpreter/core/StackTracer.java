@@ -41,8 +41,22 @@ public class StackTracer {
         if (success) failureDepth = 0;
     }
     
+    /**
+     *  Returns the current stack trace depth.
+     */
     public int getTraceDepth() {
         return failureDepth;
+    }
+    
+   /**
+    *  Returns the current stack trace depth.
+    * 
+    * @param onlyCurrent
+    *            true if only the current frames on the stack should be
+    *            printed, and not any failed frames.
+    */
+   public int getTraceDepth(boolean onlyCurrent) {
+        return onlyCurrent ? currentDepth : failureDepth;
     }
     
     /**
