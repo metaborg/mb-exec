@@ -45,22 +45,53 @@ public class StackTracer {
         return failureDepth;
     }
     
+    /**
+     * Returns the current stack trace.
+     */
     public String[] getTrace() {
-        String[] results = new String[failureDepth];
-        for (int i = 0; i < failureDepth; i++)
+        return getTrace(false);
+    }
+    
+    /**
+     * Returns the current stack trace.
+     * 
+     * @param onlyCurrent
+     *            true if only the current frames on the stack should be
+     *            printed, and not any failed frames.
+     */
+    public String[] getTrace(boolean onlyCurrent) {
+        int depth = onlyCurrent ? currentDepth : failureDepth;
+        String[] frames = this.frames; // avoid _some_ race conditions        
+        String[] results = new String[depth];
+        
+        for (int i = 0; i < depth; i++)
             results[results.length - i - 1] = frames[i];
+        
         return results;
     }
     
+    /**
+     * Prints the stack trace to the standard error output.
+     */
     public void printStackTrace() {
-        // Copy fields to avoid race conditions in _some_ cases
-        int failureDepth = this.failureDepth;
-        String[] frames = this.frames; 
+        printStackTrace(false);
+    }
+
+    /**
+     * Prints the stack trace to the standard error output.
+     * 
+     * @param onlyCurrent
+     *            true if only the current frames on the stack should be
+     *            printed, and not any failed frames.
+     */
+    public void printStackTrace(boolean onlyCurrent) {
+        int depth = onlyCurrent ? currentDepth : failureDepth;
+        String[] frames = this.frames; // avoid _some_ race conditions
         
-        for (int i = 0; i < failureDepth; i++) {
+        for (int i = 0; i < depth; i++) {
             if (i == MAX_REPORTED_FRAMES - MAX_REPORTED_FRAMES_TAIL) {
                 System.err.println("...truncated...");
-                i = Math.max(i + 1, failureDepth - MAX_REPORTED_FRAMES_TAIL);
+                i = Math.max(i + 1, depth - MAX_REPORTED_FRAMES_TAIL);
             }
             System.err.println("\t" + frames[i]);
         }
