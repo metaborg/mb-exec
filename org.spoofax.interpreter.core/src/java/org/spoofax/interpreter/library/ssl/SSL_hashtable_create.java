@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -19,7 +19,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_hashtable_create extends AbstractPrimitive {
 
-    protected static class Hashtable extends HashMap<IStrategoTerm, IStrategoTerm> {
+    protected static class Hashtable extends LinkedHashMap<IStrategoTerm, IStrategoTerm> {
 
         private static final long serialVersionUID = -8193582031891397734L;
 
