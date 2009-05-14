@@ -49,7 +49,7 @@ public class SSL_times extends AbstractPrimitive {
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();
         return bean.isCurrentThreadCpuTimeSupported()
             ? bean.getCurrentThreadUserTime()
-            : 0L;
+            : 0;
     }
 
     /** Get system time in nanoseconds. */
@@ -57,6 +57,6 @@ public class SSL_times extends AbstractPrimitive {
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();
         return bean.isCurrentThreadCpuTimeSupported()
             ? (bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime())
-            : 0L;
+            : 0;
     }
 }

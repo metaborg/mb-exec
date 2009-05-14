@@ -13,7 +13,7 @@ import java.io.RandomAccessFile;
 
 public class RandomAccessOutputStream extends OutputStream {
 
-    private RandomAccessFile raf;
+    private final RandomAccessFile raf;
 
     public RandomAccessOutputStream(RandomAccessFile raf) {
         this.raf = raf;
@@ -22,6 +22,11 @@ public class RandomAccessOutputStream extends OutputStream {
     @Override
     public void write(int b) throws IOException {
         raf.write(b);
+    }
+    
+    @Override
+    public void close() throws IOException {
+        raf.close(); 
     }
 
 }

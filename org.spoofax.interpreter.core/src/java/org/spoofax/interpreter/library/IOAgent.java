@@ -1,5 +1,7 @@
 package org.spoofax.interpreter.library;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,7 +35,9 @@ public class IOAgent {
     private PrintStream stdoutStream;
     private PrintStream stderrStream;
     
-    private Map<Integer, RandomAccessFile> fileMap = new HashMap<Integer, RandomAccessFile>();
+    private Map<Integer, InputStream> inStreams = new HashMap<Integer, InputStream>();
+    
+    private Map<Integer, PrintStream> outStreams = new HashMap<Integer, PrintStream>();
     
     private String workingDir;
     private String definitionDir;
@@ -108,29 +112,30 @@ public class IOAgent {
         } else if (fd == CONST_STDERR) {
             return stderrStream;
         }
-        RandomAccessFile raf = fileMap.get(fd);
-        if(raf == null)
-            return null;
-        
-        return new PrintStream(new RandomAccessOutputStream(raf), true);
+        return outStreams.get(fd);
     }
 
     public boolean closeRandomAccessFile(int fd) throws InterpreterException {
-        RandomAccessFile raf = fileMap.get(fd);
-        if(raf == null)
+        OutputStream stream = outStreams.get(fd);
+        if(stream == null)
             return false;
         try {
-            raf.close();
+            stream.close();
         } catch(IOException e) {
             throw new InterpreterException(e);
         }
-        fileMap.remove(fd);
+        inStreams.remove(fd);
+        outStreams.remove(fd);
         return true;
     }
 
     public int openRandomAccessFile(String fn, String mode) throws FileNotFoundException {
         String m = mode.indexOf('w') >= 0 ? "rw" : "r";
-        fileMap.put(fileCounter, new RandomAccessFile(getAbsolutePath(getWorkingDir(), fn), m));
+        RandomAccessFile file = new RandomAccessFile(getAbsolutePath(getWorkingDir(), fn), m);
+        
+        inStreams.put(fileCounter, new BufferedInputStream(new RandomAccessInputStream(file)));
+        outStreams.put(fileCounter, new PrintStream(new BufferedOutputStream(new RandomAccessOutputStream(file))));
+        
         return fileCounter++;
     }
 
@@ -138,11 +143,7 @@ public class IOAgent {
         if(fd == CONST_STDIN) {
             return stdinStream;
         }
-        RandomAccessFile raf = fileMap.get(fd);
-        if(raf == null)
-            return null;
-        
-        return new RandomAccessInputStream(raf);
+        return inStreams.get(fd);
     }
     
     /**
