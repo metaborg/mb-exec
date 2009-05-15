@@ -7,7 +7,7 @@ package org.spoofax.interpreter.core;
  */
 public class StackTracer {
     
-    private static final int MAX_REPORTED_FRAMES = 300;
+    private static final int MAX_REPORTED_FRAMES = 130;
     
     private static final int MAX_REPORTED_FRAMES_TAIL = 30;
     
