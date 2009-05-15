@@ -36,7 +36,7 @@ public class SSL_indexedSet_put extends AbstractPrimitive {
         Strategy s = sargs[0];
         
         if(is.containsKey(t)) {
-            is.put(t);
+            env.setCurrent(env.getFactory().makeInt(is.getIndex(t)));
             return s.evaluate(env);
         }
 

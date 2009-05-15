@@ -61,6 +61,7 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
         }
 
         public void clear() {
+            counter = 0;
             map.clear();
         }
 
