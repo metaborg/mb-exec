@@ -20,6 +20,11 @@ public class RandomAccessInputStream extends InputStream {
     }
     
     @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+        return raf.read(b, off, len);
+    }
+    
+    @Override
     public int read() throws IOException {
         return raf.read();
     }

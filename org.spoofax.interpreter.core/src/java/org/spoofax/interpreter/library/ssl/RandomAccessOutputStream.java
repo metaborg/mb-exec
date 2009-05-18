@@ -20,6 +20,11 @@ public class RandomAccessOutputStream extends OutputStream {
     }
     
     @Override
+    public void write(byte[] b, int off, int len) throws IOException {
+        raf.write(b, off, len);
+    }
+    
+    @Override
     public void write(int b) throws IOException {
         raf.write(b);
     }
