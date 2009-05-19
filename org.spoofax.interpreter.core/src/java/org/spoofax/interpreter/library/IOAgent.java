@@ -129,12 +129,14 @@ public class IOAgent {
         return true;
     }
 
-    public int openRandomAccessFile(String fn, String mode) throws FileNotFoundException {
+    public int openRandomAccessFile(String fn, String mode) throws FileNotFoundException, IOException {
         String m = mode.indexOf('w') >= 0 ? "rw" : "r";
         RandomAccessFile file = new RandomAccessFile(getAbsolutePath(getWorkingDir(), fn), m);
         
         inStreams.put(fileCounter, new BufferedInputStream(new RandomAccessInputStream(file)));
         outStreams.put(fileCounter, new PrintStream(new BufferedOutputStream(new RandomAccessOutputStream(file))));
+        
+        if (m.equals("rw")) file.setLength(0);
         
         return fileCounter++;
     }

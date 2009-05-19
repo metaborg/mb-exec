@@ -8,6 +8,7 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -40,6 +41,8 @@ public class SSL_fopen extends AbstractPrimitive {
             env.setCurrent(env.getFactory().makeInt(ref));
             return true;
         } catch (FileNotFoundException e) {
+            return false;
+        } catch (IOException e) {
             return false;
         }
     }
