@@ -16,7 +16,7 @@ public class BasicStrategoArrayList extends BasicStrategoTerm implements IStrate
         this.kids = kids;
     }
 
-    protected BasicStrategoArrayList(IStrategoTerm[] kids) {
+    public BasicStrategoArrayList(IStrategoTerm[] kids) {
         super(null);
         this.kids = kids;
     }
