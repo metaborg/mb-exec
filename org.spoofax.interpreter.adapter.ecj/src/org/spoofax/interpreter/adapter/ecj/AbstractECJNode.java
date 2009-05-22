@@ -15,4 +15,11 @@ public abstract class AbstractECJNode implements IStrategoTerm {
 	public IStrategoList getAnnotations() {
 		return BasicTermFactory.EMPTY_LIST;
 	}
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof IStrategoTerm))
+            return false;
+        return match((IStrategoTerm)obj);
+    }
 }

@@ -19,10 +19,12 @@ signature
   Binding        : Int * Int * String -> Binding
   TypeBinding    : List(String) * String * List(TypeBinding) * TypeBinding * List(TypeBinding) * Int * ITypeBinding -> TypeBinding
   TypeParameter  : List(String) -> TypeParameter
+  ITypeParameter : String * List(String) -> ITypeParameter
   DottedName     : String -> DottedName
   IType          : DottedName * Int * IType * DottedName * List(DottedName) * List(TypeParameter) -> IType
   ITypeHierarchy : IType * List(IType) -> ITypeHierarchy
   PrimitiveName  : String -> Name
+  ActualTypeSignature : String * String * String * ActualTypeSignature -> ActualTypeSignature
   
 strategies
 
@@ -210,12 +212,23 @@ strategies
       DottedName(?typename)
     ; prim("ECJ_search_for_supertype_type_refs", scope, typename)      
 
-  /** @param scope - IType
+  /** @param scope - IJavaElement
     * @type DottedName -> List(IType) 
     */
-  ecj-search-for-supertype-type-refs-in-hierarchy(|scope) = 
+  ecj-search-for-supertype-type-refs-no-generics(|scope) = 
       DottedName(?typename)
-    ; prim("ECJ_search_for_supertype_type_refs_in_hierarchy", scope, typename)      
+    ; prim("ECJ_search_for_supertype_type_refs_no_generics", scope, typename)      
+
+  /** Search for a given type name (type erasure) in the parent type hierarchy
+    * of the parameter 'scope'.
+    * 
+    * @param accept - Signature -> _ 
+    * @param scope - IType
+    * @type DottedName -> List(IType) 
+    */
+  ecj-search-for-supertype-type-refs-in-hierarchy(accept|scope) = 
+      DottedName(?typename)
+    ; prim("ECJ_search_for_supertype_type_refs_in_hierarchy", accept | scope, typename)      
 
   /** 
    * Check compilation units with the given type name for the presence of a type
@@ -316,6 +329,12 @@ strategies
   /** @type -> PrimitiveName */
   ecj-name-of = ?PrimitiveType(<id>) ; !PrimitiveName(<id>)
   
+  /** @type -> SimpleName / QualifiedName */
+  ecj-name-of = ?IType(<id>, _, _, _, _, _) ; ecj-as-qualified-name
+  
+  /** @type ParameterizedType -> SimpleName / QualifiedName */
+  ecj-name-of = ?ParameterizedType(<id>, _)
+  
   /**
    * Computes the dotted name of an AST node, if this is possible
    * 
@@ -331,6 +350,9 @@ strategies
   
   /** @type PrimitiveType -> DottedName  */
   ecj-dotted-name-of = ?PrimitiveType(x); !DottedName(x)
+  
+  /** @type ParameterizedType -> DottedName  */
+  ecj-dotted-name-of = ?ParameterizedType(<ecj-dotted-name-of>, _)
   
   /** @type */    
   ecj-package-of = ?CompilationUnit(<id>, _, _)
@@ -501,6 +523,13 @@ strategies
    * @type ASTNode -> String
    */
   ecj-string-name-of = ecj-dotted-name-of ; ?DottedName(<id>)
+  
+   /** 
+    * @type String -> Type
+    */
+  ecj-signature-to-type =
+    ?x
+    ; prim("ECJ_signature_to_type", x)
   
 overlays
 
