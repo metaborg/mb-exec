@@ -69,13 +69,13 @@ public class All extends Strategy {
     	final All th = this;
     	body.getHook().push(new Hook(){
     		IStrategoTerm oldterm = old;
-    		IConstruct onSuccess(IContext env) throws InterpreterException
+    		public IConstruct onSuccess(IContext env) throws InterpreterException
     		{
     			list[i] = env.current();
     			env.setCurrent(oldterm);
     			return evalAll(env, i + 1, list);
     		}
-    		IConstruct onFailure(IContext env) throws InterpreterException
+    		public IConstruct onFailure(IContext env) throws InterpreterException
     		{
     			return th.getHook().pop().onFailure(env);
     		}

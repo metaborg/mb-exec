@@ -68,12 +68,12 @@ public class Some extends Strategy {
     	env.setCurrent(list[n]);
     	body.getHook().push(new Hook(){
 			@Override
-			IConstruct onFailure(IContext env) throws InterpreterException {
+			public IConstruct onFailure(IContext env) throws InterpreterException {
 				env.setCurrent(old);
 				return eval(env, n+1, hadsome, list);
 			}
 			@Override
-			IConstruct onSuccess(IContext env) throws InterpreterException {
+			public IConstruct onSuccess(IContext env) throws InterpreterException {
 				list[n] = env.current();
 				env.setCurrent(old);
 				return eval(env, n+1, true, list);

@@ -55,12 +55,12 @@ public class One extends Strategy {
     	env.setCurrent(list[n]);
     	body.getHook().push(new Hook(){
 			@Override
-			IConstruct onFailure(IContext env) throws InterpreterException {
+			public IConstruct onFailure(IContext env) throws InterpreterException {
 				env.setCurrent(old);
 				return eval(env, n+1, list);
 			}
 			@Override
-			IConstruct onSuccess(IContext env) throws InterpreterException {
+			public IConstruct onSuccess(IContext env) throws InterpreterException {
 				IStrategoTerm[] kids = old.getAllSubterms();
 				kids[n] = env.current();
 				switch (old.getTermType()) {

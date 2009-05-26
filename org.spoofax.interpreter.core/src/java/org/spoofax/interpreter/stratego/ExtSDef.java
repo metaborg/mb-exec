@@ -18,7 +18,7 @@ public class ExtSDef extends SDefT {
 
     @Override
     public String toString() {
-        return "ExtSDefT(\"" + name + "\")";
+        return "ExtSDefT(\"" + getName() + "\")";
     }
 
     @Override

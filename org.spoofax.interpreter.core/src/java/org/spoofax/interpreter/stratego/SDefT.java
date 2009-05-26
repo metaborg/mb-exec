@@ -15,15 +15,15 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.VarScope;
 
 public class SDefT implements IConstruct {
-    protected String name;
+    private String name;
 
-    protected SVar[] strategyArgs;
+    private SVar[] strategyArgs;
 
-    protected String[] termArgs;
+    private String[] termArgs;
 
-    protected Strategy body;
+    private Strategy body;
 
-    protected VarScope scope;
+    private VarScope scope;
 
     public static class SVar {
         public final String name;
@@ -85,6 +85,8 @@ public class SDefT implements IConstruct {
         this.body = actual;
         this.scope = scope;
     }
+    
+    protected SDefT() {}
 
     public  IConstruct eval(IContext e) throws InterpreterException {
         //e.getVarScope().dump("", true);
@@ -94,17 +96,33 @@ public class SDefT implements IConstruct {
     public String getName() {
         return name;
     }
+    
+    protected void setName(String name) {
+        this.name = name;
+    }
 
     public Strategy getBody() {
         return body;
+    }
+    
+    protected void setBody(Strategy body) {
+        this.body = body;
     }
 
     public String[] getTermParams() {
         return termArgs;
     }
+    
+    protected void setTermParams(String[] termArgs) {
+        this.termArgs = termArgs;
+    }
 
     public SVar[] getStrategyParams() {
         return strategyArgs;
+    }
+    
+    protected void setStrategyParams(SVar[] strategyArgs) {
+        this.strategyArgs = strategyArgs;
     }
 
     public VarScope getScope() {

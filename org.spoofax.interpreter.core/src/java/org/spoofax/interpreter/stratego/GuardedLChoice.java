@@ -43,11 +43,11 @@ public class GuardedLChoice extends Strategy {
         	final Strategy second = children[n].second;
         	Strategy first = children[n].first;
         	first.getHook().push(new Hook(){
-        		IConstruct onSuccess(IContext env) {
+        		public IConstruct onSuccess(IContext env) {
                 	second.getHook().push(getHook().pop());
     				return second;
     			}
-    			IConstruct onFailure(IContext env) throws InterpreterException {
+        		public IConstruct onFailure(IContext env) throws InterpreterException {
     	        	env.setCurrent(oldCurrent);
     	        	env.getVarScope().restoreUnboundVars(bi);    				
     				return eval(env, n+1);
