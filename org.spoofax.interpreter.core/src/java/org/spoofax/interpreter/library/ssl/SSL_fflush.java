@@ -17,34 +17,29 @@ import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_write_term_to_stream_baf extends AbstractPrimitive {
+public class SSL_fflush extends AbstractPrimitive {
 
-    SSL_write_term_to_stream_baf() {
-        super("SSL_write_term_to_stream_baf", 0, 2);
-        
+    SSL_fflush() {
+        super("SSL_flush", 0, 1);
     }
+    
     @Override
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-        
-        // FIXME should we even bother with BAF? Now it's just text
-        
+
         if(!Tools.isTermInt(tvars[0]))
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        OutputStream os = or.getIOAgent().getOutputStream(Tools.asJavaInt(tvars[0]));
-        if(os == null)
-            return false;
+        OutputStream stream = or.getIOAgent().getOutputStream(Tools.asJavaInt(tvars[0]));
+        if (stream == null) return false;
         
         try {
-            env.getFactory().unparseToFile(tvars[1], os);
-        } catch(IOException e) {
-            throw new InterpreterException(e);
+            stream.flush();
+            return true;
+        } catch (IOException e) {
+            return false;
         }
-        
-        env.setCurrent(tvars[0]);
-        return true;
     }
 
 }

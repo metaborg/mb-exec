@@ -118,7 +118,7 @@ public class IOAgent {
     public boolean closeRandomAccessFile(int fd) throws InterpreterException {
         OutputStream stream = outStreams.get(fd);
         if(stream == null)
-            return false;
+            return true; // already closed: be forgiving
         try {
             stream.close();
         } catch(IOException e) {
