@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.terms;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,7 +27,7 @@ import org.spoofax.NotImplementedException;
 
 public class BasicTermFactory implements ITermFactory {
 
-    public static final IStrategoTerm[] EMPTY = new IStrategoTerm[0];
+    public static final IStrategoTerm[] EMPTY = {};
 
     public static final BasicStrategoList EMPTY_LIST = new BasicStrategoList(null, null, null); 
 
@@ -41,6 +42,8 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoTerm parseFromStream(InputStream inputStream) throws IOException {
+        if (!(inputStream instanceof BufferedInputStream))
+            inputStream = new BufferedInputStream(inputStream);
         PushbackInputStream bis = new PushbackInputStream(inputStream);
         
         return parseFromStream(bis);
@@ -136,7 +139,7 @@ public class BasicTermFactory implements ITermFactory {
         do {
             sb.append((char)ch);
             ch = bis.read();
-        } while(Character.isLetter(ch) || ch == '-');
+        } while(Character.isLetterOrDigit(ch) || ch == '-');
         
         //System.err.println(" - " + sb.toString());
         
