@@ -14,6 +14,10 @@ public abstract class BasicStrategoTerm implements IStrategoTerm, Cloneable {
     protected BasicStrategoTerm(IStrategoList annotations) {
         this.annotations = annotations;
     }
+    
+    public int getStorageType() {
+        return IMMUTABLE;
+    }
 
     public boolean match(IStrategoTerm second) {
         return this == second || doSlowMatch(second);

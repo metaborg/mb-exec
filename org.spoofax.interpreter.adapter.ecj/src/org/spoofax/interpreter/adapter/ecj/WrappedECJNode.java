@@ -23,4 +23,8 @@ public abstract class WrappedECJNode extends AbstractECJAppl {
     public IStrategoList getAnnotations() {
     	return BasicTermFactory.EMPTY_LIST;
     }
+    
+    public int getStorageType() {
+        return MUTABLE;
+    }
 }

@@ -74,7 +74,7 @@ public class BasicStrategoTuple extends BasicStrategoTerm implements IStrategoTu
             pp.indent(2);
             get(0).prettyPrint(pp);
             for(int i = 1; i < sz; i++) {
-                pp.print(", ");
+                pp.print(",");
                 pp.nextIndentOff();
                 get(i).prettyPrint(pp);
                 pp.println("");

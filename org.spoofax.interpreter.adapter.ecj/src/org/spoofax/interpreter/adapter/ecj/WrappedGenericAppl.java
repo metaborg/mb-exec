@@ -25,6 +25,10 @@ public class WrappedGenericAppl implements IStrategoAppl {
         this.children = children;
     }
     
+    public int getStorageType() {
+        return MUTABLE;
+    }
+    
     public IStrategoTerm[] getArguments() {
         return children;
     }
