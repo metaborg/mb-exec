@@ -26,7 +26,7 @@ public class WrappedActualTypeSignature extends AbstractECJAppl {
 			final String te = Signature.getTypeErasure(wrappee);
 			final String p = Signature.getSignatureQualifier(te);
 			final String n = Signature.getSignatureSimpleName(te);
-			return ECJFactory.wrap(p.isEmpty() ? n : p + "." + n);
+			return ECJFactory.wrap(p.length() == 0 ? n : p + "." + n);
 		}
 		case 3:
 			return ECJFactory.wrapSignatures(Signature.getTypeArguments(wrappee));
