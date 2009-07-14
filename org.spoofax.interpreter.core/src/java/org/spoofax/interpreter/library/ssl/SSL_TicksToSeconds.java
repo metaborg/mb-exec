@@ -31,7 +31,7 @@ public class SSL_TicksToSeconds extends AbstractPrimitive {
         else
             return false;
         
-        env.setCurrent(env.getFactory().makeReal(timeValue / SSL_times.TICKS_PER_SECOND));
+        env.setCurrent(env.getFactory().makeReal(timeValue / (double) SSL_times.TICKS_PER_SECOND));
         return true;
     }
 

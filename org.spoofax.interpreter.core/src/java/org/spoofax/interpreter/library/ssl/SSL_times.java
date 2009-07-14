@@ -1,8 +1,5 @@
 package org.spoofax.interpreter.library.ssl;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
-
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -16,6 +13,8 @@ import org.spoofax.interpreter.terms.ITermFactory;
 public class SSL_times extends AbstractPrimitive {
     
     public static final int TICKS_PER_SECOND = 100;
+    
+    private final long startTime = System.nanoTime();
 
     protected SSL_times() {
         super("SSL_times", 0, 0);
@@ -31,13 +30,11 @@ public class SSL_times extends AbstractPrimitive {
         
         ITermFactory factory = env.getFactory();
         
-        int utime = (int) (getUserTime() / 1000000000 * TICKS_PER_SECOND);
-        int stime = (int) (getSystemTime() / 1000000000 * TICKS_PER_SECOND);
+        int utime = (int) (getUserTime() * TICKS_PER_SECOND / 1000000000);
+        int stime = (int) (getSystemTime() * TICKS_PER_SECOND / 1000000000);
         
         IStrategoTerm utimeTerm = factory.makeInt(utime);
         IStrategoTerm stimeTerm = factory.makeInt(stime);
-        
-        // TODO: Perhaps collect child process times?
         IStrategoTerm ctimeTerm = factory.makeInt(0);
         
         env.setCurrent(factory.makeTuple(utimeTerm, stimeTerm, ctimeTerm, ctimeTerm));
@@ -45,18 +42,29 @@ public class SSL_times extends AbstractPrimitive {
         return true;
     }
     
+    /**
+     * Get the user time in nanoseconds.
+     */
     private long getUserTime() {
+        return System.nanoTime() - startTime;
+        /* imprecise, incomplete MXBean method:
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();
         return bean.isCurrentThreadCpuTimeSupported()
             ? bean.getCurrentThreadUserTime()
             : 0;
+        */
     }
 
-    /** Get system time in nanoseconds. */
+    /**
+     * Get the system time in nanoseconds.
+     */
     private long getSystemTime() {
+        return 0;
+        /* imprecise, incomplete MXBean method:
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();
         return bean.isCurrentThreadCpuTimeSupported()
             ? (bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime())
             : 0;
+        */
     }
 }
