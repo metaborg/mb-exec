@@ -12,15 +12,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Set;
 
-import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.internal.compiler.ast.CompilationUnitDeclaration;
+import org.eclipse.jdt.internal.core.CompilationUnit;
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -33,7 +31,7 @@ public class ParseJava {
         
     	String inputFile = null;
     	String outputFile = null;
-    	boolean statmentsRecovery=false;
+    	boolean statementsRecovery=true;
     	
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("--debug")) {
@@ -42,8 +40,8 @@ public class ParseJava {
                 inputFile = args[i + 1];
             } else if (args[i].equals("-o")) {
                 outputFile = args[i + 1];
-            }else if (args[i].equals("-sr")) {
-                statmentsRecovery=true;
+            }else if (args[i].equals("-nsr")) {
+                statementsRecovery=false;
             }
         }
 
@@ -52,7 +50,7 @@ public class ParseJava {
             System.exit(2);
         }
 
-        IStrategoTerm r = parseJava(inputFile, statmentsRecovery);
+        IStrategoTerm r = parseJava(inputFile, statementsRecovery);
         if(r == null) {
         	System.err.println("Failed to open and read file " + inputFile);
         	System.exit(3);
@@ -72,11 +70,14 @@ public class ParseJava {
     private static IStrategoTerm parseJava(String fileName, boolean useStatementsRecovery) throws FileNotFoundException, IOException {
     
     	ASTParser parser = ASTParser.newParser(AST.JLS3);
-    	parser.setStatementsRecovery(useStatementsRecovery);   	
-    	
+    	parser.setStatementsRecovery(useStatementsRecovery);
+    	parser.setKind(ASTParser.K_COMPILATION_UNIT);
+        parser.setResolveBindings(true);
     	parser.setSource(getBytes(fileName));
+    	parser.setBindingsRecovery(true);
     
     	ASTNode ast = parser.createAST(null);
+    	
     	ECJFactory f = new ECJFactory();
     	return f.parseFromTree(ast);
     }
