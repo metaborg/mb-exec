@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import java.io.PrintStream;
+
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
@@ -55,9 +57,13 @@ public class SSL_printnl extends AbstractPrimitive {
         IOAgent agent = or.getIOAgent();
         
         if(output.equals("stderr")) {
-            agent.getOutputStream(IOAgent.CONST_STDERR).println(sb);
+            PrintStream stream = agent.getOutputStream(IOAgent.CONST_STDERR);
+            stream.println(sb);
+            if (stream.checkError()) return false;
         } else if(output.equals("stdout")) {
-            agent.getOutputStream(IOAgent.CONST_STDOUT).println(sb);
+            PrintStream stream = agent.getOutputStream(IOAgent.CONST_STDOUT);
+            stream.println(sb);
+            if (stream.checkError()) return false;
         } else {
             throw new InterpreterException("Unknown output : " + output);
         }

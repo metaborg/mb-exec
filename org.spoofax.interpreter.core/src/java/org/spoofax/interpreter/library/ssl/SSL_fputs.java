@@ -34,6 +34,7 @@ public class SSL_fputs extends AbstractPrimitive {
         
         PrintStream ous = or.getIOAgent().getOutputStream(Tools.asJavaInt(targs[1]));
         ous.print(Tools.javaString(targs[0]));
+        if (ous.checkError()) return false;
         
         env.setCurrent(targs[1]);
         

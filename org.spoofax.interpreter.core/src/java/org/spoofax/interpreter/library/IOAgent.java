@@ -116,13 +116,16 @@ public class IOAgent {
     }
 
     public boolean closeRandomAccessFile(int fd) throws InterpreterException {
+        if (fd == CONST_STDOUT || fd == CONST_STDERR || fd == CONST_STDIN)
+            return true;
+        
         OutputStream stream = outStreams.get(fd);
         if(stream == null)
             return true; // already closed: be forgiving
         try {
             stream.close();
-        } catch(IOException e) {
-            throw new InterpreterException(e);
+        } catch (IOException e) {
+            return true;
         }
         inStreams.remove(fd);
         outStreams.remove(fd);
