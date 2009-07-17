@@ -28,6 +28,7 @@ public interface IContext {
 
     public ITermFactory getFactory();
     public IOperatorRegistry getOperatorRegistry(String domain);
+    public void addOperatorRegistry(IOperatorRegistry or);
 
     public boolean bindVars(Results r);
 

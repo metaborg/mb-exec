@@ -1,3 +1,4 @@
+
 /*
  * Created on 07.aug.2005
  *
@@ -161,11 +162,12 @@ public class Interpreter {
 		loader.load(term);
 	}
 
+    @Deprecated
     public void addOperatorRegistry(String domainName, IOperatorRegistry or) {
         context.addOperatorRegistry(domainName, or);
     }
 
     public void addOperatorRegistry(IOperatorRegistry or) {
-        context.addOperatorRegistry(or.getOperatorRegistryName(), or);
+        context.addOperatorRegistry(or);
     }
 }

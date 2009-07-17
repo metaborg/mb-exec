@@ -163,8 +163,13 @@ public class Context implements IContext {
         return null;
     }
 
+    @Deprecated
     public void addOperatorRegistry(String domain, IOperatorRegistry or) {
         operatorRegistries.put(domain, or);
+    }
+
+    public void addOperatorRegistry(IOperatorRegistry or) {
+        operatorRegistries.put(or.getOperatorRegistryName(), or);
     }
 
     public Collection<String> getStrategyNames() {
