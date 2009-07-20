@@ -64,7 +64,8 @@ public class SSL_mkterm extends AbstractPrimitive {
         String name = nameTerm.stringValue();
         for (int i = 0; i < name.length(); i++) {
             char c = name.charAt(i);
-            if (!(Character.isLetter(c) || c == '-')) {
+            if (!(Character.isLetter(c) || c == '_' || c == '-'
+                || c == '+' || c == '*' || c == '$')) {
                 name = name.substring(0, i);
                 break;
             }

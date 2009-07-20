@@ -139,7 +139,8 @@ public class BasicTermFactory implements ITermFactory {
         do {
             sb.append((char)ch);
             ch = bis.read();
-        } while(Character.isLetterOrDigit(ch) || ch == '-');
+        } while(Character.isLetterOrDigit(ch) || ch == '_' || ch == '-'
+            || ch == '+' || ch == '*' || ch == '$');
         
         //System.err.println(" - " + sb.toString());
         
