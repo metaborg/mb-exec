@@ -26,15 +26,6 @@ public class InlinePrinter implements ITermPrinter {
 
 	public void outdent(int i) {
 	}
-	
-	@Override
-	public String toString() {
-	    return getString();
-	}
-	
-	public void reset() {
-	    out.setLength(0);
-	}
 
 	public void println(String string, boolean b) {
 		if (string.matches("^ *$")) {

@@ -49,12 +49,12 @@ public class Let extends Strategy {
         final Strategy th = this;
         body.getHook().push(new Hook(){
 			@Override
-            public IConstruct onFailure(IContext env) throws InterpreterException {
+			IConstruct onFailure(IContext env) throws InterpreterException {
 				env.popVarScope();
 				return th.getHook().pop().onFailure(env);
 			}
 			@Override
-            public IConstruct onSuccess(IContext env) throws InterpreterException {
+			IConstruct onSuccess(IContext env) throws InterpreterException {
 		        env.popVarScope();
 				return th.getHook().pop().onSuccess(env);
 			}

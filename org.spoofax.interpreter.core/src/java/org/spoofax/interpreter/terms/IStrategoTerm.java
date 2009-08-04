@@ -18,17 +18,11 @@ public interface IStrategoTerm {
     public static final int CTOR = 6;
     public static final int TUPLE = 7;
     public static final int REF = 8;
-    
-    public static final int MUTABLE = 0;
-    public static final int IMMUTABLE = 1;
-    public static final int SHARABLE = 2;
-    public static final int MAXIMALLY_SHARED = 3;
 
     public int getSubtermCount();
     public IStrategoTerm getSubterm(int index);
     public IStrategoTerm[] getAllSubterms();
     public int getTermType();
-    public int getStorageType();
     
     public IStrategoList getAnnotations();
     

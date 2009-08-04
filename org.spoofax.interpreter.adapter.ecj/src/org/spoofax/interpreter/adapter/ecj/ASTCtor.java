@@ -25,10 +25,6 @@ public class ASTCtor implements IStrategoConstructor {
         this.arity = arity;
     }
     
-    public int getStorageType() {
-        return IMMUTABLE;
-    }
-    
     public int getArity() {
         return arity;
     }

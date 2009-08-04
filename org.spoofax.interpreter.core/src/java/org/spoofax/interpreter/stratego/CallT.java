@@ -19,11 +19,11 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class CallT extends Strategy {
 
-    private final String name;
+    protected final String name;
 
-    private final Strategy[] svars;
+    protected final Strategy[] svars;
 
-    private final IStrategoTerm[] tvars;
+    protected final IStrategoTerm[] tvars;
 
     private static int counter = 0;
 
@@ -49,7 +49,7 @@ public class CallT extends Strategy {
             throw new InterpreterException("Not found '" + name + "'");
 
         if(DebugUtil.tracing) {
-            System.err.println("[" + depth + "] - " + sdef.getName());
+            System.err.println("[" + depth + "] - " + sdef.name);
             depth++;
         }
     
@@ -110,12 +110,12 @@ public class CallT extends Strategy {
         final CallT th = this;
         Strategy body = sdef.getBody();
         body.getHook().push(new Hook(){
-        	public IConstruct onSuccess(IContext env) throws InterpreterException {
+        	IConstruct onSuccess(IContext env) throws InterpreterException {
                 env.restoreVarScope(oldVarScope);
                 env.getStackTracer().popOnSuccess();
         		return th.getHook().pop().onSuccess(env);
         	}
-        	public IConstruct onFailure(IContext env) throws InterpreterException {
+        	IConstruct onFailure(IContext env) throws InterpreterException {
         		env.restoreVarScope(oldVarScope);
         		env.getStackTracer().popOnFailure();
         		return th.getHook().pop().onFailure(env);
@@ -195,12 +195,12 @@ public class CallT extends Strategy {
         final CallT th = this;
         Strategy body = sdef.getBody();
         body.getHook().push(new Hook(){
-        	public IConstruct onSuccess(IContext env) throws InterpreterException {
+        	IConstruct onSuccess(IContext env) throws InterpreterException {
                 env.restoreVarScope(oldVarScope);
                 env.getStackTracer().popOnSuccess();
         		return th.getHook().pop().onSuccess(env);
         	}
-        	public IConstruct onFailure(IContext env) throws InterpreterException {
+        	IConstruct onFailure(IContext env) throws InterpreterException {
         		env.restoreVarScope(oldVarScope);
         		env.getStackTracer().popOnFailure();
         		return th.getHook().pop().onFailure(env);
@@ -290,12 +290,12 @@ public class CallT extends Strategy {
 	    class WithArgsHook extends Hook {
 	        boolean result;
             @Override
-            public IConstruct onFailure(IContext env) throws InterpreterException {
+            IConstruct onFailure(IContext env) throws InterpreterException {
                 result = false;
                 return null;
             }
             @Override
-            public IConstruct onSuccess(IContext env) throws InterpreterException {
+            IConstruct onSuccess(IContext env) throws InterpreterException {
                 result = false;
                 return null;
             }

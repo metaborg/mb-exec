@@ -29,10 +29,6 @@ public class WrappedASTNodeList implements IStrategoList {
         this.wrappee = (List<ASTNode>)wrappee;
     }
     
-    public int getStorageType() {
-        return MUTABLE;
-    }
-    
     public IStrategoTerm get(int i) {
         return getSubterm(i);
     }

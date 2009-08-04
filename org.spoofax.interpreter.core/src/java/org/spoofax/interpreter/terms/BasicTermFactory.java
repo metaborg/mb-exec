@@ -7,7 +7,6 @@
  */
 package org.spoofax.interpreter.terms;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,35 +14,30 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.spoofax.NotImplementedException;
 
 public class BasicTermFactory implements ITermFactory {
 
-    public static final IStrategoTerm[] EMPTY = {};
+    public static final IStrategoTerm[] EMPTY = new IStrategoTerm[0];
 
     public static final BasicStrategoList EMPTY_LIST = new BasicStrategoList(null, null, null); 
 
-    private static final Map<BasicStrategoConstructor, BasicStrategoConstructor> ctorCache =
-        Collections.synchronizedMap(new WeakHashMap<BasicStrategoConstructor,BasicStrategoConstructor>());
-    
-    private static final Set<String> stringPool =
-        Collections.synchronizedSet(new HashSet<String>());
+    private Map<String,Integer> ctorCache;
+
+    public BasicTermFactory() {
+        ctorCache = new WeakHashMap<String,Integer>();
+    }
     
     public IStrategoTerm parseFromFile(String path) throws IOException {
         return parseFromStream(new FileInputStream(path));
     }
 
     public IStrategoTerm parseFromStream(InputStream inputStream) throws IOException {
-        if (!(inputStream instanceof BufferedInputStream))
-            inputStream = new BufferedInputStream(inputStream);
         PushbackInputStream bis = new PushbackInputStream(inputStream);
         
         return parseFromStream(bis);
@@ -71,7 +65,7 @@ public class BasicTermFactory implements ITermFactory {
         StringBuilder sb = new StringBuilder();
         int ch = bis.read();
         if(ch == '"')
-            return makeString("");
+            return new BasicStrategoString("", null);
         boolean escaped = false;
         do {
             escaped = false;
@@ -127,7 +121,7 @@ public class BasicTermFactory implements ITermFactory {
                 ch = bis.read();
             }
         } while(escaped || ch != '\"');
-        return makeString(sb.toString());
+        return new BasicStrategoString(sb.toString(), null);
     }
 
     private IStrategoTerm parseAppl(PushbackInputStream bis) throws IOException {
@@ -139,7 +133,7 @@ public class BasicTermFactory implements ITermFactory {
         do {
             sb.append((char)ch);
             ch = bis.read();
-        } while(Character.isLetterOrDigit(ch) || ch == '-');
+        } while(Character.isLetter(ch) || ch == '-');
         
         //System.err.println(" - " + sb.toString());
         
@@ -272,10 +266,8 @@ public class BasicTermFactory implements ITermFactory {
         ous.write(tp.getString().getBytes());
     }
 
-    public boolean hasConstructor(String name, int arity) {
-        return arity == 0
-            ? stringPool.contains(name)
-            : ctorCache.get(new BasicStrategoConstructor(name, arity)) != null;
+    public boolean hasConstructor(String ctorName, int arity) {
+        return ctorCache.get(ctorName) != null;
     }
 
     public final IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids,
@@ -297,15 +289,8 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoConstructor makeConstructor(String name, int arity) {
-        BasicStrategoConstructor result = new BasicStrategoConstructor(name, arity);
-        BasicStrategoConstructor cached = ctorCache.get(result);
-        if (cached == null) {
-            ctorCache.put(result, result);
-            if (arity == 0) stringPool.add(name);
-        } else {
-            result = cached;
-        }
-        return result;
+        ctorCache.put(name, arity);
+        return new BasicStrategoConstructor(name, arity);
     }
 
     public IStrategoInt makeInt(int i) {
@@ -333,7 +318,6 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoString makeString(String s) {
-        stringPool.add(s);
         return new BasicStrategoString(s, null);
     }
 

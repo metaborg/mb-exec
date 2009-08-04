@@ -14,8 +14,6 @@ public interface IStrategoTermBuilder {
     
     public IStrategoConstructor makeConstructor(String string, int arity);
 
-    // TODO: Rename makeApl() IStrategoList overload to avoid accidental invocation
-    @Deprecated
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids);
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... terms);
 
@@ -27,7 +25,6 @@ public interface IStrategoTermBuilder {
     public IStrategoList makeList(Collection<IStrategoTerm> terms);
     
     // TODO: Rename makeList() head/tail overload to avoid accidental invocation
-    @Deprecated
     public IStrategoList makeList(IStrategoTerm head, IStrategoList tail);
     
     public IStrategoTerm annotateTerm(IStrategoTerm term, IStrategoList annotations);

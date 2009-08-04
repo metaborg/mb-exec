@@ -26,18 +26,16 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
-import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.InlinePrinter;
 
 public class ECJ_search_for_supertype_type_refs_in_hierarchy extends AbstractPrimitive {
 
 	public ECJ_search_for_supertype_type_refs_in_hierarchy() {
-		super("ECJ_search_for_supertype_type_refs_in_hierarchy", 1, 2);
+		super("ECJ_search_for_supertype_type_refs_in_hierarchy", 0, 2);
 	}
 
 	@Override
-	public boolean call(final IContext env, Strategy[] svars, IStrategoTerm[] tvars)
+	public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
 	throws InterpreterException {
 
 		if(!ECJTools.isIType(tvars[0]))
@@ -45,14 +43,13 @@ public class ECJ_search_for_supertype_type_refs_in_hierarchy extends AbstractPri
 		if(!Tools.isTermString(tvars[1]))
 			return false;
 
-	// TODO: This only works in 3.4, what to do for other versions? 
+		// TODO: This only works in 3.4, what to do for other versions? 
 
 		// FIXME this method will currently only return exact type matches.
 		//       it is unclear whether searches for the supertype Foo<Object>
 		//       should also allow Foo<Bar> to be returned; for now, it's explicitly
 		//       forbidden
 
-		final Strategy acceptor = svars[0];
 		final String className = Tools.asJavaString(tvars[1]);
 		final SearchPattern sp = SearchPattern.createPattern(
 				className, 
@@ -72,16 +69,11 @@ public class ECJ_search_for_supertype_type_refs_in_hierarchy extends AbstractPri
 					IType t = (IType)match.getElement();
 					//System.out.println(" * " + t.getFullyQualifiedName());
 					for(String s : t.getSuperInterfaceTypeSignatures()) {
-						IStrategoAppl a = ECJFactory.wrapSignature(s);
-						try {
-							env.setCurrent(a);
-							if(acceptor.evaluate(env)) {
-								results.add(t);
-							}
-						} catch(InterpreterException e) {
-							// FIXME: log
+						final String p = Signature.toString(s);
+						if(p.equals(className)) {
+							results.add(t);
+							return;
 						}
-						
 					}
 				}
 

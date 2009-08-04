@@ -73,11 +73,11 @@ abstract public class Strategy implements IConstruct {
     	}
     	getHook().push(new Hook(){
 			@Override
-			public IConstruct onFailure(IContext env) throws InterpreterException {
+			IConstruct onFailure(IContext env) throws InterpreterException {
 				throw new Finished(false);
 			}
 			@Override
-			public IConstruct onSuccess(IContext env) throws InterpreterException {
+			IConstruct onSuccess(IContext env) throws InterpreterException {
 				throw new Finished(true);
 			}
     	});

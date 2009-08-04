@@ -59,9 +59,7 @@ public class BasicStrategoAppl extends BasicStrategoTerm implements IStrategoApp
             return false;
         if (!getAnnotations().match(second.getAnnotations()))
             return false;
-        if (o.getSubtermCount() != getSubtermCount())
-            return false;
-        IStrategoTerm[] otherkids = o.getArguments();
+        IStrategoTerm[] otherkids = o.getAllSubterms();
         for(int i = 0, sz = kids.length; i < sz; i++) {
             if(!kids[i].match(otherkids[i])) {
                 return false;
@@ -77,7 +75,7 @@ public class BasicStrategoAppl extends BasicStrategoTerm implements IStrategoApp
             pp.indent(ctor.getName().length());
             kids[0].prettyPrint(pp);
             for(int i = 1; i < kids.length; i++) {
-                pp.print(",");
+                pp.print(", ");
                 kids[i].prettyPrint(pp);
             }
             pp.println(")");
@@ -90,15 +88,15 @@ public class BasicStrategoAppl extends BasicStrategoTerm implements IStrategoApp
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(ctor.getName());
+        sb.append("(");
         if(kids.length > 0) {
-            sb.append("(");
             sb.append(kids[0]);
             for(int i = 1; i < kids.length; i++) {
                 sb.append(",");
                 sb.append(kids[i].toString());
             }
-            sb.append(")");
         }
+        sb.append(")");
         appendAnnotations(sb);
         return sb.toString();
     }

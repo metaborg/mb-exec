@@ -19,10 +19,6 @@ public class ECJAnnoWrapper implements IStrategoTerm, IStrategoList, IStrategoAp
 		this.wrappee = wrappee;
 		this.annotations = annotations;
 	}
-    
-	public int getStorageType() {
-		return IMMUTABLE;
-	}
 	
 	public IStrategoTerm[] getAllSubterms() {
 		return wrappee.getAllSubterms();

@@ -9,9 +9,7 @@ package org.spoofax.interpreter.terms;
 
 public interface IStrategoConstructor extends IStrategoTerm {
 
-    @Deprecated
     public IStrategoAppl instantiate(ITermFactory factory, IStrategoTerm... kids);
-    @Deprecated
     public IStrategoAppl instantiate(ITermFactory factory, IStrategoList kids);
 
     public String getName();

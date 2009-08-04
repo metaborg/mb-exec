@@ -27,10 +27,9 @@ public class SSL_exit extends AbstractPrimitive {
         if(!Tools.isTermInt(tvars[0]))
             return false;
         
-        int exitCode = Tools.asJavaInt(tvars[0]);
-        env.getStackTracer().popOnExit(exitCode == 0);
+        env.getStackTracer().popOnExit();
         
-        throw new InterpreterExit(exitCode);
+        throw new InterpreterExit(Tools.asJavaInt(tvars[0]));
     }
 
 }

@@ -13,25 +13,15 @@ import java.io.RandomAccessFile;
 
 public class RandomAccessOutputStream extends OutputStream {
 
-    private final RandomAccessFile raf;
+    private RandomAccessFile raf;
 
     public RandomAccessOutputStream(RandomAccessFile raf) {
         this.raf = raf;
     }
     
     @Override
-    public void write(byte[] b, int off, int len) throws IOException {
-        raf.write(b, off, len);
-    }
-    
-    @Override
     public void write(int b) throws IOException {
         raf.write(b);
-    }
-    
-    @Override
-    public void close() throws IOException {
-        raf.close(); 
     }
 
 }

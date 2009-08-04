@@ -25,13 +25,109 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.ITypeParameter;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.Annotation;
+import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
+import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
+import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
+import org.eclipse.jdt.core.dom.ArrayAccess;
+import org.eclipse.jdt.core.dom.ArrayCreation;
+import org.eclipse.jdt.core.dom.ArrayInitializer;
+import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.AssertStatement;
+import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BlockComment;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
+import org.eclipse.jdt.core.dom.BooleanLiteral;
+import org.eclipse.jdt.core.dom.BreakStatement;
+import org.eclipse.jdt.core.dom.CastExpression;
+import org.eclipse.jdt.core.dom.CatchClause;
+import org.eclipse.jdt.core.dom.CharacterLiteral;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.Comment;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.ConditionalExpression;
+import org.eclipse.jdt.core.dom.ConstructorInvocation;
+import org.eclipse.jdt.core.dom.ContinueStatement;
+import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.EmptyStatement;
+import org.eclipse.jdt.core.dom.EnhancedForStatement;
+import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.FieldAccess;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IBinding;
+import org.eclipse.jdt.core.dom.IExtendedModifier;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.InfixExpression;
+import org.eclipse.jdt.core.dom.Initializer;
+import org.eclipse.jdt.core.dom.InstanceofExpression;
+import org.eclipse.jdt.core.dom.Javadoc;
+import org.eclipse.jdt.core.dom.LabeledStatement;
+import org.eclipse.jdt.core.dom.LineComment;
+import org.eclipse.jdt.core.dom.MarkerAnnotation;
+import org.eclipse.jdt.core.dom.MemberRef;
+import org.eclipse.jdt.core.dom.MemberValuePair;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.MethodRef;
+import org.eclipse.jdt.core.dom.MethodRefParameter;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.NormalAnnotation;
+import org.eclipse.jdt.core.dom.NullLiteral;
+import org.eclipse.jdt.core.dom.NumberLiteral;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.ParameterizedType;
+import org.eclipse.jdt.core.dom.ParenthesizedExpression;
+import org.eclipse.jdt.core.dom.PostfixExpression;
+import org.eclipse.jdt.core.dom.PrefixExpression;
+import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.QualifiedName;
+import org.eclipse.jdt.core.dom.QualifiedType;
+import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
+import org.eclipse.jdt.core.dom.SuperFieldAccess;
+import org.eclipse.jdt.core.dom.SuperMethodInvocation;
+import org.eclipse.jdt.core.dom.SwitchCase;
+import org.eclipse.jdt.core.dom.SwitchStatement;
+import org.eclipse.jdt.core.dom.SynchronizedStatement;
+import org.eclipse.jdt.core.dom.TagElement;
+import org.eclipse.jdt.core.dom.TextElement;
+import org.eclipse.jdt.core.dom.ThisExpression;
+import org.eclipse.jdt.core.dom.ThrowStatement;
+import org.eclipse.jdt.core.dom.TryStatement;
+import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
+import org.eclipse.jdt.core.dom.TypeLiteral;
+import org.eclipse.jdt.core.dom.TypeParameter;
+import org.eclipse.jdt.core.dom.VariableDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.core.dom.WhileStatement;
+import org.eclipse.jdt.core.dom.WildcardType;
 import org.eclipse.jdt.core.dom.InfixExpression.Operator;
 import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.spoofax.DebugUtil;
 import org.spoofax.NotImplementedException;
-import org.spoofax.interpreter.terms.BasicStrategoArrayList;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
@@ -140,7 +236,6 @@ public class ECJFactory implements ITermFactory {
     private static final int IMPORT_REFERENCE = 93;
     private static final int ANONYMOUS_CLASS_DECLARATION = 94;
     private static final int ASSIGNMENT_OPERATOR = 95;
-	private static ASTMatcher astMatcher;
         
     private Map<String,Integer> ctorNameToIndexMap;
     private AST ast;
@@ -1108,7 +1203,7 @@ public class ECJFactory implements ITermFactory {
             if((!isJavadoc(kids[0]) && !isNone(kids[0]))
                     || !isModifierList(kids[1])
                     || !isSimpleName(kids[2])
-                    || !isTypeParameterList(kids[3])
+                    || !isTypeList(kids[3])
                     || (!isType(kids[4]) && !isNone(kids[4]))
                     || !isTypeList(kids[5])
                     || !isBodyDeclarationList(kids[6])
@@ -1121,7 +1216,7 @@ public class ECJFactory implements ITermFactory {
                 x.setJavadoc(asJavadoc(kids[0]));
             x.modifiers().addAll(asModifierList(kids[1]));
             x.setName(asSimpleName(kids[2]));
-            x.typeParameters().addAll(asTypeParameterList(kids[3]));
+            x.typeParameters().addAll(asTypeList(kids[3]));
             if(isNone(kids[4])) 
                 x.setSuperclassType(null);
             else 
@@ -1214,7 +1309,7 @@ public class ECJFactory implements ITermFactory {
 
     private Javadoc asJavadoc(IStrategoTerm term) {
         Javadoc x = ((WrappedJavadoc)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (Javadoc)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (Javadoc)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1229,11 +1324,7 @@ public class ECJFactory implements ITermFactory {
 
     private IExtendedModifier asExtendedModifier(IStrategoTerm term) {
     	final IExtendedModifier x = ((IWrappedExtendedModifier)term).getModifierWrappee();
-    	final ASTNode an = ((ASTNode)x);
-    	if(an.getParent() == null && an.getAST() == ast)
-    		return x;
-    	else 
-    		return (IExtendedModifier)ASTNode.copySubtree(ast, an);
+    	return ((ASTNode)x).getParent() == null ? x : (IExtendedModifier)ASTNode.copySubtree(ast, (ASTNode)x);
     }
 
     private boolean isExtendedModifierList(IStrategoTerm term) {
@@ -1262,7 +1353,7 @@ public class ECJFactory implements ITermFactory {
 
     private TypeParameter asTypeParameter(IStrategoTerm term) {
         TypeParameter x = ((WrappedTypeParameter)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (TypeParameter)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (TypeParameter)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1278,7 +1369,7 @@ public class ECJFactory implements ITermFactory {
 
     private TagElement asTagElement(IStrategoTerm term) {
     	TagElement x = ((WrappedTagElement)term).getWrappee(); 
-        return x.getParent() == null && x.getAST() == ast ? x : (TagElement)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (TagElement)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1320,7 +1411,7 @@ public class ECJFactory implements ITermFactory {
 
     private AbstractTypeDeclaration asAbstractTypeDeclaration(IStrategoTerm term) {
         AbstractTypeDeclaration x = ((WrappedAbstractTypeDeclaration)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (AbstractTypeDeclaration)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (AbstractTypeDeclaration)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1345,12 +1436,12 @@ public class ECJFactory implements ITermFactory {
 
     private ImportDeclaration asImportDeclaration(IStrategoTerm term) {
         ImportDeclaration x = ((WrappedImportDeclaration)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (ImportDeclaration)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (ImportDeclaration)ASTNode.copySubtree(ast, x);
     }
 
     private PackageDeclaration asPackageDeclaration(IStrategoTerm term) {
         PackageDeclaration x = ((WrappedPackageDeclaration)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (PackageDeclaration)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (PackageDeclaration)ASTNode.copySubtree(ast, x);
     }
 
 
@@ -1366,7 +1457,7 @@ public class ECJFactory implements ITermFactory {
 
     private EnumConstantDeclaration asEnumConstantDeclaration(IStrategoTerm term) {
         EnumConstantDeclaration x = ((WrappedEnumConstantDeclaration)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (EnumConstantDeclaration)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (EnumConstantDeclaration)ASTNode.copySubtree(ast, x);
     }
 
 
@@ -1382,12 +1473,12 @@ public class ECJFactory implements ITermFactory {
 
     private ASTNode asASTNode(IStrategoTerm term) {
         ASTNode x = ((WrappedASTNode)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : ASTNode.copySubtree(ast, x);
     }
 
     private MethodRefParameter asMethodRefParameter(IStrategoTerm term) {
         MethodRefParameter x = ((WrappedMethodRefParameter)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (MethodRefParameter)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (MethodRefParameter)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1402,7 +1493,7 @@ public class ECJFactory implements ITermFactory {
 
     private MemberValuePair asMemberValuePair(IStrategoTerm term) {
         MemberValuePair x = ((WrappedMemberValuePair)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (MemberValuePair)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (MemberValuePair)ASTNode.copySubtree(ast, x);
     }
 
     private Code asTypeCode(IStrategoTerm term) {
@@ -1415,7 +1506,7 @@ public class ECJFactory implements ITermFactory {
 
     private Name asName(IStrategoTerm term) {
         Name x = ((WrappedName)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (Name)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (Name)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1430,7 +1521,7 @@ public class ECJFactory implements ITermFactory {
 
     private AbstractTypeDeclaration asTypeDecl(IStrategoTerm term) {
         AbstractTypeDeclaration x = ((WrappedAbstractTypeDeclaration)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (AbstractTypeDeclaration)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (AbstractTypeDeclaration)ASTNode.copySubtree(ast, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -1445,27 +1536,27 @@ public class ECJFactory implements ITermFactory {
 
     private ArrayInitializer asArrayInitializer(IStrategoTerm term) {
         ArrayInitializer x = ((WrappedArrayInitializer)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (ArrayInitializer)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (ArrayInitializer)ASTNode.copySubtree(ast, x);
     }
 
     private ArrayType asArrayType(IStrategoTerm term) {
         ArrayType x = ((WrappedArrayType)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (ArrayType)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (ArrayType)ASTNode.copySubtree(ast, x);
     }
 
     private Type asType(IStrategoTerm term) {
         Type x = ((WrappedType)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (Type)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (Type)ASTNode.copySubtree(ast, x);
     }
 
     private SingleVariableDeclaration asSingleVariableDeclaration(IStrategoTerm term) {
         SingleVariableDeclaration x = ((WrappedSingleVariableDeclaration)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (SingleVariableDeclaration)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (SingleVariableDeclaration)ASTNode.copySubtree(ast, x);
     }
 
     private Block asBlock(IStrategoTerm term) {
         Block x = ((WrappedBlock)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (Block)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (Block)ASTNode.copySubtree(ast, x);
     }
 
     private PrefixExpression.Operator asPrefixOperator(IStrategoTerm term) {
@@ -1494,7 +1585,7 @@ public class ECJFactory implements ITermFactory {
 
     private Expression asExpression(IStrategoTerm term) {
         Expression x = ((WrappedExpression) term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (Expression)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (Expression)ASTNode.copySubtree(ast, x);
     }
 
     private int asInt(IStrategoTerm term) {
@@ -1521,32 +1612,32 @@ public class ECJFactory implements ITermFactory {
 
     private BodyDeclaration asBodyDeclaration(IStrategoTerm k) {
         BodyDeclaration x = ((WrappedBodyDeclaration)k).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (BodyDeclaration)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (BodyDeclaration)ASTNode.copySubtree(ast, x);
     }
 
     private SimpleName asSimpleName(IStrategoTerm term) {
         SimpleName x = ((WrappedSimpleName)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (SimpleName)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (SimpleName)ASTNode.copySubtree(ast, x);
     }
 
     private Modifier asModifier(IStrategoTerm term) {
         Modifier x = ((WrappedModifier)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (Modifier)ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (Modifier)ASTNode.copySubtree(ast, x);
     }
 
     private VariableDeclarationFragment asVariableDeclarationFragment(IStrategoTerm term) {
     	VariableDeclarationFragment x = ((WrappedVariableDeclarationFragment)term).getWrappee();
-    	return x.getParent() == null && x.getAST() == ast ? x : (VariableDeclarationFragment) ASTNode.copySubtree(ast, x);
+    	return x.getParent() == null ? x : (VariableDeclarationFragment) ASTNode.copySubtree(ast, x);
     }
 
     private AnonymousClassDeclaration asAnonymousClassDeclaration(IStrategoTerm term) {
         AnonymousClassDeclaration x = ((WrappedAnonymousClassDeclaration)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (AnonymousClassDeclaration) ASTNode.copySubtree(ast, x);
+        return x.getParent() == null ? x : (AnonymousClassDeclaration) ASTNode.copySubtree(ast, x);
     }
 
     private CatchClause asCatchClause(IStrategoTerm term) {
     	CatchClause x = ((WrappedCatchClause)term).getWrappee();
-    	return x.getParent() == null && x.getAST() == ast ? x : (CatchClause) ASTNode.copySubtree(ast, x);
+    	return x.getParent() == null ? x : (CatchClause) ASTNode.copySubtree(ast, x);
     }
 
     private String asString(IStrategoTerm term) {
@@ -1565,7 +1656,7 @@ public class ECJFactory implements ITermFactory {
 
     private Statement asStatement(IStrategoTerm term) {
         Statement x = ((WrappedStatement)term).getWrappee();
-        return x.getParent() == null && x.getAST() == ast ? x : (Statement)ASTNode.copySubtree(ast, x); 
+        return x.getParent() == null ? x : (Statement)ASTNode.copySubtree(ast, x); 
     }
 
     private boolean isAbstractTypeDeclarationList(IStrategoTerm term) {
@@ -1798,11 +1889,10 @@ public class ECJFactory implements ITermFactory {
 
     private boolean isTypeList(IStrategoTerm term) {
         if(term instanceof IStrategoList) {
-        	for(IStrategoTerm t : ((IStrategoList)term).getAllSubterms()) {
-        		if(!isType(t))
-        			return false;
-        	}
-        	return true;
+            IStrategoList list = (IStrategoList)term;
+            if(list.size() > 0) 
+                return isType(list.head());
+            return true;
         }
         return false;
     }
@@ -3042,8 +3132,6 @@ public class ECJFactory implements ITermFactory {
 			return wrap(((Boolean)o) ? 1 : 0);
 		if(o instanceof ASTNode)
 			return genericWrap((ASTNode)o);
-		if(o instanceof IType)
-			return wrap((IType)o);
 		
 		throw new NotImplementedException(" " + o.getClass());
 	}
@@ -3058,31 +3146,5 @@ public class ECJFactory implements ITermFactory {
 		else
 			return new WrappedIJavaElement(el);
 	}
-
-	public static IStrategoAppl wrapSignature(String s) {
-		if(s == null)
-			return None.INSTANCE;
-		else
-			return new WrappedActualTypeSignature(s);
-		
-	}
-
-	public static IStrategoTerm wrapSignatures(String[] signatures) {
-		if(signatures == null)
-			return None.INSTANCE;
-		else {
-			IStrategoAppl[] ws = new WrappedActualTypeSignature[signatures.length];
-			for(int i = 0; i < signatures.length; i++)
-				ws[i] = wrapSignature(signatures[i]);
-			return new BasicStrategoArrayList(ws);
-		}
-
-	}
-
-	public static ASTMatcher getMatcher() {
-		if(astMatcher == null)
-			astMatcher = new ASTMatcher();
-		return astMatcher;
-	}
-
+    
 }

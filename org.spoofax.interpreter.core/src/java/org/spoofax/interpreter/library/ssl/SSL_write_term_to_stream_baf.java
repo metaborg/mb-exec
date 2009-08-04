@@ -36,6 +36,8 @@ public class SSL_write_term_to_stream_baf extends AbstractPrimitive {
         OutputStream os = or.getIOAgent().getOutputStream(Tools.asJavaInt(tvars[0]));
         if(os == null)
             return false;
+
+        System.err.println("warning: Only writing of text ATerms is supported on this platform");
         
         try {
             env.getFactory().unparseToFile(tvars[1], os);

@@ -24,10 +24,6 @@ public class TermConverter {
         return results;
     }
     
-    public static IStrategoTerm convert(ITermFactory factory, IStrategoTerm term) {
-        return new TermConverter(factory).convert(term);
-    }
-    
     public IStrategoTerm convert(IStrategoTerm term) {
         switch (term.getTermType()) {
             case APPL: return convert((IStrategoAppl) term);

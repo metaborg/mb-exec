@@ -21,18 +21,15 @@ public class SSL_mkdir extends AbstractPrimitive {
             throws InterpreterException {
 
         if (!Tools.isTermString(tvars[0])) return false;
-        // if (!Tools.isTermList(tvars[1])) return false;
         
         SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        int result = op.getIOAgent().mkdir(Tools.asJavaString(tvars[0])) ? 0 : -1;
-        
-        /* access parameter is ignored in C version
         AbstractPrimitive access = op.get("SSL_access");
+        
+        int result = op.getIOAgent().mkdir(Tools.asJavaString(tvars[0])) ? 0 : -1;
         
         if (result == 0) { // Set access rights
             result = access.call(env, svars, tvars) ? 0 : -1;
         }
-        */
         
         env.setCurrent(env.getFactory().makeInt(result));
         

@@ -113,7 +113,7 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
             pp.indent(2);
             head().prettyPrint(pp);
             for (IStrategoList cur = tail(); !cur.isEmpty(); cur = cur.tail()) {
-                pp.print(",");
+                pp.print(", ");
                 pp.nextIndentOff();
                 cur.head().prettyPrint(pp);
                 pp.println("");

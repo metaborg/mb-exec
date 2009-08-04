@@ -36,11 +36,11 @@ public class Seq extends Strategy {
 		final Strategy th = this;
 		children[n].getHook().push(new Hook(){
 			@Override
-			public IConstruct onFailure(IContext env) throws InterpreterException {
+			IConstruct onFailure(IContext env) throws InterpreterException {
 				return th.getHook().pop().onFailure(env);
 			}
 			@Override
-			public IConstruct onSuccess(IContext env) throws InterpreterException {
+			IConstruct onSuccess(IContext env) throws InterpreterException {
 				return eval(env, n+1);
 			}
 		});

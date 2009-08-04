@@ -1,49 +1,38 @@
 package org.spoofax.interpreter.library.ssl;
 
-import java.util.WeakHashMap;
+import java.util.HashSet;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
-import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.ITermFactory;
 
 public class SSL_newname extends AbstractPrimitive {
-	
-    private WeakHashMap<String, Integer> counters = new WeakHashMap<String, Integer>();
+	private HashSet<String> set;
 	
 	SSL_newname () {
 		super("SSL_newname", 0, 1);
+		set = new HashSet<String>();
 	}
 	
 	@Override
 	public boolean call(IContext env, Strategy[] svars,
 			IStrategoTerm[] tvars) throws InterpreterException {
-
-        final String prefix;
-
-	    if (Tools.isTermString(tvars[0])) {
-	        prefix = ((IStrategoString) tvars[0]).stringValue();
-	    } else {
-	        SSLLibrary library = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-	        library.get("SSL_get_constructor").call(env, svars, tvars);
-	        prefix = ((IStrategoString) env.current()).stringValue();
-	    }
+        if(!Tools.isTermString(tvars[0]))
+            return false;
         
-        ITermFactory factory = env.getFactory();
-	    Integer oldCounter = counters.get(prefix);
-	    int counter = oldCounter == null ? 0 : oldCounter;
-	    
-        String result;
+        String var = tvars[0].toString();
+        
+        int n = 0;
+        
+        String s;
         do {
-        	result = prefix + counter++;
-        } while (factory.hasConstructor(result, 0));
+        	s = var + n++;
+        } while (set.contains(s));
 
-        counters.put(prefix, counter);
-        env.setCurrent(factory.makeString(result));
+        env.setCurrent(env.getFactory().makeString(s));
         
 		return true;
 	}

@@ -9,18 +9,13 @@ package org.spoofax.interpreter.adapter.ecj;
 
 import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.Signature;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.Name;
-import org.eclipse.jdt.core.dom.ParameterizedType;
-import org.eclipse.jdt.core.dom.Type;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedITypeParameter extends AbstractECJAppl {
 
     private final ITypeParameter wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ITypeParameter", 2);
+    private final static IStrategoConstructor CTOR = new ASTCtor("TypeParameter", 1);
     
     WrappedITypeParameter(ITypeParameter wrappee) {
         super(CTOR);
@@ -35,10 +30,8 @@ public class WrappedITypeParameter extends AbstractECJAppl {
     public IStrategoTerm getSubterm(int index) {
         switch(index) {
         case 0:
-        	return ECJFactory.wrap(wrappee.getElementName());
-        case 1:
         	try {
-        		return ECJFactory.wrap(wrappee.getBounds());
+        	return ECJFactory.wrap(wrappee.getBounds());
         	} catch(JavaModelException e) {
         		e.printStackTrace();
         		return None.INSTANCE;
@@ -46,4 +39,5 @@ public class WrappedITypeParameter extends AbstractECJAppl {
         }
         throw new ArrayIndexOutOfBoundsException();
     }
+
 }
