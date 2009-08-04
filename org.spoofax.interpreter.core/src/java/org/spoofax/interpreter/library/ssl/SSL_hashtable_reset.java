@@ -18,8 +18,11 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_hashtable_reset extends AbstractPrimitive {
 
-    protected SSL_hashtable_reset() {
+    private final SSLLibrary library;
+
+    protected SSL_hashtable_reset(SSLLibrary library) {
         super("SSL_hashtable_reset", 0, 1);
+        this.library = library;
     }
 
     @Override
@@ -28,8 +31,7 @@ public class SSL_hashtable_reset extends AbstractPrimitive {
         if (!(Tools.isTermInt(tvars[0])))
             return false;
 
-        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        Hashtable ht = or.getHashtable(((IStrategoInt)tvars[0]).intValue());
+        Hashtable ht = library.getHashtable(((IStrategoInt)tvars[0]).intValue());
         ht.clear();
         return true;
     }

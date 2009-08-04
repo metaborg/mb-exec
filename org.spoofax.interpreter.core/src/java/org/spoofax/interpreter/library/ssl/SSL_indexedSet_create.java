@@ -26,6 +26,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_indexedSet_create extends AbstractPrimitive {
 
+    private final SSLLibrary library;
+    
     class IndexedSet  {
         
         private static final long serialVersionUID = -4514696890481283123L;
@@ -102,8 +104,9 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
         }
     }
 
-    protected SSL_indexedSet_create() {
+    protected SSL_indexedSet_create(SSLLibrary library) {
         super("SSL_indexedSet_create", 0, 2);
+        this.library = library;
     }
     
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
@@ -116,7 +119,7 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
         int initialSize = ((IStrategoInt)targs[0]).intValue();
         int maxLoad = ((IStrategoInt)targs[1]).intValue();
 
-        int ref = SSLLibrary.instance(env).registerIndexedSet(new IndexedSet(initialSize, maxLoad));
+        int ref = library.registerIndexedSet(new IndexedSet(initialSize, maxLoad));
         env.setCurrent(env.getFactory().makeInt(ref));
         
         return true;

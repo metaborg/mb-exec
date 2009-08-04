@@ -17,8 +17,11 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_hashtable_destroy extends AbstractPrimitive {
 
-    protected SSL_hashtable_destroy() {
+    private final SSLLibrary library;
+
+    protected SSL_hashtable_destroy(SSLLibrary library) {
         super("SSL_hashtable_destroy", 0, 1);
+        this.library = library;
     }
 
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
@@ -27,8 +30,7 @@ public class SSL_hashtable_destroy extends AbstractPrimitive {
         if (!(Tools.isTermInt(targs[0])))
             return false;
 
-        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        boolean res = or.removeHashtable(((IStrategoInt)targs[0]).intValue());
+        boolean res = library.removeHashtable(((IStrategoInt)targs[0]).intValue());
         env.setCurrent(targs[0]);
         return res;
     }

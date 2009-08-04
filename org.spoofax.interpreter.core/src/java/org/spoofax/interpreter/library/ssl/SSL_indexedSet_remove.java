@@ -16,9 +16,12 @@ import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_indexedSet_remove extends AbstractPrimitive {
+ 
+    private final SSLLibrary library;
 
-    protected SSL_indexedSet_remove() {
+    protected SSL_indexedSet_remove(SSLLibrary library) {
         super("SSL_indexedSet_remove", 0, 2);
+        this.library = library;
     }
 
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
@@ -27,7 +30,7 @@ public class SSL_indexedSet_remove extends AbstractPrimitive {
         if (!(Tools.isTermInt(targs[0])))
             return false;
 
-        IndexedSet is = SSLLibrary.instance(env).getIndexedSet(Tools.asJavaInt(targs[0]));
+        IndexedSet is = library.getIndexedSet(Tools.asJavaInt(targs[0]));
         
         if(is == null)
             return false;

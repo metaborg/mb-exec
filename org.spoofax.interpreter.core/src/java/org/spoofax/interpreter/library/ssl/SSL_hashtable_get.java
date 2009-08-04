@@ -18,8 +18,11 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_hashtable_get extends AbstractPrimitive {
 
-    protected SSL_hashtable_get() {
+    private final SSLLibrary library;
+
+    protected SSL_hashtable_get(SSLLibrary library) {
         super("SSL_hashtable_get", 0, 2);
+        this.library = library;
     }
     
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
@@ -27,8 +30,7 @@ public class SSL_hashtable_get extends AbstractPrimitive {
         if(!(Tools.isTermInt(targs[0])))
             return false;
 
-        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        Hashtable ath = or.getHashtable(((IStrategoInt)targs[0]).intValue());
+        Hashtable ath = library.getHashtable(((IStrategoInt)targs[0]).intValue());
         if(ath == null)
             return false;
         

@@ -19,6 +19,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_hashtable_create extends AbstractPrimitive {
 
+    private final SSLLibrary library;
+
     protected static class Hashtable extends LinkedHashMap<IStrategoTerm, IStrategoTerm> {
 
         private static final long serialVersionUID = -8193582031891397734L;
@@ -29,8 +31,9 @@ public class SSL_hashtable_create extends AbstractPrimitive {
 
     }
 
-    protected SSL_hashtable_create() {
+    protected SSL_hashtable_create(SSLLibrary library) {
         super("SSL_hashtable_create", 0, 2);
+        this.library = library;
     }
 
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
@@ -44,8 +47,7 @@ public class SSL_hashtable_create extends AbstractPrimitive {
         int initialSize = ((IStrategoInt)targs[0]).intValue();
         int maxLoad = ((IStrategoInt)targs[1]).intValue();
 
-        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        int ref = or.registerHashtable(new Hashtable(initialSize, maxLoad));
+        int ref = library.registerHashtable(new Hashtable(initialSize, maxLoad));
         
         env.setCurrent(env.getFactory().makeInt(ref));
         return true;

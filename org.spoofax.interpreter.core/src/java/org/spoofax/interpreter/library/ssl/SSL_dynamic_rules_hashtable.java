@@ -15,18 +15,18 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_dynamic_rules_hashtable extends AbstractPrimitive {
 
-    protected SSL_dynamic_rules_hashtable() {
+    private final SSLLibrary library;
+
+    protected SSL_dynamic_rules_hashtable(SSLLibrary library) {
         super("SSL_dynamic_rules_hashtable", 0, 0);
+        this.library = library;
     }
 
     @Override
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
 
-        SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        or.getDynamicRuleHashtableRef();
-
-        env.setCurrent(env.getFactory().makeInt(or.getDynamicRuleHashtableRef()));
+        env.setCurrent(env.getFactory().makeInt(library.getDynamicRuleHashtableRef()));
         return true;
     }
 
