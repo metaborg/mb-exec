@@ -75,8 +75,9 @@ public class Tools {
         return (IStrategoList) t.getSubterm(i);
     }
 
-    public static IStrategoTerm termAt(IStrategoTerm t, int i) {
-        return t.getSubterm(i);
+    @SuppressWarnings("unchecked") // casting is inherently unsafe, but doesn't warrant a warning here
+    public static<T extends IStrategoTerm> T termAt(IStrategoTerm t, int i) {
+        return (T) t.getSubterm(i);
     }
 
     public static IStrategoReal realAt(IStrategoList t, int i) {
