@@ -22,7 +22,12 @@ public class SSL_perror extends AbstractPrimitive {
     @Override
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-        env.setCurrent(env.getFactory().makeString("error: perror() not supported on this platform!"));
+        
+        String message = tvars[0].getTermType() == IStrategoTerm.STRING
+            ? tvars[0] + " - "
+            : "";
+        
+        System.err.println("ERROR: " + message + "<perror() not supported on this platform>");
         return true;
     }
 
