@@ -15,7 +15,9 @@ import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_copy extends AbstractPrimitive {
@@ -28,29 +30,48 @@ public class SSL_copy extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
 
-        if(!Tools.isTermString(tvars[0]))
-            return false;
-        
-        if(!Tools.isTermString(tvars[1]))
-            return false;
-        
         SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-
-        byte[] bs = new byte[1024];
-        int read;
+        IOAgent agent = op.getIOAgent();
+        
+        InputStream fis = null;
+        OutputStream fos = null;
+        
+        boolean closeIn = true;
+        boolean closeOut = true;
 
         try {
-            InputStream fis = op.getIOAgent().openInputStream(Tools.javaString(tvars[0]));
-            OutputStream fos =  op.getIOAgent().openFileOutputStream(Tools.javaString(tvars[1]));
+            if (Tools.isTermString(tvars[0])) {
+                fis = agent.openInputStream(Tools.javaString(tvars[0]));
+            } else if (Tools.isTermAppl(tvars[0]) && Tools.hasConstructor((IStrategoAppl) tvars[0], "stdin")) {
+                fis = agent.getInputStream(IOAgent.CONST_STDIN);
+                closeIn = false;
+            } else {
+                return false;
+            }
+            
+            if (Tools.isTermString(tvars[1])) {
+                fos =  agent.openFileOutputStream(Tools.javaString(tvars[1]));
+            } else if (Tools.isTermAppl(tvars[1]) && Tools.hasConstructor((IStrategoAppl) tvars[1], "stdout")) {
+                fos =  agent.getOutputStream(IOAgent.CONST_STDOUT);
+                closeOut = false;
+            } else if (Tools.isTermAppl(tvars[1]) && Tools.hasConstructor((IStrategoAppl) tvars[1], "stderr")) {
+                fos =  agent.getOutputStream(IOAgent.CONST_STDERR);
+                closeOut = false;
+            } else {
+                return false;
+            }
+    
+            byte[] bs = new byte[1024];
+            int read;
         
             read = fis.read(bs, 0, 1024);
             while(read != -1) {
                 fos.write(bs,0, read);
                 read = fis.read(bs, 0, 1024);
             }
-            
-            fis.close();
-            fos.close();
+
+            if (closeOut) fos.close();
+            if (closeIn) fis.close();
         } catch(IOException e) {
             throw new InterpreterException(e);
         }
