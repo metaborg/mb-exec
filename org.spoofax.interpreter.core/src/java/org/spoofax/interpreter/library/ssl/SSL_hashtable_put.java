@@ -26,7 +26,6 @@ public class SSL_hashtable_put extends AbstractPrimitive {
     }
     
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-
         if(!(Tools.isTermInt(targs[0])))
             return false;
 

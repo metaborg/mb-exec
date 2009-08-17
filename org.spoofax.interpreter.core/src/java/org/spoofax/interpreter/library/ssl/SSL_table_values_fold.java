@@ -18,7 +18,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_table_values_fold extends AbstractPrimitive {
 
-    SSL_table_values_fold() {
+    public SSL_table_values_fold() {
         super("SSL_table_values_fold", 1, 2);
     }
     

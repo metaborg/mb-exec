@@ -18,7 +18,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_table_keys_fold extends AbstractPrimitive {
 
-    SSL_table_keys_fold() {
+    public SSL_table_keys_fold() {
         super("SSL_table_keys_fold", 1, 2);
     }
     
