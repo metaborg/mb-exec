@@ -15,13 +15,15 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_table_hashtable extends AbstractPrimitive {
 
-    protected SSL_table_hashtable() {
+    private final SSLLibrary library;
+    
+    protected SSL_table_hashtable(SSLLibrary library) {
         super("SSL_table_hashtable", 0, 0);
+        this.library = library;
     }
     
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        
-        int ref = SSLLibrary.instance(env).getTableTableRef();
+        int ref = library.getTableTableRef();
         env.setCurrent(env.getFactory().makeInt(ref));
         return true;
     }
