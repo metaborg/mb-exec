@@ -9,29 +9,24 @@ package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
-import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_hashtable_destroy extends AbstractPrimitive {
 
-    private final SSLLibrary library;
-
-    protected SSL_hashtable_destroy(SSLLibrary library) {
+    protected SSL_hashtable_destroy() {
         super("SSL_hashtable_destroy", 0, 1);
-        this.library = library;
     }
 
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
             throws InterpreterException {
 
-        if (!(Tools.isTermInt(targs[0])))
+        if (!(targs[0] instanceof StrategoHashMap))
             return false;
-
-        boolean res = library.removeHashtable(((IStrategoInt)targs[0]).intValue());
-        env.setCurrent(targs[0]);
-        return res;
+        
+        StrategoHashMap ht = (StrategoHashMap) targs[0];
+        ht.clear();
+        return true;
     }
 }

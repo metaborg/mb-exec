@@ -8,32 +8,21 @@
 package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
-import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
-import org.spoofax.interpreter.library.ssl.SSL_indexedSet_create.IndexedSet;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_indexedSet_getIndex extends AbstractPrimitive {
 
-    private final SSLLibrary library;
-
-    protected SSL_indexedSet_getIndex(SSLLibrary library) {
+    protected SSL_indexedSet_getIndex() {
         super("SSL_indexedSet_getIndex", 0, 2);
-        this.library = library;
     }
 
-    public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
-            throws InterpreterException {
-
-        if (!(Tools.isTermInt(targs[0])))
+    public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
+        if(!(targs[0] instanceof IndexedSet))
             return false;
-
-        IndexedSet is = library.getIndexedSet(Tools.asJavaInt(targs[0]));
         
-        if(is == null)
-            return false;
+        IndexedSet is = (IndexedSet) targs[0];
         
         int idx = is.getIndex(targs[1]);
         if(idx == -1)

@@ -9,28 +9,23 @@ package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_indexedSet_destroy extends AbstractPrimitive {
 
-    private final SSLLibrary library;
-
-    protected SSL_indexedSet_destroy(SSLLibrary library) {
+    protected SSL_indexedSet_destroy() {
         super("SSL_indexedSet_destroy", 0, 1);
-        this.library = library;
     }
     
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-
-        if(!(Tools.isTermInt(targs[0])))
+        if(!(targs[0] instanceof IndexedSet))
             return false;
-
-        boolean r = library.removeIndexedSet(Tools.asJavaInt(targs[0]));
-        env.setCurrent(targs[0]);
         
-        return r;
+        IndexedSet set = (IndexedSet) targs[0];
+        set.clear();
+        
+        return true;
     }
 }

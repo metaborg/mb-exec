@@ -23,8 +23,7 @@ public class SSL_table_hashtable extends AbstractPrimitive {
     }
     
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        int ref = library.getTableTableRef();
-        env.setCurrent(env.getFactory().makeInt(ref));
+        env.setCurrent(library.getTableTable());
         return true;
     }
 }

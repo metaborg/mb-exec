@@ -26,7 +26,7 @@ public class SSL_dynamic_rules_hashtable extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
 
-        env.setCurrent(env.getFactory().makeInt(library.getDynamicRuleHashtableRef()));
+        env.setCurrent(library.getDynamicRuleTable());
         return true;
     }
 

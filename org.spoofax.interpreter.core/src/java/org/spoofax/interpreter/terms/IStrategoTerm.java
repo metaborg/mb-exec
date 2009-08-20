@@ -18,6 +18,7 @@ public interface IStrategoTerm {
     public static final int CTOR = 6;
     public static final int TUPLE = 7;
     public static final int REF = 8;
+    public static final int BLOB = 9;
     
     public static final int MUTABLE = 0;
     public static final int IMMUTABLE = 1;

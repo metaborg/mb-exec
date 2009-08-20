@@ -7,8 +7,6 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.util.LinkedHashMap;
-
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
@@ -18,22 +16,9 @@ import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_hashtable_create extends AbstractPrimitive {
-
-    private final SSLLibrary library;
-
-    protected static class Hashtable extends LinkedHashMap<IStrategoTerm, IStrategoTerm> {
-
-        private static final long serialVersionUID = -8193582031891397734L;
-
-        public Hashtable(int initialSize, int maxLoad) {
-            super(initialSize, 1.0f * maxLoad / 100);
-        }
-
-    }
-
-    protected SSL_hashtable_create(SSLLibrary library) {
+    
+    protected SSL_hashtable_create() {
         super("SSL_hashtable_create", 0, 2);
-        this.library = library;
     }
 
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
@@ -47,9 +32,9 @@ public class SSL_hashtable_create extends AbstractPrimitive {
         int initialSize = ((IStrategoInt)targs[0]).intValue();
         int maxLoad = ((IStrategoInt)targs[1]).intValue();
 
-        int ref = library.registerHashtable(new Hashtable(initialSize, maxLoad));
+        IStrategoTerm table = new StrategoHashMap(initialSize, maxLoad);
         
-        env.setCurrent(env.getFactory().makeInt(ref));
+        env.setCurrent(table);
         return true;
     }
 }
