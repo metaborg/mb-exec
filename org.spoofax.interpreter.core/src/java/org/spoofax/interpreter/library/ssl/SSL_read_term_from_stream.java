@@ -27,8 +27,6 @@ public class SSL_read_term_from_stream extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-        // FIXME should we even bother with BAF? Now it's just text
-        
         if(!Tools.isTermInt(tvars[0]))
             return false;
         

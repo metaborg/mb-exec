@@ -36,6 +36,8 @@ public class SSL_mkstemp extends AbstractPrimitive {
         
         // HACK: We ignore the template directory, and just use it as a filename prefix
         String prefix = new File(javaString(tvars[0])).getName();
+        if (prefix.endsWith("XXXXXX"))
+            prefix = prefix.substring(0, prefix.length() - 6);
         
         SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         IOAgent agent = op.getIOAgent();
