@@ -29,7 +29,9 @@ public class BasicTermFactory implements ITermFactory {
 
     public static final IStrategoTerm[] EMPTY = {};
 
-    public static final BasicStrategoList EMPTY_LIST = new BasicStrategoList(null, null, null); 
+    public static final BasicStrategoList EMPTY_LIST = new BasicStrategoList(null, null, null);
+    
+    private static final int MAX_POOLED_STRING_LENGTH = 100;
 
     private static final Map<BasicStrategoConstructor, BasicStrategoConstructor> ctorCache =
         Collections.synchronizedMap(new WeakHashMap<BasicStrategoConstructor,BasicStrategoConstructor>());
@@ -274,7 +276,9 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public boolean hasConstructor(String name, int arity) {
-        return arity == 0
+    	if (name.length() > MAX_POOLED_STRING_LENGTH)
+            throw new UnsupportedOperationException("String too long to be pooled: " + name);
+    	return arity == 0
             ? stringPool.contains(name)
             : ctorCache.get(new BasicStrategoConstructor(name, arity)) != null;
     }
@@ -334,7 +338,8 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoString makeString(String s) {
-        stringPool.add(s);
+    	if (s.length() <= MAX_POOLED_STRING_LENGTH)
+    	    stringPool.add(s);
         return new BasicStrategoString(s, null);
     }
 

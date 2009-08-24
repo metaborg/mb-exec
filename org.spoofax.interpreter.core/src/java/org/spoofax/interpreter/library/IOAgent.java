@@ -139,7 +139,7 @@ public class IOAgent {
         inStreams.put(fileCounter, new BufferedInputStream(new RandomAccessInputStream(file)));
         outStreams.put(fileCounter, new PrintStream(new BufferedOutputStream(new RandomAccessOutputStream(file))));
         
-        if (m.equals("rw")) file.setLength(0);
+        if (m.equals("rw")) file.setLength(0); // HACK
         
         return fileCounter++;
     }
