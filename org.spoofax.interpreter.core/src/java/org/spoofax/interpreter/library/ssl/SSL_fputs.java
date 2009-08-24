@@ -32,9 +32,10 @@ public class SSL_fputs extends AbstractPrimitive {
 
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         
+        // TODO: Don't use a printstream because of its quiet failing behavior
         PrintStream ous = or.getIOAgent().getOutputStream(Tools.asJavaInt(targs[1]));
         ous.print(Tools.javaString(targs[0]));
-        if (ous.checkError()) return false;
+        // if (ous.checkError()) return false; // UNDONE: quietly flushes the stream!
         
         env.setCurrent(targs[1]);
         

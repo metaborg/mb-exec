@@ -59,7 +59,7 @@ public class SSL_printnl extends AbstractPrimitive {
         if(output.equals("stderr")) {
             PrintStream stream = agent.getOutputStream(IOAgent.CONST_STDERR);
             stream.println(sb);
-            if (stream.checkError()) return false;
+            // if (stream.checkError()) return false;  // UNDONE: quietly flushes the stream!
         } else if(output.equals("stdout")) {
             PrintStream stream = agent.getOutputStream(IOAgent.CONST_STDOUT);
             stream.println(sb);

@@ -219,7 +219,7 @@ public class CallT extends Strategy {
 
     @Override
     public String toString() {
-        return "CallT(\"" + name + "\"," + svars + "," + tvars + ")";
+        return "CallT(\"" + getTargetStrategyName() + "\"," + svars + "," + tvars + ")";
     }
 
     public void prettyPrint(StupidFormatter sf) {
@@ -282,8 +282,8 @@ public class CallT extends Strategy {
     }
 
     @Override
-    protected String getTraceName() {
-        return "call of" + "(" + name + ")";
+    protected final String getTraceName() {
+        return "call of" + "(" + getTargetStrategyName() + ")";
     }
 
 	public boolean evaluateWithArgs(IContext env, Strategy[] sv, IStrategoTerm[] tv) throws InterpreterException {
