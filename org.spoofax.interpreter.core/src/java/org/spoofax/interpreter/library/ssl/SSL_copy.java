@@ -61,6 +61,7 @@ public class SSL_copy extends AbstractPrimitive {
                 return false;
             }
     
+            // TODO: Optimize - use the fancy new Java API for copying files
             byte[] bs = new byte[1024];
             int read;
         
@@ -73,7 +74,8 @@ public class SSL_copy extends AbstractPrimitive {
             if (closeOut) fos.close();
             if (closeIn) fis.close();
         } catch(IOException e) {
-            throw new InterpreterException(e);
+            agent.getOutputStream(IOAgent.CONST_STDERR).println("SSL_copy: " + e.getMessage());
+            return false;
         }
         
         
