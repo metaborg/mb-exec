@@ -15,17 +15,17 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_indexedSet_put extends AbstractPrimitive {
 
-    protected SSL_indexedSet_put() {
+    public SSL_indexedSet_put() {
         super("SSL_indexedSet_put", 1, 2);
     }
 
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
             throws InterpreterException {
         
-        if(!(targs[0] instanceof IndexedSet))
+        if(!(targs[0] instanceof StrategoSet))
             return false;
         
-        IndexedSet is = (IndexedSet) targs[0];
+        StrategoSet is = (StrategoSet) targs[0];
         
         if(is == null)
             return false;

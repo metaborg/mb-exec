@@ -15,7 +15,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_hashtable_reset extends AbstractPrimitive {
 
-    protected SSL_hashtable_reset() {
+    public SSL_hashtable_reset() {
         super("SSL_hashtable_reset", 0, 1);
     }
 

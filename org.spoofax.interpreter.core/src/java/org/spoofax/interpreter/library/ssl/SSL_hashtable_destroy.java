@@ -15,7 +15,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_hashtable_destroy extends AbstractPrimitive {
 
-    protected SSL_hashtable_destroy() {
+    public SSL_hashtable_destroy() {
         super("SSL_hashtable_destroy", 0, 1);
     }
 

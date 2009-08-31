@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,13 +22,13 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
 
-public class IndexedSet implements IStrategoTerm {
+public class StrategoSet implements IStrategoTerm, Serializable {
         
     private static final long serialVersionUID = -4514696890481283123L;
     private int counter;
-    Map<IStrategoTerm, Integer> map;
+    private final Map<IStrategoTerm, Integer> map;
     
-    IndexedSet(int initialSize, int maxLoad) {
+    public StrategoSet(int initialSize, int maxLoad) {
         map = new HashMap<IStrategoTerm, Integer>(initialSize, 1.0f*maxLoad/100);
         counter = 0;
     }

@@ -21,7 +21,7 @@ public class ECJAnnoWrapper implements IStrategoTerm, IStrategoList, IStrategoAp
 	}
     
 	public int getStorageType() {
-		return IMMUTABLE;
+		return MUTABLE; // does not cache its hashCode() method
 	}
 	
 	public IStrategoTerm[] getAllSubterms() {

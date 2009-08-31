@@ -15,7 +15,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_hashtable_remove extends AbstractPrimitive {
 
-    protected SSL_hashtable_remove() {
+    public SSL_hashtable_remove() {
         super("SSL_hashtable_remove", 0, 2);
     }
     

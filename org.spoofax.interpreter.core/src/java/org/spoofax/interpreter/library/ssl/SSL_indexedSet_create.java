@@ -31,7 +31,7 @@ public class SSL_indexedSet_create extends AbstractPrimitive {
         int initialSize = ((IStrategoInt)targs[0]).intValue();
         int maxLoad = ((IStrategoInt)targs[1]).intValue();
 
-        IStrategoTerm result = new IndexedSet(initialSize, maxLoad);
+        IStrategoTerm result = new StrategoSet(initialSize, maxLoad);
         env.setCurrent(result);
         
         return true;

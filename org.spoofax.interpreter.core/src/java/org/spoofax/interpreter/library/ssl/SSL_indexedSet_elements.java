@@ -14,15 +14,15 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_indexedSet_elements extends AbstractPrimitive {
 
-    protected SSL_indexedSet_elements() {
+    public SSL_indexedSet_elements() {
         super("SSL_indexedSet_elements", 0, 1);
     }
 
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
-        if(!(targs[0] instanceof IndexedSet))
+        if(!(targs[0] instanceof StrategoSet))
             return false;
         
-        IndexedSet is = (IndexedSet) targs[0];
+        StrategoSet is = (StrategoSet) targs[0];
         
         env.setCurrent(env.getFactory().makeList(is.keySet()));
         

@@ -16,7 +16,7 @@ public abstract class BasicStrategoTerm implements IStrategoTerm, Cloneable {
     }
     
     public int getStorageType() {
-        return IMMUTABLE;
+        return MUTABLE; // provides no guarantees (and does not cache hashCode())
     }
 
     public boolean match(IStrategoTerm second) {

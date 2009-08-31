@@ -14,15 +14,15 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_indexedSet_remove extends AbstractPrimitive {
 
-    protected SSL_indexedSet_remove() {
+    public SSL_indexedSet_remove() {
         super("SSL_indexedSet_remove", 0, 2);
     }
 
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
-        if(!(targs[0] instanceof IndexedSet))
+        if(!(targs[0] instanceof StrategoSet))
             return false;
         
-        IndexedSet is = (IndexedSet) targs[0];
+        StrategoSet is = (StrategoSet) targs[0];
         if(is == null)
             return false;
 

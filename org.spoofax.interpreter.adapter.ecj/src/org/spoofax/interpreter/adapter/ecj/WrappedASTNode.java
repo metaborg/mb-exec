@@ -12,10 +12,6 @@ public abstract class WrappedASTNode extends AbstractECJAppl {
 
     public abstract ASTNode getWrappee();
     
-    public int getStorageType() {
-        return MUTABLE;
-    }
-    
     @Override
     public boolean match(IStrategoTerm second) {
     	if(!(second instanceof WrappedASTNode))

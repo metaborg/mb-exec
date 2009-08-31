@@ -15,7 +15,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_hashtable_get extends AbstractPrimitive {
 
-    protected SSL_hashtable_get() {
+    public SSL_hashtable_get() {
         super("SSL_hashtable_get", 0, 2);
     }
     
