@@ -74,7 +74,7 @@ public class SSL_copy extends AbstractPrimitive {
             if (closeOut) fos.close();
             if (closeIn) fis.close();
         } catch(IOException e) {
-            agent.getOutputStream(IOAgent.CONST_STDERR).println("SSL_copy: " + e.getMessage());
+            agent.getOutputStream(IOAgent.CONST_STDERR).println("SSL_copy: Could not copy file " + e.getMessage());
             return false;
         }
         
