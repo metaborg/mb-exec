@@ -329,7 +329,12 @@ public class BasicTermFactory implements ITermFactory {
         return makeList(terms.toArray(EMPTY));
     }
     
-    public IStrategoList makeList(IStrategoTerm head, IStrategoList tail) {
+    @Deprecated
+    public final IStrategoList makeList(IStrategoTerm head, IStrategoList tail) {
+        return makeListCons(head, tail);
+    }
+    
+    public IStrategoList makeListCons(IStrategoTerm head, IStrategoList tail) {
         return new BasicStrategoList(head, tail, null);
     }
 
