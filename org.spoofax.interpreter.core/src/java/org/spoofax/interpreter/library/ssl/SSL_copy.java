@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -38,6 +39,11 @@ public class SSL_copy extends AbstractPrimitive {
         
         boolean closeIn = true;
         boolean closeOut = true;
+        
+        File file1 = agent.openFile(Tools.javaString(tvars[0]));
+        File file2 = agent.openFile(Tools.javaString(tvars[1]));
+        if (file1.exists() && file1.equals(file2))
+            return true;
 
         try {
             if (Tools.isTermString(tvars[0])) {
