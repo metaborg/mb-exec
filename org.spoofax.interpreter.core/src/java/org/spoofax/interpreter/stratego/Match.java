@@ -410,10 +410,47 @@ public class Match extends Strategy {
             return matchTuple(env, (IStrategoTuple) t, p);
         case IStrategoTerm.REF:
             return matchRef(env, (IStrategoRef)t, p);
+        case IStrategoTerm.BLOB:
+            return matchBlob(env, t, p);
         default:
             throw new InterpreterException("Unsupported term type : "
                                            + t.getClass().toString() + " [" + t.getTermType() + "]");
         }
+    }
+
+    private Results matchBlob(IContext env, IStrategoTerm t, IStrategoAppl p) throws InterpreterException {
+        if (DebugUtil.isDebugging()) {
+            debug("term is Blob");
+        }
+        if (Tools.isAnno(p, env)) {
+            return matchAnyAnno(env, t, p);
+        }
+        else if (Tools.isWld(p, env)) {
+            return matchAnyWld(p);
+        }
+        else if (Tools.isAs(p, env)) {
+            return matchCompoundAs(env, t, p);
+        }
+        else if (Tools.isVar(p, env)) {
+            return matchAnyVar(t, p);
+        }
+        else if (Tools.isExplode(p, env)) {
+            return null; // FIXME: explode blobs?
+        } 
+        else if (Tools.isStr(p, env)) {
+            return null;
+        }
+        else if (Tools.isInt(p, env)) {
+            return null;
+        }
+        else if (Tools.isReal(p, env)) {
+            return null;
+        }
+        else if (Tools.isOp(p, env)) {
+            return null;
+        }
+
+        throw new InterpreterException("Unknown Tuple case '" + p + "'");
     }
 
     private Results matchRef(IContext env, IStrategoRef ref, IStrategoAppl p) {
