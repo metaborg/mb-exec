@@ -42,8 +42,12 @@ public class SSL_copy extends AbstractPrimitive {
         
         File file1 = agent.openFile(Tools.javaString(tvars[0]));
         File file2 = agent.openFile(Tools.javaString(tvars[1]));
-        if (file1.exists() && file1.equals(file2))
-            return true;
+        try {
+            if (file1.exists() && file1.getCanonicalPath().equals(file2.getCanonicalPath()))
+                return true;
+        } catch (IOException e) {
+            // Ignore: files may not exist yet
+        }
 
         try {
             if (Tools.isTermString(tvars[0])) {
