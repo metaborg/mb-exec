@@ -32,7 +32,7 @@ public class SSL_implode_string extends AbstractPrimitive {
 
         for (IStrategoList l = (IStrategoList) t; !l.isEmpty(); l = l.tail()) {
             IStrategoInt v = (IStrategoInt) l.head();
-            result.append(new Character((char)v.intValue()));
+            result.append((char)v.intValue());
         }
         env.setCurrent(env.getFactory().makeString(result.toString()));
         return true;

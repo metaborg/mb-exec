@@ -31,11 +31,11 @@ public class SSL_explode_string extends AbstractPrimitive {
         
         String s = Tools.javaString(t);
         IStrategoTerm[] r = new IStrategoInt[s.length()];
-        byte[] bs = s.getBytes();
+        char[] cs = s.toCharArray();
         
         ITermFactory f = env.getFactory();
-        for(int i = 0; i < bs.length; i++)
-            r[i] = f.makeInt(bs[i]);
+        for(int i = 0; i < cs.length; i++)
+            r[i] = f.makeInt(cs[i]);
         
         IStrategoTerm sl = env.getFactory().makeList(r);
         env.setCurrent(sl);

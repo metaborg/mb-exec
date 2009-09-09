@@ -197,15 +197,14 @@ public class Build extends Strategy {
         IStrategoList children = (IStrategoList) t.getSubterm(1);
 
         IStrategoConstructor ctor = factory.makeConstructor(ctr, children.size());
-        IStrategoList kids = factory.makeList();
+        IStrategoTerm[] kids = new IStrategoTerm[children.size()];
 
-        // FIXME use IStrategoTerm[]
         for (int i = children.size() -1 ; i >= 0; i--) {
             IStrategoTerm kid = buildTerm(env, (IStrategoAppl) children.getSubterm(i));
             if (kid == null) {
                 return null;
             }
-            kids = factory.makeList(kid, kids);
+            kids[i] = kid;
         }
 
         return factory.makeAppl(ctor, kids);
@@ -224,7 +223,7 @@ public class Build extends Strategy {
         if(tail == null || head == null)
             return null;
         
-        return factory.makeList(head, tail);
+        return factory.makeListCons(head, tail);
     }
 
     private IStrategoList buildList(IContext env, IStrategoAppl t, ITermFactory factory) throws InterpreterException {
