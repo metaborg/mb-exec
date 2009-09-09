@@ -131,7 +131,7 @@ public class SDefT implements IConstruct {
 
     @Override
     public String toString() {
-        return "SDefT(\"" + name + "\", " + getBody() + ")";
+        return "SDefT(\"" + getName() + "\", " + getBody() + ")";
     }
 
     public void setScope(VarScope newScope) {
@@ -141,7 +141,7 @@ public class SDefT implements IConstruct {
     public void prettyPrint(StupidFormatter sf) {
         sf.first("SDefT(");
         sf.bump(6);
-        sf.line("  \"" + name + "\"");
+        sf.line("  \"" + getName() + "\"");
         sf.line(", " + strategyArgs);
         sf.line(", " + termArgs);
         sf.append(", ");
