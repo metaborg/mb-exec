@@ -47,6 +47,10 @@ public class Context implements IContext {
     private VarScope varScope;
 
     public Context(ITermFactory factory, ITermFactory programFactory) {
+        this(factory, programFactory, false);
+    }
+
+    public Context(ITermFactory factory, ITermFactory programFactory, boolean skipStandardLibraries) {
         this.programFactory =  programFactory;
         this.factory = factory;
         stackTracer = new StackTracer();
@@ -55,8 +59,10 @@ public class Context implements IContext {
         strategoSignature = new StrategoSignature(programFactory);
         operatorRegistries = new LinkedHashMap<String, IOperatorRegistry>();
         
-        operatorRegistries.put(SSLLibrary.REGISTRY_NAME, new SSLLibrary());
-        operatorRegistries.put(JFFLibrary.REGISTRY_NAME, new JFFLibrary(factory));
+        if (!skipStandardLibraries) {
+           addOperatorRegistry(new SSLLibrary());
+           addOperatorRegistry(new JFFLibrary(factory));
+        }
     }
 
     public IStrategoTerm current() {

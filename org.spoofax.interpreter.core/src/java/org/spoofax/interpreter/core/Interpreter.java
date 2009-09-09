@@ -22,24 +22,18 @@ import org.spoofax.interpreter.terms.ITermFactory;
 
 public class Interpreter {
 
-    private Context context;
-    private StrategoCoreLoader loader;
+    private final Context context;
+    private final StrategoCoreLoader loader;
 
     public Interpreter() {
-        ITermFactory f = new BasicTermFactory();
-        doInit(f,f);
+        this(new BasicTermFactory());
     }
 
     public Interpreter(ITermFactory factory) {
-        doInit(factory, factory);
+        this(factory, factory);
     }
 
-    public Interpreter(ITermFactory termFactory, ITermFactory programFactory) {
-        doInit(termFactory, programFactory);
-    }
-
-    private void doInit(ITermFactory termFactory, ITermFactory programFactory) {
-        
+    public Interpreter(ITermFactory termFactory, ITermFactory programFactory) {        
         Context.indentation = 0;
         context = createContext(termFactory, programFactory);
         
