@@ -27,27 +27,24 @@ import org.spoofax.interpreter.library.ssl.RandomAccessOutputStream;
  * @author Karl Trygve Kalleberg <karltk near strategoxt.org>
  */
 public class IOAgent {
+    
     public final static int CONST_STDIN = 0;
+    
     public final static int CONST_STDOUT = 1;
+    
     public final static int CONST_STDERR = 2;
     
-    private InputStream stdinStream;
-    private PrintStream stdoutStream;
-    private PrintStream stderrStream;
+    private final Map<Integer, InputStream> inStreams = new HashMap<Integer, InputStream>();
     
-    private Map<Integer, InputStream> inStreams = new HashMap<Integer, InputStream>();
-    
-    private Map<Integer, PrintStream> outStreams = new HashMap<Integer, PrintStream>();
+    private final Map<Integer, PrintStream> outStreams = new HashMap<Integer, PrintStream>();
     
     private String workingDir;
+    
     private String definitionDir;
+    
     private int fileCounter = 3;
     
     public IOAgent() {
-        stdinStream = System.in;
-        stdoutStream = System.out;
-        stderrStream = System.err;
-        
         try {
             String dir = System.getProperty("user.dir");
             if (dir == null) dir = ".";
@@ -108,9 +105,9 @@ public class IOAgent {
     
     public PrintStream getOutputStream(int fd) {
         if(fd == CONST_STDOUT) {
-            return stdoutStream;
+            return System.out;
         } else if (fd == CONST_STDERR) {
-            return stderrStream;
+            return System.err;
         }
         return outStreams.get(fd);
     }
@@ -145,10 +142,7 @@ public class IOAgent {
     }
 
     public InputStream getInputStream(int fd) {
-        if(fd == CONST_STDIN) {
-            return stdinStream;
-        }
-        return inStreams.get(fd);
+        return fd == CONST_STDIN ? System.in : inStreams.get(fd);
     }
     
     /**
@@ -180,7 +174,7 @@ public class IOAgent {
     }
     
     public boolean mkdir(String fn) {
-        return openFile(getAbsolutePath(getWorkingDir(), fn)).mkdir();
+        return openFile(fn).mkdir();
     }
     
     @Deprecated // this is not a Stratego primitive; use mkdir instead

@@ -127,7 +127,7 @@ public class Main {
             if(ior == null) {
                 System.err.println("Unable to load '" + s + "'");
             } else {
-                itp.addOperatorRegistry(ior.getOperatorRegistryName(), ior);
+                itp.addOperatorRegistry(ior);
             }
         }
     }

@@ -363,6 +363,7 @@ public class StrategoCoreLoader {
         return new Build(u);
     }
     
+    @Deprecated
     public void load(String path) throws IOException, InterpreterException {
         doLoad(context.getProgramFactory().parseFromFile(path));
     }
@@ -419,6 +420,7 @@ public class StrategoCoreLoader {
 
     }
 
+    @Deprecated
     public void load(InputStream stream) throws InterpreterException, IOException {
         if (stream == null)
             throw new IOException("Could not load Stratego core input from null stream");

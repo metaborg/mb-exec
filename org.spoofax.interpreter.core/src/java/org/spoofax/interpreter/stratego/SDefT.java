@@ -86,7 +86,9 @@ public class SDefT implements IConstruct {
         this.scope = scope;
     }
     
-    protected SDefT() {}
+    protected SDefT(VarScope scope) {
+        this.scope = scope;
+    }
 
     public  IConstruct eval(IContext e) throws InterpreterException {
         //e.getVarScope().dump("", true);

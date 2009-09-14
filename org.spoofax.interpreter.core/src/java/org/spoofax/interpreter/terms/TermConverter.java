@@ -37,6 +37,7 @@ public class TermConverter {
             case REAL: return convert((IStrategoReal) term);
             case STRING: return convert((IStrategoString) term);
             case TUPLE: return convert((IStrategoTuple) term);
+            case BLOB: return term;
             default:
                 throw new IllegalStateException("Unkown term type: " + term.getClass().getSimpleName());
         }

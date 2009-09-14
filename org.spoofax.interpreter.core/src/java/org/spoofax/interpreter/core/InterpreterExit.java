@@ -20,6 +20,11 @@ public class InterpreterExit extends InterpreterException {
         this.value = value;
     }
     
+    public InterpreterExit(int value, Throwable cause) {
+        super("Legal exit", cause);
+        this.value = value;
+    }
+    
     public int getValue() {
         return value;
     }

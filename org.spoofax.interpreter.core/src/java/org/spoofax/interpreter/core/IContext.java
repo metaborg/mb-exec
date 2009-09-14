@@ -16,8 +16,6 @@ import org.spoofax.interpreter.stratego.Match.Results;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
-// FIXME aggregate IStrategoTermBuilder instead
-
 public interface IContext {
 
     public IStrategoTerm current();

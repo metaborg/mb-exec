@@ -11,7 +11,7 @@ public class InterpreterException extends Exception {
 
     private static final long serialVersionUID = -3622131518420023392L;
     
-    public InterpreterException(String message, Exception cause) {
+    public InterpreterException(String message, Throwable cause) {
         super(message, cause);
     }
 

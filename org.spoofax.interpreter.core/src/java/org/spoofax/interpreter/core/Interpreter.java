@@ -144,12 +144,15 @@ public class Interpreter {
         return context.getFactory();
     }
 
-    public void load(InputStream stream) throws IOException, InterpreterException {
-        loader.load(stream);
+    public final void load(InputStream stream) throws IOException, InterpreterException {
+        if (stream == null)
+            throw new IOException("Could not load Stratego core input from null stream");
+            
+       load(context.getProgramFactory().parseFromStream(stream));
     }
     
-    public void load(String file) throws IOException, InterpreterException {
-        loader.load(file);
+    public final void load(String file) throws IOException, InterpreterException {
+        load(context.getProgramFactory().parseFromFile(file));
     }
 
 	public void load(IStrategoTerm term) throws InterpreterException {
