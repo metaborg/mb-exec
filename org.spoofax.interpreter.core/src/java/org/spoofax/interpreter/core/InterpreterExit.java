@@ -16,12 +16,11 @@ public class InterpreterExit extends InterpreterException {
     private final int value;
     
     public InterpreterExit(int value) {
-        super("Legal exit");
-        this.value = value;
+        this(value, null);
     }
     
     public InterpreterExit(int value, Throwable cause) {
-        super("Legal exit", cause);
+        super("Legal exit: return code " + value, cause);
         this.value = value;
     }
     

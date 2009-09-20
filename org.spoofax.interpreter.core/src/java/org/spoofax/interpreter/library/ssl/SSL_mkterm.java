@@ -64,7 +64,7 @@ public class SSL_mkterm extends AbstractPrimitive {
         String name = nameTerm.stringValue();
         for (int i = 0; i < name.length(); i++) {
             char c = name.charAt(i);
-            if (!(Character.isLetter(c) || c == '_' || c == '-'
+            if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-'
                 || c == '+' || c == '*' || c == '$')) {
                 name = name.substring(0, i);
                 break;
@@ -74,10 +74,10 @@ public class SSL_mkterm extends AbstractPrimitive {
         IStrategoList args = (IStrategoList) argsTerm;
         
         if (name.length() == 0) { // tuple
-            env.setCurrent(env.getFactory().makeTuple(args));
+            env.setCurrent(env.getFactory().makeTuple(args.getAllSubterms()));
         } else {
             IStrategoConstructor cons = env.getFactory().makeConstructor(name, args.size());
-            env.setCurrent(env.getFactory().makeAppl(cons, args));
+            env.setCurrent(env.getFactory().makeAppl(cons, args.getAllSubterms()));
         }        
         return true;
     }

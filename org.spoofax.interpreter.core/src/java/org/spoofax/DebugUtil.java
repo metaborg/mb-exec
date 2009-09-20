@@ -31,11 +31,11 @@ public class DebugUtil {
         if (debugging) {
             // Indent just for stragies that use a scope.
             boolean doIndent = strategy instanceof CallT || strategy instanceof Let || strategy instanceof Scope;
-            StringBuilder sb = buildIndent(doIndent ? INDENT_STEP : 0);
+            String s = doIndent ? buildIndent(INDENT_STEP).toString() : "";
             if(!result) {
-                Strategy.debug(sb, "=> failed: ", current, "\n");
+                Strategy.debug(s, "=> failed: ", current, "\n");
             } else {
-                Strategy.debug(sb, "=> succeeded: ", current, "\n");
+                Strategy.debug(s, "=> succeeded: ", current, "\n");
             }
         }
         return result;

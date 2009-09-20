@@ -18,12 +18,13 @@ public class StackTracer {
     private int failureDepth;
     
     public void push(String name) {
-        if (frames.length == currentDepth) {
+        int depth = currentDepth++;
+        if (frames.length == depth) {
             String[] oldframes = frames;
             frames = new String[frames.length * 2];
             System.arraycopy(oldframes, 0, frames, 0, oldframes.length);
         }
-        frames[currentDepth++] = name;
+        frames[depth] = name;
         failureDepth = currentDepth;
     }
     

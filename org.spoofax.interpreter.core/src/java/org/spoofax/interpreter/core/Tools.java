@@ -55,7 +55,7 @@ public class Tools {
             for (int i = children.length - 1; i >= 0; i--) {
                 kids = factory.makeListCons(implode(factory, (IStrategoAppl) children[i]), kids);
             }
-            return factory.makeAppl(ctr, kids);
+            return factory.makeAppl(ctr, kids.getAllSubterms());
         } else if (ctor.equals(sign.getInt())) {
             IStrategoString x = (IStrategoString) t.getSubterm(0);
             return factory.makeInt(new Integer(x.stringValue()).intValue());

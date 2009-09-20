@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import static org.spoofax.interpreter.core.Tools.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,13 +42,16 @@ public class SSL_copy extends AbstractPrimitive {
         boolean closeIn = true;
         boolean closeOut = true;
         
-        File file1 = agent.openFile(Tools.javaString(tvars[0]));
-        File file2 = agent.openFile(Tools.javaString(tvars[1]));
-        try {
-            if (file1.exists() && file1.getCanonicalPath().equals(file2.getCanonicalPath()))
-                return true;
-        } catch (IOException e) {
-            // Ignore: files may not exist yet
+        if (isTermString(tvars[0]) && isTermString(tvars[1])) {
+            // Avoid a file to itself
+            File file1 = agent.openFile(Tools.javaString(tvars[0]));
+            File file2 = agent.openFile(Tools.javaString(tvars[1]));
+            try {
+                if (file1.exists() && file1.getCanonicalPath().equals(file2.getCanonicalPath()))
+                    return true;
+            } catch (IOException e) {
+                // Ignore: files may not exist yet
+            }
         }
 
         try {

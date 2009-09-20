@@ -2,6 +2,8 @@ package org.spoofax.interpreter.terms;
 
 import static org.spoofax.interpreter.terms.IStrategoTerm.*;
 
+import java.util.HashMap;
+
 /**
  * Copies terms created by one {@link ITermFactory} to
  * terms created by another (or the same) factory. 
@@ -11,6 +13,9 @@ import static org.spoofax.interpreter.terms.IStrategoTerm.*;
 public class TermConverter {
     
     private final ITermFactory factory;
+    
+    private final HashMap<IStrategoConstructor, IStrategoConstructor> constructors =
+    	new HashMap<IStrategoConstructor, IStrategoConstructor>();
     
     public TermConverter(ITermFactory factory) {
         this.factory = factory;
@@ -39,7 +44,7 @@ public class TermConverter {
             case TUPLE: return convert((IStrategoTuple) term);
             case BLOB: return term;
             default:
-                throw new IllegalStateException("Unkown term type: " + term.getClass().getSimpleName());
+                throw new IllegalStateException("Unknown term type: " + term.getClass().getSimpleName());
         }
     }
 
@@ -50,7 +55,12 @@ public class TermConverter {
     }
 
     public IStrategoConstructor convert(IStrategoConstructor constructor) {
-        return factory.makeConstructor(constructor.getName(), constructor.getArity());
+    	IStrategoConstructor cached = constructors.get(constructor);
+    	if (cached == null) {
+    	    cached = factory.makeConstructor(constructor.getName(), constructor.getArity());
+    	    constructors.put(constructor, cached);
+    	}
+    	return cached;
     }
 
     public IStrategoInt convert(IStrategoInt term) {
@@ -58,7 +68,6 @@ public class TermConverter {
     }
 
     public IStrategoList convert(IStrategoList term) {
-        // TODO: Optimize - use iterator to copy list items efficiently for both linked- and array-lists
         IStrategoTerm[] subterms = convertAll(term.getAllSubterms());
         return annotate(factory.makeList(subterms), term);
     }
