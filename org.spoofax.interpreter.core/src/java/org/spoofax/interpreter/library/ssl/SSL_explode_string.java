@@ -12,7 +12,7 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
-import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
@@ -23,22 +23,21 @@ public class SSL_explode_string extends AbstractPrimitive {
     }
     
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException {
-        
         IStrategoTerm t = tvars[0];
         
-        if(!Tools.isTermString(t))
+        if (!Tools.isTermString(t))
             return false;
         
         String s = Tools.javaString(t);
-        IStrategoTerm[] r = new IStrategoInt[s.length()];
-        char[] cs = s.toCharArray();
         
-        ITermFactory f = env.getFactory();
-        for(int i = 0; i < cs.length; i++)
-            r[i] = f.makeInt(cs[i]);
+        ITermFactory factory = env.getFactory();
+        IStrategoList result = factory.makeList();
         
-        IStrategoTerm sl = env.getFactory().makeList(r);
-        env.setCurrent(sl);
+        for (int i = s.length() - 1; i >= 0; i--) {
+            result = factory.makeListCons(factory.makeInt(s.charAt(i)), result);
+        }
+        
+        env.setCurrent(result);
         return true;
     }
 }

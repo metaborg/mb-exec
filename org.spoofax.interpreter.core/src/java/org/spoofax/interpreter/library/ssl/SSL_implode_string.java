@@ -28,7 +28,7 @@ public class SSL_implode_string extends AbstractPrimitive {
         if(!Tools.isTermList(t))
             return false;
 
-        StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder(targs.length);
 
         for (IStrategoList l = (IStrategoList) t; !l.isEmpty(); l = l.tail()) {
             IStrategoInt v = (IStrategoInt) l.head();
