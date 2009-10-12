@@ -101,7 +101,7 @@ public class StackTracer {
      */
     public void printStackTrace(boolean onlyCurrent) {
         int depth = onlyCurrent ? currentDepth : failureDepth;
-        String[] frames = this.frames; // avoid _some_ race conditions
+        String[] frames = this.frames.clone(); // avoid _most_ race conditions (for UncaughtExceptionHandler)
         
         for (int i = 0; i < depth; i++) {
             if (i == MAX_REPORTED_FRAMES - MAX_REPORTED_FRAMES_TAIL) {

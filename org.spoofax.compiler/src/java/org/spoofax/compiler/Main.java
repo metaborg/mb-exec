@@ -31,7 +31,7 @@ public class Main {
             } else if(arg.equals("-i")) {
                 toCompile = args[i+1];
                 skip++;
-            } else if(args.equals("-o")) {
+            } else if(arg.equals("-o")) {
                 outFile = args[i+1];
                 skip++;
             }
