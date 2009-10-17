@@ -27,6 +27,8 @@ public class SSL_exit extends AbstractPrimitive {
         if(!Tools.isTermInt(tvars[0]))
             return false;
         
+        SSLLibrary.instance(env).getIOAgent().closeAllFiles();
+        
         int exitCode = Tools.asJavaInt(tvars[0]);
         env.getStackTracer().popOnExit(exitCode == 0);
         

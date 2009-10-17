@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.spoofax.interpreter.core.InterpreterException;
@@ -122,11 +123,26 @@ public class IOAgent {
         try {
             stream.close();
         } catch (IOException e) {
-            return true;
+            // Ignored
         }
         inStreams.remove(fd);
         outStreams.remove(fd);
         return true;
+    }
+    
+    public void closeAllFiles() {
+        Iterator<Integer> fds = outStreams.keySet().iterator();
+        while (fds.hasNext()) {
+            int fd = fds.next();
+            OutputStream stream = outStreams.get(fd);
+            try {
+                stream.close();
+            } catch (IOException e) {
+                // Ignored
+            }
+            inStreams.remove(fd);
+            fds.remove();
+        }
     }
 
     public int openRandomAccessFile(String fn, String mode) throws FileNotFoundException, IOException {
