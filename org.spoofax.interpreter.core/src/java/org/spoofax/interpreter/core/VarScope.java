@@ -137,6 +137,7 @@ public class VarScope {
         DebugUtil.debug(s);
     }
     
+    @Deprecated
     public BindingInfo saveUnboundVars() {
         return saveUnboundVars(new BindingInfo());
     }
@@ -154,6 +155,7 @@ public class VarScope {
         return bi;
     }
 
+    @Deprecated
     public void restoreUnboundVars(BindingInfo bi) {
         
         List<Pair<VarScope, String>> bindings = bi.getBindings();

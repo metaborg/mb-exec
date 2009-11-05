@@ -38,7 +38,7 @@ public class GuardedLChoice extends Strategy {
     		return s;
     	}
     	else {
-    		final BindingInfo bi = env.getVarScope().saveUnboundVars();
+    		//final BindingInfo bi = env.getVarScope().saveUnboundVars();
         	final IStrategoTerm oldCurrent = env.current();
         	final Strategy second = children[n].second;
         	Strategy first = children[n].first;
@@ -49,7 +49,7 @@ public class GuardedLChoice extends Strategy {
     			}
         		public IConstruct onFailure(IContext env) throws InterpreterException {
     	        	env.setCurrent(oldCurrent);
-    	        	env.getVarScope().restoreUnboundVars(bi);    				
+    	        	//env.getVarScope().restoreUnboundVars(bi);    				
     				return eval(env, n+1);
     			}
         	});
