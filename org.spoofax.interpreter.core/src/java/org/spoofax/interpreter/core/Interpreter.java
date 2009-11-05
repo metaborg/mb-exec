@@ -54,7 +54,9 @@ public class Interpreter {
      * @throws InterpreterException
      *             In case of an internal error or other interpreter exception.
      */
-    public boolean invoke(String name) throws InterpreterExit, InterpreterException {
+    public boolean invoke(String name)
+            throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+        
         StackTracer stackTracer = getContext().getStackTracer();
         SDefT def = context.lookupSVar(cify(name) + "_0_0");
         
@@ -63,7 +65,7 @@ public class Interpreter {
         }
 
         if (def == null) {
-            throw new InterpreterException("Definition '" + name + "' not found");
+            throw new UndefinedStrategyException("Definition '" + name + "' not found");
         }
         
         stackTracer.push(def.getName());
