@@ -1,5 +1,9 @@
 package org.spoofax.interpreter.core;
 
+import java.io.PrintStream;
+
+import org.spoofax.interpreter.library.IOAgent;
+
 /**
  * Stack tracing support.
  * 
@@ -10,6 +14,8 @@ public class StackTracer {
     private static final int MAX_REPORTED_FRAMES = 130;
     
     private static final int MAX_REPORTED_FRAMES_TAIL = 30;
+    
+    private IOAgent ioAgent; 
     
     private String[] frames = new String[50];
     
@@ -40,6 +46,14 @@ public class StackTracer {
     public void popOnExit(boolean success) {
         currentDepth = 0;
         if (success) failureDepth = 0;
+    }
+    
+    public IOAgent getIOAgent() {
+        return ioAgent;
+    }
+    
+    public void setIOAgent(IOAgent ioAgent) {
+        this.ioAgent = ioAgent;
     }
     
     /**
@@ -86,29 +100,41 @@ public class StackTracer {
     }
     
     /**
-     * Prints the stack trace to the standard error output.
+     * Prints the stack trace to the error output stream of the IOAgent.
      */
-    public void printStackTrace() {
+    public final void printStackTrace() {
         printStackTrace(false);
     }
 
     /**
-     * Prints the stack trace to the standard error output.
+     * Prints the stack trace to the error output stream of the IOAgent.
      * 
      * @param onlyCurrent
      *            true if only the current frames on the stack should be
      *            printed, and not any failed frames.
      */
-    public void printStackTrace(boolean onlyCurrent) {
+    public final void printStackTrace(boolean onlyCurrent) {
+        PrintStream stream = getIOAgent() == null ? System.err : getIOAgent().getOutputStream(IOAgent.CONST_STDERR);
+        printStackTrace(stream, onlyCurrent);
+    }
+
+    /**
+     * Prints the stack trace to the default error output.
+     * 
+     * @param onlyCurrent
+     *            true if only the current frames on the stack should be
+     *            printed, and not any failed frames.
+     */
+    public void printStackTrace(PrintStream stream, boolean onlyCurrent) {
         int depth = onlyCurrent ? currentDepth : failureDepth;
         String[] frames = this.frames.clone(); // avoid _most_ race conditions (for UncaughtExceptionHandler)
         
         for (int i = 0; i < depth; i++) {
             if (i == MAX_REPORTED_FRAMES - MAX_REPORTED_FRAMES_TAIL) {
-                System.err.println("...truncated...");
+                stream.println("...truncated...");
                 i = Math.max(i + 1, depth - MAX_REPORTED_FRAMES_TAIL);
             }
-            System.err.println("\t" + frames[i]);
+            stream.println("\t" + frames[i]);
         }
     }
 }

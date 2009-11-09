@@ -116,6 +116,7 @@ public class Interpreter {
     public void setIOAgent(IOAgent ioAgent) {
         SSLLibrary op = (SSLLibrary) getContext().getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         op.setIOAgent(ioAgent);
+        getContext().getStackTracer().setIOAgent(ioAgent);
     }
     
     /**

@@ -7,8 +7,6 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.util.Map;
-
 import org.spoofax.interpreter.core.Context;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -28,6 +26,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
     private StrategoHashMap tableTable;
 
     public SSLLibrary() {
+        super(150);
         initRegistry();
         init();
     }
@@ -140,10 +139,6 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_newname());
         add(new SSL_stacktrace_get_all_frame_names());
      }
-
-    protected Map<String, AbstractPrimitive> getRegistry() {
-        return registry;
-    }
 
     public AbstractPrimitive lookup(String s) {
         return get(s);

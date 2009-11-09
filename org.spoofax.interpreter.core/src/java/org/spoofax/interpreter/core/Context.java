@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.library.java.JFFLibrary;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
@@ -62,21 +63,32 @@ public class Context implements IContext {
         if (!skipStandardLibraries) {
            addOperatorRegistry(new SSLLibrary());
            addOperatorRegistry(new JFFLibrary(factory));
+           stackTracer.setIOAgent(getIOAgent());
         }
     }
 
     public IStrategoTerm current() {
         return current;
     }
-    
-    public StackTracer getStackTracer() {
-        return stackTracer;
-    }
 
     public void setCurrent(IStrategoTerm term) {
         current = term;
     }
-
+    
+    public StackTracer getStackTracer() {
+        return stackTracer;
+    }
+    
+    public IOAgent getIOAgent() {
+        SSLLibrary op = (SSLLibrary) getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
+        return op == null ? null : op.getIOAgent();
+    }
+    
+    public void setIOAgent(IOAgent ioAgent) {
+        SSLLibrary op = (SSLLibrary) getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
+        if (op == null) throw new IllegalStateException("No SSL library");
+        op.setIOAgent(ioAgent);
+    }
 
     public static void debug(Object... s) {
 

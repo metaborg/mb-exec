@@ -12,10 +12,19 @@ import java.util.Map;
 
 public abstract class AbstractStrategoOperatorRegistry implements IOperatorRegistry {
 
-    protected Map<String, AbstractPrimitive> registry;
+    private final Map<String, AbstractPrimitive> registry;
     
     protected AbstractStrategoOperatorRegistry() {
-        registry = new HashMap<String, AbstractPrimitive>();
+        this(16);
+    }
+    
+    protected AbstractStrategoOperatorRegistry(int initialCapacity) {
+        registry = new HashMap<String, AbstractPrimitive>(initialCapacity);
+    }
+
+    @Deprecated
+    protected Map<String, AbstractPrimitive> getRegistry() {
+        return registry;
     }
     
     // FIXME kill - this is superflouse
