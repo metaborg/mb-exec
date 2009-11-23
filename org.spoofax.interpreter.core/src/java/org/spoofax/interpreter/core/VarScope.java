@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -137,36 +138,40 @@ public class VarScope {
         DebugUtil.debug(s);
     }
     
-    @Deprecated
-    public BindingInfo saveUnboundVars() {
-        return saveUnboundVars(new BindingInfo());
+    public List<BindingInfo> saveUnboundVars() {
+        return saveUnboundVars(new ArrayList<BindingInfo>());
     }
 
-    private BindingInfo saveUnboundVars(BindingInfo bi) {
-        
+    private List<BindingInfo> saveUnboundVars(ArrayList<BindingInfo> results) {
         for (String k : vars.keySet()) {
             if (vars.get(k) == null)
-                bi.add(this, k);
+                results.add(new BindingInfo(this, k));
         }
         
         if (parent != null)
-            return parent.saveUnboundVars(bi);
+            return parent.saveUnboundVars(results);
         
-        return bi;
+        return results;
     }
 
-    @Deprecated
-    public void restoreUnboundVars(BindingInfo bi) {
-        
-        List<Pair<VarScope, String>> bindings = bi.getBindings();
-        
-        for (Pair<VarScope, String> p : bindings) {
-            p.first.resetVar(p.second);
+    public void restoreUnboundVars(List<BindingInfo> bindings) {
+        for (BindingInfo binding : bindings) {
+            binding.value = binding.scope.overrideVar(binding.name, null);
+        }
+    }
+    
+    public void setBoundVarsAfterBacktracking(List<BindingInfo> bindings) {
+        for (BindingInfo binding : bindings) {
+            String name = binding.name;
+            IStrategoTerm value = binding.value;
+            if (value != null && vars.get(name) == null) {
+                overrideVar(name, value);
+            }
         }
     }
 
-    private void resetVar(String name) {
-        vars.put(name, null);
+    private IStrategoTerm overrideVar(String name, IStrategoTerm value) {
+        return vars.put(name, value);
     }
 
     public Collection<SDefT> getStrategyDefinitions() {

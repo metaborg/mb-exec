@@ -29,17 +29,24 @@ public class ImportTerm extends Strategy {
 
 	public IConstruct eval(IContext env) throws InterpreterException {
         if (result == null) {
+            InputStream input = null;
             try {
                 SSLLibrary op = (SSLLibrary) env
                         .getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
                 IOAgent io = op.getIOAgent();
 
-                InputStream input = io.openInputStream(path, true);
+                input = io.openInputStream(path, true);
                 result = env.getFactory().parseFromStream(input);
             } catch (IOException e) {
                 throw new InterpreterException("import-term failed", e);
             } catch (RuntimeException e) {
                 throw new InterpreterException("import-term failed", e);
+            } finally {
+                try {
+                    if (input != null) input.close();
+                } catch (IOException e) {
+                    // Silly checked exceptions
+                }
             }
         }
 

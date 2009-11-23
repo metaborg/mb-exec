@@ -28,7 +28,7 @@ public class Seq extends Strategy {
 		return eval(env, 0);
     }
 
-	private IConstruct eval(IContext env, final int n) throws InterpreterException {
+	protected IConstruct eval(IContext env, final int n) throws InterpreterException {
 		if (n == children.length) {
 			return getHook().pop().onSuccess(env);
 		}

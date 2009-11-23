@@ -16,7 +16,7 @@ public interface IStrategoList extends IStrategoTerm {
 
     /**
      * @deprecated Use
-     *             {@link IStrategoTermBuilder#makeList(IStrategoTerm, IStrategoList)}
+     *             {@link IStrategoTermBuilder#makeListCons(IStrategoTerm, IStrategoList)}
      *             instead.
      */
     @Deprecated

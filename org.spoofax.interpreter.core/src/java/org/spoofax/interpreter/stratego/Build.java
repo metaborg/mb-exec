@@ -123,7 +123,7 @@ public class Build extends Strategy {
 
     private IStrategoTerm doBuildExplode(ITermFactory factory, IStrategoTerm actualCtor, IStrategoTerm actualArgs) throws InterpreterException {
         if (!(Tools.isTermList(actualArgs))) {
-            throw new InterpreterException("");
+            throw new InterpreterException("Not a list: " + actualArgs);
         }
 
         String n = ((IStrategoString)actualCtor).stringValue();
@@ -175,12 +175,13 @@ public class Build extends Strategy {
         // FIXME memoize constructors
         
         String ctr = Tools.javaStringAt(t, 0);
+        IStrategoList children = (IStrategoList) t.getSubterm(1);
         
-        if(ctr.equals("")) {
+        if(ctr.length() == 0) {
             return buildTuple(env, t);
-        } else if(ctr.equals("Nil")) {
+        } else if(children.getSubtermCount() == 0 && ctr.equals("Nil")) {
             return buildNil(env);
-        } else if(ctr.equals("Cons")) {
+        } else if(children.getSubtermCount() == 2 && ctr.equals("Cons")) {
             return buildCons(env, t, factory);
         } else {
             return buildOp(ctr, env, t, factory);

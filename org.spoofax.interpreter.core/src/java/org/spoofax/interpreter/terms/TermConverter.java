@@ -12,6 +12,8 @@ import java.util.HashMap;
  */
 public class TermConverter {
     
+    // TODO: support ATerms, maintaining sharing?
+    
     private final ITermFactory factory;
     
     private final HashMap<IStrategoConstructor, IStrategoConstructor> constructors =

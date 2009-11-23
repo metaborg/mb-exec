@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter.stratego;
 
+import java.util.List;
+
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.core.BindingInfo;
 import org.spoofax.interpreter.core.IConstruct;
@@ -38,7 +40,10 @@ public class GuardedLChoice extends Strategy {
     		return s;
     	}
     	else {
-    		//final BindingInfo bi = env.getVarScope().saveUnboundVars();
+    	    // TODO: test variable binding guarded choice
+            //       should succeed: (!1; ?a; fail <+      !2; ?a)
+    	    //       should fail:    (!1; ?a; fail <+ id); !2; ?a
+    		final List<BindingInfo> bi = env.getVarScope().saveUnboundVars();
         	final IStrategoTerm oldCurrent = env.current();
         	final Strategy second = children[n].second;
         	Strategy first = children[n].first;
@@ -49,8 +54,10 @@ public class GuardedLChoice extends Strategy {
     			}
         		public IConstruct onFailure(IContext env) throws InterpreterException {
     	        	env.setCurrent(oldCurrent);
-    	        	//env.getVarScope().restoreUnboundVars(bi);    				
-    				return eval(env, n+1);
+    	        	env.getVarScope().restoreUnboundVars(bi);    				
+    				IConstruct result = eval(env, n+1);
+    				env.getVarScope().setBoundVarsAfterBacktracking(bi);
+                    return result;
     			}
         	});
         	return first;

@@ -183,6 +183,11 @@ public class Tools {
     public static String javaStringAt(IStrategoList t, int i) {
         return Tools.stringAt(t, i).stringValue();
     }
+    
+    public static int javaIntAt(IStrategoTerm t, int i) {
+        IStrategoInt result = intAt(t, i);
+        return result.intValue();
+    }
 
     public static int javaInt(IStrategoTerm term) {
         return ((IStrategoInt)term).intValue();

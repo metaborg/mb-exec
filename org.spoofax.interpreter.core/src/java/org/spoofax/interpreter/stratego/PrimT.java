@@ -46,6 +46,7 @@ public class PrimT extends Strategy {
             // FIXME this cast should be moved out
             IStrategoAppl t = (IStrategoAppl)tvars[i];
             vals[i] = env.lookupVar(Tools.javaStringAt(t, 0));
+            if (vals[i] == null) return getHook().pop().onFailure(env);
         }
 
 

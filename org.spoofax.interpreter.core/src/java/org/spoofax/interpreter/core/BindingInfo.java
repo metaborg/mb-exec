@@ -7,22 +7,19 @@
  */
 package org.spoofax.interpreter.core;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class BindingInfo {
-    List<Pair<VarScope, String>> bindings;
     
-    public BindingInfo() {
-        bindings = new ArrayList<Pair<VarScope,String>>();
-    }
+    final VarScope scope;
     
-    void add(VarScope scope, String varName) {
-        bindings.add(new Pair<VarScope, String>(scope, varName));
-    }
-
-    public List<Pair<VarScope, String>> getBindings() {
-        return bindings;
+    final String name;
+    
+    IStrategoTerm value;
+    
+    BindingInfo(VarScope scope, String name) {
+        this.scope = scope;
+        this.name = name;
     }
     
 }

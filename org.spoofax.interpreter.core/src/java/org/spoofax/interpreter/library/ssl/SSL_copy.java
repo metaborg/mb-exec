@@ -36,23 +36,14 @@ public class SSL_copy extends AbstractPrimitive {
         SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         IOAgent agent = op.getIOAgent();
         
+        if (isSameFile(tvars, agent))
+            return true;
+        
         InputStream fis = null;
         OutputStream fos = null;
         
         boolean closeIn = true;
         boolean closeOut = true;
-        
-        if (isTermString(tvars[0]) && isTermString(tvars[1])) {
-            // Avoid a file to itself
-            File file1 = agent.openFile(Tools.javaString(tvars[0]));
-            File file2 = agent.openFile(Tools.javaString(tvars[1]));
-            try {
-                if (file1.exists() && file1.getCanonicalPath().equals(file2.getCanonicalPath()))
-                    return true;
-            } catch (IOException e) {
-                // Ignore: files may not exist yet
-            }
-        }
 
         try {
             if (Tools.isTermString(tvars[0])) {
@@ -88,13 +79,27 @@ public class SSL_copy extends AbstractPrimitive {
 
             if (closeOut) fos.close();
             if (closeIn) fis.close();
-        } catch(IOException e) {
-            agent.getOutputStream(IOAgent.CONST_STDERR).println("SSL_copy: Could not copy file (" + e.getMessage() + ")");
+        } catch (IOException e) {
+            agent.getOutputStream(IOAgent.CONST_STDERR).println("SSL_copy: Could not copy file (" + e.getMessage() + "-" + "attempted to copy to " + tvars[1]);
             return false;
         }
         
         
         return true;
+    }
+
+    private boolean isSameFile(IStrategoTerm[] tvars, IOAgent agent) {
+        if (isTermString(tvars[0]) && isTermString(tvars[1])) {
+            File file1 = agent.openFile(Tools.javaString(tvars[0]));
+            File file2 = agent.openFile(Tools.javaString(tvars[1]));
+            try {
+                if (file1.exists() && file1.getCanonicalPath().equals(file2.getCanonicalPath()))
+                    return true;
+            } catch (IOException e) {
+                // Ignore: files may not exist yet
+            }
+        }
+        return false;
     }
 
 }

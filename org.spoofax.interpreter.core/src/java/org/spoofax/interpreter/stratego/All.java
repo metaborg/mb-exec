@@ -48,7 +48,7 @@ public class All extends Strategy {
 
     }
     
-    private IConstruct evalAll(IContext env, final int i, final IStrategoTerm[] list) throws InterpreterException
+    protected IConstruct evalAll(IContext env, final int i, final IStrategoTerm[] list) throws InterpreterException
     {
     	final IStrategoTerm old = env.current();
     	if (i >= old.getSubtermCount()) {

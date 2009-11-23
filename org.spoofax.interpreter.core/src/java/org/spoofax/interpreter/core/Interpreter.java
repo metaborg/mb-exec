@@ -58,11 +58,7 @@ public class Interpreter {
             throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
         
         StackTracer stackTracer = getContext().getStackTracer();
-        SDefT def = context.lookupSVar(cify(name) + "_0_0");
-        
-        if (def == null) {
-            def = context.lookupSVar(name);
-        }
+        SDefT def = lookupUncifiedSVar(name);
 
         if (def == null) {
             throw new UndefinedStrategyException("Definition '" + name + "' not found");
@@ -76,6 +72,19 @@ public class Interpreter {
         else stackTracer.popOnFailure();
             
         return success;
+    }
+
+    protected SDefT lookupUncifiedSVar(String name) {
+        try {
+            SDefT def = context.lookupSVar(cify(name) + "_0_0");
+            
+            if (def == null) {
+                def = context.lookupSVar(name);
+            }
+            return def;
+        } catch (InterpreterException e) {
+            return null;
+        }
     }
     
     /**
