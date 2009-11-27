@@ -55,18 +55,30 @@ public class BasicTermFactory implements ITermFactory {
         parseSkip(bis);
         final int ch = bis.read();
         switch(ch) {
-        case '[': return parseList(bis);
-        case '(': return parseTuple(bis);
-        case '"': return parseString(bis);
+        case '[': return parseAnno(bis, parseList(bis));
+        case '(': return parseAnno(bis, parseTuple(bis));
+        case '"': return parseAnno(bis, parseString(bis));
         default:
             bis.unread(ch);
-            if(Character.isLetter(ch)) {
-                return parseAppl(bis);
+            if (Character.isLetter(ch)) {
+                return parseAnno(bis, parseAppl(bis));
             }
             else if(Character.isDigit(ch))
-                return parseNumber(bis);
+                return parseAnno(bis, parseNumber(bis));
         }
         throw new ParseError("Invalid term : '" + (char)ch + "'");
+    }
+    
+    private IStrategoTerm parseAnno(PushbackInputStream bis, IStrategoTerm term) throws IOException {
+        parseSkip(bis);
+        final int ch = bis.read();
+        if (ch == '{') {
+            List<IStrategoTerm> annos = parseTermSequence(bis, '}');
+            return annotateTerm(term, makeList(annos));
+        } else {
+            bis.unread(ch);
+            return term;
+        }
     }
 
     private IStrategoTerm parseString(PushbackInputStream bis) throws IOException {
