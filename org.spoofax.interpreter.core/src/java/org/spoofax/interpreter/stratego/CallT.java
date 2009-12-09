@@ -51,9 +51,13 @@ public class CallT extends Strategy {
             depth++;
         }
 
-        Strategy result = sdef.getParametrizedBody(svars, tvars);
-        if (result != null)
-            return addHook(result, env.getVarScope());
+        /* UNDONE: getParametrizedBody is trouble
+        if (svars.length == 0) {
+            Strategy result = sdef.getParametrizedBody(svars, tvars);
+            if (result != null)
+                return addHook(result, env.getVarScope());
+        }
+        */
     
         String[] formalTermArgs = sdef.getTermParams();
         SVar[] formalStrategyArgs = sdef.getStrategyParams();
@@ -129,9 +133,13 @@ public class CallT extends Strategy {
         if (sdef == null)
             throw new InterpreterException("Not found '" + name + "'");
 
-        Strategy result = sdef.getParametrizedBody(sv, actualTVars);
-        if (result != null)
-            return addHook(result, env.getVarScope());
+        /* UNDONE: getParametrizedBody is trouble
+        if (sv.length == 0) {
+            Strategy result = sdef.getParametrizedBody(sv, actualTVars);
+            if (result != null)
+                return addHook(result, env.getVarScope());
+        }
+        */
     
         String[] formalTermArgs = sdef.getTermParams();
         SVar[] formalStrategyArgs = sdef.getStrategyParams();
