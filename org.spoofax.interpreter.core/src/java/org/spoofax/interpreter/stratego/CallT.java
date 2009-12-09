@@ -25,8 +25,6 @@ public class CallT extends Strategy {
 
     private final IStrategoTerm[] tvars;
 
-    private static int counter = 0;
-
     public CallT(String name, Strategy[] svars, IStrategoTerm[] tvars) {
         this.name = name;
         this.svars = svars;
@@ -52,6 +50,10 @@ public class CallT extends Strategy {
             System.err.println("[" + depth + "] - " + sdef.getName());
             depth++;
         }
+
+        Strategy result = sdef.getParametrizedBody(svars, tvars);
+        if (result != null)
+            return addHook(result, env.getVarScope());
     
         String[] formalTermArgs = sdef.getTermParams();
         SVar[] formalStrategyArgs = sdef.getStrategyParams();
@@ -91,7 +93,7 @@ public class CallT extends Strategy {
             else {
                 SVar[] stratArgs = new SVar[0];
                 String[] termArgs = new String[0];
-                target = new SDefT(makeTempName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
+                target = new SDefT(SDefT.createAnonymousName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
             }
 
             newScope.addSVar(formal.name, target);
@@ -107,22 +109,9 @@ public class CallT extends Strategy {
         }
 
         final VarScope oldVarScope = env.getVarScope();
-        final CallT th = this;
-        Strategy body = sdef.getBody();
-        body.getHook().push(new Hook(){
-        	public IConstruct onSuccess(IContext env) throws InterpreterException {
-                env.restoreVarScope(oldVarScope);
-                env.getStackTracer().popOnSuccess();
-        		return th.getHook().pop().onSuccess(env);
-        	}
-        	public IConstruct onFailure(IContext env) throws InterpreterException {
-        		env.restoreVarScope(oldVarScope);
-        		env.getStackTracer().popOnFailure();
-        		return th.getHook().pop().onFailure(env);
-        	}
-        });
         env.setVarScope(newScope);
-        return body;
+        
+        return addHook(sdef.getBody(), oldVarScope);
     }
 
     public Strategy evalWithArgs(IContext env, Strategy[] sv, IStrategoTerm[] actualTVars) throws InterpreterException {
@@ -140,6 +129,9 @@ public class CallT extends Strategy {
         if (sdef == null)
             throw new InterpreterException("Not found '" + name + "'");
 
+        Strategy result = sdef.getParametrizedBody(sv, actualTVars);
+        if (result != null)
+            return addHook(result, env.getVarScope());
     
         String[] formalTermArgs = sdef.getTermParams();
         SVar[] formalStrategyArgs = sdef.getStrategyParams();
@@ -179,7 +171,7 @@ public class CallT extends Strategy {
             else {
                 SVar[] stratArgs = new SVar[0];
                 String[] termArgs = new String[0];
-                target = new SDefT(makeTempName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
+                target = new SDefT(SDefT.createAnonymousName(formal.name), stratArgs, termArgs, actual, env.getVarScope());
             }
 
             newScope.addSVar(formal.name, target);
@@ -192,29 +184,28 @@ public class CallT extends Strategy {
 
         final VarScope oldVarScope = env.getVarScope();
         env.setVarScope(newScope);
-        final CallT th = this;
-        Strategy body = sdef.getBody();
-        body.getHook().push(new Hook(){
+        
+        return addHook(sdef.getBody(), oldVarScope);
+    }
+
+    private Strategy addHook(Strategy strategy, final VarScope oldVarScope) {
+        strategy.getHook().push(new Hook() {
         	public IConstruct onSuccess(IContext env) throws InterpreterException {
                 env.restoreVarScope(oldVarScope);
                 env.getStackTracer().popOnSuccess();
-        		return th.getHook().pop().onSuccess(env);
+        		return CallT.this.getHook().pop().onSuccess(env);
         	}
         	public IConstruct onFailure(IContext env) throws InterpreterException {
         		env.restoreVarScope(oldVarScope);
         		env.getStackTracer().popOnFailure();
-        		return th.getHook().pop().onFailure(env);
+        		return CallT.this.getHook().pop().onFailure(env);
         	}
         });
-        return body;
+        return strategy;
     }
 
     private IStrategoTerm[] getTermArguments() {
         return tvars;
-    }
-
-    private static String makeTempName(String s) {
-        return "<anon_" + s + "_" + counter + ">";
     }
 
     @Override

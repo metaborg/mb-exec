@@ -13,8 +13,12 @@ import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.VarScope;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SDefT implements IConstruct {
+
+    private static int counter = 0;
+    
     private String name;
 
     private SVar[] strategyArgs;
@@ -107,6 +111,10 @@ public class SDefT implements IConstruct {
         return body;
     }
     
+    public Strategy getParametrizedBody(Strategy[] sargs, IStrategoTerm[] targs) {
+        return null; // overridden InteropSDefT for compiled strategies
+    }
+    
     protected void setBody(Strategy body) {
         this.body = body;
     }
@@ -157,4 +165,8 @@ public class SDefT implements IConstruct {
 	public boolean evaluate(IContext env) throws InterpreterException {
 		return body.evaluate(env);
 	}
+
+    protected static String createAnonymousName(String s) {
+        return "<anon_" + s + "_" + (counter++) + ">";
+    }
 }
