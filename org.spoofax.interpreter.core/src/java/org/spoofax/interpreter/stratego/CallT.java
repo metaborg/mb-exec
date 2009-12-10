@@ -38,13 +38,15 @@ public class CallT extends Strategy {
         if (DebugUtil.isDebugging()) {
             debug("CallT.eval() - ", env.current());
         }
-        
-        env.getStackTracer().push(name);
 
     	SDefT sdef = env.lookupSVar(name);
     	
         if (sdef == null)
             throw new InterpreterException("Not found '" + name + "'");
+        
+        boolean isCompiledStrategy = sdef.isCompiledStrategy();
+        if (!isCompiledStrategy)
+            env.getStackTracer().push(name);
 
         if(DebugUtil.tracing) {
             System.err.println("[" + depth + "] - " + sdef.getName());
@@ -115,7 +117,7 @@ public class CallT extends Strategy {
         final VarScope oldVarScope = env.getVarScope();
         env.setVarScope(newScope);
         
-        return addHook(sdef.getBody(), oldVarScope);
+        return addHook(sdef.getBody(), isCompiledStrategy, oldVarScope);
     }
 
     public Strategy evalWithArgs(IContext env, Strategy[] sv, IStrategoTerm[] actualTVars) throws InterpreterException {
@@ -125,13 +127,15 @@ public class CallT extends Strategy {
         if (DebugUtil.isDebugging()) {
             debug("CallT.eval() - ", env.current());
         }
-        
-        env.getStackTracer().push(name);
 
         SDefT sdef = env.lookupSVar(name); //getsdef(env);
     	
         if (sdef == null)
             throw new InterpreterException("Not found '" + name + "'");
+        
+        boolean isCompiledStrategy = sdef.isCompiledStrategy();
+        if (!isCompiledStrategy)
+            env.getStackTracer().push(name);
 
         /* UNDONE: getParametrizedBody is trouble
         if (sv.length == 0) {
@@ -193,19 +197,21 @@ public class CallT extends Strategy {
         final VarScope oldVarScope = env.getVarScope();
         env.setVarScope(newScope);
         
-        return addHook(sdef.getBody(), oldVarScope);
+        return addHook(sdef.getBody(), isCompiledStrategy, oldVarScope);
     }
 
-    private Strategy addHook(Strategy strategy, final VarScope oldVarScope) {
+    private Strategy addHook(Strategy strategy, final boolean isCompiledStrategy, final VarScope oldVarScope) {
         strategy.getHook().push(new Hook() {
         	public IConstruct onSuccess(IContext env) throws InterpreterException {
                 env.restoreVarScope(oldVarScope);
-                env.getStackTracer().popOnSuccess();
+                if (!isCompiledStrategy)
+                    env.getStackTracer().popOnSuccess();
         		return CallT.this.getHook().pop().onSuccess(env);
         	}
         	public IConstruct onFailure(IContext env) throws InterpreterException {
         		env.restoreVarScope(oldVarScope);
-        		env.getStackTracer().popOnFailure();
+                if (!isCompiledStrategy)
+                    env.getStackTracer().popOnFailure();
         		return CallT.this.getHook().pop().onFailure(env);
         	}
         });

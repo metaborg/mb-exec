@@ -115,6 +115,10 @@ public class SDefT implements IConstruct {
         return null; // overridden InteropSDefT for compiled strategies
     }
     
+    public boolean isCompiledStrategy() {
+        return false; // overridden InteropSDefT for compiled strategies
+    }
+    
     protected void setBody(Strategy body) {
         this.body = body;
     }

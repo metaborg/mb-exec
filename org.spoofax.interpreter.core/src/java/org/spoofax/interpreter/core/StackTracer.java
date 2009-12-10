@@ -1,5 +1,7 @@
 package org.spoofax.interpreter.core;
 
+import static java.lang.Math.*;
+
 import java.io.PrintStream;
 
 import org.spoofax.interpreter.library.IOAgent;
@@ -97,6 +99,12 @@ public class StackTracer {
             results[results.length - i - 1] = frames[i];
         
         return results;
+    }
+    
+    public void setTrace(String[] trace) {
+        currentDepth = min(trace.length, currentDepth);
+        failureDepth = trace.length;
+        frames = trace;
     }
     
     /**
