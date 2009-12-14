@@ -15,7 +15,7 @@ public class LoggingIOAgent extends IOAgent {
         new PrintStream(new LoggingOutputStream(System.err), true); 
     private final PrintStream stdout =
         new PrintStream(new LoggingOutputStream(System.out), true);
-    private final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     
     public String getLog() {
     	return bytes.toString();
