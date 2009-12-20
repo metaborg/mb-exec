@@ -11,6 +11,10 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.InlinePrinter;
 import org.spoofax.jsglr.InvalidParseTableException;
 
+/**
+ * @deprecated use strc-java instead
+ */
+@Deprecated
 public class Main {
     public static void main(String[] args) throws IOException, InterpreterException, InvalidParseTableException {
     

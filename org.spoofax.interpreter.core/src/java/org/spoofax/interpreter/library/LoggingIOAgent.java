@@ -11,10 +11,15 @@ import java.io.PrintStream;
  * @author Lennart Kats <lennart add lclnet.nl>
  */
 public class LoggingIOAgent extends IOAgent {
-    private final PrintStream stderr =
-        new PrintStream(new LoggingOutputStream(System.err), true); 
-    private final PrintStream stdout =
-        new PrintStream(new LoggingOutputStream(System.out), true);
+    
+    private final LoggingOutputStream stdoutLog = new LoggingOutputStream(System.out);
+    
+    private final LoggingOutputStream stderrLog = new LoggingOutputStream(System.err);
+    
+    private final PrintStream stdout = new PrintStream(stdoutLog, true);
+    
+    private final PrintStream stderr = new PrintStream(stderrLog, true);
+    
     final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     
     public String getLog() {
@@ -28,17 +33,19 @@ public class LoggingIOAgent extends IOAgent {
     @Override
     public PrintStream getOutputStream(int fd) {
         switch (fd) {
-            case CONST_STDERR:
-                return stderr;
             case CONST_STDOUT:
+                stderrLog.stream = System.out; // might have changed
                 return stdout;
+            case CONST_STDERR:
+                stderrLog.stream = System.err; // might have changed
+                return stderr;
             default:
                 return super.getOutputStream(fd);
         }
     }
     
     private class LoggingOutputStream extends OutputStream {
-        private final OutputStream stream;
+        OutputStream stream;
         
         public LoggingOutputStream(OutputStream stream) {
             this.stream = stream;
@@ -69,8 +76,10 @@ public class LoggingIOAgent extends IOAgent {
         
         @Override
         public void close() throws IOException {
-            if (stream != System.out && stream != System.err)
-                stream.close();
+            // UNDONE: closing console streams is asking for trouble
+            // if (stream != System.out && stream != System.err)
+            //    stream.close();
+            stream.flush();
         }
     }
 }

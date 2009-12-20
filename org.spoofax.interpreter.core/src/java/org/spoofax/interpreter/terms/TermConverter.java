@@ -12,8 +12,6 @@ import java.util.HashMap;
  */
 public class TermConverter {
     
-    // TODO: support ATerms, maintaining sharing?
-    
     private final ITermFactory factory;
     
     private final HashMap<IStrategoConstructor, IStrategoConstructor> constructors =
@@ -37,10 +35,26 @@ public class TermConverter {
     
     public IStrategoTerm convert(IStrategoTerm term) {
         switch (term.getTermType()) {
-            case APPL: return convert((IStrategoAppl) term);
+            // APPL and LIST are inlined to help stack usage
+            case APPL:
+                IStrategoAppl appl = (IStrategoAppl) term;
+                IStrategoTerm[] terms = appl.getAllSubterms();
+                IStrategoTerm[] subTerms = new IStrategoTerm[terms.length];
+                for (int i = 0; i < terms.length; i++) {
+                    subTerms[i] = convert(terms[i]);
+                }
+                IStrategoConstructor ctor = convert(appl.getConstructor());
+                return annotate(factory.makeAppl(ctor, subTerms), appl);
+            case LIST:
+                IStrategoList list = (IStrategoList) term;
+                IStrategoTerm[] terms2 = list.getAllSubterms();
+                IStrategoTerm[] subTerms2 = new IStrategoTerm[terms2.length];
+                for (int i = 0; i < terms2.length; i++) {
+                    subTerms2[i] = convert(terms2[i]);
+                }
+                return annotate(factory.makeList(subTerms2), list);
             case CTOR: return convert((IStrategoConstructor) term);
             case INT: return convert((IStrategoInt) term);
-            case LIST: return convert((IStrategoList) term);
             case REAL: return convert((IStrategoReal) term);
             case STRING: return convert((IStrategoString) term);
             case TUPLE: return convert((IStrategoTuple) term);
@@ -50,7 +64,7 @@ public class TermConverter {
         }
     }
 
-    public IStrategoAppl convert(IStrategoAppl term) {
+    public final IStrategoAppl convert(IStrategoAppl term) {
         IStrategoTerm[] subTerms = convertAll(term.getAllSubterms());
         IStrategoConstructor ctor = convert(term.getConstructor());
         return annotate(factory.makeAppl(ctor, subTerms), term);
@@ -69,7 +83,7 @@ public class TermConverter {
         return annotate(factory.makeInt(term.intValue()), term);
     }
 
-    public IStrategoList convert(IStrategoList term) {
+    public final IStrategoList convert(IStrategoList term) {
         IStrategoTerm[] subterms = convertAll(term.getAllSubterms());
         return annotate(factory.makeList(subterms), term);
     }
@@ -90,7 +104,7 @@ public class TermConverter {
     @SuppressWarnings("unchecked")
     protected<T extends IStrategoTerm> T annotate(T term, T input) {
         IStrategoList annotations = input.getAnnotations();
-        if (annotations.isEmpty()) {
+        if (annotations == null || annotations.isEmpty()) {
             return term;
         } else {
             return (T) factory.annotateTerm(term, convert(annotations));

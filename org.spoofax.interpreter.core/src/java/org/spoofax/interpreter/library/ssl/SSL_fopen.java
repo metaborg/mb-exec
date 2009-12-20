@@ -15,12 +15,15 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_fopen extends AbstractPrimitive {
 
-    SSL_fopen() {
-        super("SSL_fopen", 0, 2);
+    public static final String NAME = "SSL_fopen";
+    
+    protected SSL_fopen() {
+        super(NAME, 0, 2);
     }
     
     @Override
@@ -35,15 +38,22 @@ public class SSL_fopen extends AbstractPrimitive {
         String fn = Tools.javaString(tvars[0]);
         String mode = Tools.javaString(tvars[1]);
         
+        IStrategoInt result = call(env, fn, mode);
+        if (result == null) return false;
+        
+        env.setCurrent(result);
+        return true;
+    }
+
+    protected IStrategoInt call(IContext env, String fn, String mode) {
         SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         try {
             int ref = op.getIOAgent().openRandomAccessFile(fn, mode);
-            env.setCurrent(env.getFactory().makeInt(ref));
-            return true;
+            return env.getFactory().makeInt(ref);
         } catch (FileNotFoundException e) {
-            return false;
+            return null;
         } catch (IOException e) {
-            return false;
+            return null;
         }
     }
 

@@ -11,6 +11,10 @@ import org.spoofax.interpreter.library.jsglr.JSGLRLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.InvalidParseTableException;
 
+/**
+ * @deprecated use strc-java instead
+ */
+@Deprecated
 public class Compiler {
 	private Interpreter compiler;
 	private String sharePath;
