@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import static org.spoofax.interpreter.core.Tools.*;
+
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -24,10 +26,10 @@ public class SSL_perror extends AbstractPrimitive {
             throws InterpreterException {
         
         String message = tvars[0].getTermType() == IStrategoTerm.STRING
-            ? tvars[0] + " - "
-            : "";
+            ? asJavaString(tvars[0])
+            : "(no details on this error; perror not supported)";
         
-        System.err.println("ERROR: " + message + "<perror() not supported on this platform>");
+        System.err.println("ERROR: " + message);
         return true;
     }
 

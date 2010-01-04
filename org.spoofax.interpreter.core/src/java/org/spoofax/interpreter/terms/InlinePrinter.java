@@ -12,9 +12,11 @@ public class InlinePrinter implements ITermPrinter {
 	}
 
 	public void print(String string) {
-		if (string.matches("^ *$")) {
-			return ;
+		/* UNDONE: don't break empty strategostrings
+	    if (string.matches("^ *$")) {
+		    return ;
 		}
+		*/
 		out.append(string);
 	}
 
@@ -37,9 +39,11 @@ public class InlinePrinter implements ITermPrinter {
 	}
 
 	public void println(String string, boolean b) {
+	    /*
 		if (string.matches("^ *$")) {
 			return ;
 		}
+		*/
 		out.append(string);
 	}
 

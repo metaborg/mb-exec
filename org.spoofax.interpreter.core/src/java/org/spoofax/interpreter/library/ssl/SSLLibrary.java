@@ -44,6 +44,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_mkdir());
         add(new SSL_P_tmpdir());
         add(new SSL_mkstemp());
+        add(new SSL_mkdtemp());
         add(new SSL_filemode());
         add(new SSL_S_ISDIR());
         add(new SSL_divi());

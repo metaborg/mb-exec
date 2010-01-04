@@ -190,7 +190,17 @@ public class IOAgent {
     }
     
     public String createTempFile(String prefix) throws IOException {
-        return File.createTempFile(prefix, null).getPath(); 
+        return File.createTempFile(prefix, null).getPath();
+    }
+    
+    public String createTempDir(String prefix) throws IOException {
+        File result;
+        do {
+            result = File.createTempFile(prefix, null);
+            result.delete();
+        } while (!result.mkdir());
+        result.deleteOnExit();
+        return result.getPath();
     }
     
     public boolean mkdir(String fn) {

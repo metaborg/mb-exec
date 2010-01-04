@@ -62,6 +62,7 @@ abstract public class Strategy implements IConstruct {
     }
     
     public boolean evaluate(IContext env) throws InterpreterException {
+        // XXX: Don't use exceptions for control flow
     	class Finished extends InterpreterException {
 			private static final long serialVersionUID = -857185250056951094L;
 			boolean result;

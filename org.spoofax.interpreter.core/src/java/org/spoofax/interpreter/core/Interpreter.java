@@ -155,6 +155,10 @@ public class Interpreter {
     public ITermFactory getFactory() {
         return context.getFactory();
     }
+    
+    public ITermFactory getProgramFactory() {
+        return context.getProgramFactory();
+    }
 
     public final void load(InputStream stream) throws IOException, InterpreterException {
         if (stream == null)

@@ -12,6 +12,7 @@ import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
+import org.spoofax.interpreter.core.UndefinedStrategyException;
 import org.spoofax.interpreter.core.VarScope;
 import org.spoofax.interpreter.stratego.SDefT.SVar;
 import org.spoofax.interpreter.terms.IStrategoAppl;
@@ -42,7 +43,7 @@ public class CallT extends Strategy {
     	SDefT sdef = env.lookupSVar(name);
     	
         if (sdef == null)
-            throw new InterpreterException("Not found '" + name + "'");
+            throw new UndefinedStrategyException("Not found '" + name + "'");
         
         boolean isCompiledStrategy = sdef.isCompiledStrategy();
         if (!isCompiledStrategy)
@@ -131,7 +132,7 @@ public class CallT extends Strategy {
         SDefT sdef = env.lookupSVar(name); //getsdef(env);
     	
         if (sdef == null)
-            throw new InterpreterException("Not found '" + name + "'");
+            throw new UndefinedStrategyException("Not found '" + name + "'");
         
         boolean isCompiledStrategy = sdef.isCompiledStrategy();
         if (!isCompiledStrategy)

@@ -11,13 +11,17 @@ import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ParseError;
 
 public class SSL_read_term_from_string extends AbstractPrimitive {
+    
+    private static final String NAME = "SSL_read_term_from_string";
 
     SSL_read_term_from_string() {
-        super("SSL_read_term_from_string", 0, 1);
+        super(NAME, 0, 1);
     }
     
     @Override
@@ -27,8 +31,13 @@ public class SSL_read_term_from_string extends AbstractPrimitive {
         if(!Tools.isTermString(tvars[0]))
             return false;
         
-        IStrategoTerm t = env.getFactory().parseFromString(Tools.javaString(tvars[0]));
-        env.setCurrent(t);
+        try {
+            IStrategoTerm t = env.getFactory().parseFromString(Tools.javaString(tvars[0]));
+            env.setCurrent(t);
+        } catch (ParseError e) {
+            SSLLibrary.instance(env).getIOAgent().getOutputStream(IOAgent.CONST_STDERR).println(NAME + ": " + e.getMessage());
+            return false;
+        }
         return true;
     }
 
