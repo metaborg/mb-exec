@@ -36,6 +36,7 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.interpreter.terms.IStrategoPlaceholder;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -289,7 +290,12 @@ public class ECJFactory implements ITermFactory {
     private Javadoc getJavadoc(IStrategoTerm term) {
         return ((WrappedJavadoc)term).getWrappee();
     }
+    
+    public IStrategoPlaceholder makePlaceholder(IStrategoTerm template) {
+        throw new NotImplementedException();
+    }
 
+    @Deprecated
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList terms) {
         return makeAppl(ctr, terms.getAllSubterms());
     }

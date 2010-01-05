@@ -39,6 +39,8 @@ public class BasicTermFactory implements ITermFactory {
     private static final Set<String> stringPool =
         Collections.synchronizedSet(new HashSet<String>());
     
+    private IStrategoConstructor placeholderConstructor;
+    
     public IStrategoTerm parseFromFile(String path) throws IOException {
         return parseFromStream(new FileInputStream(path));
     }
@@ -58,6 +60,7 @@ public class BasicTermFactory implements ITermFactory {
         case '[': return parseAnno(bis, parseList(bis));
         case '(': return parseAnno(bis, parseTuple(bis));
         case '"': return parseAnno(bis, parseString(bis));
+        case '<': return parsePlaceholder(bis);
         default:
             bis.unread(ch);
             if (Character.isLetter(ch)) {
@@ -171,6 +174,11 @@ public class BasicTermFactory implements ITermFactory {
             IStrategoConstructor c = makeConstructor(sb.toString(), 0);
             return makeAppl(c, new IStrategoTerm[0]);
         }
+    }
+    
+    private IStrategoTerm parsePlaceholder(PushbackInputStream bis) throws IOException {
+        IStrategoTerm template = parseFromStream(bis);
+        return makePlaceholder(template);
     }
 
     private IStrategoTerm parseTuple(PushbackInputStream bis) throws IOException {
@@ -323,6 +331,12 @@ public class BasicTermFactory implements ITermFactory {
             result = cached;
         }
         return result;
+    }
+    
+    public IStrategoPlaceholder makePlaceholder(IStrategoTerm template) {
+        if (placeholderConstructor == null)
+            placeholderConstructor = makeConstructor("<>", 1);
+        return new BasicStrategoPlaceholder(placeholderConstructor, template);
     }
 
     public IStrategoInt makeInt(int i) {

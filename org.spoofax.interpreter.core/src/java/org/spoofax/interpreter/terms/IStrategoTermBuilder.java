@@ -23,6 +23,7 @@ public interface IStrategoTermBuilder {
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids);
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... terms);
 
+    public IStrategoPlaceholder makePlaceholder(IStrategoTerm template);
     public IStrategoInt makeInt(int i);
     public IStrategoReal makeReal(double d);
     public IStrategoTuple makeTuple(IStrategoTerm... terms);
