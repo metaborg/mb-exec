@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.concurrent.locks.ReadWriteLock;
 
 import org.spoofax.NotImplementedException;
 
@@ -69,7 +70,7 @@ public class BasicTermFactory implements ITermFactory {
             else if(Character.isDigit(ch))
                 return parseAnno(bis, parseNumber(bis));
         }
-        throw new ParseError("Invalid term : '" + (char)ch + "'");
+        throw new ParseError("Invalid term: '" + (char)ch + "'");
     }
     
     private IStrategoTerm parseAnno(PushbackInputStream bis, IStrategoTerm term) throws IOException {
@@ -178,6 +179,9 @@ public class BasicTermFactory implements ITermFactory {
     
     private IStrategoTerm parsePlaceholder(PushbackInputStream bis) throws IOException {
         IStrategoTerm template = parseFromStream(bis);
+        parseSkip(bis);
+        if (bis.read() != '>')
+            throw new ParseError("Expected: '>'");
         return makePlaceholder(template);
     }
 
