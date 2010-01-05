@@ -19,7 +19,7 @@ public abstract class AbstractPrimitive {
     protected int svars;
     protected int tvars;
     
-    protected AbstractPrimitive(String name, int svars, int tvars) {
+    public AbstractPrimitive(String name, int svars, int tvars) {
         this.name = name;
         this.svars = svars;
         this.tvars = tvars;
