@@ -74,7 +74,7 @@ public class Interpreter {
         return success;
     }
 
-    protected SDefT lookupUncifiedSVar(String name) {
+    public SDefT lookupUncifiedSVar(String name) {
         try {
             SDefT def = context.lookupSVar(cify(name) + "_0_0");
             
