@@ -10,6 +10,7 @@ package org.spoofax.interpreter.adapter.ecj;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,6 +43,7 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.interpreter.terms.InlinePrinter;
 
 public class ECJFactory implements ITermFactory {
@@ -276,6 +278,12 @@ public class ECJFactory implements ITermFactory {
         InlinePrinter pp = new InlinePrinter();
         t.prettyPrint(pp);
         ous.write(pp.getString().getBytes());
+    }
+
+    public void unparseToFile(IStrategoTerm t, Writer out) throws IOException {
+        ITermPrinter tp = new InlinePrinter();
+        t.prettyPrint(tp);
+        out.write(tp.getString());
     }
 
     public boolean hasConstructor(String s, int i) {

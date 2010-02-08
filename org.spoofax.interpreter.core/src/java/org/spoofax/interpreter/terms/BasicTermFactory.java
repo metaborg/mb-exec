@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
-import java.util.concurrent.locks.ReadWriteLock;
 
 import org.spoofax.NotImplementedException;
 
@@ -297,6 +297,12 @@ public class BasicTermFactory implements ITermFactory {
         ITermPrinter tp = new InlinePrinter();
         t.prettyPrint(tp);
         ous.write(tp.getString().getBytes());
+    }
+
+    public void unparseToFile(IStrategoTerm t, Writer out) throws IOException {
+        ITermPrinter tp = new InlinePrinter();
+        t.prettyPrint(tp);
+        out.write(tp.getString());
     }
 
     public boolean hasConstructor(String name, int arity) {

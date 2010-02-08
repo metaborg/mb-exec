@@ -8,7 +8,7 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.Writer;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -33,12 +33,12 @@ public class SSL_write_term_to_stream_baf extends AbstractPrimitive {
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        OutputStream os = or.getIOAgent().getOutputStream(Tools.asJavaInt(tvars[0]));
-        if(os == null)
+        Writer out = or.getIOAgent().getWriter(Tools.asJavaInt(tvars[0]));
+        if(out == null)
             return false;
         
         try {
-            env.getFactory().unparseToFile(tvars[1], os);
+            env.getFactory().unparseToFile(tvars[1], out);
         } catch(IOException e) {
             throw new InterpreterException(e);
         }

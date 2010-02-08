@@ -1,18 +1,26 @@
 package org.spoofax.interpreter.library;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.RandomAccessFile;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.CharBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileChannel.MapMode;
+import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.spoofax.interpreter.core.InterpreterException;
@@ -35,9 +43,23 @@ public class IOAgent {
     
     public final static int CONST_STDERR = 2;
     
-    private final Map<Integer, InputStream> inStreams = new HashMap<Integer, InputStream>();
+    private final static String FILE_ENCODING = "ISO-8859-1";
     
-    private final Map<Integer, PrintStream> outStreams = new HashMap<Integer, PrintStream>();
+    private final static Charset FILE_CHARSET = Charset.forName(FILE_ENCODING);
+    
+    private final Map<Integer, FileHandle> openFiles = new HashMap<Integer, FileHandle>();
+    
+    private final Writer stdoutWriter = new PrintStreamWriter(System.out);
+    
+    private final Writer stderrWriter = new PrintStreamWriter(System.err);
+    
+    private final Reader stdinReader = new InputStreamReader(System.in, FILE_CHARSET);
+    
+    private final OutputStream stdout = System.out;
+    
+    private final OutputStream stderr = System.err;
+    
+    private final InputStream stdin = System.in;
     
     private String workingDir;
     
@@ -104,65 +126,122 @@ public class IOAgent {
     
     // OPENING, MANIPULATING FILES
     
-    public PrintStream getOutputStream(int fd) {
-        if(fd == CONST_STDOUT) {
-            return System.out;
+    public Writer getWriter(int fd) {
+        if (fd == CONST_STDOUT) {
+            return stdoutWriter;
         } else if (fd == CONST_STDERR) {
-            return System.err;
+            return stderrWriter;
+        } else {
+            FileHandle file = openFiles.get(fd);
+            if (file.writer == null) {
+                assert file.outputStream == null;
+                try {
+                    file.file.setLength(0); // Clear written-to file contents
+                } catch (IOException e) {
+                    // Be forgiving: if this results in an exception, so will writing to it
+                }
+                file.writer = new BufferedWriter(Channels.newWriter(file.file.getChannel(), FILE_ENCODING));
+            }
+            return file.writer;
         }
-        return outStreams.get(fd);
+    }
+    
+    public OutputStream getOutputStream(int fd) {
+        if (fd == CONST_STDOUT) {
+            return stdout;
+        } else if (fd == CONST_STDERR) {
+            return stderr;
+        } else {
+            FileHandle file = openFiles.get(fd);
+            if (file.outputStream == null) {
+                assert file.writer == null;
+                try {
+                    file.file.setLength(0); // Clear written-to file contents
+                } catch (IOException e) {
+                    // Be forgiving: if this results in an exception, so will writing to it
+                }
+                file.outputStream = new RandomAccessOutputStream(file.file);
+            }
+            return file.outputStream;
+        }
     }
 
     public boolean closeRandomAccessFile(int fd) throws InterpreterException {
         if (fd == CONST_STDOUT || fd == CONST_STDERR || fd == CONST_STDIN)
             return true;
         
-        OutputStream stream = outStreams.get(fd);
-        if(stream == null)
+        FileHandle file = openFiles.remove(fd);
+        if(file == null)
             return true; // already closed: be forgiving
         try {
-            stream.close();
+            if (file.writer != null) file.writer.close();
+            if (file.outputStream != null) file.outputStream.close();
+            file.file.close();
         } catch (IOException e) {
             // Ignored
         }
-        inStreams.remove(fd);
-        outStreams.remove(fd);
         return true;
     }
     
     public void closeAllFiles() {
-        Iterator<Integer> fds = outStreams.keySet().iterator();
-        while (fds.hasNext()) {
-            int fd = fds.next();
-            OutputStream stream = outStreams.get(fd);
+        for (FileHandle file : openFiles.values()) {
             try {
-                stream.close();
+                if (file.writer != null) file.writer.close();
+                file.file.close();
             } catch (IOException e) {
                 // Ignored
             }
-            inStreams.remove(fd);
-            fds.remove();
         }
+        openFiles.clear();
     }
 
     public int openRandomAccessFile(String fn, String mode) throws FileNotFoundException, IOException {
-        String m = mode.indexOf('w') >= 0 ? "rw" : "r";
-        if (m.equals("rw")) {
+        boolean writeMode = mode.indexOf('w') >= 0;
+        
+        if (writeMode) {
             File file = new File(getAbsolutePath(getWorkingDir(), fn));
             if (!file.exists()) file.createNewFile();
         }
-        RandomAccessFile file = new RandomAccessFile(getAbsolutePath(getWorkingDir(), fn), m);
-        
-        inStreams.put(fileCounter, new BufferedInputStream(new RandomAccessInputStream(file)));
-        outStreams.put(fileCounter, new PrintStream(new BufferedOutputStream(new RandomAccessOutputStream(file))));
-        
-        if (m.equals("rw")) file.setLength(0); // HACK: clear written-to file contents
+        RandomAccessFile file = new RandomAccessFile(getAbsolutePath(getWorkingDir(), fn), writeMode ? "rw" : "r");
+        openFiles.put(fileCounter, new FileHandle(file));
         
         return fileCounter++;
     }
 
     public InputStream getInputStream(int fd) {
-        return fd == CONST_STDIN ? System.in : inStreams.get(fd);
+        if (fd == CONST_STDIN) {
+            return stdin;
+        } else {
+            FileHandle file = openFiles.get(fd);
+            if (file.inputStream == null)
+                file.inputStream = new RandomAccessInputStream(file.file);
+            return file.inputStream;
+        }
+    }
+    
+    public Reader getReader(int fd) {
+        if (fd == CONST_STDIN)
+            return stdinReader;
+        FileHandle file = openFiles.get(fd);
+        if (file.reader == null)
+            file.reader = new BufferedReader(Channels.newReader(file.file.getChannel(), FILE_ENCODING));
+        return file.reader;
+    }
+    
+    public String readString(int fd) throws IOException {
+        if (fd == CONST_STDIN) {
+            char[] buffer = new char[2048];
+            StringBuilder result = new StringBuilder();
+            Reader reader = getReader(fd);
+            for (int read = 0; read != -1; read = reader.read(buffer))
+                result.append(buffer, 0, read);
+            return result.toString();
+        } else {
+            FileHandle file = openFiles.get(fd);
+            FileChannel channel = file.file.getChannel();
+            MappedByteBuffer buffer = channel.map(MapMode.READ_ONLY, 0, channel.size());
+            return FILE_CHARSET.decode(buffer).toString();
+        }
     }
     
     /**
@@ -179,6 +258,14 @@ public class IOAgent {
     
     public final InputStream openInputStream(String fn) throws FileNotFoundException {
         return openInputStream(fn, false);
+    }
+    
+    public void printError(String error) {
+        try {
+            getWriter(CONST_STDERR).write(error + "\n");
+        } catch (IOException e) {
+            // Like System.err.println, we swallow excpetions
+        }
     }
     
     public OutputStream openFileOutputStream(String fn) throws FileNotFoundException {
@@ -210,5 +297,60 @@ public class IOAgent {
     @Deprecated // this is not a Stratego primitive; use mkdir instead
     public boolean mkDirs(String fn) {
         return openFile(fn).mkdirs();
+    }
+    
+    /**
+     * An open file handle.
+     * 
+     * @author Lennart Kats <lennart add lclnet.nl>
+     */
+    private static class FileHandle {
+        final RandomAccessFile file;
+        Reader reader;
+        Writer writer;
+        InputStream inputStream;
+        OutputStream outputStream;
+        
+        FileHandle(RandomAccessFile file) {
+            this.file = file;
+        }
+    }
+    
+    /**
+     * A class for writing to a PrintStream.
+     * 
+     * @author Lennart Kats <lennart add lclnet.nl>
+     */
+    private static class PrintStreamWriter extends Writer {
+        
+        private final PrintStream stream;
+        
+        PrintStreamWriter(PrintStream stream) {
+            this.stream = stream;
+        }
+
+        @Override
+        public void close() throws IOException {
+            stream.close();
+        }
+
+        @Override
+        public void flush() throws IOException {
+            stream.flush();
+        }
+
+        @Override
+        public void write(char[] cbuf, int off, int len) throws IOException {
+            if (off == 0 && len == cbuf.length)
+                stream.print(cbuf);
+            else
+                stream.append(CharBuffer.wrap(cbuf, off, len));
+        }
+        
+        @Override
+        public void write(String str, int off, int len) throws IOException {
+            stream.append(str, off, len);
+        }
+        
     }
 }

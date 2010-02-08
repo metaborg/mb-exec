@@ -8,7 +8,7 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.Writer;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -31,11 +31,11 @@ public class SSL_fflush extends AbstractPrimitive {
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        OutputStream stream = or.getIOAgent().getOutputStream(Tools.asJavaInt(tvars[0]));
-        if (stream == null) return false;
+        Writer writer = or.getIOAgent().getWriter(Tools.asJavaInt(tvars[0]));
+        if (writer == null) return false;
         
         try {
-            stream.flush();
+            writer.flush();
             return true;
         } catch (IOException e) {
             return false;

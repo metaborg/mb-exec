@@ -8,7 +8,7 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -30,12 +30,12 @@ public class SSL_fgetc extends AbstractPrimitive {
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        InputStream is = or.getIOAgent().getInputStream(Tools.asJavaInt(tvars[0]));
+        Reader in = or.getIOAgent().getReader(Tools.asJavaInt(tvars[0]));
 
         int r = -1;
         
         try {
-            r = is.read();
+            r = in.read();
         } catch(IOException e) {
             throw new InterpreterException(e);
         }

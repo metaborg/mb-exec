@@ -7,7 +7,8 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.io.PrintStream;
+import java.io.IOException;
+import java.io.Writer;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -52,20 +53,23 @@ public class SSL_printnl extends AbstractPrimitive {
             t.prettyPrint(p);
             sb.append(p.getString());
         }
+        sb.append("\n");
 
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         IOAgent agent = or.getIOAgent();
         
-        if(output.equals("stderr")) {
-            PrintStream stream = agent.getOutputStream(IOAgent.CONST_STDERR);
-            stream.println(sb);
-            // if (stream.checkError()) return false;  // UNDONE: quietly flushes the stream!
-        } else if(output.equals("stdout")) {
-            PrintStream stream = agent.getOutputStream(IOAgent.CONST_STDOUT);
-            stream.println(sb);
-            if (stream.checkError()) return false;
-        } else {
-            throw new InterpreterException("Unknown output : " + output);
+        try {
+            if(output.equals("stderr")) {
+                Writer out = agent.getWriter(IOAgent.CONST_STDERR);
+                out.write(sb.toString());
+            } else if(output.equals("stdout")) {
+                Writer out = agent.getWriter(IOAgent.CONST_STDOUT);
+                out.write(sb.toString());
+            } else {
+                throw new InterpreterException("Unknown output : " + output);
+            }
+        } catch (IOException e) {
+            or.getIOAgent().printError("SSL_println: could not print line (" + e.getMessage() + ")");
         }
         
         return true;

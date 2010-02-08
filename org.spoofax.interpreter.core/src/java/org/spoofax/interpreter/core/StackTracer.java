@@ -1,8 +1,11 @@
 package org.spoofax.interpreter.core;
 
-import static java.lang.Math.*;
+import static java.lang.Math.min;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.Writer;
 
 import org.spoofax.interpreter.library.IOAgent;
 
@@ -122,10 +125,12 @@ public class StackTracer {
      *            printed, and not any failed frames.
      */
     public final void printStackTrace(boolean onlyCurrent) {
-        PrintStream stream = getIOAgent() == null ? System.err : getIOAgent().getOutputStream(IOAgent.CONST_STDERR);
-        printStackTrace(stream, onlyCurrent);
+        Writer writer = getIOAgent() == null
+                ? new OutputStreamWriter(System.err)
+                : getIOAgent().getWriter(IOAgent.CONST_STDERR);
+        printStackTrace(writer, onlyCurrent);
     }
-
+    
     /**
      * Prints the stack trace to the default error output.
      * 
@@ -134,15 +139,23 @@ public class StackTracer {
      *            printed, and not any failed frames.
      */
     public void printStackTrace(PrintStream stream, boolean onlyCurrent) {
-        int depth = onlyCurrent ? currentDepth : failureDepth;
-        String[] frames = this.frames.clone(); // avoid _most_ race conditions (for UncaughtExceptionHandler)
-        
-        for (int i = 0; i < depth; i++) {
-            if (i == MAX_REPORTED_FRAMES - MAX_REPORTED_FRAMES_TAIL) {
-                stream.println("...truncated...");
-                i = Math.max(i + 1, depth - MAX_REPORTED_FRAMES_TAIL);
+        printStackTrace(new OutputStreamWriter(stream), onlyCurrent);
+    }
+
+    private void printStackTrace(Writer writer, boolean onlyCurrent) {
+        try {
+            int depth = onlyCurrent ? currentDepth : failureDepth;
+            String[] frames = this.frames.clone(); // avoid _most_ race conditions (for UncaughtExceptionHandler)
+            
+            for (int i = 0; i < depth; i++) {
+                if (i == MAX_REPORTED_FRAMES - MAX_REPORTED_FRAMES_TAIL) {
+                    writer.write("...truncated..." + "\n");
+                    i = Math.max(i + 1, depth - MAX_REPORTED_FRAMES_TAIL);
+                }
+                writer.write("\t" + frames[i] + "\n");
             }
-            stream.println("\t" + frames[i]);
+        } catch (IOException e) {
+            // Swallow it like we're PrintStream
         }
     }
 }

@@ -7,12 +7,15 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import static org.spoofax.interpreter.core.Tools.*;
+import static org.spoofax.interpreter.core.Tools.isTermString;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -39,48 +42,53 @@ public class SSL_copy extends AbstractPrimitive {
         if (isSameFile(tvars, agent))
             return true;
         
-        InputStream fis = null;
-        OutputStream fos = null;
+        InputStream in = null;
+        OutputStream out = null;
         
         boolean closeIn = true;
         boolean closeOut = true;
 
         try {
             if (Tools.isTermString(tvars[0])) {
-                fis = agent.openInputStream(Tools.javaString(tvars[0]));
+                in = agent.openInputStream(Tools.javaString(tvars[0]));
             } else if (Tools.isTermAppl(tvars[0]) && Tools.hasConstructor((IStrategoAppl) tvars[0], "stdin")) {
-                fis = agent.getInputStream(IOAgent.CONST_STDIN);
+                in = agent.getInputStream(IOAgent.CONST_STDIN);
                 closeIn = false;
             } else {
                 return false;
             }
             
             if (Tools.isTermString(tvars[1])) {
-                fos =  agent.openFileOutputStream(Tools.javaString(tvars[1]));
+                out = agent.openFileOutputStream(Tools.javaString(tvars[1]));
             } else if (Tools.isTermAppl(tvars[1]) && Tools.hasConstructor((IStrategoAppl) tvars[1], "stdout")) {
-                fos =  agent.getOutputStream(IOAgent.CONST_STDOUT);
+                out = agent.getOutputStream(IOAgent.CONST_STDOUT);
                 closeOut = false;
             } else if (Tools.isTermAppl(tvars[1]) && Tools.hasConstructor((IStrategoAppl) tvars[1], "stderr")) {
-                fos =  agent.getOutputStream(IOAgent.CONST_STDERR);
+                out = agent.getOutputStream(IOAgent.CONST_STDERR);
                 closeOut = false;
             } else {
                 return false;
             }
+            
+            if (in instanceof FileInputStream && out instanceof FileOutputStream) {
+                FileChannel inChannel = ((FileInputStream) in).getChannel();
+                inChannel.transferTo(0, inChannel.size(), ((FileOutputStream) out).getChannel());
+            } else {
+                // TODO: Optimize - use the fancy new Java API for copying files
+                byte[] bs = new byte[1024];
+                int read;
+            
+                read = in.read(bs, 0, 1024);
+                while(read != -1) {
+                    out.write(bs,0, read);
+                    read = in.read(bs, 0, 1024);
+                }
     
-            // TODO: Optimize - use the fancy new Java API for copying files
-            byte[] bs = new byte[1024];
-            int read;
-        
-            read = fis.read(bs, 0, 1024);
-            while(read != -1) {
-                fos.write(bs,0, read);
-                read = fis.read(bs, 0, 1024);
+                if (closeOut) out.close();
+                if (closeIn) in.close();
             }
-
-            if (closeOut) fos.close();
-            if (closeIn) fis.close();
         } catch (IOException e) {
-            agent.getOutputStream(IOAgent.CONST_STDERR).println("SSL_copy: Could not copy file (" + e.getMessage() + "-" + "attempted to copy to " + tvars[1]);
+            agent.printError("SSL_copy: Could not copy file (" + e.getMessage() + "-" + "attempted to copy to " + tvars[1]);
             return false;
         }
         

@@ -45,7 +45,7 @@ public class Some extends Strategy {
         }
     }
 
-    private IConstruct eval(final IContext env, final int n, final boolean hadsome, final IStrategoTerm[] list) throws InterpreterException
+    IConstruct eval(final IContext env, final int n, final boolean hadsome, final IStrategoTerm[] list) throws InterpreterException
     {
     	final IStrategoTerm old = env.current();
     	if (n >= old.getSubtermCount()) {

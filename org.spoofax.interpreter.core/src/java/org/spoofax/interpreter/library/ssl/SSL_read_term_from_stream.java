@@ -14,7 +14,6 @@ import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
-import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -31,6 +30,7 @@ public class SSL_read_term_from_stream extends AbstractPrimitive {
         if(!Tools.isTermInt(tvars[0]))
             return false;
         
+        // TODO: optimize - use memory-mapped I/O for reading terms?
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         InputStream is = or.getIOAgent().getInputStream(Tools.asJavaInt(tvars[0]));
         if(is == null)
@@ -39,7 +39,7 @@ public class SSL_read_term_from_stream extends AbstractPrimitive {
         try {
             env.setCurrent(env.getFactory().parseFromStream(is));
         } catch(IOException e) {
-            or.getIOAgent().getOutputStream(IOAgent.CONST_STDERR).println("SSL_read_term_from_stream: " + e.getMessage());
+            or.getIOAgent().printError("SSL_read_term_from_stream: " + e.getMessage());
             return false;
         }
         return true;
