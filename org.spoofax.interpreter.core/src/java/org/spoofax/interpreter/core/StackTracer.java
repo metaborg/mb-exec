@@ -154,6 +154,7 @@ public class StackTracer {
                 }
                 writer.write("\t" + frames[i] + "\n");
             }
+            writer.flush();
         } catch (IOException e) {
             // Swallow it like we're PrintStream
         }
