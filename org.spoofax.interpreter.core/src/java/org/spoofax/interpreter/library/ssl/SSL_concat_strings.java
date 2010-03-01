@@ -12,6 +12,7 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_concat_strings extends AbstractPrimitive {
@@ -25,15 +26,22 @@ public class SSL_concat_strings extends AbstractPrimitive {
         
         if(!Tools.isTermList(targs[0]))
             return false;
-        IStrategoTerm[] kids = targs[0].getAllSubterms();
+        String result = call((IStrategoList) targs[0]);
+        if (result == null)
+            return false;
+        env.setCurrent(env.getFactory().makeString(result));
+        return true;
+    }
+
+    public static String call(IStrategoList list) {
+        IStrategoTerm[] kids = list.getAllSubterms();
         
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < kids.length; i++) {
             if(!Tools.isTermString(kids[i]))
-                return false;
+                return null;
             sb.append(Tools.asJavaString(kids[i]));
         }
-        env.setCurrent(env.getFactory().makeString(sb.toString()));
-        return true;
+        return sb.toString();
     }
 }
