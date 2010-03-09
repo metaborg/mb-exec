@@ -136,7 +136,9 @@ public class IOAgent {
             if (file.writer == null) {
                 assert file.outputStream == null;
                 try {
-                    file.file.setLength(0); // Clear written-to file contents
+                    // Clear written-to file contents
+                    if (file.file.length() != 0)
+                        file.file.setLength(0);
                 } catch (IOException e) {
                     // Be forgiving: if this results in an exception, so will writing to it
                 }

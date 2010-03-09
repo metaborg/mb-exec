@@ -13,6 +13,7 @@ import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
@@ -28,7 +29,7 @@ public class SSL_explode_string extends AbstractPrimitive {
         if (!Tools.isTermString(t))
             return false;
         
-        String s = Tools.javaString(t);
+        String s = ((IStrategoString) t).stringValue();
         
         ITermFactory factory = env.getFactory();
         IStrategoList result = factory.makeList();
