@@ -138,6 +138,11 @@ public class VarScope {
         DebugUtil.debug(s);
     }
     
+    public void clear() {
+        vars.clear();
+        svars.clear();
+    }
+    
     public List<BindingInfo> saveUnboundVars() {
         return saveUnboundVars(new ArrayList<BindingInfo>());
     }
