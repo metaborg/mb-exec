@@ -49,6 +49,7 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoTerm parseFromStream(InputStream inputStream) throws IOException {
+        /*
         PushbackInputStream pushbackStream;
         
         if (inputStream instanceof FileInputStream) {
@@ -61,6 +62,12 @@ public class BasicTermFactory implements ITermFactory {
         }
         
         return parseFromStream(pushbackStream);
+        */
+        if (!(inputStream instanceof BufferedInputStream))
+            inputStream = new BufferedInputStream(inputStream);
+        PushbackInputStream bis = new PushbackInputStream(inputStream);
+        
+        return parseFromStream(bis);
     }
 
     protected IStrategoTerm parseFromStream(PushbackInputStream bis) throws IOException {
