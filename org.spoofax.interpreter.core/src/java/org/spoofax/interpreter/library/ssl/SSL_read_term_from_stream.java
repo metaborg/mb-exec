@@ -31,6 +31,13 @@ public class SSL_read_term_from_stream extends AbstractPrimitive {
             return false;
         
         // TODO: optimize - use memory-mapped I/O for reading terms?
+        //       PushBackInputStream.read() is very inefficient;
+        //       why not create our own implementation based on memory-mapped I/O?
+        //
+        // UNDONE: tricky: detecting if it's a BAF term in TermFactory...
+        //
+        // FileChannel channel = or.getIOAgent().getInputChannel(Tools.asJavaInt(tvars[0]));
+        // ChannelPushbackInputStream reader = new ChannelPushbackInputStream(channel);
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         InputStream is = or.getIOAgent().getInputStream(Tools.asJavaInt(tvars[0]));
         if(is == null)

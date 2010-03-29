@@ -220,6 +220,19 @@ public class IOAgent {
             return file.inputStream;
         }
     }
+
+    /**
+     * Gets the file channel for a file descriptor.
+     * Should only be used for reading data
+     * (since inheritor classes may depend on logging writes).
+     */
+    public FileChannel getInputChannel(int fd) {
+        if (fd == CONST_STDIN || fd == CONST_STDOUT || fd == CONST_STDERR) {
+            throw new UnsupportedOperationException();
+        } else {
+            return openFiles.get(fd).file.getChannel();
+        }
+    }
     
     public Reader getReader(int fd) {
         if (fd == CONST_STDIN)
