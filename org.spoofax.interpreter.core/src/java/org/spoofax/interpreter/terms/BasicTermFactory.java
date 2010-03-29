@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
 import java.io.Writer;
-import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -26,7 +25,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.spoofax.NotImplementedException;
-import org.spoofax.interpreter.library.ssl.ChannelPushbackInputStream;
 
 public class BasicTermFactory implements ITermFactory {
 
