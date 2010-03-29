@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
 import java.io.Writer;
+import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -25,6 +26,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.spoofax.NotImplementedException;
+import org.spoofax.interpreter.library.ssl.ChannelPushbackInputStream;
 
 public class BasicTermFactory implements ITermFactory {
 
@@ -47,11 +49,18 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoTerm parseFromStream(InputStream inputStream) throws IOException {
-        if (!(inputStream instanceof BufferedInputStream))
-            inputStream = new BufferedInputStream(inputStream);
-        PushbackInputStream bis = new PushbackInputStream(inputStream);
+        PushbackInputStream pushbackStream;
         
-        return parseFromStream(bis);
+        if (inputStream instanceof FileInputStream) {
+            FileChannel channel = ((FileInputStream)inputStream).getChannel();
+            pushbackStream = new ChannelPushbackInputStream(channel);
+        } else {
+            if (!(inputStream instanceof BufferedInputStream) && !(inputStream instanceof ChannelPushbackInputStream))
+                inputStream = new BufferedInputStream(inputStream);
+            pushbackStream = new PushbackInputStream(inputStream);
+        }
+        
+        return parseFromStream(pushbackStream);
     }
 
     protected IStrategoTerm parseFromStream(PushbackInputStream bis) throws IOException {
@@ -150,6 +159,7 @@ public class BasicTermFactory implements ITermFactory {
 
     private IStrategoTerm parseAppl(PushbackInputStream bis) throws IOException {
         //System.err.println("appl");
+        // TODO: share stringbuilder instances?
         StringBuilder sb = new StringBuilder();
         int ch;
         
@@ -157,7 +167,8 @@ public class BasicTermFactory implements ITermFactory {
         do {
             sb.append((char)ch);
             ch = bis.read();
-        } while(Character.isLetterOrDigit(ch) || ch == '_' || ch == '-'
+        } // TODO: use a switch for this
+          while(Character.isLetterOrDigit(ch) || ch == '_' || ch == '-'
             || ch == '+' || ch == '*' || ch == '$');
         
         //System.err.println(" - " + sb.toString());
@@ -278,19 +289,11 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public IStrategoTuple replaceTuple(IStrategoTerm[] kids, IStrategoTuple old) {
-        IStrategoTuple result = makeTuple(kids);
-        IStrategoList annos = old.getAnnotations();
-        return annos.isEmpty()
-            ? result
-            : (IStrategoTuple) annotateTerm(result, annos);
+        return makeTuple(kids, old.getAnnotations());
     }
     
     public IStrategoList replaceList(IStrategoTerm[] kids, IStrategoList old) {
-        IStrategoList result = makeList(kids);
-        IStrategoList annos = old.getAnnotations();
-        return annos.isEmpty()
-            ? result
-            : (IStrategoList) annotateTerm(result, annos);
+        return makeList(kids, old.getAnnotations());
     }
 
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException {
@@ -353,10 +356,20 @@ public class BasicTermFactory implements ITermFactory {
         return new BasicStrategoInt(i, null);
     }
 
-    public IStrategoList makeList(IStrategoTerm... terms) {
+    public final IStrategoList makeList(IStrategoTerm... terms) {
+        return makeList(terms, null);
+    }
+
+    public IStrategoList makeList(IStrategoTerm[] terms, IStrategoList outerAnnos) {
         BasicStrategoList result = EMPTY_LIST;
-        for (int i = terms.length - 1; i >= 0; i--) {
-            result = new BasicStrategoList(terms[i], result, null);
+        int i = terms.length - 1;
+        while (i > 0) {
+            result = new BasicStrategoList(terms[i--], result, null);
+        }
+        if (i == 0) {
+            result = new BasicStrategoList(terms[0], result, outerAnnos);
+        } else {
+            return new BasicStrategoList(null, null, outerAnnos);
         }
         return result;
     }
@@ -369,9 +382,13 @@ public class BasicTermFactory implements ITermFactory {
     public final IStrategoList makeList(IStrategoTerm head, IStrategoList tail) {
         return makeListCons(head, tail);
     }
+
+    public final IStrategoList makeListCons(IStrategoTerm head, IStrategoList tail) {
+        return makeListCons(head, tail, null);
+    }
     
-    public IStrategoList makeListCons(IStrategoTerm head, IStrategoList tail) {
-        return new BasicStrategoList(head, tail, null);
+    public IStrategoList makeListCons(IStrategoTerm head, IStrategoList tail, IStrategoList annotations) {
+        return new BasicStrategoList(head, tail, annotations);
     }
 
     public IStrategoReal makeReal(double d) {
@@ -384,8 +401,12 @@ public class BasicTermFactory implements ITermFactory {
         return new BasicStrategoString(s, null);
     }
 
-    public IStrategoTuple makeTuple(IStrategoTerm... terms) {
-        return new BasicStrategoTuple(terms, null);
+    public final IStrategoTuple makeTuple(IStrategoTerm... terms) {
+        return makeTuple(terms, null);
+    }
+
+    public IStrategoTuple makeTuple(IStrategoTerm[] terms, IStrategoList annotations) {
+        return new BasicStrategoTuple(terms, annotations);
     }
     
     public IStrategoTerm annotateTerm(IStrategoTerm term, IStrategoList annotations) {
