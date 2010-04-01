@@ -37,8 +37,8 @@ public class SSL_modification_time extends AbstractPrimitive {
         if(f == null)
             return false;
         
-        // FIXME not good
-        env.setCurrent(env.getFactory().makeInt((int)f.lastModified()));
+        long result = f.lastModified() / 1000;
+        env.setCurrent(env.getFactory().makeInt((int) result));
         return true;
     }
 

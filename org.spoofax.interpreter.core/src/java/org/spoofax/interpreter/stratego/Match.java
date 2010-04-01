@@ -656,7 +656,7 @@ public class Match extends Strategy {
             DebugUtil.debug("  pattern is Str");
         }
         IStrategoString s = Tools.stringAt(p, 0);
-        if(s.match(t)) {
+        if(s.stringValue().equals(t.stringValue())) {
             return emptyList();
         }
         return null;
