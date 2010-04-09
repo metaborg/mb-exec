@@ -37,15 +37,28 @@ public class All extends Strategy {
             case IStrategoTerm.STRING:
                 return getHook().pop().onSuccess(env);
             case IStrategoTerm.APPL:
+                return evalAll(env, 0, t.getAllSubterms().clone());
             case IStrategoTerm.LIST:
             case IStrategoTerm.TUPLE:
                 // TODO: Optimize - treat IStrategoList as linked list or use iterator?
                 //       (same for some, all)
-                return evalAll(env, 0, t.getAllSubterms());
+                IStrategoTerm[] subterms = t.getAllSubterms();
+                assert isCopy(t, subterms);
+                return evalAll(env, 0, subterms);
             default:
                 throw new InterpreterException("Unknown ATerm type " + t.getTermType());
         }
 
+    }
+    
+    private static boolean isCopy(IStrategoTerm parent, IStrategoTerm[] kids) {
+        if (kids.length > 0) {
+            kids[0] = null;
+            IStrategoTerm subterm = parent.getSubterm(0);
+            if (subterm == null) return false;
+            kids[0] = subterm;
+        }
+        return true;
     }
     
     protected IConstruct evalAll(IContext env, final int i, final IStrategoTerm[] list) throws InterpreterException
