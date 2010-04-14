@@ -24,7 +24,7 @@ public class All extends Strategy {
         this.body = body;
     }
     
-    // TODO: Optimize 'all', based on SRTS_all.java, which doesn't do all the copying
+    // TODO: Optimize 'all', based on SRTS_all.java, which doesn't do all the copying and recursion
 
     public IConstruct eval(IContext env) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
