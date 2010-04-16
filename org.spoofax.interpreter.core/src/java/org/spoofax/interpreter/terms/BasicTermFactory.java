@@ -15,10 +15,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -208,11 +208,12 @@ public class BasicTermFactory implements ITermFactory {
 
     private List<IStrategoTerm> parseTermSequence(PushbackInputStream bis, char endChar) throws IOException {
         //System.err.println("sequence");
-        List<IStrategoTerm> els = new LinkedList<IStrategoTerm>();
+        List<IStrategoTerm> els = Collections.emptyList();
         parseSkip(bis);
         int ch = bis.read();
         if(ch == endChar)
             return els;
+        els = new ArrayList<IStrategoTerm>();
         bis.unread(ch);
         do {
             els.add(parseFromStream(bis));
@@ -227,7 +228,7 @@ public class BasicTermFactory implements ITermFactory {
         }
 
         if(ch != endChar)
-            throw new ParseError("Sequence must end with '" + endChar + "',saw '" + (char)ch + "'");
+            throw new ParseError("Sequence must end with '" + endChar + "', saw '" + (char)ch + "'");
         
         return els;
     }
@@ -278,13 +279,15 @@ public class BasicTermFactory implements ITermFactory {
     }
     
     private void parseSkip(PushbackInputStream input) throws IOException {
-        int b = input.read();
-        switch (b) {
-            case ' ': case '\t': case '\n':
-                parseSkip(input);
-                return;
-            default:
-                input.unread(b);
+        for (;;) {
+            int b = input.read();
+            switch (b) {
+                case ' ': case '\t': case '\n':
+                    continue;
+                default:
+                    input.unread(b);
+                    return;
+            }
         }
     }
 

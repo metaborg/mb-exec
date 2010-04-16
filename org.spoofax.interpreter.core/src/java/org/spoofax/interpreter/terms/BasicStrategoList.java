@@ -99,12 +99,19 @@ public class BasicStrategoList extends BasicStrategoTerm implements IStrategoLis
         if (!getAnnotations().match(second.getAnnotations()))
             return false;
         
-        
+        // TODO: test equality of annos on cons nodes (see StrategoList)
         for (IStrategoList cur = this; !cur.isEmpty(); cur = cur.tail(), snd = snd.tail()) {
             if(!cur.head().match(snd.head()))
                 return false;
         }
-        return true;
+        
+        IStrategoList annotations = getAnnotations();
+        IStrategoList secondAnnotations = second.getAnnotations();
+        if (annotations == secondAnnotations) {
+            return true;
+        } else {
+            return annotations.match(secondAnnotations);
+        }
     }
 
     public void prettyPrint(ITermPrinter pp) {
