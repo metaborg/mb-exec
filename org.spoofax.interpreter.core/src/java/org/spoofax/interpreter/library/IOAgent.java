@@ -254,8 +254,13 @@ public class IOAgent {
         } else {
             FileHandle file = openFiles.get(fd);
             FileChannel channel = file.file.getChannel();
-            MappedByteBuffer buffer = channel.map(MapMode.READ_ONLY, 0, channel.size());
-            return FILE_CHARSET.decode(buffer).toString();
+            try {
+                MappedByteBuffer buffer = channel.map(MapMode.READ_ONLY, 0, channel.size());
+                return FILE_CHARSET.decode(buffer).toString();
+            } finally {
+                channel.close();
+                file.file.close();
+            }
         }
     }
     
