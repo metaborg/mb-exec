@@ -52,7 +52,7 @@ public class SSL_copy extends AbstractPrimitive {
             if (Tools.isTermString(tvars[0])) {
                 in = agent.openInputStream(Tools.javaString(tvars[0]));
             } else if (Tools.isTermAppl(tvars[0]) && Tools.hasConstructor((IStrategoAppl) tvars[0], "stdin")) {
-                in = agent.getInputStream(IOAgent.CONST_STDIN);
+                in = agent.internalGetInputStream(IOAgent.CONST_STDIN);
                 closeIn = false;
             } else {
                 return false;
@@ -61,10 +61,10 @@ public class SSL_copy extends AbstractPrimitive {
             if (Tools.isTermString(tvars[1])) {
                 out = agent.openFileOutputStream(Tools.javaString(tvars[1]));
             } else if (Tools.isTermAppl(tvars[1]) && Tools.hasConstructor((IStrategoAppl) tvars[1], "stdout")) {
-                out = agent.getOutputStream(IOAgent.CONST_STDOUT);
+                out = agent.internalGetOutputStream(IOAgent.CONST_STDOUT);
                 closeOut = false;
             } else if (Tools.isTermAppl(tvars[1]) && Tools.hasConstructor((IStrategoAppl) tvars[1], "stderr")) {
-                out = agent.getOutputStream(IOAgent.CONST_STDERR);
+                out = agent.internalGetOutputStream(IOAgent.CONST_STDERR);
                 closeOut = false;
             } else {
                 return false;

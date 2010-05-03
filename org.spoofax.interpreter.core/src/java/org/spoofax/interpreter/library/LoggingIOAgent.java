@@ -3,8 +3,7 @@ package org.spoofax.interpreter.library;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.PrintStream;
 
 /**
  * An IO Agent class that logs all console output.
@@ -13,9 +12,13 @@ import java.io.Writer;
  */
 public class LoggingIOAgent extends IOAgent {
     
-    private final Writer stdout = new OutputStreamWriter(new LoggingOutputStream(System.out));
+    private final LoggingOutputStream stdoutLog = new LoggingOutputStream(System.out);
     
-    private final Writer stderr = new OutputStreamWriter(new LoggingOutputStream(System.err));
+    private final LoggingOutputStream stderrLog = new LoggingOutputStream(System.err);
+    
+    private final PrintStream stdout = new PrintStream(stdoutLog, true);
+    
+    private final PrintStream stderr = new PrintStream(stderrLog, true);
     
     final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     
@@ -28,19 +31,21 @@ public class LoggingIOAgent extends IOAgent {
     }
     
     @Override
-    public Writer getWriter(int fd) {
+    public OutputStream internalGetOutputStream(int fd) {
         switch (fd) {
             case CONST_STDOUT:
+                stderrLog.stream = System.out; // might have changed
                 return stdout;
             case CONST_STDERR:
+                stderrLog.stream = System.err; // might have changed
                 return stderr;
             default:
-                return super.getWriter(fd);
+                return super.internalGetOutputStream(fd);
         }
     }
     
     private class LoggingOutputStream extends OutputStream {
-        private final OutputStream stream;
+        OutputStream stream;
         
         public LoggingOutputStream(OutputStream stream) {
             this.stream = stream;

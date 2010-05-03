@@ -43,7 +43,12 @@ public class BasicTermFactory implements ITermFactory {
     private IStrategoConstructor placeholderConstructor;
     
     public IStrategoTerm parseFromFile(String path) throws IOException {
-        return parseFromStream(new FileInputStream(path));
+        InputStream stream = new FileInputStream(path);
+        try {
+            return parseFromStream(stream);
+        } finally {
+            stream.close();
+        }
     }
 
     public IStrategoTerm parseFromStream(InputStream inputStream) throws IOException {
@@ -310,6 +315,7 @@ public class BasicTermFactory implements ITermFactory {
         ous.write(tp.getString().getBytes());
     }
 
+    @Deprecated
     public void unparseToFile(IStrategoTerm t, Writer out) throws IOException {
         ITermPrinter tp = new InlinePrinter();
         t.prettyPrint(tp);

@@ -10,15 +10,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.CharBuffer;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileChannel.MapMode;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -126,6 +124,10 @@ public class IOAgent {
     
     // OPENING, MANIPULATING FILES
     
+    /**
+     * Gets the writer for a file.
+     * Should not be used together with getReader() for the same file.
+     */
     public Writer getWriter(int fd) {
         if (fd == CONST_STDOUT) {
             return stdoutWriter;
@@ -136,19 +138,20 @@ public class IOAgent {
             if (file.writer == null) {
                 assert file.outputStream == null;
                 try {
-                    // Clear written-to file contents
-                    if (file.file.length() != 0)
-                        file.file.setLength(0);
-                } catch (IOException e) {
-                    // Be forgiving: if this results in an exception, so will writing to it
+                    file.writer = new BufferedWriter(new OutputStreamWriter(internalGetOutputStream(fd), FILE_ENCODING));
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
                 }
-                file.writer = new BufferedWriter(Channels.newWriter(file.file.getChannel(), FILE_ENCODING));
             }
             return file.writer;
         }
     }
     
-    public OutputStream getOutputStream(int fd) {
+    /**
+     * Gets the output stream for a file.
+     * Should not be used together with getWriter() for the same file.
+     */
+    public OutputStream internalGetOutputStream(int fd) {
         if (fd == CONST_STDOUT) {
             return stdout;
         } else if (fd == CONST_STDERR) {
@@ -167,6 +170,24 @@ public class IOAgent {
             return file.outputStream;
         }
     }
+    
+    /**
+     * Write a single byte character to a file,
+     * trying not to allocate a new Writer object.
+     */
+    public void writeChar(int fd, int c) throws IOException {
+        if (fd == CONST_STDOUT || fd == CONST_STDERR) {
+            getWriter(fd).append((char) c);
+        } else {
+            FileHandle file = openFiles.get(fd);
+            if (file.writer == null) {
+                if (file.outputStream == null) internalGetOutputStream(fd);
+                file.outputStream.write(c);
+            } else {
+                file.writer.append((char) c);
+            }
+        }
+    }
 
     public boolean closeRandomAccessFile(int fd) throws InterpreterException {
         if (fd == CONST_STDOUT || fd == CONST_STDERR || fd == CONST_STDIN)
@@ -180,7 +201,7 @@ public class IOAgent {
             if (file.outputStream != null) file.outputStream.close();
             file.file.close();
         } catch (IOException e) {
-            // Ignored
+            e.printStackTrace();
         }
         return true;
     }
@@ -189,9 +210,10 @@ public class IOAgent {
         for (FileHandle file : openFiles.values()) {
             try {
                 if (file.writer != null) file.writer.close();
+                if (file.outputStream != null) file.outputStream.close();
                 file.file.close();
             } catch (IOException e) {
-                // Ignored
+                e.printStackTrace();
             }
         }
         openFiles.clear();
@@ -210,7 +232,11 @@ public class IOAgent {
         return fileCounter++;
     }
 
-    public InputStream getInputStream(int fd) {
+    /**
+     * Gets the input stream for a file.
+     * Should not be used together with getReader() for the same file.
+     */
+    public InputStream internalGetInputStream(int fd) {
         if (fd == CONST_STDIN) {
             return stdin;
         } else {
@@ -221,11 +247,11 @@ public class IOAgent {
         }
     }
 
-    /**
+    /* UNDONE: memory-mapped IO considered harmful (Spoofax/106)
      * Gets the file channel for a file descriptor.
      * Should only be used for reading data
      * (since inheritor classes may depend on logging writes).
-     */
+     *
     public FileChannel getInputChannel(int fd) {
         if (fd == CONST_STDIN || fd == CONST_STDOUT || fd == CONST_STDERR) {
             throw new UnsupportedOperationException();
@@ -233,35 +259,32 @@ public class IOAgent {
             return openFiles.get(fd).file.getChannel();
         }
     }
+    */
     
+    /**
+     * Gets the reader for a file.
+     * Should not be used together with getInputStream() for the same file.
+     */
     public Reader getReader(int fd) {
         if (fd == CONST_STDIN)
             return stdinReader;
         FileHandle file = openFiles.get(fd);
-        if (file.reader == null)
-            file.reader = new BufferedReader(Channels.newReader(file.file.getChannel(), FILE_ENCODING));
+        try {
+            if (file.reader == null)
+                file.reader = new BufferedReader(new InputStreamReader(internalGetInputStream(fd), FILE_ENCODING));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         return file.reader;
     }
     
     public String readString(int fd) throws IOException {
-        if (fd == CONST_STDIN) {
-            char[] buffer = new char[2048];
-            StringBuilder result = new StringBuilder();
-            Reader reader = getReader(fd);
-            for (int read = 0; read != -1; read = reader.read(buffer))
-                result.append(buffer, 0, read);
-            return result.toString();
-        } else {
-            FileHandle file = openFiles.get(fd);
-            FileChannel channel = file.file.getChannel();
-            try {
-                MappedByteBuffer buffer = channel.map(MapMode.READ_ONLY, 0, channel.size());
-                return FILE_CHARSET.decode(buffer).toString();
-            } finally {
-                channel.close();
-                file.file.close();
-            }
-        }
+        char[] buffer = new char[2048];
+        StringBuilder result = new StringBuilder();
+        Reader reader = getReader(fd);
+        for (int read = 0; read != -1; read = reader.read(buffer))
+            result.append(buffer, 0, read);
+        return result.toString();
     }
     
     /**

@@ -33,7 +33,7 @@ public class GuardedLChoice extends Strategy {
         return eval(env, 0);
     }
 
-    IConstruct eval(IContext env, final int n) throws InterpreterException {
+    private IConstruct eval(IContext env, final int n) throws InterpreterException {
     	if (n == (children.length - 1)) {
     		Strategy s = children[n].first;
     		s.getHook().push(getHook().pop());
