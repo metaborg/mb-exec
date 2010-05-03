@@ -38,9 +38,9 @@ public class ImportTerm extends Strategy {
                 input = io.openInputStream(path, true);
                 result = env.getFactory().parseFromStream(input);
             } catch (IOException e) {
-                throw new InterpreterException("import-term failed", e);
+                throw new InterpreterException("import-term failed for " + path, e);
             } catch (RuntimeException e) {
-                throw new InterpreterException("import-term failed", e);
+                throw new InterpreterException("import-term failed for " + path, e);
             } finally {
                 try {
                     if (input != null) input.close();
