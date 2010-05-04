@@ -38,6 +38,7 @@ public class SSL_read_term_from_stream extends AbstractPrimitive {
         //
         // FileChannel channel = or.getIOAgent().getInputChannel(Tools.asJavaInt(tvars[0]));
         // ChannelPushbackInputStream reader = new ChannelPushbackInputStream(channel);
+        // TODO: in other places we're using getReader(); seems risky to use internalGetInputStream() here
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         InputStream is = or.getIOAgent().internalGetInputStream(Tools.asJavaInt(tvars[0]));
         if(is == null)
