@@ -315,7 +315,6 @@ public class BasicTermFactory implements ITermFactory {
         ous.write(tp.getString().getBytes());
     }
 
-    @Deprecated
     public void unparseToFile(IStrategoTerm t, Writer out) throws IOException {
         ITermPrinter tp = new InlinePrinter();
         t.prettyPrint(tp);

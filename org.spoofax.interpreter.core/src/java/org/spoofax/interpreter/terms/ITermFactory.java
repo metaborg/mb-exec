@@ -24,7 +24,6 @@ public interface ITermFactory extends IStrategoTermBuilder {
     
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException;
     
-    @Deprecated
     public void unparseToFile(IStrategoTerm t, Writer out) throws IOException;
 
     public IStrategoAppl replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids, IStrategoAppl old);

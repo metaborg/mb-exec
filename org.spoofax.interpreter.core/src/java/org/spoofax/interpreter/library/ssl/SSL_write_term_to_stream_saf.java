@@ -8,7 +8,7 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.Writer;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -24,27 +24,27 @@ public class SSL_write_term_to_stream_saf extends AbstractPrimitive {
         
     }
     @Override
-    public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
+    public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] targs)
             throws InterpreterException {
         
         // FIXME SAF? Now it's just text
         
-        if(!Tools.isTermInt(tvars[0]))
+        if(!Tools.isTermInt(targs[0]))
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        OutputStream out = or.getIOAgent().internalGetOutputStream(Tools.asJavaInt(tvars[0]));
+        Writer out = or.getIOAgent().getWriter(Tools.asJavaInt(targs[0]));
         if(out == null)
             return false;
         
         try {
-            env.getFactory().unparseToFile(tvars[1], out);
+            env.getFactory().unparseToFile(targs[1], out);
             out.flush();
         } catch(IOException e) {
             throw new InterpreterException(e);
         }
         
-        env.setCurrent(tvars[0]);
+        env.setCurrent(targs[0]);
         return true;
     }
 
