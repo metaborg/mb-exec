@@ -244,10 +244,13 @@ public class Build extends Strategy {
         
         if(Tools.isVar(t, env)) {
             IStrategoTerm r = buildVar(env, t);
-            if(r.getTermType() == IStrategoTerm.LIST) {
+            if (r == null) return null;
+            if (r.getTermType() == IStrategoTerm.LIST) {
                 return (IStrategoList) r;
+            } else {
+                System.err.println("Warning: trying to build list with illegal tail: " + t.toString());
+                return null;
             }
-            throw new InterpreterException("List tail must always be a list -- got " + r);
         }
         
         throw new InterpreterException("List tail must always be a list!");
