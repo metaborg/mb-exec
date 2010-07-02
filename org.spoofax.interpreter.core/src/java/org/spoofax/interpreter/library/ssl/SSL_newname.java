@@ -2,7 +2,7 @@ package org.spoofax.interpreter.library.ssl;
 
 import static org.spoofax.interpreter.core.Tools.isTermAppl;
 
-import java.util.HashMap;
+import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.spoofax.interpreter.core.IContext;
@@ -17,8 +17,8 @@ import org.spoofax.interpreter.terms.ITermFactory;
 public class SSL_newname extends AbstractPrimitive {
 	
     // static, like TermFactory.asyncStringPool
-    private static HashMap<String, AtomicInteger> asyncCounters =
-        new HashMap<String, AtomicInteger>();
+    private static WeakHashMap<String, AtomicInteger> asyncCounters =
+        new WeakHashMap<String, AtomicInteger>();
 	
 	SSL_newname () {
 		super("SSL_newname", 0, 1);
@@ -54,12 +54,23 @@ public class SSL_newname extends AbstractPrimitive {
 	    
         String result;
         do {
-        	result = prefix + counter.getAndIncrement();
+            int counterValue = getNextValue(counter);
+        	result = prefix + counterValue;
         } while (factory.hasConstructor(result, 0));
 
         env.setCurrent(factory.makeString(result));
         
 		return true;
 	}
+
+    private int getNextValue(AtomicInteger counter) {
+        int result;
+        for (;;) {
+            result = counter.getAndIncrement();
+            if (result > 0) break;
+            else counter.compareAndSet(result, 0);
+        }
+        return result;
+    }
 
 }
