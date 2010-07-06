@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.CancellationException;
 
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -19,10 +20,10 @@ import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.library.java.JFFLibrary;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
-import org.spoofax.interpreter.stratego.OpDecl;
-import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.Match.Binding;
 import org.spoofax.interpreter.stratego.Match.Results;
+import org.spoofax.interpreter.stratego.OpDecl;
+import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
@@ -46,6 +47,8 @@ public class Context implements IContext {
     private IStrategoTerm current;
 
     private VarScope varScope;
+
+    private transient volatile boolean asyncCancelled;
 
     public Context(ITermFactory factory, ITermFactory programFactory) {
         this(factory, programFactory, false);
@@ -107,6 +110,7 @@ public class Context implements IContext {
     }
 
     public ITermFactory getFactory() {
+        if (asyncCancelled) cancel();
         return factory;
     }
 
@@ -173,6 +177,7 @@ public class Context implements IContext {
     }
 
     public AbstractPrimitive lookupOperator(String name) {        
+        if (asyncCancelled) cancel();
         for(IOperatorRegistry or : operatorRegistries.values()) {
             AbstractPrimitive t = or.get(name);
             if(t != null)
@@ -199,5 +204,19 @@ public class Context implements IContext {
         for(SDefT s : v.getStrategyDefinitions())
             r.add(s.getName());
         return r;
+    }
+
+    public void asyncCancel() {
+        asyncCancelled = true;
+    }
+
+    public void asyncCancelReset() {
+        asyncCancelled = false;
+    }
+
+    private void cancel() {
+        asyncCancelled = false;
+        getIOAgent().closeAllFiles();
+        throw new CancellationException("Stratego interpreter cancelled");
     }
 }
