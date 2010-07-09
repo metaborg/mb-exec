@@ -2,6 +2,7 @@ package org.spoofax.interpreter.library.ssl;
 
 import static org.spoofax.interpreter.core.Tools.isTermAppl;
 
+import java.util.HashSet;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,10 +17,15 @@ import org.spoofax.interpreter.terms.ITermFactory;
 
 public class SSL_newname extends AbstractPrimitive {
 	
-    // static, like TermFactory.asyncStringPool
-    private static WeakHashMap<String, AtomicInteger> asyncCounters =
+    // static weak set, like TermFactory.asyncStringPool
+    // weak to avoid accumulating entries with long-lived/interactive sessions
+    private static final WeakHashMap<String, AtomicInteger> asyncCounters =
         new WeakHashMap<String, AtomicInteger>();
 	
+    // non-static strong-reference set
+    // to keep counters alive as long as this Stratego instance exists
+    private final HashSet<String> asyncMyCounters = new HashSet<String>();
+    
 	SSL_newname () {
 		super("SSL_newname", 0, 1);
 	}
@@ -46,6 +52,7 @@ public class SSL_newname extends AbstractPrimitive {
 	    
 	    synchronized (asyncCounters) {
 	        counter = asyncCounters.get(prefix);
+	        asyncMyCounters.add(prefix);
 	        if (counter == null) {
 	            counter = new AtomicInteger();
 	            asyncCounters.put(prefix, counter);
@@ -54,8 +61,8 @@ public class SSL_newname extends AbstractPrimitive {
 	    
         String result;
         do {
-            int counterValue = getNextValue(counter);
-        	result = prefix + counterValue;
+            int counterValue = getNextValue(prefix, counter);
+            result = prefix + counterValue;
         } while (factory.hasConstructor(result, 0));
 
         env.setCurrent(factory.makeString(result));
@@ -63,12 +70,15 @@ public class SSL_newname extends AbstractPrimitive {
 		return true;
 	}
 
-    private int getNextValue(AtomicInteger counter) {
+    private int getNextValue(String prefix, AtomicInteger counter) {
         int result;
         for (;;) {
             result = counter.getAndIncrement();
-            if (result > 0) break;
-            else counter.compareAndSet(result, 0);
+            if (result >= 0) {
+                break;
+            } else if (counter.compareAndSet(result, 0)) {
+                return 0;
+            }
         }
         return result;
     }
