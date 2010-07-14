@@ -105,10 +105,10 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     private IStrategoTerm parseString(PushbackInputStream bis) throws IOException {
-        StringBuilder sb = new StringBuilder();
         int ch = bis.read();
         if(ch == '"')
             return makeString("");
+        StringBuilder sb = new StringBuilder();
         boolean escaped = false;
         do {
             escaped = false;

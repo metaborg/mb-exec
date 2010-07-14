@@ -160,11 +160,6 @@ public class IOAgent {
             FileHandle file = openFiles.get(fd);
             if (file.outputStream == null) {
                 assert file.writer == null;
-                try {
-                    file.file.setLength(0); // Clear written-to file contents
-                } catch (IOException e) {
-                    // Be forgiving: if this results in an exception, so will writing to it
-                }
                 file.outputStream = new RandomAccessOutputStream(file.file);
             }
             return file.outputStream;
@@ -220,13 +215,20 @@ public class IOAgent {
     }
 
     public int openRandomAccessFile(String fn, String mode) throws FileNotFoundException, IOException {
-        boolean writeMode = mode.indexOf('w') >= 0;
-        
+        boolean appendMode = mode.indexOf('a') >= 0;
+        boolean writeMode = appendMode || mode.indexOf('w') >= 0;
+        boolean clearFile = false;
+
         if (writeMode) {
             File file = new File(getAbsolutePath(getWorkingDir(), fn));
-            if (!file.exists()) file.createNewFile();
+            if (!file.exists()) {
+                file.createNewFile();
+            } else if (!appendMode) {
+                clearFile = true;
+            }
         }
         RandomAccessFile file = new RandomAccessFile(getAbsolutePath(getWorkingDir(), fn), writeMode ? "rw" : "r");
+        if (clearFile) file.setLength(0);
         openFiles.put(fileCounter, new FileHandle(file));
         
         return fileCounter++;

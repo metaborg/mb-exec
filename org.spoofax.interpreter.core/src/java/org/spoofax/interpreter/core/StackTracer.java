@@ -28,7 +28,7 @@ public class StackTracer {
     
     private int failureDepth;
     
-    public void push(String name) {
+    public final void push(String name) {
         int depth = currentDepth++;
         if (frames.length == depth) {
             String[] oldframes = frames;
@@ -39,12 +39,12 @@ public class StackTracer {
         failureDepth = currentDepth;
     }
     
-    public void popOnFailure() {
+    public final void popOnFailure() {
         currentDepth--;
         // failureDepth stays the same and keeps track of this failure
     }
     
-    public void popOnSuccess() {
+    public final void popOnSuccess() {
         failureDepth = --currentDepth;
     }
     
@@ -75,7 +75,7 @@ public class StackTracer {
     *            true if only the current frames on the stack should be
     *            printed, and not any failed frames.
     */
-   public int getTraceDepth(boolean onlyCurrent) {
+    public int getTraceDepth(boolean onlyCurrent) {
         return onlyCurrent ? currentDepth : failureDepth;
     }
     
