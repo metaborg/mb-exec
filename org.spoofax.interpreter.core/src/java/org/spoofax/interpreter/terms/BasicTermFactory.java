@@ -429,6 +429,7 @@ public class BasicTermFactory implements ITermFactory {
             } else {
                 BasicStrategoTerm result = ((BasicStrategoTerm) term).clone();
                 result.internalSetAnnotations(annotations);
+                assert result.getStorageType() != IStrategoTerm.MAXIMALLY_SHARED;
                 return result;
             }
         } else if (term == null) {
