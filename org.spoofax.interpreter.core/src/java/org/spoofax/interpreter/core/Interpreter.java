@@ -53,6 +53,9 @@ public class Interpreter {
      *             If the interpreter is exited.
      * @throws InterpreterException
      *             In case of an internal error or other interpreter exception.
+     *             
+     * @see #setCurrent(IStrategoTerm)
+     *             Sets the input term for the invoked strategy.
      */
     public boolean invoke(String name)
             throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
