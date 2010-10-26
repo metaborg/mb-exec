@@ -5,6 +5,7 @@ import static java.lang.Math.min;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.StringWriter;
 import java.io.Writer;
 
 import org.spoofax.interpreter.library.IOAgent;
@@ -102,6 +103,12 @@ public class StackTracer {
             results[results.length - i - 1] = frames[i];
         
         return results;
+    }
+    
+    public String getTraceString() {
+        StringWriter writer = new StringWriter();
+        printStackTrace(writer, false);
+        return writer.toString();
     }
     
     public void setTrace(String[] trace) {
