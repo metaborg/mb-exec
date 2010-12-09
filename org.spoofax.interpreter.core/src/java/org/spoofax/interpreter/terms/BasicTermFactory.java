@@ -86,7 +86,7 @@ public class BasicTermFactory implements ITermFactory {
             if (Character.isLetter(ch)) {
                 return parseAnno(bis, parseAppl(bis));
             }
-            else if(Character.isDigit(ch))
+            else if (Character.isDigit(ch) || ch == '-')
                 return parseAnno(bis, parseNumber(bis));
         }
         throw new ParseError("Invalid term: '" + (char)ch + "'");
