@@ -8,11 +8,13 @@
 package org.spoofax.interpreter.terms;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PushbackInputStream;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -310,15 +312,13 @@ public class BasicTermFactory implements ITermFactory {
     }
 
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException {
-        ITermPrinter tp = new InlinePrinter();
-        t.prettyPrint(tp);
-        ous.write(tp.getString().getBytes());
+        Writer out = new BufferedWriter(new OutputStreamWriter(ous));
+        unparseToFile(t, out);
     }
 
     public void unparseToFile(IStrategoTerm t, Writer out) throws IOException {
-        ITermPrinter tp = new InlinePrinter();
+        ITermPrinter tp = new InlineWriter(out);
         t.prettyPrint(tp);
-        out.write(tp.getString());
     }
 
     public boolean hasConstructor(String name, int arity) {
