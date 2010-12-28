@@ -16,6 +16,7 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.io.baf.BAFTermReader;
 
 public class ImportTerm extends Strategy {
 
@@ -36,7 +37,7 @@ public class ImportTerm extends Strategy {
                 IOAgent io = op.getIOAgent();
 
                 input = io.openInputStream(path, true);
-                result = env.getFactory().parseFromStream(input);
+                result = new BAFTermReader(env.getFactory()).parseFromStream(input);
             } catch (IOException e) {
                 throw new InterpreterException("import-term failed for " + path, e);
             } catch (RuntimeException e) {

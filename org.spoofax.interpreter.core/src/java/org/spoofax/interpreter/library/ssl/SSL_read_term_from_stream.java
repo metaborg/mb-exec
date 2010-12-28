@@ -16,6 +16,7 @@ import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.io.baf.BAFTermReader;
 
 public class SSL_read_term_from_stream extends AbstractPrimitive {
 
@@ -45,7 +46,7 @@ public class SSL_read_term_from_stream extends AbstractPrimitive {
             return false;
 
         try {
-            env.setCurrent(env.getFactory().parseFromStream(is));
+            env.setCurrent(new BAFTermReader(env.getFactory()).parseFromStream(is));
         } catch(IOException e) {
             or.getIOAgent().printError("SSL_read_term_from_stream: " + e.getMessage());
             return false;

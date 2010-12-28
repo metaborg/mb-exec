@@ -18,7 +18,8 @@ import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.StupidFormatter;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
-import org.spoofax.terms.io.AbstractIOTermFactory;
+import org.spoofax.terms.TermFactory;
+import org.spoofax.terms.io.baf.BAFTermReader;
 
 public class Interpreter {
 
@@ -26,7 +27,7 @@ public class Interpreter {
     private final StrategoCoreLoader loader;
 
     public Interpreter() {
-        this(new AbstractIOTermFactory());
+        this(new TermFactory());
     }
 
     public Interpreter(ITermFactory factory) {
@@ -167,11 +168,11 @@ public class Interpreter {
         if (stream == null)
             throw new IOException("Could not load Stratego core input from null stream");
             
-       load(context.getProgramFactory().parseFromStream(stream));
+       load(new BAFTermReader(context.getProgramFactory()).parseFromStream(stream));
     }
     
     public final void load(String file) throws IOException, InterpreterException {
-        load(context.getProgramFactory().parseFromFile(file));
+        load(new BAFTermReader(context.getProgramFactory()).parseFromFile(file));
     }
 
 	public void load(IStrategoTerm term) throws InterpreterException {
