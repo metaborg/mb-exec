@@ -14,13 +14,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermAttachment;
 import org.spoofax.interpreter.terms.ITermPrinter;
-import org.spoofax.terms.io.AbstractIOTermFactory;
+import org.spoofax.terms.AbstractTermFactory;
 
 public class StrategoSet implements IStrategoTerm, Serializable {
         
@@ -98,7 +99,7 @@ public class StrategoSet implements IStrategoTerm, Serializable {
     }
 
     public IStrategoTerm[] getAllSubterms() {
-        return AbstractIOTermFactory.EMPTY;
+        return AbstractTermFactory.EMPTY;
     }
 
     public IStrategoList getAnnotations() {
@@ -137,4 +138,13 @@ public class StrategoSet implements IStrategoTerm, Serializable {
     public String toString() {
         return String.valueOf(hashCode());
     }
+    
+    public <T extends ITermAttachment> T getAttachment(Class<T> attachment) {
+        throw new UnsupportedOperationException();
+    }
+    
+    public void addAttachment(ITermAttachment attachment) {
+        throw new UnsupportedOperationException();
+    }
+
 }

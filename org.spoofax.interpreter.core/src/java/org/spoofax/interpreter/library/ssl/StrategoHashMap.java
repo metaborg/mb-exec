@@ -4,8 +4,9 @@ import java.util.LinkedHashMap;
 
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermAttachment;
 import org.spoofax.interpreter.terms.ITermPrinter;
-import org.spoofax.terms.io.AbstractIOTermFactory;
+import org.spoofax.terms.AbstractTermFactory;
 
 public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm> implements IStrategoTerm {
 
@@ -16,7 +17,7 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
     }
 
     public IStrategoTerm[] getAllSubterms() {
-        return AbstractIOTermFactory.EMPTY;
+        return AbstractTermFactory.EMPTY;
     }
 
     public IStrategoList getAnnotations() {
@@ -54,6 +55,14 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
     @Override
     public String toString() {
         return String.valueOf(hashCode());
+    }
+    
+    public <T extends ITermAttachment> T getAttachment(Class<T> attachment) {
+        throw new UnsupportedOperationException();
+    }
+    
+    public void addAttachment(ITermAttachment attachment) {
+        throw new UnsupportedOperationException();
     }
 
 }
