@@ -23,7 +23,7 @@ import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.InlinePrinter;
+import org.spoofax.terms.io.InlinePrinter;
 
 public class ParseJava {
 

@@ -2,10 +2,10 @@ package org.spoofax.interpreter.library.ssl;
 
 import java.util.LinkedHashMap;
 
-import org.spoofax.interpreter.terms.BasicTermFactory;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.terms.io.AbstractIOTermFactory;
 
 public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm> implements IStrategoTerm {
 
@@ -16,7 +16,7 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
     }
 
     public IStrategoTerm[] getAllSubterms() {
-        return BasicTermFactory.EMPTY;
+        return AbstractIOTermFactory.EMPTY;
     }
 
     public IStrategoList getAnnotations() {

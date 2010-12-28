@@ -4,7 +4,7 @@ import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
-import org.spoofax.interpreter.terms.InlinePrinter;
+import org.spoofax.terms.io.InlinePrinter;
 
 public abstract class WrappedASMNode implements IStrategoTerm {
 

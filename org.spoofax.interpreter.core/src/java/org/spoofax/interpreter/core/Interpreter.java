@@ -16,9 +16,9 @@ import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.StupidFormatter;
-import org.spoofax.interpreter.terms.BasicTermFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.io.AbstractIOTermFactory;
 
 public class Interpreter {
 
@@ -26,7 +26,7 @@ public class Interpreter {
     private final StrategoCoreLoader loader;
 
     public Interpreter() {
-        this(new BasicTermFactory());
+        this(new AbstractIOTermFactory());
     }
 
     public Interpreter(ITermFactory factory) {

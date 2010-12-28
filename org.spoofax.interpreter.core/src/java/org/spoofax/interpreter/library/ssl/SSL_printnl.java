@@ -18,8 +18,8 @@ import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.InlinePrinter;
 import org.spoofax.interpreter.terms.PrettyPrinter;
+import org.spoofax.terms.io.InlinePrinter;
 
 public class SSL_printnl extends AbstractPrimitive {
 

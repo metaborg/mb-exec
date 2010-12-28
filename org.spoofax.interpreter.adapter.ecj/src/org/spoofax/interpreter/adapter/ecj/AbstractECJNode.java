@@ -7,13 +7,13 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import org.spoofax.interpreter.terms.BasicTermFactory;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.io.AbstractIOTermFactory;
 
 public abstract class AbstractECJNode implements IStrategoTerm {
 	public IStrategoList getAnnotations() {
-		return BasicTermFactory.EMPTY_LIST;
+		return AbstractIOTermFactory.EMPTY_LIST;
 	}
     
     public int getStorageType() {

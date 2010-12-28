@@ -9,8 +9,7 @@ Require-Bundle: org.spoofax.interpreter.core,
  org.spoofax.jsglr,
  org.spoofax.interpreter.adapter.aterm,
  org.junit,
- org.junit,
- org.junit
+ org.spoofax.terms
 Bundle-ActivationPolicy: lazy
 Export-Package: org.spoofax.compiler
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

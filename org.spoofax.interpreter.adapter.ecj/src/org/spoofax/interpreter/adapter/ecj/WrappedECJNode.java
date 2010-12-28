@@ -7,9 +7,9 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import org.spoofax.interpreter.terms.BasicTermFactory;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.terms.io.AbstractIOTermFactory;
 
 
 public abstract class WrappedECJNode extends AbstractECJAppl {
@@ -21,7 +21,7 @@ public abstract class WrappedECJNode extends AbstractECJAppl {
     public abstract Object getWrappee();
     
     public IStrategoList getAnnotations() {
-    	return BasicTermFactory.EMPTY_LIST;
+    	return AbstractIOTermFactory.EMPTY_LIST;
     }
     
     public int getStorageType() {
