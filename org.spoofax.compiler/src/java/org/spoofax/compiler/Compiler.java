@@ -9,7 +9,7 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.library.jsglr.JSGLRLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.jsglr.InvalidParseTableException;
+import org.spoofax.jsglr.client.InvalidParseTableException;
 
 /**
  * @deprecated use strc-java instead

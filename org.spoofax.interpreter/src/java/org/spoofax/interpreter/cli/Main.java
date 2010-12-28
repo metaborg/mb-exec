@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.spoofax.interpreter.ConcreteInterpreter;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.jsglr.InvalidParseTableException;
+import org.spoofax.jsglr.client.InvalidParseTableException;
 
 public class Main {
 
