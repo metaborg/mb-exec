@@ -143,8 +143,12 @@ public class StrategoSet implements IStrategoTerm, Serializable {
         throw new UnsupportedOperationException();
     }
     
-    public void addAttachment(ITermAttachment attachment) {
+    public void putAttachment(ITermAttachment attachment) {
         throw new UnsupportedOperationException();
+    }
+    
+    public boolean isList() {
+        return false;
     }
 
 }

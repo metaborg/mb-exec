@@ -61,8 +61,12 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         throw new UnsupportedOperationException();
     }
     
-    public void addAttachment(ITermAttachment attachment) {
+    public void putAttachment(ITermAttachment attachment) {
         throw new UnsupportedOperationException();
+    }
+    
+    public boolean isList() {
+        return false;
     }
 
 }
