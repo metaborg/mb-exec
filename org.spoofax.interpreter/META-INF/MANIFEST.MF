@@ -8,8 +8,6 @@ Require-Bundle: org.junit,
  org.spoofax.interpreter.core,
  org.spoofax.compiler,
  org.spoofax.jsglr;bundle-version="0.3.0",
- org.spoofax.aterm,
- org.spoofax.interpreter.adapter.aterm,
  org.spoofax.terms
 Export-Package: org.spoofax.interpreter
 Eclipse-LazyStart: true

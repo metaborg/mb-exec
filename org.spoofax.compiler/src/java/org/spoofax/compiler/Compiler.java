@@ -6,10 +6,10 @@ import java.util.LinkedList;
 
 import org.spoofax.interpreter.core.Interpreter;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.library.jsglr.JSGLRLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
+import org.spoofax.terms.TermFactory;
 
 /**
  * @deprecated use strc-java instead
@@ -20,18 +20,18 @@ public class Compiler {
 	private String sharePath;
 	
     public Compiler() throws IOException, InterpreterException, InvalidParseTableException {
-    	this(sharePath(), new WrappedATermFactory());
+    	this(sharePath(), new TermFactory());
     }
     
-	public Compiler(String sharePath, WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
+	public Compiler(String sharePath, TermFactory factory) throws IOException, InterpreterException, InvalidParseTableException {
 		this.sharePath = sharePath;
 		init(factory);
     }
     
-    private void init(WrappedATermFactory factory) throws IOException, InterpreterException, InvalidParseTableException
+    private void init(TermFactory factory) throws IOException, InterpreterException, InvalidParseTableException
     {
 		compiler = new Interpreter(factory);
-		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary(factory));
+		compiler.addOperatorRegistry("JSGLR", new JSGLRLibrary());
 		compiler.load(sharePath + "/libstratego-lib.ctree");
 		compiler.load(sharePath + "/libstratego-sglr.ctree");
 		compiler.load(sharePath + "/libstrc.ctree");

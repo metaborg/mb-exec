@@ -1,5 +1,6 @@
 package org.spoofax.interpreter.cli;
 
+/* Replaced by org.strategoxt.HybridInterpreter
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,3 +61,4 @@ public class Main {
 		}
 	}
 }
+*/

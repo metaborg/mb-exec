@@ -12,11 +12,8 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.terms.io.InlinePrinter;
 
 public class SSL_write_term_to_string extends AbstractPrimitive {
-    
-    private final InlinePrinter printer = new InlinePrinter();
 
     protected SSL_write_term_to_string() {
         super("SSL_write_term_to_string", 0, 1);
@@ -26,9 +23,7 @@ public class SSL_write_term_to_string extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-        tvars[0].prettyPrint(printer);
-        String result = printer.toString();
-        printer.reset();
+        String result = tvars[0].toString();
         env.setCurrent(env.getFactory().makeString(result));
         return true;
     }

@@ -7,7 +7,6 @@ Bundle-Vendor: Spoofax.org
 Require-Bundle: org.spoofax.interpreter.core,
  org.spoofax.interpreter.library.jsglr,
  org.spoofax.jsglr;bundle-version="0.3.0",
- org.spoofax.interpreter.adapter.aterm,
  org.junit,
  org.spoofax.terms
 Bundle-ActivationPolicy: lazy

@@ -1,5 +1,6 @@
 package org.spoofax.interpreter.library.ssl;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import org.spoofax.interpreter.terms.IStrategoList;
@@ -55,6 +56,15 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
     @Override
     public String toString() {
         return String.valueOf(hashCode());
+    }
+    
+    public String toString(int maxDepth) {
+        return toString();
+    }
+    
+    public void writeToString(Appendable output, int maxDepth)
+            throws IOException {
+        output.append(toString());
     }
     
     public <T extends ITermAttachment> T getAttachment(Class<T> attachment) {

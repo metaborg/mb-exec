@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -137,6 +138,15 @@ public class StrategoSet implements IStrategoTerm, Serializable {
     @Override
     public String toString() {
         return String.valueOf(hashCode());
+    }
+    
+    public String toString(int maxDepth) {
+        return toString();
+    }
+    
+    public void writeToString(Appendable output, int maxDepth)
+            throws IOException {
+        output.append(toString());
     }
     
     public <T extends ITermAttachment> T getAttachment(Class<T> attachment) {

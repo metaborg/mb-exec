@@ -1,5 +1,6 @@
 package org.spoofax.interpreter;
 
+/* Obsolete; replaced by whatever
 import java.io.IOException;
 
 import org.spoofax.interpreter.core.Interpreter;
@@ -26,3 +27,4 @@ public class ConcreteInterpreter extends Interpreter {
     	return (WrappedATermFactory)super.getFactory();
     }
 }
+*/
