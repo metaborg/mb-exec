@@ -18,11 +18,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.ITermAttachment;
 import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.AbstractTermFactory;
+import org.spoofax.terms.attachments.ITermAttachment;
+import org.spoofax.terms.attachments.TermAttachmentType;
 
 public class StrategoSet implements IStrategoTerm, Serializable {
         
@@ -149,12 +151,16 @@ public class StrategoSet implements IStrategoTerm, Serializable {
         output.append(toString());
     }
     
-    public <T extends ITermAttachment> T getAttachment(Class<T> attachment) {
+    public<T extends ITermAttachment> T getAttachment(TermAttachmentType<T> attachmentType) {
         throw new UnsupportedOperationException();
     }
+
+    public<T extends ITermAttachment> void putAttachment(ITermAttachment attachment) {
+        throw new NotImplementedException();
+    }
     
-    public void putAttachment(ITermAttachment attachment) {
-        throw new UnsupportedOperationException();
+    public void removeAttachment(TermAttachmentType<?> attachmentType) {
+        throw new NotImplementedException();
     }
     
     public boolean isList() {

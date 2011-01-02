@@ -41,7 +41,7 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.terms.io.baf.BAFTermReader;
+import org.spoofax.terms.io.baf.TermReader;
 
 public class StrategoCoreLoader {
 
@@ -366,7 +366,7 @@ public class StrategoCoreLoader {
     
     @Deprecated
     public void load(String path) throws IOException, InterpreterException {
-        doLoad(new BAFTermReader(context.getProgramFactory()).parseFromFile(path));
+        doLoad(new TermReader(context.getProgramFactory()).parseFromFile(path));
     }
     
     public void load(IStrategoTerm prg) throws InterpreterException {
@@ -426,7 +426,7 @@ public class StrategoCoreLoader {
         if (stream == null)
             throw new IOException("Could not load Stratego core input from null stream");
             
-        doLoad(new BAFTermReader(context.getProgramFactory()).parseFromStream(stream));
+        doLoad(new TermReader(context.getProgramFactory()).parseFromStream(stream));
     }
 
 }
