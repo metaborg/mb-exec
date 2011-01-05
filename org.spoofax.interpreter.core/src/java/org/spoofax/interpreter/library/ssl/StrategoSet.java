@@ -155,7 +155,7 @@ public class StrategoSet implements IStrategoTerm, Serializable {
         throw new UnsupportedOperationException();
     }
 
-    public<T extends ITermAttachment> void putAttachment(ITermAttachment attachment) {
+    public void putAttachment(ITermAttachment attachment) {
         throw new NotImplementedException();
     }
     
