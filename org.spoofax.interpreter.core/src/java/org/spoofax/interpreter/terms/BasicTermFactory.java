@@ -314,6 +314,7 @@ public class BasicTermFactory implements ITermFactory {
     public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException {
         Writer out = new BufferedWriter(new OutputStreamWriter(ous));
         unparseToFile(t, out);
+        out.flush();
     }
 
     public void unparseToFile(IStrategoTerm t, Writer out) throws IOException {
