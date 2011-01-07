@@ -6,6 +6,7 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTuple;
 
 public class ATermConstants {
 
@@ -18,7 +19,11 @@ public class ATermConstants {
     public static final int AT_LIST = 4;
 
     public static int ATermTypeForTerm(IStrategoTerm term) {
-        if (term instanceof IStrategoAppl || term instanceof IStrategoString) {
+        if (term instanceof IStrategoAppl) {
+            return AT_APPL;
+        } else if (term instanceof IStrategoString) {
+            return AT_APPL;
+        } else if (term instanceof IStrategoTuple) {
             return AT_APPL;
         } else if (term instanceof IStrategoInt) {
             return AT_INT;

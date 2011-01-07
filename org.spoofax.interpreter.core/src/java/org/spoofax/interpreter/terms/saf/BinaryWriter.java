@@ -48,6 +48,7 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTuple;
 
 /**
  * Writes the given ATerm to a (streamable) binary format. Supply the
@@ -192,11 +193,17 @@ public class BinaryWriter {
             voidVisitReal((IStrategoReal) term);
         } else if (term instanceof IStrategoString) {
             voidVisitString((IStrategoString) term);
+        } else if (term instanceof IStrategoTuple) {
+            voidVisitTuple((IStrategoTuple) term);
         } else {
             throw new RuntimeException("Could not serializate term of type "
                     + term.getClass().getName() + " to SAF format.");
         }
 
+    }
+
+    private void voidVisitTuple(IStrategoTuple term) {
+        writeAppl(term, null);
     }
 
     private void voidVisitString(IStrategoString term) {
@@ -321,8 +328,13 @@ public class BinaryWriter {
                 boolean quoted = false;
                 String name = null;
                 if (fun instanceof IStrategoConstructor) {
+                    // Application
                     name = ((IStrategoConstructor)fun).getName();
+                } else if (fun == null) {
+                    // Tuple
+                    name = "";
                 } else {
+                    // String
                     name = (String)fun;
                     quoted = true;
                 }
@@ -331,7 +343,6 @@ public class BinaryWriter {
                 currentBuffer.put(header);
 
                 writeInt(term.getSubtermCount());
-
                 
                 byte[] nameBytes = name.getBytes();
                 int length = nameBytes.length;

@@ -28,6 +28,7 @@
 
 package org.spoofax.interpreter.terms.saf;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -265,26 +266,41 @@ public class BinaryReader {
 
         if (tempBytesIndex == length) {
             if (tempType == ATermConstants.AT_APPL) {
-                
+
                 ATermConstruct ac = stack[stackPosition];
-                
+
                 if (tempIsQuoted) {
-                    
-                    IStrategoTerm term = factory.makeString(new String(tempBytes));
+
+                    // String
+                    IStrategoTerm term = factory.makeString(new String(
+                            tempBytes));
                     applSignatures.add(term);
-                    
+
                     if (!ac.hasAnnos) {
                         sharedTerms[ac.termIndex] = term;
                         linkTerm(term);
-                    } else{
+                    } else {
                         ac.tempTerm = term;
+                    }
+
+                } else if (tempBytes.length == 0) {
+                    
+                    // Tuple, must have subterms
+                    if (tempArity == 0 && !ac.hasAnnos) {
+                        IStrategoTerm term = factory.makeTuple();
+                        sharedTerms[ac.termIndex] = term;
+                        linkTerm(term);
+                    } else {
+                        ac.subTerms = new IStrategoTerm[tempArity];
                     }
                     
                 } else {
-                    IStrategoConstructor fun = factory.makeConstructor(new String(
-                            tempBytes), tempArity);
+
+                    // Application
+                    IStrategoConstructor fun = factory.makeConstructor(
+                            new String(tempBytes), tempArity);
                     applSignatures.add(fun);
-                    
+
                     if (tempArity == 0 && !ac.hasAnnos) {
                         IStrategoTerm term = factory.makeAppl(fun);
                         sharedTerms[ac.termIndex] = term;
@@ -411,16 +427,23 @@ public class BinaryReader {
      * @return The constructed aterm.
      */
     private IStrategoTerm buildTerm(ATermConstruct ac) {
-        
+
         IStrategoTerm constructedTerm;
         IStrategoTerm[] subTerms = ac.subTerms;
 
         int type = ac.type;
-        if (type == ATermConstants.AT_APPL && ac.tempTerm instanceof IStrategoConstructor) {
+        if (type == ATermConstants.AT_APPL
+                && ac.tempTerm instanceof IStrategoConstructor) {
+
+            constructedTerm = factory.makeAppl(
+                    (IStrategoConstructor) ac.tempTerm, subTerms);
+
+        } else if (type == ATermConstants.AT_APPL && ac.tempTerm == null) {
+            // Tuple
+            constructedTerm = factory.makeTuple(ac.subTerms);
             
-            constructedTerm = factory.makeAppl((IStrategoConstructor)ac.tempTerm, subTerms);
-            
-        } else if (type == ATermConstants.AT_LIST) {
+        }
+        else if (type == ATermConstants.AT_LIST) {
             IStrategoList list = factory.makeList();
             for (int i = subTerms.length - 1; i >= 0; i--) {
                 list = factory.makeListCons(subTerms[i], list);
@@ -430,10 +453,11 @@ public class BinaryReader {
         } else if (ac.hasAnnos) {
             constructedTerm = ac.tempTerm;
         } else {
-            // primitive terms should already be constructed in the touch method.
+            // primitive terms should already be constructed in the touch
+            // method.
             throw new RuntimeException("Unable to construct term.\n");
         }
-        
+
         if (ac.hasAnnos) {
             constructedTerm = factory.annotateTerm(constructedTerm, ac.annos);
         }
@@ -728,5 +752,19 @@ public class BinaryReader {
 
         return binaryReader.getRoot();
 
+    }
+
+    public static boolean isStreamingATerm(BufferedInputStream stream)
+            throws IOException {
+        boolean isSaf = false;
+
+        stream.mark(1);
+        char ch = (char) stream.read();
+        if (ch == '?')
+            isSaf = true;
+
+        stream.reset();
+
+        return isSaf;
     }
 }
