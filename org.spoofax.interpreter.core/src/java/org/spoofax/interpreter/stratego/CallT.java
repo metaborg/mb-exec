@@ -302,7 +302,7 @@ public class CallT extends Strategy {
             }
             @Override
             public IConstruct onSuccess(IContext env) throws InterpreterException {
-                result = false;
+                result = true;
                 return null;
             }
 	    }
