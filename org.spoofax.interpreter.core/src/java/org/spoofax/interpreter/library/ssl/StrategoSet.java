@@ -146,7 +146,7 @@ public class StrategoSet implements IStrategoTerm, Serializable {
         return toString();
     }
     
-    public void writeToString(Appendable output, int maxDepth)
+    public void writeAsString(Appendable output, int maxDepth)
             throws IOException {
         output.append(toString());
     }

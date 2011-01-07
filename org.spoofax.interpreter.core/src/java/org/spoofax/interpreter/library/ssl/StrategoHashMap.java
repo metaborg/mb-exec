@@ -64,7 +64,7 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         return toString();
     }
     
-    public void writeToString(Appendable output, int maxDepth)
+    public void writeAsString(Appendable output, int maxDepth)
             throws IOException {
         output.append(toString());
     }
