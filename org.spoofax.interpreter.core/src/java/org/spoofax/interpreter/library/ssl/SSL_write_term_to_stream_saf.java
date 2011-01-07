@@ -41,7 +41,7 @@ public class SSL_write_term_to_stream_saf extends AbstractPrimitive {
         try {
             
             BinaryWriter.writeTermToSAFStream(targs[1], bout);
-            out.flush();
+            bout.close();
             
         } catch(IOException e) {
             throw new InterpreterException(e);
