@@ -108,11 +108,12 @@ public class BinaryReader {
     private ByteBuffer currentBuffer;
 
     private boolean isDone = false;
-    
+
     private final boolean debug = false;
 
     class StrategoSignature {
         IStrategoConstructor cons;
+
         boolean isString;
     }
 
@@ -165,20 +166,21 @@ public class BinaryReader {
 
         while (buffer.hasRemaining()) {
             byte header = buffer.get();
-            
+
             if (debug) {
-                for (int i=0; i<(stackPosition+1); i++) {
+                for (int i = 0; i < (stackPosition + 1); i++) {
                     System.out.print(" ");
                 }
             }
-                
+
             if ((header & ISSHAREDFLAG) == ISSHAREDFLAG) {
                 int index = readInt();
-                
+
                 IStrategoTerm term = sharedTerms[index];
                 stackPosition++;
-                if (debug) System.out.println(term);
-                
+                if (debug)
+                    System.out.println(term);
+
                 linkTerm(term);
             } else {
                 int type = (header & TYPEMASK);
@@ -191,9 +193,10 @@ public class BinaryReader {
                 ensureSharedTermsCapacity();
 
                 stack[++stackPosition] = ac;
-                
-                if(debug) System.out.print("parsing " + type + ": ");
-                
+
+                if (debug)
+                    System.out.print("parsing " + type + ": ");
+
                 TYPECHECK: switch (type) {
                 case ATermConstants.AT_APPL:
                     touchAppl(header);
@@ -212,7 +215,8 @@ public class BinaryReader {
                             + ". Current buffer position: "
                             + currentBuffer.position());
                 }
-                if(debug) System.out.println();
+                if (debug)
+                    System.out.println();
             }
 
             // Make sure the stack remains large enough
@@ -290,7 +294,8 @@ public class BinaryReader {
                 sig.cons = factory.makeConstructor(new String(tempBytes),
                         tempArity);
                 sig.isString = tempIsQuoted;
-                if (debug) System.out.print(new String(tempBytes) + "/" + tempArity);
+                if (debug)
+                    System.out.print(new String(tempBytes) + "/" + tempArity);
 
                 applSignatures.add(sig);
 
@@ -311,12 +316,13 @@ public class BinaryReader {
             resetTemp();
         }
     }
-    
+
     private IStrategoTerm convertAppl(StrategoSignature sig) {
         return convertAppl(sig, new IStrategoTerm[0]);
     }
 
-    private IStrategoTerm convertAppl(StrategoSignature sig, IStrategoTerm[] subterms) {
+    private IStrategoTerm convertAppl(StrategoSignature sig,
+            IStrategoTerm[] subterms) {
         if (sig.isString) {
             return factory.makeString(sig.cons.getName());
         } else if (sig.cons.getName().length() == 0) {
@@ -338,8 +344,9 @@ public class BinaryReader {
             int key = readInt();
 
             StrategoSignature sig = applSignatures.get(key);
-            if (debug) System.out.print(sig.cons + " (shared)");
-            
+            if (debug)
+                System.out.print(sig.cons + " (shared)");
+
             int arity = sig.cons.getArity();
 
             ATermConstruct ac = stack[stackPosition];
@@ -736,13 +743,24 @@ public class BinaryReader {
 
             byteBuffer.clear();
             byteBuffer.limit(blockSize);
-            bytesRead = channel.read(byteBuffer);
-            byteBuffer.flip();
+
+            // Use multiple reads to fill buffers (the channel apparently only
+            // reads 8192 bytes per call)
+            bytesRead = 0;
+            while (bytesRead < blockSize) {
+                int res = channel.read(byteBuffer);
+                if (res <= 0)
+                    break; // end of file
+                bytesRead += res;
+            }
+
             if (bytesRead != blockSize)
                 throw new IOException("Unable to read bytes from file "
                         + bytesRead + " vs " + blockSize + ".");
 
+            byteBuffer.flip();
             binaryReader.deserialize(byteBuffer);
+
         } while (bytesRead > 0);
 
         if (!binaryReader.isDone())
