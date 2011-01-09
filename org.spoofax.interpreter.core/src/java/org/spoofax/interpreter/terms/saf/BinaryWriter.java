@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.spoofax.interpreter.terms.IStrategoAppl;
-import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoReal;
@@ -203,12 +202,11 @@ public class BinaryWriter {
     }
 
     private void voidVisitTuple(IStrategoTuple term) {
-        writeAppl(term, null);
+        writeAppl(term, term.getSubtermCount(), "", false);
     }
 
     private void voidVisitString(IStrategoString term) {
-        // constructor without annos
-        writeAppl(term, term.stringValue());
+        writeAppl(term, term.stringValue(), term.stringValue(), true);
     }
 
     /**
@@ -312,38 +310,31 @@ public class BinaryWriter {
     }
 
     /**
-     * Write appl or string.
-     * @param term the term
-     * @param fun the constructor or string value
-     * @param subterms
-     * @param annos
+     * Write appl or string or tuple.
+     * 
+     * @param term
+     *            the term
+     * @param fun
+     *            the constructor key, can be a IStrategoConstructor (for
+     *            applications), a IStrategoString (for strings) or an integer,
+     *            for tuples
+     * @param name the constructor name, or string value, or empty string for a tuple 
+     * @param isString true if the term is a string
      */
-    protected void writeAppl(IStrategoTerm term, Object fun) {
+    protected void writeAppl(IStrategoTerm term, Object fun, String name,
+            boolean isString) {
         if (indexInTerm == 0) {
             byte header = getHeader(term);
-            
+
             Integer key = applSignatures.get(fun);
             if (key == null) {
 
-                boolean quoted = false;
-                String name = null;
-                if (fun instanceof IStrategoConstructor) {
-                    // Application
-                    name = ((IStrategoConstructor)fun).getName();
-                } else if (fun == null) {
-                    // Tuple
-                    name = "";
-                } else {
-                    // String
-                    name = (String)fun;
-                    quoted = true;
-                }
-                
-                if(quoted) header = (byte) (header | APPLQUOTED);
+                if (isString)
+                    header = (byte) (header | APPLQUOTED);
                 currentBuffer.put(header);
 
                 writeInt(term.getSubtermCount());
-                
+
                 byte[] nameBytes = name.getBytes();
                 int length = nameBytes.length;
                 writeInt(length);
@@ -385,14 +376,14 @@ public class BinaryWriter {
             }
         }
     }
-    
+
     /**
      * Serializes the given appl. The function name of the appl can be
      * serialized in chunks.
      * 
      */
     public void voidVisitAppl(IStrategoAppl arg) {
-        writeAppl(arg, arg.getConstructor());
+        writeAppl(arg, arg.getConstructor(), arg.getConstructor().getName(), false);
     }
 
     /**
@@ -592,6 +583,7 @@ public class BinaryWriter {
 
     /**
      * Write to stream. Uses buffer of 65535 bytes.
+     * 
      * @param term
      * @param out
      * @throws IOException
@@ -617,7 +609,8 @@ public class BinaryWriter {
 
         } while (!binaryWriter.isFinished());
 
-        // Do not close the channel, doing so will also close the backing stream.
-        
+        // Do not close the channel, doing so will also close the backing
+        // stream.
+
     }
 }

@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2002-2007, CWI and INRIA
  *
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without
@@ -90,7 +89,7 @@ public class BinaryReader {
 
     private IStrategoTerm[] sharedTerms;
 
-    private List<IStrategoTerm> applSignatures;
+    private List<StrategoSignature> applSignatures;
 
     private ATermConstruct[] stack;
 
@@ -109,6 +108,13 @@ public class BinaryReader {
     private ByteBuffer currentBuffer;
 
     private boolean isDone = false;
+    
+    private final boolean debug = false;
+
+    class StrategoSignature {
+        IStrategoConstructor cons;
+        boolean isString;
+    }
 
     /**
      * Constructor.
@@ -122,7 +128,7 @@ public class BinaryReader {
         this.factory = factory;
 
         sharedTerms = new IStrategoTerm[INITIALSHAREDTERMSARRAYSIZE];
-        applSignatures = new ArrayList<IStrategoTerm>();
+        applSignatures = new ArrayList<StrategoSignature>();
         sharedTermIndex = 0;
 
         stack = new ATermConstruct[STACKSIZE];
@@ -159,12 +165,20 @@ public class BinaryReader {
 
         while (buffer.hasRemaining()) {
             byte header = buffer.get();
-
+            
+            if (debug) {
+                for (int i=0; i<(stackPosition+1); i++) {
+                    System.out.print(" ");
+                }
+            }
+                
             if ((header & ISSHAREDFLAG) == ISSHAREDFLAG) {
                 int index = readInt();
+                
                 IStrategoTerm term = sharedTerms[index];
                 stackPosition++;
-
+                if (debug) System.out.println(term);
+                
                 linkTerm(term);
             } else {
                 int type = (header & TYPEMASK);
@@ -177,7 +191,9 @@ public class BinaryReader {
                 ensureSharedTermsCapacity();
 
                 stack[++stackPosition] = ac;
-
+                
+                if(debug) System.out.print("parsing " + type + ": ");
+                
                 TYPECHECK: switch (type) {
                 case ATermConstants.AT_APPL:
                     touchAppl(header);
@@ -196,6 +212,7 @@ public class BinaryReader {
                             + ". Current buffer position: "
                             + currentBuffer.position());
                 }
+                if(debug) System.out.println();
             }
 
             // Make sure the stack remains large enough
@@ -269,53 +286,43 @@ public class BinaryReader {
 
                 ATermConstruct ac = stack[stackPosition];
 
-                if (tempIsQuoted) {
+                StrategoSignature sig = new StrategoSignature();
+                sig.cons = factory.makeConstructor(new String(tempBytes),
+                        tempArity);
+                sig.isString = tempIsQuoted;
+                if (debug) System.out.print(new String(tempBytes) + "/" + tempArity);
 
-                    // String
-                    IStrategoTerm term = factory.makeString(new String(
-                            tempBytes));
-                    applSignatures.add(term);
+                applSignatures.add(sig);
 
-                    if (!ac.hasAnnos) {
-                        sharedTerms[ac.termIndex] = term;
-                        linkTerm(term);
-                    } else {
-                        ac.tempTerm = term;
-                    }
-
-                } else if (tempBytes.length == 0) {
-                    
-                    // Tuple, must have subterms
-                    if (tempArity == 0 && !ac.hasAnnos) {
-                        IStrategoTerm term = factory.makeTuple();
-                        sharedTerms[ac.termIndex] = term;
-                        linkTerm(term);
-                    } else {
-                        ac.subTerms = new IStrategoTerm[tempArity];
-                    }
-                    
+                if (tempArity == 0 && !ac.hasAnnos) {
+                    IStrategoTerm term = convertAppl(sig);
+                    sharedTerms[ac.termIndex] = term;
+                    linkTerm(term);
                 } else {
-
-                    // Application
-                    IStrategoConstructor fun = factory.makeConstructor(
-                            new String(tempBytes), tempArity);
-                    applSignatures.add(fun);
-
-                    if (tempArity == 0 && !ac.hasAnnos) {
-                        IStrategoTerm term = factory.makeAppl(fun);
-                        sharedTerms[ac.termIndex] = term;
-                        linkTerm(term);
-                    } else {
-                        ac.tempTerm = fun;
-                        ac.subTerms = new IStrategoTerm[tempArity];
-                    }
+                    ac.tempSig = sig;
+                    ac.subTerms = new IStrategoTerm[tempArity];
                 }
+
             } else {
                 throw new RuntimeException("Unsupported chunkified type: "
                         + tempType);
             }
 
             resetTemp();
+        }
+    }
+    
+    private IStrategoTerm convertAppl(StrategoSignature sig) {
+        return convertAppl(sig, new IStrategoTerm[0]);
+    }
+
+    private IStrategoTerm convertAppl(StrategoSignature sig, IStrategoTerm[] subterms) {
+        if (sig.isString) {
+            return factory.makeString(sig.cons.getName());
+        } else if (sig.cons.getName().length() == 0) {
+            return factory.makeTuple(subterms);
+        } else {
+            return factory.makeAppl(sig.cons, subterms);
         }
     }
 
@@ -326,28 +333,25 @@ public class BinaryReader {
      *            The header of the appl.
      */
     private void touchAppl(byte header) {
+
         if ((header & ISFUNSHARED) == ISFUNSHARED) {
             int key = readInt();
 
-            IStrategoTerm fun = applSignatures.get(key);
-
-            int arity;
-            if (fun instanceof IStrategoConstructor) {
-                arity = ((IStrategoConstructor) fun).getArity();
-            } else {
-                // fun instanceof IStrategoString
-                arity = 0;
-            }
+            StrategoSignature sig = applSignatures.get(key);
+            if (debug) System.out.print(sig.cons + " (shared)");
+            
+            int arity = sig.cons.getArity();
 
             ATermConstruct ac = stack[stackPosition];
 
             if (arity == 0 && !ac.hasAnnos) {
-                IStrategoTerm term = factory
-                        .makeAppl((IStrategoConstructor) fun);
+
+                IStrategoTerm term = convertAppl(sig);
                 sharedTerms[ac.termIndex] = term;
                 linkTerm(term);
+
             } else {
-                ac.tempTerm = fun;
+                ac.tempSig = sig;
                 ac.subTerms = new IStrategoTerm[arity];
             }
         } else {
@@ -432,18 +436,9 @@ public class BinaryReader {
         IStrategoTerm[] subTerms = ac.subTerms;
 
         int type = ac.type;
-        if (type == ATermConstants.AT_APPL
-                && ac.tempTerm instanceof IStrategoConstructor) {
-
-            constructedTerm = factory.makeAppl(
-                    (IStrategoConstructor) ac.tempTerm, subTerms);
-
-        } else if (type == ATermConstants.AT_APPL && ac.tempTerm == null) {
-            // Tuple
-            constructedTerm = factory.makeTuple(ac.subTerms);
-            
-        }
-        else if (type == ATermConstants.AT_LIST) {
+        if (type == ATermConstants.AT_APPL) {
+            constructedTerm = convertAppl(ac.tempSig, subTerms);
+        } else if (type == ATermConstants.AT_LIST) {
             IStrategoList list = factory.makeList();
             for (int i = subTerms.length - 1; i >= 0; i--) {
                 list = factory.makeListCons(subTerms[i], list);
@@ -485,6 +480,7 @@ public class BinaryReader {
                 if (parent.subTerms.length != parent.subTermIndex || hasAnnos)
                     return;
 
+                // Remove?
                 if (!hasAnnos)
                     parent.annos = factory.makeList();
             } else if (hasAnnos && (term instanceof IStrategoList)) {
@@ -492,7 +488,7 @@ public class BinaryReader {
             } else {
                 throw new RuntimeException(
                         "Encountered a term that didn't fit anywhere. Type: "
-                                + term.getTermType());
+                                + term.getTermType() + ", term " + term);
             }
 
             term = buildTerm(parent);
@@ -524,6 +520,8 @@ public class BinaryReader {
         public boolean hasAnnos;
 
         public IStrategoList annos;
+
+        public StrategoSignature tempSig;
     }
 
     private final static int SEVENBITS = 0x0000007f;
@@ -727,8 +725,8 @@ public class BinaryReader {
 
         int bytesRead;
         do {
-            byte size1 = (byte) in.read();
-            byte size2 = (byte) in.read();
+            int size1 = in.read();
+            int size2 = in.read();
             if (size1 < 0 || size2 < 0)
                 break;
 
