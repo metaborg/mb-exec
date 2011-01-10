@@ -293,20 +293,7 @@ public class CallT extends Strategy {
     }
 
 	public boolean evaluateWithArgs(IContext env, Strategy[] sv, IStrategoTerm[] tv) throws InterpreterException {
-	    class WithArgsHook extends Hook {
-	        boolean result;
-            @Override
-            public IConstruct onFailure(IContext env) throws InterpreterException {
-                result = false;
-                return null;
-            }
-            @Override
-            public IConstruct onSuccess(IContext env) throws InterpreterException {
-                result = true;
-                return null;
-            }
-	    }
-	    WithArgsHook hook = new WithArgsHook();
+	    ResultHook hook = new ResultHook();
     	getHook().push(hook);
 
     	IConstruct c = evalWithArgs(env, sv, tv);

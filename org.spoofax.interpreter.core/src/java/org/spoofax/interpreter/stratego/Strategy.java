@@ -62,50 +62,41 @@ abstract public class Strategy implements IConstruct {
     }
     
     public boolean evaluate(IContext env) throws InterpreterException {
-        // XXX: Don't use exceptions for control flow
-    	class Finished extends InterpreterException {
-			private static final long serialVersionUID = -857185250056951094L;
-			boolean result;
-    		Finished(boolean b)
-    		{
-    			super("Finished");
-    			result = b;
-    		}
-    	}
-    	getHook().push(new Hook(){
-			@Override
-			public IConstruct onFailure(IContext env) throws InterpreterException {
-				throw new Finished(false);
-			}
-			@Override
-			public IConstruct onSuccess(IContext env) throws InterpreterException {
-				throw new Finished(true);
-			}
-    	});
-    	Stack<Strategy> s = null;
+    	ResultHook resultHook = new ResultHook();
+    	getHook().push(resultHook);
+    	Stack<Strategy> debugStack = null;
     	if (DebugUtil.isDebugging()) {
-    		 s = new Stack<Strategy>();
+    		 debugStack = new Stack<Strategy>();
     	}
     	IConstruct c = this;
     	boolean debug = DebugUtil.isDebugging();
-    	boolean result = false;
-    	try {
-    		while (true) {
-    			if (debug)
-    				s.push((Strategy)c);
-    			c = c.eval(env);
-    		}
-    	}
-    	catch (Finished f) {
-    		result = f.result;
-    	}
+		while (c != null) {
+			if (debug)
+				debugStack.push((Strategy)c);
+			c = c.eval(env);
+		}
     	if (DebugUtil.isDebugging()) {
-    		for (Strategy strat : s) {
+    		for (Strategy strat : debugStack) {
     			if (strat.getHook().size() != 0)
-    				throw new InterpreterException("There was a leak on: " + s);
+    				throw new InterpreterException("There was a leak on: " + debugStack);
     		}
     	}
     	
-		return result;
+		return resultHook.result;
+    }
+    
+    static class ResultHook extends Hook {
+        boolean result;
+        
+        @Override
+        public IConstruct onFailure(IContext env) throws InterpreterException {
+            result = false;
+            return null;
+        }
+        @Override
+        public IConstruct onSuccess(IContext env) throws InterpreterException {
+            result = true;
+            return null;
+        }
     }
 }
