@@ -7,8 +7,9 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.Writer;
+import java.io.OutputStream;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -16,7 +17,7 @@ import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.terms.io.baf.TermReader;
+import org.spoofax.terms.io.binary.SAFWriter;
 
 public class SSL_write_term_to_stream_saf extends AbstractPrimitive {
 
@@ -28,19 +29,19 @@ public class SSL_write_term_to_stream_saf extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] targs)
             throws InterpreterException {
         
-        // FIXME SAF? Now it's just text
-        
         if(!Tools.isTermInt(targs[0]))
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        Writer out = or.getIOAgent().getWriter(Tools.asJavaInt(targs[0]));
+        OutputStream out = or.getIOAgent().internalGetOutputStream(Tools.asJavaInt(targs[0]));
+        BufferedOutputStream bout = new BufferedOutputStream(out);
         if(out == null)
             return false;
         
         try {
-            new TermReader(env.getFactory()).unparseToFile(targs[1], out);
-            out.flush();
+            SAFWriter.writeTermToSAFStream(targs[1], bout);
+            bout.close();
+            
         } catch(IOException e) {
             throw new InterpreterException(e);
         }
