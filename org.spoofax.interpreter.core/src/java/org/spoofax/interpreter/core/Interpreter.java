@@ -17,9 +17,19 @@ import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.StupidFormatter;
 import org.spoofax.interpreter.terms.BasicTermFactory;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
+/**
+ * A Stratego interpreter.
+ * 
+ * @see org.strategoxt.HybridInterpreter   For an efficient hybrid compiler/interpreter.
+ * 
+ * @author Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ * @author Lennart Kats <lennart add lclnet.nl>
+ */
 public class Interpreter {
 
     private final Context context;
@@ -60,20 +70,43 @@ public class Interpreter {
     public boolean invoke(String name)
             throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
         
-        StackTracer stackTracer = getContext().getStackTracer();
         SDefT def = lookupUncifiedSVar(name);
 
         if (def == null) {
             throw new UndefinedStrategyException("Definition '" + name + "' not found");
         }
         
+        return evaluate(def);
+    }
+    
+    /**
+     * Evaluates a stratego expression. Must be fully desugared,
+     * using C names in SDefTs and SCallTs.
+     * 
+     * @see org.strategoxt.HybridInterpreter#evaluate  A variant of evaluate() with desugaring support.
+     */
+    public boolean evaluate(IStrategoAppl s)
+            throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+        
+        final ITermFactory factory = getFactory();
+        final IStrategoConstructor sdefT = factory.makeConstructor("SDefT", 4);
+        
+        if (s.getConstructor() != sdefT)
+            s = factory.makeAppl(sdefT, factory.makeString("interpreter_evaluate_dummy_0_0"), factory.makeList(), factory.makeList(), s);
+
+        SDefT def = loader.parseSDefT(s);
+        return evaluate(def);
+    }
+
+    private boolean evaluate(SDefT def) throws InterpreterException {
+        StackTracer stackTracer = getContext().getStackTracer();
         stackTracer.push(def.getName());
         
         boolean success = def.getBody().evaluate(context);
         
         if (success) stackTracer.popOnSuccess();
         else stackTracer.popOnFailure();
-            
+        
         return success;
     }
 
