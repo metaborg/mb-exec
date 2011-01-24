@@ -161,7 +161,7 @@ public class Match extends Strategy {
 
         IStrategoList ctorArgs = Tools.listAt(p, 1);
         
-        IStrategoTerm[] args = t.getArguments();
+        IStrategoTerm[] args = t.getAllSubterms();
         
         // Check that arity of pattern equals arity of tuple
         if(ctorArgs.size() != args.length)
@@ -352,7 +352,7 @@ public class Match extends Strategy {
             if (Tools.isNil(a, env) || Tools.isCons(a, env))
                 return t;
             else
-                return env.getFactory().makeList(a.getArguments());
+                return env.getFactory().makeList(a.getAllSubterms());
         case IStrategoTerm.LIST: 
             return t;
         case IStrategoTerm.STRING:

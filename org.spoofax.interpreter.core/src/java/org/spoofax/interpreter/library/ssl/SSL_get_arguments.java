@@ -27,7 +27,7 @@ public class SSL_get_arguments extends AbstractPrimitive {
         switch(tvars[0].getTermType()) {
         case IStrategoTerm.APPL:
             IStrategoAppl a = (IStrategoAppl) tvars[0];
-            env.setCurrent(env.getFactory().makeList(a.getArguments()));
+            env.setCurrent(env.getFactory().makeList(a.getAllSubterms()));
             return true;
         case IStrategoTerm.INT:
         case IStrategoTerm.STRING:

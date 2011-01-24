@@ -79,8 +79,9 @@ public class ECJAnnoWrapper implements IStrategoTerm, IStrategoList, IStrategoAp
 		return ((IStrategoList) wrappee).tail();
 	}
 
+	@Deprecated
 	public IStrategoTerm[] getArguments() {
-		return ((IStrategoAppl) wrappee).getArguments();
+		return ((IStrategoAppl) wrappee).getAllSubterms();
 	}
 
 	public IStrategoConstructor getConstructor() {
