@@ -152,7 +152,7 @@ public class StrategoCoreLoader {
         return new Let(defs, body);
     }
 
-    private SDefT parseSDefT(IStrategoAppl t) throws InterpreterException {
+    public SDefT parseSDefT(IStrategoAppl t) throws InterpreterException {
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug("parseSDefT()");
         }

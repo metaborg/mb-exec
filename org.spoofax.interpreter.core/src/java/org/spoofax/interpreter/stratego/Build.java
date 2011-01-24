@@ -283,6 +283,7 @@ public class Build extends Strategy {
             return term;
         } else {
             IStrategoTerm annoList = buildTerm(env, annos);
+            if (annoList == null) return null;
             if (annoList.getTermType() != IStrategoTerm.LIST)
                 annoList = env.getFactory().makeList(annoList);
             

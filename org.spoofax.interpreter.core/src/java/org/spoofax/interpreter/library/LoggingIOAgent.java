@@ -40,7 +40,7 @@ public class LoggingIOAgent extends IOAgent {
     public OutputStream internalGetOutputStream(int fd) {
         switch (fd) {
             case CONST_STDOUT:
-                stderrLog.stream = System.out; // might have changed
+                stdoutLog.stream = System.out; // might have changed
                 return stdout;
             case CONST_STDERR:
                 stderrLog.stream = System.err; // might have changed
@@ -54,7 +54,7 @@ public class LoggingIOAgent extends IOAgent {
     public Writer getWriter(int fd) {
         switch (fd) {
             case CONST_STDOUT:
-                stderrLog.stream = System.out; // might have changed
+                stdoutLog.stream = System.out; // might have changed
                 return stdoutWriter;
             case CONST_STDERR:
                 stderrLog.stream = System.err; // might have changed
