@@ -595,11 +595,11 @@ public class Match extends Strategy {
             
             IStrategoList pattern = Tools.listAt(p, 1);
             
-            Results r = match(env, head, (IStrategoAppl)pattern.get(0));
+            Results r = match(env, head, (IStrategoAppl)pattern.getSubterm(0));
             if(r == null)
                 return null;
             
-            Results r2 = match(env, tail, (IStrategoAppl)pattern.get(1));
+            Results r2 = match(env, tail, (IStrategoAppl)pattern.getSubterm(1));
             if(r2 == null)
                 return null;
             
