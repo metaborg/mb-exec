@@ -70,7 +70,7 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
     }
     
     public<T extends ITermAttachment> T getAttachment(TermAttachmentType<T> attachmentType) {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     public void putAttachment(ITermAttachment attachment) {

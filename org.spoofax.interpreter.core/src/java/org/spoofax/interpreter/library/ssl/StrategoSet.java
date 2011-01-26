@@ -152,7 +152,7 @@ public class StrategoSet implements IStrategoTerm, Serializable {
     }
     
     public<T extends ITermAttachment> T getAttachment(TermAttachmentType<T> attachmentType) {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     public void putAttachment(ITermAttachment attachment) {
