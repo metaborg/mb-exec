@@ -11,8 +11,10 @@ import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.TermFactory;
 
 public class SSL_new extends AbstractPrimitive {
 
@@ -25,13 +27,15 @@ public class SSL_new extends AbstractPrimitive {
         super("SSL_new", 0, 0);
     }
 
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         ITermFactory factory = env.getFactory();
 
-        synchronized (SSL_new.class) { 
+        synchronized (TermFactory.class) { // protect SSL_new data and hope for JVM lock elimination in loop
             String s = (char)(letterA + alphaCounter) + "_" + counter;
-            while(factory.hasConstructor(s, 0)) {
+            IStrategoString result;
+            while((result = factory.tryMakeUniqueString(s)) == null) {
                 alphaCounter++;
                 if(alphaCounter > 25) {
                     alphaCounter = 0;
@@ -40,7 +44,7 @@ public class SSL_new extends AbstractPrimitive {
                 }
                 s = (char)(letterA + alphaCounter) + "_" + counter;
             }
-            env.setCurrent(env.getFactory().makeString(s));
+            env.setCurrent(result);
         }
 
         return true;

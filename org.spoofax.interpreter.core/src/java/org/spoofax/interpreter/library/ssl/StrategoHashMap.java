@@ -3,10 +3,11 @@ package org.spoofax.interpreter.library.ssl;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
-import org.spoofax.NotImplementedException;
+import org.spoofax.interpreter.terms.ISimpleTerm;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.terms.AbstractSimpleTerm;
 import org.spoofax.terms.AbstractTermFactory;
 import org.spoofax.terms.attachments.ITermAttachment;
 import org.spoofax.terms.attachments.TermAttachmentType;
@@ -14,6 +15,20 @@ import org.spoofax.terms.attachments.TermAttachmentType;
 public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm> implements IStrategoTerm {
 
     private static final long serialVersionUID = -8193582031891397734L;
+    
+    private final AbstractSimpleTerm attachmentContainer = new AbstractSimpleTerm() {
+        public boolean isList() {
+            return false;
+        }
+        
+        public int getSubtermCount() {
+            return 0;
+        }
+        
+        public ISimpleTerm getSubterm(int i) {
+            throw new IndexOutOfBoundsException("" + i);
+        }
+    };
 
     public StrategoHashMap(int initialSize, int maxLoad) {
         super(initialSize, 1.0f * maxLoad / 100);
@@ -47,6 +62,7 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         return second == this;
     }
     
+    @Override
     public int hashCode() {
         return System.identityHashCode(this);
     }
@@ -69,16 +85,16 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         output.append(toString());
     }
     
-    public<T extends ITermAttachment> T getAttachment(TermAttachmentType<T> attachmentType) {
-        return null;
-    }
-
-    public void putAttachment(ITermAttachment attachment) {
-        throw new NotImplementedException();
+    public<T extends ITermAttachment> T getAttachment(TermAttachmentType<T> type) {
+        return attachmentContainer.getAttachment(type);
     }
     
-    public void removeAttachment(TermAttachmentType<?> attachmentType) {
-        throw new NotImplementedException();
+    public void putAttachment(ITermAttachment attachment) {
+        attachmentContainer.putAttachment(attachment);
+    }
+    
+    public void removeAttachment(TermAttachmentType<?> type) {
+        attachmentContainer.removeAttachment(type);
     }
     
     public boolean isList() {

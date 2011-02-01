@@ -14,6 +14,7 @@ import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.TermFactory;
 
 public class SSL_newname extends AbstractPrimitive {
 	
@@ -60,12 +61,15 @@ public class SSL_newname extends AbstractPrimitive {
 	    }
 	    
         String result;
-        do {
-            int counterValue = getNextValue(prefix, counter);
-            result = prefix + counterValue;
-        } while (factory.hasConstructor(result, 0));
+        IStrategoTerm resultTerm;
+        synchronized (TermFactory.class) { // additional, non-essential lock
+            do {
+                int counterValue = getNextValue(prefix, counter);
+                result = prefix + counterValue;
+            } while ((resultTerm = factory.tryMakeUniqueString(result)) == null);
+        }
 
-        env.setCurrent(factory.makeString(result));
+        env.setCurrent(resultTerm);
         
 		return true;
 	}

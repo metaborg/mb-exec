@@ -49,9 +49,7 @@ public class SSL_printnl extends AbstractPrimitive {
 //                    sb.append(Tools.javaString(t));
 //                continue;
 //            }
-            PrettyPrinter p = new PrettyPrinter();
-            t.prettyPrint(p);
-            sb.append(p.getString());
+            sb.append(t);
         }
         sb.append("\n");
 

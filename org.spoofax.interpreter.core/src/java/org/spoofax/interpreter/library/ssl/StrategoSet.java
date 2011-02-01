@@ -18,15 +18,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.terms.AbstractSimpleTerm;
 import org.spoofax.terms.AbstractTermFactory;
-import org.spoofax.terms.attachments.ITermAttachment;
-import org.spoofax.terms.attachments.TermAttachmentType;
 
-public class StrategoSet implements IStrategoTerm, Serializable {
+public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Serializable {
         
     private static final long serialVersionUID = -4514696890481283123L;
     private int counter;
@@ -129,6 +127,7 @@ public class StrategoSet implements IStrategoTerm, Serializable {
         return second == this;
     }
     
+    @Override
     public int hashCode() {
         return System.identityHashCode(this);
     }
@@ -149,18 +148,6 @@ public class StrategoSet implements IStrategoTerm, Serializable {
     public void writeAsString(Appendable output, int maxDepth)
             throws IOException {
         output.append(toString());
-    }
-    
-    public<T extends ITermAttachment> T getAttachment(TermAttachmentType<T> attachmentType) {
-        return null;
-    }
-
-    public void putAttachment(ITermAttachment attachment) {
-        throw new NotImplementedException();
-    }
-    
-    public void removeAttachment(TermAttachmentType<?> attachmentType) {
-        throw new NotImplementedException();
     }
     
     public boolean isList() {
