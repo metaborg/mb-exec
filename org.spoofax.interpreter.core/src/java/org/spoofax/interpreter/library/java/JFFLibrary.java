@@ -1,5 +1,7 @@
 package org.spoofax.interpreter.library.java;
 
+import static org.spoofax.terms.Term.isTermInt;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +68,7 @@ public class JFFLibrary extends AbstractStrategoOperatorRegistry {
 
 	public Object unwrapObject(IStrategoAppl term) {
 		IStrategoTerm t = term.getSubterm(0);
-		if(!(t instanceof IStrategoInt))
+		if(!(isTermInt(t)))
 			return null;
 		return objectWrappers.get(((IStrategoInt)t).intValue());
 	}

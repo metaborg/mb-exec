@@ -38,6 +38,7 @@ public class Tools {
         return (IStrategoInt) t.getSubterm(i);
     }
 
+    /*
     public IStrategoTerm implode(ITermFactory factory, IStrategoAppl t) throws InterpreterException {
         IStrategoConstructor ctor = t.getConstructor();
         // TODO get an instance of the Stratego signature from the interpreter instance. 
@@ -66,6 +67,7 @@ public class Tools {
 
         throw new InterpreterException("Unknown build constituent '" + t.getConstructor() + "'");
     }
+    */
 
     public static IStrategoList listAt(IStrategoTerm t, int i) {
         return (IStrategoList) t.getSubterm(i);

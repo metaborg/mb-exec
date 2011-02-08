@@ -1,12 +1,13 @@
 package org.spoofax.interpreter.cli;
 
+/* Replaced by org.strategoxt.HybridInterpreter
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.spoofax.interpreter.ConcreteInterpreter;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.jsglr.InvalidParseTableException;
+import org.spoofax.jsglr.client.InvalidParseTableException;
 
 public class Main {
 
@@ -60,3 +61,4 @@ public class Main {
 		}
 	}
 }
+*/

@@ -215,8 +215,8 @@ public class Build extends Strategy {
 
         IStrategoList children = (IStrategoList) t.getSubterm(1);
         
-        IStrategoAppl headPattern = (IStrategoAppl) children.get(0);
-        IStrategoAppl tailPattern = (IStrategoAppl) children.get(1);
+        IStrategoAppl headPattern = (IStrategoAppl) children.getSubterm(0);
+        IStrategoAppl tailPattern = (IStrategoAppl) children.getSubterm(1);
         
         IStrategoList tail = buildList(env, tailPattern, factory); 
         IStrategoTerm head = buildTerm(env, headPattern);

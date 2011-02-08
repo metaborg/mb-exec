@@ -20,7 +20,7 @@ import org.spoofax.interpreter.library.ecj.ECJLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.ITermPrinter;
-import org.spoofax.interpreter.terms.InlinePrinter;
+import org.spoofax.terms.io.InlinePrinter;
 
 public class Main {
 

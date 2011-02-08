@@ -4,4 +4,3 @@ Bundle-Name: Xlet
 Bundle-SymbolicName: org.spoofax.xlet
 Bundle-Version: 0.1.0
 Bundle-Localization: plugin
-Require-Bundle: org.spoofax.interpreter

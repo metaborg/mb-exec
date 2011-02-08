@@ -17,7 +17,7 @@ import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.saf.BinaryWriter;
+import org.spoofax.terms.io.binary.SAFWriter;
 
 public class SSL_write_term_to_stream_saf extends AbstractPrimitive {
 
@@ -39,8 +39,7 @@ public class SSL_write_term_to_stream_saf extends AbstractPrimitive {
             return false;
         
         try {
-            
-            BinaryWriter.writeTermToSAFStream(targs[1], bout);
+            SAFWriter.writeTermToSAFStream(targs[1], bout);
             bout.close();
             
         } catch(IOException e) {

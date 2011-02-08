@@ -18,8 +18,8 @@ import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.InlinePrinter;
 import org.spoofax.interpreter.terms.PrettyPrinter;
+import org.spoofax.terms.io.InlinePrinter;
 
 public class SSL_printnl extends AbstractPrimitive {
 
@@ -49,9 +49,7 @@ public class SSL_printnl extends AbstractPrimitive {
 //                    sb.append(Tools.javaString(t));
 //                continue;
 //            }
-            PrettyPrinter p = new PrettyPrinter();
-            t.prettyPrint(p);
-            sb.append(p.getString());
+            sb.append(t);
         }
         sb.append("\n");
 

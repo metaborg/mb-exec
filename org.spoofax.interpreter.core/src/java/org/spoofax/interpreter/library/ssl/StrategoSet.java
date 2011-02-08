@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,15 +15,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import org.spoofax.interpreter.terms.BasicTermFactory;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.terms.AbstractSimpleTerm;
+import org.spoofax.terms.AbstractTermFactory;
 
-public class StrategoSet implements IStrategoTerm, Serializable {
+public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Serializable {
         
     private static final long serialVersionUID = -4514696890481283123L;
     private int counter;
@@ -98,7 +100,7 @@ public class StrategoSet implements IStrategoTerm, Serializable {
     }
 
     public IStrategoTerm[] getAllSubterms() {
-        return BasicTermFactory.EMPTY;
+        return AbstractTermFactory.EMPTY;
     }
 
     public IStrategoList getAnnotations() {
@@ -125,6 +127,7 @@ public class StrategoSet implements IStrategoTerm, Serializable {
         return second == this;
     }
     
+    @Override
     public int hashCode() {
         return System.identityHashCode(this);
     }
@@ -137,4 +140,18 @@ public class StrategoSet implements IStrategoTerm, Serializable {
     public String toString() {
         return String.valueOf(hashCode());
     }
+    
+    public String toString(int maxDepth) {
+        return toString();
+    }
+    
+    public void writeAsString(Appendable output, int maxDepth)
+            throws IOException {
+        output.append(toString());
+    }
+    
+    public boolean isList() {
+        return false;
+    }
+
 }

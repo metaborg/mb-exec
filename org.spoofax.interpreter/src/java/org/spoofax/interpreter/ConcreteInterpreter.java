@@ -1,11 +1,12 @@
 package org.spoofax.interpreter;
 
+/* Obsolete; replaced by whatever
 import java.io.IOException;
 
 import org.spoofax.interpreter.core.Interpreter;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
-import org.spoofax.jsglr.InvalidParseTableException;
+import org.spoofax.jsglr.client.InvalidParseTableException;
 import org.spoofax.compiler.Compiler;
 
 public class ConcreteInterpreter extends Interpreter {
@@ -26,3 +27,4 @@ public class ConcreteInterpreter extends Interpreter {
     	return (WrappedATermFactory)super.getFactory();
     }
 }
+*/
