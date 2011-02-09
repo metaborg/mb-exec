@@ -41,7 +41,7 @@ public class IOAgent {
     
     public final static int CONST_STDERR = 2;
     
-    private final static String FILE_ENCODING = "ISO-8859-1";
+    private final static String FILE_ENCODING = "UTF-8";
     
     private final static Charset FILE_CHARSET = Charset.forName(FILE_ENCODING);
     
