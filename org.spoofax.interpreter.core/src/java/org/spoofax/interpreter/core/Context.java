@@ -33,8 +33,6 @@ public class Context implements IContext {
     public static int indentation = 0; // TODO should this be non static?
     
     private final StackTracer stackTracer;
-    
-    private final ITermFactory factory;
 
     private final ITermFactory programFactory;
 
@@ -43,6 +41,8 @@ public class Context implements IContext {
     private final Map<String, OpDecl> opdecls;
 
     private final StrategoSignature strategoSignature;
+    
+    private ITermFactory factory;
 
     private IStrategoTerm current;
 
@@ -112,6 +112,10 @@ public class Context implements IContext {
     public ITermFactory getFactory() {
         if (asyncCancelled) cancel();
         return factory;
+    }
+    
+    public void setFactory(ITermFactory factory) {
+        this.factory = factory;
     }
 
     public boolean bindVars(Results r) {

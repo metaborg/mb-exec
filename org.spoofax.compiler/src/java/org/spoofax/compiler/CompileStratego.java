@@ -8,6 +8,7 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
 
+@Deprecated
 public class CompileStratego {
 
 	/**

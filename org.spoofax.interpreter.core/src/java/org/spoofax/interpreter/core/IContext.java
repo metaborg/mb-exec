@@ -26,6 +26,7 @@ public interface IContext extends IAsyncCancellable {
     public SDefT lookupSVar(String n) throws InterpreterException;
 
     public ITermFactory getFactory();
+    public void setFactory(ITermFactory factory);
     public IOperatorRegistry getOperatorRegistry(String domain);
     public void addOperatorRegistry(IOperatorRegistry or);
 
