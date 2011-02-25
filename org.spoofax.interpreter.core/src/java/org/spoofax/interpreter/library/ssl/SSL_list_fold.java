@@ -34,7 +34,7 @@ public class SSL_list_fold extends AbstractPrimitive {
         IStrategoTerm[] tv = { tvars[0] };
         
         env.setCurrent(tv[0]);
-        for (IStrategoList list = (IStrategoList) tvars[0]; !list.isEmpty(); list = list.tail()) {
+        for (IStrategoList list = (IStrategoList) tvars[1]; !list.isEmpty(); list = list.tail()) {
             env.setCurrent(list.head());
             if(!s.evaluateWithArgs(env, sv, tv))
                 return false;
