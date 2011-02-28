@@ -46,6 +46,9 @@ public class SSL_get_constructor extends AbstractPrimitive {
         case IStrategoTerm.TUPLE:
             env.setCurrent(factory.makeString(""));
             return true;
+        case IStrategoTerm.PLACEHOLDER:
+            env.setCurrent(factory.makePlaceholder(factory.makeList()));
+            return true;
         default:
             throw new IllegalStateException("SSL_get_constructor failed for " + tvars[0]);
         }

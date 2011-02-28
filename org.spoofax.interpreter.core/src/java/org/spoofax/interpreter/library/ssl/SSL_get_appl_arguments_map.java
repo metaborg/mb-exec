@@ -7,12 +7,13 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import static org.spoofax.interpreter.core.Tools.isTermTuple;
+
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
-import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_get_appl_arguments_map extends AbstractPrimitive {
@@ -25,14 +26,15 @@ public class SSL_get_appl_arguments_map extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-        if(!Tools.isTermAppl(tvars[0]))
+        IStrategoTerm input = tvars[0];
+        
+        if(!Tools.isTermAppl(input) && !isTermTuple(input))
             return false;
         
-        IStrategoAppl a = (IStrategoAppl) tvars[0];
         Strategy c = svars[0];
-        final int arity = a.getConstructor().getArity();
+        int arity = input.getSubtermCount();
         IStrategoTerm[] result = new IStrategoTerm[arity];
-        IStrategoTerm[] applArgs = a.getAllSubterms();
+        IStrategoTerm[] applArgs = input.getAllSubterms();
         for(int i = 0; i < arity; i++) {
             env.setCurrent(applArgs[i]);
             if(!c.evaluate(env))
