@@ -44,7 +44,7 @@ public class SSL_get_arguments extends AbstractPrimitive {
             return true;
         case IStrategoTerm.PLACEHOLDER:
             IStrategoPlaceholder placeholder = (IStrategoPlaceholder) tvars[0];
-            env.setCurrent(placeholder.getTemplate());
+            env.setCurrent(env.getFactory().makeList(placeholder.getTemplate()));
             return true;
         default:
             throw new IllegalStateException("SSL_get_arguments failed for " + tvars[0]);
