@@ -23,6 +23,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.AbstractSimpleTerm;
 import org.spoofax.terms.AbstractTermFactory;
+import org.spoofax.terms.TermFactory;
 
 public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Serializable {
         
@@ -104,7 +105,7 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
     }
 
     public IStrategoList getAnnotations() {
-        return null;
+        return TermFactory.EMPTY_LIST;
     }
 
     public int getStorageType() {

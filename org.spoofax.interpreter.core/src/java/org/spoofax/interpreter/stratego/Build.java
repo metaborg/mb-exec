@@ -16,6 +16,7 @@ import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
+import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
@@ -248,12 +249,15 @@ public class Build extends Strategy {
             if (r.getTermType() == IStrategoTerm.LIST) {
                 return (IStrategoList) r;
             } else {
-                System.err.println("Warning: trying to build list with illegal tail: " + t.toString());
+            	SSLLibrary.instance(env).getIOAgent().printError("Warning: trying to build list with illegal tail: " + t.toString());
                 return null;
             }
         }
         
-        throw new InterpreterException("List tail must always be a list!");
+        // throw new InterpreterException("List tail must always be a list!");
+        IStrategoTerm r = buildTerm(env, t);
+        SSLLibrary.instance(env).getIOAgent().printError("Warning: trying to build list with illegal tail: " + r.toString());
+        return null;
     }
 
 

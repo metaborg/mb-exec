@@ -21,6 +21,7 @@ public class SSL_concat_strings extends AbstractPrimitive {
         super("SSL_concat_strings", 0, 1);
     }
 
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         

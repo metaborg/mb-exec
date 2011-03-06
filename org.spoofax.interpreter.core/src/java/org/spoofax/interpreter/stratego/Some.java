@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter.stratego;
 
+import static org.spoofax.interpreter.stratego.All.isCopy;
+
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
@@ -37,9 +39,14 @@ public class Some extends Strategy {
             case IStrategoTerm.STRING:
             	return getHook().pop().onFailure(env);
             case IStrategoTerm.APPL:
+                return eval(env, 0, false, t.getAllSubterms().clone());
             case IStrategoTerm.LIST:
             case IStrategoTerm.TUPLE:
-            	return eval(env, 0, false, t.getAllSubterms());
+                IStrategoTerm[] subterms = t.getAllSubterms();
+                assert isCopy(t, subterms);
+                return eval(env, 0, false, subterms);
+            case IStrategoTerm.BLOB:
+                return getHook().pop().onFailure(env);
             default:
                 throw new InterpreterException("Unknown ATerm type " + t.getTermType());
         }

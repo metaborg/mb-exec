@@ -44,9 +44,9 @@ public class Tools {
         // TODO get an instance of the Stratego signature from the interpreter instance. 
         StrategoSignature sign = null;
         
-        if (ctor.equals(sign.getAnno())) {
+        if (ctor == sign.getAnno()) {
             return implode(factory, applAt(t, 0));
-        } else if (ctor.equals(sign.getOp())) {
+        } else if (ctor == sign.getOp()) {
             String ctorName = javaStringAt(t, 0);
             IStrategoTerm[] children = t.getSubterm(1).getAllSubterms();
 
@@ -57,10 +57,10 @@ public class Tools {
                 kids = factory.makeListCons(implode(factory, (IStrategoAppl) children[i]), kids);
             }
             return factory.makeAppl(ctr, kids.getAllSubterms());
-        } else if (ctor.equals(sign.getInt())) {
+        } else if (ctor == sign.getInt()) {
             IStrategoString x = (IStrategoString) t.getSubterm(0);
             return factory.makeInt(new Integer(x.stringValue()).intValue());
-        } else if (ctor.equals(sign.getStr())) {
+        } else if (ctor == sign.getStr()) {
             IStrategoAppl x = (IStrategoAppl) t.getSubterm(0);
             return x;
         }
@@ -91,7 +91,7 @@ public class Tools {
     }
 
     public static boolean isCons(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getCons());
+        return t.getConstructor() == env.getStrategoSignature().getCons();
     }
 
     public static boolean isTermString(IStrategoTerm t) {
@@ -107,15 +107,15 @@ public class Tools {
     }
 
     public static boolean isNil(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getNil());
+        return t.getConstructor() == env.getStrategoSignature().getNil();
     }
 
     public static boolean isSDefT(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getSDefT());
+        return t.getConstructor() == env.getStrategoSignature().getSDefT();
     }
 
     public static boolean isExtSDef(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getExtSDef());
+        return t.getConstructor() == env.getStrategoSignature().getExtSDef();
     }
 
     public static boolean isTermInt(IStrategoTerm t) {
@@ -123,39 +123,39 @@ public class Tools {
     }
 
     public static boolean isAnno(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getAnno());
+        return t.getConstructor() == env.getStrategoSignature().getAnno();
     }
 
     public static boolean isOp(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getOp());
+        return t.getConstructor() == env.getStrategoSignature().getOp();
     }
 
     public static boolean isStr(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getStr());
+        return t.getConstructor() == env.getStrategoSignature().getStr();
 }
 
     public static boolean isVar(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getVar());
+        return t.getConstructor() == env.getStrategoSignature().getVar();
     }
 
     public static boolean isExplode(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getExplode());
+        return t.getConstructor() == env.getStrategoSignature().getExplode();
     }
 
     public static boolean isWld(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getWld());
+        return t.getConstructor() == env.getStrategoSignature().getWld();
     }
 
     public static boolean isAs(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getAs());
+        return t.getConstructor() == env.getStrategoSignature().getAs();
     }
 
     public static boolean isReal(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getReal());
+        return t.getConstructor() == env.getStrategoSignature().getReal();
     }
 
     public static boolean isInt(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getInt());
+        return t.getConstructor() == env.getStrategoSignature().getInt();
     }
 
     public static boolean isTermReal(IStrategoTerm t) {
@@ -167,11 +167,11 @@ public class Tools {
     }
 
     public static boolean isFunType(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getFunType());
+        return t.getConstructor() == env.getStrategoSignature().getFunType();
     }
 
     public static boolean isConstType(IStrategoAppl t, IContext env) {
-        return t.getConstructor().equals(env.getStrategoSignature().getConstType());
+        return t.getConstructor() == env.getStrategoSignature().getConstType();
     }
 
     public static String javaStringAt(IStrategoTerm t, int i) {

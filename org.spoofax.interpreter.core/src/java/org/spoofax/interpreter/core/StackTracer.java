@@ -112,9 +112,14 @@ public class StackTracer {
     }
     
     public void setTrace(String[] trace) {
-        currentDepth = min(trace.length, currentDepth);
-        failureDepth = trace.length;
-        frames = trace;
+        if (trace.length == 0) { // cannot resize 0-length arrays
+            currentDepth = failureDepth = 0;
+            frames = new String[10]; 
+        } else {
+            currentDepth = min(trace.length, currentDepth);
+            failureDepth = trace.length;
+            frames = trace;
+        }
     }
     
     /**
@@ -154,6 +159,7 @@ public class StackTracer {
             int depth = onlyCurrent ? currentDepth : failureDepth;
             String[] frames = this.frames.clone(); // avoid _most_ race conditions (for UncaughtExceptionHandler)
             
+            // TODO: reverse the order of this trace: latest frames should be at the end...
             for (int i = 0; i < depth; i++) {
                 if (i == MAX_REPORTED_FRAMES - MAX_REPORTED_FRAMES_TAIL) {
                     writer.write("...truncated..." + "\n");

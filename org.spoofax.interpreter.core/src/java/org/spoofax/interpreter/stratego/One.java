@@ -15,6 +15,7 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
+import static org.spoofax.interpreter.stratego.All.*;
 
 public class One extends Strategy {
 
@@ -37,9 +38,14 @@ public class One extends Strategy {
             case IStrategoTerm.STRING:
                 return getHook().pop().onFailure(env);
             case IStrategoTerm.APPL:
+                return eval(env, 0, t.getAllSubterms().clone());
             case IStrategoTerm.LIST:
             case IStrategoTerm.TUPLE:
-                return eval(env, 0, t.getAllSubterms());
+                IStrategoTerm[] subterms = t.getAllSubterms();
+                assert isCopy(t, subterms);
+                return eval(env, 0, subterms);
+            case IStrategoTerm.BLOB:
+                return getHook().pop().onFailure(env);
             default:
                 throw new InterpreterException("Unknown ATerm type " + t.getTermType());
         }
@@ -61,20 +67,19 @@ public class One extends Strategy {
 			}
 			@Override
 			public IConstruct onSuccess(IContext env) throws InterpreterException {
-				IStrategoTerm[] kids = old.getAllSubterms();
-				kids[n] = env.current();
+				list[n] = env.current();
 				switch (old.getTermType()) {
 				case IStrategoTerm.LIST: {
-					env.setCurrent(env.getFactory().replaceList(kids, (IStrategoList)old));
+					env.setCurrent(env.getFactory().replaceList(list, (IStrategoList)old));
 					break ;
 				}
 				case IStrategoTerm.APPL: {
 					IStrategoAppl appl = (IStrategoAppl)old;
-					env.setCurrent(env.getFactory().replaceAppl(appl.getConstructor(), kids, (IStrategoAppl)old));
+					env.setCurrent(env.getFactory().replaceAppl(appl.getConstructor(), list, (IStrategoAppl)old));
 					break ;
 				}
 				case IStrategoTerm.TUPLE: {
-					env.setCurrent(env.getFactory().replaceTuple(kids, (IStrategoTuple) old));
+					env.setCurrent(env.getFactory().replaceTuple(list, (IStrategoTuple) old));
 					break ;
 				}
 				default: {

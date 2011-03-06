@@ -9,6 +9,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.AbstractSimpleTerm;
 import org.spoofax.terms.AbstractTermFactory;
+import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.attachments.ITermAttachment;
 import org.spoofax.terms.attachments.TermAttachmentType;
 
@@ -39,7 +40,7 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
     }
 
     public IStrategoList getAnnotations() {
-        return null;
+        return TermFactory.EMPTY_LIST;
     }
 
     public int getStorageType() {
