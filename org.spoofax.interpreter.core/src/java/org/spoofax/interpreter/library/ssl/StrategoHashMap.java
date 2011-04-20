@@ -17,6 +17,7 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
 
     private static final long serialVersionUID = -8193582031891397734L;
     
+    // I already burned my base class here, so I use encapsulation for attachments
     private final AbstractSimpleTerm attachmentContainer = new AbstractSimpleTerm() {
         public boolean isList() {
             return false;
@@ -94,8 +95,8 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         attachmentContainer.putAttachment(attachment);
     }
     
-    public void removeAttachment(TermAttachmentType<?> type) {
-        attachmentContainer.removeAttachment(type);
+    public ITermAttachment removeAttachment(TermAttachmentType<?> type) {
+        return attachmentContainer.removeAttachment(type);
     }
     
     public boolean isList() {
