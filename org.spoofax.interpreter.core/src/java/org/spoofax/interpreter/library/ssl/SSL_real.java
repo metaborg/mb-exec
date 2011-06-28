@@ -18,6 +18,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 /**
  * @author Sander Vermolen <sandervermolen near gmail.com>
  * @author Lennart Kats <lennart add lclnet.nl>
+ * @author Tobi Vollebregt
  */
 public class SSL_real extends AbstractPrimitive {
 
@@ -33,7 +34,7 @@ public class SSL_real extends AbstractPrimitive {
 
         if(Tools.isTermInt(tvars[0])) {
             IStrategoInt a = (IStrategoInt) tvars[0];
-            env.setCurrent(env.getFactory().makeInt(a.intValue()));
+            env.setCurrent(env.getFactory().makeReal(a.intValue()));
             return true;
         }
         
