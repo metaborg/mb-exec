@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.spoofax.interpreter.library.xml
+Bundle-SymbolicName: org.spoofax.interpreter.library.xml
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.junit;bundle-version="4.8.1",
+ org.spoofax.interpreter.core,
+ org.spoofax.terms;bundle-version="1.0.0"
+Export-Package: org.spoofax.interpreter.library.xml

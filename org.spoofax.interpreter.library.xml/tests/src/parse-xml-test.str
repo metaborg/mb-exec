@@ -1,0 +1,193 @@
+module parse-xml-test
+imports stratego-lib
+
+strategies
+
+  main =
+    xml-set-feature(|"http://xml.org/sax/features/namespaces", 0);
+    // xml-set-feature(|"http://xml.org/sax/features/validation", 1);
+    test-suite(!"parse-xml-test",
+      simple-tests
+    ; whitespace-tests
+    ; entity-tests
+    ; namespace-tests
+    ; parse-error-tests
+    )
+
+strategies
+
+  xml-set-feature = ?(a, b); prim("XML_set_feature", a, b)
+  xml-set-feature(|a, b) = prim("XML_set_feature", a, b)
+  xml-parse-string = ?t; prim("XML_parse_string", t)
+  xml-get-parse-errors = prim("XML_get_parse_errors")
+
+  with-feature(s | feature, enable) =
+  	xml-set-feature(|feature, enable); s;
+  	xml-set-feature(|feature, <subti> (1, enable)) 
+
+  with-mixed-content(s) =
+  	with-feature(s | "http://spoofax.org/sax/features/mixed-content", 1)
+
+  without-character-data(s) =
+  	with-feature(s | "http://spoofax.org/sax/features/character-data", 0)
+
+  with-namespaces(s) =
+  	with-feature(s | "http://xml.org/sax/features/namespaces", 1)
+
+// namespace aware
+signature
+  constructors
+    Element   : QName * List(Attribute) * List(Element) -> Element
+    Attribute : QName * String -> Attribute
+    Text      : String -> Element
+    QName     : String * String -> QName
+
+// not namespace aware 
+signature
+  constructors
+    Element   : String * List(Attribute) * List(Element) -> Element
+    Attribute : String * String -> Attribute
+    Text      : String -> Element
+
+strategies
+
+  simple-tests =
+    apply-test(
+      !"combined open/close tag"
+    , xml-parse-string
+    , !"<root/>"
+    , !Element("root", [], [])
+      )
+  ; apply-test(
+      !"separate open/close tag"
+    , xml-parse-string
+    , !"<root></root>"
+    , !Element("root", [], [])
+    )
+  ; apply-test(
+      !"attributes"
+    , xml-parse-string
+    , !"<root a=\"1\" b='2'/>"
+    , !Element("root", [Attribute("a", "1"), Attribute("b", "2")], [])
+    )
+  ; apply-test(
+       !"child elements"
+    , xml-parse-string
+     , !"<root><a>1</a><b>2</b></root>"
+     , !Element("root", [], [Element("a", [], [Text("1")]), Element("b", [], [Text("2")])])
+    )
+  ; apply-test(
+      !"comments"
+    , xml-parse-string
+    , !"<root><!-- this is a comment --></root>"
+    , !Element("root", [], [])
+    )
+  ; apply-test(
+      !"cdata"
+    , xml-parse-string
+    , !"<root><![CDATA[this is CDATA ]]>this is PCDATA</root>"
+    , !Element("root", [], [Text("this is CDATA this is PCDATA")])
+    )
+
+  whitespace-tests =
+    apply-test(
+      !"mixed content 0"
+    , without-character-data(xml-parse-string)
+    , !"<root> <a/> </root>"
+    , !Element("root", [], [Element("a", [], [])])
+    )
+  ; apply-test(
+      !"mixed content 1"
+    , xml-parse-string
+    , !"<root> <a/> </root>"
+    , !Element("root", [], [Element("a", [], [])])
+    )
+  ; apply-test(
+      !"mixed content 2"
+    , with-mixed-content(xml-parse-string)
+    , !"<root> <a/> </root>"
+    , !Element("root", [], [Text(" "), Element("a", [], []), Text(" ")])
+    )
+  ; apply-test(
+       !"text content 0"
+    , without-character-data(xml-parse-string)
+    , !"<root> foo </root>"
+    , !Element("root", [], [])
+    )
+  ; apply-test(
+       !"text content 1"
+    , xml-parse-string
+    , !"<root> foo </root>"
+    , !Element("root", [], [Text(" foo ")])
+    )
+  ; apply-test(
+       !"text content 2"
+    , with-mixed-content(xml-parse-string)
+    , !"<root> foo </root>"
+    , !Element("root", [], [Text(" foo ")])
+    )
+
+  entity-tests =
+    apply-test(
+      !"basic entity test"
+    , xml-parse-string
+    , !"<root>&quot;&amp;&apos;&lt;&gt;</root>"
+    , !Element("root", [], [Text("\"&'<>")])
+    )
+  ; apply-test(
+      !"numeric entity test"
+    , xml-parse-string
+    , !"<root>&#0065;&#0097;&#x0042;&#x0062;</root>"
+    , !Element("root", [], [Text("AaBb")])
+    )
+  ; apply-test(
+      !"custom entity test"
+    , xml-parse-string
+    , !"<!DOCTYPE test [<!ENTITY fb \"foobar\">]><root>&fb;</root>"
+    , !Element("root", [], [Text("foobar")])
+    )
+  ; apply-and-show(
+      !"unknown entity test"
+    , not(xml-parse-string) ; xml-get-parse-errors
+    , !"<root>&fb;</root>"
+    )
+
+  namespace-tests =
+    // source of the example: http://www.w3.org/TR/xml-names/
+    apply-test(
+      !"namespace test 0"
+    , xml-parse-string
+    , !"<x xmlns:edi='http://ecommerce.example.org/schema'><edi:foo/></x>"
+    , !Element("x", [Attribute("xmlns:edi","http://ecommerce.example.org/schema")], [Element("edi:foo", [], [])])
+    )
+  ; apply-test(
+      !"namespace test 1"
+    , with-namespaces(xml-parse-string)
+    , !"<x xmlns:edi='http://ecommerce.example.org/schema'><edi:foo/></x>"
+    , !Element(QName(None(), "x"), [], [Element(QName("http://ecommerce.example.org/schema", "foo"), [], [])])
+    )
+
+  parse-error-tests =
+    // Possibly other XML parser implementations are capable of recovering
+    // from the errors and returning an approximation of the input document.
+    // If so, s/not/try/ for those tests.
+    apply-and-show(
+      !"parse error 0"
+    , not(xml-parse-string) ; xml-get-parse-errors ; is-list
+    , !"<wrong>"
+    )
+  ;	apply-and-show(
+      !"parse error 1"
+    , not(xml-parse-string) ; xml-get-parse-errors ; is-list
+    , !"<wrong>&amp</wrong>"
+    )
+  ;	apply-and-show(
+      !"parse error 2"
+    , not(xml-parse-string) ; xml-get-parse-errors ; is-list
+    , !"<wrong>5 < 3</wrong>"
+    )
+  ;	apply-and-show(
+      !"parse error 3"
+    , not(with-namespaces(xml-parse-string)) ; xml-get-parse-errors ; is-list
+    , !"<wrong><edi:foo/></wrong>"
+    )
