@@ -61,7 +61,7 @@ public abstract class AbstractInterpreterTest extends TestCase {
         if(unitTestDebug) {
             System.out.println("Input : " + input);
         }
-        assertTrue(runInterp(test, input));
+        assertTrue("main strategy failed", runInterp(test, input));
         IStrategoTerm x = output;
         IStrategoTerm y = itp.current();
         if(unitTestDebug) {
@@ -74,7 +74,7 @@ public abstract class AbstractInterpreterTest extends TestCase {
         if(unitTestDebug) {
             System.out.println(succeeded);
         }
-        assertTrue(succeeded);
+        assertTrue("actual output differs from expected output", succeeded);
     }
 
     private boolean runInterp(String test, IStrategoTerm input) throws IOException, InterpreterException {

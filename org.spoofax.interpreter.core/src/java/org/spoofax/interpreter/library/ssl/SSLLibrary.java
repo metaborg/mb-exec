@@ -143,7 +143,8 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_isPlaceholder());
         add(new SSL_makePlaceholder());
         add(new SSL_getPlaceholder());
-     }
+        add(new SSL_filesize());
+    }
 
     public AbstractPrimitive lookup(String s) {
         return get(s);

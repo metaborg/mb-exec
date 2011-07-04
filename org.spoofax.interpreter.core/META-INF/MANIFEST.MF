@@ -13,5 +13,6 @@ Export-Package: org.spoofax,
  org.spoofax.interpreter.library.ssl,
  org.spoofax.interpreter.stratego,
  org.spoofax.interpreter.terms,
- org.spoofax.interpreter.terms.saf
+ org.spoofax.interpreter.terms.saf,
+ org.spoofax.interpreter.test
 Bundle-Vendor: Spoofax.org
