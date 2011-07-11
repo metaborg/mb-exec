@@ -17,10 +17,10 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * If the parser is namespace aware, then the resulting ATerm has the structure:
  *
- *  Element   : QName * List(Attribute) * List(Element) -> Element
- *  Attribute : QName * String -> Attribute
+ *  Element   : Name * List(Attribute) * List(Element) -> Element
+ *  Attribute : Name * String -> Attribute
  *  Text      : String -> Element
- *  QName     : String * String
+ *  Name     : String * String
  *
  * If the parser is not namespace aware, then it has this structure:
  *
@@ -64,7 +64,7 @@ public class StrategoTermBuilder extends DefaultHandler {
 
 	private final IStrategoConstructor textCons;
 
-	private final IStrategoConstructor qNameCons;
+	private final IStrategoConstructor nameCons;
 
 	private final IStrategoConstructor noneCons;
 
@@ -88,7 +88,7 @@ public class StrategoTermBuilder extends DefaultHandler {
 		elementCons = factory.makeConstructor("Element", 3);
 		attributeCons = factory.makeConstructor("Attribute", 2);
 		textCons = factory.makeConstructor("Text", 1);
-		qNameCons = factory.makeConstructor("QName", 2);
+		nameCons = factory.makeConstructor("Name", 2);
 		noneCons = factory.makeConstructor("None", 0);
 
 		allowMixedContent = library.getAllowMixedContent();
@@ -127,7 +127,7 @@ public class StrategoTermBuilder extends DefaultHandler {
 		if (namespaceAware) {
 			IStrategoTerm uriTerm = uri.isEmpty() ? factory.makeAppl(noneCons) : factory.makeString(uri);
 			IStrategoTerm localNameTerm = factory.makeString(uri.isEmpty() ? qName : localName);
-			return factory.makeAppl(qNameCons, uriTerm, localNameTerm);
+			return factory.makeAppl(nameCons, uriTerm, localNameTerm);
 		}
 		else {
 			return factory.makeString(qName);
