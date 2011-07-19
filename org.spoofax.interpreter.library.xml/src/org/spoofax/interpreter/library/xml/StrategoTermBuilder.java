@@ -125,8 +125,9 @@ public class StrategoTermBuilder extends DefaultHandler {
 	private IStrategoTerm makeName(String uri, String localName, String qName)
 	{
 		if (namespaceAware) {
-			IStrategoTerm uriTerm = uri.isEmpty() ? factory.makeAppl(noneCons) : factory.makeString(uri);
-			IStrategoTerm localNameTerm = factory.makeString(uri.isEmpty() ? qName : localName);
+			boolean uriIsEmpty = uri.length() == 0;
+			IStrategoTerm uriTerm = uriIsEmpty ? factory.makeAppl(noneCons) : factory.makeString(uri);
+			IStrategoTerm localNameTerm = factory.makeString(uriIsEmpty ? qName : localName);
 			return factory.makeAppl(nameCons, uriTerm, localNameTerm);
 		}
 		else {
