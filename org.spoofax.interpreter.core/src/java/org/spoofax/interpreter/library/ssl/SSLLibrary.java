@@ -125,6 +125,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_fclose());
         add(new SSL_read_term_from_string());
         add(new SSL_fgetc());
+        add(new SSL_fflush());
         add(new SSL_table_fold());
         add(new SSL_table_keys_fold());
         add(new SSL_table_values_fold());
