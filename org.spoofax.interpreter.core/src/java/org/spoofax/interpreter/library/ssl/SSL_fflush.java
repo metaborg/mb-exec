@@ -20,7 +20,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class SSL_fflush extends AbstractPrimitive {
 
     SSL_fflush() {
-        super("SSL_flush", 0, 1);
+        super("SSL_fflush", 0, 1);
     }
     
     @Override
