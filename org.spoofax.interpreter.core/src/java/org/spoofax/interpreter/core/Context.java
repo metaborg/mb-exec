@@ -218,7 +218,7 @@ public class Context implements IContext {
         asyncCancelled = false;
     }
 
-    private void cancel() {
+    protected void cancel() {
         asyncCancelled = false;
         getIOAgent().closeAllFiles();
         throw new CancellationException("Stratego interpreter cancelled");
