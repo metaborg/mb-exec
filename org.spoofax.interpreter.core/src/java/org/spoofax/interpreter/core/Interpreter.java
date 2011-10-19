@@ -103,12 +103,17 @@ public class Interpreter {
         StackTracer stackTracer = getContext().getStackTracer();
         stackTracer.push(def.getName());
         
-        boolean success = def.getBody().evaluate(context);
+        try {
+            boolean success = def.getBody().evaluate(context);
         
-        if (success) stackTracer.popOnSuccess();
-        else stackTracer.popOnFailure();
-        
-        return success;
+            if (success) stackTracer.popOnSuccess();
+            else stackTracer.popOnFailure();
+            
+            return success;
+        } catch (RuntimeException e) {
+            stackTracer.popOnExit(false);
+            throw new InterpreterException(e);
+        }
     }
 
     public SDefT lookupUncifiedSVar(String name) {
