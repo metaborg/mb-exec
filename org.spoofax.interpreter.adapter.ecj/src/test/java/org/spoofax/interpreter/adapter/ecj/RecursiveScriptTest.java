@@ -5,7 +5,7 @@
  * 
  * Licensed under the GNU General Public License, v2
  */
-package org.spoofax.interpreter.adapter.ecj.tests;
+package org.spoofax.interpreter.adapter.ecj;
 
 import java.io.BufferedReader;
 import java.io.File;

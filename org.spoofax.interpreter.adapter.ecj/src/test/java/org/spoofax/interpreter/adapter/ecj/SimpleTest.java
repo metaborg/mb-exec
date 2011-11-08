@@ -1,4 +1,4 @@
-package org.spoofax.interpreter.adapter.ecj.tests;
+package org.spoofax.interpreter.adapter.ecj;
 
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
