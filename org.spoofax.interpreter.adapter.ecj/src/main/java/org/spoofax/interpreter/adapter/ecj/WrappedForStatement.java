@@ -16,7 +16,7 @@ public class WrappedForStatement extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final ForStatement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ForStatement", 4);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ForStatement", 4);
     
     WrappedForStatement(ForStatement wrappee) {
         super(CTOR);

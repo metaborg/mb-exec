@@ -16,7 +16,7 @@ public class WrappedJavadoc extends WrappedComment {
     private static final long serialVersionUID = 1L;
 
     private final Javadoc wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("Javadoc", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("Javadoc", 1);
     
     WrappedJavadoc(Javadoc wrappee) {
         super(CTOR);

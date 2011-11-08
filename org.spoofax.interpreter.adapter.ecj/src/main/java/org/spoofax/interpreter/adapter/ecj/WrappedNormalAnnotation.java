@@ -17,7 +17,7 @@ public class WrappedNormalAnnotation extends WrappedAnnotation {
     private static final long serialVersionUID = 1L;
 
     private final NormalAnnotation wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("NormalAnnotation", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("NormalAnnotation", 2);
     
     WrappedNormalAnnotation(NormalAnnotation wrappee) {
         super(CTOR);

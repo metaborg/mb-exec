@@ -16,7 +16,7 @@ public class WrappedICompilationUnit extends AbstractWrappedECJNode {
     private static final long serialVersionUID = 1L;
 
     private final ICompilationUnit wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ICompilationUnit", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ICompilationUnit", 2);
 
     WrappedICompilationUnit(ICompilationUnit wrappee) {
         super(CTOR);

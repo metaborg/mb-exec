@@ -16,7 +16,7 @@ public class WrappedDoubleType extends WrappedType {
     private static final long serialVersionUID = 1L;
 
     private final PrimitiveType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("DoubleType", 0);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("DoubleType", 0);
     
     WrappedDoubleType(PrimitiveType wrappee) {
         super(CTOR);

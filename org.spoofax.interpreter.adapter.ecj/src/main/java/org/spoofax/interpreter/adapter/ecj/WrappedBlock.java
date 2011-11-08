@@ -16,7 +16,7 @@ public class WrappedBlock extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final Block wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("Block", 1); 
+    private final static IStrategoConstructor CTOR = new ECJConstructor("Block", 1); 
     
     WrappedBlock(Block wrappee) {
         super(CTOR);

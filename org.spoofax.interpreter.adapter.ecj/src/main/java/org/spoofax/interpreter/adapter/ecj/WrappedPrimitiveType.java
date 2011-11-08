@@ -20,7 +20,7 @@ public class WrappedPrimitiveType extends WrappedType {
     // FIXME should we even keep this?
     
     private final PrimitiveType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("PrimitiveType", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("PrimitiveType", 1);
     
     WrappedPrimitiveType(PrimitiveType wrappee) {
         super(CTOR);

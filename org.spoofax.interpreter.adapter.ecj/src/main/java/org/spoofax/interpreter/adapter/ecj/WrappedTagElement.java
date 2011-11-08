@@ -18,7 +18,7 @@ public class WrappedTagElement extends WrappedASTNode {
     // FIXME nested
     
     private final TagElement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("TagElement", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("TagElement", 2);
     
     WrappedTagElement(TagElement wrappee) {
         super(CTOR);

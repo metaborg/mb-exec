@@ -16,7 +16,7 @@ public class WrappedIJavaElement extends AbstractECJAppl {
     private static final long serialVersionUID = 1L;
 
     private final IJavaElement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("IJavaElement", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("IJavaElement", 1);
     
     WrappedIJavaElement(IJavaElement wrappee) {
         super(CTOR);

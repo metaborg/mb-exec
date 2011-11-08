@@ -16,7 +16,7 @@ public class WrappedTextElement extends WrappedASTNode {
     private static final long serialVersionUID = 1L;
 
     private final TextElement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("TextElement", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("TextElement", 1);
     
     WrappedTextElement(TextElement wrappee) {
         super(CTOR);

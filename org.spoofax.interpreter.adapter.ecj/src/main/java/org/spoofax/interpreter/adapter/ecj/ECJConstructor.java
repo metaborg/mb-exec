@@ -19,14 +19,14 @@ import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.attachments.ITermAttachment;
 import org.spoofax.terms.attachments.TermAttachmentType;
 
-public class ASTCtor implements IStrategoConstructor {
+public class ECJConstructor implements IStrategoConstructor {
 
     private static final long serialVersionUID = 1L;
     
     private final String name;
     private final int arity;
 
-    ASTCtor(String name, int arity) {
+    ECJConstructor(String name, int arity) {
         this.name = name;
         this.arity = arity;
     }

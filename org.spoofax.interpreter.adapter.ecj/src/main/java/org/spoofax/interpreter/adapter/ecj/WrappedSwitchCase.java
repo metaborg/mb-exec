@@ -18,7 +18,7 @@ public class WrappedSwitchCase extends WrappedStatement {
     // FIXME default
     
     private final SwitchCase wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("SwitchCase", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("SwitchCase", 1);
     
     WrappedSwitchCase(SwitchCase wrappee) {
         super(CTOR);

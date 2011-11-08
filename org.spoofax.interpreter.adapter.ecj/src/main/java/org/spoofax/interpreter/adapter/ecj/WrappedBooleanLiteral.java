@@ -16,7 +16,7 @@ public class WrappedBooleanLiteral extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final BooleanLiteral wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("BooleanLiteral", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("BooleanLiteral", 1);
     
     WrappedBooleanLiteral(BooleanLiteral wrappee) {
         super(CTOR);

@@ -16,7 +16,7 @@ public class WrappedMethodInvocation extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final MethodInvocation wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("MethodInvocation", 4);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("MethodInvocation", 4);
     
     WrappedMethodInvocation(MethodInvocation wrappee) {
         super(CTOR);

@@ -18,7 +18,7 @@ public class WrappedMarkerAnnotation extends WrappedAnnotation {
 
     // FIXME improve
     private final MarkerAnnotation wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("MarkerAnnotation", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("MarkerAnnotation", 1);
     
     WrappedMarkerAnnotation(MarkerAnnotation wrappee) {
         super(CTOR);

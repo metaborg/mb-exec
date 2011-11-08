@@ -16,7 +16,7 @@ public class WrappedLabeledStatement extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final LabeledStatement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("LabeledStatement", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("LabeledStatement", 2);
     
     WrappedLabeledStatement(LabeledStatement wrappee) {
         super(CTOR);

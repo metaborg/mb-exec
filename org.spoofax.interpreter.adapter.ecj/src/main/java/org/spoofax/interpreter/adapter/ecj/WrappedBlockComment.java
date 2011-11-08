@@ -17,7 +17,7 @@ public class WrappedBlockComment extends WrappedComment {
 
     // FIXME where's the content?
     private final BlockComment wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("BlockComment", 0);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("BlockComment", 0);
     
     WrappedBlockComment(BlockComment wrappee) {
         super(CTOR);

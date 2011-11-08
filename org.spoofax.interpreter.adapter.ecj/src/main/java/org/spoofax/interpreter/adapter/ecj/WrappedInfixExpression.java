@@ -16,7 +16,7 @@ public class WrappedInfixExpression extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final InfixExpression wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("InfixExpression", 4);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("InfixExpression", 4);
     
     WrappedInfixExpression(InfixExpression wrappee) {
         super(CTOR);

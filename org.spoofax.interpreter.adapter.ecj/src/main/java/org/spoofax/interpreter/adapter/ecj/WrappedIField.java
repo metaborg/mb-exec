@@ -18,7 +18,7 @@ public class WrappedIField extends AbstractWrappedECJNode {
     private static final long serialVersionUID = 1L;
 
     private final IField wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("IField", 3);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("IField", 3);
 
     WrappedIField(IField wrappee) {
         super(CTOR);

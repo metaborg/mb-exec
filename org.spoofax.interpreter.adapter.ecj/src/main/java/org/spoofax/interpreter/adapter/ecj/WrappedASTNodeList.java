@@ -127,11 +127,6 @@ public class WrappedASTNodeList extends SkeletonStrategoList {
     }
 
     @Override
-    public String toString(int maxDepth) {
-        throw new NotImplementedException();
-    }
-
-    @Override
     public <T extends ITermAttachment> T getAttachment(
             TermAttachmentType<T> type) {
         throw new NotImplementedException();

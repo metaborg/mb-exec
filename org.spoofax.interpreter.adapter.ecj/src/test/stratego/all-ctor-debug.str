@@ -4,4 +4,4 @@ imports
 strategies
 
 
-  main = topdown(debug) //where(try(?c#(xs) ; <debug> (c, <length> xs))))
+  main = debug ; collect-all(\ c#(xs) -> (c, <length> xs) \)

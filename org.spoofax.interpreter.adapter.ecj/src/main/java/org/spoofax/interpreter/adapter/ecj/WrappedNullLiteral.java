@@ -16,7 +16,7 @@ public class WrappedNullLiteral extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final NullLiteral wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("NullLiteral", 0);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("NullLiteral", 0);
     
     WrappedNullLiteral(NullLiteral wrappee) {
         super(CTOR);

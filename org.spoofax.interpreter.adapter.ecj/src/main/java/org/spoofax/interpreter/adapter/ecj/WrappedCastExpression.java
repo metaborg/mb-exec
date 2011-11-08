@@ -16,7 +16,7 @@ public class WrappedCastExpression extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final CastExpression wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("CastExpression", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("CastExpression", 2);
     
     WrappedCastExpression(CastExpression wrappee) {
         super(CTOR);

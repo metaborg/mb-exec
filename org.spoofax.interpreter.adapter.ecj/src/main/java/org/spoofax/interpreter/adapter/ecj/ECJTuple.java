@@ -7,16 +7,16 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.StrategoTuple;
-import org.spoofax.terms.TermFactory;
 
 public class ECJTuple extends StrategoTuple {
 
     private static final long serialVersionUID = 1L;
 
-    ECJTuple(IStrategoTerm[] kids) {
-        super(kids, TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
+    ECJTuple(IStrategoTerm[] kids, IStrategoList annos) {
+        super(kids, annos, IStrategoTerm.IMMUTABLE);
     }
 
 }

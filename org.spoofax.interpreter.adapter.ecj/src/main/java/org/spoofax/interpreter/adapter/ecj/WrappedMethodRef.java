@@ -16,7 +16,7 @@ public class WrappedMethodRef extends WrappedASTNode {
     private static final long serialVersionUID = 1L;
 
     private final MethodRef wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("MethodRef", 3);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("MethodRef", 3);
     
     WrappedMethodRef(MethodRef wrappee) {
         super(CTOR);

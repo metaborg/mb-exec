@@ -15,7 +15,7 @@ public class WrappedPackageDeclaration extends WrappedASTNode {
 
     private static final long serialVersionUID = 1L;
 
-    private static final IStrategoConstructor CTOR = new ASTCtor("PackageDeclaration", 3); 
+    private static final IStrategoConstructor CTOR = new ECJConstructor("PackageDeclaration", 3); 
     private final PackageDeclaration wrappee;
     
     protected WrappedPackageDeclaration(PackageDeclaration wrappee) {

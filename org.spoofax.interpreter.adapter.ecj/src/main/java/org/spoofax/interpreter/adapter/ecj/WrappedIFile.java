@@ -16,7 +16,7 @@ public class WrappedIFile extends AbstractECJAppl {
     private static final long serialVersionUID = 1L;
 
     private final IFile wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ECJFile", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ECJFile", 2);
     
     WrappedIFile(IFile wrappee) {
         super(CTOR);

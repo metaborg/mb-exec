@@ -16,7 +16,7 @@ public class WrappedQualifiedType extends WrappedType {
     private static final long serialVersionUID = 1L;
 
     private final QualifiedType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("QualifiedType", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("QualifiedType", 2);
     
     WrappedQualifiedType(QualifiedType wrappee) {
         super(CTOR);

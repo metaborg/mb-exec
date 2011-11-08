@@ -16,7 +16,7 @@ public class WrappedQualifiedName extends WrappedName {
     private static final long serialVersionUID = 1L;
 
     private final QualifiedName wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("QualifiedName", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("QualifiedName", 2);
     
     WrappedQualifiedName(QualifiedName wrappee) {
         super(CTOR);

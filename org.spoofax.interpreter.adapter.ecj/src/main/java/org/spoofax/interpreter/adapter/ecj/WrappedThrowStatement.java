@@ -16,7 +16,7 @@ public class WrappedThrowStatement extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final ThrowStatement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ThrowStatement", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ThrowStatement", 1);
     
     WrappedThrowStatement(ThrowStatement wrappee) {
         super(CTOR);

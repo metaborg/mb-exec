@@ -17,7 +17,7 @@ public class WrappedModifier extends WrappedASTNode implements IWrappedExtendedM
     private static final long serialVersionUID = 1L;
 
     private final Modifier wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("Modifier", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("Modifier", 1);
     
     WrappedModifier(Modifier wrappee) {
         super(CTOR);

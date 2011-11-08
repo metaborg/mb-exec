@@ -16,7 +16,7 @@ public class WrappedParenthesizedExpression extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final ParenthesizedExpression wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ParenthesizedExpression", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ParenthesizedExpression", 1);
     
     WrappedParenthesizedExpression(ParenthesizedExpression wrappee) {
         super(CTOR);

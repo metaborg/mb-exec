@@ -16,7 +16,7 @@ public class WrappedFieldDeclaration extends WrappedBodyDeclaration {
     private static final long serialVersionUID = 1L;
 
     private final FieldDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("FieldDeclaration", 4);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("FieldDeclaration", 4);
     
     WrappedFieldDeclaration(FieldDeclaration wrappee) {
         super(CTOR);

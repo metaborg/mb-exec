@@ -16,7 +16,7 @@ public class WrappedContinueStatement extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final ContinueStatement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ContinueStatement", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ContinueStatement", 1);
     
     WrappedContinueStatement(ContinueStatement wrappee) {
         super(CTOR);

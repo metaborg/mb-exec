@@ -16,7 +16,7 @@ public class WrappedIfStatement extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final IfStatement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("IfStatement", 3); 
+    private final static IStrategoConstructor CTOR = new ECJConstructor("IfStatement", 3); 
     
     WrappedIfStatement(IfStatement wrappee) {
         super(CTOR);

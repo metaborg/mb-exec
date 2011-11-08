@@ -16,7 +16,7 @@ public class WrappedInstanceofExpression extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final InstanceofExpression wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("InstanceofExpression", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("InstanceofExpression", 2);
     
     WrappedInstanceofExpression(InstanceofExpression wrappee) {
         super(CTOR);

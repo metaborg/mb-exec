@@ -16,7 +16,7 @@ public class WrappedArrayAccess extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final ArrayAccess wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ArrayAccess", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ArrayAccess", 2);
     
     WrappedArrayAccess(ArrayAccess wrappee) {
         super(CTOR);

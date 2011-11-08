@@ -17,7 +17,7 @@ public class WrappedClassInstanceCreation extends WrappedExpression {
 
     private final ClassInstanceCreation wrappee;
 
-    private final static IStrategoConstructor CTOR = new ASTCtor("ClassInstanceCreation", 4);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ClassInstanceCreation", 4);
 
     WrappedClassInstanceCreation(ClassInstanceCreation wrappee) {
         super(CTOR);

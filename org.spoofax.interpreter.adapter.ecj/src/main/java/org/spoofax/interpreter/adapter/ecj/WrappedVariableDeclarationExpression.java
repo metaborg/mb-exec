@@ -16,7 +16,7 @@ public class WrappedVariableDeclarationExpression extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final VariableDeclarationExpression wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("VariableDeclarationExpression", 3);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("VariableDeclarationExpression", 3);
 
     WrappedVariableDeclarationExpression(VariableDeclarationExpression wrappee) {
         super(CTOR);

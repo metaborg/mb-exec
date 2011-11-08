@@ -16,7 +16,7 @@ public class WrappedEnumDeclaration extends WrappedAbstractTypeDeclaration {
     private static final long serialVersionUID = 1L;
 
     private final EnumDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("EnumDeclaration", 5);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("EnumDeclaration", 5);
     
     WrappedEnumDeclaration(EnumDeclaration wrappee) {
         super(CTOR);

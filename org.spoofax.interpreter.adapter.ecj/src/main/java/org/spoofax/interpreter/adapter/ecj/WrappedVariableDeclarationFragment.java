@@ -16,7 +16,7 @@ public class WrappedVariableDeclarationFragment extends WrappedVariableDeclarati
     private static final long serialVersionUID = 1L;
 
     private final VariableDeclarationFragment wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("VariableDeclarationFragment", 3); 
+    private final static IStrategoConstructor CTOR = new ECJConstructor("VariableDeclarationFragment", 3); 
     
     WrappedVariableDeclarationFragment(VariableDeclarationFragment wrappee) {
         super(CTOR);

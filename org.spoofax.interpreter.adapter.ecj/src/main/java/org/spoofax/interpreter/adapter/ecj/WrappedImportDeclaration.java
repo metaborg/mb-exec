@@ -15,7 +15,7 @@ public class WrappedImportDeclaration extends WrappedASTNode {
     private static final long serialVersionUID = 1L;
 
     private ImportDeclaration wrappee;
-    public final static ASTCtor CTOR = new ASTCtor("ImportDeclaration", 3); 
+    public final static ECJConstructor CTOR = new ECJConstructor("ImportDeclaration", 3); 
     
     public WrappedImportDeclaration(ImportDeclaration wrappee) {
         super(CTOR);

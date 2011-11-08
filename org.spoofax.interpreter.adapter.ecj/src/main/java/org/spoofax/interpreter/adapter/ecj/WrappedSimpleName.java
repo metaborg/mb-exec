@@ -16,7 +16,7 @@ public class WrappedSimpleName extends WrappedName {
     private static final long serialVersionUID = 1L;
 
     private final SimpleName wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("SimpleName", 1); 
+    private final static IStrategoConstructor CTOR = new ECJConstructor("SimpleName", 1); 
 
     WrappedSimpleName(SimpleName wrappee) {
         super(CTOR);

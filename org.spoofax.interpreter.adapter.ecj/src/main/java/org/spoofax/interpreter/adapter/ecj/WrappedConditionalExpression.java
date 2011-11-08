@@ -16,7 +16,7 @@ public class WrappedConditionalExpression extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final ConditionalExpression wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ConditionalExpression", 3);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ConditionalExpression", 3);
     
     WrappedConditionalExpression(ConditionalExpression wrappee) {
         super(CTOR);

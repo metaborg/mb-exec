@@ -16,7 +16,7 @@ public class WrappedAssertStatement extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final AssertStatement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("AssertStatement", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("AssertStatement", 2);
     
     WrappedAssertStatement(AssertStatement wrappee) {
         super(CTOR);

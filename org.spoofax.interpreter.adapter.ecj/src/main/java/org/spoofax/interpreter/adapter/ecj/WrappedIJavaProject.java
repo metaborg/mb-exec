@@ -16,7 +16,7 @@ public class WrappedIJavaProject extends WrappedIJavaElement {
     private static final long serialVersionUID = 1L;
 
     private final IJavaProject wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ECJJavaProject", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ECJJavaProject", 2);
     
     WrappedIJavaProject(IJavaProject wrappee) {
         super(CTOR, wrappee);

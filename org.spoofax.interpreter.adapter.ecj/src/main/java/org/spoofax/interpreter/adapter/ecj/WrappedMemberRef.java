@@ -16,7 +16,7 @@ public class WrappedMemberRef extends WrappedASTNode {
     private static final long serialVersionUID = 1L;
 
     private final MemberRef wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("MemberRef", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("MemberRef", 2);
     
     WrappedMemberRef(MemberRef wrappee) {
         super(CTOR);

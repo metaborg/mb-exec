@@ -16,7 +16,7 @@ public class WrappedSuperFieldAccess extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final SuperFieldAccess wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("SuperFieldAccess", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("SuperFieldAccess", 2);
     
     WrappedSuperFieldAccess(SuperFieldAccess wrappee) {
         super(CTOR);

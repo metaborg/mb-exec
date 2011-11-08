@@ -16,7 +16,7 @@ public class WrappedModifierKeyword extends AbstractWrappedECJNode {
     private static final long serialVersionUID = 1L;
 
     private final Modifier.ModifierKeyword wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ModifierKeyword", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ModifierKeyword", 1);
     
     WrappedModifierKeyword(Modifier.ModifierKeyword wrappee) {
         super(CTOR);

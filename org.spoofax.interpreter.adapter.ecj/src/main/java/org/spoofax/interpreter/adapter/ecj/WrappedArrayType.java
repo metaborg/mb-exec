@@ -16,7 +16,7 @@ public class WrappedArrayType extends WrappedType {
     private static final long serialVersionUID = 1L;
 
     private final ArrayType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ArrayType", 3);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ArrayType", 3);
     
     WrappedArrayType(ArrayType wrappee) {
         super(CTOR);

@@ -17,7 +17,7 @@ public class WrappedLineComment extends WrappedComment {
 
     // FIXME where is the content?
     private final LineComment wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("LineComment", 0);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("LineComment", 0);
     
     WrappedLineComment(LineComment wrappee) {
         super(CTOR);

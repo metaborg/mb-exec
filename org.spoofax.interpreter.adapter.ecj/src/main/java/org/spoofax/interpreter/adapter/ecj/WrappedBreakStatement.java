@@ -16,7 +16,7 @@ public class WrappedBreakStatement extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final BreakStatement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("BreakStatement", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("BreakStatement", 1);
     
     WrappedBreakStatement(BreakStatement wrappee) {
         super(CTOR);

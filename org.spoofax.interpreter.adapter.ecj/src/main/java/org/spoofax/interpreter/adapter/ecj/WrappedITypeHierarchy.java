@@ -9,7 +9,7 @@ public class WrappedITypeHierarchy extends AbstractECJAppl {
 
     private static final long serialVersionUID = 1L;
 
-    private final static IStrategoConstructor CTOR = new ASTCtor("ITypeHierarchy", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ITypeHierarchy", 2);
 	private final ITypeHierarchy wrappee;
 	
 	protected WrappedITypeHierarchy(ITypeHierarchy wrappee) {

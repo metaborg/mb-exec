@@ -28,19 +28,18 @@ import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.spoofax.DebugUtil;
 import org.spoofax.NotImplementedException;
+import org.spoofax.interpreter.adapter.ecj.skeleton.SkeletonTermFactory;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
-import org.spoofax.interpreter.terms.IStrategoPlaceholder;
-import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
-import org.spoofax.interpreter.terms.ITermFactory;
-import org.spoofax.terms.TermFactory;
+import org.spoofax.terms.StrategoConstructor;
+import org.spoofax.terms.StrategoList;
 
-public class ECJFactory implements ITermFactory {
+public class ECJFactory extends SkeletonTermFactory {
 
     private static final int ARRAY_ACCESS = 1;
     private static final int PACKAGE_DECLARATION = 2;
@@ -143,11 +142,13 @@ public class ECJFactory implements ITermFactory {
     private AST ast;
     
     public ECJFactory(AST ast) {
+        super(IStrategoTerm.IMMUTABLE);
         this.ast = ast;
         initCtorMap();
     }
     
     public ECJFactory() {
+        super(IStrategoTerm.IMMUTABLE);
         initCtorMap();
     }
     
@@ -250,7 +251,8 @@ public class ECJFactory implements ITermFactory {
         ctorNameToIndexMap.put("AnonymousClassDeclaration", ANONYMOUS_CLASS_DECLARATION);
         ctorNameToIndexMap.put("AssignmentOperator", ASSIGNMENT_OPERATOR);
     }
-    
+
+    /*
     @Override
     public IStrategoTerm parseFromString(String text) {
         if(text.equals("()")) {
@@ -260,6 +262,7 @@ public class ECJFactory implements ITermFactory {
         }
         throw new NotImplementedException();
     }
+    */
 
     private List<ASTNode> getAnnotations(IStrategoTerm term) {
         return ((WrappedASTNodeList)term).getWrappee();
@@ -268,12 +271,8 @@ public class ECJFactory implements ITermFactory {
     private Javadoc getJavadoc(IStrategoTerm term) {
         return ((WrappedJavadoc)term).getWrappee();
     }
-    
-    @Override
-    public IStrategoPlaceholder makePlaceholder(IStrategoTerm template) {
-        throw new NotImplementedException();
-    }
-    
+
+    /*    
     @Override
     public IStrategoTerm annotateTerm(IStrategoTerm term, IStrategoList annotations) {
     	if(term instanceof ECJAnnoWrapper) {
@@ -282,26 +281,30 @@ public class ECJFactory implements ITermFactory {
     		return new ECJAnnoWrapper(term, annotations);
     	}
     }
+*/
 
     @Override
-    public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... kids) {
-        IStrategoAppl t = constructASTNode(ctr, kids);
+    public IStrategoAppl makeAppl(IStrategoConstructor ctor, IStrategoTerm[] kids, IStrategoList annotations) {
+        IStrategoAppl t = constructASTNode(ctor, kids);
+        // FIXME add support for annos
+        if(annotations != null && !annotations.isEmpty())
+            throw new UnsupportedOperationException("cannot make appl with annos yet");
         if(t == null) {
             if(DebugUtil.isDebugging()) {
                 System.err.println("Generic fallback for:");
-                System.err.println("Construct: " + ctr.getName() + "/" + ctr.getArity() + " with " + kids.length + " kids");
+                System.err.println("Construct: " + ctor.getName() + "/" + ctor.getArity() + " with " + kids.length + " kids");
                 for(int i = 0; i < kids.length; i++) {
                     if(kids[i] instanceof WrappedASTNodeList) {
                         WrappedASTNodeList l = (WrappedASTNodeList)kids[i];
                         if(!l.isEmpty()) 
-                            System.err.println("  [" + l.get(0) + "]");
+                            System.err.println("  [" + l.getSubterm(0) + "]");
                         else
                             System.err.println("  " + l + " - empty");
                     } else
                         System.err.println("  " + kids[i]);
                 }
             }
-            return ctr.instantiate(this, kids);
+            return new ECJGenericAppl(ctor, kids);
         }
         return t;
     }
@@ -1879,18 +1882,19 @@ public class ECJFactory implements ITermFactory {
     }
 
     @Override
-    public IStrategoConstructor makeConstructor(String string, int arity) {
-        return new ASTCtor(string, arity);
+    public StrategoConstructor makeConstructor(String string, int arity) {
+        return new StrategoConstructor(string, arity);
     }
 
-    @Override
-    public IStrategoInt makeInt(int i) {
-        return new ECJInt(i);
-    }
-
+    /*
+*/
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public IStrategoList makeList(IStrategoTerm... terms) {
+    public IStrategoList makeList(IStrategoTerm[] terms, IStrategoList annotations) {
+        
+        if(annotations != null && !annotations.isEmpty())
+            throw new UnsupportedOperationException("Cannot make list with annos");
         
         boolean mustUseGeneric = false;
         for(IStrategoTerm t : terms)
@@ -1907,26 +1911,42 @@ public class ECJFactory implements ITermFactory {
         return new WrappedASTNodeList(r);
     }
     
+    
+    
     @Override
-    public IStrategoList makeListCons(IStrategoTerm head, IStrategoList tail) {
-        // TODO: handle list prepending in ECJFactory
-        return tail.prepend(head);
+    public IStrategoList makeListCons(IStrategoTerm head, IStrategoList tail, IStrategoList annos) {
+        if(tail instanceof WrappedASTNodeList && head instanceof WrappedASTNode) {
+            List<ASTNode> r = new ArrayList<ASTNode>();
+            r.add(((WrappedASTNode)head).getWrappee());
+            for(IStrategoTerm t : tail.getAllSubterms())
+                r.add(((WrappedASTNode)t).getWrappee());
+            return new WrappedASTNodeList(r);
+        }
+        return new StrategoList(head,  tail, annos, IStrategoTerm.IMMUTABLE);
     }
 
-    @Override
+    /*
+     *     @Override
     public IStrategoReal makeReal(double d) {
         return new ECJReal(d);
     }
+*/
 
     @Override
     public IStrategoString makeString(String s) {
         return new ECJString(s);
     }
 
+    
     @Override
-    public IStrategoTuple makeTuple(IStrategoTerm... terms) {
-        return new ECJTuple(terms);
+    public IStrategoInt makeInt(int value) {
+        return new ECJInt(value);
     }
+    @Override
+    public IStrategoTuple makeTuple(IStrategoTerm[] terms, IStrategoList annos) {
+        return new ECJTuple(terms, annos);
+    }
+
 
     public static IStrategoAppl wrap(Javadoc javadoc) {
         if(javadoc == null)
@@ -2927,7 +2947,7 @@ public class ECJFactory implements ITermFactory {
     public void setAST(AST ast) {
         this.ast = ast;
     }
-
+/*    
     @Deprecated
     public IStrategoAppl replaceAppl(IStrategoConstructor constructor, IStrategoTerm[] kids, IStrategoTerm old) {
         return replaceAppl(constructor, kids, (IStrategoAppl)old);
@@ -2946,7 +2966,7 @@ public class ECJFactory implements ITermFactory {
         }
         return r;
     }
-    
+
     public IStrategoTuple replaceTuple(IStrategoTerm[] kids, IStrategoTuple old) {
         return makeTuple(kids);
     }
@@ -2954,7 +2974,8 @@ public class ECJFactory implements ITermFactory {
     public IStrategoList replaceList(IStrategoTerm[] kids, IStrategoList old) {
         return makeList(kids);
     }
-
+*/
+    
     public static IStrategoTerm wrap(IType t) {
         if(t == null)
             return None.INSTANCE;
@@ -3069,70 +3090,4 @@ public class ECJFactory implements ITermFactory {
 			astMatcher = new ASTMatcher();
 		return astMatcher;
 	}
-
-    @Override
-    public IStrategoList makeList() {
-        return TermFactory.EMPTY_LIST;
-    }
-
-    @Override
-    public IStrategoAppl makeAppl(IStrategoConstructor constructor,
-            IStrategoTerm[] kids, IStrategoList annotations) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public IStrategoList makeList(IStrategoTerm[] kids,
-            IStrategoList annotations) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public IStrategoList makeListCons(IStrategoTerm head, IStrategoList tail,
-            IStrategoList annotations) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public IStrategoTuple makeTuple(IStrategoTerm[] kids,
-            IStrategoList annotations) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public IStrategoString tryMakeUniqueString(String name) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public int getDefaultStorageType() {
-        return IStrategoTerm.IMMUTABLE;
-    }
-
-    @Override
-    public IStrategoTerm copyAttachments(IStrategoTerm from, IStrategoTerm to) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public IStrategoList replaceListCons(IStrategoTerm head,
-            IStrategoList tail, IStrategoTerm oldHead, IStrategoList oldTail) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public IStrategoTerm replaceTerm(IStrategoTerm term, IStrategoTerm old) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public ITermFactory getFactoryWithStorageType(int storageType) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public IStrategoList makeList(Collection<? extends IStrategoTerm> terms) {
-        throw new NotImplementedException();
-    }
-
 }

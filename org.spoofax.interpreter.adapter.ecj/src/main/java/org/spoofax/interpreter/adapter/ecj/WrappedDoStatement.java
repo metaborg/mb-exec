@@ -16,7 +16,7 @@ public class WrappedDoStatement extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final DoStatement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("DoStatement", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("DoStatement", 2);
     
     WrappedDoStatement(DoStatement wrappee) {
         super(CTOR);

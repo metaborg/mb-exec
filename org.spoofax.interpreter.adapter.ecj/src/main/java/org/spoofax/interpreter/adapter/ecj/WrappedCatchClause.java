@@ -16,7 +16,7 @@ public class WrappedCatchClause extends WrappedASTNode {
     private static final long serialVersionUID = 1L;
 
     private final CatchClause wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("CatchClause", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("CatchClause", 2);
     
     WrappedCatchClause(CatchClause wrappee) {
         super(CTOR);

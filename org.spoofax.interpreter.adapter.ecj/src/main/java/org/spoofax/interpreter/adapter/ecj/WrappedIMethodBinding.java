@@ -16,7 +16,7 @@ public class WrappedIMethodBinding extends AbstractWrappedBinding {
     private static final long serialVersionUID = 1L;
 
     private final IMethodBinding wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("MethodBinding", 4);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("MethodBinding", 4);
     
     WrappedIMethodBinding(IMethodBinding wrappee) {
         super(CTOR);

@@ -18,7 +18,7 @@ public class WrappedAssignmentOperator extends AbstractWrappedECJNode {
     private static final long serialVersionUID = 1L;
 
     private final Assignment.Operator wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("AssignmentOperator", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("AssignmentOperator", 1);
     
     WrappedAssignmentOperator(Assignment.Operator wrappee) {
         super(CTOR);

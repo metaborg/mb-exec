@@ -16,7 +16,7 @@ public class WrappedEnumConstantDeclaration extends WrappedBodyDeclaration {
     private static final long serialVersionUID = 1L;
 
     private final EnumConstantDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("EnumConstantDeclaration", 4);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("EnumConstantDeclaration", 4);
     
     WrappedEnumConstantDeclaration(EnumConstantDeclaration wrappee) {
         super(CTOR);

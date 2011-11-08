@@ -16,7 +16,7 @@ public class WrappedReturnStatement extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final ReturnStatement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ReturnStatement", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ReturnStatement", 1);
     
     WrappedReturnStatement(ReturnStatement wrappee) {
         super(CTOR);

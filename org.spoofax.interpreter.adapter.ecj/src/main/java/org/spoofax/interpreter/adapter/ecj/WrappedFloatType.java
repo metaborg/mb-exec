@@ -16,7 +16,7 @@ public class WrappedFloatType extends WrappedType {
     private static final long serialVersionUID = 1L;
 
     private final PrimitiveType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("FloatType", 0);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("FloatType", 0);
     
     WrappedFloatType(PrimitiveType wrappee) {
         super(CTOR);

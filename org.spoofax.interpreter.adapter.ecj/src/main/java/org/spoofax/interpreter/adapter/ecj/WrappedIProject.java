@@ -16,7 +16,7 @@ public class WrappedIProject extends AbstractECJAppl {
     private static final long serialVersionUID = 1L;
 
     private final IProject wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ECJProject", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ECJProject", 2);
     
     WrappedIProject(IProject wrappee) {
         super(CTOR);

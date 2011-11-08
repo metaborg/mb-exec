@@ -16,7 +16,7 @@ public class WrappedSuperConstructorInvocation extends WrappedStatement {
     private static final long serialVersionUID = 1L;
     
     private final SuperConstructorInvocation wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("SuperConstructorInvocation", 3);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("SuperConstructorInvocation", 3);
     
     WrappedSuperConstructorInvocation(SuperConstructorInvocation wrappee) {
         super(CTOR);

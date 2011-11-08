@@ -16,7 +16,7 @@ public class WrappedLongType extends WrappedType {
     private static final long serialVersionUID = 1L;
 
     private final PrimitiveType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("LongType", 0);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("LongType", 0);
     
     WrappedLongType(PrimitiveType wrappee) {
         super(CTOR);

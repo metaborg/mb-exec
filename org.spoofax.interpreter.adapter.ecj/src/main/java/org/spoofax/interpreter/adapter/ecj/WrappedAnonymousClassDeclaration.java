@@ -16,7 +16,7 @@ public class WrappedAnonymousClassDeclaration extends WrappedASTNode {
     private static final long serialVersionUID = 1L;
 
     private final AnonymousClassDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("AnonymousClassDeclaration", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("AnonymousClassDeclaration", 1);
     
     WrappedAnonymousClassDeclaration(AnonymousClassDeclaration wrappee) {
         super(CTOR);

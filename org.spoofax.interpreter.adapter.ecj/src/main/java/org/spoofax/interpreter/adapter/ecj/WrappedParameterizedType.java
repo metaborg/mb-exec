@@ -16,7 +16,7 @@ public class WrappedParameterizedType extends WrappedType {
     private static final long serialVersionUID = 1L;
 
     private final ParameterizedType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ParameterizedType", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ParameterizedType", 2);
     
     
     WrappedParameterizedType(ParameterizedType wrappee) {

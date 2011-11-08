@@ -16,7 +16,7 @@ public class WrappedInitializer extends WrappedBodyDeclaration {
     private static final long serialVersionUID = 1L;
 
     private final Initializer wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("Initializer", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("Initializer", 1);
     
     WrappedInitializer(Initializer wrappee) {
         super(CTOR);

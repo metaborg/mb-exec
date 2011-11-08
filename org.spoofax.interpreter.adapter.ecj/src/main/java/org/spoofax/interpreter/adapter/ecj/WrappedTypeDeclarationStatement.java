@@ -16,7 +16,7 @@ public class WrappedTypeDeclarationStatement extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final TypeDeclarationStatement wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("TypeDeclarationStatement", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("TypeDeclarationStatement", 1);
     
     WrappedTypeDeclarationStatement(TypeDeclarationStatement wrappee) {
         super(CTOR);

@@ -16,7 +16,7 @@ public class WrappedAnnotationTypeDeclaration extends WrappedAbstractTypeDeclara
     private static final long serialVersionUID = 1L;
 
     private final AnnotationTypeDeclaration wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("AnnotationTypeDeclaration", 3);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("AnnotationTypeDeclaration", 3);
     
     WrappedAnnotationTypeDeclaration(AnnotationTypeDeclaration wrappee) {
         super(CTOR);

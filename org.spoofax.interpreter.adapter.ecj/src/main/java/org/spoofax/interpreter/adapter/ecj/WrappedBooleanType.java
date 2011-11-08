@@ -16,7 +16,7 @@ public class WrappedBooleanType extends WrappedType {
     private static final long serialVersionUID = 1L;
 
     private final PrimitiveType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("BooleanType", 0);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("BooleanType", 0);
     
     WrappedBooleanType(PrimitiveType wrappee) {
         super(CTOR);

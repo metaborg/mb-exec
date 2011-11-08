@@ -17,7 +17,7 @@ public class WrappedITypeParameter extends AbstractECJAppl {
     private static final long serialVersionUID = 1L;
     
     private final ITypeParameter wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ITypeParameter", 2);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ITypeParameter", 2);
     
     WrappedITypeParameter(ITypeParameter wrappee) {
         super(CTOR);

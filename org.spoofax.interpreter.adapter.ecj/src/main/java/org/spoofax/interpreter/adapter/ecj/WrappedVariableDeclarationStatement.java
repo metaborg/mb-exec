@@ -16,7 +16,7 @@ public class WrappedVariableDeclarationStatement extends WrappedStatement {
     private static final long serialVersionUID = 1L;
 
     private final VariableDeclarationStatement wrappee;  
-    private final static IStrategoConstructor CTOR = new ASTCtor("VariableDeclarationStatement", 3); 
+    private final static IStrategoConstructor CTOR = new ECJConstructor("VariableDeclarationStatement", 3); 
         
     public WrappedVariableDeclarationStatement(VariableDeclarationStatement wrappee) {
         super(CTOR);

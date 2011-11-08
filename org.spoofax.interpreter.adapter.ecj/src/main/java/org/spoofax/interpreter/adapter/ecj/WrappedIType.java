@@ -17,7 +17,7 @@ public class WrappedIType extends AbstractWrappedECJNode {
     private static final long serialVersionUID = 1L;
 
     private final IType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("IType", 6);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("IType", 6);
 
     WrappedIType(IType wrappee) {
         super(CTOR);

@@ -19,7 +19,7 @@ public class None extends WrappedASTNode {
     private static final long serialVersionUID = 1L;
     
     private final static IStrategoTerm[] EMPTY = new IStrategoTerm[0];
-    private final static IStrategoConstructor CTOR = new ASTCtor("None", 0); 
+    private final static IStrategoConstructor CTOR = new ECJConstructor("None", 0); 
     
     final static None INSTANCE = new None();
     

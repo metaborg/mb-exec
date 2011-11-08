@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spoofax.interpreter.core.Interpreter;
 import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.terms.TermFactory;
 
 public class TestScripting {
@@ -55,6 +56,9 @@ public class TestScripting {
         interp.load("bin/all-ctor-debug.ctree");
         setupData();
         assertTrue(interp.invoke("main_0_0"));
+        IStrategoList t = (IStrategoList) interp.current();
+        System.out.println(t);
+        assertTrue(t.getSubtermCount() > 10);
     }
 
 }

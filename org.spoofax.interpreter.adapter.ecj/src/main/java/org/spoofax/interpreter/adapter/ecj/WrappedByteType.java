@@ -16,7 +16,7 @@ public class WrappedByteType extends WrappedType {
     private static final long serialVersionUID = 1L;
 
     private final PrimitiveType wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ByteType", 0);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ByteType", 0);
     
     WrappedByteType(PrimitiveType wrappee) {
         super(CTOR);

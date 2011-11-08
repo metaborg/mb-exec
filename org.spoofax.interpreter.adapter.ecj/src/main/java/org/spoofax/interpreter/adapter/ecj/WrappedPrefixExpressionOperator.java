@@ -18,7 +18,7 @@ public class WrappedPrefixExpressionOperator extends AbstractWrappedECJNode {
     private static final long serialVersionUID = 1L;
 
     private final PrefixExpression.Operator wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("PrefixExpressionOperator", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("PrefixExpressionOperator", 1);
     
     WrappedPrefixExpressionOperator(PrefixExpression.Operator wrappee) {
         super(CTOR);

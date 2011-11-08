@@ -16,7 +16,7 @@ public class WrappedTypeLiteral extends WrappedExpression {
     private static final long serialVersionUID = 1L;
 
     private final TypeLiteral wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("TypeLiteral", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("TypeLiteral", 1);
     
     WrappedTypeLiteral(TypeLiteral wrappee) {
         super(CTOR);

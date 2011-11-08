@@ -24,12 +24,12 @@ public class ECJGenericAppl implements IStrategoAppl {
     private static final long serialVersionUID = 1L;
     
     private IStrategoConstructor ctor;
-    private IStrategoTerm[] children;
+    private IStrategoTerm[] kids;
     
 
-    ECJGenericAppl(IStrategoConstructor ctor, IStrategoTerm[] children) {
+    ECJGenericAppl(IStrategoConstructor ctor, IStrategoTerm[] kids) {
         this.ctor = ctor;
-        this.children = children;
+        this.kids = kids;
     }
     
     @Override
@@ -49,17 +49,17 @@ public class ECJGenericAppl implements IStrategoAppl {
 
     @Override
     public IStrategoTerm getSubterm(int index) {
-        return children[index];
+        return kids[index];
     }
     
     @Override
     public IStrategoTerm[] getAllSubterms() {
-        return children;
+        return kids;
     }
 
     @Override
     public int getSubtermCount() {
-        return children.length;
+        return kids.length;
     }
 
     @Override

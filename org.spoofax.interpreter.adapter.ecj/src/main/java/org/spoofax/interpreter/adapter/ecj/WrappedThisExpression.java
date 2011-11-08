@@ -16,7 +16,7 @@ public class WrappedThisExpression extends WrappedExpression {
     private static final long serialVersionUID = 1L;
     
     private final ThisExpression wrappee;
-    private final static IStrategoConstructor CTOR = new ASTCtor("ThisExpression", 1);
+    private final static IStrategoConstructor CTOR = new ECJConstructor("ThisExpression", 1);
     
     WrappedThisExpression(ThisExpression wrappee) {
         super(CTOR);
