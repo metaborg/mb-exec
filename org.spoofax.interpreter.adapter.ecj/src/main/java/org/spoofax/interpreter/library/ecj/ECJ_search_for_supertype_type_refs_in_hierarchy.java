@@ -1,9 +1,9 @@
 /*
  * Created on 9. sep. 2008
  *
- * Copyright (c) 2005-2008, Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * Copyright (c) 2005-2008, Karl Trygve Kalleberg <karltk near strategoxt dot org>
  * 
- * Licensed under the GNU General Public License, v2
+ * Licensed under the GNU Lesser Public License, v2.1
  */
 package org.spoofax.interpreter.library.ecj;
 

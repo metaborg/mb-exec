@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2008, Karl Trygve Kalleberg <karltk@strategoxt.org>
  * 
- * Licensed under the GNU General Public License, v2
+ * Licensed under the GNU Lesser Public License, v2.1
  */
 package org.spoofax.interpreter.adapter.ecj;
 
