@@ -1,6 +1,8 @@
 wanted := \
-	bin/allid.ctree \
-	bin/all-ctor-debug.ctree
+	bin/topdown-id.ctree \
+    bin/topdown-deconstruct.ctree \
+	bin/collect-all-ctors.ctree \
+    bin/collect-all-typedeclarations.ctree \
 
 all : $(wanted)
 

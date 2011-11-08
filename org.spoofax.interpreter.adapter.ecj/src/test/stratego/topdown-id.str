@@ -1,7 +1,7 @@
-module allid
+module topdown-id
 imports
-  stratego-lib	  
+  stratego-lib	 
+   
 strategies
-
 
   main = topdown(id)

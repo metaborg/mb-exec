@@ -1,6 +1,6 @@
-module test6
+module api-open-parse-match-resolve-method-and-type
 imports
-  lib
+  stratego-lib
   EclipseJava
   ecj-adapter
 

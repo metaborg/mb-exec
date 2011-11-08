@@ -45,20 +45,38 @@ public class TestScripting {
     }
 
     @Test
-    public void test_traversal_allid() throws IOException, InterpreterException {
-        interp.load("bin/allid.ctree");
+    public void traverse_topdown_id() throws IOException, InterpreterException {
+        interp.load("bin/topdown-id.ctree");
         setupData();
         assertTrue(interp.invoke("main_0_0"));
     }
 
     @Test
-    public void test_traversal_all_ctor_debug() throws IOException, InterpreterException {
-        interp.load("bin/all-ctor-debug.ctree");
+    public void traverse_topdown_deconstruct() throws IOException, InterpreterException {
+        interp.load("bin/topdown-deconstruct.ctree");
         setupData();
         assertTrue(interp.invoke("main_0_0"));
+    }
+
+    @Test
+    public void collect_all_typedeclarations() throws IOException, InterpreterException {
+        interp.load("bin/collect-all-typedeclarations.ctree");
+        setupData();
+        assertTrue(interp.invoke("main_0_0"));
+        assertListLongerThan(0);
+    }
+
+    private void assertListLongerThan(int minLength) {
         IStrategoList t = (IStrategoList) interp.current();
-        System.out.println(t);
-        assertTrue(t.getSubtermCount() > 10);
+        assertTrue(t.getSubtermCount() > minLength);
+    }
+
+    @Test
+    public void collect_all_ctors() throws IOException, InterpreterException {
+        interp.load("bin/collect-all-ctors.ctree");
+        setupData();
+        assertTrue(interp.invoke("main_0_0"));
+        assertListLongerThan(10);
     }
 
 }

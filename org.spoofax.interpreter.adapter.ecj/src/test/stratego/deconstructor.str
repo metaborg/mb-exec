@@ -1,9 +1,0 @@
-module deconstructor
-imports
-  stratego-lib
-
-strategies
-
-  main = topdown(deconstruct) ; debug
-
-  deconstruct = where(?x#(y) ; <debug> x)

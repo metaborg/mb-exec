@@ -1,8 +1,8 @@
-module test4
+module api-open-project-parse-match-resolve-type
 imports
-  lib
-  EclipseJava
-  ecj-adapter
+  stratego-lib
+  spoofax/bindings/ecj/EclipseJava
+  spoofax/bindings/ecj/ecj-adapter
 
 strategies
   

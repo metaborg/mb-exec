@@ -1,0 +1,9 @@
+module topdown-deconstruct
+imports
+  stratego-lib
+
+strategies
+
+  main = topdown(deconstruct)
+
+  deconstruct = where(?x#(y))

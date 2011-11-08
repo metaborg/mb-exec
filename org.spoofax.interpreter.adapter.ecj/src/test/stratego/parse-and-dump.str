@@ -1,8 +1,0 @@
-module parse-and-dump
-imports
-  stratego-lib
-  spoofax/bindings/eclipse/eclipse-compiler-ffi
- 
-strategies
-
-  main = debug

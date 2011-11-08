@@ -1,4 +1,4 @@
-module all-ctor-debug
+module collect-all-ctors
 imports
   stratego-lib	  
 strategies

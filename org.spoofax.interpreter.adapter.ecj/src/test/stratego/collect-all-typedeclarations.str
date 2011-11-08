@@ -1,0 +1,8 @@
+module collect-all-typedeclarations
+imports
+  stratego-lib
+  spoofax/bindings/eclipse/EclipseJava
+  
+strategies
+
+  main = collect-all(?TypeDeclaration(_, _, _, _, _, _, _, _))

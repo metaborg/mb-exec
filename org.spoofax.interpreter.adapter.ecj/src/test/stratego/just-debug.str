@@ -1,7 +1,7 @@
-module test7
+module just-debug
 imports
   stratego-lib
-
+ 
 strategies
 
-  main = topdown(id)
+  main = debug
