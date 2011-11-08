@@ -4,4 +4,4 @@ imports
 strategies
 
 
-  main = topdown(where(try(?c#(xs) ; <debug> (c, <length> xs))))
+  main = topdown(debug) //where(try(?c#(xs) ; <debug> (c, <length> xs))))
