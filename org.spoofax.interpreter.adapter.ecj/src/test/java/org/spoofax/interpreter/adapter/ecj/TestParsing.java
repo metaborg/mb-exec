@@ -87,25 +87,25 @@ public class TestParsing {
     }
     
     @Test
-    public void test_parse_all_ecj_source_code() throws FileNotFoundException, IOException {
+    public void parse_all_ecj_source_code() throws FileNotFoundException, IOException {
         for(String file : findAllFiles(new File("src/main/java")))
             assertTrue(asString(parse(file)).length() > 0);
     }
 
     @Test
-    public void test_term_equality() throws FileNotFoundException, IOException {
+    public void apply_term_equals_against_self_for_all_source_files() throws FileNotFoundException, IOException {
         for(String file : findAllFiles(new File("src/main/java")))
             assertEquals(parse(file), parse(file));
     }
 
     @Test
-    public void test_term_matching() throws FileNotFoundException, IOException {
+    public void term_match_against_self_for_all_source_files() throws FileNotFoundException, IOException {
         for(String file : findAllFiles(new File("src/main/java")))
             assertTrue(parse(file).match(parse(file)));
     }
 
     @Test
-    public void test_term_structure() throws FileNotFoundException, IOException {
+    public void validate_top_level_term_structure() throws FileNotFoundException, IOException {
         IStrategoTerm cu = parse("src/main/java/org/spoofax/interpreter/adapter/ecj/ECJFactory.java");
         System.out.println(cu);
 
