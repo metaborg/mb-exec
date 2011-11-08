@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.spoofax.interpreter.core.Interpreter;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.TermFactory;
 
 public class TestScripting {
@@ -79,4 +80,15 @@ public class TestScripting {
         assertListLongerThan(10);
     }
 
+    @Test
+    public void build_minimal_cu() throws IOException, InterpreterException {
+        ASTParser parser = ASTParser.newParser(AST.JLS3);
+        parser.setSource("".toCharArray());
+        wef.setAST(parser.createAST(null).getAST());
+        interp.setCurrent(wef.makeInt(0));
+        interp.load("bin/build-minimal-cu.ctree");
+        assertTrue(interp.invoke("main_0_0"));
+        IStrategoTerm t = interp.current();
+        assertTrue(t instanceof WrappedCompilationUnit);
+    }
 }

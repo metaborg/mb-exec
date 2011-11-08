@@ -1,9 +1,8 @@
-module test3
+module build-minimal-cu
 imports
   stratego-lib
-  spoofax/bindings/ecj/EclipseJava
-  spoofax/bindings/ecj/ecj-adapter
-
+  spoofax/bindings/eclipse/EclipseJava
+  
 strategies
   
-  main = where(!CompilationUnit(PackageDeclaration(None, [], SimpleName("foo")), [], []) ; debug)
+  main = !CompilationUnit(PackageDeclaration(None(), [], SimpleName("foo")), [], [])

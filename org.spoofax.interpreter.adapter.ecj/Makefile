@@ -3,6 +3,7 @@ wanted := \
     bin/topdown-deconstruct.ctree \
 	bin/collect-all-ctors.ctree \
     bin/collect-all-typedeclarations.ctree \
+    bin/build-minimal-cu.ctree
 
 all : $(wanted)
 
