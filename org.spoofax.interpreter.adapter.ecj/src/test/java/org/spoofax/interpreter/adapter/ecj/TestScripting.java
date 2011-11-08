@@ -7,11 +7,13 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.junit.Before;
@@ -90,5 +92,6 @@ public class TestScripting {
         assertTrue(interp.invoke("main_0_0"));
         IStrategoTerm t = interp.current();
         assertTrue(t instanceof WrappedCompilationUnit);
+        assertEquals(ASTNode.COMPILATION_UNIT, ((WrappedCompilationUnit)t).getWrappee().getNodeType());
     }
 }
