@@ -38,6 +38,7 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.TermFactory;
 
 public class ECJFactory implements ITermFactory {
 
@@ -3071,7 +3072,7 @@ public class ECJFactory implements ITermFactory {
 
     @Override
     public IStrategoList makeList() {
-        throw new NotImplementedException();
+        return TermFactory.EMPTY_LIST;
     }
 
     @Override

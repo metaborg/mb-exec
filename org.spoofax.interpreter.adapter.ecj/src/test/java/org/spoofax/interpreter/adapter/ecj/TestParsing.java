@@ -24,10 +24,11 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.junit.Before;
 import org.junit.Test;
+import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 
-public class ParseTest {
+public class TestParsing {
 
     private ECJFactory wef;
 
@@ -101,6 +102,19 @@ public class ParseTest {
     public void test_term_matching() throws FileNotFoundException, IOException {
         for(String file : findAllFiles(new File("src/main/java")))
             assertTrue(parse(file).match(parse(file)));
+    }
+
+    @Test
+    public void test_term_structure() throws FileNotFoundException, IOException {
+        IStrategoTerm cu = parse("src/main/java/org/spoofax/interpreter/adapter/ecj/ECJFactory.java");
+        System.out.println(cu);
+
+        assertEquals(3, cu.getSubtermCount());
+        assertEquals("CompilationUnit", ((IStrategoAppl)cu).getName());
+        
+        IStrategoAppl pkg = (IStrategoAppl) cu.getSubterm(0);
+        assertEquals(3, pkg.getSubtermCount());
+        assertEquals("PackageDeclaration", pkg.getName());
     }
 
 }

@@ -1,0 +1,7 @@
+module all-ctor-debug
+imports
+  stratego-lib	  
+strategies
+
+
+  main = topdown(where(try(?c#(xs) ; <debug> (c, <length> xs))))

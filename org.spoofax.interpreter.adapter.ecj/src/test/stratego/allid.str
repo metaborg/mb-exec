@@ -1,8 +1,6 @@
 module allid
 imports
-  stratego-lib
-  ecj-adapter
-
+  stratego-lib	  
 strategies
 
 
