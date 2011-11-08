@@ -13,7 +13,9 @@ import org.eclipse.jdt.core.Signature;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedIField extends WrappedECJNode {
+public class WrappedIField extends AbstractWrappedECJNode {
+    
+    private static final long serialVersionUID = 1L;
 
     private final IField wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("IField", 3);

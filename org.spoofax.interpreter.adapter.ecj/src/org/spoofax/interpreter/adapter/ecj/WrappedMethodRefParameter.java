@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedMethodRefParameter extends WrappedASTNode {
 
+    private static final long serialVersionUID = 1L;
+
     private final MethodRefParameter wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("MethodRefParameter", 2);
     

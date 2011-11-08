@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedByteType extends WrappedType {
+    
+    private static final long serialVersionUID = 1L;
 
     private final PrimitiveType wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ByteType", 0);

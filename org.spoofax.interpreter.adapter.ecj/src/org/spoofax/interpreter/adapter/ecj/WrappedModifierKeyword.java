@@ -11,7 +11,9 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedModifierKeyword extends WrappedECJNode {
+public class WrappedModifierKeyword extends AbstractWrappedECJNode {
+
+    private static final long serialVersionUID = 1L;
 
     private final Modifier.ModifierKeyword wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ModifierKeyword", 1);

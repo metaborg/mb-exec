@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedParameterizedType extends WrappedType {
 
+    private static final long serialVersionUID = 1L;
+
     private final ParameterizedType wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ParameterizedType", 2);
     

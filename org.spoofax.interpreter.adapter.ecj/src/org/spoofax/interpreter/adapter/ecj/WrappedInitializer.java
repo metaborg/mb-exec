@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedInitializer extends WrappedBodyDeclaration {
 
+    private static final long serialVersionUID = 1L;
+
     private final Initializer wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("Initializer", 1);
     

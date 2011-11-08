@@ -28,7 +28,7 @@ public class ECJ_rewrite_compilation_unit extends AbstractPrimitive {
 		super("ECJ_rewrite_compilation_unit", 1, 1);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
 	throws InterpreterException {

@@ -7,23 +7,23 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import org.spoofax.interpreter.terms.IStrategoList;
-import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.terms.io.AbstractIOTermFactory;
+import java.io.IOException;
 
-public abstract class AbstractECJNode implements IStrategoTerm {
-	public IStrategoList getAnnotations() {
-		return AbstractIOTermFactory.EMPTY_LIST;
-	}
-    
-    public int getStorageType() {
-        return MUTABLE;
+import org.spoofax.NotImplementedException;
+import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.terms.StrategoTerm;
+
+public abstract class AbstractECJNode extends StrategoTerm {
+
+    private static final long serialVersionUID = 1L;
+
+    protected AbstractECJNode(IStrategoList annotations, int storageType) {
+        super(annotations, storageType);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof IStrategoTerm))
-            return false;
-        return match((IStrategoTerm)obj);
+    public void writeAsString(Appendable output, int maxDepth)
+            throws IOException {
+        throw new NotImplementedException();
     }
 }

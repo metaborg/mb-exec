@@ -43,7 +43,7 @@ public class ECJParseAndResolveFile {
 
         ECJFactory wef = new ECJFactory();
         Interpreter itp = new Interpreter(wef);
-        itp.addOperatorRegistry(ECJLibrary.REGISTRY_NAME, new ECJLibrary());
+        itp.addOperatorRegistry(new ECJLibrary());
         itp.load(prg);
         IStrategoTerm t = wef.parseFromTree(n);
         itp.setCurrent(t);

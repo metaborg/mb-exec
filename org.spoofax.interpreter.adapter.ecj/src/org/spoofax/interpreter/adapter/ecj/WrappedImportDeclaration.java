@@ -11,6 +11,8 @@ import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedImportDeclaration extends WrappedASTNode {
+    
+    private static final long serialVersionUID = 1L;
 
     private ImportDeclaration wrappee;
     public final static ASTCtor CTOR = new ASTCtor("ImportDeclaration", 3); 

@@ -7,13 +7,17 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
+import java.io.IOException;
+
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class None extends WrappedASTNode {
 
-
+    private static final long serialVersionUID = 1L;
+    
     private final static IStrategoTerm[] EMPTY = new IStrategoTerm[0];
     private final static IStrategoConstructor CTOR = new ASTCtor("None", 0); 
     
@@ -33,11 +37,36 @@ public class None extends WrappedASTNode {
         return null;
     }
 
+/*    
+    @Override
     public IStrategoTerm[] getArguments() {
         return EMPTY;
     }
-
+*/
+    
+    @Override
     public IStrategoTerm[] getAllSubterms() {
         return EMPTY;
+    }
+
+    @Override
+    public void writeAsString(Appendable output, int maxDepth)
+            throws IOException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public String getName() {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    protected boolean doSlowMatch(IStrategoTerm second, int commonStorageType) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    protected int hashFunction() {
+        throw new NotImplementedException();
     }
 }

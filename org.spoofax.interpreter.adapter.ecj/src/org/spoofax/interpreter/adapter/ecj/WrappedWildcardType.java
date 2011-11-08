@@ -13,6 +13,10 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedWildcardType extends WrappedType {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     // FIXME isUpperBound()
     private final WildcardType wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("WildcardType", 1);

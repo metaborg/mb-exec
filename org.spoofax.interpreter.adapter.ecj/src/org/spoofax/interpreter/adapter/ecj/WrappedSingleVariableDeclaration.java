@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedSingleVariableDeclaration extends WrappedVariableDeclaration {
 
+    private static final long serialVersionUID = 1L;
+    
     private final SingleVariableDeclaration wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SingleVariableDeclaration", 5);
     

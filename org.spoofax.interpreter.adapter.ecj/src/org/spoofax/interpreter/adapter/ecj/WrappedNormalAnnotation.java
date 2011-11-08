@@ -14,6 +14,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedNormalAnnotation extends WrappedAnnotation {
 
+    private static final long serialVersionUID = 1L;
+
     private final NormalAnnotation wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("NormalAnnotation", 2);
     

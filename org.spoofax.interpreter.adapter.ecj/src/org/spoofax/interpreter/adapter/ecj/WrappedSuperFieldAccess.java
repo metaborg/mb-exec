@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedSuperFieldAccess extends WrappedExpression {
 
+    private static final long serialVersionUID = 1L;
+
     private final SuperFieldAccess wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SuperFieldAccess", 2);
     

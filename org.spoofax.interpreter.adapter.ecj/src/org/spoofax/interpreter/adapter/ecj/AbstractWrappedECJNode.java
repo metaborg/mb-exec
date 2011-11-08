@@ -1,5 +1,5 @@
 /*
- * Created on 25. des.. 2006
+ * Created on 24. jan.. 2007
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk@ii.uib.no>
  * 
@@ -7,16 +7,17 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 
-public abstract class WrappedBodyDeclaration extends WrappedASTNode {
-    
+
+public abstract class AbstractWrappedECJNode extends AbstractECJAppl {
+
     private static final long serialVersionUID = 1L;
 
-    protected WrappedBodyDeclaration(IStrategoConstructor constructor) {
+    protected AbstractWrappedECJNode(IStrategoConstructor constructor) {
         super(constructor);
     }
 
-    public abstract BodyDeclaration getWrappee();
+    public abstract Object getWrappee();
+    
 }

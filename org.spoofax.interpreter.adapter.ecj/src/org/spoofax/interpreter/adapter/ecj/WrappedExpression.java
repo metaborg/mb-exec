@@ -11,6 +11,8 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 
 public abstract class WrappedExpression extends WrappedASTNode {
+    
+    private static final long serialVersionUID = 1L;
 
     protected WrappedExpression(IStrategoConstructor constructor) {
         super(constructor);

@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedIMethodBinding extends AbstractWrappedBinding {
+    
+    private static final long serialVersionUID = 1L;
 
     private final IMethodBinding wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("MethodBinding", 4);

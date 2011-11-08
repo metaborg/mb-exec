@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedIFile extends AbstractECJAppl {
+    
+    private static final long serialVersionUID = 1L;
 
     private final IFile wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ECJFile", 2);

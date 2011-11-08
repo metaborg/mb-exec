@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedEmptyStatement extends WrappedStatement {
+    
+    private static final long serialVersionUID = 1L;
 
     private final EmptyStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("EmptyStatement", 0);

@@ -14,6 +14,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedModifier extends WrappedASTNode implements IWrappedExtendedModifier {
 
+    private static final long serialVersionUID = 1L;
+
     private final Modifier wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("Modifier", 1);
     

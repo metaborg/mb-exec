@@ -11,6 +11,8 @@ import org.eclipse.jdt.core.dom.Annotation;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 
 public abstract class WrappedAnnotation extends WrappedExpression implements IWrappedExtendedModifier {
+    
+    private static final long serialVersionUID = 1L;
 
     protected WrappedAnnotation(IStrategoConstructor constructor) {
         super(constructor);

@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedIfStatement extends WrappedStatement {
 
+    private static final long serialVersionUID = 1L;
+
     private final IfStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("IfStatement", 3); 
     

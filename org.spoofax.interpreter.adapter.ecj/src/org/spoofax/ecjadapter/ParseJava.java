@@ -13,12 +13,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.internal.compiler.ast.CompilationUnitDeclaration;
-import org.eclipse.jdt.internal.core.CompilationUnit;
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.core.InterpreterException;

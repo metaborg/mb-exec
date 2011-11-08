@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedITypeBinding extends AbstractWrappedBinding {
 
+    private static final long serialVersionUID = 1L;
+
     private final ITypeBinding wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("TypeBinding", 7);
     

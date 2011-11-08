@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedWhileStatement extends WrappedStatement {
 
+    private static final long serialVersionUID = 1L;
+
     private final WhileStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("WhileStatement", 2);
     

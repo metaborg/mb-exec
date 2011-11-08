@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedNullLiteral extends WrappedExpression {
 
+    private static final long serialVersionUID = 1L;
+
     private final NullLiteral wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("NullLiteral", 0);
     

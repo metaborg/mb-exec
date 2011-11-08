@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedBlockComment extends WrappedComment {
+    
+    private static final long serialVersionUID = 1L;
 
     // FIXME where's the content?
     private final BlockComment wrappee;

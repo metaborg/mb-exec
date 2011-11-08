@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedCompilationUnit extends WrappedASTNode {
+    
+    private static final long serialVersionUID = 1L;
 
     private final CompilationUnit wrappee;
     private static final IStrategoConstructor CTOR = new ASTCtor("CompilationUnit", 3); 

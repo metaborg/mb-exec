@@ -7,7 +7,9 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedITypeHierarchy extends AbstractECJAppl {
 
-	private final static IStrategoConstructor CTOR = new ASTCtor("ITypeHierarchy", 2);
+    private static final long serialVersionUID = 1L;
+
+    private final static IStrategoConstructor CTOR = new ASTCtor("ITypeHierarchy", 2);
 	private final ITypeHierarchy wrappee;
 	
 	protected WrappedITypeHierarchy(ITypeHierarchy wrappee) {
@@ -25,7 +27,7 @@ public class WrappedITypeHierarchy extends AbstractECJAppl {
 			final IStrategoTerm[] terms = new IStrategoTerm[types.length];
 			for(int i = 0; i < types.length; i++)
 				terms[i] = ECJFactory.wrap(types[i]);
-			return new WrappedGenericList(terms);
+			return new ECJGenericList(terms);
 		default:
 			throw new ArrayIndexOutOfBoundsException();
 		}

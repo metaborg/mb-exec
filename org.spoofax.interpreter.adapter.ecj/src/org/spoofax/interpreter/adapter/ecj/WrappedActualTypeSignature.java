@@ -5,6 +5,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedActualTypeSignature extends AbstractECJAppl {
+    
+    private static final long serialVersionUID = 1L;
 
 	private final String wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ActualTypeSignature", 4);

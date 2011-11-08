@@ -11,7 +11,9 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedICompilationUnit extends WrappedECJNode {
+public class WrappedICompilationUnit extends AbstractWrappedECJNode {
+    
+    private static final long serialVersionUID = 1L;
 
     private final ICompilationUnit wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ICompilationUnit", 2);

@@ -74,7 +74,7 @@ public class TestECJAdapter extends TestCase {
     protected void interpTestFail(String string, String in) throws IOException, InterpreterException {
         ECJFactory f = new ECJFactory();
         Interpreter itp = new Interpreter(f);
-        itp.addOperatorRegistry(ECJLibrary.REGISTRY_NAME, new ECJLibrary());
+        itp.addOperatorRegistry(new ECJLibrary());
         itp.load("str/" + string + ".rtree");
         IStrategoTerm inTerm = f.parseFromString(in);
         itp.setCurrent(inTerm);
@@ -85,7 +85,7 @@ public class TestECJAdapter extends TestCase {
         ECJFactory f = new ECJFactory();
         Interpreter itp = new Interpreter(f);
         //DebugUtil.debugging = true;
-        itp.addOperatorRegistry(ECJLibrary.REGISTRY_NAME, new ECJLibrary());
+        itp.addOperatorRegistry(new ECJLibrary());
         itp.load(findFile(string));
         IStrategoTerm inTerm = f.parseFromString(in);
         IStrategoTerm outTerm = f.parseFromString(out);

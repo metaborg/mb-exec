@@ -7,10 +7,6 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,7 +28,6 @@ import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.spoofax.DebugUtil;
 import org.spoofax.NotImplementedException;
-import org.spoofax.interpreter.terms.BasicStrategoArrayList;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
@@ -43,8 +38,6 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
-import org.spoofax.interpreter.terms.ITermPrinter;
-import org.spoofax.terms.io.InlinePrinter;
 
 public class ECJFactory implements ITermFactory {
 
@@ -257,14 +250,7 @@ public class ECJFactory implements ITermFactory {
         ctorNameToIndexMap.put("AssignmentOperator", ASSIGNMENT_OPERATOR);
     }
     
-    public IStrategoTerm parseFromFile(String path) throws IOException {
-        throw new NotImplementedException();
-    }
-
-    public IStrategoTerm parseFromStream(InputStream inputStream) throws IOException {
-        throw new NotImplementedException();
-    }
-
+    @Override
     public IStrategoTerm parseFromString(String text) {
         if(text.equals("()")) {
             return makeTuple();
@@ -272,23 +258,6 @@ public class ECJFactory implements ITermFactory {
             return makeString(text.substring(1).substring(0, text.length() - 2));
         }
         throw new NotImplementedException();
-    }
-
-    public void unparseToFile(IStrategoTerm t, OutputStream ous) throws IOException {
-        InlinePrinter pp = new InlinePrinter();
-        t.prettyPrint(pp);
-        ous.write(pp.getString().getBytes());
-    }
-
-    public void unparseToFile(IStrategoTerm t, Writer out) throws IOException {
-        ITermPrinter tp = new InlinePrinter();
-        t.prettyPrint(tp);
-        out.write(tp.getString());
-    }
-
-    public boolean hasConstructor(String s, int i) {
-    	// FIXME also check generic factory
-    	return ctorNameToIndexMap.containsKey(s);
     }
 
     private List<ASTNode> getAnnotations(IStrategoTerm term) {
@@ -299,15 +268,12 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedJavadoc)term).getWrappee();
     }
     
+    @Override
     public IStrategoPlaceholder makePlaceholder(IStrategoTerm template) {
         throw new NotImplementedException();
     }
-
-    @Deprecated
-    public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList terms) {
-        return makeAppl(ctr, terms.getAllSubterms());
-    }
     
+    @Override
     public IStrategoTerm annotateTerm(IStrategoTerm term, IStrategoList annotations) {
     	if(term instanceof ECJAnnoWrapper) {
     		return new ECJAnnoWrapper(((ECJAnnoWrapper)term).getWrappee(), annotations);
@@ -316,6 +282,7 @@ public class ECJFactory implements ITermFactory {
     	}
     }
 
+    @Override
     public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoTerm... kids) {
         IStrategoAppl t = constructASTNode(ctr, kids);
         if(t == null) {
@@ -338,7 +305,7 @@ public class ECJFactory implements ITermFactory {
         return t;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private IStrategoAppl constructASTNode(IStrategoConstructor ctr, IStrategoTerm[] kids) {
         int index = ctorNameToIndex(ctr);
         switch(index) {
@@ -1231,7 +1198,7 @@ public class ECJFactory implements ITermFactory {
         return x.getParent() == null && x.getAST() == ast ? x : (Javadoc)ASTNode.copySubtree(ast, x);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asExtendedModifierList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1264,7 +1231,7 @@ public class ECJFactory implements ITermFactory {
         return term instanceof IWrappedExtendedModifier;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asTypeParameterList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1279,7 +1246,7 @@ public class ECJFactory implements ITermFactory {
         return x.getParent() == null && x.getAST() == ast ? x : (TypeParameter)ASTNode.copySubtree(ast, x);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asTagElementList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1295,7 +1262,7 @@ public class ECJFactory implements ITermFactory {
         return x.getParent() == null && x.getAST() == ast ? x : (TagElement)ASTNode.copySubtree(ast, x);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asAbstractTypeDeclarationList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1312,7 +1279,7 @@ public class ECJFactory implements ITermFactory {
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asNameList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1322,7 +1289,7 @@ public class ECJFactory implements ITermFactory {
         return r;    
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asSingleVariableDeclarationList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1337,7 +1304,7 @@ public class ECJFactory implements ITermFactory {
         return x.getParent() == null && x.getAST() == ast ? x : (AbstractTypeDeclaration)ASTNode.copySubtree(ast, x);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asMethodRefParameterList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1347,7 +1314,7 @@ public class ECJFactory implements ITermFactory {
         return r;    
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asImportDeclarationList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1368,7 +1335,7 @@ public class ECJFactory implements ITermFactory {
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asEnumConstantDeclarationList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1384,7 +1351,7 @@ public class ECJFactory implements ITermFactory {
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asASTNodeList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1404,7 +1371,7 @@ public class ECJFactory implements ITermFactory {
         return x.getParent() == null && x.getAST() == ast ? x : (MethodRefParameter)ASTNode.copySubtree(ast, x);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asMemberValuePairList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1432,7 +1399,7 @@ public class ECJFactory implements ITermFactory {
         return x.getParent() == null && x.getAST() == ast ? x : (Name)ASTNode.copySubtree(ast, x);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asCatchClauseList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1447,7 +1414,7 @@ public class ECJFactory implements ITermFactory {
         return x.getParent() == null && x.getAST() == ast ? x : (AbstractTypeDeclaration)ASTNode.copySubtree(ast, x);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private List asFragmentList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1486,7 +1453,7 @@ public class ECJFactory implements ITermFactory {
         return ((WrappedPrefixExpressionOperator)term).getWrappee();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asTypeList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1496,7 +1463,7 @@ public class ECJFactory implements ITermFactory {
         return r;    
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asBodyDeclarationList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1515,7 +1482,7 @@ public class ECJFactory implements ITermFactory {
         return ((IStrategoInt)term).intValue();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asExpressionList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1567,7 +1534,7 @@ public class ECJFactory implements ITermFactory {
         return ((IStrategoString)term).stringValue();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asStatementList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1871,7 +1838,7 @@ public class ECJFactory implements ITermFactory {
         return term instanceof WrappedType;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Collection asModifierList(IStrategoTerm term) {
         IStrategoTerm[] kids = term.getAllSubterms();
         List r = new ArrayList(kids.length);
@@ -1910,15 +1877,18 @@ public class ECJFactory implements ITermFactory {
         return x == null ? -1 : x.intValue();
     }
 
+    @Override
     public IStrategoConstructor makeConstructor(String string, int arity) {
         return new ASTCtor(string, arity);
     }
 
+    @Override
     public IStrategoInt makeInt(int i) {
-        return new WrappedInt(i);
+        return new ECJInt(i);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
     public IStrategoList makeList(IStrategoTerm... terms) {
         
         boolean mustUseGeneric = false;
@@ -1927,7 +1897,7 @@ public class ECJFactory implements ITermFactory {
                 mustUseGeneric = true;
         
         if(mustUseGeneric) {
-            return new WrappedGenericList(terms);
+            return new ECJGenericList(terms);
         }
         
         List<ASTNode> r = new ArrayList();
@@ -1935,31 +1905,26 @@ public class ECJFactory implements ITermFactory {
             r.add(((WrappedASTNode)t).getWrappee());
         return new WrappedASTNodeList(r);
     }
-
-    public IStrategoList makeList(Collection<IStrategoTerm> terms) {
-    	return makeList(terms.toArray(new IStrategoTerm[0]));
-    }
     
-    @Deprecated
-    public final IStrategoList makeList(IStrategoTerm head, IStrategoList tail) {
-        return makeListCons(head, tail);
-    }
-    
+    @Override
     public IStrategoList makeListCons(IStrategoTerm head, IStrategoList tail) {
         // TODO: handle list prepending in ECJFactory
         return tail.prepend(head);
     }
 
+    @Override
     public IStrategoReal makeReal(double d) {
-        return new WrappedReal(d);
+        return new ECJReal(d);
     }
 
+    @Override
     public IStrategoString makeString(String s) {
-        return new WrappedString(s);
+        return new ECJString(s);
     }
 
+    @Override
     public IStrategoTuple makeTuple(IStrategoTerm... terms) {
-        return new WrappedTuple(terms);
+        return new ECJTuple(terms);
     }
 
     public static IStrategoAppl wrap(Javadoc javadoc) {
@@ -1969,7 +1934,7 @@ public class ECJFactory implements ITermFactory {
             return new WrappedJavadoc(javadoc);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static IStrategoTerm wrap(List list) {
         if(list == null)
             return None.INSTANCE;
@@ -2004,8 +1969,8 @@ public class ECJFactory implements ITermFactory {
             return new WrappedQualifiedName(name);
     }
 
-    @SuppressWarnings("unchecked")
-	public static IStrategoTerm genericWrap(ASTNode node) {
+	@SuppressWarnings("rawtypes")
+    public static IStrategoTerm genericWrap(ASTNode node) {
         
         if(node instanceof ImportDeclaration)
             return wrap((ImportDeclaration) node);
@@ -2480,7 +2445,7 @@ public class ECJFactory implements ITermFactory {
     }
 
     public static IStrategoTerm wrap(int val) {
-        return new WrappedInt(val);
+        return new ECJInt(val);
     }
 
     public static IStrategoAppl wrap(ArrayType type) {
@@ -2494,7 +2459,7 @@ public class ECJFactory implements ITermFactory {
         if(identifier == null)
             return None.INSTANCE;
         else
-            return new WrappedString(identifier);
+            return new ECJString(identifier);
     }
 
     static IStrategoTerm wrapExpression(Expression expr) {
@@ -2905,21 +2870,21 @@ public class ECJFactory implements ITermFactory {
         IStrategoTerm[] terms = new IStrategoTerm[bindings.length];
         for(int i = 0, sz = bindings.length; i < sz; i++)
             terms[i] = ECJFactory.wrap(bindings[i]);
-        return new WrappedGenericList(terms);
+        return new ECJGenericList(terms);
     }
 
     public static IStrategoTerm wrap(ITypeParameter[] parameters) {
         final IStrategoTerm[] terms = new IStrategoTerm[parameters.length];
         for(int i = 0, sz = parameters.length; i < sz; i++)
             terms[i] = ECJFactory.wrap(parameters[i]);
-        return new WrappedGenericList(terms);
+        return new ECJGenericList(terms);
     }
     
     public static IStrategoTerm wrap(IField[] fields) {
         IStrategoTerm[] terms = new IStrategoTerm[fields.length];
         for(int i = 0, sz = fields.length; i < sz; i++)
             terms[i] = ECJFactory.wrap(fields[i]);
-        return new WrappedGenericList(terms);
+        return new ECJGenericList(terms);
     }
 
 
@@ -2948,7 +2913,7 @@ public class ECJFactory implements ITermFactory {
         IStrategoTerm[] r = new IStrategoTerm[strs.length];
         for(int i = 0; i < r.length; i++)
             r[i] = wrap(strs[i]);
-        return new WrappedGenericList(r);
+        return new ECJGenericList(r);
     }
 
     public static IStrategoTerm wrap(IMethodBinding mb) {
@@ -3093,7 +3058,7 @@ public class ECJFactory implements ITermFactory {
 			IStrategoAppl[] ws = new WrappedActualTypeSignature[signatures.length];
 			for(int i = 0; i < signatures.length; i++)
 				ws[i] = wrapSignature(signatures[i]);
-			return new BasicStrategoArrayList(ws);
+			return new ECJGenericList(ws);
 		}
 
 	}
@@ -3103,5 +3068,70 @@ public class ECJFactory implements ITermFactory {
 			astMatcher = new ASTMatcher();
 		return astMatcher;
 	}
+
+    @Override
+    public IStrategoList makeList() {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public IStrategoAppl makeAppl(IStrategoConstructor constructor,
+            IStrategoTerm[] kids, IStrategoList annotations) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public IStrategoList makeList(IStrategoTerm[] kids,
+            IStrategoList annotations) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public IStrategoList makeListCons(IStrategoTerm head, IStrategoList tail,
+            IStrategoList annotations) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public IStrategoTuple makeTuple(IStrategoTerm[] kids,
+            IStrategoList annotations) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public IStrategoString tryMakeUniqueString(String name) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public int getDefaultStorageType() {
+        return IStrategoTerm.IMMUTABLE;
+    }
+
+    @Override
+    public IStrategoTerm copyAttachments(IStrategoTerm from, IStrategoTerm to) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public IStrategoList replaceListCons(IStrategoTerm head,
+            IStrategoList tail, IStrategoTerm oldHead, IStrategoList oldTail) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public IStrategoTerm replaceTerm(IStrategoTerm term, IStrategoTerm old) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public ITermFactory getFactoryWithStorageType(int storageType) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public IStrategoList makeList(Collection<? extends IStrategoTerm> terms) {
+        throw new NotImplementedException();
+    }
 
 }

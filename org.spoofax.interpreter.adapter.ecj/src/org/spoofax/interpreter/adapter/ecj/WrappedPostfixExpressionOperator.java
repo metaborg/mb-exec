@@ -13,8 +13,10 @@ import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedPostfixExpressionOperator extends WrappedECJNode {
+public class WrappedPostfixExpressionOperator extends AbstractWrappedECJNode {
 
+    private static final long serialVersionUID = 1L;
+    
     private final PostfixExpression.Operator wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("PostfixExpressionOperator", 1);
     

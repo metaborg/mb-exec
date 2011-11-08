@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedSuperMethodInvocation extends WrappedExpression {
 
+    private static final long serialVersionUID = 1L;
+
     private final SuperMethodInvocation wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SuperMethodInvocation", 4);
     

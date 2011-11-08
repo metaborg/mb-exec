@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedBooleanType extends WrappedType {
 
+    private static final long serialVersionUID = 1L;
+
     private final PrimitiveType wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("BooleanType", 0);
     

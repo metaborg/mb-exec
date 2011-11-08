@@ -30,7 +30,7 @@ public class ECJ_rewrite_file extends AbstractPrimitive {
 		super("ECJ_rewrite_file", 1, 1);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
 	throws InterpreterException {

@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedVariableDeclarationFragment extends WrappedVariableDeclaration {
 
+    private static final long serialVersionUID = 1L;
+
     private final VariableDeclarationFragment wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("VariableDeclarationFragment", 3); 
     

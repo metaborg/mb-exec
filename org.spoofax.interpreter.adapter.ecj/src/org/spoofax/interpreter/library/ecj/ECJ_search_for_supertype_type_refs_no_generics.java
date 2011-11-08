@@ -70,7 +70,6 @@ public class ECJ_search_for_supertype_type_refs_no_generics extends AbstractPrim
 					//System.out.println(" * " + t.getFullyQualifiedName());
 					for(String s : t.getSuperInterfaceTypeSignatures()) {
 						final String p = Signature.toString(s);
-						int x = 0;
 						if(p.equals(className)) {
 							results.add(t);
 							return;

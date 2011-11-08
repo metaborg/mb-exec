@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 
 
 public abstract class AbstractWrappedBinding extends AbstractECJAppl {
+    
+    private static final long serialVersionUID = 1L;
 
     protected AbstractWrappedBinding(IStrategoConstructor constructor) {
         super(constructor);

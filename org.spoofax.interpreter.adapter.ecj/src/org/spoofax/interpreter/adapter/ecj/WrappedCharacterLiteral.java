@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedCharacterLiteral extends WrappedExpression {
+    
+    private static final long serialVersionUID = 1L;
 
     private final CharacterLiteral wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("CharacterLiteral", 1);

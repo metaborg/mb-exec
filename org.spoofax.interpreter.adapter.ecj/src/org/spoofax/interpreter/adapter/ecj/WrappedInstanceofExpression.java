@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedInstanceofExpression extends WrappedExpression {
 
+    private static final long serialVersionUID = 1L;
+
     private final InstanceofExpression wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("InstanceofExpression", 2);
     

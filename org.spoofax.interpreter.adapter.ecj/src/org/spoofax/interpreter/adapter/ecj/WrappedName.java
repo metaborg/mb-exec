@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 
 public abstract class WrappedName extends WrappedExpression {
 
+    private static final long serialVersionUID = 1L;
+
     protected WrappedName(IStrategoConstructor constructor) {
         super(constructor);
     }

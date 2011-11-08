@@ -15,6 +15,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedPrimitiveType extends WrappedType {
 
+    private static final long serialVersionUID = 1L;
+
     // FIXME should we even keep this?
     
     private final PrimitiveType wrappee;

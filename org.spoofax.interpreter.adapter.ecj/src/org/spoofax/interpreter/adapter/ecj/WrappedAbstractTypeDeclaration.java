@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 
 public abstract class WrappedAbstractTypeDeclaration extends WrappedBodyDeclaration {
 
+    private static final long serialVersionUID = 1L;
+
     protected WrappedAbstractTypeDeclaration(IStrategoConstructor constructor) {
         super(constructor);
     }

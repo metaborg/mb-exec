@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedEnumDeclaration extends WrappedAbstractTypeDeclaration {
+    
+    private static final long serialVersionUID = 1L;
 
     private final EnumDeclaration wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("EnumDeclaration", 5);

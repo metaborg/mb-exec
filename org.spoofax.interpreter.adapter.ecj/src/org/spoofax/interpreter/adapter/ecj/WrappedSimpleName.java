@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedSimpleName extends WrappedName {
 
+    private static final long serialVersionUID = 1L;
+
     private final SimpleName wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("SimpleName", 1); 
 

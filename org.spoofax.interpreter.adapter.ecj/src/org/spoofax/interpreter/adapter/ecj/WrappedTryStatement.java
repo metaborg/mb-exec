@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedTryStatement extends WrappedStatement {
 
+    private static final long serialVersionUID = 1L;
+
     private final TryStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("TryStatement", 3);
     

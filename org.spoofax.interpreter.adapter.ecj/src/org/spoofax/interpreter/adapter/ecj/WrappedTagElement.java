@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedTagElement extends WrappedASTNode {
 
+    private static final long serialVersionUID = 1L;
+
     // FIXME nested
     
     private final TagElement wrappee;

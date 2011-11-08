@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedMemberRef extends WrappedASTNode {
 
+    private static final long serialVersionUID = 1L;
+
     private final MemberRef wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("MemberRef", 2);
     

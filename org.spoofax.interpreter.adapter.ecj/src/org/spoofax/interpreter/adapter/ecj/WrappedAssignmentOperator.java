@@ -13,7 +13,9 @@ import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedAssignmentOperator extends WrappedECJNode {
+public class WrappedAssignmentOperator extends AbstractWrappedECJNode {
+    
+    private static final long serialVersionUID = 1L;
 
     private final Assignment.Operator wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("AssignmentOperator", 1);

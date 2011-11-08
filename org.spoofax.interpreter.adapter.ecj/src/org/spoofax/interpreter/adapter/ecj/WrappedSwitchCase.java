@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedSwitchCase extends WrappedStatement {
 
+    private static final long serialVersionUID = 1L;
+
     // FIXME default
     
     private final SwitchCase wrappee;

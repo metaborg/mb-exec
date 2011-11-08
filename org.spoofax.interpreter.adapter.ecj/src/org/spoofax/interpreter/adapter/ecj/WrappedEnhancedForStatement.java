@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedEnhancedForStatement extends WrappedStatement {
+    
+    private static final long serialVersionUID = 1L;
 
     private final EnhancedForStatement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("EnhancedForStatement", 3);

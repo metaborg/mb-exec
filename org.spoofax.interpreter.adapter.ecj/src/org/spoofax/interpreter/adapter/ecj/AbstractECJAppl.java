@@ -12,28 +12,36 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.terms.TermFactory;
 
 public abstract class AbstractECJAppl extends AbstractECJNode implements IStrategoAppl {
 
+    private static final long serialVersionUID = 1L;
+    
     private final IStrategoConstructor constructor;
     
     protected AbstractECJAppl(IStrategoConstructor constructor) {
+        super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
         this.constructor = constructor;
     }
-    
+
+    @Override
     public int getTermType() {
         return IStrategoTerm.APPL;
     }
 
+    @Override
     public IStrategoConstructor getConstructor() {
         return constructor;
     }
 
+    @Override
     public int getSubtermCount() {
         return constructor.getArity();
     }
  
-
+/*
+    @Override
     public IStrategoTerm[] getArguments() {
         IStrategoTerm[] r = new IStrategoTerm[constructor.getArity()];
         for(int i = 0; i < r.length; i++) {
@@ -41,11 +49,8 @@ public abstract class AbstractECJAppl extends AbstractECJNode implements IStrate
         }
         return r;
     }
-    
-    public boolean match(IStrategoTerm second) {
-        throw new NotImplementedException();
-    }
-
+*/    
+    @Override
     public void prettyPrint(ITermPrinter pp) {
         pp.print(constructor.getName());
         
@@ -71,6 +76,7 @@ public abstract class AbstractECJAppl extends AbstractECJNode implements IStrate
     
     public abstract IStrategoTerm getSubterm(int index);
 
+    @Override
     public IStrategoTerm[] getAllSubterms() {
         final int sz = getConstructor().getArity();
         IStrategoTerm[] r = new IStrategoTerm[sz];
@@ -80,4 +86,18 @@ public abstract class AbstractECJAppl extends AbstractECJNode implements IStrate
         return r;
     }
 
+    @Override
+    protected int hashFunction() {
+        throw new NotImplementedException();
+    }
+    
+    @Override
+    public String getName() {
+        return constructor.getName();
+    }
+    
+    @Override
+    protected boolean doSlowMatch(IStrategoTerm second, int commonStorageType) {
+        throw new NotImplementedException();
+    }
 }

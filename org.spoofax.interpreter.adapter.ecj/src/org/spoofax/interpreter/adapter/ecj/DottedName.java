@@ -1,16 +1,18 @@
 package org.spoofax.interpreter.adapter.ecj;
 
-import org.spoofax.interpreter.terms.BasicStrategoAppl;
-import org.spoofax.interpreter.terms.BasicStrategoConstructor;
-import org.spoofax.interpreter.terms.BasicStrategoString;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.StrategoAppl;
+import org.spoofax.terms.StrategoConstructor;
 
-public class DottedName extends BasicStrategoAppl {
-	private final static IStrategoConstructor CTOR = new BasicStrategoConstructor("DottedName", 1);
+public class DottedName extends StrategoAppl {
+    
+    private static final long serialVersionUID = 1L;
+    
+    private final static IStrategoConstructor CTOR = new StrategoConstructor("DottedName", 1);
 	
 	protected DottedName(String name) {
-		super(CTOR, new IStrategoTerm[] { new BasicStrategoString(name) });
+		super(CTOR, new IStrategoTerm[] { new ECJString(name) });
 	}
 
 }

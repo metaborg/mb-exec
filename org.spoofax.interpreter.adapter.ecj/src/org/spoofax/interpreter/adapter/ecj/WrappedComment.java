@@ -10,6 +10,8 @@ package org.spoofax.interpreter.adapter.ecj;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 
 public abstract class WrappedComment extends WrappedASTNode {
+    
+    private static final long serialVersionUID = 1L;
 
     protected WrappedComment(IStrategoConstructor constructor) {
         super(constructor);

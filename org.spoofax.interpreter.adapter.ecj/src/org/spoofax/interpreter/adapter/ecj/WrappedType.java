@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 
 public abstract class WrappedType extends WrappedASTNode {
 
+    private static final long serialVersionUID = 1L;
+
     protected WrappedType(IStrategoConstructor constructor) {
         super(constructor);
     }

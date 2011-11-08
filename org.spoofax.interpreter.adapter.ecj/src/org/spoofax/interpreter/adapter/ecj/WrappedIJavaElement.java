@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedIJavaElement extends AbstractECJAppl {
+    
+    private static final long serialVersionUID = 1L;
 
     private final IJavaElement wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("IJavaElement", 1);

@@ -13,6 +13,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedJavadoc extends WrappedComment {
 
+    private static final long serialVersionUID = 1L;
+
     private final Javadoc wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("Javadoc", 1);
     

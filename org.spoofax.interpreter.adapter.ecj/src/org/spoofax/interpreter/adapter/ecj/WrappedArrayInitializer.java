@@ -12,6 +12,8 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedArrayInitializer extends WrappedExpression {
+    
+    private static final long serialVersionUID = 1L;
 
     private final ArrayInitializer wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("ArrayInitializer", 1);

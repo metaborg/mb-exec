@@ -12,7 +12,6 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.Type;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;

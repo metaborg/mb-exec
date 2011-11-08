@@ -14,6 +14,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class WrappedMarkerAnnotation extends WrappedAnnotation {
 
+    private static final long serialVersionUID = 1L;
+
     // FIXME improve
     private final MarkerAnnotation wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("MarkerAnnotation", 1);

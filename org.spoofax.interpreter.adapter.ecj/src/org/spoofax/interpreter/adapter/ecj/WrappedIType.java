@@ -12,7 +12,9 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class WrappedIType extends WrappedECJNode {
+public class WrappedIType extends AbstractWrappedECJNode {
+
+    private static final long serialVersionUID = 1L;
 
     private final IType wrappee;
     private final static IStrategoConstructor CTOR = new ASTCtor("IType", 6);
@@ -70,7 +72,7 @@ public class WrappedIType extends WrappedECJNode {
     	final IStrategoTerm[] resolved = new IStrategoTerm[names.length];
     	for(int i = 0; i < names.length; i++)
     		resolved[i] = resolveDottedName(names[i]);
-    	return new WrappedGenericList(resolved);
+    	return new ECJGenericList(resolved);
 	}
 
 	private IStrategoTerm resolveDottedName(final String name) throws JavaModelException {

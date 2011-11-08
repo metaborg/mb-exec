@@ -7,56 +7,67 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
+import java.io.IOException;
+
+import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
-import org.spoofax.terms.io.AbstractIOTermFactory;
+import org.spoofax.terms.TermFactory;
+import org.spoofax.terms.attachments.ITermAttachment;
+import org.spoofax.terms.attachments.TermAttachmentType;
 
-public class WrappedGenericAppl implements IStrategoAppl {
+public class ECJGenericAppl implements IStrategoAppl {
 
+    private static final long serialVersionUID = 1L;
+    
     private IStrategoConstructor ctor;
     private IStrategoTerm[] children;
     
 
-    WrappedGenericAppl(IStrategoConstructor ctor, IStrategoTerm[] children) {
+    ECJGenericAppl(IStrategoConstructor ctor, IStrategoTerm[] children) {
         this.ctor = ctor;
         this.children = children;
     }
     
+    @Override
     public int getStorageType() {
         return MUTABLE;
     }
     
-    public IStrategoTerm[] getArguments() {
-        return children;
-    }
-    
+    @Override
     public IStrategoList getAnnotations() {
-    	return AbstractIOTermFactory.EMPTY_LIST;
+    	return TermFactory.EMPTY_LIST;
     }
 
+    @Override
     public IStrategoConstructor getConstructor() {
         return ctor;
     }
 
+    @Override
     public IStrategoTerm getSubterm(int index) {
         return children[index];
     }
     
+    @Override
     public IStrategoTerm[] getAllSubterms() {
         return children;
     }
 
+    @Override
     public int getSubtermCount() {
         return children.length;
     }
 
+    @Override
     public int getTermType() {
         return IStrategoTerm.APPL;
     }
 
+    @Override
     public boolean match(IStrategoTerm second) {
         if(!(second instanceof IStrategoAppl))
             return false;
@@ -74,6 +85,7 @@ public class WrappedGenericAppl implements IStrategoAppl {
         return true;
     }
 
+    @Override
     public void prettyPrint(ITermPrinter pp) {
         pp.print(ctor.getName());
         
@@ -95,6 +107,43 @@ public class WrappedGenericAppl implements IStrategoAppl {
             pp.outdent(ctor.getName().length() + 1);
             
         }
+    }
+
+    @Override
+    public String toString(int maxDepth) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void writeAsString(Appendable output, int maxDepth)
+            throws IOException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public <T extends ITermAttachment> T getAttachment(
+            TermAttachmentType<T> type) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void putAttachment(ITermAttachment resourceAttachment) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public ITermAttachment removeAttachment(TermAttachmentType<?> attachmentType) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public boolean isList() {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public String getName() {
+        throw new NotImplementedException();
     }
 
 }

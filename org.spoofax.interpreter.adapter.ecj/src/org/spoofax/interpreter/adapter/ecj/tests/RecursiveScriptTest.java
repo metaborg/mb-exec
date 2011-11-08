@@ -16,12 +16,12 @@ import java.io.IOException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.spoofax.interpreter.adapter.aterm.WrappedATermFactory;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.core.Interpreter;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.ecj.ECJLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.TermFactory;
 
 public class RecursiveScriptTest {
 
@@ -81,15 +81,15 @@ public class RecursiveScriptTest {
     }
 
     private ECJFactory dataFactory;
-    private WrappedATermFactory programFactory;
+    private TermFactory programFactory;
     private Interpreter interp;
     private ASTParser parser; 
     
     RecursiveScriptTest(String script) {
-        programFactory = new WrappedATermFactory();
+        programFactory = new TermFactory();
         dataFactory = new ECJFactory();
         interp = new Interpreter(dataFactory, programFactory);
-        interp.addOperatorRegistry(ECJLibrary.REGISTRY_NAME, new ECJLibrary());
+        interp.addOperatorRegistry(new ECJLibrary());
         parser = ASTParser.newParser(AST.JLS3);
         try {
             interp.load(script);
