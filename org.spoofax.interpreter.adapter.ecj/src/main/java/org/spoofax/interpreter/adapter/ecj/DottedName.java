@@ -4,6 +4,7 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.StrategoAppl;
 import org.spoofax.terms.StrategoConstructor;
+import org.spoofax.terms.TermFactory;
 
 public class DottedName extends StrategoAppl {
     
@@ -12,7 +13,10 @@ public class DottedName extends StrategoAppl {
     private final static IStrategoConstructor CTOR = new StrategoConstructor("DottedName", 1);
 	
 	protected DottedName(String name) {
-		super(CTOR, new IStrategoTerm[] { new ECJString(name) });
+		super(CTOR, 
+		        new IStrategoTerm[] { new ECJString(name) },
+		        TermFactory.EMPTY_LIST,
+		        IStrategoTerm.IMMUTABLE);
 	}
 
 }

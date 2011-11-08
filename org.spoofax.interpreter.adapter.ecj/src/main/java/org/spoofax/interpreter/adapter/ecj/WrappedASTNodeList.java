@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.spoofax.NotImplementedException;
+import org.spoofax.interpreter.adapter.ecj.skeleton.SkeletonStrategoList;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
@@ -20,28 +21,21 @@ import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.attachments.ITermAttachment;
 import org.spoofax.terms.attachments.TermAttachmentType;
 
-public class WrappedASTNodeList implements IStrategoList {
+public class WrappedASTNodeList extends SkeletonStrategoList {
 
     private static final long serialVersionUID = 1L;
     
     private List<ASTNode> wrappee;
     
     public WrappedASTNodeList(List<ASTNode> wrappee) {
+        super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
         
-        for(Object n : wrappee) 
+        for(Object n : wrappee) {
             if(!(n instanceof ASTNode) && n != null)
-                throw new ClassCastException();
+                throw new ClassCastException("Cannot convert " + n.getClass() + " to ASTNode");
+        }
+        
         this.wrappee = (List<ASTNode>)wrappee;
-    }
-    
-    @Override
-    public int getStorageType() {
-        return MUTABLE;
-    }
-    
-    @Override
-    public IStrategoTerm get(int i) {
-        return getSubterm(i);
     }
 
     @Override
@@ -68,11 +62,6 @@ public class WrappedASTNodeList implements IStrategoList {
             }
             return new ECJGenericList(r);
         }
-    }
-
-    @Override
-    public int size() {
-        return wrappee.size();
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -114,43 +103,17 @@ public class WrappedASTNodeList implements IStrategoList {
     }
 
     @Override
-    public int getTermType() {
-        return IStrategoTerm.LIST;
-    }
-
-    @Override
-    public boolean match(IStrategoTerm second) {
+    public boolean doSlowMatch(IStrategoTerm second, int commonStorageType) {
         if(second instanceof IStrategoList) {
             IStrategoList snd = (IStrategoList) second;
             if(size() != snd.size()) 
                 return false;
             for(int i = 0; i < size(); i++) 
-                if(!get(i).match(snd.getSubterm(i)))
+                if(!getSubterm(i).match(snd.getSubterm(i)))
                     return false;
             return true;
-        } 
-        return false;
-    }
-
-    @Override
-    public void prettyPrint(ITermPrinter pp) {
-        int sz = size();
-        if(sz > 0) {
-            pp.println("[");
-            pp.indent(2);
-            get(0).prettyPrint(pp);
-            for(int i = 1; i < sz; i++) {
-                pp.print(", ");
-                pp.nextIndentOff();
-                get(i).prettyPrint(pp);
-                pp.println("");
-            }
-            pp.println("");
-            pp.print("]");
-            pp.outdent(2);
-
         } else {
-            pp.print("[]");
+            return super.doSlowMatch(second, commonStorageType);
         }
     }
 
@@ -162,20 +125,9 @@ public class WrappedASTNodeList implements IStrategoList {
     public boolean isEmpty() {
         return wrappee.isEmpty();
     }
-    
-    @Override
-    public IStrategoList getAnnotations() {
-    	return TermFactory.EMPTY_LIST;
-    }
 
     @Override
     public String toString(int maxDepth) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void writeAsString(Appendable output, int maxDepth)
-            throws IOException {
         throw new NotImplementedException();
     }
 
@@ -193,10 +145,5 @@ public class WrappedASTNodeList implements IStrategoList {
     @Override
     public ITermAttachment removeAttachment(TermAttachmentType<?> attachmentType) {
         throw new NotImplementedException();
-    }
-
-    @Override
-    public boolean isList() {
-        return true;
     }
 }

@@ -3,7 +3,7 @@
  *
  * Licensed under the GNU Lesser General Public License, v2.1
  *
- * @author Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * @author Karl Trygve Kalleberg <karltk near strategoxt dot org>
  */
 
 module spoofax/bindings/eclipse/eclipse-compiler-ffi

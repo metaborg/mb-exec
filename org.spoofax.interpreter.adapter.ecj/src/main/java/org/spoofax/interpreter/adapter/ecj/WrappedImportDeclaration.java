@@ -36,11 +36,6 @@ public class WrappedImportDeclaration extends WrappedASTNode {
     }
 
     @Override
-    public int getSubtermCount() {
-        return 3;
-    }
-
-    @Override
     public ImportDeclaration getWrappee() {
         return wrappee;
     }

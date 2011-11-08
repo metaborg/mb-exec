@@ -48,25 +48,4 @@ public class None extends WrappedASTNode {
     public IStrategoTerm[] getAllSubterms() {
         return EMPTY;
     }
-
-    @Override
-    public void writeAsString(Appendable output, int maxDepth)
-            throws IOException {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public String getName() {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    protected boolean doSlowMatch(IStrategoTerm second, int commonStorageType) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    protected int hashFunction() {
-        throw new NotImplementedException();
-    }
 }

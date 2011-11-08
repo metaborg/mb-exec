@@ -7,9 +7,6 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import java.io.IOException;
-
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.terms.StrategoTerm;
 
@@ -21,9 +18,4 @@ public abstract class AbstractECJNode extends StrategoTerm {
         super(annotations, storageType);
     }
 
-    @Override
-    public void writeAsString(Appendable output, int maxDepth)
-            throws IOException {
-        throw new NotImplementedException();
-    }
 }
