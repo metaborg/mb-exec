@@ -1,13 +1,13 @@
-module api-open-project-parse-match-resolve-type
+module api-open-parse-match-resolve-type
 imports
-  stratego-lib
+  libstratego-lib
   spoofax/bindings/eclipse/EclipseJava
   spoofax/bindings/eclipse/eclipse-compiler-ffi
 
 strategies
   
   main =  
-      where(<ecj-open-project> "demo1" => p)
+      where(<ecj-open-project> "DummyProject" => p)
     ;!FILE(<id>)
     ; ecj-parse-and-resolve(|p)
     ; topdown(try(?TypeDeclaration(_, _, _, _, _, _, _, _) 

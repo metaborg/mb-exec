@@ -27,6 +27,7 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
     }
     
     private void init() {
+        add(new ECJ_parse_file());
         add(new ECJ_parse_only());
         add(new ECJ_parse_and_resolve());
         add(new ECJ_open_project());

@@ -13,7 +13,7 @@ imports
 
 signature
   constructors
-  FILE : Term -> FILE
+  FILE           : String -> FILE
   
   Project        : Term -> Project
   Binding        : Int * Int * String -> Binding
@@ -28,20 +28,43 @@ signature
   
 strategies
 
-  /** @type FILE -> ASTNode */
-  ecj-parse-only = ?FILE(name) ; prim("ECJ_parse_only", name)
+  /** Parse a file inside an Eclipse project and return the AST. The file path must be
+    * relative to the project.
+    *
+    * @param IProject
+    * @type FILE -> ASTNode 
+    */
+  ecj-parse-only(|project) = ?FILE(fileName) ; prim("ECJ_parse_only", project, fileName)
+
+  /** Parse a file on disk and return the AST. The file path must be relative to the current
+    * working directory.
+    * 
+    * @type FILE -> ASTNode 
+    */
+  ecj-parse-file = ?FILE(fileName) ; prim("ECJ_parse_file", fileName)
 
   /** @type String -> ECJProject */
   ecj-open-project = ?path ; prim("ECJ_open_project", path)
   
+  /** @type String -> ECJProject */
   ecj-create-project = ?path ; prim("ECJ_create_project", path)
 
+  /** @param IProject 
+    * @type String -> ?success
+    */
   ecj-add-source-folder(|project) = ?path ; prim("ECJ_add_source_folder", project, path)
   
+  /** @param IProject 
+    * @type String -> ?success
+    */
   ecj-add-jar(|project) = ?path ; prim("ECJ_add_jar", path, project)
     
+  /** @param IProject 
+    * @type FILE -> ASTNode 
+    */
   ecj-parse-and-resolve(|project) = ?FILE(name) ; prim("ECJ_parse_and_resolve", project, name) 
   
+  /** @type ASTNode -> ASTNode */
   ecj-is-valid-ast-node = 
        (?t ; prim("ECJ_is_valid_ast_node", t))
     <+ (?t ; prim("ECJ_is_valid_ast_nodelist", t))

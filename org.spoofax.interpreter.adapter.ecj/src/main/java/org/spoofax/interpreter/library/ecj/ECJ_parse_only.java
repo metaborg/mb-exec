@@ -7,61 +7,59 @@
  */
 package org.spoofax.interpreter.library.ecj;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
+import org.spoofax.interpreter.adapter.ecj.WrappedIProject;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJ_parse_only extends AbstractPrimitive {
 
-    protected ECJ_parse_only() {
-        super("ECJ_parse_only", 0, 1);
+    public ECJ_parse_only() {
+        super("ECJ_parse_only", 0, 2);
     }
-
-    private static char[] getBytes(String fileName) throws FileNotFoundException, IOException {
-
-        BufferedReader r = new BufferedReader(new FileReader(fileName));
-        StringBuilder sb = new StringBuilder();
-        String s = r.readLine();
-        while(s != null) {
-            sb.append(s);
-            s = r.readLine();
-        }
-            
-        return sb.toString().toCharArray();
-    }
-    
     @Override
-    public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException {
-         
-        if(!Tools.isTermString(tvars[0]))
-             return false;
+    public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
+            throws InterpreterException {
+
+        if(!ECJTools.isIProject(tvars[0]))
+            return false;
+        if(!Tools.isTermString(tvars[1]))
+            return false;
+        
+        String path = ((IStrategoString)tvars[1]).stringValue();
+        
+        IProject project = ((WrappedIProject)tvars[0]).getWrappee();
+        if(project == null)
+            return false;
         
         ASTParser parser = ASTParser.newParser(AST.JLS3);
-        try {
-            parser.setSource(getBytes(Tools.javaString(tvars[0])));
-        } catch(FileNotFoundException e) {
+        IFile file = (IFile) project.findMember(path);
+        if(file == null)
             return false;
-        } catch(IOException e) {
+        
+        ICompilationUnit cu = JavaCore.createCompilationUnitFrom(file);
+        if(cu == null)
             return false;
-        }
         
-        ASTNode ast = parser.createAST(null);
-        ECJFactory f = ((ECJFactory)env.getFactory());
-        IStrategoTerm t = f.parseFromTree(ast);
+        parser.setResolveBindings(false);
+        parser.setSource(cu);
+        ASTNode n = parser.createAST(null);
+        if(n == null)
+            return false;
         
-        env.setCurrent(t);
+        env.setCurrent(ECJFactory.genericWrap(n));
         return true;
     }
 

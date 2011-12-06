@@ -7,17 +7,12 @@ imports
 strategies
   
   main =  
-      debug(!"5");
       where(<ecj-open-project> "DummyProject" => p)
-    ; debug(!"1")
     ; !FILE(<id>)
-    ; debug(!"2")
     ; ecj-parse-and-resolve(|p)
-    ; debug(!"3")
     ; topdown(try(?MethodInvocation(_, _, _, _) 
                   ; where(debug ; ecj-method-of ; debug)
                   ; where(debug ; ecj-type-of ; debug)
                  )
              )
-    ; debug(!"4")
     ;!()

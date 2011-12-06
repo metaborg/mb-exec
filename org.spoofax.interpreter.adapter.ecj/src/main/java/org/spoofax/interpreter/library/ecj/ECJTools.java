@@ -36,7 +36,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class ECJTools {
 
-    public static boolean isProject(IStrategoTerm t) {
+    public static boolean isIProject(IStrategoTerm t) {
         return unannotate(t) instanceof WrappedIProject;
     }
 

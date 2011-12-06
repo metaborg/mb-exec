@@ -33,7 +33,7 @@ public class ECJ_parse_and_resolve extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
 
-        if(!ECJTools.isProject(tvars[0]))
+        if(!ECJTools.isIProject(tvars[0]))
             return false;
         if(!Tools.isTermString(tvars[1]))
             return false;

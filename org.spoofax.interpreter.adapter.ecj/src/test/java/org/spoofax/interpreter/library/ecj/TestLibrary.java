@@ -46,4 +46,25 @@ public class TestLibrary {
         assertTrue(interp.invoke("main_0_0"));
     }
 
+    @Test
+    public void open_parse_match_resolve_method() throws IOException, InterpreterException, CoreException {
+        interp.load(TestLibrary.class.getResourceAsStream("/api-open-parse-match-resolve-method.ctree"));
+        interp.setCurrent(wef.makeString("Foo.java"));
+        assertTrue(interp.invoke("main_0_0"));
+    }
+
+    @Test
+    public void open_parse_match_resolve_type() throws IOException, InterpreterException, CoreException {
+        interp.load(TestLibrary.class.getResourceAsStream("/api-open-parse-match-resolve-type.ctree"));
+        interp.setCurrent(wef.makeString("Foo.java"));
+        assertTrue(interp.invoke("main_0_0"));
+    }
+
+    @Test
+    public void open_parse_then_topdown_match_typedeclaration() throws IOException, InterpreterException, CoreException {
+        interp.load(TestLibrary.class.getResourceAsStream("/api-parse-then-topdown-match-typedeclaration.ctree"));
+        interp.setCurrent(wef.makeString("Foo.java"));
+        assertTrue(interp.invoke("main_0_0"));
+    }
+
 }
