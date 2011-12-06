@@ -40,7 +40,9 @@ public class SDefT implements IConstruct {
             return type;
         }
     }
+    
     public interface ArgType {
+        // empty
     }
 
     public static class FunType implements ArgType {

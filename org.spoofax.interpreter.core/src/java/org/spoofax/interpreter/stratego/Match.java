@@ -304,6 +304,7 @@ public class Match extends Strategy {
 
     @SuppressWarnings("serial")
     public static final class Results extends ArrayList<Binding> {
+        // empty
     }
 
     public static final class Binding extends Pair<String, IStrategoTerm> {
