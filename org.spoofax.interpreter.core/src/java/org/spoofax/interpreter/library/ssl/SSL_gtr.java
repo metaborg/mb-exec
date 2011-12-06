@@ -21,6 +21,7 @@ public class SSL_gtr extends AbstractPrimitive {
         super("SSL_gtr", 0, 2);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         if(!Tools.isTermReal(targs[0]))

@@ -15,6 +15,7 @@ public class SSL_divr extends AbstractPrimitive {
         super("SSL_divr", 0, 2);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException {
         double a, b;
         

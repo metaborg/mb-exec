@@ -19,6 +19,7 @@ public class SSL_hashtable_remove extends AbstractPrimitive {
         super("SSL_hashtable_remove", 0, 2);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         if (!(targs[0] instanceof StrategoHashMap))
             return false;

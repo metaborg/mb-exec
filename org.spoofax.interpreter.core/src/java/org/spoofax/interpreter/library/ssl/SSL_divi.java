@@ -21,6 +21,7 @@ public class SSL_divi extends AbstractPrimitive {
         super("SSL_divi", 0, 2);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         if(!(Tools.isTermInt(targs[0])))

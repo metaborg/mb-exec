@@ -20,6 +20,7 @@ public class SSL_strcat extends AbstractPrimitive {
         super("SSL_strcat", 0, 2);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         if(!Tools.isTermString(targs[0]))

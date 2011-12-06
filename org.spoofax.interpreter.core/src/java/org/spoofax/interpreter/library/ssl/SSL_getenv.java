@@ -20,6 +20,7 @@ public class SSL_getenv extends AbstractPrimitive {
         super("SSL_getenv", 0, 1);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         if(!Tools.isTermString(targs[0]))

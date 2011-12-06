@@ -32,6 +32,7 @@ public class SSL_access extends AbstractPrimitive {
         super("SSL_access", 0, 2);
     }
 
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         if (!Tools.isTermString(targs[0]))

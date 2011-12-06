@@ -19,6 +19,7 @@ public class SSL_hashtable_destroy extends AbstractPrimitive {
         super("SSL_hashtable_destroy", 0, 1);
     }
 
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
             throws InterpreterException {
 

@@ -19,6 +19,7 @@ public class SSL_rand extends AbstractPrimitive {
         super("SSL_rand", 0, 0);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         double r = Math.random();

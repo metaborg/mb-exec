@@ -18,6 +18,7 @@ public class SSL_indexedSet_reset extends AbstractPrimitive {
         super("SSL_indexedSet_reset", 0, 1);
     }
 
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
         if(!(targs[0] instanceof StrategoSet))
             return false;

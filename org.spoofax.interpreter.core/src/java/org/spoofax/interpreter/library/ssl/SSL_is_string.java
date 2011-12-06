@@ -20,6 +20,7 @@ public class SSL_is_string extends AbstractPrimitive {
         super("SSL_is_string", 0, 1);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         return Tools.isTermString(targs[0]);
     }

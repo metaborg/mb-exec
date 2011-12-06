@@ -20,6 +20,7 @@ public class SSL_strlen extends AbstractPrimitive {
         super("SSL_strlen", 0, 1);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         if(!Tools.isTermString(targs[0]))

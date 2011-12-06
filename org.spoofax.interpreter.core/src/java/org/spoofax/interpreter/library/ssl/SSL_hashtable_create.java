@@ -21,6 +21,7 @@ public class SSL_hashtable_create extends AbstractPrimitive {
         super("SSL_hashtable_create", 0, 2);
     }
 
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
             throws InterpreterException {
 

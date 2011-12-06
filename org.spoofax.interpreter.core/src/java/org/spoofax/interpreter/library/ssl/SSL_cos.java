@@ -21,6 +21,7 @@ public class SSL_cos extends AbstractPrimitive {
         super("SSL_cos", 0, 1);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
         if(!(Tools.isTermReal(targs[0])))

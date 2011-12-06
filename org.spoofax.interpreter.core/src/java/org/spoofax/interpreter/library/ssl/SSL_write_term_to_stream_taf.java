@@ -24,6 +24,7 @@ public class SSL_write_term_to_stream_taf extends AbstractPrimitive {
         super("SSL_write_term_to_stream_taf", 0, 2);
     }
     
+    @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         
         if(!Tools.isTermInt(targs[0]))
