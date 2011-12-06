@@ -7,10 +7,7 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import java.io.IOException;
-
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 

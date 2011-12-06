@@ -41,7 +41,8 @@ public class ECJ_signature_to_type extends ECJPrimitive {
     	
     }
     
-	private Type signatureStringToType(final AST ast, final String signatureName) {
+	@SuppressWarnings("unchecked")
+    private Type signatureStringToType(final AST ast, final String signatureName) {
 		final String[] args = Signature.getTypeArguments(signatureName);
 		final String qual = Signature.getQualifier(signatureName);
 		final String base = Signature.getSignatureSimpleName(Signature.getTypeErasure(signatureName));

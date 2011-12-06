@@ -7,19 +7,17 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.spoofax.NotImplementedException;
-import org.spoofax.interpreter.adapter.ecj.skeleton.SkeletonStrategoList;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.attachments.ITermAttachment;
 import org.spoofax.terms.attachments.TermAttachmentType;
+import org.spoofax.terms.skeleton.SkeletonStrategoList;
 
 public class WrappedASTNodeList extends SkeletonStrategoList {
 

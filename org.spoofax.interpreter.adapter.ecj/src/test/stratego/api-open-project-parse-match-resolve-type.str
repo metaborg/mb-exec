@@ -1,6 +1,6 @@
 module api-open-project-parse-match-resolve-type
 imports
-  libstratego-lib
+  stratego-lib
   spoofax/bindings/eclipse/EclipseJava
   spoofax/bindings/eclipse/eclipse-compiler-ffi
 

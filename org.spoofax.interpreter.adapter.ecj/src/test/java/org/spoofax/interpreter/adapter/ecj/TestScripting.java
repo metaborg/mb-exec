@@ -7,7 +7,7 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -94,4 +94,5 @@ public class TestScripting {
         assertTrue(t instanceof WrappedCompilationUnit);
         assertEquals(ASTNode.COMPILATION_UNIT, ((WrappedCompilationUnit)t).getWrappee().getNodeType());
     }
+    
 }
