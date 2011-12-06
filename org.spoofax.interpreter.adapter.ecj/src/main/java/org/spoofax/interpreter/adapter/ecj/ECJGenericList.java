@@ -7,23 +7,22 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import java.io.IOException;
-
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.attachments.ITermAttachment;
 import org.spoofax.terms.attachments.TermAttachmentType;
+import org.spoofax.terms.skeleton.SkeletonStrategoList;
 
-public class ECJGenericList implements IStrategoList {
+public class ECJGenericList extends SkeletonStrategoList {
 
     private static final long serialVersionUID = 1L;
     
     private IStrategoTerm[] kids;
 
     ECJGenericList(IStrategoTerm[] kids) {
+        super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
         this.kids = kids;
     }
     
@@ -59,38 +58,7 @@ public class ECJGenericList implements IStrategoList {
     }
 
     @Override
-    public int getTermType() {
-        return IStrategoTerm.LIST;
-    }
-
-    @Override
-    public int getStorageType() {
-        return IStrategoTerm.IMMUTABLE;
-    }
-
-    @Override
-    public IStrategoList getAnnotations() {
-        return TermFactory.EMPTY_LIST;
-    }
-
-    @Override
-    public boolean match(IStrategoTerm second) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void prettyPrint(ITermPrinter pp) {
-        throw new NotImplementedException();
-    }
-
-    @Override
     public String toString(int maxDepth) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void writeAsString(Appendable output, int maxDepth)
-            throws IOException {
         throw new NotImplementedException();
     }
 
@@ -111,28 +79,13 @@ public class ECJGenericList implements IStrategoList {
     }
 
     @Override
-    public boolean isList() {
-        return true;
-    }
-
-    @Override
-    public IStrategoTerm get(int index) {
-        return kids[index];
-    }
-
-    @Override
-    public int size() {
-        return kids.length;
-    }
-
-    @Override
     public IStrategoTerm head() {
         return kids[0];
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return kids.length == 0;
     }
 }
 
