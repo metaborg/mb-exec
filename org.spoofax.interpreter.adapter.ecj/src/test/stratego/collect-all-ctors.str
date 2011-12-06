@@ -1,6 +1,6 @@
 module collect-all-ctors
 imports
-  stratego-lib	  
+  libstratego-lib	  
 strategies
 
 

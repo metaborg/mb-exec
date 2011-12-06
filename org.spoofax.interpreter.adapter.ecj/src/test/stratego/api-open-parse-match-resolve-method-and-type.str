@@ -1,8 +1,8 @@
 module api-open-parse-match-resolve-method-and-type
 imports
-  stratego-lib
-  EclipseJava
-  ecj-adapter
+  libstratego-lib
+  spoofax/bindings/eclipse/EclipseJava
+  spoofax/bindings/eclipse/eclipse-compiler-ffi
 
 strategies
   

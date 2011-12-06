@@ -8,7 +8,7 @@
 
 module spoofax/bindings/eclipse/eclipse-compiler-ffi
 imports
-  stratego-lib
+  libstratego-lib
   spoofax/bindings/eclipse/EclipseJava
 
 signature
@@ -385,7 +385,7 @@ strategies
   
   /**
    * @param IProject - project
-   * @type Tuple(IProject, String) -> IFile 
+   * @type String -> IFile 
    */
   ecj-project-get-file(|project) =
       ?filename
@@ -398,7 +398,6 @@ strategies
       ?file
     ; prim("ECJ_file_exists", file)
 
-  
   /** @type SimpleName -> SimpleName */
   ecj-simplename-of = ?SimpleName(_)
 
@@ -517,6 +516,20 @@ strategies
       collect-all(\ TypeBinding(_,x,_,_,_,_,_) -> x \)
     ; map(!DottedName(<id>))
 
+strategies
+
+  /* @type Expr -> ITypeBinding */
+  ecj-type-of = prim("ECJ_type_of_expr", <id>)
+  
+  /* @type Type -> ITypeBinding */
+  ecj-type-of = prim("ECJ_type_of_type", <id>)
+  
+  /* @type TypeDecl -> ITypeBinding */
+  ecj-type-of = prim("ECJ_type_of_typedecl", <id>)
+
+  /* @type TypeParameter -> ITypeBinding */
+  ecj-type-of = prim("ECJ_type_of_typeparameter", <id>) 
+  	
 strategies
 
   /**

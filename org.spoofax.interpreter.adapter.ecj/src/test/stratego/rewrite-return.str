@@ -1,7 +1,7 @@
 module rewrite-return
 imports
-  stratego-lib
-  spoofax/bindings/ecj/EclipseJava
+  libstratego-lib
+  spoofax/bindings/eclipse/EclipseJava
   
 strategies
 

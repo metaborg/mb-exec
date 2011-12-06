@@ -1,6 +1,6 @@
 module just-debug
 imports
-  stratego-lib
+  libstratego-lib
  
 strategies
 

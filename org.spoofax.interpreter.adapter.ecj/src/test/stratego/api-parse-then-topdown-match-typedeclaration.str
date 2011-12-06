@@ -1,8 +1,8 @@
 module api-parse-then-topdown-match-typedeclaration
 imports
-  stratego-lib
-  spoofax/bindings/ecj/EclipseJava
-  spoofax/bindings/ecj/ecj-adapter
+  libstratego-lib
+  spoofax/bindings/eclipse/EclipseJava
+  spoofax/bindings/eclipse/eclipse-compiler-ffi
 
 strategies
   
@@ -10,5 +10,5 @@ strategies
       !FILE(<id>) 
     ; debug 
     ; ecj-parse-only
-    ; topdown(try(?TypeDeclaration(_, _, _, _, _, _) ; debug))
+    ; topdown(try(?TypeDeclaration(_, _, _, _, _, _, _, _) ; debug))
     ) ; !()

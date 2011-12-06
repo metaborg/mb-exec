@@ -1,8 +1,8 @@
 module api-open-parse-match-resolve-method
 imports
-  stratego-lib
-  spoofax/bindings/ecj/EclipseJava
-  spoofax/bindings/ecj/ecj-adapter
+  libstratego-lib
+  spoofax/bindings/eclipse/EclipseJava
+  spoofax/bindings/eclipse/eclipse-compiler-ffi
 
 strategies
   
@@ -11,7 +11,7 @@ strategies
     ;!FILE(<id>)
     ; ecj-parse-and-resolve(|p)
     ; debug
-    ; topdown(try(?MethodDeclaration(_, _, _, _, _, _) 
+    ; topdown(try(?MethodDeclaration(_, _, _, _, _, _, _, _) 
                   ; where(ecj-method-of  ; debug)
                  )
              )

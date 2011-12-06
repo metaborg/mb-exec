@@ -1,6 +1,6 @@
 module collect-all-typedeclarations
 imports
-  stratego-lib
+  libstratego-lib
   spoofax/bindings/eclipse/EclipseJava
   
 strategies

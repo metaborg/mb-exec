@@ -28,7 +28,7 @@ import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.spoofax.DebugUtil;
 import org.spoofax.NotImplementedException;
-import org.spoofax.interpreter.adapter.ecj.skeleton.SkeletonTermFactory;
+import org.spoofax.terms.skeleton.SkeletonTermFactory;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;

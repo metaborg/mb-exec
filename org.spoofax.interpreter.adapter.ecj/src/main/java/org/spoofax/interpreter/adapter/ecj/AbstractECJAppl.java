@@ -8,11 +8,11 @@
 package org.spoofax.interpreter.adapter.ecj;
 
 import org.spoofax.NotImplementedException;
-import org.spoofax.interpreter.adapter.ecj.skeleton.SkeletonStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.TermFactory;
+import org.spoofax.terms.skeleton.SkeletonStrategoAppl;
 
 public abstract class AbstractECJAppl extends SkeletonStrategoAppl {
 
