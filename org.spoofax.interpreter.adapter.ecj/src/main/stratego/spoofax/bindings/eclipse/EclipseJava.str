@@ -92,7 +92,7 @@ signature
     PrefixExpression                : Term * Term -> Expression
     PrefixExpressionOperator        : Term -> Term
     PrimitiveType                   : Term -> Term
-    QualifiedName                   : Term * Term -> Term
+    QualifiedName                   : QualifiedName * SimpleName -> QualifiedName
     QualifiedType                   : Term * Term -> Term
     ReturnStatement                 : Expression -> Statement
     SimpleName                      : Term -> Term 
