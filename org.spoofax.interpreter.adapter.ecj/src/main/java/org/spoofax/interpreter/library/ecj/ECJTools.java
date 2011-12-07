@@ -1,9 +1,9 @@
 /*
  * Created on 10. okt.. 2006
  *
- * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ * Copyright (c) 2006-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
  * 
- * Licensed under the GNU Lesser Public License, v2.1
+ * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.library.ecj;
 
@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.Type;
 import org.spoofax.interpreter.adapter.ecj.ECJAnnoWrapper;
@@ -30,6 +31,7 @@ import org.spoofax.interpreter.adapter.ecj.WrappedIJavaProject;
 import org.spoofax.interpreter.adapter.ecj.WrappedIProject;
 import org.spoofax.interpreter.adapter.ecj.WrappedIType;
 import org.spoofax.interpreter.adapter.ecj.WrappedITypeBinding;
+import org.spoofax.interpreter.adapter.ecj.WrappedMethodDeclaration;
 import org.spoofax.interpreter.adapter.ecj.WrappedName;
 import org.spoofax.interpreter.adapter.ecj.WrappedType;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -138,5 +140,16 @@ public class ECJTools {
 	public static Type asType(IStrategoTerm term) {
 		return ((WrappedType)unannotate(term)).getWrappee();
 	}
+
+	public static boolean isMethodDeclaration(IStrategoTerm term) {
+		return unannotate(term) instanceof WrappedMethodDeclaration;
+	}
+
+	public static MethodDeclaration asMethodDeclaration(
+			IStrategoTerm term) {
+		return ((WrappedMethodDeclaration)unannotate(term)).getWrappee();
+	}
+	
+	
 
 }
