@@ -67,6 +67,7 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
         add(new ECJ_create_package());
         add(new ECJ_signature_to_type());
         add(new ECJ_search_for_supertype_type_refs_no_generics());
+        add(new ECJ_binding_of_methoddecl());
     }
     
     public IProject getCurrentProject() {
