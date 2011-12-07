@@ -18,6 +18,7 @@ signature
   Project        : Term -> Project
   Binding        : Int * Int * String -> Binding
   TypeBinding    : List(String) * String * List(TypeBinding) * TypeBinding * List(TypeBinding) * Int * ITypeBinding -> TypeBinding
+  MethodBinding  : TypeBinding * Name * Type * List(TypeBinding) -> MethodBinding
   TypeParameter  : List(String) -> TypeParameter
   ITypeParameter : String * List(String) -> ITypeParameter
   DottedName     : String -> DottedName
@@ -107,6 +108,12 @@ strategies
     ; ?expr
     ; prim("ECJ_type_of_expr", expr)
 
+  /** @type MethodDeclaration -> MethodBinding */
+  ecj-binding-of = 
+      ecj-is-MethodDeclaration
+    ; ?md
+    ; prim("ECJ_binding_of_methoddecl", md)
+    
 
 strategies
 
@@ -307,9 +314,9 @@ strategies
     ; prim("ECJ_rewrite_compilation_unit", s | cu)
 
   /** @type IFile -> IFile */
-  ecj-rewrite-file(s) = 
+  ecj-rewrite-file(typerw, importrw) = 
     ?cu
-    ; prim("ECJ_rewrite_file", s | cu)
+    ; prim("ECJ_rewrite_file", typerw, importrw | cu)
     
 strategies
 
@@ -356,7 +363,10 @@ strategies
   ecj-name-of = ?IType(<id>, _, _, _, _, _) ; ecj-as-qualified-name
   
   /** @type ParameterizedType -> SimpleName / QualifiedName */
-  ecj-name-of = ?ParameterizedType(<id>, _)
+  ecj-name-of = ?ParameterizedType(<ecj-name-of>, _)
+
+  /** @type SimpleName -> SimpleName */
+  ecj-name-of = ?SimpleName(_) 
   
   /**
    * Computes the dotted name of an AST node, if this is possible
@@ -393,10 +403,22 @@ strategies
    * @type Type -> Name 
    */
   ecj-qualified-name-of = 
-      ecj-binding-of 
+      not(ecj-is-TypeBinding)
+    ; ecj-binding-of 
     ; ecj-dotted-name-of 
+    ; ecj-erased-name-of
     ; ecj-as-qualified-name
   
+  /** @type TypeBinding -> Name */
+  ecj-qualified-name-of =
+      ecj-is-TypeBinding
+    ; ecj-dotted-name-of
+    ; ecj-as-qualified-name
+    
+  /** @type DottedName -> DottedName */
+  ecj-erased-name-of =
+      DottedName(explode-string ; take-until(?'<') ; implode-string) 
+      
 strategies
   
   /**
@@ -453,6 +475,9 @@ strategies
       end
     ; not(is-int)
 
+  /** @type String -> String */
+  ecj-is-primitive-type-name = ?"int" + ?"float" + ?"double" + ?"void" + ?"byte" + ?"char"
+  
   /**
    * Returns true iff the supplied Type is a primitive type
    * @type ASTNode -> PrimitiveType
