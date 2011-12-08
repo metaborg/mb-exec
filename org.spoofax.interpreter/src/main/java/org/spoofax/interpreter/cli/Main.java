@@ -1,6 +1,11 @@
+/*
+ * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk at strategoxt dot org>
+ * 
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.cli;
 
-/* Replaced by org.strategoxt.HybridInterpreter
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,4 +66,3 @@ public class Main {
 		}
 	}
 }
-*/
