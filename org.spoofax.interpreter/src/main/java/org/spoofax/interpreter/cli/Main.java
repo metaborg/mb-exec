@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk at strategoxt dot org>
+ * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
  * 
  * Licensed under the GNU Lesser General Public License, v2.1
  */
@@ -21,6 +21,7 @@ import org.spoofax.interpreter.core.InterpreterErrorExit;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.InterpreterExit;
 import org.spoofax.interpreter.core.UndefinedStrategyException;
+import org.spoofax.interpreter.core.VarScope;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
@@ -85,8 +86,13 @@ public class Main {
 				else if (":clear".equals(code)) {
 					consoleReader.clearScreen();
 				} else if (":vars".equals(code)) {
-					for (String var : intp.getContext().getVarScope().getVars())
-						out.println(var);
+					VarScope vs = intp.getContext().getVarScope();
+					for(String v : vs.getVars()) {
+						IStrategoTerm t = vs.lookup(v);
+						ANSIBuffer ab = new ANSIBuffer();
+						out.println(" " + v + " = " + colorize(ab, t).toString());
+					}
+					out.flush();
 				} else if (":strategies".equals(code)) {
 					SortedSet<String> sorted = new TreeSet<String>();
 					for (String strategy : intp.getContext().getStrategyNames()) {
@@ -95,6 +101,17 @@ public class Main {
 					for (String s : sorted)
 						out.println(s);
 					out.flush();
+				} else if(code.startsWith(":forget ")) {
+					String[] els = code.split(" ");
+					VarScope vs = intp.getContext().getVarScope();
+					for(int i = 1 ; i < els.length; i++) {
+						if("_".equals(els[i])) {
+							vs.removeAllVars();
+							break;
+						} else {
+							vs.removeVar(els[i]);
+						}
+					}
 				}
 				if (code.equals("") || code.startsWith(":"))
 					continue;

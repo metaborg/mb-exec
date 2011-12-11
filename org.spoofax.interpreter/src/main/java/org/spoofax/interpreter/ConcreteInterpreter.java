@@ -101,9 +101,9 @@ public class ConcreteInterpreter extends Interpreter {
 	
 	public boolean parseAndInvoke(String codeAsString) throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
 		IStrategoAppl program = parseAndCompile(codeAsString, "spoofax_frontend_for_expr_0_0", "Strategy");	
-		if(program != null)
+		if(program != null) {
 			return evaluate(program);
-		else
+		} else
 			throw new InterpreterException("Failed to compile fragment");
 	}
 }
