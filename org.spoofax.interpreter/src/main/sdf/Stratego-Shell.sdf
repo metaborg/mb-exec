@@ -1,0 +1,9 @@
+module Stratego-Shell
+
+imports
+	Stratego-Sugar
+	
+exports
+	
+	context-free start-symbols
+		Strategy	
