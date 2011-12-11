@@ -7,6 +7,7 @@ package org.spoofax.interpreter.cli;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
@@ -92,15 +93,12 @@ public class Main {
 						ANSIBuffer ab = new ANSIBuffer();
 						out.println(" " + v + " = " + colorize(ab, t).toString());
 					}
-					out.flush();
 				} else if (":strategies".equals(code)) {
 					SortedSet<String> sorted = new TreeSet<String>();
 					for (String strategy : intp.getContext().getStrategyNames()) {
 						sorted.add(StrategyCompletor.uncify(strategy));
 					}
-					for (String s : sorted)
-						out.println(s);
-					out.flush();
+					consoleReader.printColumns(sorted);
 				} else if(code.startsWith(":forget ")) {
 					String[] els = code.split(" ");
 					VarScope vs = intp.getContext().getVarScope();
@@ -112,9 +110,13 @@ public class Main {
 							vs.removeVar(els[i]);
 						}
 					}
+				} else if(code.startsWith(":")) {
+					usage(out);
 				}
-				if (code.equals("") || code.startsWith(":"))
+				if (code.equals("") || code.startsWith(":")) {
+					out.flush();
 					continue;
+				}
 				promptCount++;
 				IStrategoTerm old = intp.current();
 				try {
@@ -122,7 +124,6 @@ public class Main {
 						lastWasGood = true;
 						ANSIBuffer ab = new ANSIBuffer();
 						out.println(colorize(ab, intp.current()));
-						out.flush();
 					} else {
 						lastWasGood = false;
 						intp.setCurrent(old);
@@ -186,6 +187,15 @@ public class Main {
 		ab.bold(close);
 	}
 
+	private static void usage(PrintWriter out) {
+		out.println(new ANSIBuffer().yellow(" :help                       ").append("-- print this page"));
+		out.println(new ANSIBuffer().yellow(" :forget ").append("var1 var2 ... varN  -- forget global variables"));
+		out.println(new ANSIBuffer().yellow(" :forget ").append("_                   -- forget all global variables"));
+		out.println(new ANSIBuffer().yellow(" :vars                       ").append("-- show all global variables"));
+		out.println(new ANSIBuffer().yellow(" :strategies                 ").append("-- show all global strategies"));
+	}
+	
+	
 	private static String makePrompt(boolean success, int promptCount) {
 		ANSIBuffer ab = new ANSIBuffer();
 		ab.bold(promptCount + "");
