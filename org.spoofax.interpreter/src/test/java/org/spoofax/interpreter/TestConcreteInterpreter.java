@@ -3,13 +3,21 @@ package org.spoofax.interpreter;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.spoofax.interpreter.core.InterpreterErrorExit;
+import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterExit;
+import org.spoofax.interpreter.core.UndefinedStrategyException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.jsglr.client.ParseException;
+import org.spoofax.jsglr.shared.BadTokenException;
+import org.spoofax.jsglr.shared.SGLRException;
+import org.spoofax.jsglr.shared.TokenExpectedException;
 import org.spoofax.terms.StrategoInt;
 
 public class TestConcreteInterpreter {
 
 	@Test
-	public void load_and_exec_id() {
+	public void load_and_exec_id() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		assertTrue(ci.parseAndInvoke("id <+ fail"));
@@ -17,7 +25,7 @@ public class TestConcreteInterpreter {
 	}
 
 	@Test
-	public void load_and_exec_inc() {
+	public void load_and_exec_inc() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		assertTrue(ci.parseAndInvoke("inc"));
@@ -25,7 +33,7 @@ public class TestConcreteInterpreter {
 	}
 
 	@Test
-	public void load_and_exec_a_strategy_def() {
+	public void load_and_exec_a_strategy_def() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		ci.parseAndLoad("zz = inc");
@@ -34,7 +42,7 @@ public class TestConcreteInterpreter {
 	}
 
 	@Test
-	public void load_and_exec_a_higher_order_strategy_def() {
+	public void load_and_exec_a_higher_order_strategy_def() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		ci.parseAndLoad("zz(s) = s");
@@ -44,7 +52,7 @@ public class TestConcreteInterpreter {
 
 
 	@Test
-	public void load_and_exec_a_build() {
+	public void load_and_exec_a_build() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		assertTrue(ci.parseAndInvoke("!Foo(1,2,3)"));
