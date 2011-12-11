@@ -1,14 +1,15 @@
 /*
  * Created on 26.jun.2005
  *
- * Copyright (c) 2004, Karl Trygve Kalleberg <karltk near strategoxt.org>
+ * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
  * 
- * Licensed under the GNU General Public License, v2
+ * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +43,11 @@ public class VarScope {
 
         if(DebugUtil.isDebugging()) {
             Context.debug(DebugUtil.buildIndent(DebugUtil.INDENT_STEP), "lookup : ", name, " = ", t);
+            VarScope vs = this;
+            while(vs != null) {
+                Context.debug(DebugUtil.buildIndent(DebugUtil.INDENT_STEP), vs);
+                vs = vs.parent;
+            }
         }
 
         return t;
@@ -74,6 +80,10 @@ public class VarScope {
         for (String var : vars) {
             this.vars.put(var, null);
         }
+    }
+
+    public Collection<String> getVars() {
+        return Collections.unmodifiableCollection(vars.keySet());
     }
 
     public String printVars() {
@@ -137,12 +147,12 @@ public class VarScope {
     private void debug(Object... s) {
         DebugUtil.debug(s);
     }
-    
+
     public void clear() {
         vars.clear();
         svars.clear();
     }
-    
+
     public List<BindingInfo> saveUnboundVars() {
         return saveUnboundVars(new ArrayList<BindingInfo>());
     }
@@ -152,10 +162,10 @@ public class VarScope {
             if (vars.get(k) == null)
                 results.add(new BindingInfo(this, k));
         }
-        
+
         if (parent != null)
             return parent.saveUnboundVars(results);
-        
+
         return results;
     }
 
@@ -164,7 +174,7 @@ public class VarScope {
             binding.value = binding.scope.overrideVar(binding.name, null);
         }
     }
-    
+
     public void setBoundVarsAfterBacktracking(List<BindingInfo> bindings) {
         for (BindingInfo binding : bindings) {
             String name = binding.name;
@@ -181,5 +191,17 @@ public class VarScope {
 
     public Collection<SDefT> getStrategyDefinitions() {
         return svars.values();
+    }
+
+    public boolean removeVar(String varName) {
+        return vars.remove(varName) != null;
+    }
+
+    public boolean removeSVar(String svarName) {
+        return svars.remove(svarName) != null;
+    }
+
+    public void removeAllVars() {
+        vars.clear();
     }
 }
