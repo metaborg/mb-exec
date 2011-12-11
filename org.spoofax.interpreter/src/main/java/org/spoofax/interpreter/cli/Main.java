@@ -142,14 +142,13 @@ public class Main {
 				}
 				promptCount++;
 				IStrategoTerm old = intp.current();
+				lastWasGood = false;
 				try {
 					if (intp.parseAndInvoke(code)) {
 						lastWasGood = true;
 						ANSIBuffer ab = new ANSIBuffer();
 						out.println(colorize(ab, intp.current()));
-					} else {
-						lastWasGood = false;
-						intp.setCurrent(old);
+						old = intp.current();
 					}
 				} catch (UndefinedStrategyException e) {
 					handleUndefinedStrategyException(out, e);
@@ -175,6 +174,8 @@ public class Main {
 						handleUndefinedStrategyException(out,
 								(UndefinedStrategyException) e.getCause());
 					}
+				} finally {
+					intp.setCurrent(old);
 				}
 				out.flush();
 			}
@@ -236,7 +237,7 @@ public class Main {
 
 	private static void handleUndefinedStrategyException(PrintWriter out,
 			UndefinedStrategyException e) {
-		out.println("undefined strategy "
-				+ StrategyCompletor.uncify(e.getStrategyName()));
+		out.println(new ANSIBuffer().red("Undefined strategy "
+				+ StrategyCompletor.uncify(e.getStrategyName())));
 	}
 }
