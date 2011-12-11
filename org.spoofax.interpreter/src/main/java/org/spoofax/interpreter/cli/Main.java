@@ -5,6 +5,7 @@
  */
 package org.spoofax.interpreter.cli;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
@@ -72,7 +73,11 @@ public class Main {
 		if (toCompile.size() == 0) {
 			PrintWriter out = new PrintWriter(System.out);
 			ConsoleReader consoleReader = new ConsoleReader();
-
+			
+			File historyFile = new File(System.getProperty("user.home") + "/.stratego-shell-history");
+			if(historyFile.canRead() && historyFile.canWrite())
+				consoleReader.getHistory().setHistoryFile(historyFile);
+			
 			consoleReader.setBellEnabled(false);
 			consoleReader
 					.addCompletor(new StrategyCompletor(intp.getContext()));
