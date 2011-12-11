@@ -96,12 +96,12 @@ public class ConcreteInterpreter extends Interpreter {
 			throws IOException, InterpreterException {
 	}
 
-	private IStrategoAppl parseAndDesugar(String codeAsString, String startSymbol) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+	private IStrategoAppl parseAndCompile(String codeAsString, String frontendStrategy, String startSymbol) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
 		IStrategoTerm tree = (IStrategoTerm) sugarParser.parse(codeAsString, "stdin", startSymbol);
 		System.out.println(tree);
 		IStrategoTerm old = current();
 		setCurrent(tree);
-		invoke("spoofax_concrete_desugar_0_0");
+		invoke(frontendStrategy);
 		IStrategoAppl ret = (IStrategoAppl) current();
 		setCurrent(old);
 		System.out.println(ret);
@@ -110,7 +110,7 @@ public class ConcreteInterpreter extends Interpreter {
 	
 	public void parseAndLoad(String codeAsString) {
         try {
-        	IStrategoAppl program = parseAndDesugar(codeAsString, "Def");
+        	IStrategoAppl program = parseAndCompile(codeAsString, "spoofax_frontend_for_def_0_0", "Def");
             SDefT def = loader.parseSDefT(program);
             context.addSVar(def.getName(), def);
         } catch(InterpreterException e) {
@@ -128,7 +128,7 @@ public class ConcreteInterpreter extends Interpreter {
 	
 	public boolean parseAndInvoke(String codeAsString) {
 		try {
-			IStrategoAppl program = parseAndDesugar(codeAsString, "Strategy");	
+			IStrategoAppl program = parseAndCompile(codeAsString, "spoofax_frontend_for_expr_0_0", "Strategy");	
 			if(program != null)
 				return evaluate(program);
 			else

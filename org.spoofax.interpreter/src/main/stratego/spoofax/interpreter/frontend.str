@@ -1,34 +1,54 @@
 module spoofax/interpreter/frontend
 imports
-	libstratego-lib
-	libstrc
+    libstratego-lib
+    libstrc
 
 strategies
-	
-	spoofax-concrete-desugar = 
-		pre-desugar
+
+    fake-main = spoofax-frontend-for-def ; spoofax-frontend-for-expr
+
+    spoofax-frontend-for-expr = 
+        pre-desugar
       ; desugar-list-matching
       ; desugar
       ; raise-annotations
       ; simplify
-      ; debug(!"Z")
-      ; try(RenameSDef)
-      ; spoofax-rename-calls
-    
+      ; spoofax-fixup-rename-calls
+
+    spoofax-frontend-for-def =
+        stratego-desugar
+      ; raise-annotations
+      ; desugar-list-matching
+      ; rules-to-sdefs-def 
+      ; desugar-DefaultVarDec
+      ; strename
+      ; desugar-def
+      ; rename-sdef
+      ; spoofax-fixup-rename-calls
+
     spoofax-RenameVar:
       (varName, (n, m)) -> varName'
     where
-	   varName' := <concat-strings> [<cify> varName, "_", <int-to-string> n, "_", <int-to-string> m]
-    
+      varName' := <concat-strings> [<cify> varName, "_", <int-to-string> n, "_", <int-to-string> m]
+
     spoofax-HoArg = fail
-    
+
+    spoofax-ends-with-arity =
+        ?x
+      ; trim-chars(is-num)
+      ; where(<not(eq)> (x, <id>))
+      ; string-ends-with(|"_")
+
     spoofax-RenameCall :
     CallT(SVar(x), ss, ts) -> CallT(SVar(y), ss, ts)
-    where <length> ss => n
-        ; <length> ts => m
-        ; ( <spoofax-RenameVar> (x,(n,m)) => y <+ <spoofax-HoArg> x => y )
+    where 
+      <not(spoofax-ends-with-arity)> x
+    with 
+        <length> ss => n
+      ; <length> ts => m
+      ; ( <spoofax-RenameVar> (x,(n,m)) => y <+ <spoofax-HoArg> x => y )
 
-    spoofax-rename-calls =
+    spoofax-fixup-rename-calls =
       topdown(try(spoofax-RenameCall))
-    
-    main = !SDefT("zz",[],[],CallT(SVar("inc"),[],[])) ; spoofax-concrete-desugar
+
+    main = !SDefT("zz",[],[],CallT(SVar("inc"),[],[])) ; spoofax-frontend-for-def

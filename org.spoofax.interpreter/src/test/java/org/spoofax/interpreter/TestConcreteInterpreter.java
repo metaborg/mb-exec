@@ -25,12 +25,31 @@ public class TestConcreteInterpreter {
 	}
 
 	@Test
-	public void load_and_exec_a_def() {
+	public void load_and_exec_a_strategy_def() {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		ci.parseAndLoad("zz = inc");
 		assertTrue(ci.parseAndInvoke("zz"));
 		assertEquals(new StrategoInt(11, IStrategoTerm.IMMUTABLE), ci.current());
+	}
+
+	@Test
+	public void load_and_exec_a_higher_order_strategy_def() {
+		ConcreteInterpreter ci = new ConcreteInterpreter();
+		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
+		ci.parseAndLoad("zz(s) = s");
+		assertTrue(ci.parseAndInvoke("zz(inc)"));
+		assertEquals(new StrategoInt(11, IStrategoTerm.IMMUTABLE), ci.current());
+	}
+
+
+	@Test
+	public void load_and_exec_a_build() {
+		ConcreteInterpreter ci = new ConcreteInterpreter();
+		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
+		assertTrue(ci.parseAndInvoke("!Foo(1,2,3)"));
+		assertEquals(IStrategoTerm.APPL, ci.current().getTermType());
+		System.out.println(ci.current());
 	}
 
 }
