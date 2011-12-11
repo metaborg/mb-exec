@@ -27,4 +27,19 @@ public class TestCompletor {
 		assertEquals("F_OK/(3,4)", StrategyCompletor.uncifyComplete("F__OK_3_4"));
 	}
 
+	@Test
+	public void test_cify_0_0() {
+		assertEquals("foo_p__0_0", StrategyCompletor.cify("foo'/(0,0)"));
+	}
+
+	@Test
+	public void test_cify_tick_0_0() {
+		assertEquals("foo_p__0_0", StrategyCompletor.cify("foo'/(0,0)"));
+	}
+
+	@Test
+	public void test_cify_hyphen_underline_1_2() {
+		assertEquals("bar_foo___1_2", StrategyCompletor.cify("bar-foo_/(1,2)"));
+	}
+
 }

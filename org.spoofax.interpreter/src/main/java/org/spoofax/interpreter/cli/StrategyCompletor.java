@@ -78,4 +78,16 @@ public class StrategyCompletor implements Completor {
 		return unescape(s.substring(0, aritySplit)) + "/(" + sarity + "," + tarity + ")";
 	}
 
+	public static String cify(String s) {
+		int aritySplit = s.indexOf("/");
+		int i = s.indexOf(',', aritySplit);
+		String sarity = s.substring(aritySplit + 2, i);
+		String tarity = s.substring(i + 1, s.length() - 1);
+		return escape(s.substring(0, aritySplit)) + "_" + sarity + "_" + tarity;
+	}
+
+	private static String escape(String s) {
+		return s.replace("_", "__").replace("-", "_").replace("'", "_p_");
+	}
+
 }

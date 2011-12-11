@@ -106,8 +106,12 @@ public class Main {
 						if("_".equals(els[i])) {
 							vs.removeAllVars();
 							break;
-						} else {
+						} else if (els[i].indexOf("/") == -1){
 							vs.removeVar(els[i]);
+						} else {
+							String name = StrategyCompletor.cify(els[i]);
+							if(!vs.removeSVar(name))
+								out.print(new ANSIBuffer().red("Strategy '" + name + "' unknown"));
 						}
 					}
 				} else if(code.startsWith(":arity ")) {
@@ -204,6 +208,7 @@ public class Main {
 	private static void usage(PrintWriter out) {
 		out.println(new ANSIBuffer().yellow(" :help                       ").append("-- print this page"));
 		out.println(new ANSIBuffer().yellow(" :forget ").append("var1 var2 ... varN  -- forget specific global variables"));
+		out.println(new ANSIBuffer().yellow(" :forget ").append("strat/(n,m)         -- forget strategy with arity (n, m), e.g :forget zip/(1,0)"));
 		out.println(new ANSIBuffer().yellow(" :forget ").append("_                   -- forget all global variables"));
 		out.println(new ANSIBuffer().yellow(" :arity ").append("strategy             -- show arity for a strategy"));
 		out.println(new ANSIBuffer().yellow(" :strategies                 ").append("-- show all global strategies"));
