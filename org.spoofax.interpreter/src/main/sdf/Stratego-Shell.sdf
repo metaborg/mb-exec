@@ -1,10 +1,14 @@
 module Stratego-Shell
 
 imports
-	Stratego-Sugar
-	
+    Stratego-Sugar
+
 exports
-	
-	context-free start-symbols
-		Strategy	
-		Def
+
+    context-free syntax
+
+        Strategy -> Toplevel
+        Def      -> Toplevel
+
+    context-free start-symbols
+        Toplevel

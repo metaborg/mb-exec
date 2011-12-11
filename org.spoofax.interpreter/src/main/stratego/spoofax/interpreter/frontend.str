@@ -5,17 +5,26 @@ imports
 
 strategies
 
-    fake-main = spoofax-frontend-for-def ; spoofax-frontend-for-expr
+    fake-main = spx-shell-frontend
 
-    spoofax-frontend-for-expr = 
+    spx-shell-frontend :
+        x -> x'
+    with
+        x' := <spx-shell-is-strategy < spx-shell-frontend-for-def + spx-shell-frontend-for-expr> x
+
+    spx-shell-is-strategy : x@SDefT(_, _, _, _) -> x
+    spx-shell-is-strategy : x@SDef(_, _, _) -> x
+    spx-shell-is-strategy : x@SDefNoArgs(_, _) -> x
+
+    spx-shell-frontend-for-expr = 
         pre-desugar
       ; desugar-list-matching
       ; desugar
       ; raise-annotations
       ; simplify
-      ; spoofax-fixup-rename-calls
+      ; spx-shell-fixup-rename-calls
 
-    spoofax-frontend-for-def =
+    spx-shell-frontend-for-def =
         stratego-desugar
       ; raise-annotations
       ; desugar-list-matching
@@ -24,31 +33,33 @@ strategies
       ; strename
       ; desugar-def
       ; rename-sdef
-      ; spoofax-fixup-rename-calls
+      ; spx-shell-fixup-rename-calls
 
-    spoofax-RenameVar:
+    spx-shell-RenameVar:
       (varName, (n, m)) -> varName'
     where
       varName' := <concat-strings> [<cify> varName, "_", <int-to-string> n, "_", <int-to-string> m]
 
-    spoofax-HoArg = fail
+    spx-shell-HoArg = fail
 
-    spoofax-ends-with-arity =
+    spx-shell-ends-with-arity =
         ?x
       ; trim-chars(is-num)
       ; where(<not(eq)> (x, <id>))
       ; string-ends-with(|"_")
 
-    spoofax-RenameCall :
+    spx-shell-RenameCall :
     CallT(SVar(x), ss, ts) -> CallT(SVar(y), ss, ts)
     where 
-      <not(spoofax-ends-with-arity)> x
+      <not(spx-shell-ends-with-arity)> x
     with 
         <length> ss => n
       ; <length> ts => m
-      ; ( <spoofax-RenameVar> (x,(n,m)) => y <+ <spoofax-HoArg> x => y )
+      ; ( <spx-shell-RenameVar> (x,(n,m)) => y <+ <spx-shell-HoArg> x => y )
 
-    spoofax-fixup-rename-calls =
-      topdown(try(spoofax-RenameCall))
+    spx-shell-fixup-rename-calls =
+      topdown(try(spx-shell-RenameCall))
 
-    main = !SDefT("zz",[],[],CallT(SVar("inc"),[],[])) ; spoofax-frontend-for-def
+    pain = !SDefT("zz",[],[],CallT(SVar("inc"),[],[])) ; spx-shell-frontend
+
+    main = !SDef("zz",[DefaultVarDec("s")],CallNoArgs(SVar("s"))) ; spx-shell-frontend

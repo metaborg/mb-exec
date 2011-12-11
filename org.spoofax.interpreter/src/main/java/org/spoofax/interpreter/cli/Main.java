@@ -8,7 +8,6 @@ package org.spoofax.interpreter.cli;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
@@ -206,7 +205,7 @@ public class Main {
 		out.println(new ANSIBuffer().yellow(" :help                       ").append("-- print this page"));
 		out.println(new ANSIBuffer().yellow(" :forget ").append("var1 var2 ... varN  -- forget specific global variables"));
 		out.println(new ANSIBuffer().yellow(" :forget ").append("_                   -- forget all global variables"));
-		out.println(new ANSIBuffer().yellow(" :arity ").append("strategy              -- show arity for a strategy"));
+		out.println(new ANSIBuffer().yellow(" :arity ").append("strategy             -- show arity for a strategy"));
 		out.println(new ANSIBuffer().yellow(" :strategies                 ").append("-- show all global strategies"));
 		out.println(new ANSIBuffer().yellow(" :vars                       ").append("-- show all global variables"));
 	}

@@ -93,17 +93,16 @@ public class ConcreteInterpreter extends Interpreter {
 		return ret;
 	}
 	
-	public void parseAndLoad(String codeAsString) throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
-		IStrategoAppl program = parseAndCompile(codeAsString, "spoofax_frontend_for_def_0_0", "Def");
-		SDefT def = loader.parseSDefT(program);
-		context.addSVar(def.getName(), def);
-	}
-	
 	public boolean parseAndInvoke(String codeAsString) throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
-		IStrategoAppl program = parseAndCompile(codeAsString, "spoofax_frontend_for_expr_0_0", "Strategy");	
-		if(program != null) {
-			return evaluate(program);
-		} else
+		IStrategoAppl program = parseAndCompile(codeAsString, "spx_shell_frontend_0_0", "Toplevel");
+		if(program == null) {
 			throw new InterpreterException("Failed to compile fragment");
+		} else if(program.getName().equals("SDefT")) {
+			SDefT def = loader.parseSDefT(program);
+			context.addSVar(def.getName(), def);
+			return true;
+		} else {
+			return evaluate(program);
+		} 
 	}
 }
