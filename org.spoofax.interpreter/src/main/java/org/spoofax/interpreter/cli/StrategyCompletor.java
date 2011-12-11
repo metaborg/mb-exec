@@ -45,7 +45,16 @@ public class StrategyCompletor implements Completor {
 		}
 	}
 
+	private static String unescape(String name) {
+		return name.replace("_p_", "'").replace("__", "+")
+		.replace('_', '-').replace("+", "_");
+	}
+
 	public static String uncify(String name) {
+		return unescape(name.substring(0, indexOfArity(name)));
+	}
+
+	private static int indexOfArity(String name) {
 		int underlineCount = 0;
 		int i;
 		for (i = name.length() - 1; i >= 0; i--) {
@@ -54,9 +63,19 @@ public class StrategyCompletor implements Completor {
 			if (underlineCount == 2)
 				break;
 		}
-		// FIXME make this cleaner!
-		return name.substring(0, i).replace("_p_", "'").replace("__", "+")
-				.replace('_', '-').replace("+", "_");
+		return i;
+	}
+
+	public static String uncifyComplete(String s) {
+		int aritySplit = indexOfArity(s);
+		int i = aritySplit + 1;
+		for(; i < s.length(); i++) {
+			if(!Character.isDigit(s.charAt(i)))
+				break;	
+		}
+		String sarity = s.substring(aritySplit + 1, i);
+		String tarity = s.substring(i + 1, s.length());
+		return unescape(s.substring(0, aritySplit)) + "/(" + sarity + "," + tarity + ")";
 	}
 
 }

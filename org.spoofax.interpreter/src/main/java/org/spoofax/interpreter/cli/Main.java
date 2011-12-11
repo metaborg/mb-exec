@@ -7,6 +7,7 @@ package org.spoofax.interpreter.cli;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -110,6 +111,20 @@ public class Main {
 							vs.removeVar(els[i]);
 						}
 					}
+				} else if(code.startsWith(":arity ")) {
+					String[] els = code.split(" ");
+					Collection<String> interesting = new LinkedList<String>();
+					for(int i = 0; i < els.length; i++) {
+						for(String s : intp.getContext().getStrategyNames()) {
+							String uncifyName = StrategyCompletor.uncify(s);
+							if(els[i].equals(uncifyName)) {
+									interesting.add(s);
+							}
+						}
+					}
+					for(String s : interesting) {
+						out.println(StrategyCompletor.uncifyComplete(s));
+					}
 				} else if(code.startsWith(":")) {
 					usage(out);
 				}
@@ -189,10 +204,11 @@ public class Main {
 
 	private static void usage(PrintWriter out) {
 		out.println(new ANSIBuffer().yellow(" :help                       ").append("-- print this page"));
-		out.println(new ANSIBuffer().yellow(" :forget ").append("var1 var2 ... varN  -- forget global variables"));
+		out.println(new ANSIBuffer().yellow(" :forget ").append("var1 var2 ... varN  -- forget specific global variables"));
 		out.println(new ANSIBuffer().yellow(" :forget ").append("_                   -- forget all global variables"));
-		out.println(new ANSIBuffer().yellow(" :vars                       ").append("-- show all global variables"));
+		out.println(new ANSIBuffer().yellow(" :arity ").append("strategy              -- show arity for a strategy"));
 		out.println(new ANSIBuffer().yellow(" :strategies                 ").append("-- show all global strategies"));
+		out.println(new ANSIBuffer().yellow(" :vars                       ").append("-- show all global variables"));
 	}
 	
 	
