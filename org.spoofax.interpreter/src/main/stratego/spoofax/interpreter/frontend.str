@@ -1,4 +1,4 @@
-module spoofax/interpreter/desugar
+module spoofax/interpreter/frontend
 imports
 	libstratego-lib
 	libstrc
@@ -12,6 +12,7 @@ strategies
       ; raise-annotations
       ; simplify
       ; debug(!"Z")
+      ; try(RenameSDef)
       ; spoofax-rename-calls
     
     spoofax-RenameVar:
@@ -30,4 +31,4 @@ strategies
     spoofax-rename-calls =
       topdown(try(spoofax-RenameCall))
     
-    main = !CallNoArgs(SVar("inc")) ; spoofax-concrete-desugar
+    main = !SDefT("zz",[],[],CallT(SVar("inc"),[],[])) ; spoofax-concrete-desugar

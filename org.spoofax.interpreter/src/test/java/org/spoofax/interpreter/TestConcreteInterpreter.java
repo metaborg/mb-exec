@@ -24,4 +24,13 @@ public class TestConcreteInterpreter {
 		assertEquals(new StrategoInt(11, IStrategoTerm.IMMUTABLE), ci.current());
 	}
 
+	@Test
+	public void load_and_exec_a_def() {
+		ConcreteInterpreter ci = new ConcreteInterpreter();
+		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
+		ci.parseAndLoad("zz = inc");
+		assertTrue(ci.parseAndInvoke("zz"));
+		assertEquals(new StrategoInt(11, IStrategoTerm.IMMUTABLE), ci.current());
+	}
+
 }

@@ -16,6 +16,7 @@ import org.spoofax.interpreter.core.InterpreterErrorExit;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.InterpreterExit;
 import org.spoofax.interpreter.core.UndefinedStrategyException;
+import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
@@ -38,7 +39,7 @@ public class ConcreteInterpreter extends Interpreter {
 		try {
 			load(findLibrary("stratego-lib/libstratego-lib.ctree"));
 			load(findLibrary("libstrc.ctree"));
-			load(new FileInputStream("desugar.ctree"));
+			load(new FileInputStream("frontend.ctree"));
 			// load(findLibrary("libstratego-aterm.ctree"));
 			// load(findLibrary("libstratego-gpp.ctree"));
 			// load(findLibrary("libstratego-rtg.ctree"));
@@ -95,16 +96,39 @@ public class ConcreteInterpreter extends Interpreter {
 			throws IOException, InterpreterException {
 	}
 
+	private IStrategoAppl parseAndDesugar(String codeAsString, String startSymbol) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+		IStrategoTerm tree = (IStrategoTerm) sugarParser.parse(codeAsString, "stdin", startSymbol);
+		System.out.println(tree);
+		IStrategoTerm old = current();
+		setCurrent(tree);
+		invoke("spoofax_concrete_desugar_0_0");
+		IStrategoAppl ret = (IStrategoAppl) current();
+		setCurrent(old);
+		System.out.println(ret);
+		return ret;
+	}
+	
+	public void parseAndLoad(String codeAsString) {
+        try {
+        	IStrategoAppl program = parseAndDesugar(codeAsString, "Def");
+            SDefT def = loader.parseSDefT(program);
+            context.addSVar(def.getName(), def);
+        } catch(InterpreterException e) {
+        	throw new RuntimeException(e);
+        } catch (TokenExpectedException e) {
+        	throw new RuntimeException(e);
+		} catch (BadTokenException e) {
+        	throw new RuntimeException(e);
+		} catch (ParseException e) {
+        	throw new RuntimeException(e);
+		} catch (SGLRException e) {
+        	throw new RuntimeException(e);
+		}
+	}
+	
 	public boolean parseAndInvoke(String codeAsString) {
 		try {
-			IStrategoTerm tree = (IStrategoTerm) sugarParser.parse(codeAsString, "stdin", "Strategy");
-			System.out.println(tree);
-			IStrategoTerm old = current();
-			setCurrent(tree);
-			invoke("spoofax_concrete_desugar_0_0");
-			IStrategoAppl program = (IStrategoAppl) current();
-			setCurrent(old);
-			System.out.println(program);
+			IStrategoAppl program = parseAndDesugar(codeAsString, "Strategy");	
 			if(program != null)
 				return evaluate(program);
 			else
