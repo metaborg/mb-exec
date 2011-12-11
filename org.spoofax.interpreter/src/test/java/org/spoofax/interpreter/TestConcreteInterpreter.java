@@ -7,6 +7,7 @@ import org.spoofax.interpreter.core.InterpreterErrorExit;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.InterpreterExit;
 import org.spoofax.interpreter.core.UndefinedStrategyException;
+import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.ParseException;
 import org.spoofax.jsglr.shared.BadTokenException;
@@ -57,7 +58,7 @@ public class TestConcreteInterpreter {
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		assertTrue(ci.parseAndInvoke("!Foo(1,2,3)"));
 		assertEquals(IStrategoTerm.APPL, ci.current().getTermType());
-		System.out.println(ci.current());
+		assertEquals("Foo", ((IStrategoAppl)ci.current()).getName());
 	}
 
 }
