@@ -215,7 +215,7 @@ public class Main {
 		out.println(new ANSIBuffer().yellow(" :forget ").append("var1 var2 ... varN  -- forget specific global variables"));
 		out.println(new ANSIBuffer().yellow(" :forget ").append("strat/(n,m)         -- forget strategy with arity (n, m), e.g :forget zip/(1,0)"));
 		out.println(new ANSIBuffer().yellow(" :forget ").append("_                   -- forget all global variables"));
-		out.println(new ANSIBuffer().yellow(" :arity ").append("strategy             -- show arity for a strategy"));
+		out.println(new ANSIBuffer().yellow(" :arity ").append("strategy             -- show available arities for a strategy"));
 		out.println(new ANSIBuffer().yellow(" :strategies                 ").append("-- show all global strategies"));
 		out.println(new ANSIBuffer().yellow(" :vars                       ").append("-- show all global variables"));
 	}
