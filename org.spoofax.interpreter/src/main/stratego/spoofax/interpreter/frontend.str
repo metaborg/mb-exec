@@ -15,6 +15,9 @@ strategies
     spx-shell-is-strategy : x@SDefT(_, _, _, _) -> x
     spx-shell-is-strategy : x@SDef(_, _, _) -> x
     spx-shell-is-strategy : x@SDefNoArgs(_, _) -> x
+    spx-shell-is-strategy : x@RDefT(_, _, _, _) -> x
+    spx-shell-is-strategy : x@RDef(_, _, _) -> x
+    spx-shell-is-strategy : x@RDefNoArgs(_, _) -> x
 
     spx-shell-frontend-for-expr = 
         pre-desugar
@@ -62,4 +65,4 @@ strategies
 
     pain = !SDefT("zz",[],[],CallT(SVar("inc"),[],[])) ; spx-shell-frontend
 
-    main = !SDef("zz",[DefaultVarDec("s")],CallNoArgs(SVar("s"))) ; spx-shell-frontend
+    main = !RDefT("R",[],[],Rule(Anno(Int("0"),Wld()),Anno(Int("1"),Op("Nil",[])),Id())) ; spx-shell-frontend

@@ -176,8 +176,8 @@ public class Main {
 					}
 				} finally {
 					intp.setCurrent(old);
+					out.flush();
 				}
-				out.flush();
 			}
 		}
 	}

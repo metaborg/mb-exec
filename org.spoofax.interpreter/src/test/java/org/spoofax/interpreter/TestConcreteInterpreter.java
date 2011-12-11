@@ -43,6 +43,15 @@ public class TestConcreteInterpreter {
 	}
 
 	@Test
+	public void load_and_exec_a_rule_def() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
+		ConcreteInterpreter ci = new ConcreteInterpreter();
+		ci.setCurrent(new StrategoInt(0, IStrategoTerm.IMMUTABLE));
+		ci.parseAndInvoke("R : 0 -> 1");
+		assertTrue(ci.parseAndInvoke("R"));
+		assertEquals(new StrategoInt(1, IStrategoTerm.IMMUTABLE), ci.current());
+	}
+
+	@Test
 	public void load_and_exec_a_higher_order_strategy_def() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
