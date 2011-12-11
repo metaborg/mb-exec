@@ -5,18 +5,21 @@ package org.spoofax.interpreter.core;
  */
 public class UndefinedStrategyException extends InterpreterException {
 
-    private static final long serialVersionUID = 6886950665182075267L;
+    private static final long serialVersionUID = 6886950665182075268L;
+    private final String strategyName;
 
-    public UndefinedStrategyException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UndefinedStrategyException(String message) {
+    public UndefinedStrategyException(String message, String strategyName) {
         super(message);
+        this.strategyName = strategyName;
     }
 
-    public UndefinedStrategyException(Exception cause) {
+    public UndefinedStrategyException(Exception cause, String strategyName) {
         super(cause);
+        this.strategyName = strategyName;
+    }
+
+    public String getStrategyName() {
+        return strategyName;
     }
 
 }
