@@ -1,0 +1,33 @@
+module spoofax/interpreter/desugar
+imports
+	libstratego-lib
+	libstrc
+
+strategies
+	
+	spoofax-concrete-desugar = 
+		pre-desugar
+      ; desugar-list-matching
+      ; desugar
+      ; raise-annotations
+      ; simplify
+      ; debug(!"Z")
+      ; spoofax-rename-calls
+    
+    spoofax-RenameVar:
+      (varName, (n, m)) -> varName'
+    where
+	   varName' := <concat-strings> [<cify> varName, "_", <int-to-string> n, "_", <int-to-string> m]
+    
+    spoofax-HoArg = fail
+    
+    spoofax-RenameCall :
+    CallT(SVar(x), ss, ts) -> CallT(SVar(y), ss, ts)
+    where <length> ss => n
+        ; <length> ts => m
+        ; ( <spoofax-RenameVar> (x,(n,m)) => y <+ <spoofax-HoArg> x => y )
+
+    spoofax-rename-calls =
+      topdown(try(spoofax-RenameCall))
+    
+    main = !CallNoArgs(SVar("inc")) ; spoofax-concrete-desugar

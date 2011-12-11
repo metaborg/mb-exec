@@ -54,7 +54,6 @@ public class Main {
         	System.err.println("No files to compile");
         	return;
         }
-        includes.add(System.getProperty("user.home") + ".nix-profile/share/");
         
         intp.load(System.getProperty("share.dir") + "/libstratego-lib.ctree");
 		intp.loadConcrete(toCompile, includes.toArray(new String[0]), false);
