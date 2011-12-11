@@ -2,9 +2,9 @@
 /*
  * Created on 07.aug.2005
  *
- * Copyright (c) 2005, Karl Trygve Kalleberg <karltk near strategoxt.org>
+ * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
  *
- * Licensed under the GNU General Public License, v2
+ * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.core;
 
@@ -33,8 +33,8 @@ import org.spoofax.terms.io.binary.TermReader;
  */
 public class Interpreter {
 
-    private final Context context;
-    private final StrategoCoreLoader loader;
+    protected final Context context;
+    protected final StrategoCoreLoader loader;
 
     public Interpreter() {
         this(new TermFactory());
@@ -74,7 +74,7 @@ public class Interpreter {
         SDefT def = lookupUncifiedSVar(name);
 
         if (def == null) {
-            throw new UndefinedStrategyException("Definition '" + name + "' not found");
+            throw new UndefinedStrategyException("Definition '" + name + "' not found", name);
         }
         
         return evaluate(def);
@@ -88,10 +88,10 @@ public class Interpreter {
      */
     public boolean evaluate(IStrategoAppl s)
             throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
-        
+
         final ITermFactory factory = getFactory();
         final IStrategoConstructor sdefT = factory.makeConstructor("SDefT", 4);
-        
+
         if (s.getConstructor() != sdefT)
             s = factory.makeAppl(sdefT, factory.makeString("interpreter_evaluate_dummy_0_0"), factory.makeList(), factory.makeList(), s);
 
@@ -102,7 +102,7 @@ public class Interpreter {
     private boolean evaluate(SDefT def) throws InterpreterException {
         StackTracer stackTracer = getContext().getStackTracer();
         stackTracer.push(def.getName());
-        
+
         try {
             boolean success = def.getBody().evaluate(context);
         
