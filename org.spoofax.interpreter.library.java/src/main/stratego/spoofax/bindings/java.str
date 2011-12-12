@@ -1,0 +1,20 @@
+/*
+ * Copyright (c) 2006-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1 
+ */
+module spoofax/bindings/java
+
+strategies
+
+    /* @type String -> Class */
+    java-find-class = ?name ; prim("JFF_find_class", name)
+
+    /* @type Constructor, List(Object) -> Object */
+    java-new-instance = ?(ctor, args) ; prim("JFF_new_instance", ctor, args)
+
+    /* @type Object, List(Class) -> Constructor */
+    java-get-constructor = ?(obj, argtypes) ; prim("JFF_get_constructor", obj, argtypes)
+
+    /* @type Method, Object, List(Object) -> Object */
+    java-invoke-method = ?(meth, obj, args) ; prim("JFF_invoke_method", meth, obj, args)
