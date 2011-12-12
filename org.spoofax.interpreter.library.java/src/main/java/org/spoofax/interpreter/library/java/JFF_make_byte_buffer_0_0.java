@@ -14,10 +14,10 @@ import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 
-public class JFI_make_byte_buffer_0_0 extends AbstractPrimitive {
+public class JFF_make_byte_buffer_0_0 extends AbstractPrimitive {
 
 
-	public JFI_make_byte_buffer_0_0() {
+	public JFF_make_byte_buffer_0_0() {
 		super("JFI_make_byte_buffer", 0, 0);
 	}
 

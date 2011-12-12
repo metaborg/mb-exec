@@ -16,9 +16,9 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 
-public class JFI_open_file_channel_0_0 extends AbstractPrimitive {
+public class JFF_open_file_channel_0_0 extends AbstractPrimitive {
 	
-	public JFI_open_file_channel_0_0() {
+	public JFF_open_file_channel_0_0() {
 		super("JFI_open_file_channel", 0, 0);
 	}
 
@@ -50,7 +50,7 @@ public class JFI_open_file_channel_0_0 extends AbstractPrimitive {
 			context.setCurrent(new GenericWrappedTerm("FileChannel", raf.getChannel()));
 			return true;
 		} catch(IOException e) {
-			return JFILibrary.invokeExceptionHandler(context, e);
+			return JFFLibrary.invokeExceptionHandler(context, e);
 		}
 	}
 

@@ -5,37 +5,40 @@
  */
 package org.spoofax.interpreter.library.java;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class JFI_flip_byte_buffer_0_0 extends AbstractPrimitive {
-
-	public JFI_flip_byte_buffer_0_0() {
-		super("JFI_flip_byte_buffer", 0, 0);
+public class JFF_write_to_file_channel_0_0 extends AbstractPrimitive {
+	
+	public JFF_write_to_file_channel_0_0() {
+		super("JFI_write_to_file_channel", 0, 0);
 	}
 
 	@Override
 	public boolean call(IContext context, Strategy[] svars, IStrategoTerm[] tvars) {
-
+		
 		IStrategoTerm current = context.current();
 		
-		if (!(current instanceof GenericWrappedTerm))
-			return false;
-
-		GenericWrappedTerm wrapper = (GenericWrappedTerm) current;
+		FileChannel c = JFFLibrary.fromTupleWrapped(current, 0, FileChannel.class);
+		ByteBuffer buf = JFFLibrary.fromTupleWrapped(current, 1, ByteBuffer.class);
 		
-		if(!(wrapper.getWrappee() instanceof ByteBuffer))
+		if(c == null || buf == null)
 			return true;
 		
-		ByteBuffer buf = (ByteBuffer) wrapper.getWrappee();
+		try {
+			c.write(buf);
+		} catch(IOException e) {
+			return JFFLibrary.invokeExceptionHandler(context, e);
+		}
 		
-		buf.flip();
-		
-		return false;
+		return true;
 	}
+
 
 }
