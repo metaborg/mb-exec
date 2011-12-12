@@ -18,7 +18,6 @@ import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.library.IOperatorRegistry;
-import org.spoofax.interpreter.library.java.JFFLibrary;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.stratego.Match.Binding;
 import org.spoofax.interpreter.stratego.Match.Results;
@@ -62,10 +61,9 @@ public class Context implements IContext {
         varScope = new VarScope(null);
         strategoSignature = new StrategoSignature(programFactory);
         operatorRegistries = new LinkedHashMap<String, IOperatorRegistry>();
-        
+
         if (!skipStandardLibraries) {
            addOperatorRegistry(new SSLLibrary());
-           addOperatorRegistry(new JFFLibrary(factory));
            stackTracer.setIOAgent(getIOAgent());
         }
     }
