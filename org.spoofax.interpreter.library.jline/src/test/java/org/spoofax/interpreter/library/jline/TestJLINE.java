@@ -15,12 +15,26 @@ import org.spoofax.interpreter.core.InterpreterException;
 
 public class TestJLINE {
 
-	@Test
-	public void test_jline_repl() throws IOException, InterpreterException {
+	private Interpreter makeInterpreter() throws IOException, InterpreterException {
 		Interpreter intp = new Interpreter();
 		intp.addOperatorRegistry(new JLINELibrary());
+		intp.load(System.getProperty("user.home") + "/.nix-profile/share/stratego-lib/libstratego-lib.ctree");
 		intp.load("jline-test.ctree");
 		intp.setCurrent(intp.getFactory().makeTuple());
-		assertTrue("Strategy failed", intp.invoke("main_0_0"));
+		return intp;
+	}
+
+	@Test
+	public void test_jline_make_console() throws IOException, InterpreterException {
+		Interpreter intp = makeInterpreter();
+		System.out.println(intp.current());
+		assertTrue("Strategy failed", intp.invoke("test_make_console_0_0"));
+	}
+
+	@Test
+	public void test_jline_repl() throws IOException, InterpreterException {
+		Interpreter intp = makeInterpreter();
+		intp.setCurrent(intp.getFactory().makeTuple());
+		assertTrue("Strategy failed", intp.invoke("test_repl_0_0"));
 	}
 }

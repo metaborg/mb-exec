@@ -73,7 +73,7 @@ public class JLINE_make_console extends AbstractPrimitive {
 			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 }

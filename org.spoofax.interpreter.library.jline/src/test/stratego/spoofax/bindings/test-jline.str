@@ -17,4 +17,6 @@ strategies
 
     format = map(try(int-to-string)) ; concat-strings
 
-    main = test-repl
+    test-make-console = jline-make-console(fail)
+
+    main = test-repl ; test-make-console
