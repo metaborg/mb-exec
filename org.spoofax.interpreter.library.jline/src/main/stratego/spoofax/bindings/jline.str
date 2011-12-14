@@ -6,13 +6,20 @@
 module spoofax/bindings/jline
 signature
   constructors
-      Red     : String -> ANSI
-      Green   : String -> ANSI
-      Blue    : String -> ANSI
-      Bold    : String -> ANSI
-      Cyan    : String -> ANSI
-      Magenta : String -> ANSI
-      Yellow  : String -> ANSI
+      ANSIFragment : Int * String -> ANSIFragment
+
+overlays
+
+      Bold(str)    = ANSIFragment(1, str)
+      Reverse(str) = ANSIFragment(7, str)
+      Black(str)   = ANSIFragment(30, str)
+      Red(str)     = ANSIFragment(31, str)
+      Green(str)   = ANSIFragment(32, str)
+      Yellow(str)  = ANSIFragment(33, str)
+      Blue(str)    = ANSIFragment(34, str)
+      Magenta(str) = ANSIFragment(35, str)
+      Cyan(str)    = ANSIFragment(36, str)
+      White(str)   = ANSIFragment(37, str)
 
 strategies
 
@@ -32,4 +39,7 @@ strategies
     jline-clear-screen = ?console ; prim("JLINE_clear_screen", console)
 
     /** @type List(String | ANSI) -> _ */
-    jline-println(|console) = ?stuff ; prim("JLINE_println", console, stuff) 
+    jline-println = prim("JLINE_println")
+
+    /** @type List(String | ANSI) -> String */
+    jline-format = prim("JLINE_format")

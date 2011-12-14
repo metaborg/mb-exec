@@ -25,6 +25,13 @@ public class TestJLINE {
 	}
 
 	@Test
+	public void test_jline_printnl() throws IOException, InterpreterException {
+		Interpreter intp = makeInterpreter();
+		intp.setCurrent(intp.getFactory().makeTuple());
+		assertTrue("Strategy failed", intp.invoke("test_println_0_0"));
+	}
+
+	@Test
 	public void test_jline_make_console() throws IOException, InterpreterException {
 		Interpreter intp = makeInterpreter();
 		System.out.println(intp.current());

@@ -18,6 +18,8 @@ public class JLINELibrary extends AbstractStrategoOperatorRegistry {
 		add(new JLINE_make_console());
 		add(new JLINE_clear_screen());
 		add(new JLINE_repl());
+		add(new JLINE_println());
+		add(new JLINE_format());
 	}
 	
 	@Override

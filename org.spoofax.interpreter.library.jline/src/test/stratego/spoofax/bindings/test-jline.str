@@ -9,9 +9,9 @@ signature
 
 strategies
 
-    test-prompter : state -> (<format> [<?State(<id>)> state , "/ok"])
+    test-prompter : state -> (<jline-format> [<?State(<id>)> state , "/", Green("ok"), "> "])
 
-    test-eval : (line, state) -> state
+    test-eval : (line, State(n)) -> State(<inc> n)
 
     test-repl = <jline-repl(test-prompter, test-eval | <jline-make-console(fail)> )> State(0)
 
@@ -19,4 +19,6 @@ strategies
 
     test-make-console = jline-make-console(fail)
 
-    main = test-repl ; test-make-console
+    test-println = <jline-println> [ "foo" , Green("bar"), Bold("baz") ] 
+
+    main = test-repl ; test-make-console ; test-println
