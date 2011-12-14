@@ -16,8 +16,14 @@ signature
 
 strategies
 
-    /** @type Console -> Console */
-    jline-repl(exec) = ?console ; prim("JLINE_repl", exec|console)
+    /** Generic interpreter REPL for the Unix/Linux/Windows command line. 
+      *
+      * @param prompter : a -> (String, a)
+      * @param evaluator : a -> a
+      * @type a -> a 
+      */
+    jline-repl(prompter, evaluator | console) = 
+      prim("JLINE_repl", prompter, evaluator|console)
 
     /** @type _ -> Console */
     jline-make-console(completer) = prim("JLINE_make_console", completer|)

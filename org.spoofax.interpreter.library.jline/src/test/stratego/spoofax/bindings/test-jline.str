@@ -1,0 +1,20 @@
+module spoofax/bindings/test-jline
+imports
+    spoofax/bindings/jline
+    libstratego-lib
+
+signature
+  constructors
+      State : Int -> State
+
+strategies
+
+    test-prompter : state -> (<format> [<?State(<id>)> state , "/ok"])
+
+    test-eval : (line, state) -> state
+
+    test-repl = <jline-repl(test-prompter, test-eval | <jline-make-console(fail)> )> State(0)
+
+    format = map(try(int-to-string)) ; concat-strings
+
+    main = test-repl

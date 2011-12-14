@@ -19,7 +19,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class JLINE_clear_screen extends AbstractPrimitive {
 
 	public JLINE_clear_screen() {
-		super("JLINE_clear_screen", 0, 0);
+		super("JLINE_clear_screen", 0, 1);
 	}
 	
 	@Override
@@ -27,6 +27,8 @@ public class JLINE_clear_screen extends AbstractPrimitive {
 			throws InterpreterException {
 		try {
 			ConsoleReader consoleReader = JFFLibrary.unwrap(tvars, 0, ConsoleReader.class);
+			if(consoleReader == null)
+				return false;
 			consoleReader.clearScreen();
 		} catch(IOException e) {
 			JLINELibrary.reportException(env, e);

@@ -16,6 +16,8 @@ public class JLINELibrary extends AbstractStrategoOperatorRegistry {
 
 	public JLINELibrary() {
 		add(new JLINE_make_console());
+		add(new JLINE_clear_screen());
+		add(new JLINE_repl());
 	}
 	
 	@Override
@@ -23,9 +25,8 @@ public class JLINELibrary extends AbstractStrategoOperatorRegistry {
 		return REGISTRY_NAME;
 	}
 
-	public static void reportException(IContext env, IOException e) {
-		// TODO Auto-generated method stub
-		
+	public static boolean reportException(IContext env, IOException e) {
+		return false;
 	}
 
 }
