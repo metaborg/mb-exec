@@ -1,0 +1,29 @@
+/*
+ * Copyright (c) 2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
+module spoofax/bindings/jline
+signature
+  constructors
+      Red     : String -> ANSI
+      Green   : String -> ANSI
+      Blue    : String -> ANSI
+      Bold    : String -> ANSI
+      Cyan    : String -> ANSI
+      Magenta : String -> ANSI
+      Yellow  : String -> ANSI
+
+strategies
+
+    /** @type Console -> Console */
+    jline-repl(exec) = ?console ; prim("JLINE_repl", exec|console)
+
+    /** @type _ -> Console */
+    jline-make-console(completer) = prim("JLINE_make_console", completer|)
+
+    /** @type Console -> Console */
+    jline-clear-screen = ?console ; prim("JLINE_clear_screen", console)
+
+    /** @type List(String | ANSI) -> _ */
+    jline-println(|console) = ?stuff ; prim("JLINE_println", console, stuff) 
