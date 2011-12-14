@@ -12,21 +12,22 @@ import jline.ConsoleReader;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
-import org.spoofax.interpreter.library.java.GenericWrappedTerm;
+import org.spoofax.interpreter.library.java.JFFLibrary;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class JLINE_make_console extends AbstractPrimitive {
+public class JLINE_clear_screen extends AbstractPrimitive {
 
-	public JLINE_make_console() {
-		super("JLINE_make_console", 0, 0);
+	public JLINE_clear_screen() {
+		super("JLINE_clear_screen", 0, 0);
 	}
 	
 	@Override
 	public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
 			throws InterpreterException {
 		try {
-			env.setCurrent(new GenericWrappedTerm("ConsoleReader", new ConsoleReader()));
+			ConsoleReader consoleReader = JFFLibrary.unwrap(tvars, 0, ConsoleReader.class);
+			consoleReader.clearScreen();
 		} catch(IOException e) {
 			JLINELibrary.reportException(env, e);
 			return false;
