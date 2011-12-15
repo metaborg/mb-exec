@@ -1,9 +1,9 @@
 /*
  * Created on 3. okt.. 2006
  *
- * Copyright (c) 2005, Karl Trygve Kalleberg <karltk near strategoxt.org>
- * 
- * Licensed under the GNU General Public License, v2
+ * Copyright (c) 2006-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.core;
 
@@ -28,14 +28,14 @@ import org.spoofax.interpreter.stratego.One;
 import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.PrimT;
 import org.spoofax.interpreter.stratego.SDefT;
-import org.spoofax.interpreter.stratego.Scope;
-import org.spoofax.interpreter.stratego.Seq;
-import org.spoofax.interpreter.stratego.Some;
-import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.stratego.SDefT.ArgType;
 import org.spoofax.interpreter.stratego.SDefT.ConstType;
 import org.spoofax.interpreter.stratego.SDefT.FunType;
 import org.spoofax.interpreter.stratego.SDefT.SVar;
+import org.spoofax.interpreter.stratego.Scope;
+import org.spoofax.interpreter.stratego.Seq;
+import org.spoofax.interpreter.stratego.Some;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
@@ -46,11 +46,11 @@ import org.spoofax.terms.io.binary.TermReader;
 public class StrategoCoreLoader {
 
     private Context context;
-    
+
     StrategoCoreLoader(Context context) {
         this.context = context;
     }
-    
+
     private ExtSDef parseExtSDef(IStrategoAppl t) {
 
         String name = Tools.javaStringAt(t, 0);
@@ -176,7 +176,7 @@ public class StrategoCoreLoader {
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" tvars : ", tvars);
         }
-        
+
         String[] realtvars = makeVars(tvars);
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(" tvars : ", realtvars);
@@ -334,7 +334,7 @@ public class StrategoCoreLoader {
     private Seq parseSeq(IStrategoAppl t) throws InterpreterException {
     	LinkedList<Strategy> s = new LinkedList<Strategy>();
         StrategoSignature sign = context.getStrategoSignature();
-    	
+
     	while (t.getConstructor().equals(sign.getSeq())) {
           s.add(parseStrategy(Tools.applAt(t, 0)));
           t = Tools.applAt(t, 1);
@@ -363,22 +363,22 @@ public class StrategoCoreLoader {
         IStrategoAppl u = Tools.applAt(t, 0);
         return new Build(u);
     }
-    
+
     @Deprecated
     public void load(String path) throws IOException, InterpreterException {
         doLoad(new TermReader(context.getProgramFactory()).parseFromFile(path));
     }
-    
+
     public void load(IStrategoTerm prg) throws InterpreterException {
     	doLoad(prg);
     }
 
     private void doLoad(IStrategoTerm prg) throws InterpreterException {
-        
+
 //        PrettyPrinter pp = new PrettyPrinter();
 //        prg.prettyPrint(pp);
 //        System.out.println(pp.getString());
-        
+
         IStrategoAppl sign = Tools.applAt(Tools.listAt(prg, 0), 0);
         IStrategoAppl strats = Tools.applAt(Tools.listAt(prg, 0), 1);
 
@@ -392,8 +392,8 @@ public class StrategoCoreLoader {
 
     private void loadConstructors(IStrategoList list) {
         for (int i = 0; i < list.size(); i++) {
-         // TODO Added the ExtOpDeclInj here, not sure this should be handled differently, 
-         //      but this extra check will at least prevent the class cast exception otherwise 
+         // TODO Added the ExtOpDeclInj here, not sure this should be handled differently,
+         //      but this extra check will at least prevent the class cast exception otherwise
          //      thrown and allow the loading to recover.
         	if (!Tools.applAt(list, i).getConstructor().getName().equals("OpDeclInj") &&
         	    !Tools.applAt(list, i).getConstructor().getName().equals("ExtOpDeclInj")  ) {
@@ -425,7 +425,7 @@ public class StrategoCoreLoader {
     public void load(InputStream stream) throws InterpreterException, IOException {
         if (stream == null)
             throw new IOException("Could not load Stratego core input from null stream");
-            
+
         doLoad(new TermReader(context.getProgramFactory()).parseFromStream(stream));
     }
 

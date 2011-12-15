@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.core;
 
 import org.spoofax.interpreter.terms.IStrategoConstructor;
@@ -87,7 +92,7 @@ public class StrategoSignature {
         CTOR_ExtSDef = factory.makeConstructor("ExtSDefT", 3);
         CTOR_Scope = factory.makeConstructor("Scope", 2);
         CTOR_Seq = factory.makeConstructor("Seq", 2);
-        
+
         CTOR_GuardedLChoice = factory.makeConstructor("GuardedLChoice", 3);
         CTOR_CallT = factory.makeConstructor("CallT", 3);
         CTOR_Fail = factory.makeConstructor("Fail", 0);
@@ -97,7 +102,7 @@ public class StrategoSignature {
         CTOR_PrimT = factory.makeConstructor("PrimT", 3);
 
         CTOR_ImportTerm = factory.makeConstructor("ImportTerm", 1);
-        
+
         CTOR_All = factory.makeConstructor("All", 1);
         CTOR_Some = factory.makeConstructor("Some", 1);
         CTOR_One = factory.makeConstructor("One", 1);

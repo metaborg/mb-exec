@@ -1,9 +1,9 @@
 /*
  * Created on 24.jun.2005
  *
- * Copyright (c) 2004, Karl Trygve Kalleberg <karltk near strategoxt.org>
+ * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
  *
- * Licensed under the GNU General Public License, v2
+ * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.core;
 
@@ -39,9 +39,9 @@ public class Tools {
     /*
     public IStrategoTerm implode(ITermFactory factory, IStrategoAppl t) throws InterpreterException {
         IStrategoConstructor ctor = t.getConstructor();
-        // TODO get an instance of the Stratego signature from the interpreter instance. 
+        // TODO get an instance of the Stratego signature from the interpreter instance.
         StrategoSignature sign = null;
-        
+
         if (ctor == sign.getAnno()) {
             return implode(factory, applAt(t, 0));
         } else if (ctor == sign.getOp()) {
@@ -183,7 +183,7 @@ public class Tools {
     public static String javaStringAt(IStrategoList t, int i) {
         return Tools.stringAt(t, i).stringValue();
     }
-    
+
     public static int javaIntAt(IStrategoTerm t, int i) {
         IStrategoInt result = intAt(t, i);
         return result.intValue();

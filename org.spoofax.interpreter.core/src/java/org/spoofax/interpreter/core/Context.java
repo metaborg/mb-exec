@@ -1,9 +1,9 @@
 /*
  * Created on 07.aug.2005
  *
- * Copyright (c) 2005, Karl Trygve Kalleberg <karltk near strategoxt.org>
- * 
- * Licensed under the GNU General Public License, v2
+ * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.core;
 
@@ -30,7 +30,7 @@ import org.spoofax.interpreter.terms.ITermFactory;
 public class Context implements IContext {
 
     public static int indentation = 0; // TODO should this be non static?
-    
+
     private final StackTracer stackTracer;
 
     private final ITermFactory programFactory;
@@ -40,7 +40,7 @@ public class Context implements IContext {
     private final Map<String, OpDecl> opdecls;
 
     private final StrategoSignature strategoSignature;
-    
+
     private ITermFactory factory;
 
     private IStrategoTerm current;
@@ -75,16 +75,16 @@ public class Context implements IContext {
     public void setCurrent(IStrategoTerm term) {
         current = term;
     }
-    
+
     public StackTracer getStackTracer() {
         return stackTracer;
     }
-    
+
     public IOAgent getIOAgent() {
         SSLLibrary op = (SSLLibrary) getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         return op == null ? null : op.getIOAgent();
     }
-    
+
     public void setIOAgent(IOAgent ioAgent) {
         SSLLibrary op = (SSLLibrary) getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         if (op == null) throw new IllegalStateException("No SSL library");
@@ -111,7 +111,7 @@ public class Context implements IContext {
         if (asyncCancelled) cancel();
         return factory;
     }
-    
+
     public void setFactory(ITermFactory factory) {
         this.factory = factory;
     }
@@ -178,7 +178,7 @@ public class Context implements IContext {
         return operatorRegistries.get(domain);
     }
 
-    public AbstractPrimitive lookupOperator(String name) {        
+    public AbstractPrimitive lookupOperator(String name) {
         if (asyncCancelled) cancel();
         for(IOperatorRegistry or : operatorRegistries.values()) {
             AbstractPrimitive t = or.get(name);
@@ -199,9 +199,9 @@ public class Context implements IContext {
 
     public Collection<String> getStrategyNames() {
         VarScope v = getVarScope();
-        while(v.getParent() != null) 
+        while(v.getParent() != null)
             v = v.getParent();
-        
+
         Collection<String> r = new HashSet<String>();
         for(SDefT s : v.getStrategyDefinitions())
             r.add(s.getName());

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.core;
 
 import java.io.IOException;
@@ -16,12 +21,12 @@ public class Main {
     public static void main(String args[]) throws IOException {
 
         String[] files = null;
-        String factoryName = null; 
+        String factoryName = null;
         boolean waitForProfiler = false;
         boolean inProgramArgs = false;
         final List<String> programArgs = new LinkedList<String>();
         final List<String> libraryArgs = new LinkedList<String>();
-        
+
         for (int i = 0; i < args.length; i++) {
         	if(inProgramArgs) {
         		programArgs.add(args[i]);
@@ -44,7 +49,7 @@ public class Main {
 
         final Interpreter itp = createInterpreter(factoryName);
         loadLibraries(itp, libraryArgs, itp.getFactory());
-        
+
         try {
 //            long loadTime = System.nanoTime();
             for(String fn : files) {
@@ -62,14 +67,14 @@ public class Main {
 //            long runTime = System.nanoTime();
         	final IStrategoTerm[] as = new IStrategoTerm[programArgs.size()];
         	final ITermFactory factory = itp.getFactory();
-        	for(int i = 0; i < as.length; i++) 
+        	for(int i = 0; i < as.length; i++)
         		as[i] = factory.makeString(programArgs.get(i));
             itp.setCurrent(itp.getFactory().makeList(as));
-            
+
             boolean r = itp.invoke("main_0_0");
-            
+
 //            System.out.println("Run time: " + (System.nanoTime() - runTime)/1000/1000 + "ms");
-            
+
             if(r) {
                 System.out.println("" + itp.current());
             } else {
@@ -81,7 +86,7 @@ public class Main {
         } catch (InterpreterException e) {
             e.printStackTrace();
         }
-        
+
         if(waitForProfiler)
             System.in.read();
     }

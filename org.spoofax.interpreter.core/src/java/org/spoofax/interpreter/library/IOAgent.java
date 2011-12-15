@@ -1,3 +1,6 @@
+/*
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.library;
 
 import java.io.BufferedReader;
@@ -28,43 +31,43 @@ import org.spoofax.interpreter.library.ssl.RandomAccessOutputStream;
 /**
  * The IOAgent class provides access to filesystem from Stratego programs,
  * handles the notion of a current directory, and may be overridden
- * to redirect console or file I/O streams. 
- * 
+ * to redirect console or file I/O streams.
+ *
  * @author Lennart Kats <lennart add lclnet.nl>
  * @author Karl Trygve Kalleberg <karltk near strategoxt.org>
  */
 public class IOAgent {
-    
+
     public final static int CONST_STDIN = 0;
-    
+
     public final static int CONST_STDOUT = 1;
-    
+
     public final static int CONST_STDERR = 2;
-    
+
     private final static String FILE_ENCODING = "UTF-8";
-    
+
     private final static Charset FILE_CHARSET = Charset.forName(FILE_ENCODING);
-    
+
     private final Map<Integer, FileHandle> openFiles = new HashMap<Integer, FileHandle>();
-    
+
     private final Writer stdoutWriter = new PrintStreamWriter(System.out);
-    
+
     private final Writer stderrWriter = new PrintStreamWriter(System.err);
-    
+
     private final Reader stdinReader = new InputStreamReader(System.in, FILE_CHARSET);
-    
+
     private final OutputStream stdout = System.out;
-    
+
     private final OutputStream stderr = System.err;
-    
+
     private final InputStream stdin = System.in;
-    
+
     private String workingDir;
-    
+
     private String definitionDir;
-    
+
     private int fileCounter = 3;
-    
+
     public IOAgent() {
         try {
             String dir = System.getProperty("user.dir");
@@ -75,21 +78,21 @@ public class IOAgent {
             throw new RuntimeException(e);
         }
     }
-    
+
     // DIRECTORIES AND PATHS
-    
+
     public String getWorkingDir() {
         return workingDir;
     }
-    
+
     public String getDefinitionDir() {
         return definitionDir;
     }
-    
+
     public String getTempDir() {
         return System.getProperty("java.io.tmpdir");
     }
-    
+
     public void setWorkingDir(String workingDir) throws FileNotFoundException, IOException {
         File workingDirFile = new File(getAbsolutePath(getWorkingDir(), workingDir));
         if (!workingDirFile.exists() || !workingDirFile.isDirectory()) {
@@ -97,7 +100,7 @@ public class IOAgent {
         }
         this.workingDir = workingDirFile.getCanonicalPath();
     }
-    
+
     public void setDefinitionDir(String definitionDir) throws FileNotFoundException {
         File definitionDirFile = new File(getAbsolutePath(getDefinitionDir(), definitionDir));
         if (!definitionDirFile.exists() || !definitionDirFile.isDirectory()) {
@@ -105,12 +108,12 @@ public class IOAgent {
         }
         this.definitionDir = definitionDirFile.getAbsolutePath();
     }
-    
+
     @Deprecated // use getAbsolutePath instead
     protected String adaptFilePath(String fn) {
         return getAbsolutePath(getWorkingDir(), fn);
     }
-    
+
     /**
      * Converts a path relative to a given directory
      * to an absolute path.
@@ -121,9 +124,9 @@ public class IOAgent {
             ? f.getAbsolutePath()
             : new File(dir, fn).getAbsolutePath();
     }
-    
+
     // OPENING, MANIPULATING FILES
-    
+
     /**
      * Gets the writer for a file.
      * Should not be used together with getReader() for the same file.
@@ -146,7 +149,7 @@ public class IOAgent {
             return file.writer;
         }
     }
-    
+
     /**
      * Gets the output stream for a file.
      * Should not be used together with getWriter() for the same file.
@@ -165,7 +168,7 @@ public class IOAgent {
             return file.outputStream;
         }
     }
-    
+
     /**
      * Write a single byte character to a file,
      * trying not to allocate a new Writer object.
@@ -187,7 +190,7 @@ public class IOAgent {
     public boolean closeRandomAccessFile(int fd) throws InterpreterException {
         if (fd == CONST_STDOUT || fd == CONST_STDERR || fd == CONST_STDIN)
             return true;
-        
+
         FileHandle file = openFiles.remove(fd);
         if(file == null)
             return true; // already closed: be forgiving
@@ -200,7 +203,7 @@ public class IOAgent {
         }
         return true;
     }
-    
+
     public void closeAllFiles() {
         for (FileHandle file : openFiles.values()) {
             try {
@@ -230,7 +233,7 @@ public class IOAgent {
         RandomAccessFile file = new RandomAccessFile(getAbsolutePath(getWorkingDir(), fn), writeMode ? "rw" : "r");
         if (clearFile) file.setLength(0);
         openFiles.put(fileCounter, new FileHandle(file));
-        
+
         return fileCounter++;
     }
 
@@ -262,7 +265,7 @@ public class IOAgent {
         }
     }
     */
-    
+
     /**
      * Gets the reader for a file.
      * Should not be used together with getInputStream() for the same file.
@@ -279,7 +282,7 @@ public class IOAgent {
         }
         return file.reader;
     }
-    
+
     public String readString(int fd) throws IOException {
         char[] buffer = new char[2048];
         StringBuilder result = new StringBuilder();
@@ -288,10 +291,10 @@ public class IOAgent {
             result.append(buffer, 0, read);
         return result.toString();
     }
-    
+
     /**
      * Opens an input stream given a file path.
-     * 
+     *
      * @param isDefinitionFile
      *            Indicates the path is relative to the Stratego source tree or
      *            imports, e.g., a .pp.af file included by import-term.
@@ -300,11 +303,11 @@ public class IOAgent {
         String dir = isDefinitionFile ? getDefinitionDir() : getWorkingDir();
         return new FileInputStream(getAbsolutePath(dir, fn));
     }
-    
+
     public final InputStream openInputStream(String fn) throws FileNotFoundException {
         return openInputStream(fn, false);
     }
-    
+
     public void printError(String error) {
         try {
             getWriter(CONST_STDERR).write(error + "\n");
@@ -312,19 +315,19 @@ public class IOAgent {
             // Like System.err.println, we swallow excpetions
         }
     }
-    
+
     public OutputStream openFileOutputStream(String fn) throws FileNotFoundException {
         return new FileOutputStream(getAbsolutePath(getWorkingDir(), fn));
     }
-    
+
     public File openFile(String fn) {
         return new File(getAbsolutePath(getWorkingDir(), fn));
     }
-    
+
     public String createTempFile(String prefix) throws IOException {
         return File.createTempFile(prefix, null).getPath();
     }
-    
+
     public String createTempDir(String prefix) throws IOException {
         File result;
         do {
@@ -334,19 +337,19 @@ public class IOAgent {
         result.deleteOnExit();
         return result.getPath();
     }
-    
+
     public boolean mkdir(String fn) {
         return openFile(fn).mkdir();
     }
-    
+
     @Deprecated // this is not a Stratego primitive; use mkdir instead
     public boolean mkDirs(String fn) {
         return openFile(fn).mkdirs();
     }
-    
+
     /**
      * An open file handle.
-     * 
+     *
      * @author Lennart Kats <lennart add lclnet.nl>
      */
     private static class FileHandle {
@@ -355,21 +358,21 @@ public class IOAgent {
         Writer writer;
         InputStream inputStream;
         OutputStream outputStream;
-        
+
         FileHandle(RandomAccessFile file) {
             this.file = file;
         }
     }
-    
+
     /**
      * A class for writing to a PrintStream.
-     * 
+     *
      * @author Lennart Kats <lennart add lclnet.nl>
      */
     private static class PrintStreamWriter extends Writer {
-        
+
         private final PrintStream stream;
-        
+
         PrintStreamWriter(PrintStream stream) {
             this.stream = stream;
         }
@@ -391,11 +394,11 @@ public class IOAgent {
             else
                 stream.append(CharBuffer.wrap(cbuf, off, len));
         }
-        
+
         @Override
         public void write(String str, int off, int len) throws IOException {
             stream.append(str, off, len);
         }
-        
+
     }
 }

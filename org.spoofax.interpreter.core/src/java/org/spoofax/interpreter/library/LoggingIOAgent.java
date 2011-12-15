@@ -1,3 +1,6 @@
+/*
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.library;
 
 import java.io.ByteArrayOutputStream;
@@ -9,33 +12,33 @@ import java.io.Writer;
 
 /**
  * An IO Agent class that logs all console output.
- * 
+ *
  * @author Lennart Kats <lennart add lclnet.nl>
  */
 public class LoggingIOAgent extends IOAgent {
-    
+
     private final LoggingOutputStream stdoutLog = new LoggingOutputStream(System.out);
-    
+
     private final LoggingOutputStream stderrLog = new LoggingOutputStream(System.err);
-    
+
     private final PrintStream stdout = new PrintStream(stdoutLog, true);
-    
+
     private final PrintStream stderr = new PrintStream(stderrLog, true);
-    
+
     private final OutputStreamWriter stdoutWriter = new OutputStreamWriter(stdoutLog);
-    
+
     private final OutputStreamWriter stderrWriter = new OutputStreamWriter(stderrLog);
-    
+
     final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    
+
     public String getLog() {
     	return bytes.toString();
     }
-    
+
     public void clearLog() {
         bytes.reset();
     }
-    
+
     @Override
     public OutputStream internalGetOutputStream(int fd) {
         switch (fd) {
@@ -49,7 +52,7 @@ public class LoggingIOAgent extends IOAgent {
                 return super.internalGetOutputStream(fd);
         }
     }
-    
+
     @Override
     public Writer getWriter(int fd) {
         switch (fd) {
@@ -63,37 +66,37 @@ public class LoggingIOAgent extends IOAgent {
                 return super.getWriter(fd);
         }
     }
-    
+
     private class LoggingOutputStream extends OutputStream {
         OutputStream stream;
-        
+
         public LoggingOutputStream(OutputStream stream) {
             this.stream = stream;
         }
-        
+
         @Override
         public void write(int b) throws IOException {
             stream.write(b);
-            bytes.write(b); 
+            bytes.write(b);
         }
-        
+
         @Override
         public void write(byte[] b) throws IOException {
             stream.write(b);
             bytes.write(b);
         }
-        
+
         @Override
         public void write(byte[] b, int off, int len) throws IOException {
             stream.write(b, off, len);
             bytes.write(b, off, len);
         }
-        
+
         @Override
         public void flush() throws IOException {
             stream.flush();
         }
-        
+
         @Override
         public void close() throws IOException {
             // UNDONE: closing console streams is asking for trouble

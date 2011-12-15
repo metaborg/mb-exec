@@ -1,9 +1,9 @@
 /*
  * Created on 07.aug.2005
  *
- * Copyright (c) 2004, Karl Trygve Kalleberg <karltk near strategoxt.org>
- * 
- * Licensed under the GNU General Public License, v2
+ * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
+ * Licensed under the GNU Lesser General Public License, v2
  */
 package org.spoofax.interpreter.core;
 
@@ -37,10 +37,10 @@ public interface IContext extends IAsyncCancellable {
 
     public void popVarScope();
     public void restoreVarScope(VarScope anotherVarScope);
-    
+
     public StrategoSignature getStrategoSignature();
     public AbstractPrimitive lookupOperator(String name);
     public Collection<String> getStrategyNames();
-    
+
     public StackTracer getStackTracer();
 }

@@ -1,3 +1,6 @@
+/*
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.core;
 
 /**

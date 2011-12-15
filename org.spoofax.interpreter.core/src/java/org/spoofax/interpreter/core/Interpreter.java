@@ -1,4 +1,3 @@
-
 /*
  * Created on 07.aug.2005
  *
@@ -25,9 +24,9 @@ import org.spoofax.terms.io.binary.TermReader;
 
 /**
  * A Stratego interpreter.
- * 
+ *
  * @see org.strategoxt.HybridInterpreter   For an efficient hybrid compiler/interpreter.
- * 
+ *
  * @author Karl Trygve Kalleberg <karltk near strategoxt dot org>
  * @author Lennart Kats <lennart add lclnet.nl>
  */
@@ -44,46 +43,46 @@ public class Interpreter {
         this(factory, factory);
     }
 
-    public Interpreter(ITermFactory termFactory, ITermFactory programFactory) {        
+    public Interpreter(ITermFactory termFactory, ITermFactory programFactory) {
         Context.indentation = 0;
         context = createContext(termFactory, programFactory);
-        
+
         loader = new StrategoCoreLoader(context);
     }
 
     /**
      * Invokes a strategy.
-     * 
+     *
      * @param name
      *            The name of the strategy to invoke, using its regular
      *            Stratego-based name (e.g., "strategy-name").
      *            If this fails, the strategy is looked up using C-based
      *            naming conventions (e.g., strategy_name_0_0").
-     * 
+     *
      * @throws InterpreterExit
      *             If the interpreter is exited.
      * @throws InterpreterException
      *             In case of an internal error or other interpreter exception.
-     *             
+     *
      * @see #setCurrent(IStrategoTerm)
      *             Sets the input term for the invoked strategy.
      */
     public boolean invoke(String name)
             throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
-        
+
         SDefT def = lookupUncifiedSVar(name);
 
         if (def == null) {
             throw new UndefinedStrategyException("Definition '" + name + "' not found", name);
         }
-        
+
         return evaluate(def);
     }
-    
+
     /**
      * Evaluates a stratego expression. Must be fully desugared,
      * using C names in SDefTs and SCallTs.
-     * 
+     *
      * @see org.strategoxt.HybridInterpreter#evaluate  A variant of evaluate() with desugaring support.
      */
     public boolean evaluate(IStrategoAppl s)
@@ -105,10 +104,10 @@ public class Interpreter {
 
         try {
             boolean success = def.getBody().evaluate(context);
-        
+
             if (success) stackTracer.popOnSuccess();
             else stackTracer.popOnFailure();
-            
+
             return success;
         } catch (InterpreterException e) {
             stackTracer.popOnExit(false);
@@ -122,7 +121,7 @@ public class Interpreter {
     public SDefT lookupUncifiedSVar(String name) {
         try {
             SDefT def = context.lookupSVar(cify(name) + "_0_0");
-            
+
             if (def == null) {
                 def = context.lookupSVar(name);
             }
@@ -131,7 +130,7 @@ public class Interpreter {
             return null;
         }
     }
-    
+
     /**
      * Rewrite a strategy name based on the C naming conventions,
      * following the stratego-lib term/string/cify strategy.
@@ -148,7 +147,7 @@ public class Interpreter {
     public IContext getContext() {
         return context;
     }
-    
+
     protected Context createContext(ITermFactory termFactory, ITermFactory programFactory) {
        return new Context(termFactory, programFactory);
     }
@@ -161,24 +160,24 @@ public class Interpreter {
     public IStrategoTerm current() {
         return context.current();
     }
-    
+
     public IOAgent getIOAgent() {
         SSLLibrary op = (SSLLibrary) getContext().getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         return op.getIOAgent();
     }
-    
+
     public void setIOAgent(IOAgent ioAgent) {
         SSLLibrary op = (SSLLibrary) getContext().getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         op.setIOAgent(ioAgent);
         getContext().getStackTracer().setIOAgent(ioAgent);
     }
-    
+
     /**
      * Resets the state of this interpreter.
      */
     public void reset() {
         // TODO: better way to reset the interpreter state?
-        //       the comment at SSLLibrary.init() talks about scoping this?     
+        //       the comment at SSLLibrary.init() talks about scoping this?
         SSLLibrary op = (SSLLibrary) getContext().getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         op.init();
     }
@@ -200,7 +199,7 @@ public class Interpreter {
     public ITermFactory getFactory() {
         return context.getFactory();
     }
-    
+
     public ITermFactory getProgramFactory() {
         return context.getProgramFactory();
     }
@@ -208,10 +207,10 @@ public class Interpreter {
     public final void load(InputStream stream) throws IOException, InterpreterException {
         if (stream == null)
             throw new IOException("Could not load Stratego core input from null stream");
-            
+
        load(new TermReader(context.getProgramFactory()).parseFromStream(stream));
     }
-    
+
     public final void load(String file) throws IOException, InterpreterException {
         load(new TermReader(context.getProgramFactory()).parseFromFile(file));
     }
