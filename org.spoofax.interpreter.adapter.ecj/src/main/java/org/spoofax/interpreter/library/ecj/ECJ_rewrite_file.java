@@ -69,7 +69,8 @@ public class ECJ_rewrite_file extends AbstractPrimitive {
 
 			//System.out.println("before: " + root);
 			root.recordModifications();
-			List newTds = new ArrayList();
+			@SuppressWarnings("rawtypes")
+            List newTds = new ArrayList();
 			for(Object ob : root.types()) {
 				TypeDeclaration td = (TypeDeclaration) ob;
 
@@ -79,7 +80,7 @@ public class ECJ_rewrite_file extends AbstractPrimitive {
 					final IStrategoTerm term = env.current();
 					if(term instanceof WrappedASTNode)
 						newTds.add(((WrappedASTNode)term).getWrappee());
-					else 
+					else
 						ecj.log("Rewriting types resulted in an invalid tree");
 				} else {
 					newTds.add(td);
@@ -87,8 +88,9 @@ public class ECJ_rewrite_file extends AbstractPrimitive {
 			}
 			root.types().clear();
 			root.types().addAll(newTds);
-			
-			List newImports = new ArrayList();
+
+			@SuppressWarnings("rawtypes")
+            List newImports = new ArrayList();
 			env.setCurrent(ECJFactory.wrap(root.imports()));
 			CallT s = (CallT)svars[1];
 			if(s.evaluate(env)) {
@@ -112,7 +114,7 @@ public class ECJ_rewrite_file extends AbstractPrimitive {
 			}
 			root.imports().clear();
 			root.imports().addAll(newImports);
-			
+
 			//System.out.println("after: " + root);
 			TextEdit te = root.rewrite(document, cu.getJavaProject().getOptions(true));
 			te.apply(document);

@@ -2,7 +2,7 @@
  * Created on 9. okt.. 2006
  *
  * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser Public License, v2.1
  */
 package org.spoofax.interpreter.library.ecj;
@@ -19,28 +19,28 @@ import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_signature_to_type extends ECJPrimitive {
+class ECJ_signature_to_type extends ECJPrimitive {
 
-    public ECJ_signature_to_type() {
+    ECJ_signature_to_type() {
         super("ECJ_signature_to_type", 0, 1);
     }
-    
+
     @Override
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-    	
+
     	if(!Tools.isTermString(tvars[0]))
     		return false;
-    	
+
     	final ECJFactory factory = (ECJFactory)env.getFactory();
     	final Type t = signatureStringToType(
-    			factory.getAST(), 
+    			factory.getAST(),
     			Signature.createTypeSignature(Tools.asJavaString(tvars[0]), false));
     	env.setCurrent(ECJFactory.wrapType(t));
     	return true;
-    	
+
     }
-    
+
 	@SuppressWarnings("unchecked")
     private Type signatureStringToType(final AST ast, final String signatureName) {
 		final String[] args = Signature.getTypeArguments(signatureName);
@@ -49,7 +49,7 @@ public class ECJ_signature_to_type extends ECJPrimitive {
 		final Name n = qual.length() == 0 ? ast.newName(base) : ast.newName(qual + "." + base);
 
 		final Type bt = ast.newSimpleType(n);
-		if(args.length == 0) 
+		if(args.length == 0)
 			return bt;
 		else {
 			ParameterizedType pt = ast.newParameterizedType(bt);

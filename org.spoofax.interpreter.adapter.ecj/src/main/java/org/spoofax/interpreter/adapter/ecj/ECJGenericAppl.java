@@ -18,17 +18,17 @@ import org.spoofax.terms.skeleton.SkeletonStrategoAppl;
 public class ECJGenericAppl extends SkeletonStrategoAppl {
 
     private static final long serialVersionUID = 1L;
-    
+
     private IStrategoConstructor ctor;
     private IStrategoTerm[] kids;
-    
+
 
     ECJGenericAppl(IStrategoConstructor ctor, IStrategoTerm[] kids) {
         super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
         this.ctor = ctor;
         this.kids = kids;
     }
-    
+
     @Override
     public IStrategoConstructor getConstructor() {
         return ctor;
@@ -38,7 +38,7 @@ public class ECJGenericAppl extends SkeletonStrategoAppl {
     public IStrategoTerm getSubterm(int index) {
         return kids[index];
     }
-    
+
     @Override
     public IStrategoTerm[] getAllSubterms() {
         return kids;

@@ -1,7 +1,7 @@
 /*
- * Created on 9. okt.. 2006
+ * Created on 15. des. 2011
  *
- * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ * Copyright (c) 2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
  *
  * Licensed under the GNU Lesser Public License, v2.1
  */
@@ -17,10 +17,10 @@ import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_create_project extends AbstractPrimitive {
+class ECJ_create_java_project extends AbstractPrimitive {
 
-    protected ECJ_create_project() {
-        super("ECJ_create_project", 0, 1);
+    ECJ_create_java_project() {
+        super("ECJ_create_java_project", 0, 1);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ECJ_create_project extends AbstractPrimitive {
             return false;
         IStrategoString s = (IStrategoString) tvars[0];
         try {
-            env.setCurrent(ECJFactory.wrap(pu.createProject(s.stringValue(), false)));
+            env.setCurrent(ECJFactory.wrap(pu.createJavaProject(s.stringValue(), false)));
         } catch(CoreException e) {
             return ECJLibrary.invokeExceptionHandler(env, e);
         }

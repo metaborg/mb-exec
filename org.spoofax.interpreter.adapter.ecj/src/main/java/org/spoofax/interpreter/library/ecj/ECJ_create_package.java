@@ -2,7 +2,7 @@
  * Created on 9. okt.. 2006
  *
  * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser Public License, v2.1
  */
 package org.spoofax.interpreter.library.ecj;
@@ -20,9 +20,9 @@ import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_create_package extends ECJPrimitive {
+class ECJ_create_package extends ECJPrimitive {
 
-    public ECJ_create_package() {
+    ECJ_create_package() {
         super("ECJ_create_package", 0, 2);
     }
 
@@ -39,18 +39,18 @@ public class ECJ_create_package extends ECJPrimitive {
         final String baseName = Tools.asJavaString(tvars[0]);
         IProject project = getLibrary(env).getCurrentProject();
         IContainer container = baseName.length() == 0 ? project : project.getFolder(baseName);
-        
+
         try {
         	if(!packageName.equals("")) {
         		String[] xs = packageName.split("\\.");
         		for(int i = 0; i < xs.length; i++) {
-        			container = container.getFolder(new Path(xs[i]));	
+        			container = container.getFolder(new Path(xs[i]));
         			if(!container.exists()) {
         				((IFolder)container).create(true, true, getLibrary(env).getNullProgressMonitor());
         			}
         		}
         		env.setCurrent(ECJFactory.wrap(JavaCore.create(container)));
-        	} 
+        	}
         } catch(CoreException e) {
         	e.printStackTrace();
         	return false;

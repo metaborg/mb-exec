@@ -1,8 +1,8 @@
 /*
- * Created on 4. okt.. 2006
+ * Created on 4. okt. 2006
  *
- * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ * Copyright (c) 2006-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
  * Licensed under the GNU Lesser Public License, v2.1
  */
 package org.spoofax.interpreter.adapter.ecj;
@@ -18,24 +18,24 @@ import org.spoofax.terms.skeleton.SkeletonStrategoList;
 public class ECJGenericList extends SkeletonStrategoList {
 
     private static final long serialVersionUID = 1L;
-    
+
     private IStrategoTerm[] kids;
 
     ECJGenericList(IStrategoTerm[] kids) {
         super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
         this.kids = kids;
     }
-    
+
     @Override
     public IStrategoList tail() {
         return new ECJGenericList(doTail());
     }
-    
+
     @Override
     public IStrategoList prepend(IStrategoTerm prefix) {
-        throw new NotImplementedException(); 
+        throw new NotImplementedException();
     }
-    
+
     private IStrategoTerm[] doTail() {
         IStrategoTerm[] tail = new IStrategoTerm[kids.length - 1];
         System.arraycopy(kids, 1, tail, 0, tail.length);
@@ -55,11 +55,6 @@ public class ECJGenericList extends SkeletonStrategoList {
     @Override
     public IStrategoTerm[] getAllSubterms() {
         return kids;
-    }
-
-    @Override
-    public String toString(int maxDepth) {
-        throw new NotImplementedException();
     }
 
     @Override

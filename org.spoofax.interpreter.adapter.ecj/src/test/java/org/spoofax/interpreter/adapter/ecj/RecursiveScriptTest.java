@@ -2,7 +2,7 @@
  * Created on 24. jan.. 2007
  *
  * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.adapter.ecj;
@@ -16,7 +16,6 @@ import java.io.IOException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.core.Interpreter;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.ecj.ECJLibrary;
@@ -34,7 +33,7 @@ public class RecursiveScriptTest {
             sb.append(s);
             s = r.readLine();
         }
-            
+
         return sb.toString().toCharArray();
     }
 
@@ -56,10 +55,10 @@ public class RecursiveScriptTest {
         //to.prettyPrint(pp);
         //System.out.println(to.getClass());
         //System.out.println(pp.getString());
-        
+
         //System.out.println(((WrappedASTNode)to).getWrappee().toString());
     }
-    
+
     void recurse(File base) throws FileNotFoundException, IOException, InterpreterException {
         for(String s : base.list()) {
             if(s.endsWith(".java"))
@@ -71,9 +70,9 @@ public class RecursiveScriptTest {
             }
             //System.out.println(s);
         }
-        
+
     }
-    
+
     public static void main(String[] args) throws FileNotFoundException, IOException, InterpreterException {
         RecursiveScriptTest rst = new RecursiveScriptTest("scripts/for-check.ctree");
         rst.recurse(new File(args[0]));
@@ -83,13 +82,13 @@ public class RecursiveScriptTest {
     private ECJFactory dataFactory;
     private TermFactory programFactory;
     private Interpreter interp;
-    private ASTParser parser; 
-    
-    RecursiveScriptTest(String script) {
+    private ASTParser parser;
+
+    RecursiveScriptTest(String script) throws IOException, InterpreterException {
         programFactory = new TermFactory();
         dataFactory = new ECJFactory();
         interp = new Interpreter(dataFactory, programFactory);
-        interp.addOperatorRegistry(new ECJLibrary());
+        ECJLibrary.attach(interp);
         parser = ASTParser.newParser(AST.JLS3);
         try {
             interp.load(script);
@@ -99,5 +98,5 @@ public class RecursiveScriptTest {
             e.printStackTrace();
         }
     }
-    
+
 }

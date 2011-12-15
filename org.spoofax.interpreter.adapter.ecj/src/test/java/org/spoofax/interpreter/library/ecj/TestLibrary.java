@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 
@@ -24,21 +24,21 @@ import org.spoofax.terms.TermFactory;
  *
  */
 public class TestLibrary {
-    
+
     private ECJFactory wef;
-    private Interpreter interp;        
+    private Interpreter interp;
 
     @Before
     public void setUp() throws IOException, InterpreterException, CoreException {
         wef = new ECJFactory();
         interp = new Interpreter(wef, new TermFactory());
-        interp.addOperatorRegistry(new ECJLibrary());
+        ECJLibrary.attach(interp);
         interp.load(System.getenv("HOME") + "/.nix-profile/share/stratego-lib/libstratego-lib.ctree");
         ProjectUtils pu = new ProjectUtils();
         IJavaProject p = pu.createDummyJavaProject();
         pu.createCompilationUnit(p.getProject(), "Foo.java", "package src; class Foo {}");
     }
-    
+
     @Test
     public void open_parse_match_resolve_method_and_type() throws IOException, InterpreterException, CoreException {
         interp.load(TestLibrary.class.getResourceAsStream("/api-open-parse-match-resolve-method-and-type.ctree"));

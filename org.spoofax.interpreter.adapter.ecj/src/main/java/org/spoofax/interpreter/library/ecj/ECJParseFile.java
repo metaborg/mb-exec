@@ -16,7 +16,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
  * Created on 27. sep.. 2006
  *
  * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser Public License, v2.1
  */
 
@@ -31,14 +31,14 @@ public class ECJParseFile {
             sb.append(s);
             s = r.readLine();
         }
-            
+
         return sb.toString().toCharArray();
     }
 
     static void parse(String prg, String file) throws FileNotFoundException, IOException, InterpreterException {
 
         Interpreter itp = new Interpreter(new ECJFactory());
-        itp.addOperatorRegistry(new ECJLibrary());
+        ECJLibrary.attach(itp);
         itp.load(prg);
         ASTParser parser = ASTParser.newParser(AST.JLS3);
         parser.setSource(getBytes(file));
@@ -50,13 +50,13 @@ public class ECJParseFile {
         itp.invoke("main_0_0");
 
     }
-    
-    
+
+
     public static void main(String[] args) throws FileNotFoundException, IOException, InterpreterException {
        if(args.length > 1)
             parse(args[0], args[1]);
         else
             parse("str/parse-and-dump.rtree", args[0]);
     }
-    
+
 }

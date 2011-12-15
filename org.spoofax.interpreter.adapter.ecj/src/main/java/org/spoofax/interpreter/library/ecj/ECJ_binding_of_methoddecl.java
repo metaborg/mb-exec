@@ -16,9 +16,9 @@ import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_binding_of_methoddecl extends AbstractPrimitive {
+class ECJ_binding_of_methoddecl extends AbstractPrimitive {
 
-    public ECJ_binding_of_methoddecl() {
+    ECJ_binding_of_methoddecl() {
         super("ECJ_binding_of_methoddecl", 0, 1);
     }
 

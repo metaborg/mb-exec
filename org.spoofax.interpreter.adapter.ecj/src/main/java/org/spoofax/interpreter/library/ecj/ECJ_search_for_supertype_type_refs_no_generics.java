@@ -2,7 +2,7 @@
  * Created on 9. sep. 2008
  *
  * Copyright (c) 2005-2008, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser Public License, v2.1
  */
 package org.spoofax.interpreter.library.ecj;
@@ -28,9 +28,9 @@ import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class ECJ_search_for_supertype_type_refs_no_generics extends AbstractPrimitive {
+class ECJ_search_for_supertype_type_refs_no_generics extends AbstractPrimitive {
 
-	public ECJ_search_for_supertype_type_refs_no_generics() {
+	ECJ_search_for_supertype_type_refs_no_generics() {
 		super("ECJ_search_for_supertype_type_refs_no_generics", 0, 2);
 	}
 
@@ -43,7 +43,7 @@ public class ECJ_search_for_supertype_type_refs_no_generics extends AbstractPrim
 		if(!Tools.isTermString(tvars[1]))
 			return false;
 
-		// TODO: This only works in 3.4, what to do for other versions? 
+		// TODO: This only works in 3.4, what to do for other versions?
 
 		// FIXME this method will currently only return exact type matches.
 		//       it is unclear whether searches for the supertype Foo<Object>
@@ -52,13 +52,13 @@ public class ECJ_search_for_supertype_type_refs_no_generics extends AbstractPrim
 
 		final String className = Tools.asJavaString(tvars[1]).replaceAll("*", "[^,]+");
 		final SearchPattern sp = SearchPattern.createPattern(
-				className, 
-				IJavaSearchConstants.TYPE, 
-				IJavaSearchConstants.IMPLEMENTORS, //SUPERTYPE_TYPE_REFERENCE, 
+				className,
+				IJavaSearchConstants.TYPE,
+				IJavaSearchConstants.IMPLEMENTORS, //SUPERTYPE_TYPE_REFERENCE,
 				SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
 
 
-		try { 
+		try {
 			final IJavaSearchScope ss = SearchEngine.createHierarchyScope(ECJTools.asIType(tvars[0]));
 			final Collection<IType> results = new LinkedList<IType>();
 			final SearchRequestor requestor = new SearchRequestor() {
@@ -83,9 +83,9 @@ public class ECJ_search_for_supertype_type_refs_no_generics extends AbstractPrim
 	        final ECJLibrary ecj = (ECJLibrary)env.getOperatorRegistry(ECJLibrary.REGISTRY_NAME);
 
 
-			se.search(sp, 
+			se.search(sp,
 					new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() },
-					ss, 
+					ss,
 					requestor,
 					ecj.getNullProgressMonitor());
 			final IStrategoTerm[] r = new IStrategoTerm[results.size()];

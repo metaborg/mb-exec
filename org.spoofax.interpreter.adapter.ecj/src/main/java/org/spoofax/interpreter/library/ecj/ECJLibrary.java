@@ -1,10 +1,12 @@
 /*
  *
  * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser Public License, v2.1
  */
 package org.spoofax.interpreter.library.ecj;
+
+import java.io.IOException;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -12,6 +14,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.spoofax.interpreter.core.IContext;
+import org.spoofax.interpreter.core.Interpreter;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractStrategoOperatorRegistry;
 
 public class ECJLibrary extends AbstractStrategoOperatorRegistry {
@@ -21,11 +26,12 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
     private IJavaProject currentJavaProject;
 	private ASTParser astParser = null;
 	private NullProgressMonitor nullProgressMonitor;
+	private ProjectUtils projectUtils;
 
-    public ECJLibrary() {
+    private ECJLibrary() {
         init();
     }
-    
+
     private void init() {
         add(new ECJ_parse_file());
         add(new ECJ_parse_only());
@@ -68,12 +74,15 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
         add(new ECJ_signature_to_type());
         add(new ECJ_search_for_supertype_type_refs_no_generics());
         add(new ECJ_binding_of_methoddecl());
+        add(new ECJ_create_java_project());
+        add(new ECJ_delete_project());
+        add(new ECJ_list_projects());
     }
-    
+
     public IProject getCurrentProject() {
         return currentProject;
     }
-    
+
     public void setCurrentProject(IProject currentProject) {
         this.currentProject = currentProject;
     }
@@ -81,7 +90,7 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
     public IJavaProject getCurrentJavaProject() {
         return currentJavaProject;
     }
-    
+
     public void setCurrentJavaProject(IJavaProject currentJavaProject) {
         this.currentJavaProject = currentJavaProject;
     }
@@ -105,4 +114,23 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
 	public String getOperatorRegistryName() {
 		return REGISTRY_NAME;
 	}
+
+    public static void attach(Interpreter intp) throws IOException, InterpreterException {
+        attach(intp, new ECJLibrary(), "/share/ecj-library.ctree");
+    }
+
+    ProjectUtils getProjectUtils() {
+        if(projectUtils == null) {
+            projectUtils = new ProjectUtils(getNullProgressMonitor());
+        }
+        return projectUtils;
+    }
+
+    static ECJLibrary registry(IContext env) {
+        return (ECJLibrary) env.getOperatorRegistry(REGISTRY_NAME);
+    }
+
+    public static boolean invokeExceptionHandler(IContext env, Exception e) {
+        return false;
+    }
 }

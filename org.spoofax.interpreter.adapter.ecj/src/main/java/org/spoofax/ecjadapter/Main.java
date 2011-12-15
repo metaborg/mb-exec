@@ -2,7 +2,7 @@
  * Created on 27. jan.. 2007
  *
  * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser Public License, v2.1
  */
 package org.spoofax.ecjadapter;
@@ -25,10 +25,10 @@ import org.spoofax.terms.io.InlinePrinter;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterpreterException {
-        
+
         String[] files = null;
         List<String> actualArgs = new LinkedList<String>();
-        
+
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("--debug")) {
                 DebugUtil.setDebug(true);
@@ -45,20 +45,20 @@ public class Main {
             System.err.println("Usage: ecj-shell [--debug] -i program.ctree");
             System.exit(2);
         }
-        
+
         ITermFactory data = new ECJFactory();
         ITermFactory program = new TermFactory();
         Interpreter intp = new Interpreter(data, program);
-        intp.addOperatorRegistry(new ECJLibrary());
+        ECJLibrary.attach(intp);
         for(String f : files)
             intp.load(f);
-        
+
         // Compute parameters
         IStrategoTerm[] finalArgs = new IStrategoTerm[actualArgs.size()];
         for(int i = 0; i < actualArgs.size(); i++)
             finalArgs[i] = data.makeString(actualArgs.get(i));
         intp.setCurrent(data.makeList(finalArgs));
-        
+
         if(!intp.invoke("main_0_0")) {
             System.err.println("Rewriting failed");
             System.exit(2);

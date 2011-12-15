@@ -2,7 +2,7 @@
  * Created on 9. okt.. 2006
  *
  * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser Public License, v2.1
  */
 package org.spoofax.interpreter.library.ecj;
@@ -24,7 +24,7 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class TestECJAdapter extends TestCase {
-    
+
     protected InputStream findFile(String name) throws CoreException {
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
         IWorkspaceRoot root = workspace.getRoot();
@@ -34,7 +34,7 @@ public class TestECJAdapter extends TestCase {
         IFile file = (IFile) project.findMember("str/" + name + ".rtree");
         return file.getContents();
     }
-    
+
     public void testTest1() throws IOException, InterpreterException, CoreException {
         interpTest("test1", "()", "()");
     }
@@ -74,7 +74,7 @@ public class TestECJAdapter extends TestCase {
     protected void interpTestFail(String string, String in) throws IOException, InterpreterException {
         ECJFactory f = new ECJFactory();
         Interpreter itp = new Interpreter(f);
-        itp.addOperatorRegistry(new ECJLibrary());
+        ECJLibrary.attach(itp);
         itp.load("str/" + string + ".rtree");
         IStrategoTerm inTerm = f.parseFromString(in);
         itp.setCurrent(inTerm);
@@ -85,7 +85,7 @@ public class TestECJAdapter extends TestCase {
         ECJFactory f = new ECJFactory();
         Interpreter itp = new Interpreter(f);
         //DebugUtil.debugging = true;
-        itp.addOperatorRegistry(new ECJLibrary());
+        ECJLibrary.attach(itp);
         itp.load(findFile(string));
         IStrategoTerm inTerm = f.parseFromString(in);
         IStrategoTerm outTerm = f.parseFromString(out);

@@ -14,7 +14,7 @@ imports
 signature
   constructors
   FILE           : String -> FILE
-  
+
   Project        : Term -> Project
   Binding        : Int * Int * String -> Binding
   TypeBinding    : List(String) * String * List(TypeBinding) * TypeBinding * List(TypeBinding) * Int * ITypeBinding -> TypeBinding
@@ -26,7 +26,7 @@ signature
   ITypeHierarchy : IType * List(IType) -> ITypeHierarchy
   PrimitiveName  : String -> Name
   ActualTypeSignature : String * String * String * ActualTypeSignature -> ActualTypeSignature
-  
+
 strategies
 
   /** Parse a file inside an Eclipse project and return the AST. The file path must be
@@ -44,27 +44,36 @@ strategies
     */
   ecj-parse-file = ?FILE(fileName) ; prim("ECJ_parse_file", fileName)
 
+  /** @type _ -> List(ECJProject) */
+  ecj-list-projects = prim("ECJ_list_projects")
+
+  /** @type ECJProject -> ? */
+  ecj-delete-project = ?proj ; prim("ECJ_delete_project", proj)
+
   /** @type String -> ECJProject */
   ecj-open-project = ?path ; prim("ECJ_open_project", path)
-  
-  /** @type String -> ECJProject */
+
+  /** @type String -> IProject */
   ecj-create-project = ?path ; prim("ECJ_create_project", path)
+
+  /** @type String -> IJavaProject */
+  ecj-create-java-project = ?path ; prim("ECJ_create_java_cd ..project", path)
 
   /** @param IProject 
     * @type String -> ?success
     */
   ecj-add-source-folder(|project) = ?path ; prim("ECJ_add_source_folder", project, path)
-  
+
   /** @param IProject 
     * @type String -> ?success
     */
   ecj-add-jar(|project) = ?path ; prim("ECJ_add_jar", path, project)
-    
+
   /** @param IProject 
     * @type FILE -> ASTNode 
     */
   ecj-parse-and-resolve(|project) = ?FILE(name) ; prim("ECJ_parse_and_resolve", project, name) 
-  
+
   /** @type ASTNode -> ASTNode */
   ecj-is-valid-ast-node = 
        (?t ; prim("ECJ_is_valid_ast_node", t))
@@ -77,7 +86,7 @@ strategies
      ecj-is-Name
    ; ?name
    ; prim("ECJ_binding_of_name", name)
-   
+
   /** @type Name -> TypeBinding */
   ecj-binding-of = 
      ecj-is-TypeDeclaration
@@ -113,7 +122,6 @@ strategies
       ecj-is-MethodDeclaration
     ; ?md
     ; prim("ECJ_binding_of_methoddecl", md)
-    
 
 strategies
 
@@ -133,7 +141,6 @@ strategies
      ?source
    ; prim("ECJ_is_subtype_compatible", target, source)
 
-    
 strategies
 
   /** @type MethodInvocation -> MethodBinding */
@@ -153,16 +160,16 @@ strategies
       ?SuperConstructorInvocation(_, _, _)
     ; ?meth
     ; prim("ECJ_method_of_superctorinvoc", meth)
-    
+
 strategies
 
   ecj-is-TypeDeclaration = 
       ?AnnotationTypeDeclaration(_, _, _, _)
     + ?EnumDeclaration(_, _, _, _, _, _)
     + ?TypeDeclaration(_, _, _, _, _, _ ,_,_)
-      
+
   ecj-is-IType = ?"IType"#(_)
-  
+
   ecj-is-Type = 
       ?ArrayType(_, _, _)
     + ?ParameterizedType(_, _)
@@ -175,7 +182,7 @@ strategies
       ?SimpleName(_)
     + ?QualifiedName(_, _)
     + ?PrimitiveName(_)
-   
+
   ecj-is-Expression =
       ?MarkerAnnotation(_)
     + ?NormalAnnotation(_,_)
@@ -209,17 +216,17 @@ strategies
   ecj-is-CompilationUnit = ?CompilationUnit(_, _, _)
 
   ecj-is-DottedName = ?DottedName(_)
-  
+
   ecj-is-MethodDeclaration = ?MethodDeclaration(_, _, _, _, _, _, _, _)
 
   ecj-is-FieldDeclaration = ?FieldDeclaration(_, _, _, _)
 
   ecj-is-SimpleName = ?SimpleName(_)    
-  
+
   ecj-is-Javadoc = ?Javadoc(_)
-  
+
   ecj-is-TypeBinding = ?TypeBinding(_, _, _, _, _, _, _)
-  
+
 strategies
 
   /** @type Term -> ECJProject */
@@ -287,7 +294,7 @@ strategies
   ecj-hierarchy-for-type = 
     ?type
     ; prim("ECJ_hierarchy_for_type", type)
-    
+
   /** @type IType -> ICompilationUnit */    
   ecj-icompilation-unit-for-type =
     ?type
@@ -317,7 +324,7 @@ strategies
   ecj-rewrite-file(typerw, importrw) = 
     ?cu
     ; prim("ECJ_rewrite_file", typerw, importrw | cu)
-    
+
 strategies
 
   /** 
@@ -334,7 +341,7 @@ strategies
 
   /** @type PrimitiveName -> String */
   ecj-as-dotted-string = ?PrimitiveName(<id>)
-  
+
   /** @type _ -> SimpleName / QualifiedName */
   ecj-name-of = ?TypeDeclaration(_, _, <id>, _, _, _, _, _)   
 
