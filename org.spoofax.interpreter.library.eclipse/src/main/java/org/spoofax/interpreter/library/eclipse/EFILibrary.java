@@ -28,6 +28,6 @@ public class EFILibrary extends AbstractStrategoOperatorRegistry {
     }
 
     public static void attach(Interpreter intp) throws IOException, InterpreterException {
-        attach(intp, new EFILibrary(), "/shared/efi-library.ctree");
+        attach(intp, new EFILibrary(), "/share/efi-library.ctree");
     }
 }

@@ -4,12 +4,12 @@
  *
  * Licensed under the GNU Lesser General Public License, v2.1
  *
- * @author Karl Trygve Kalleberg <karltk@ii.uib.no>
+ * @author Karl Trygve Kalleberg <karltk at boblycat dot org>
  */
 
-module org/spoofax/bindings/eclipse/eclipse-ui
+module spoofax/bindings/eclipse/eclipse-ui
 imports
-  stratego-lib
+  libstratego-lib
 strategies
 
   eclipse-ui-show-popup = 
