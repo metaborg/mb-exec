@@ -1,9 +1,9 @@
 /*
  * Created on 08.aug.2005
  *
- * Copyright (c) 2005, Karl Trygve Kalleberg <karltk near strategoxt.org>
- * 
- * Licensed under the GNU General Public License, v2
+ * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
+ * Licensed under the GNU Lesser General Public License, v2
  */
 package org.spoofax.interpreter.library.ssl;
 
@@ -19,7 +19,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
     public static final String REGISTRY_NAME = "SSL";
 
     // FIXME: Move these into environment
-    
+
     private IOAgent ioAgent = new IOAgent();
 
     private StrategoHashMap dynamicRuleTable;
@@ -30,11 +30,11 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         initRegistry();
         init();
     }
-    
+
     public String getOperatorRegistryName() {
         return REGISTRY_NAME;
     }
-    
+
     private void initRegistry() {
         add(new SSL_is_int());
         add(new SSL_is_real());
@@ -172,11 +172,11 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
             tableTable = new StrategoHashMap(128, 75);
         return tableTable;
     }
-    
+
     public IOAgent getIOAgent() {
         return ioAgent;
     }
-    
+
     public void setIOAgent(IOAgent ioAgent) {
         this.ioAgent = ioAgent;
     }
@@ -185,5 +185,5 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         return (SSLLibrary)env.getOperatorRegistry(REGISTRY_NAME);
     }
 
-    
+
 }

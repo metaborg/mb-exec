@@ -7,8 +7,13 @@
  */
 package org.spoofax.interpreter.library;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.spoofax.interpreter.core.Interpreter;
+import org.spoofax.interpreter.core.InterpreterException;
 
 public abstract class AbstractStrategoOperatorRegistry implements IOperatorRegistry {
 
@@ -40,4 +45,14 @@ public abstract class AbstractStrategoOperatorRegistry implements IOperatorRegis
     public AbstractPrimitive get(String name) {
         return registry.get(name);
     }
+
+    protected static void attach(Interpreter intp, AbstractStrategoOperatorRegistry op, String ctreeFile) throws IOException, InterpreterException {
+        InputStream ins = op.getClass().getClassLoader().getResourceAsStream(ctreeFile);
+        if(ins == null) {
+            throw new IOException("Failed to load internal library " + ctreeFile);
+        }
+        intp.load(ins);
+        intp.addOperatorRegistry(op);
+    }
+
 }
