@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.cli;
@@ -73,11 +73,11 @@ public class Main {
 		if (toCompile.size() == 0) {
 			PrintWriter out = new PrintWriter(System.out);
 			ConsoleReader consoleReader = new ConsoleReader();
-			
+
 			File historyFile = new File(System.getProperty("user.home") + "/.stratego-shell-history");
 			if(historyFile.canRead() && historyFile.canWrite())
 				consoleReader.getHistory().setHistoryFile(historyFile);
-			
+
 			consoleReader.setBellEnabled(false);
 			consoleReader
 					.addCompletor(new StrategyCompletor(intp.getContext()));
@@ -220,8 +220,8 @@ public class Main {
 		out.println(new ANSIBuffer().yellow(" :strategies                 ").append("-- show all global strategies"));
 		out.println(new ANSIBuffer().yellow(" :vars                       ").append("-- show all global variables"));
 	}
-	
-	
+
+
 	private static String makePrompt(boolean success, int promptCount) {
 		ANSIBuffer ab = new ANSIBuffer();
 		ab.bold(promptCount + "");

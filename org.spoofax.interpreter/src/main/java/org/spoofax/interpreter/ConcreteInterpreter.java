@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk at strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter;
@@ -19,6 +19,7 @@ import org.spoofax.interpreter.core.UndefinedStrategyException;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.jsglr.client.InvalidParseTableException;
 import org.spoofax.jsglr.client.ParseException;
 import org.spoofax.jsglr.client.ParseTable;
@@ -29,6 +30,7 @@ import org.spoofax.jsglr.shared.BadTokenException;
 import org.spoofax.jsglr.shared.SGLRException;
 import org.spoofax.jsglr.shared.TokenExpectedException;
 import org.spoofax.terms.ParseError;
+import org.spoofax.terms.TermFactory;
 
 public class ConcreteInterpreter extends Interpreter {
 
@@ -36,10 +38,15 @@ public class ConcreteInterpreter extends Interpreter {
 	private final SGLR sugarParser;
 
 	public ConcreteInterpreter() {
+		this(new TermFactory());
+	}
+
+	public ConcreteInterpreter(ITermFactory termFactory) {
+		super(termFactory, new TermFactory());
 		try {
 			load(findLibrary("stratego-lib/libstratego-lib.ctree"));
 			load(findLibrary("libstrc.ctree"));
-			load(new FileInputStream("share/frontend.ctree"));
+			load(findLocalLibrary("share/frontend.ctree"));
 			// load(findLibrary("libstratego-aterm.ctree"));
 			// load(findLibrary("libstratego-gpp.ctree"));
 			// load(findLibrary("libstratego-rtg.ctree"));
@@ -49,7 +56,7 @@ public class ConcreteInterpreter extends Interpreter {
 
 			ParseTableManager ptm = new ParseTableManager();
 			sugarTable = ptm
-					.loadFromStream(new FileInputStream("share/Stratego-Shell.tbl"));
+					.loadFromStream(findLocalLibrary("/share/Stratego-Shell.tbl"));
 			sugarParser = new SGLR(new TreeBuilder(), sugarTable);
 			sugarParser.setUseStructureRecovery(false);
 			setCurrent(getFactory().makeList());
@@ -65,7 +72,14 @@ public class ConcreteInterpreter extends Interpreter {
 
 	}
 
-	private InputStream findLibrary(String libraryPath) {
+	private InputStream findLocalLibrary(String path) throws IOException {
+		InputStream ins = ConcreteInterpreter.class.getClassLoader().getResourceAsStream(path);
+		if(ins == null)
+			throw new IOException("Failed to load internal library " + path);
+		return ins;
+	}
+
+	protected InputStream findLibrary(String libraryPath) throws IOException {
 		String shareDir = System.getProperty("user.home")
 				+ "/.nix-profile/share/";
 		File file = new File(shareDir + "/" + libraryPath);
@@ -76,7 +90,7 @@ public class ConcreteInterpreter extends Interpreter {
 				throw new RuntimeException(e);
 			}
 		}
-		throw new RuntimeException("Failed to find Stratego library " + file.getAbsolutePath());
+		throw new IOException("Failed to find Stratego library " + file.getAbsolutePath());
 	}
 
 	public void loadConcrete(String file, String[] path, boolean lib)
@@ -92,7 +106,7 @@ public class ConcreteInterpreter extends Interpreter {
 		setCurrent(old);
 		return ret;
 	}
-	
+
 	public boolean parseAndInvoke(String codeAsString) throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
 		IStrategoAppl program = parseAndCompile(codeAsString, "spx_shell_frontend_0_0", "Toplevel");
 		if(program == null) {
@@ -103,6 +117,6 @@ public class ConcreteInterpreter extends Interpreter {
 			return true;
 		} else {
 			return evaluate(program);
-		} 
+		}
 	}
 }
