@@ -10,7 +10,7 @@ import org.spoofax.terms.StrategoAppl;
 import org.spoofax.terms.StrategoConstructor;
 import org.spoofax.terms.StrategoInt;
 
-class GenericWrappedTerm extends StrategoAppl {
+public class GenericWrappedTerm extends StrategoAppl {
 
 	private static final long serialVersionUID = -305297606780539827L;
 	

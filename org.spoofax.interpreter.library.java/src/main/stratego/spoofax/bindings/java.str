@@ -4,6 +4,8 @@
  * Licensed under the GNU Lesser General Public License, v2.1 
  */
 module spoofax/bindings/java
+imports
+    libstratego-lib
 
 strategies
 
