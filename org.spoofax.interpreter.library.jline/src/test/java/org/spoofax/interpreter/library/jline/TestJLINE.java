@@ -1,11 +1,11 @@
 /*
  * Copyright (c) 2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.library.jline;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ public class TestJLINE {
 
 	private Interpreter makeInterpreter() throws IOException, InterpreterException {
 		Interpreter intp = new Interpreter();
-		intp.addOperatorRegistry(new JLINELibrary());
+		JLINELibrary.attach(intp);
 		intp.load(System.getProperty("user.home") + "/.nix-profile/share/stratego-lib/libstratego-lib.ctree");
 		intp.load("jline-test.ctree");
 		intp.setCurrent(intp.getFactory().makeTuple());

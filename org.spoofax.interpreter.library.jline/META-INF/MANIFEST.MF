@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JLine Bindings for Stratego/J
-Bundle-SymbolicName: org.spoofax.interpreter.library.jline;singleton:=true
+Bundle-SymbolicName: org.spoofax.interpreter.library.jline
 Bundle-Version: 0.1.0.qualifier
 Bundle-ClassPath: jline.jar,
- lib/jline-1.0.jar
+ jline-1.0.jar
 Bundle-Vendor: Spoofax.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: jline,
