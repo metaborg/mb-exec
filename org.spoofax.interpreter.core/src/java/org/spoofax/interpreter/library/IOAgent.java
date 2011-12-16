@@ -170,20 +170,13 @@ public class IOAgent {
     }
 
     /**
-     * Write a single byte character to a file,
-     * trying not to allocate a new Writer object.
+     * Write a single byte character to a file, using a Writer.
      */
     public void writeChar(int fd, int c) throws IOException {
         if (fd == CONST_STDOUT || fd == CONST_STDERR) {
             getWriter(fd).append((char) c);
         } else {
-            FileHandle file = openFiles.get(fd);
-            if (file.writer == null) {
-                if (file.outputStream == null) internalGetOutputStream(fd);
-                file.outputStream.write(c);
-            } else {
-                file.writer.append((char) c);
-            }
+            getWriter(fd).append((char) c);
         }
     }
 
