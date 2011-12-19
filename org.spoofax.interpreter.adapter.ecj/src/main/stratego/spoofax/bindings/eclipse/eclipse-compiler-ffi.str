@@ -57,7 +57,7 @@ strategies
   ecj-create-project = ?path ; prim("ECJ_create_project", path)
 
   /** @type String -> IJavaProject */
-  ecj-create-java-project = ?path ; prim("ECJ_create_java_cd ..project", path)
+  ecj-create-java-project = ?path ; prim("ECJ_create_java_project", path)
 
   /** @param IProject 
     * @type String -> ?success
