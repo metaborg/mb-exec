@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="org.spoofax.interpreter.ui.actionSet"
+            label="Stratego Action Set"
+            visible="true">
+         <menu
+               id="strategoMenu"
+               label="Stratego">
+            <separator
+                  name="strategoGroup">
+            </separator>
+         </menu>
+         <action
+               class="org.spoofax.interpreter.ui.actions.NewConsoleAction"
+               icon="icons/sample.gif"
+               id="org.spoofax.interpreter.ui.actions.NewConsoleAction"
+               label="New Console"
+               menubarPath="strategoMenu/strategoGroup"
+               toolbarPath="strategoGroup"
+               tooltip="Open Stratego console">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>
