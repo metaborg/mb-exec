@@ -5,7 +5,7 @@
  *
  * Copyright (c) 2005, Karl Trygve Kalleberg <karltk near strategoxt.org>
  * 
- * Licensed under the GNU General Public License, v2
+ * Licensed under the GNU Lesser General Public License, v2.1
  * 
  * Part of Spoofax
  */

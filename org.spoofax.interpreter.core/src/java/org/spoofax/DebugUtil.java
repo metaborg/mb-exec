@@ -11,7 +11,7 @@ import org.spoofax.interpreter.stratego.Strategy;
  *
  * Copyright (c) 2006-2007, Karl Trygve Kalleberg <karltk near strategoxt.org>
  *
- * Licensed under the GNU General Public License, v2
+ * Licensed under the GNU Lesser General Public License, v2.1
  */
 public class DebugUtil {
     public static boolean debugging = false;
