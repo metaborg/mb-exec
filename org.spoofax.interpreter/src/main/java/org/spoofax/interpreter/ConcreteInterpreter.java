@@ -46,7 +46,7 @@ public class ConcreteInterpreter extends Interpreter {
 		try {
 			load(findLibrary("stratego-lib/libstratego-lib.ctree"));
 			load(findLibrary("libstrc.ctree"));
-			load(findLocalLibrary("share/frontend.ctree"));
+			load(findLocalResource("share/frontend.ctree"));
 			// load(findLibrary("libstratego-aterm.ctree"));
 			// load(findLibrary("libstratego-gpp.ctree"));
 			// load(findLibrary("libstratego-rtg.ctree"));
@@ -56,7 +56,7 @@ public class ConcreteInterpreter extends Interpreter {
 
 			ParseTableManager ptm = new ParseTableManager();
 			sugarTable = ptm
-					.loadFromStream(findLocalLibrary("/share/Stratego-Shell.tbl"));
+					.loadFromStream(findLocalResource("share/Stratego-Shell.tbl"));
 			sugarParser = new SGLR(new TreeBuilder(), sugarTable);
 			sugarParser.setUseStructureRecovery(false);
 			setCurrent(getFactory().makeList());
@@ -72,10 +72,10 @@ public class ConcreteInterpreter extends Interpreter {
 
 	}
 
-	private InputStream findLocalLibrary(String path) throws IOException {
+	private InputStream findLocalResource(String path) throws IOException {
 		InputStream ins = ConcreteInterpreter.class.getClassLoader().getResourceAsStream(path);
 		if(ins == null)
-			throw new IOException("Failed to load internal library " + path);
+			throw new IOException("Failed to load internal resource " + path);
 		return ins;
 	}
 
