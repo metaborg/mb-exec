@@ -5,6 +5,8 @@
     <property name="src.dir" value="src" />
 
     <property file="version.properties" />
+    <property name="sdf.dir" value="${HOME}/.nix-profile/" />
+    <property name="strategoxt.dir" value="${HOME}/.nix-profile/" />
 
     <path id="lib.path.id">
         <fileset dir="${lib.dir}" />
@@ -16,7 +18,7 @@
             <exclude name="org/spoofax/gwt/**" />
         </javac>
         <mkdir dir="${build.dir}/share" />
-        <exec executable="strc" failonerror="true">
+        <exec executable="${strategoxt.dir}/bin/strc" failonerror="true">
             <arg value="-i"/>
             <arg value="src/main/stratego/spoofax/interpreter/frontend.str" />
             <arg value="-F"/>
@@ -25,15 +27,15 @@
             <arg value="-o"/>
             <arg value="${build.dir}/share/frontend.ctree"/>
         </exec>
-        <exec executable="pack-sdf" failonerror="true">
+        <exec executable="${strategoxt.dir}/bin/pack-sdf" failonerror="true">
             <arg value="-i"/>
             <arg value="src/main/sdf/Stratego-Shell.sdf" />
             <arg value="-I" />
-            <arg value="${HOME}/.nix-profile/share/stratego-front"/>
+            <arg value="${strategoxt.dir}/share/stratego-front"/>
             <arg value="-o"/>
             <arg value="${build.dir}/share/Stratego-Shell.def"/>
         </exec>
-        <exec executable="sdf2table" failonerror="true">
+        <exec executable="${sdf.dir}/bin/sdf2table" failonerror="true">
             <arg value="-i"/>
             <arg value="${build.dir}/share/Stratego-Shell.def" />
             <arg value="-m"/>
