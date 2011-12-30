@@ -51,7 +51,13 @@
             <fileset dir="${lib.dir}/" />
         </copy>
 
-        <copy file="build/${jarname}-${version}.jar" todir="${prefix}/share/java" />
+        <copy file="stri.in" tofile="${prefix}/bin/stri" />
+        <replaceregexp match="@@version@@" replace="${version}" flags="g" byline="true">
+            <fileset dir="${prefix}/bin/" includes="stri"/>
+        </replaceregexp>
+        <chmod file="${prefix}/bin/stri" perm="+x"/>
+
+        <copy file="${build.dir}/${jarname}-${version}.jar" todir="${prefix}/share/java" />
    </target>
 
    <target name="dist" description="--> create the dist tarball">
@@ -76,7 +82,7 @@
           </fileset>
           <manifest>
             <attribute name="Main-Class" value="org.spoofax.interpreter.cli.Main" />
-            <attribute name="Class-Path" value="jline-1.0.jar spoofax-interpreter-core-0.3.14.jar spoofax-jsglr-0.2.0.jar spoofax-terms-0.6.0.jar" />
+            <attribute name="Class-Path" value="jline-1.0.jar spoofax-interpreter-core-0.3.14.jar spoofax-jsglr-0.2.1.jar spoofax-terms-0.6.0.jar" />
           </manifest>
         </jar>
     </target>
