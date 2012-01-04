@@ -34,7 +34,7 @@ public class JFFLibrary extends AbstractStrategoOperatorRegistry {
 	private int objectCounter;
 	private IStrategoConstructor objWrapCtor;
 
-	private JFFLibrary(ITermFactory termFactory) {
+	public JFFLibrary(ITermFactory termFactory) {
 		this.termFactory = termFactory;
 
 		add(new JFF_close_file_channel_0_0());
