@@ -21,6 +21,16 @@ public class UndefinedStrategyException extends InterpreterException {
         this.strategyName = strategyName;
     }
 
+    public UndefinedStrategyException(Exception cause) {
+        super(cause);
+        this.strategyName = null;
+    }
+
+    /**
+     * Gets the strategy name that was attempted to be called,
+     * or <code>null</code> if the name was to be determined dynamically
+     * (e.g., by {@link org.strategoxt.lang.compat.SSL_EXT_java_call})
+     */
     public String getStrategyName() {
         return strategyName;
     }
