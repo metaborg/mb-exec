@@ -49,6 +49,7 @@ public class JFFLibrary extends AbstractStrategoOperatorRegistry {
 		add(new JFF_get_method());
 		add(new JFF_invoke_method());
 		add(new JFF_new_instance());
+		add(new JFF_chmod_0_0());
 
 		init();
 	}
