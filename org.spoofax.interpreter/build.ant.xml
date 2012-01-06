@@ -3,10 +3,11 @@
     <property name="lib.dir" value="lib" />
     <property name="build.dir" value="target" />
     <property name="src.dir" value="src" />
+    <property name="dist.dir" value="${build.dir}/dist" />
 
     <property file="version.properties" />
-    <property name="sdf.dir" value="${HOME}/.nix-profile/" />
-    <property name="strategoxt.dir" value="${HOME}/.nix-profile/" />
+    <property name="sdf.dir" value="${user.home}/.nix-profile/" />
+    <property name="strategoxt.dir" value="${user.home}/.nix-profile/" />
 
     <path id="lib.path.id">
         <fileset dir="${lib.dir}" />
@@ -45,29 +46,39 @@
         </exec>
     </target>
 
-   <target name="install" depends="jar" description="--> install the project into prefix">
-        <mkdir dir="${prefix}/bin" />
-        <mkdir dir="${prefix}/share/java" />
+   <target name="bindist" depends="jar" description="--> create the binary dist tarball">
+        <mkdir dir="${dist.dir}/bin" />
+        <mkdir dir="${dist.dir}/share/java" />
 
-        <copy todir="${prefix}/share/java">
+        <copy todir="${dist.dir}/share/java">
             <fileset dir="${lib.dir}/" />
         </copy>
 
-        <copy file="spoofax.in" tofile="${prefix}/bin/spoofax" />
+        <copy file="spoofax.in" tofile="${dist.dir}/bin/spoofax" />
         <replaceregexp match="@@version@@" replace="${version}" flags="g" byline="true">
-            <fileset dir="${prefix}/bin/" includes="spoofax"/>
+            <fileset dir="${dist.dir}/bin/" includes="spoofax"/>
         </replaceregexp>
-        <chmod file="${prefix}/bin/spoofax" perm="+x"/>
+        <chmod file="${dist.dir}/bin/spoofax" perm="+x"/>
 
-        <copy file="${build.dir}/${jarname}-${version}.jar" todir="${prefix}/share/java" />
+        <copy file="${build.dir}/${jarname}-${version}.jar" todir="${dist.dir}/share/java" />
+
+        <tar destfile="${build.dir}/${jarname}-bin-${version}.tar">
+          <tarfileset prefix="${jarname}-bin-${version}" dir="${dist.dir}" includes="share/" />
+          <tarfileset prefix="${jarname}-bin-${version}" dir="${dist.dir}" includes="bin/spoofax" filemode="755" />
+        </tar>
+        <gzip zipfile="${build.dir}/${jarname}-bin-${version}.tar.gz" src="${build.dir}/${jarname}-bin-${version}.tar" />
+ 
    </target>
 
-   <target name="dist" description="--> create the dist tarball">
+   <target name="dist" depends="jar" description="--> create the dist tarball">
        <tar destfile="${build.dir}/${jarname}-${version}.tar">
            <tarfileset prefix="${jarname}-${version}/" dir="." includes="src/"/>
            <tarfileset prefix="${jarname}-${version}/" dir=".">
              <include name="*.xml" />
              <include name="*.properties" />
+             <include name="spoofax.in" />
+             <include name="LICENSE" />
+             <include name="AUTHORS" />
            </tarfileset>
            <tarfileset prefix="${jarname}-${version}/" dir="." includes="INSTALL AUTHORS" />
            <tarfileset prefix="${jarname}-${version}/" dir="." includes="META-INF/" />
@@ -84,7 +95,7 @@
           </fileset>
           <manifest>
             <attribute name="Main-Class" value="org.spoofax.interpreter.cli.Main" />
-            <attribute name="Class-Path" value="jline-1.0.jar spoofax-interpreter-core-0.3.14.jar spoofax-jsglr-0.2.1.jar spoofax-terms-0.6.0.jar" />
+<!--            <attribute name="Class-Path" value="jline-1.0.jar spoofax-interpreter-core-0.3.14.jar spoofax-jsglr-0.2.1.jar spoofax-terms-0.6.0.jar" /> -->
           </manifest>
         </jar>
     </target>
