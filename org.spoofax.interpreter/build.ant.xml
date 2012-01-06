@@ -53,11 +53,11 @@
             <fileset dir="${lib.dir}/" />
         </copy>
 
-        <copy file="stri.in" tofile="${prefix}/bin/stri" />
+        <copy file="spoofax.in" tofile="${prefix}/bin/spoofax" />
         <replaceregexp match="@@version@@" replace="${version}" flags="g" byline="true">
-            <fileset dir="${prefix}/bin/" includes="stri"/>
+            <fileset dir="${prefix}/bin/" includes="spoofax"/>
         </replaceregexp>
-        <chmod file="${prefix}/bin/stri" perm="+x"/>
+        <chmod file="${prefix}/bin/spoofax" perm="+x"/>
 
         <copy file="${build.dir}/${jarname}-${version}.jar" todir="${prefix}/share/java" />
    </target>
