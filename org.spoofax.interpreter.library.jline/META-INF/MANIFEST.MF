@@ -9,6 +9,5 @@ Bundle-Vendor: Spoofax.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: jline,
  org.spoofax.interpreter.library.jline
-Require-Bundle: jline,
- org.spoofax.interpreter.core,
+Require-Bundle: org.spoofax.interpreter.core,
  org.junit
