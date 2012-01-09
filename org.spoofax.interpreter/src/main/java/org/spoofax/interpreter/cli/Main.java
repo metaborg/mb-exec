@@ -182,7 +182,7 @@ public class Main {
 		}
 	}
 
-	private static ANSIBuffer colorize(ANSIBuffer ab, IStrategoTerm current) {
+	static ANSIBuffer colorize(ANSIBuffer ab, IStrategoTerm current) {
 		if (current instanceof IStrategoInt || current instanceof IStrategoReal) {
 			ab.yellow(current.toString());
 		} else if (current instanceof IStrategoTuple) {
@@ -194,6 +194,8 @@ public class Main {
 		} else if (current instanceof IStrategoAppl) {
 			ab.append(((IStrategoAppl) current).getName());
 			printSequence(ab, "(", ")", current);
+		} else {
+			throw new NotImplementedException("Unknown term type " + current.getClass());
 		}
 		return ab;
 	}
@@ -202,7 +204,7 @@ public class Main {
 			IStrategoTerm current) {
 		ab.bold(open);
 		IStrategoTerm[] ts = current.getAllSubterms();
-		if (ts.length > 1)
+		if (ts.length >= 1)
 			colorize(ab, ts[0]);
 		for (int i = 1; i < ts.length; i++) {
 			ab.bold(",");
