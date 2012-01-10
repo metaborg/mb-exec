@@ -15,4 +15,4 @@ Bundle-Vendor: Spoofax.org
 Export-Package: 
  org.spoofax.interpreter.adapter.ecj,
  org.spoofax.interpreter.library.ecj
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
