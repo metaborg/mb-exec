@@ -7,6 +7,7 @@ Export-Package: org.spoofax.interpreter,
  org.spoofax.interpreter.ui
 Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.console,
+ org.eclipse.core.runtime,
  org.spoofax.interpreter.core,
  org.spoofax.interpreter,
  org.spoofax.jsglr,
