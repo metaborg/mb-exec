@@ -15,3 +15,4 @@ Require-Bundle: org.eclipse.ui,
  org.spoofax.interpreter.library.eclipse,
  org.spoofax.interpreter.library.jsglr,
  org.spoofax.interpreter.library.java
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
