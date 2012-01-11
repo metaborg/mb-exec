@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Java Bindings for Stratego/J
 Bundle-SymbolicName: org.spoofax.interpreter.library.java
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.1.1.qualifier
 Export-Package: org.spoofax.interpreter.library.java
 Bundle-Vendor: Spoofax.org
-Require-Bundle: org.spoofax.interpreter.core;bundle-version="0.4.1"
+Require-Bundle: org.spoofax.interpreter.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
