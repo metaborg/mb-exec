@@ -14,18 +14,18 @@ import org.spoofax.interpreter.core.InterpreterExit;
 import org.spoofax.interpreter.core.UndefinedStrategyException;
 import org.spoofax.interpreter.library.eclipse.EFILibrary;
 import org.spoofax.interpreter.library.java.JFFLibrary;
-import org.spoofax.interpreter.ui.StrategoConsole.ConsoleIOAgent;
+import org.spoofax.interpreter.ui.SpoofaxConsole.ConsoleIOAgent;
 import org.spoofax.jsglr.client.ParseException;
 import org.spoofax.jsglr.shared.BadTokenException;
 import org.spoofax.jsglr.shared.SGLRException;
 import org.spoofax.jsglr.shared.TokenExpectedException;
 
-public class StrategoInterpreter {
+public class SpoofaxInterpreter {
 
 	private final ConcreteInterpreter interpreter;
 	private final ConsoleIOAgent ioAgent;
 
-	public StrategoInterpreter(ConsoleIOAgent ioAgent) {
+	public SpoofaxInterpreter(ConsoleIOAgent ioAgent) {
 		this.ioAgent = ioAgent;
 		interpreter = new ConcreteInterpreter(); //new ECJFactory());
 		try {
@@ -42,7 +42,6 @@ public class StrategoInterpreter {
 
 	public boolean eval(String line) {
 		try {
-			System.out.println("EVAL " + line);
 			if(!interpreter.parseAndInvoke(line)) {
 				ioAgent.err.println("command failed");
 			} else {

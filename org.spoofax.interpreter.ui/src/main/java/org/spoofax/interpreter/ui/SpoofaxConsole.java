@@ -17,7 +17,7 @@ import org.eclipse.ui.console.IOConsole;
 import org.eclipse.ui.console.IOConsoleOutputStream;
 import org.spoofax.interpreter.library.IOAgent;
 
-public class StrategoConsole extends IOConsole implements Runnable {
+public class SpoofaxConsole extends IOConsole implements Runnable {
 
 	public static class ConsoleIOAgent extends IOAgent {
 
@@ -42,20 +42,19 @@ public class StrategoConsole extends IOConsole implements Runnable {
 
 	}
 
-	public StrategoConsole() {
-		super("Stratego Console", ImageDescriptor.getMissingImageDescriptor());
+	public SpoofaxConsole() {
+		super("Spoofax Console", ImageDescriptor.getMissingImageDescriptor());
 		Thread t = new Thread(this);
 		t.start();
 	}
 
 	@Override
 	public String getName() {
-		return "Stratego Console";
+		return "Spoofax Console";
 	}
 
 	@Override
 	public void run() {
-		System.out.println("Running console");
 		IOConsoleOutputStream err = newOutputStream();
 		IOConsoleOutputStream out = newOutputStream();
 		IOConsoleOutputStream prompt = newOutputStream();
@@ -63,7 +62,7 @@ public class StrategoConsole extends IOConsole implements Runnable {
 		out.setColor(new Color(null, 234,123,195));
 		prompt.setColor(new Color(null, 95, 200, 23));
 		ConsoleIOAgent ioAgent = new ConsoleIOAgent(out, err);
-		StrategoInterpreter intp = new StrategoInterpreter(ioAgent);
+		SpoofaxInterpreter intp = new SpoofaxInterpreter(ioAgent);
 		BufferedReader br = new BufferedReader(new InputStreamReader(getInputStream()));
 		for(;;) {
 			try {

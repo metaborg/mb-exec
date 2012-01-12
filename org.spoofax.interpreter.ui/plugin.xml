@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+<!--
    <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
             id="org.spoofax.interpreter.ui.actionSet"
-            label="Stratego Action Set"
+            label="Spoofax Action Set"
             visible="true">
          <menu
-               id="strategoMenu"
-               label="Stratego">
+               id="spoofaxMenu"
+               label="Spoofax">
             <separator
-                  name="strategoGroup">
+                  name="spoofaxGroup">
             </separator>
          </menu>
          <action
@@ -19,11 +20,19 @@
                icon="icons/sample.gif"
                id="org.spoofax.interpreter.ui.actions.NewConsoleAction"
                label="New Console"
-               menubarPath="strategoMenu/strategoGroup"
-               toolbarPath="strategoGroup"
-               tooltip="Open Stratego console">
+               menubarPath="spoofaxMenu/spoofaxGroup"
+               toolbarPath="spoofaxGroup"
+               tooltip="Open Spoofax console">
          </action>
       </actionSet>
+   </extension>
+-->
+   <extension
+         point="org.eclipse.ui.console.consoleFactories">
+      <consoleFactory
+            class="org.spoofax.interpreter.ui.SpoofaxConsoleFactory"
+            label="Spoofax Console">
+      </consoleFactory>
    </extension>
 
 </plugin>

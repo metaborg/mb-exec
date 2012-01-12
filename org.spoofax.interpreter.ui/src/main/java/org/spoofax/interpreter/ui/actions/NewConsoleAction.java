@@ -11,13 +11,13 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
-import org.spoofax.interpreter.ui.StrategoConsole;
+import org.spoofax.interpreter.ui.SpoofaxConsole;
 
 public class NewConsoleAction implements IWorkbenchWindowActionDelegate {
 
 	@Override
 	public void run(IAction action) {
-		StrategoConsole console = new StrategoConsole();
+		SpoofaxConsole console = new SpoofaxConsole();
 		ConsolePlugin.getDefault().getConsoleManager()
 				.addConsoles(new IConsole[] { console });
 		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(console);

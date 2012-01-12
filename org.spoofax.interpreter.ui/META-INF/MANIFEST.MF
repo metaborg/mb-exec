@@ -2,9 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ui
 Bundle-SymbolicName: org.spoofax.interpreter.ui;singleton:=true
-Bundle-Version: 0.4.1.qualifier
-Export-Package: org.spoofax.interpreter,
- org.spoofax.interpreter.ui
+Bundle-Version: 0.4.2.qualifier
+Export-Package: org.spoofax.interpreter.ui
 Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.console,
  org.eclipse.core.runtime,
