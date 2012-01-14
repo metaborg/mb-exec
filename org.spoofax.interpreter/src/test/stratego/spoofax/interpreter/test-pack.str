@@ -1,0 +1,9 @@
+module spoofax/interpreter/test-pack
+imports
+    libstratego-lib
+    spoofax/interpreter/frontend
+    Stratego-Shell
+
+strategies
+
+    main = !ImportOne(Import("foo.str")) ; spx-shell-frontend-for-import

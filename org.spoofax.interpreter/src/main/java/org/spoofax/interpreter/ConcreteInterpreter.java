@@ -16,6 +16,8 @@ import org.spoofax.interpreter.core.InterpreterErrorExit;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.InterpreterExit;
 import org.spoofax.interpreter.core.UndefinedStrategyException;
+import org.spoofax.interpreter.library.IOAgent;
+import org.spoofax.interpreter.library.jsglr.JSGLRLibrary;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -37,6 +39,20 @@ public class ConcreteInterpreter extends Interpreter {
 	private final ParseTable sugarTable;
 	private final SGLR sugarParser;
 
+	private static class ConcreteIOAgent extends IOAgent {
+
+		@Override
+		public InputStream openInputStream(String fn, boolean isDefinitionFile) throws FileNotFoundException {
+			if(isDefinitionFile) {
+				InputStream r = ConcreteInterpreter.class.getClassLoader().getResourceAsStream(fn);
+				return r;
+			}
+			else {
+				return super.openInputStream(fn, isDefinitionFile);
+			}
+		}
+	}
+
 	public ConcreteInterpreter() {
 		this(new TermFactory());
 	}
@@ -51,7 +67,7 @@ public class ConcreteInterpreter extends Interpreter {
 			// load(findLibrary("libstratego-gpp.ctree"));
 			// load(findLibrary("libstratego-rtg.ctree"));
 			// load(findLibrary("libstratego-sdf.ctree"));
-			// load(findLibrary("libstratego-sglr.ctree"));
+			load(findLibrary("libstratego-sglr.ctree"));
 			// load(findLibrary("libstratego-tool-doc.ctree"));
 
 			ParseTableManager ptm = new ParseTableManager();
@@ -60,6 +76,8 @@ public class ConcreteInterpreter extends Interpreter {
 			sugarParser = new SGLR(new TreeBuilder(), sugarTable);
 			sugarParser.setUseStructureRecovery(false);
 			setCurrent(getFactory().makeList());
+			setIOAgent(new ConcreteIOAgent());
+			addOperatorRegistry(new JSGLRLibrary());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} catch (InterpreterException e) {
@@ -101,7 +119,8 @@ public class ConcreteInterpreter extends Interpreter {
 		IStrategoTerm tree = (IStrategoTerm) sugarParser.parse(codeAsString, "stdin", startSymbol);
 		IStrategoTerm old = current();
 		setCurrent(tree);
-		invoke(frontendStrategy);
+		if(!invoke(frontendStrategy))
+			return null;
 		IStrategoAppl ret = (IStrategoAppl) current();
 		setCurrent(old);
 		return ret;
@@ -114,6 +133,9 @@ public class ConcreteInterpreter extends Interpreter {
 		} else if(program.getName().equals("SDefT")) {
 			SDefT def = loader.parseSDefT(program);
 			context.addSVar(def.getName(), def);
+			return true;
+		} else if(program.getName().equals("Specification")) {
+			load(program);
 			return true;
 		} else {
 			return evaluate(program);

@@ -1,14 +1,17 @@
 module Stratego-Shell
 
 imports
-    Stratego-Sugar
+  Stratego-Sugar
 
 exports
 
-    context-free syntax
+  context-free syntax
 
-        Strategy -> Toplevel
-        Def      -> Toplevel
+    "import" ImportModName -> ImportOne{cons("ImportOne")}
 
-    context-free start-symbols
-        Toplevel
+    Strategy -> Toplevel
+    Def      -> Toplevel
+    ImportOne   -> Toplevel
+
+  context-free start-symbols
+    Toplevel

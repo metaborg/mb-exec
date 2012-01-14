@@ -1,106 +1,147 @@
 <project name="spoofax-terms" default="jar">
-	
-    <property name="lib.dir" value="lib" />
-    <property name="build.dir" value="target" />
-    <property name="src.dir" value="src" />
-    <property name="dist.dir" value="${build.dir}/dist" />
 
-    <property file="version.properties" />
-    <property name="sdf.dir" value="${user.home}/.nix-profile/" />
-    <property name="strategoxt.dir" value="${user.home}/.nix-profile/" />
+	<property name="lib.dir" value="lib" />
+	<property name="build.dir" value="target" />
+	<property name="src.dir" value="src" />
+	<property name="dist.dir" value="${build.dir}/dist" />
 
-    <path id="lib.path.id">
-        <fileset dir="${lib.dir}" />
-    </path>
+	<property file="version.properties" />
+	<property name="sdf.dir" value="${user.home}/.nix-profile/" />
+	<property name="strategoxt.dir" value="${user.home}/.nix-profile/" />
 
-    <target name="compile" description="--> compile the project">
-        <mkdir dir="${build.dir}/classes" />
-        <javac srcdir="${src.dir}" destdir="${build.dir}/classes" classpathref="lib.path.id">
-            <exclude name="org/spoofax/gwt/**" />
-        </javac>
-        <mkdir dir="${build.dir}/share" />
-        <exec executable="${strategoxt.dir}/bin/strc" failonerror="true">
-            <arg value="-i"/>
-            <arg value="src/main/stratego/spoofax/interpreter/frontend.str" />
-            <arg value="-F"/>
-            <arg value="-c"/>
-            <arg value="--library"/>
-            <arg value="-o"/>
-            <arg value="${build.dir}/share/frontend.ctree"/>
-        </exec>
-        <exec executable="${strategoxt.dir}/bin/pack-sdf" failonerror="true">
-            <arg value="-i"/>
-            <arg value="src/main/sdf/Stratego-Shell.sdf" />
-            <arg value="-I" />
-            <arg value="${strategoxt.dir}/share/stratego-front"/>
-            <arg value="-o"/>
-            <arg value="${build.dir}/share/Stratego-Shell.def"/>
-        </exec>
-        <exec executable="${sdf.dir}/bin/sdf2table" failonerror="true">
-            <arg value="-i"/>
-            <arg value="${build.dir}/share/Stratego-Shell.def" />
-            <arg value="-m"/>
-            <arg value="Stratego-Shell"/>
-            <arg value="-o"/>
-            <arg value="${build.dir}/share/Stratego-Shell.tbl"/>
-        </exec>
+	<path id="lib.path.id">
+		<fileset dir="${lib.dir}" />
+	</path>
+
+	<target name="compile" description="--> compile the project">
+		<mkdir dir="${build.dir}/classes" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}/classes" classpathref="lib.path.id" />
     </target>
 
-   <target name="bindist" depends="jar" description="--> create the binary dist tarball">
-        <mkdir dir="${dist.dir}/bin" />
-        <mkdir dir="${dist.dir}/share/java" />
+    <target name="compile-sdf-str" description="--> compile SDF and Stratego code">
+		<mkdir dir="${build.dir}/share" />
+		<exec executable="${strategoxt.dir}/bin/pack-sdf" failonerror="true">
+			<arg value="-i" />
+			<arg value="src/main/sdf/Stratego-Shell.sdf" />
+			<arg value="-I" />
+			<arg value="${strategoxt.dir}/share/stratego-front" />
+			<arg value="-o" />
+			<arg value="${build.dir}/share/Stratego-Shell.def" />
+		</exec>
+		<exec executable="${sdf.dir}/bin/sdf2table" failonerror="true">
+			<arg value="-i" />
+			<arg value="${build.dir}/share/Stratego-Shell.def" />
+			<arg value="-m" />
+			<arg value="Stratego-Shell" />
+			<arg value="-o" />
+			<arg value="${build.dir}/share/Stratego-Shell.tbl" />
+		</exec>
+		<exec executable="${strategoxt.dir}/bin/sdf2rtg" failonerror="true">
+			<arg value="-i" />
+			<arg value="${build.dir}/share/Stratego-Shell.def" />
+			<arg value="-m" />
+			<arg value="Stratego-Shell" />
+			<arg value="-o" />
+			<arg value="${build.dir}/share/Stratego-Shell.sig" />
+		</exec>
+		<exec executable="${strategoxt.dir}/bin/rtg2sig" failonerror="true">
+			<arg value="-i" />
+			<arg value="${build.dir}/share/Stratego-Shell.sig" />
+			<arg value="-o" />
+			<arg value="${build.dir}/share/Stratego-Shell.str" />
+		</exec>
+		<exec executable="${strategoxt.dir}/bin/strc" failonerror="true">
+			<arg value="-i" />
+			<arg value="src/main/stratego/spoofax/interpreter/frontend.str" />
+			<arg value="-I" />
+			<arg value="src/main/stratego" />
+			<arg value="-I" />
+			<arg value="target/share" />
+			<arg value="-F" />
+			<arg value="-c" />
+			<arg value="--library" />
+			<arg value="-o" />
+			<arg value="${build.dir}/share/frontend.ctree" />
+		</exec>
+	</target>
 
-        <copy todir="${dist.dir}/share/java">
-            <fileset dir="${lib.dir}/" />
-        </copy>
+	<target name="bindist" depends="jar" description="--> create the binary dist tarball">
+		<mkdir dir="${dist.dir}/bin" />
+		<mkdir dir="${dist.dir}/share/java" />
 
-        <copy file="spoofax.in" tofile="${dist.dir}/bin/spoofax" />
-        <replaceregexp match="@@version@@" replace="${version}" flags="g" byline="true">
-            <fileset dir="${dist.dir}/bin/" includes="spoofax"/>
-        </replaceregexp>
-        <chmod file="${dist.dir}/bin/spoofax" perm="+x"/>
+		<copy todir="${dist.dir}/share/java">
+			<fileset dir="${lib.dir}/" />
+		</copy>
 
-        <copy file="${build.dir}/${jarname}-${version}.jar" todir="${dist.dir}/share/java" />
+		<copy file="spoofax.in" tofile="${dist.dir}/bin/spoofax" />
+		<replaceregexp match="@@version@@" replace="${version}" flags="g" byline="true">
+			<fileset dir="${dist.dir}/bin/" includes="spoofax" />
+		</replaceregexp>
+		<chmod file="${dist.dir}/bin/spoofax" perm="+x" />
 
-        <tar destfile="${build.dir}/${jarname}-bin-${version}.tar">
-          <tarfileset prefix="${jarname}-bin-${version}" dir="${dist.dir}" includes="share/" />
-          <tarfileset prefix="${jarname}-bin-${version}" dir="${dist.dir}" includes="bin/spoofax" filemode="755" />
-        </tar>
-        <gzip zipfile="${build.dir}/${jarname}-bin-${version}.tar.gz" src="${build.dir}/${jarname}-bin-${version}.tar" />
- 
-   </target>
+		<copy file="${build.dir}/${jarname}-${version}.jar" todir="${dist.dir}/share/java" />
 
-   <target name="dist" depends="jar" description="--> create the dist tarball">
-       <tar destfile="${build.dir}/${jarname}-${version}.tar">
-           <tarfileset prefix="${jarname}-${version}/" dir="." includes="src/"/>
-           <tarfileset prefix="${jarname}-${version}/" dir=".">
-             <include name="*.xml" />
-             <include name="*.properties" />
-             <include name="spoofax.in" />
-             <include name="LICENSE" />
-             <include name="AUTHORS" />
-           </tarfileset>
-           <tarfileset prefix="${jarname}-${version}/" dir="." includes="INSTALL AUTHORS" />
-           <tarfileset prefix="${jarname}-${version}/" dir="." includes="META-INF/" />
-       </tar>
-       <gzip zipfile="${build.dir}/${jarname}-${version}.tar.gz" src="${build.dir}/${jarname}-${version}.tar" />
-   </target>
+		<tar destfile="${build.dir}/${jarname}-bin-${version}.tar">
+			<tarfileset prefix="${jarname}-bin-${version}" dir="${dist.dir}" includes="share/" />
+			<tarfileset prefix="${jarname}-bin-${version}" dir="${dist.dir}" includes="bin/spoofax" filemode="755" />
+		</tar>
+		<gzip zipfile="${build.dir}/${jarname}-bin-${version}.tar.gz" src="${build.dir}/${jarname}-bin-${version}.tar" />
 
-   <target name="jar" depends="compile">
-        <jar destfile="${build.dir}/${jarname}-${version}.jar">
-          <fileset dir="${build.dir}/classes" />
-          <fileset dir="${build.dir}" >
-            <include name="share/frontend.ctree" />
-            <include name="share/Stratego-Shell.tbl" />
-          </fileset>
-          <manifest>
-            <attribute name="Main-Class" value="org.spoofax.interpreter.cli.Main" />
-<!--            <attribute name="Class-Path" value="jline-1.0.jar spoofax-interpreter-core-0.3.14.jar spoofax-jsglr-0.2.1.jar spoofax-terms-0.6.0.jar" /> -->
-          </manifest>
-        </jar>
-    </target>
+	</target>
 
-   <target name="check" depends="jar">
-   </target>
+	<target name="dist" depends="jar" description="--> create the dist tarball">
+		<tar destfile="${build.dir}/${jarname}-${version}.tar">
+			<tarfileset prefix="${jarname}-${version}/" dir="." includes="src/" />
+			<tarfileset prefix="${jarname}-${version}/" dir=".">
+				<include name="*.xml" />
+				<include name="*.properties" />
+				<include name="spoofax.in" />
+				<include name="LICENSE" />
+				<include name="AUTHORS" />
+			</tarfileset>
+			<tarfileset prefix="${jarname}-${version}/" dir="." includes="INSTALL AUTHORS" />
+			<tarfileset prefix="${jarname}-${version}/" dir="." includes="META-INF/" />
+		</tar>
+		<gzip zipfile="${build.dir}/${jarname}-${version}.tar.gz" src="${build.dir}/${jarname}-${version}.tar" />
+	</target>
+
+	<target name="copylibs" depends="compile-sdf-str">
+		<copy todir="${build.dir}/share">
+			<fileset dir="${strategoxt.dir}/share">
+				<include name="libstrc.ctree" />
+				<include name="libstratego-aterm.ctree" />
+				<include name="libstratego-gpp.ctree" />
+				<include name="libstratego-sglr.ctree" />
+				<include name="libstratego-rtg.ctree" />
+				<include name="libstratego-sdf.ctree" />
+			</fileset>
+			<fileset file="${strategoxt.dir}/share/stratego-lib/libstratego-lib.ctree" />
+			<fileset file="${strategoxt.dir}/share/sdf/stratego-front/Stratego-Sugar.tbl" />
+		</copy>
+	</target>
+
+	<target name="makerunnable" depends="copylibs">
+		<copy todir="bin/share/">
+			<fileset dir="${build.dir}/share/" />
+		</copy>
+	</target>
+
+	<target name="jar" depends="compile,makerunnable">
+		<jar destfile="${build.dir}/${jarname}-${version}.jar">
+			<fileset dir="${build.dir}/classes" />
+			<fileset dir="${build.dir}">
+				<include name="share/*.ctree" />
+				<include name="share/*.tbl" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="org.spoofax.interpreter.cli.Main" />
+				<!--            <attribute name="Class-Path" value="jline-1.0.jar spoofax-interpreter-core-0.3.14.jar spoofax-jsglr-0.2.1.jar spoofax-terms-0.6.0.jar" /> -->
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="check" depends="jar">
+	</target>
 
 </project>
+

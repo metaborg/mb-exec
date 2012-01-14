@@ -79,8 +79,7 @@ public class Main {
 				consoleReader.getHistory().setHistoryFile(historyFile);
 
 			consoleReader.setBellEnabled(false);
-			consoleReader
-					.addCompletor(new StrategyCompletor(intp.getContext()));
+			consoleReader.addCompletor(new StrategyCompletor(intp.getContext()));
 			String line;
 			int promptCount = 0;
 			boolean lastWasGood = true;
@@ -93,9 +92,9 @@ public class Main {
 					consoleReader.clearScreen();
 				} else if (":vars".equals(code)) {
 					VarScope vs = intp.getContext().getVarScope();
-					for(String v : vs.getVars()) {
+					for(String v : vs.getVarNames()) {
 						IStrategoTerm t = vs.lookup(v);
-						ANSIBuffer ab = new ANSIBuffer();
+						ANSIBuffer ab = newBuffer();
 						out.println(" " + v + " = " + colorize(ab, t).toString());
 					}
 				} else if (":strategies".equals(code)) {
@@ -116,7 +115,7 @@ public class Main {
 						} else {
 							String name = StrategyCompletor.cify(els[i]);
 							if(!vs.removeSVar(name))
-								out.print(new ANSIBuffer().red("Strategy '" + name + "' unknown"));
+								out.print(newBuffer().red("Strategy '" + name + "' unknown"));
 						}
 					}
 				} else if(code.startsWith(":arity ")) {
@@ -146,7 +145,7 @@ public class Main {
 				try {
 					if (intp.parseAndInvoke(code)) {
 						lastWasGood = true;
-						ANSIBuffer ab = new ANSIBuffer();
+						ANSIBuffer ab = newBuffer();
 						out.println(colorize(ab, intp.current()));
 						old = intp.current();
 					}
@@ -156,7 +155,7 @@ public class Main {
 					e.printStackTrace(out);
 					out.println(e.getClass());
 				} catch (BadTokenException e) {
-					out.println(new ANSIBuffer().red(e.getMessage()).toString());
+					out.println(newBuffer().red(e.getMessage()).toString());
 				} catch (ParseException e) {
 					e.printStackTrace(out);
 					out.println(e.getClass());
@@ -173,6 +172,9 @@ public class Main {
 					if (e.getCause() instanceof UndefinedStrategyException) {
 						handleUndefinedStrategyException(out,
 								(UndefinedStrategyException) e.getCause());
+					} else {
+						e.printStackTrace(out);
+						out.println(e.getClass());
 					}
 				} finally {
 					intp.setCurrent(old);
@@ -180,6 +182,8 @@ public class Main {
 				}
 			}
 		}
+
+		outFile.length(); // FIXME silence warning for now
 	}
 
 	static ANSIBuffer colorize(ANSIBuffer ab, IStrategoTerm current) {
@@ -214,18 +218,23 @@ public class Main {
 	}
 
 	private static void usage(PrintWriter out) {
-		out.println(new ANSIBuffer().yellow(" :help                       ").append("-- print this page"));
-		out.println(new ANSIBuffer().yellow(" :forget ").append("var1 var2 ... varN  -- forget specific global variables"));
-		out.println(new ANSIBuffer().yellow(" :forget ").append("strat/(n,m)         -- forget strategy with arity (n, m), e.g :forget zip/(1,0)"));
-		out.println(new ANSIBuffer().yellow(" :forget ").append("_                   -- forget all global variables"));
-		out.println(new ANSIBuffer().yellow(" :arity ").append("strategy             -- show available arities for a strategy"));
-		out.println(new ANSIBuffer().yellow(" :strategies                 ").append("-- show all global strategies"));
-		out.println(new ANSIBuffer().yellow(" :vars                       ").append("-- show all global variables"));
+		out.println(newBuffer().yellow(" :help                       ").append("-- print this page"));
+		out.println(newBuffer().yellow(" :forget ").append("var1 var2 ... varN  -- forget specific global variables"));
+		out.println(newBuffer().yellow(" :forget ").append("strat/(n,m)         -- forget strategy with arity (n, m), e.g :forget zip/(1,0)"));
+		out.println(newBuffer().yellow(" :forget ").append("_                   -- forget all global variables"));
+		out.println(newBuffer().yellow(" :arity ").append("strategy             -- show available arities for a strategy"));
+		out.println(newBuffer().yellow(" :strategies                 ").append("-- show all global strategies"));
+		out.println(newBuffer().yellow(" :vars                       ").append("-- show all global variables"));
 	}
 
 
+	private static ANSIBuffer newBuffer() {
+		ANSIBuffer r = new ANSIBuffer();
+		//r.setAnsiEnabled(false);
+		return r;
+	}
 	private static String makePrompt(boolean success, int promptCount) {
-		ANSIBuffer ab = new ANSIBuffer();
+		ANSIBuffer ab = newBuffer();
 		ab.bold(promptCount + "");
 		ab.append("/");
 		if (success)
@@ -239,7 +248,7 @@ public class Main {
 
 	private static void handleUndefinedStrategyException(PrintWriter out,
 			UndefinedStrategyException e) {
-		out.println(new ANSIBuffer().red("Undefined strategy "
+		out.println(newBuffer().red("Undefined strategy "
 				+ StrategyCompletor.uncify(e.getStrategyName())));
 	}
 }
