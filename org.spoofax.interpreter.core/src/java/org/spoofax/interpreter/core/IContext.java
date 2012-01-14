@@ -13,6 +13,7 @@ import org.spoofax.IAsyncCancellable;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.stratego.Match.Results;
+import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
@@ -41,6 +42,7 @@ public interface IContext extends IAsyncCancellable {
     public StrategoSignature getStrategoSignature();
     public AbstractPrimitive lookupOperator(String name);
     public Collection<String> getStrategyNames();
+    public Collection<OpDecl> getOperatorDeclarations();
 
     public StackTracer getStackTracer();
 }

@@ -1,5 +1,5 @@
 /*
- * Licensed under the GNU Lesser Lesser General Public License, v2.1.1
+ * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.library;
 
@@ -34,7 +34,7 @@ import org.spoofax.interpreter.library.ssl.RandomAccessOutputStream;
  * to redirect console or file I/O streams.
  *
  * @author Lennart Kats <lennart add lclnet.nl>
- * @author Karl Trygve Kalleberg <karltk near strategoxt.org>
+ * @author Karl Trygve Kalleberg <karltk near strategoxt dot org>
  */
 public class IOAgent {
 

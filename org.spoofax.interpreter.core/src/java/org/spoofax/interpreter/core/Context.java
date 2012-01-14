@@ -8,6 +8,7 @@
 package org.spoofax.interpreter.core;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -160,6 +161,10 @@ public class Context implements IContext {
 
     void addOpDecl(String name, OpDecl decl) {
         opdecls.put(name, decl);
+    }
+
+    public Collection<OpDecl> getOperatorDeclarations() {
+        return Collections.unmodifiableCollection(opdecls.values());
     }
 
     public void addSVar(String name, SDefT def) {

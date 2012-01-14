@@ -12,6 +12,7 @@ import java.io.InputStream;
 
 import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.library.IOperatorRegistry;
+import org.spoofax.interpreter.library.spx.SPXInterpreterLibrary;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.stratego.StupidFormatter;
@@ -48,6 +49,8 @@ public class Interpreter {
         context = createContext(termFactory, programFactory);
 
         loader = new StrategoCoreLoader(context);
+
+        addOperatorRegistry(new SPXInterpreterLibrary());
     }
 
     /**

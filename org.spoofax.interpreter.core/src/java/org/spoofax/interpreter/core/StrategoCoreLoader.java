@@ -246,7 +246,7 @@ public class StrategoCoreLoader {
             }
             return new FunType(ch);
         } else if (Tools.isConstType(t, context)) {
-            return new ConstType();
+            return ConstType.INSTANCE;
         }
         return null;
     }
@@ -395,10 +395,13 @@ public class StrategoCoreLoader {
          // TODO Added the ExtOpDeclInj here, not sure this should be handled differently,
          //      but this extra check will at least prevent the class cast exception otherwise
          //      thrown and allow the loading to recover.
-        	if (!Tools.applAt(list, i).getConstructor().getName().equals("OpDeclInj") &&
-        	    !Tools.applAt(list, i).getConstructor().getName().equals("ExtOpDeclInj")  ) {
-        		String name = Tools.javaStringAt(Tools.applAt(list, i), 0);
-        		context.addOpDecl(name, new OpDecl(name));
+        	IStrategoAppl opDecl = Tools.applAt(list, i);
+        	if (!opDecl.getConstructor().getName().equals("OpDeclInj") &&
+        	    !opDecl.getConstructor().getName().equals("ExtOpDeclInj")  ) {
+        		String name = Tools.javaStringAt(opDecl, 0);
+        		int arity;
+        		ArgType argType = parseArgType(Tools.applAt(opDecl, 1));
+        		context.addOpDecl(name, new OpDecl(name, argType));
         	}
         }
     }

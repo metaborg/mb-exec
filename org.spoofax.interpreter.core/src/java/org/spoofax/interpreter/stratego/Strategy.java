@@ -1,8 +1,8 @@
 /*
  * Created on 07.aug.2005
  *
- * Copyright (c) 2004, Karl Trygve Kalleberg <karltk near strategoxt.org>
- * 
+ * Copyright (c) 2005-2012, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.stratego;
@@ -24,17 +24,17 @@ import org.spoofax.interpreter.stratego.SDefT.FunType;
 abstract public class Strategy implements IConstruct {
 
     private final static ArgType type;
-    
+
     static {
         List<ArgType> l = new ArrayList<ArgType>(2);
-        l.add(new ConstType());
+        l.add(ConstType.INSTANCE);
         type = new FunType(l);
     }
-    
+
     public static void debug(Object... s) {
         Context.debug(s);
     }
-    
+
     public SDefT.ArgType getType() {
         return type;
     }
@@ -53,14 +53,14 @@ abstract public class Strategy implements IConstruct {
     public String toString() {
         return getTraceName();
     }
-    
+
     private Stack<Hook> hook = new Stack<Hook>();
-      
+
     public Stack<Hook> getHook()
     {
     	return hook;
     }
-    
+
     public boolean evaluate(IContext env) throws InterpreterException {
     	ResultHook resultHook = new ResultHook();
     	getHook().push(resultHook);
@@ -81,13 +81,13 @@ abstract public class Strategy implements IConstruct {
     				throw new InterpreterException("There was a leak on: " + debugStack);
     		}
     	}
-    	
+
 		return resultHook.result;
     }
-    
+
     static class ResultHook extends Hook {
         boolean result;
-        
+
         @Override
         public IConstruct onFailure(IContext env) throws InterpreterException {
             result = false;

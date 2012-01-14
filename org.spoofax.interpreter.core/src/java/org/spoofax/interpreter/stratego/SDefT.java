@@ -1,24 +1,29 @@
 /*
  * Created on 07.aug.2005
  *
- * Copyright (c) 2004, Karl Trygve Kalleberg <karltk near strategoxt.org>
- * 
+ * Copyright (c) 2005-2012, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
 package org.spoofax.interpreter.stratego;
 
+import java.util.LinkedList;
 import java.util.List;
 
+import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.StrategoSignature;
 import org.spoofax.interpreter.core.VarScope;
+import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
 
 public class SDefT implements IConstruct {
 
     private static int counter = 0;
-    
+
     private String name;
 
     private SVar[] strategyArgs;
@@ -40,9 +45,9 @@ public class SDefT implements IConstruct {
             return type;
         }
     }
-    
+
     public interface ArgType {
-        // empty
+        IStrategoTerm toTerm(ITermFactory f, StrategoSignature sig);
     }
 
     public static class FunType implements ArgType {
@@ -54,6 +59,8 @@ public class SDefT implements IConstruct {
 
         @Override
         public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
             if (!(obj instanceof FunType))
                 return false;
             FunType other = (FunType) obj;
@@ -64,23 +71,53 @@ public class SDefT implements IConstruct {
                     return false;
             return true;
         }
-        
+
+        @Override
+        public int hashCode() {
+            return args.hashCode();
+        }
+
         @Override
         public String toString() {
             return "FunType(" + args.toString() + ")";
         }
+
+        public IStrategoTerm toTerm(ITermFactory f, StrategoSignature sig) {
+            LinkedList<IStrategoTerm> as = new LinkedList<IStrategoTerm>();
+            for(ArgType at : args) {
+                as.addFirst(at.toTerm(f, sig));
+            }
+            return f.makeAppl(sig.CTOR_FunType, f.makeList(as), ConstType.INSTANCE.toTerm(f, sig));
+        }
+
     }
 
     public static class ConstType implements ArgType {
-        
+
+        public static final ConstType INSTANCE = new ConstType();
+
+        private ConstType() {
+            // empty
+        }
+
         @Override
         public boolean equals(Object obj) {
             return obj instanceof ConstType;
         }
-        
+
         @Override
         public String toString() {
             return "ConstType(\"a\")";
+        }
+
+        @Override
+        public int hashCode() {
+            return 42; // we're a singleton
+        }
+
+        public IStrategoTerm toTerm(ITermFactory f, StrategoSignature sig) {
+            IStrategoTerm sort = f.makeAppl(sig.CTOR_Sugar_Sort, f.makeString("ATerm"), f.makeList());
+            return f.makeAppl(sig.CTOR_ConstType, sort);
         }
     }
 
@@ -91,7 +128,7 @@ public class SDefT implements IConstruct {
         this.body = actual;
         this.scope = scope;
     }
-    
+
     protected SDefT(VarScope scope) {
         this.scope = scope;
     }
@@ -104,7 +141,7 @@ public class SDefT implements IConstruct {
     public String getName() {
         return name;
     }
-    
+
     protected void setName(String name) {
         this.name = name;
     }
@@ -112,15 +149,15 @@ public class SDefT implements IConstruct {
     public Strategy getBody() {
         return body;
     }
-    
+
     public Strategy getParametrizedBody(Strategy[] sargs, IStrategoTerm[] targs) {
         return null; // overridden InteropSDefT for compiled strategies
     }
-    
+
     public boolean isCompiledStrategy() {
         return false; // overridden InteropSDefT for compiled strategies
     }
-    
+
     protected void setBody(Strategy body) {
         this.body = body;
     }
@@ -128,7 +165,7 @@ public class SDefT implements IConstruct {
     public String[] getTermParams() {
         return termArgs;
     }
-    
+
     protected void setTermParams(String[] termArgs) {
         this.termArgs = termArgs;
     }
@@ -136,7 +173,7 @@ public class SDefT implements IConstruct {
     public SVar[] getStrategyParams() {
         return strategyArgs;
     }
-    
+
     protected void setStrategyParams(SVar[] strategyArgs) {
         this.strategyArgs = strategyArgs;
     }
@@ -174,5 +211,10 @@ public class SDefT implements IConstruct {
 
     protected static String createAnonymousName(String s) {
         return "<anon_" + s + "_" + (counter++) + ">";
+    }
+
+    public IStrategoAppl toExternalDef(ITermFactory f) {
+
+        throw new NotImplementedException();
     }
 }

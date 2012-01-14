@@ -2,7 +2,7 @@
  * Created on 26.jun.2005
  *
  * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
+ *
  * Licensed under the GNU Lesser Lesser General Public License, v2.1.1
  */
 package org.spoofax.interpreter.core;
@@ -68,7 +68,7 @@ public class VarScope {
     }
 
     public void addSVars(SDefT[] sdefs) {
-        for(int i = 0, sz = sdefs.length; i < sz; i++) 
+        for(int i = 0, sz = sdefs.length; i < sz; i++)
             svars.put(sdefs[i].getName(), sdefs[i]);
     }
 
@@ -82,8 +82,12 @@ public class VarScope {
         }
     }
 
-    public Collection<String> getVars() {
+    public Collection<String> getVarNames() {
         return Collections.unmodifiableCollection(vars.keySet());
+    }
+
+    public Collection<SDefT> getSVars() {
+        return Collections.unmodifiableCollection(svars.values());
     }
 
     public String printVars() {
