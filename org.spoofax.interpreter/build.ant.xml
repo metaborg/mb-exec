@@ -6,6 +6,7 @@
 	<property name="dist.dir" value="${build.dir}/dist" />
 
 	<property file="version.properties" />
+	<property name="buildtag" value = "" />
 	<property name="sdf.dir" value="${user.home}/.nix-profile/" />
 	<property name="strategoxt.dir" value="${user.home}/.nix-profile/" />
 
@@ -85,7 +86,7 @@
 			<tarfileset prefix="${jarname}-bin-${version}" dir="${dist.dir}" includes="share/" />
 			<tarfileset prefix="${jarname}-bin-${version}" dir="${dist.dir}" includes="bin/spoofax" filemode="755" />
 		</tar>
-		<gzip zipfile="${build.dir}/${jarname}-bin-${version}.tar.gz" src="${build.dir}/${jarname}-bin-${version}.tar" />
+		<gzip zipfile="${build.dir}/${jarname}-bin-${version}${buildtag}.tar.gz" src="${build.dir}/${jarname}-bin-${version}.tar" />
 
 	</target>
 
@@ -102,7 +103,7 @@
 			<tarfileset prefix="${jarname}-${version}/" dir="." includes="INSTALL AUTHORS" />
 			<tarfileset prefix="${jarname}-${version}/" dir="." includes="META-INF/" />
 		</tar>
-		<gzip zipfile="${build.dir}/${jarname}-${version}.tar.gz" src="${build.dir}/${jarname}-${version}.tar" />
+		<gzip zipfile="${build.dir}/${jarname}-${version}${buildtag}.tar.gz" src="${build.dir}/${jarname}-${version}.tar" />
 	</target>
 
 	<target name="copylibs" depends="compile-sdf-str">
