@@ -11,69 +11,79 @@ import org.spoofax.interpreter.terms.ITermFactory;
 // FIXME should be moved to the interpreter
 public class StrategoSignature {
 
-    private final IStrategoConstructor CTOR_Match;
+    public final IStrategoConstructor CTOR_Sugar_Sort;
 
-    private final IStrategoConstructor CTOR_Op;
+    public final IStrategoConstructor CTOR_ExtOpDecl;
 
-    private final IStrategoConstructor CTOR_Cons;
+    public final IStrategoConstructor CTOR_Match;
 
-    private final IStrategoConstructor CTOR_Nil;
+    public final IStrategoConstructor CTOR_Op;
 
-    private final IStrategoConstructor CTOR_Anno;
+    public final IStrategoConstructor CTOR_Cons;
 
-    private final IStrategoConstructor CTOR_Int;
+    public final IStrategoConstructor CTOR_Nil;
 
-    private final IStrategoConstructor CTOR_Real;
+    public final IStrategoConstructor CTOR_Anno;
 
-    private final IStrategoConstructor CTOR_Str;
+    public final IStrategoConstructor CTOR_Int;
 
-    private final IStrategoConstructor CTOR_Var;
+    public final IStrategoConstructor CTOR_Real;
 
-    private final IStrategoConstructor CTOR_Explode;
+    public final IStrategoConstructor CTOR_Str;
 
-    private final IStrategoConstructor CTOR_ConstType;
+    public final IStrategoConstructor CTOR_Var;
 
-    private final IStrategoConstructor CTOR_FunType;
+    public final IStrategoConstructor CTOR_Explode;
 
-    private final IStrategoConstructor CTOR_ExtSDef;
+    public final IStrategoConstructor CTOR_ConstType;
 
-    private final IStrategoConstructor CTOR_SDefT;
+    public final IStrategoConstructor CTOR_FunType;
 
-    private final IStrategoConstructor CTOR_AnnoDef;
+    public final IStrategoConstructor CTOR_ExtSDef;
 
-    private final IStrategoConstructor CTOR_As;
+    public final IStrategoConstructor CTOR_SDefT;
 
-    private final IStrategoConstructor CTOR_Wld;
+    public final IStrategoConstructor CTOR_AnnoDef;
 
-    private final IStrategoConstructor CTOR_Build;
+    public final IStrategoConstructor CTOR_As;
 
-    private final IStrategoConstructor CTOR_Scope;
+    public final IStrategoConstructor CTOR_Wld;
 
-    private final IStrategoConstructor CTOR_Seq;
+    public final IStrategoConstructor CTOR_Build;
 
-    private final IStrategoConstructor CTOR_GuardedLChoice;
+    public final IStrategoConstructor CTOR_Scope;
 
-    private final IStrategoConstructor CTOR_Id;
+    public final IStrategoConstructor CTOR_Seq;
 
-    private final IStrategoConstructor CTOR_CallT;
+    public final IStrategoConstructor CTOR_GuardedLChoice;
 
-    private final IStrategoConstructor CTOR_PrimT;
+    public final IStrategoConstructor CTOR_Id;
 
-    private final IStrategoConstructor CTOR_Let;
+    public final IStrategoConstructor CTOR_CallT;
 
-    private final IStrategoConstructor CTOR_Fail;
+    public final IStrategoConstructor CTOR_PrimT;
 
-    private final IStrategoConstructor CTOR_All;
+    public final IStrategoConstructor CTOR_Let;
 
-    private final IStrategoConstructor CTOR_One;
+    public final IStrategoConstructor CTOR_Fail;
 
-    private final IStrategoConstructor CTOR_Some;
+    public final IStrategoConstructor CTOR_All;
 
-    private final IStrategoConstructor CTOR_ImportTerm;
+    public final IStrategoConstructor CTOR_One;
+
+    public final IStrategoConstructor CTOR_Some;
+
+    public final IStrategoConstructor CTOR_ImportTerm;
+
+    public final IStrategoConstructor CTOR_OpDecl;
 
     public StrategoSignature(ITermFactory factory) {
 
+        CTOR_Sugar_Sort = factory.makeConstructor("Sort", 2);
+
+        CTOR_OpDecl = factory.makeConstructor("OpDecl", 2);
         CTOR_Op = factory.makeConstructor("Op", 2);
+        CTOR_ExtOpDecl = factory.makeConstructor("ExtOpDecl", 2);
         CTOR_Cons = factory.makeConstructor("Cons", 2);
         CTOR_Nil = factory.makeConstructor("Nil", 0);
         CTOR_Anno = factory.makeConstructor("Anno", 2);
