@@ -82,28 +82,28 @@
 
 		<copy file="${build.dir}/${jarname}-${version}.jar" todir="${dist.dir}/share/java" />
 
-		<tar destfile="${build.dir}/${jarname}-bin-${version}.tar">
-			<tarfileset prefix="${jarname}-bin-${version}" dir="${dist.dir}" includes="share/" />
-			<tarfileset prefix="${jarname}-bin-${version}" dir="${dist.dir}" includes="bin/spoofax" filemode="755" />
+		<tar destfile="${build.dir}/${jarname}-bin-${version}${buildtag}.tar">
+			<tarfileset prefix="${jarname}-bin-${version}${buildtag}" dir="${dist.dir}" includes="share/" />
+			<tarfileset prefix="${jarname}-bin-${version}${buildtag}" dir="${dist.dir}" includes="bin/spoofax" filemode="755" />
 		</tar>
-		<gzip zipfile="${build.dir}/${jarname}-bin-${version}${buildtag}.tar.gz" src="${build.dir}/${jarname}-bin-${version}.tar" />
+		<gzip zipfile="${build.dir}/${jarname}-bin-${version}${buildtag}.tar.gz" src="${build.dir}/${jarname}-bin-${version}${buildtag}.tar" />
 
 	</target>
 
 	<target name="dist" depends="jar" description="--> create the dist tarball">
-		<tar destfile="${build.dir}/${jarname}-${version}.tar">
-			<tarfileset prefix="${jarname}-${version}/" dir="." includes="src/" />
-			<tarfileset prefix="${jarname}-${version}/" dir=".">
+		<tar destfile="${build.dir}/${jarname}-${version}${buildtag}.tar">
+			<tarfileset prefix="${jarname}-${version}${buildtag}/" dir="." includes="src/" />
+			<tarfileset prefix="${jarname}-${version}${buildtag}/" dir=".">
 				<include name="*.xml" />
 				<include name="*.properties" />
 				<include name="spoofax.in" />
 				<include name="LICENSE" />
 				<include name="AUTHORS" />
 			</tarfileset>
-			<tarfileset prefix="${jarname}-${version}/" dir="." includes="INSTALL AUTHORS" />
-			<tarfileset prefix="${jarname}-${version}/" dir="." includes="META-INF/" />
+			<tarfileset prefix="${jarname}-${version}${buildtag}/" dir="." includes="INSTALL AUTHORS" />
+			<tarfileset prefix="${jarname}-${version}${buildtag}/" dir="." includes="META-INF/" />
 		</tar>
-		<gzip zipfile="${build.dir}/${jarname}-${version}${buildtag}.tar.gz" src="${build.dir}/${jarname}-${version}.tar" />
+		<gzip zipfile="${build.dir}/${jarname}-${version}${buildtag}.tar.gz" src="${build.dir}/${jarname}-${version}${buildtag}.tar" />
 	</target>
 
 	<target name="copylibs" depends="compile-sdf-str">
