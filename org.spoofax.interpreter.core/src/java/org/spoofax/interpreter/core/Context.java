@@ -193,13 +193,12 @@ public class Context implements IContext {
         return null;
     }
 
-    @Deprecated
-    public void addOperatorRegistry(String domain, IOperatorRegistry or) {
-        operatorRegistries.put(domain, or);
+    final void internalAddOperatorRegistry(IOperatorRegistry or) {
+        operatorRegistries.put(or.getOperatorRegistryName(), or);
     }
 
     public void addOperatorRegistry(IOperatorRegistry or) {
-        operatorRegistries.put(or.getOperatorRegistryName(), or);
+        internalAddOperatorRegistry(or);
     }
 
     public Collection<String> getStrategyNames() {

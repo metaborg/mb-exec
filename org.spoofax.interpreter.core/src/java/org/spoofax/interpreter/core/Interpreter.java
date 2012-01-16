@@ -50,7 +50,7 @@ public class Interpreter {
 
         loader = new StrategoCoreLoader(context);
 
-        addOperatorRegistry(new SPXInterpreterLibrary());
+        context.internalAddOperatorRegistry(new SPXInterpreterLibrary());
     }
 
     /**
@@ -151,6 +151,10 @@ public class Interpreter {
         return context;
     }
 
+    /*
+     * This function is called by the constructor. If you override it, you cannot rely on the
+     * order for field initialization.
+     */
     protected Context createContext(ITermFactory termFactory, ITermFactory programFactory) {
        return new Context(termFactory, programFactory);
     }
@@ -221,11 +225,6 @@ public class Interpreter {
 	public void load(IStrategoTerm term) throws InterpreterException {
 		loader.load(term);
 	}
-
-    @Deprecated
-    public void addOperatorRegistry(String domainName, IOperatorRegistry or) {
-        context.addOperatorRegistry(domainName, or);
-    }
 
     public void addOperatorRegistry(IOperatorRegistry or) {
         context.addOperatorRegistry(or);
