@@ -2,13 +2,17 @@
 	
     <property name="lib.dir" value="lib" />
     <property name="build.dir" value="target" />
-    <property name="src.dir" value="src" />
+    <property name="src.dir" value="src/main/java" />
 
     <property file="version.properties" />
 
     <path id="lib.path.id">
         <fileset dir="${lib.dir}" />
     </path>
+	
+	<target name="download" description="--> download external dependencies">
+		<get src="http://search.maven.org/remotecontent?filepath=junit/junit/4.10/junit-4.10.jar" dest="lib/" usetimestamp="true" />
+	</target>
 
     <target name="compile" description="--> compile the project">
         <mkdir dir="${build.dir}/classes" />
