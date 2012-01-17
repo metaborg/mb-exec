@@ -399,7 +399,6 @@ public class StrategoCoreLoader {
         	if (!opDecl.getConstructor().getName().equals("OpDeclInj") &&
         	    !opDecl.getConstructor().getName().equals("ExtOpDeclInj")  ) {
         		String name = Tools.javaStringAt(opDecl, 0);
-        		int arity;
         		ArgType argType = parseArgType(Tools.applAt(opDecl, 1));
         		context.addOpDecl(name, new OpDecl(name, argType));
         	}

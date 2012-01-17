@@ -18,7 +18,6 @@ import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.terms.io.InlinePrinter;
 
 public class SSL_printnl extends AbstractPrimitive {
 
@@ -29,12 +28,7 @@ public class SSL_printnl extends AbstractPrimitive {
     @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        // FIXME this is extremely heavy handed
-
-        InlinePrinter pp = new InlinePrinter();
-        targs[0].prettyPrint(pp);
-        String output = pp.getString();
-
+        final String output = targs[0].toString();
         IStrategoList l = (IStrategoList) targs[1]; 
 
         StringBuilder sb = new StringBuilder();
