@@ -1,0 +1,44 @@
+module spoofax/bindings/eclipse/test-eclipse-compiler-ffi
+imports
+  libstratego-lib
+  spoofax/bindings/eclipse/eclipse-compiler-ffi
+  spoofax/bindings/eclipse/EclipseJava
+  
+	
+strategies
+	
+	api-parse-then-topdown-match-typedeclaration =
+	  where(<ecj-open-project> "DummyProject" => p)
+    ; !FILE(<id>) 
+    ; debug 
+    ; ecj-parse-only(|p)
+    ; topdown(try(?TypeDeclaration(_, _, _, _, _, _, _, _) ; debug))
+
+	api-open-parse-match-resolve-type =	
+	  where(<ecj-open-project> "DummyProject" => p)
+    ;!FILE(<id>)
+    ; ecj-parse-and-resolve(|p)
+    ; topdown(try(?TypeDeclaration(_, _, _, _, _, _, _, _) 
+                  ; where(ecj-type-of  ; debug)
+                 )
+             )
+
+	api-open-parse-match-resolve-method =
+      where(<ecj-open-project> "DummyProject" => p)
+    ;!FILE(<id>)
+    ; ecj-parse-and-resolve(|p)
+    ; debug
+    ; topdown(try(?MethodDeclaration(_, _, _, _, _, _, _, _) 
+                  ; where(ecj-method-of  ; debug)
+                 )
+             )
+	
+	api-open-parse-match-resolve-method-and-type =
+      where(<ecj-open-project> "DummyProject" => p)
+    ; !FILE(<id>)
+    ; ecj-parse-and-resolve(|p)
+    ; topdown(try(?MethodInvocation(_, _, _, _) 
+                  ; where(debug ; ecj-method-of ; debug)
+                  ; where(debug ; ecj-type-of ; debug)
+                 )
+             )

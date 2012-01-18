@@ -23,7 +23,7 @@ import org.spoofax.terms.TermFactory;
  * Must be run as Eclipse JUnit Plug-in test
  *
  */
-public class TestLibrary {
+public class TestECJLibrary {
 
     private ECJFactory wef;
     private Interpreter interp;
@@ -33,38 +33,33 @@ public class TestLibrary {
         wef = new ECJFactory();
         interp = new Interpreter(wef, new TermFactory());
         ECJLibrary.attach(interp);
-        interp.load(System.getenv("HOME") + "/.nix-profile/share/stratego-lib/libstratego-lib.ctree");
+        interp.load(System.getProperty("user.home") + "/.nix-profile/share/stratego-lib/libstratego-lib.ctree");
+        interp.load("target/resources/share/ecj-tests.ctree");
         ProjectUtils pu = new ProjectUtils();
-        IJavaProject p = pu.createDummyJavaProject();
+        IJavaProject p = pu.createJavaProject("DummyProject", true);
         pu.createCompilationUnit(p.getProject(), "Foo.java", "package src; class Foo {}");
     }
 
     @Test
     public void open_parse_match_resolve_method_and_type() throws IOException, InterpreterException, CoreException {
-        interp.load(TestLibrary.class.getResourceAsStream("/api-open-parse-match-resolve-method-and-type.ctree"));
         interp.setCurrent(wef.makeString("Foo.java"));
-        assertTrue(interp.invoke("main_0_0"));
+        assertTrue(interp.invoke("api_open_parse_match_resolve_method_and_type_0_0"));
     }
-
     @Test
     public void open_parse_match_resolve_method() throws IOException, InterpreterException, CoreException {
-        interp.load(TestLibrary.class.getResourceAsStream("/api-open-parse-match-resolve-method.ctree"));
         interp.setCurrent(wef.makeString("Foo.java"));
-        assertTrue(interp.invoke("main_0_0"));
+        assertTrue(interp.invoke("api_open_parse_match_resolve_method_0_0"));
     }
 
     @Test
     public void open_parse_match_resolve_type() throws IOException, InterpreterException, CoreException {
-        interp.load(TestLibrary.class.getResourceAsStream("/api-open-parse-match-resolve-type.ctree"));
         interp.setCurrent(wef.makeString("Foo.java"));
-        assertTrue(interp.invoke("main_0_0"));
+        assertTrue(interp.invoke("api_open_parse_match_resolve_type_0_0"));
     }
 
     @Test
     public void open_parse_then_topdown_match_typedeclaration() throws IOException, InterpreterException, CoreException {
-        interp.load(TestLibrary.class.getResourceAsStream("/api-parse-then-topdown-match-typedeclaration.ctree"));
         interp.setCurrent(wef.makeString("Foo.java"));
-        assertTrue(interp.invoke("main_0_0"));
+        assertTrue(interp.invoke("api_parse_then_topdown_match_typedeclaration_0_0"));
     }
-
 }

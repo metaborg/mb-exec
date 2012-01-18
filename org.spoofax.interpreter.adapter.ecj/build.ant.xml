@@ -1,0 +1,40 @@
+<project name="spoofax-interpreter-adapter-ecj" default="bundle-ctree">
+
+	<property name="build.dir" value="target" />
+	<property name="src.dir" value="src/main/java" />
+	<property name="strategoxt.dir" value="${user.home}/.nix-profile" />
+
+	<property file="version.properties" />
+
+	<target name="compile-str" description="--> compile Stratego code">
+		<mkdir dir="${build.dir}/resources/share" />
+		<exec executable="${strategoxt.dir}/bin/strc" failonerror="true">
+			<arg value="-i" />
+			<arg value="src/main/stratego/spoofax/bindings/eclipse/eclipse-compiler-ffi.str" />
+			<arg value="-I" />
+			<arg value="src/main/stratego" />
+			<arg value="-F" />
+			<arg value="-c" />
+			<arg value="--library" />
+			<arg value="-o" />
+			<arg value="${build.dir}/resources/share/ecj-library.ctree" />
+		</exec>
+		<exec executable="${strategoxt.dir}/bin/strc" failonerror="true">
+			<arg value="-i" />
+			<arg value="src/test/stratego/spoofax/bindings/eclipse/test-eclipse-compiler-ffi.str" />
+			<arg value="-I" />
+			<arg value="src/main/stratego" />
+			<arg value="-I" />
+			<arg value="src/test/stratego" />
+			<arg value="-F" />
+			<arg value="-c" />
+			<arg value="--library" />
+			<arg value="-o" />
+			<arg value="${build.dir}/resources/share/ecj-tests.ctree" />
+		</exec>
+	</target>
+
+	<target name="bundle-ctree" depends="compile-str">
+	  <copy todir="bin/share/" file="${build.dir}/resources/share/ecj-library.ctree"/>
+	</target>
+</project>
