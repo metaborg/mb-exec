@@ -77,7 +77,7 @@ public class ConcreteInterpreter extends Interpreter {
 			sugarParser.setUseStructureRecovery(false);
 			setCurrent(getFactory().makeList());
 			setIOAgent(new ConcreteIOAgent());
-			addOperatorRegistry(new JSGLRLibrary());
+			JSGLRLibrary.attach(this);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} catch (InterpreterException e) {
