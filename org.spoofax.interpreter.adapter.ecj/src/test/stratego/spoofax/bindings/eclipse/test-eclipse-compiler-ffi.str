@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2007-2012, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 module spoofax/bindings/eclipse/test-eclipse-compiler-ffi
 imports
   libstratego-lib
@@ -7,14 +12,45 @@ imports
 	
 strategies
 	
-	api-parse-then-topdown-match-typedeclaration =
-	  where(<ecj-open-project> "DummyProject" => p)
-    ; !FILE(<id>) 
-    ; debug 
-    ; ecj-parse-only(|p)
-    ; topdown(try(?TypeDeclaration(_, _, _, _, _, _, _, _) ; debug))
+	test-collect-all-ctors = 
+	  with-unresolved-ast(collect-all(\ c#(xs) -> (c, <length> xs) \))
+	
+	test-build-minimal-cu = 
+	  with-unresolved-ast(!CompilationUnit(PackageDeclaration(None(), [], SimpleName("foo")), [], []))
+	
+	test-collect-all-typedeclarations = 
+	  with-unresolved-ast(collect-all(?TypeDeclaration(_, _, _, _, _, _, _, _)))
+	
+	test-topdown-decontruct = 
+	  with-unresolved-ast(topdown(where({x,y:?x#(y)})))
 
-	api-open-parse-match-resolve-type =	
+	test-topdown-id = 
+	  with-unresolved-ast(topdown(id))
+	
+	test-rewrite-return = 
+	  with-unresolved-ast(where(not(collect(is-datainvariant-method) => [])) ; bottomup(try(RewriteReturn)))
+  
+    with-unresolved-ast(s) = 
+      where(<ecj-open-project> "DummyProject" => p)
+      ; !FILE(<id>) 
+      ; ecj-parse-only(|p)
+      ; ecj-with-ast(s|<id>)
+
+    is-datainvariant-method =
+      ?MethodDeclaration(_,_,_,_,SimpleName("dataInvariant"),_,_,_)
+   
+    RewriteReturn:
+      r@ReturnStatement(_) -> Block([ExpressionStatement(MethodInvocation(
+                                             None()
+                                           , SimpleName("dataInvariant")                                                                                                           
+                                           , []                                                                                                           
+                                           , []))
+                               , r])
+	
+	test-parse-then-topdown-match-typedeclaration =
+	  with-unresolved-ast(topdown(try(?TypeDeclaration(_, _, _, _, _, _, _, _))))
+
+	test-open-parse-match-resolve-type =	
 	  where(<ecj-open-project> "DummyProject" => p)
     ;!FILE(<id>)
     ; ecj-parse-and-resolve(|p)
@@ -23,7 +59,7 @@ strategies
                  )
              )
 
-	api-open-parse-match-resolve-method =
+	test-open-parse-match-resolve-method =
       where(<ecj-open-project> "DummyProject" => p)
     ;!FILE(<id>)
     ; ecj-parse-and-resolve(|p)
@@ -33,7 +69,7 @@ strategies
                  )
              )
 	
-	api-open-parse-match-resolve-method-and-type =
+	test-open-parse-match-resolve-method-and-type =
       where(<ecj-open-project> "DummyProject" => p)
     ; !FILE(<id>)
     ; ecj-parse-and-resolve(|p)

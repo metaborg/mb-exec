@@ -16,7 +16,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.core.Interpreter;
+import org.spoofax.interpreter.core.InterpreterErrorExit;
 import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterExit;
+import org.spoofax.interpreter.core.UndefinedStrategyException;
 import org.spoofax.terms.TermFactory;
 
 /**
@@ -43,23 +46,57 @@ public class TestECJLibrary {
     @Test
     public void open_parse_match_resolve_method_and_type() throws IOException, InterpreterException, CoreException {
         interp.setCurrent(wef.makeString("Foo.java"));
-        assertTrue(interp.invoke("api_open_parse_match_resolve_method_and_type_0_0"));
+        assertTrue(interp.invoke("test_open_parse_match_resolve_method_and_type_0_0"));
     }
+    
+    @Test
+    public void test_collect_all_ctors() throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+        interp.setCurrent(wef.makeString("Foo.java"));
+        assertTrue(interp.invoke("test_collect_all_ctors_0_0"));
+    }
+
+    @Test
+    public void test_build_minimal_cu() throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+        interp.setCurrent(wef.makeString("Foo.java"));
+        assertTrue(interp.invoke("test_build_minimal_cu_0_0"));
+    }
+
+    @Test
+    public void test_collect_all_typedeclarations() throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+        interp.setCurrent(wef.makeString("Foo.java"));
+        assertTrue(interp.invoke("test_collect_all_typedeclarations_0_0"));
+    }
+
+    @Test
+    public void test_topdown_decontruct() throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+        interp.setCurrent(wef.makeString("Foo.java"));
+        assertTrue(interp.invoke("test_topdown_decontruct_0_0"));
+    }
+
+    @Test
+    public void test_topdown_id() throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+        interp.setCurrent(wef.makeString("Foo.java"));
+        assertTrue(interp.invoke("test_topdown_id_0_0"));
+    }
+    
+    
+    
+    
     @Test
     public void open_parse_match_resolve_method() throws IOException, InterpreterException, CoreException {
         interp.setCurrent(wef.makeString("Foo.java"));
-        assertTrue(interp.invoke("api_open_parse_match_resolve_method_0_0"));
+        assertTrue(interp.invoke("test_open_parse_match_resolve_method_0_0"));
     }
 
     @Test
     public void open_parse_match_resolve_type() throws IOException, InterpreterException, CoreException {
         interp.setCurrent(wef.makeString("Foo.java"));
-        assertTrue(interp.invoke("api_open_parse_match_resolve_type_0_0"));
+        assertTrue(interp.invoke("test_open_parse_match_resolve_type_0_0"));
     }
 
     @Test
     public void open_parse_then_topdown_match_typedeclaration() throws IOException, InterpreterException, CoreException {
         interp.setCurrent(wef.makeString("Foo.java"));
-        assertTrue(interp.invoke("api_parse_then_topdown_match_typedeclaration_0_0"));
+        assertTrue(interp.invoke("test_parse_then_topdown_match_typedeclaration_0_0"));
     }
 }

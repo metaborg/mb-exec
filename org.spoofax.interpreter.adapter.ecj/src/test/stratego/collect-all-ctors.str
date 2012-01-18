@@ -1,7 +1,0 @@
-module collect-all-ctors
-imports
-  libstratego-lib	  
-strategies
-
-
-  main = debug ; collect-all(\ c#(xs) -> (c, <length> xs) \)

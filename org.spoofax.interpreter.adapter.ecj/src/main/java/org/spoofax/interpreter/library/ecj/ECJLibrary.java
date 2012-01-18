@@ -77,6 +77,7 @@ public class ECJLibrary extends AbstractStrategoOperatorRegistry {
         add(new ECJ_create_java_project());
         add(new ECJ_delete_project());
         add(new ECJ_list_projects());
+        add(new ECJ_with_ast());
     }
 
     public IProject getCurrentProject() {

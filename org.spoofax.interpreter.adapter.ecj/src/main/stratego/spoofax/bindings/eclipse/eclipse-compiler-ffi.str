@@ -325,6 +325,11 @@ strategies
     ?cu
     ; prim("ECJ_rewrite_file", typerw, importrw | cu)
 
+  /** @type a -> b */
+  ecj-with-ast(s : a -> b | astNode : ASTNode) = 
+    ?cu
+    ; prim("ECJ_with_ast", s | astNode)
+
 strategies
 
   /** 
