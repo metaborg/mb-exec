@@ -5,5 +5,6 @@ Bundle-SymbolicName: org.spoofax.interpreter.library.java
 Bundle-Version: 0.1.1.qualifier
 Export-Package: org.spoofax.interpreter.library.java
 Bundle-Vendor: Spoofax.org
-Require-Bundle: org.spoofax.interpreter.core
+Require-Bundle: org.spoofax.interpreter.core,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
