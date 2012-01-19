@@ -50,21 +50,17 @@ public class SpoofaxInterpreter {
 		} catch (TokenExpectedException e) {
 			ioAgent.err.println(e.getMessage());
 		} catch (InterpreterErrorExit e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e); // FIXME might want to report this sensibly
 		} catch (BadTokenException e) {
 			ioAgent.err.println(e.getMessage());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e); // FIXME might want to report this sensibly
 		} catch (InterpreterExit e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e); // FIXME might want to report this sensibly
 		} catch (UndefinedStrategyException e) {
 			ioAgent.err.println(e.getMessage());
 		} catch (SGLRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e); // FIXME might want to report this sensibly
 		} catch (InterpreterException e) {
 			if(e.getCause() != null)
 				ioAgent.err.println(e.getCause().getMessage());
@@ -75,6 +71,10 @@ public class SpoofaxInterpreter {
 			ioAgent.err.flush();
 		}
 		return true;
+	}
+
+	private void logError(Exception e) {
+		InterpreterPlugin.logError("Interpreter failure", e);
 	}
 
 
