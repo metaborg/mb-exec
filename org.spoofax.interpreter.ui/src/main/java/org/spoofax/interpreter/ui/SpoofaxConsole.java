@@ -13,6 +13,7 @@ import java.io.Writer;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.console.IOConsole;
 import org.eclipse.ui.console.IOConsoleOutputStream;
 import org.spoofax.interpreter.library.IOAgent;
@@ -34,7 +35,7 @@ public class SpoofaxConsole extends IOConsole implements Runnable {
 		public Writer getWriter(int fd) {
 			if (fd == CONST_STDERR) {
 				return err;
-			} else if(fd == CONST_STDOUT) {
+			} else if (fd == CONST_STDOUT) {
 				return out;
 			}
 			return super.getWriter(fd);
@@ -55,27 +56,40 @@ public class SpoofaxConsole extends IOConsole implements Runnable {
 
 	@Override
 	public void run() {
-		IOConsoleOutputStream err = newOutputStream();
-		IOConsoleOutputStream out = newOutputStream();
-		IOConsoleOutputStream prompt = newOutputStream();
-		err.setColor(new Color(null, 255, 0, 0));
-		out.setColor(new Color(null, 234,123,195));
-		prompt.setColor(new Color(null, 95, 200, 23));
-		ConsoleIOAgent ioAgent = new ConsoleIOAgent(out, err);
-		SpoofaxInterpreter intp = new SpoofaxInterpreter(ioAgent);
-		BufferedReader br = new BufferedReader(new InputStreamReader(getInputStream()));
-		for(;;) {
-			try {
-				prompt.write("> ");
-				prompt.flush();
-				String line = br.readLine();
-				if(!intp.eval(line))
+		try {
+			final IOConsoleOutputStream err = newOutputStream();
+			final IOConsoleOutputStream out = newOutputStream();
+			final IOConsoleOutputStream prompt = newOutputStream();
+
+			Display.getDefault().syncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					err.setColor(new Color(null, 255, 0, 0));
+					out.setColor(new Color(null, 234, 123, 195));
+					prompt.setColor(new Color(null, 95, 200, 23));
+				}
+			});
+			
+			ConsoleIOAgent ioAgent = new ConsoleIOAgent(out, err);
+			SpoofaxInterpreter intp = new SpoofaxInterpreter(ioAgent);
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					getInputStream()));
+			for (;;) {
+				try {
+					prompt.write("> ");
+					prompt.flush();
+					String line = br.readLine();
+					if (!intp.eval(line))
+						break;
+				} catch (IOException e) {
+					// assume that the console has been closed
 					break;
-			} catch (IOException e) {
-				// do nothing
+				}
 			}
+		} catch (Exception e) {
+			InterpreterPlugin.logError("Fatal error in interpreter thread", e);
 		}
 	}
-
 
 }
