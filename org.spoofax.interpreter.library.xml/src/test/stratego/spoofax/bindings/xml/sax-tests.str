@@ -1,6 +1,13 @@
-module parse-xml-test
-imports stratego-lib
-
+/*
+ * Copyright (c) 2011-2012, Tobi Vollebregt
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
+module spoofax/bindings/xml/sax-tests
+imports 
+  libstratego-lib
+  spoofax/bindings/xml/sax
+  
 strategies
 
   main =
@@ -16,38 +23,14 @@ strategies
 
 strategies
 
-  xml-set-feature = ?(a, b); prim("XML_set_feature", a, b)
-  xml-set-feature(|a, b) = prim("XML_set_feature", a, b)
-  xml-parse-string = ?t; prim("XML_parse_string", t)
-  xml-get-parse-errors = prim("XML_get_parse_errors")
-
-  with-feature(s | feature, enable) =
-  	xml-set-feature(|feature, enable); s;
-  	xml-set-feature(|feature, <subti> (1, enable)) 
-
   with-mixed-content(s) =
-  	with-feature(s | "http://spoofax.org/sax/features/mixed-content", 1)
+  	xml-with-feature(s | "http://spoofax.org/sax/features/mixed-content", 1)
 
   without-character-data(s) =
-  	with-feature(s | "http://spoofax.org/sax/features/character-data", 0)
+  	xml-with-feature(s | "http://spoofax.org/sax/features/character-data", 0)
 
   with-namespaces(s) =
-  	with-feature(s | "http://xml.org/sax/features/namespaces", 1)
-
-// namespace aware
-signature
-  constructors
-    Element   : QName * List(Attribute) * List(Element) -> Element
-    Attribute : QName * String -> Attribute
-    Text      : String -> Element
-    QName     : String * String -> QName
-
-// not namespace aware 
-signature
-  constructors
-    Element   : String * List(Attribute) * List(Element) -> Element
-    Attribute : String * String -> Attribute
-    Text      : String -> Element
+  	xml-with-feature(s | "http://xml.org/sax/features/namespaces", 1)
 
 strategies
 

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2011-2012, Tobi Vollebregt
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.library.xml.test;
 
 import java.io.IOException;
@@ -16,12 +21,13 @@ public class XMLLibraryTest extends AbstractInterpreterTest {
 
 	@Override
 	protected void setUp() throws Exception {
-		super.setUp("tests/data");
+		super.setUp("target/resources/share");
 		itp.addOperatorRegistry(new XMLLibrary());
+		itp.load("target/resources/share/libstratego-lib.ctree");
 	}
 
 	public void testParseXml() throws IOException, InterpreterException {
-		interpTest("parse-xml-test", "(22,0)");
+		interpTest("sax-tests", "(22,0)");
 	}
 
 	public void interpTest(String test, String result) throws IOException, InterpreterException {
