@@ -176,8 +176,8 @@
 	</target>
 
 	<target name="bundle-ctree" depends="copylibs">
-		<copy todir="bin/share/">
-			<fileset dir="${build.dir}/share/" />
+		<copy todir="share/"> 
+			<fileset dir="${build.dir}/share/" includes="*.ctree,*.tbl"/>
 		</copy>
 	</target>
 
