@@ -65,4 +65,5 @@
     </junit>
    </target>
 
+  <target name="bundle-ctree" />
 </project>
