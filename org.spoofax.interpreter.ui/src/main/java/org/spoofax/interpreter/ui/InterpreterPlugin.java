@@ -5,9 +5,8 @@
  */
 package org.spoofax.interpreter.ui;
 
-import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class InterpreterPlugin extends AbstractUIPlugin {
@@ -21,15 +20,20 @@ public class InterpreterPlugin extends AbstractUIPlugin {
 		return instance;
 	}
 	
-	public static void logError(final String message, final Throwable t) {
-		final ILog log = instance().getLog();
-		final String pluginId = "org.spoofax.interpreter.ui";
-		Display.getDefault().syncExec(new Runnable() {
+	public static void logError(String message, Throwable t) {
+		if (message != null) 
+			System.err.println(message);
+		t.printStackTrace();
+
+		if (message == null) 
+			message = t.getLocalizedMessage() == null ? t.getMessage() : t.getLocalizedMessage();
 			
-			@Override
-			public void run() {
-				log.log(new Status(Status.ERROR, pluginId, message, t));
-			}
-		});
+		instance().getLog().log(new SpoofaxStatus(IStatus.ERROR, 0, message, t));
+	}
+	
+	private static class SpoofaxStatus extends Status {
+		SpoofaxStatus(int severity, int code, String message, Throwable exception) {
+			super(severity, "org.spoofax.interpreter.ui", code, message, exception);
+		}
 	}
 }
