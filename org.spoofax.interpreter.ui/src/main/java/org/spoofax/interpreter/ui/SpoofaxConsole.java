@@ -19,6 +19,9 @@ import org.eclipse.ui.console.IOConsoleOutputStream;
 import org.spoofax.interpreter.library.IOAgent;
 
 public class SpoofaxConsole extends IOConsole implements Runnable {
+	
+	public static final String CONSOLE_NAME =
+		"Spoofax Console";
 
 	public static class ConsoleIOAgent extends IOAgent {
 
@@ -44,7 +47,7 @@ public class SpoofaxConsole extends IOConsole implements Runnable {
 	}
 
 	public SpoofaxConsole() {
-		super("Spoofax Console", ImageDescriptor.getMissingImageDescriptor());
+		super(CONSOLE_NAME, ImageDescriptor.getMissingImageDescriptor());
 		Thread t = new Thread(this);
 		t.start();
 	}
@@ -79,6 +82,7 @@ public class SpoofaxConsole extends IOConsole implements Runnable {
 				try {
 					prompt.write("> ");
 					prompt.flush();
+					
 					String line = br.readLine();
 					if (!intp.eval(line))
 						break;
