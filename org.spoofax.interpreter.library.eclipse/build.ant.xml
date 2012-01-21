@@ -25,7 +25,7 @@
 	</target>
 
 	<target name="bundle-ctree" depends="compile-str">
-		<copy todir="bin/share/" file="${target.ctree}"/>
+		<copy todir="share/" file="${target.ctree}"/>
 	</target>
 	
 </project>
