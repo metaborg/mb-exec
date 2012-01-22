@@ -9,7 +9,7 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.StrategoConstructor;
 
-public class ASMBoolean extends WrappedASMNode {
+public class ASMBoolean extends AbstractASMNode {
 
 	private static final long serialVersionUID = 2625229181042123567L;
 	private static final IStrategoConstructor CTOR = new StrategoConstructor("Boolean", 1);

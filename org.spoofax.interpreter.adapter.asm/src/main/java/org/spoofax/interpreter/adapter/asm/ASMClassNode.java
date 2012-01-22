@@ -10,14 +10,14 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.StrategoConstructor;
 
-public class WrappedClassNode extends WrappedASMNode {
+public class ASMClassNode extends AbstractASMNode {
 
 	private static final long serialVersionUID = 7356259800500118280L;
 	
 	private final ClassNode wrappee;
 	private final static IStrategoConstructor CTOR = new StrategoConstructor("ClassNode", 17);
 	
-	WrappedClassNode(final ClassNode wrappee) {
+	ASMClassNode(final ClassNode wrappee) {
 		super(CTOR);
 		this.wrappee = wrappee;
 	}

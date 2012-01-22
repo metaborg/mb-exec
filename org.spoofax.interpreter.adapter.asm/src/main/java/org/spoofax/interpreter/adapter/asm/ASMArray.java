@@ -11,13 +11,13 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.skeleton.SkeletonStrategoList;
 
-public class WrappedASMArray extends SkeletonStrategoList {
+public class ASMArray extends SkeletonStrategoList {
 
 	private static final long serialVersionUID = -4370875591624520389L;
 	
 	private final Object[] wrappee;
 
-	WrappedASMArray(Object[] wrappee) {
+	ASMArray(Object[] wrappee) {
 		super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 		this.wrappee = wrappee;
 	}

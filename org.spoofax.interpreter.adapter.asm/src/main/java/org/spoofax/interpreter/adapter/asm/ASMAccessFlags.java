@@ -11,13 +11,13 @@ import org.spoofax.terms.StrategoConstructor;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.skeleton.SkeletonStrategoAppl;
 
-public class WrappedAccessFlags extends SkeletonStrategoAppl {
+public class ASMAccessFlags extends SkeletonStrategoAppl {
 
 	private static final long serialVersionUID = 1114963759066088382L;
 	private static final IStrategoConstructor CTOR = new StrategoConstructor("AccessFlags", 1);
 	private final int wrappee;
 	
-	WrappedAccessFlags(int wrappee) {
+	ASMAccessFlags(int wrappee) {
 		super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 		this.wrappee = wrappee;
 	}

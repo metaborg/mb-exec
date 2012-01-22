@@ -5,19 +5,19 @@
  */
 package org.spoofax.interpreter.adapter.asm;
 
-import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.StrategoConstructor;
 
-public class WrappedLocalVariable extends WrappedASMNode {
+public class ASMFieldInsnNode extends AbstractASMNode {
 
-	private static final long serialVersionUID = 5082686857335473278L;
+	private static final long serialVersionUID = -924850942458159851L;
 	
-	private LocalVariableNode wrappee;
-	private static final IStrategoConstructor CTOR = new StrategoConstructor("LocalVariable", 6); 
-	
-	WrappedLocalVariable(LocalVariableNode node) {
+	private final FieldInsnNode wrappee;
+	private static final IStrategoConstructor CTOR = new StrategoConstructor("FieldInsnNode", 2);
+
+	ASMFieldInsnNode(FieldInsnNode node) {
 		super(CTOR);
 		this.wrappee = node;
 	}
@@ -27,18 +27,15 @@ public class WrappedLocalVariable extends WrappedASMNode {
 		case 0:
 			return ASMFactory.wrap(wrappee.desc);
 		case 1:
-			return ASMFactory.wrap(wrappee.index);
-		case 2:
 			return ASMFactory.wrap(wrappee.name);
-		case 3: 
-			return ASMFactory.wrap(wrappee.signature);
-		case 4: 
-			return ASMFactory.wrap(wrappee.start);
-		case 5: 
-			return ASMFactory.wrap(wrappee.end);
+		case 2:
+			return ASMFactory.wrap(wrappee.owner);
+		case 3:
+			return ASMFactory.wrap(wrappee.getOpcode());
+		case 4:
+			return ASMFactory.wrap(wrappee.getType());
 		}
 		throw new ArrayIndexOutOfBoundsException();
 	}
-
 
 }

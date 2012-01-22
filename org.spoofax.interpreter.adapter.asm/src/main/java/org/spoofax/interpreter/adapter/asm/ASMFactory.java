@@ -85,14 +85,14 @@ public class ASMFactory extends SkeletonTermFactory {
 	}
 
 	public static IStrategoInt wrap(long value) {
-		return new WrappedInt(value);
+		return new ASMInt(value);
 	}
 
 	public static IStrategoTerm wrap(List<?> list) {
 		if(list == null)
 			return None.INSTANCE;
 		else 
-			return new WrappedASMList(list);
+			return new ASMList(list);
 	}
 
 	public static IStrategoTerm genericWrap(Object node) {
@@ -155,7 +155,7 @@ public class ASMFactory extends SkeletonTermFactory {
 	private static IStrategoTerm wrap(ClassNode node) {
 		if(node == null)
 			return None.INSTANCE;
-		return new WrappedClassNode(node);
+		return new ASMClassNode(node);
 	}
 
 	
@@ -241,7 +241,7 @@ public class ASMFactory extends SkeletonTermFactory {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedFieldInsnNode(node);
+			return new ASMFieldInsnNode(node);
 	}
 
 	private static IStrategoTerm wrap(LookupSwitchInsnNode node) {
@@ -262,7 +262,7 @@ public class ASMFactory extends SkeletonTermFactory {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedIntInsnNode(node);
+			return new ASMIntInsnNode(node);
 	}
 
 	private static IStrategoTerm wrap(IincInsnNode node) {
@@ -283,35 +283,35 @@ public class ASMFactory extends SkeletonTermFactory {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedLdcInsnNode(node);
+			return new ASMLdcInsnNode(node);
 	}
 
 	private static IStrategoTerm wrap(TypeInsnNode node) {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedTypeInsnNode(node);
+			return new ASMTypeInsnNode(node);
 	}
 
 	private static IStrategoTerm wrap(InsnNode node) {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedInsnNode(node);
+			return new ASMInsnNode(node);
 	}
 
 	private static IStrategoTerm wrap(MethodInsnNode node) {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedMethodInsnNode(node);
+			return new ASMMethodInsnNode(node);
 	}
 
 	private static IStrategoTerm wrap(VarInsnNode node) {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedVarInsnNode(node);
+			return new ASMVarInsnNode(node);
 	}
 
 	private static IStrategoTerm wrap(FrameNode node) {
@@ -332,56 +332,56 @@ public class ASMFactory extends SkeletonTermFactory {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedLineNumberNode(node);
+			return new ASMLineNumberNode(node);
 	}
 
 	private static IStrategoTerm wrap(LocalVariableNode node) {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedLocalVariable(node);
+			return new ASMLocalVariable(node);
 	}
 
 	private static IStrategoTerm wrap(MethodNode node) {
 		if(node == null)
 			return None.INSTANCE;
 		else 
-			return new WrappedMethodNode(node);
+			return new ASMMethodNode(node);
 	}
 
 	public static IStrategoTerm wrap(String node) {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedASMString(node);
+			return new ASMString(node);
 	}
 
 	public static IStrategoTerm wrap(InsnList instructions) {
 		if(instructions == null)
 			return None.INSTANCE;
 		else
-			return new WrappedInsnList(instructions);
+			return new ASMInsnList(instructions);
 	}
 
 	public static IStrategoTerm wrap(List<?>[] node) {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedASMArray(node);
+			return new ASMArray(node);
 	}
 
 	public static IStrategoTerm wrap(LabelNode node) {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedLabelNode(node);
+			return new ASMLabelNode(node);
 	}
 
 	public static IStrategoTerm wrap(Label node) {
 		if(node == null)
 			return None.INSTANCE;
 		else
-			return new WrappedLabel(node);
+			return new ASMLabel(node);
 	}
 
 	@Override
@@ -457,7 +457,7 @@ public class ASMFactory extends SkeletonTermFactory {
 	}
 
 	public static IStrategoTerm wrapAccessFlags(int access) {
-		return new WrappedAccessFlags(access);
+		return new ASMAccessFlags(access);
 	}
 
 }

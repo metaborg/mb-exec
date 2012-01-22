@@ -5,7 +5,7 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.StrategoConstructor;
 
-public class ASMAnnotationNode extends WrappedASMNode {
+public class ASMAnnotationNode extends AbstractASMNode {
 
 	private static final IStrategoConstructor CTOR = new StrategoConstructor("AnnotationNode", 1);
 	private final AnnotationNode wrappee;

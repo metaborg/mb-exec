@@ -9,11 +9,11 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.skeleton.SkeletonStrategoInt;
 
-public class WrappedInt extends SkeletonStrategoInt {
+public class ASMInt extends SkeletonStrategoInt {
 
 	private static final long serialVersionUID = 505072984325810240L;
 
-	WrappedInt(long value) {
+	ASMInt(long value) {
 		super(value, TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 	}
 

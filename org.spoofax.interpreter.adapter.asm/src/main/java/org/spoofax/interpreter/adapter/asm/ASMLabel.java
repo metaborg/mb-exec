@@ -5,19 +5,19 @@
  */
 package org.spoofax.interpreter.adapter.asm;
 
-import org.objectweb.asm.tree.TypeInsnNode;
+import org.objectweb.asm.Label;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.StrategoConstructor;
 
-public class WrappedTypeInsnNode extends WrappedASMNode {
+public class ASMLabel extends AbstractASMNode {
 
-	private static final long serialVersionUID = -1999086677332606622L;
+	private static final long serialVersionUID = -2061512969617267941L;
 	
-	private final TypeInsnNode wrappee;
-	private static final IStrategoConstructor CTOR = new StrategoConstructor("TypeInsnNode", 2);
+	private final Label wrappee;
+	private static final IStrategoConstructor CTOR = new StrategoConstructor("Label", 1);
 
-	WrappedTypeInsnNode(TypeInsnNode node) {
+	ASMLabel(Label node) {
 		super(CTOR);
 		this.wrappee = node;
 	}
@@ -25,11 +25,16 @@ public class WrappedTypeInsnNode extends WrappedASMNode {
 	public IStrategoTerm getSubterm(int index) {
 		switch(index) {
 		case 0:
-			return ASMFactory.wrapOpcode(wrappee.getOpcode());
-		case 1:
-			return ASMFactory.wrap(wrappee.desc);
+			try {
+				return ASMFactory.wrap(wrappee.getOffset());
+			} catch(IllegalStateException e) {
+				return None.INSTANCE;
+			}
 		}
 		throw new ArrayIndexOutOfBoundsException();
 	}
 
+	public Label getWrappee() {
+		return wrappee;
+	}
 }

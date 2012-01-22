@@ -10,7 +10,7 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.StrategoConstructor;
 
-public class ASMFieldNode extends WrappedASMNode {
+public class ASMFieldNode extends AbstractASMNode {
 
 	private static final long serialVersionUID = 9012277892471498939L;
 	private static final IStrategoConstructor CTOR = new StrategoConstructor("FieldNode", 8);

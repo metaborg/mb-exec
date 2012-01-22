@@ -7,11 +7,11 @@ package org.spoofax.interpreter.adapter.asm;
 
 import org.spoofax.terms.StrategoString;
 
-public class WrappedASMString extends StrategoString {
+public class ASMString extends StrategoString {
 
 	private static final long serialVersionUID = 7923632912595160280L;
 
-	WrappedASMString(String value) {
+	ASMString(String value) {
 		super(value);
 	}
 

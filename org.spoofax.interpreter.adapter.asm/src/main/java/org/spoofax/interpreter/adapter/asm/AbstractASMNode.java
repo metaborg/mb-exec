@@ -10,13 +10,13 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.skeleton.SkeletonStrategoAppl;
 
-public abstract class WrappedASMNode extends SkeletonStrategoAppl {
+public abstract class AbstractASMNode extends SkeletonStrategoAppl {
 
 	private static final long serialVersionUID = 1L;
 	
 	private final IStrategoConstructor constructor;
 	
-	WrappedASMNode(final IStrategoConstructor constructor) {
+	AbstractASMNode(final IStrategoConstructor constructor) {
 		super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 		this.constructor = constructor;
 	}
