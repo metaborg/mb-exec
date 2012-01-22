@@ -6,14 +6,14 @@
 package org.spoofax.interpreter.adapter.asm;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.terms.StrategoInt;
 import org.spoofax.terms.TermFactory;
+import org.spoofax.terms.skeleton.SkeletonStrategoInt;
 
-public class WrappedInt extends StrategoInt {
+public class WrappedInt extends SkeletonStrategoInt {
 
 	private static final long serialVersionUID = 505072984325810240L;
 
-	WrappedInt(int value) {
+	WrappedInt(long value) {
 		super(value, TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 	}
 

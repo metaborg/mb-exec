@@ -5,19 +5,18 @@
  */
 package org.spoofax.interpreter.adapter.asm;
 
-import org.objectweb.asm.tree.FrameNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.StrategoConstructor;
 
-public class ASMFrameNode extends WrappedASMNode {
+public class ASMTryCatchBlocNode extends WrappedASMNode {
 
-	private static final long serialVersionUID = 5861904289421707200L;
-	private static final IStrategoConstructor CTOR = new StrategoConstructor("FrameNode", 3);
-	
-	private final FrameNode wrappee;
-	
-	ASMFrameNode(FrameNode wrappee) {
+	private static final long serialVersionUID = 8068162251532568248L;
+	private static final IStrategoConstructor CTOR = new StrategoConstructor("TryCatchBlockNode", 3);
+	private final TryCatchBlockNode wrappee;
+
+	ASMTryCatchBlocNode(TryCatchBlockNode wrappee) {
 		super(CTOR);
 		this.wrappee = wrappee;
 	}
@@ -26,11 +25,13 @@ public class ASMFrameNode extends WrappedASMNode {
 	public IStrategoTerm getSubterm(int index) {
 		switch(index) {
 		case 0:
-			return ASMFactory.wrapOpcode(wrappee.getOpcode());
+			return ASMFactory.wrap(wrappee.end);
 		case 1:
-			return ASMFactory.wrap(wrappee.local);
+			return ASMFactory.wrap(wrappee.handler);
 		case 2:
-			return ASMFactory.wrap(wrappee.stack);
+			return ASMFactory.wrap(wrappee.start);
+		case 3:
+			return ASMFactory.wrap(wrappee.type);
 		}
 		throw new ArrayIndexOutOfBoundsException(index);
 	}

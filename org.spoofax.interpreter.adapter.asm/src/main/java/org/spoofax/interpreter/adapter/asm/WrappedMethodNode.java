@@ -22,7 +22,6 @@ public class WrappedMethodNode extends WrappedASMNode {
 		this.wrappee = wrappee;
 	}
 
-	@SuppressWarnings("unchecked")
 	public IStrategoTerm getSubterm(int index) {
 		switch(index) {
 		case 0:

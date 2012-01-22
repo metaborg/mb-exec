@@ -17,9 +17,9 @@ public class WrappedASMList extends SkeletonStrategoList {
 
 	private static final long serialVersionUID = 3536693350501701065L;
 	
-	private List<Object> wrappee;
+	private List<?> wrappee;
 
-	WrappedASMList(List<Object> wrappee) {
+	WrappedASMList(List<?> wrappee) {
 		super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 		this.wrappee = wrappee;
 	}

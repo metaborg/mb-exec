@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007-2012, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ * Copyright (c) 2012, Karl Trygve Kalleberg <karltk near strategoxt dot org>
  * 
  * Licensed under the GNU Lesser General Public License, v2.1
  */
@@ -13,11 +13,15 @@ import java.util.List;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.FrameNode;
+import org.objectweb.asm.tree.IincInsnNode;
+import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
@@ -26,8 +30,12 @@ import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.MultiANewArrayInsnNode;
+import org.objectweb.asm.tree.TableSwitchInsnNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 import org.objectweb.asm.util.Printer;
@@ -39,6 +47,8 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
+import org.spoofax.terms.StrategoReal;
+import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.skeleton.SkeletonTermFactory;
 
 public class ASMFactory extends SkeletonTermFactory {
@@ -59,10 +69,6 @@ public class ASMFactory extends SkeletonTermFactory {
 		return wrap(cn);
 	}
 
-	private static IStrategoTerm wrap(ClassNode cn) {
-		return new WrappedClassNode(cn);
-	}
-
 	@Override
 	public IStrategoTerm parseFromString(String text) {
 		throw new NotImplementedException();
@@ -78,11 +84,11 @@ public class ASMFactory extends SkeletonTermFactory {
 		return (IStrategoString) wrap(value);
 	}
 
-	public static IStrategoInt wrap(int value) {
+	public static IStrategoInt wrap(long value) {
 		return new WrappedInt(value);
 	}
 
-	public static IStrategoTerm wrap(List<Object> list) {
+	public static IStrategoTerm wrap(List<?> list) {
 		if(list == null)
 			return None.INSTANCE;
 		else 
@@ -90,9 +96,6 @@ public class ASMFactory extends SkeletonTermFactory {
 	}
 
 	public static IStrategoTerm genericWrap(Object node) {
-		
-		System.out.println(" -  " + (node == null ? "null" : node.getClass().getName()));
-		
 		if(node == null)
 			return None.INSTANCE;
 		if(node instanceof String) {
@@ -109,9 +112,70 @@ public class ASMFactory extends SkeletonTermFactory {
 			return wrap((AnnotationNode) node);
 		} else if(node instanceof Integer) {
 			return wrap((Integer) node);
+		} else if(node instanceof TryCatchBlockNode) {
+			return wrap((TryCatchBlockNode) node);
+		} else if(node instanceof FieldNode) {
+			return wrap((FieldNode) node);
+		} else if(node instanceof InnerClassNode) {
+			return wrap((InnerClassNode) node);
+		} else if(node instanceof Long) {
+			return wrap((Long) node);
+		} else if(node instanceof Float) {
+			return wrap((Float) node);
+		} else if(node instanceof Double) {
+			return wrap((Double) node);
+		} else if(node instanceof Type) {
+			return wrap((Type) node);
+		} else if(node instanceof Boolean) {
+			return wrap((Boolean) node);
+		} else if(node instanceof List) {
+			return wrap((List<?>) node);
 		}
-		
+		 
         throw new NotImplementedException("Unknown ASM node type " + node.getClass());
+	}
+	
+	
+	private static IStrategoTerm wrap(boolean node) {
+		if(node)
+			return new ASMBoolean(True.INSTANCE);
+		else
+			return new ASMBoolean(False.INSTANCE);
+	}
+
+	private static IStrategoTerm wrap(Type node) {
+		if(node == null)
+			return None.INSTANCE;
+		return new ASMType(node);
+	}
+
+	private static IStrategoTerm wrap(double value) {
+		return new StrategoReal(value, TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);	}
+
+	private static IStrategoTerm wrap(ClassNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		return new WrappedClassNode(node);
+	}
+
+	
+
+	private static IStrategoTerm wrap(InnerClassNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		return new ASMInnerClassNode(node);
+	}
+
+	private static IStrategoTerm wrap(FieldNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		return new ASMFieldNode(node);
+	}
+
+	private static IStrategoTerm wrap(TryCatchBlockNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		return new ASMTryCatchBlocNode(node);
 	}
 
 	private static IStrategoTerm wrap(AnnotationNode node) {
@@ -123,14 +187,13 @@ public class ASMFactory extends SkeletonTermFactory {
 	public static IStrategoTerm wrap(AbstractInsnNode node) {
 		if(node == null)
 			return None.INSTANCE;
-		dumpChain(node);
 		switch(node.getType()) {
 		case AbstractInsnNode.FIELD_INSN:
 			return wrap((FieldInsnNode) node);
 		case AbstractInsnNode.FRAME:
 			return wrap((FrameNode) node);
 		case AbstractInsnNode.IINC_INSN:
-			throw new NotImplementedException();
+			return wrap((IincInsnNode) node);
 		case AbstractInsnNode.INSN:
 			return wrap((InsnNode) node);
 		case AbstractInsnNode.INT_INSN:
@@ -146,13 +209,13 @@ public class ASMFactory extends SkeletonTermFactory {
 		case AbstractInsnNode.LINE:
 			return wrap((LineNumberNode) node);
 		case AbstractInsnNode.LOOKUPSWITCH_INSN:
-			throw new NotImplementedException();
+			return wrap((LookupSwitchInsnNode) node);
 		case AbstractInsnNode.METHOD_INSN:
 			return wrap((MethodInsnNode) node);
 		case AbstractInsnNode.MULTIANEWARRAY_INSN:
-			throw new NotImplementedException();
+			return wrap((MultiANewArrayInsnNode) node);
 		case AbstractInsnNode.TABLESWITCH_INSN:
-			throw new NotImplementedException();
+			return wrap((TableSwitchInsnNode) node);
 		case AbstractInsnNode.TYPE_INSN:
 			return wrap((TypeInsnNode) node);
 		case AbstractInsnNode.VAR_INSN:
@@ -181,11 +244,39 @@ public class ASMFactory extends SkeletonTermFactory {
 			return new WrappedFieldInsnNode(node);
 	}
 
+	private static IStrategoTerm wrap(LookupSwitchInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new ASMLookupSwitchInsnNode(node);
+	}
+
+	private static IStrategoTerm wrap(MultiANewArrayInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new ASMMultiANewArrayInsnNode(node);
+	}
+
 	private static IStrategoTerm wrap(IntInsnNode node) {
 		if(node == null)
 			return None.INSTANCE;
 		else
 			return new WrappedIntInsnNode(node);
+	}
+
+	private static IStrategoTerm wrap(IincInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new ASMIincInsnNode(node);
+	}
+
+	private static IStrategoTerm wrap(TableSwitchInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new ASMTableSwitchInsnNode(node);
 	}
 
 	private static IStrategoTerm wrap(LdcInsnNode node) {
@@ -272,7 +363,7 @@ public class ASMFactory extends SkeletonTermFactory {
 			return new WrappedInsnList(instructions);
 	}
 
-	public static IStrategoTerm wrap(List<Object>[] node) {
+	public static IStrategoTerm wrap(List<?>[] node) {
 		if(node == null)
 			return None.INSTANCE;
 		else
