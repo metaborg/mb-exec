@@ -7,12 +7,9 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.TermFactory;
-import org.spoofax.terms.attachments.ITermAttachment;
-import org.spoofax.terms.attachments.TermAttachmentType;
 import org.spoofax.terms.skeleton.SkeletonStrategoList;
 
 public class ECJGenericList extends SkeletonStrategoList {
@@ -29,11 +26,6 @@ public class ECJGenericList extends SkeletonStrategoList {
     @Override
     public IStrategoList tail() {
         return new ECJGenericList(doTail());
-    }
-
-    @Override
-    public IStrategoList prepend(IStrategoTerm prefix) {
-        throw new NotImplementedException();
     }
 
     private IStrategoTerm[] doTail() {
@@ -55,22 +47,6 @@ public class ECJGenericList extends SkeletonStrategoList {
     @Override
     public IStrategoTerm[] getAllSubterms() {
         return kids;
-    }
-
-    @Override
-    public <T extends ITermAttachment> T getAttachment(
-            TermAttachmentType<T> type) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void putAttachment(ITermAttachment resourceAttachment) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public ITermAttachment removeAttachment(TermAttachmentType<?> attachmentType) {
-        throw new NotImplementedException();
     }
 
     @Override
