@@ -8,6 +8,7 @@ package org.spoofax.interpreter.ui;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleFactory;
+import org.eclipse.ui.console.IConsoleManager;
 
 public class SpoofaxConsoleFactory implements IConsoleFactory {
 
@@ -17,6 +18,15 @@ public class SpoofaxConsoleFactory implements IConsoleFactory {
 		ConsolePlugin.getDefault().getConsoleManager()
 				.addConsoles(new IConsole[] { console });
 		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(console);
+	}
+	
+	public SpoofaxConsole getExistingConsole() {
+		IConsoleManager consoles = ConsolePlugin.getDefault().getConsoleManager();
+		for (IConsole console: consoles.getConsoles()) {
+			if (SpoofaxConsole.CONSOLE_NAME.equals(console.getName()))
+				return (SpoofaxConsole) console;
+		}
+		return null;
 	}
 
 }

@@ -20,6 +20,8 @@ import org.spoofax.interpreter.library.IOAgent;
 
 public class SpoofaxConsole extends IOConsole implements Runnable {
 	
+	private boolean isDisposed;
+	
 	public static final String CONSOLE_NAME =
 		"Spoofax Console";
 
@@ -44,6 +46,16 @@ public class SpoofaxConsole extends IOConsole implements Runnable {
 			return super.getWriter(fd);
 		}
 
+	}
+	
+	@Override
+	protected void dispose() {
+		super.dispose();
+		this.isDisposed = true;
+	}
+	
+	public boolean isDisposed() {
+		return isDisposed;
 	}
 
 	public SpoofaxConsole() {
