@@ -1,35 +1,39 @@
+/*
+ * Copyright (c) 2007-2012, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ * 
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.adapter.asm;
 
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.terms.TermFactory;
+import org.spoofax.terms.skeleton.SkeletonStrategoList;
 
-public class WrappedASMArray implements IStrategoList {
+public class WrappedASMArray extends SkeletonStrategoList {
 
+	private static final long serialVersionUID = -4370875591624520389L;
+	
 	private final Object[] wrappee;
 
 	public WrappedASMArray(Object[] wrappee) {
+		super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 		this.wrappee = wrappee;
 	}
 
-	public IStrategoTerm get(int index) {
+	@Override
+	public IStrategoTerm getSubterm(int index) {
 		return ASMFactory.genericWrap(wrappee[index]);
 	}
 
+	@Override
 	public IStrategoTerm head() {
 		throw new NotImplementedException();
 	}
 
-	public boolean isEmpty() {
-		return wrappee.length == 0;
-	}
-
-	public IStrategoList prepend(IStrategoTerm prefix) {
-		throw new NotImplementedException();
-	}
-
-	public int size() {
+	@Override
+	public int getSubtermCount() {
 		return wrappee.length;
 	}
 
@@ -44,41 +48,8 @@ public class WrappedASMArray implements IStrategoList {
 		return ret;
 	}
 
-	public IStrategoTerm getSubterm(int index) {
-		return ASMFactory.genericWrap(wrappee[index]);
+	@Override
+	public boolean isEmpty() {
+		return getSubtermCount() == 0;
 	}
-
-	public int getSubtermCount() {
-		return wrappee.length;
-	}
-
-	public int getTermType() {
-		return IStrategoList.LIST;
-	}
-
-	public boolean match(IStrategoTerm second) {
-		throw new NotImplementedException();
-	}
-
-    public void prettyPrint(ITermPrinter pp) {
-        int sz = size();
-        if(sz > 0) {
-            pp.println("[");
-            pp.indent(2);
-            get(0).prettyPrint(pp);
-            for(int i = 1; i < sz; i++) {
-                pp.print(", ");
-                pp.nextIndentOff();
-                get(i).prettyPrint(pp);
-                pp.println("");
-            }
-            pp.println("");
-            pp.print("]");
-            pp.outdent(2);
-
-        } else {
-            pp.print("[]");
-        }
-    }
-
 }

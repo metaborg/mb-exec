@@ -1,13 +1,21 @@
+/*
+ * Copyright (c) 2007-2012, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ * 
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.adapter.asm;
 
 import org.objectweb.asm.tree.MethodNode;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.StrategoConstructor;
 
 public class WrappedMethodNode extends WrappedASMNode {
 
+	private static final long serialVersionUID = -3879090866079739712L;
+
 	private final MethodNode wrappee;
-	private final static IStrategoConstructor CTOR = new ASMConstructor("MethodNode", 16);
+	private final static IStrategoConstructor CTOR = new StrategoConstructor("MethodNode", 16);
 	
 	public WrappedMethodNode(final MethodNode wrappee) {
 		super(CTOR);
@@ -18,7 +26,7 @@ public class WrappedMethodNode extends WrappedASMNode {
 	public IStrategoTerm getSubterm(int index) {
 		switch(index) {
 		case 0:
-			return ASMFactory.wrap(wrappee.access);
+			return ASMFactory.wrapAccessFlags(wrappee.access);
 		case 1:
 			return ASMFactory.genericWrap(wrappee.annotationDefault);
 		case 2:
@@ -52,10 +60,4 @@ public class WrappedMethodNode extends WrappedASMNode {
 		}
 		throw new ArrayIndexOutOfBoundsException();
 	}
-
-	public boolean match(IStrategoTerm second) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

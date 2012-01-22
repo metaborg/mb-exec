@@ -1,86 +1,60 @@
+/*
+ * Copyright (c) 2007-2012, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ * 
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.adapter.asm;
 
 import org.objectweb.asm.tree.InsnList;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.terms.TermFactory;
+import org.spoofax.terms.skeleton.SkeletonStrategoList;
 
-public class WrappedInsnList implements IStrategoList {
+public class WrappedInsnList extends SkeletonStrategoList {
 
+	private static final long serialVersionUID = 4221469797997265710L;
+	
 	private InsnList wrappee;
 
 	protected WrappedInsnList(InsnList wrappee) {
+		super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 		this.wrappee = wrappee;
 	}
 
-	public IStrategoTerm get(int index) {
+	@Override
+	public IStrategoTerm getSubterm(int index) {
 		return ASMFactory.genericWrap(wrappee.get(index));
 	}
 
+	@Override
 	public IStrategoTerm head() {
 		return ASMFactory.genericWrap(wrappee.get(0));
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return wrappee.size() == 0;
 	}
 
-	public IStrategoList prepend(IStrategoTerm prefix) {
-		throw new NotImplementedException();
-	}
-
-	public int size() {
-		return wrappee.size();
-	}
-
+	@Override
 	public IStrategoList tail() {
 		throw new NotImplementedException();
 	}
 
+	@Override
 	public IStrategoTerm[] getAllSubterms() {
 		IStrategoTerm[] ret = new IStrategoTerm[wrappee.size()];
-		for(int i = 0; i < wrappee.size(); i++) {
-			ret[i] = ASMFactory.genericWrap(wrappee.get(i));
+		Object[] xs = wrappee.toArray();
+		for(int i = 0, c = xs.length; i < c; i++) {
+			ret[i] = ASMFactory.genericWrap(xs[i]);
 		}
 		return ret;
 	}
 
-	public IStrategoTerm getSubterm(int index) {
-		return get(index);
-	}
-
+	@Override
 	public int getSubtermCount() {
-		return size();
+		return wrappee.size();
 	}
-
-	public int getTermType() {
-		return IStrategoTerm.LIST;
-	}
-
-	public boolean match(IStrategoTerm second) {
-		throw new NotImplementedException();
-	}
-
-    public void prettyPrint(ITermPrinter pp) {
-        int sz = size();
-        if(sz > 0) {
-            pp.println("[");
-            pp.indent(2);
-            get(0).prettyPrint(pp);
-            for(int i = 1; i < sz; i++) {
-                pp.print(", ");
-                pp.nextIndentOff();
-                get(i).prettyPrint(pp);
-                pp.println("");
-            }
-            pp.println("");
-            pp.print("]");
-            pp.outdent(2);
-
-        } else {
-            pp.print("[]");
-        }
-    }
-
 }

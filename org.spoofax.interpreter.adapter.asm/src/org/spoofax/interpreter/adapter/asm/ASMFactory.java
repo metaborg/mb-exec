@@ -1,14 +1,19 @@
+/*
+ * Copyright (c) 2007-2012, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ * 
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.adapter.asm;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
@@ -18,24 +23,26 @@ import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LocalVariableNode;
-import org.objectweb.asm.tree.MemberNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
+import org.objectweb.asm.util.Printer;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
-import org.spoofax.interpreter.terms.IStrategoPlaceholder;
-import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
-import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.skeleton.SkeletonTermFactory;
 
-public class ASMFactory implements ITermFactory {
+public class ASMFactory extends SkeletonTermFactory {
+
+	public ASMFactory() {
+		super(IStrategoTerm.IMMUTABLE);
+	}
 
 	public IStrategoTerm parseFromFile(String path) throws IOException {
 		return parseFromStream(new FileInputStream(path));
@@ -53,79 +60,23 @@ public class ASMFactory implements ITermFactory {
 		return new WrappedClassNode(cn);
 	}
 
+	@Override
 	public IStrategoTerm parseFromString(String text) {
 		throw new NotImplementedException();
 	}
 
-	public IStrategoTerm replaceAppl(IStrategoConstructor constructor,
-			IStrategoTerm[] kids, IStrategoTerm old) {
-		// TODO Auto-generated method stub
-		return null;
+	@Override
+	public IStrategoInt makeInt(int value) {
+		return wrap(value);
 	}
 
-	public void unparseToFile(IStrategoTerm t, OutputStream ous)
-			throws IOException {
-		// TODO Auto-generated method stub
+	@Override
+	public IStrategoString makeString(String value) {
+		return (IStrategoString) wrap(value);
 	}
 
-	public boolean hasConstructor(String ctorName, int arity) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public IStrategoAppl makeAppl(IStrategoConstructor ctr, IStrategoList kids) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public IStrategoPlaceholder makePlaceholder(IStrategoTerm template) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public IStrategoAppl makeAppl(IStrategoConstructor ctr,
-			IStrategoTerm... terms) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public IStrategoConstructor makeConstructor(String string, int arity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public IStrategoInt makeInt(int i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public IStrategoList makeList(IStrategoTerm... terms) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public IStrategoList makeList(Collection<IStrategoTerm> terms) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public IStrategoReal makeReal(double d) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public IStrategoString makeString(String s) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public IStrategoTuple makeTuple(IStrategoTerm... terms) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static IStrategoTerm wrap(int access) {
-		return new WrappedInt(access);
+	public static IStrategoInt wrap(int value) {
+		return new WrappedInt(value);
 	}
 
 	public static IStrategoTerm wrap(List<Object> list) {
@@ -136,36 +87,78 @@ public class ASMFactory implements ITermFactory {
 	}
 
 	public static IStrategoTerm genericWrap(Object node) {
-		if(node instanceof MemberNode) {
-			return wrap((MemberNode)node);
-		} else if(node instanceof String) {
+		
+		System.out.println(" -  " + (node == null ? "null" : node.getClass().getName()));
+		
+		if(node == null)
+			return None.INSTANCE;
+		if(node instanceof String) {
 			return wrap((String)node);
 		} else if(node instanceof LocalVariableNode) {
 			return wrap((LocalVariableNode) node);
-		} else if(node instanceof LabelNode) {
-			return wrap((LabelNode) node);
-		} else if(node instanceof LineNumberNode) {
-			return wrap((LineNumberNode) node);
-		} else if(node instanceof VarInsnNode) {
-			return wrap((VarInsnNode) node);
-		} else if(node instanceof MethodInsnNode) {
-			return wrap((MethodInsnNode) node);
-		} else if(node instanceof InsnNode) {
-			return wrap((InsnNode) node);
-		} else if(node instanceof TypeInsnNode) {
-		 	return wrap((TypeInsnNode) node);
-		} else if(node instanceof LdcInsnNode) {
-			return wrap((LdcInsnNode) node);
-		} else if(node instanceof IntInsnNode) {
-			return wrap((IntInsnNode) node);
-		} else if(node instanceof FieldInsnNode) {
-			return wrap((FieldInsnNode) node);
+		} else if(node instanceof AbstractInsnNode) {
+			return wrap((AbstractInsnNode) node);
+		} else if(node instanceof MethodNode) {
+			return wrap((MethodNode) node);
+		} else if(node instanceof ClassNode) {
+			return wrap((ClassNode) node);
 		}
-		 
-		if(node == null)
-			return None.INSTANCE;
 		
         throw new NotImplementedException("Unknown ASM node type " + node.getClass());
+	}
+
+	public static IStrategoTerm wrap(AbstractInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		dumpChain(node);
+		switch(node.getType()) {
+		case AbstractInsnNode.FIELD_INSN:
+			return wrap((FieldInsnNode) node);
+		case AbstractInsnNode.FRAME:
+			throw new NotImplementedException();
+		case AbstractInsnNode.IINC_INSN:
+			throw new NotImplementedException();
+		case AbstractInsnNode.INSN:
+			return wrap((InsnNode) node);
+		case AbstractInsnNode.INT_INSN:
+			return wrap((IntInsnNode) node); 
+		case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
+			throw new NotImplementedException();
+		case AbstractInsnNode.JUMP_INSN:
+			throw new NotImplementedException();
+		case AbstractInsnNode.LABEL:
+			return wrap((LabelNode) node);
+		case AbstractInsnNode.LDC_INSN:
+			return wrap((LdcInsnNode) node);
+		case AbstractInsnNode.LINE:
+			return wrap((LineNumberNode) node);
+		case AbstractInsnNode.LOOKUPSWITCH_INSN:
+			throw new NotImplementedException();
+		case AbstractInsnNode.METHOD_INSN:
+			return wrap((MethodInsnNode) node);
+		case AbstractInsnNode.MULTIANEWARRAY_INSN:
+			throw new NotImplementedException();
+		case AbstractInsnNode.TABLESWITCH_INSN:
+			throw new NotImplementedException();
+		case AbstractInsnNode.TYPE_INSN:
+			return wrap((TypeInsnNode) node);
+		case AbstractInsnNode.VAR_INSN:
+			return wrap((VarInsnNode) node);
+		case -1:
+			System.err.println("Bogus " + node.getClass().getName());
+			return None.INSTANCE;
+		default:
+			throw new IllegalArgumentException("Unknown type " + node.getOpcode() + " for " + node.getClass().getName());
+		}
+	}
+
+	private static void dumpChain(AbstractInsnNode node) {
+		if(node == null)
+			return;
+		do {
+			System.out.println(node.getClass().getName());
+			node = node.getNext();
+		} while(node != null);
 	}
 
 	private static IStrategoTerm wrap(FieldInsnNode node) {
@@ -237,14 +230,6 @@ public class ASMFactory implements ITermFactory {
 		else 
 			return new WrappedMethodNode(node);
 	}
-	private static IStrategoTerm wrap(MemberNode node) {
-		if(node instanceof ClassNode) {
-			return wrap((ClassNode)node);
-		} else if(node instanceof MethodNode) {
-			return wrap((MethodNode)node);
-		}
-        throw new NotImplementedException("Unknown ASM MemberNode subtype " + node.getClass());
-	}
 
 	public static IStrategoTerm wrap(String node) {
 		if(node == null)
@@ -279,6 +264,82 @@ public class ASMFactory implements ITermFactory {
 			return None.INSTANCE;
 		else
 			return new WrappedLabel(node);
+	}
+
+	@Override
+	public IStrategoList makeList() {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoList makeList(Collection<? extends IStrategoTerm> terms) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoAppl makeAppl(IStrategoConstructor constructor,
+			IStrategoTerm[] kids, IStrategoList annotations) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoList makeList(IStrategoTerm[] kids,
+			IStrategoList annotations) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoList makeListCons(IStrategoTerm head, IStrategoList tail,
+			IStrategoList annotations) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoTuple makeTuple(IStrategoTerm[] kids,
+			IStrategoList annotations) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoTerm copyAttachments(IStrategoTerm from, IStrategoTerm to) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoAppl replaceAppl(IStrategoConstructor constructor,
+			IStrategoTerm[] kids, IStrategoAppl old) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoList replaceList(IStrategoTerm[] kids, IStrategoList old) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoList replaceListCons(IStrategoTerm head,
+			IStrategoList tail, IStrategoTerm oldHead, IStrategoList oldTail) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoTerm replaceTerm(IStrategoTerm term, IStrategoTerm old) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoTuple replaceTuple(IStrategoTerm[] kids, IStrategoTuple old) {
+		throw new NotImplementedException();
+	}
+
+	public static IStrategoTerm wrapOpcode(int opcode) {
+		if(opcode < 0)
+			return None.INSTANCE;
+		return wrap(Printer.OPCODES[opcode]);
+	}
+
+	public static IStrategoTerm wrapAccessFlags(int access) {
+		return new WrappedAccessFlags(access);
 	}
 
 }

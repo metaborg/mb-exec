@@ -1,14 +1,21 @@
+/*
+ * Copyright (c) 2007-2012, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ * 
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
 package org.spoofax.interpreter.adapter.asm;
 
 import org.objectweb.asm.tree.ClassNode;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.StrategoConstructor;
 
 public class WrappedClassNode extends WrappedASMNode {
 
+	private static final long serialVersionUID = 7356259800500118280L;
+	
 	private final ClassNode wrappee;
-	private final static IStrategoConstructor CTOR = new ASMConstructor("ClassNode", 17);
+	private final static IStrategoConstructor CTOR = new StrategoConstructor("ClassNode", 17);
 	
 	WrappedClassNode(final ClassNode wrappee) {
 		super(CTOR);
@@ -19,7 +26,7 @@ public class WrappedClassNode extends WrappedASMNode {
 	public IStrategoTerm getSubterm(int index) {
 		switch(index) {
 		case 0: 
-			return ASMFactory.wrap(wrappee.access);
+			return ASMFactory.wrapAccessFlags(wrappee.access);
 		case 1: 
 			return ASMFactory.wrap(wrappee.attrs);
 		case 2: 
@@ -54,9 +61,5 @@ public class WrappedClassNode extends WrappedASMNode {
 			return ASMFactory.wrap(wrappee.visibleAnnotations);
 		}
 		throw new ArrayIndexOutOfBoundsException();
-	}
-
-	public boolean match(IStrategoTerm second) {
-		throw new NotImplementedException();
 	}
 }

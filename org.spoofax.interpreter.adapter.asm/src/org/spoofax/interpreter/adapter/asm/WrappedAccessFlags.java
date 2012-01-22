@@ -11,31 +11,32 @@ import org.spoofax.terms.StrategoConstructor;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.skeleton.SkeletonStrategoAppl;
 
-public class None extends SkeletonStrategoAppl {
+public class WrappedAccessFlags extends SkeletonStrategoAppl {
 
-	private static final long serialVersionUID = 6485516989944181504L;
+	private static final long serialVersionUID = 1114963759066088382L;
+	private static final IStrategoConstructor CTOR = new StrategoConstructor("AccessFlags", 1);
+	private final int wrappee;
+	
+	public WrappedAccessFlags(int wrappee) {
+		super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
+		this.wrappee = wrappee;
+	}
 
-	private final static IStrategoTerm[] EMPTY = new IStrategoTerm[0];
-	private final static IStrategoConstructor CTOR = new StrategoConstructor("None", 0); 
-    
-    final static None INSTANCE = new None();
-    
-    protected None() {
-    	super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
-    }
-    
-    @Override
-    public IStrategoConstructor getConstructor() {
-    	return CTOR;
-    }
+	@Override
+	public IStrategoConstructor getConstructor() {
+		return CTOR;
+	}
 
 	@Override
 	public IStrategoTerm getSubterm(int index) {
+		if (index == 0)
+			return ASMFactory.wrap(wrappee);
 		throw new ArrayIndexOutOfBoundsException(index);
 	}
 
 	@Override
 	public IStrategoTerm[] getAllSubterms() {
-		return EMPTY;
+		return new IStrategoTerm[] { getSubterm(0) };
 	}
+
 }
