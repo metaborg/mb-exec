@@ -14,6 +14,7 @@ import java.util.List;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
@@ -102,9 +103,17 @@ public class ASMFactory extends SkeletonTermFactory {
 			return wrap((MethodNode) node);
 		} else if(node instanceof ClassNode) {
 			return wrap((ClassNode) node);
+		} else if(node instanceof AnnotationNode) {
+			return wrap((AnnotationNode) node);
 		}
 		
         throw new NotImplementedException("Unknown ASM node type " + node.getClass());
+	}
+
+	private static IStrategoTerm wrap(AnnotationNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		return new ASMAnnotationNode(node);
 	}
 
 	public static IStrategoTerm wrap(AbstractInsnNode node) {

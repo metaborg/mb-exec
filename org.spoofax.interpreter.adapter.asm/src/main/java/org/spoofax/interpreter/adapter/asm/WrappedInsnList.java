@@ -5,52 +5,55 @@
  */
 package org.spoofax.interpreter.adapter.asm;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.objectweb.asm.tree.InsnList;
+import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.skeleton.SkeletonStrategoList;
 
-public class WrappedASMList extends SkeletonStrategoList {
+public class WrappedInsnList extends SkeletonStrategoList {
 
-	private static final long serialVersionUID = 3536693350501701065L;
+	private static final long serialVersionUID = 4221469797997265710L;
 	
-	private List<Object> wrappee;
+	private InsnList wrappee;
 
-	protected WrappedASMList(List<Object> wrappee) {
+	WrappedInsnList(InsnList wrappee) {
 		super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 		this.wrappee = wrappee;
 	}
 
-	public IStrategoTerm head() {
-		return ASMFactory.genericWrap(wrappee.get(0));
-	}
-
-	public boolean isEmpty() {
-		return wrappee.isEmpty();
-	}
-
-	public IStrategoList tail() {
-		List<Object> ret = new ArrayList<Object>(wrappee);
-		ret.remove(ret.size() - 1);
-		return new WrappedASMList(ret);
-	}
-
-	public IStrategoTerm[] getAllSubterms() {
-		IStrategoTerm[] ret = new IStrategoTerm[wrappee.size()];
-		int count = 0;
-		for(Object o : wrappee) {
-			ret[count++] = ASMFactory.genericWrap(o);
-		}
-		return ret;
-	}
-
+	@Override
 	public IStrategoTerm getSubterm(int index) {
 		return ASMFactory.genericWrap(wrappee.get(index));
 	}
 
+	@Override
+	public IStrategoTerm head() {
+		return ASMFactory.genericWrap(wrappee.get(0));
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return wrappee.size() == 0;
+	}
+
+	@Override
+	public IStrategoList tail() {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStrategoTerm[] getAllSubterms() {
+		IStrategoTerm[] ret = new IStrategoTerm[wrappee.size()];
+		Object[] xs = wrappee.toArray();
+		for(int i = 0, c = xs.length; i < c; i++) {
+			ret[i] = ASMFactory.genericWrap(xs[i]);
+		}
+		return ret;
+	}
+
+	@Override
 	public int getSubtermCount() {
 		return wrappee.size();
 	}

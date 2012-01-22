@@ -17,7 +17,7 @@ public class WrappedLocalVariable extends WrappedASMNode {
 	private LocalVariableNode wrappee;
 	private static final IStrategoConstructor CTOR = new StrategoConstructor("LocalVariable", 6); 
 	
-	public WrappedLocalVariable(LocalVariableNode node) {
+	WrappedLocalVariable(LocalVariableNode node) {
 		super(CTOR);
 		this.wrappee = node;
 	}

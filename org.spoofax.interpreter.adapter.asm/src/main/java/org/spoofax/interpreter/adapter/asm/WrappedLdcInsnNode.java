@@ -5,32 +5,29 @@
  */
 package org.spoofax.interpreter.adapter.asm;
 
-import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.LdcInsnNode;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.StrategoConstructor;
 
-public class WrappedMethodInsnNode extends WrappedASMNode {
+public class WrappedLdcInsnNode extends WrappedASMNode {
+
+	private static final long serialVersionUID = -3396823075632694750L;
 	
-	private static final long serialVersionUID = 2437642831650759672L;
-	private final static IStrategoConstructor CTOR = new StrategoConstructor("MethodInsnNode", 4); 
-	private final MethodInsnNode wrappee;	
-	
-	public WrappedMethodInsnNode(MethodInsnNode node) {
+	private final LdcInsnNode wrappee;
+	private static final IStrategoConstructor CTOR = new StrategoConstructor("LdcInsnNode", 2);
+
+	WrappedLdcInsnNode(LdcInsnNode node) {
 		super(CTOR);
 		this.wrappee = node;
 	}
 
 	public IStrategoTerm getSubterm(int index) {
-		switch(index) {
+		switch (index) {
 		case 0:
 			return ASMFactory.wrapOpcode(wrappee.getOpcode());
 		case 1:
-			return ASMFactory.wrap(wrappee.owner);
-		case 2:
-			return ASMFactory.wrap(wrappee.name);
-		case 3:
-			return ASMFactory.wrap(wrappee.desc);
+			return ASMFactory.genericWrap(wrappee.cst);
 		}
 		throw new ArrayIndexOutOfBoundsException();
 	}

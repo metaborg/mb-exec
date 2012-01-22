@@ -16,7 +16,7 @@ public class WrappedVarInsnNode extends WrappedASMNode {
 	private final VarInsnNode wrappee;
 	private static final IStrategoConstructor CTOR = new StrategoConstructor("VarInsnNode",2);
 
-	public WrappedVarInsnNode(VarInsnNode node) {
+	WrappedVarInsnNode(VarInsnNode node) {
 		super(CTOR);
 		this.wrappee = node;
 	}

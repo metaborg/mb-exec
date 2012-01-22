@@ -17,7 +17,7 @@ public class WrappedLabel extends WrappedASMNode {
 	private final Label wrappee;
 	private static final IStrategoConstructor CTOR = new StrategoConstructor("Label", 1);
 
-	public WrappedLabel(Label node) {
+	WrappedLabel(Label node) {
 		super(CTOR);
 		this.wrappee = node;
 	}

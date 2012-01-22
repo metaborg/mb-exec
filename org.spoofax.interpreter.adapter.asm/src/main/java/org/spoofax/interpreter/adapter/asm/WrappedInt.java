@@ -13,7 +13,7 @@ public class WrappedInt extends StrategoInt {
 
 	private static final long serialVersionUID = 505072984325810240L;
 
-	protected WrappedInt(int value) {
+	WrappedInt(int value) {
 		super(value, TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 	}
 

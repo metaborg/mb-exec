@@ -17,7 +17,7 @@ public class WrappedASMArray extends SkeletonStrategoList {
 	
 	private final Object[] wrappee;
 
-	public WrappedASMArray(Object[] wrappee) {
+	WrappedASMArray(Object[] wrappee) {
 		super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 		this.wrappee = wrappee;
 	}

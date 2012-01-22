@@ -8,5 +8,6 @@ Bundle-ClassPath: asm.jar,
  lib/asm-tree-4.0.jar
 Export-Package: org.spoofax.interpreter.adapter.asm
 Require-Bundle: org.spoofax.interpreter.core,
-  org.spoofax.terms
+ org.spoofax.terms,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

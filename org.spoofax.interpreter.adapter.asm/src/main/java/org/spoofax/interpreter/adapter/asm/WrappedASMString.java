@@ -11,7 +11,7 @@ public class WrappedASMString extends StrategoString {
 
 	private static final long serialVersionUID = 7923632912595160280L;
 
-	protected WrappedASMString(String value) {
+	WrappedASMString(String value) {
 		super(value);
 	}
 

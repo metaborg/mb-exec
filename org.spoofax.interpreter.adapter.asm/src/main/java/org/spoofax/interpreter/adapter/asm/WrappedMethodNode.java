@@ -17,7 +17,7 @@ public class WrappedMethodNode extends WrappedASMNode {
 	private final MethodNode wrappee;
 	private final static IStrategoConstructor CTOR = new StrategoConstructor("MethodNode", 16);
 	
-	public WrappedMethodNode(final MethodNode wrappee) {
+	WrappedMethodNode(final MethodNode wrappee) {
 		super(CTOR);
 		this.wrappee = wrappee;
 	}

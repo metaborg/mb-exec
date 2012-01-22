@@ -17,7 +17,7 @@ public class WrappedAccessFlags extends SkeletonStrategoAppl {
 	private static final IStrategoConstructor CTOR = new StrategoConstructor("AccessFlags", 1);
 	private final int wrappee;
 	
-	public WrappedAccessFlags(int wrappee) {
+	WrappedAccessFlags(int wrappee) {
 		super(TermFactory.EMPTY_LIST, IStrategoTerm.IMMUTABLE);
 		this.wrappee = wrappee;
 	}

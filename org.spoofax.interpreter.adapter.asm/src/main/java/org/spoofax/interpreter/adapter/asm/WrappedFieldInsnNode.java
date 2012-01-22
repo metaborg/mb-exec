@@ -17,7 +17,7 @@ public class WrappedFieldInsnNode extends WrappedASMNode {
 	private final FieldInsnNode wrappee;
 	private static final IStrategoConstructor CTOR = new StrategoConstructor("FieldInsnNode", 2);
 
-	public WrappedFieldInsnNode(FieldInsnNode node) {
+	WrappedFieldInsnNode(FieldInsnNode node) {
 		super(CTOR);
 		this.wrappee = node;
 	}
