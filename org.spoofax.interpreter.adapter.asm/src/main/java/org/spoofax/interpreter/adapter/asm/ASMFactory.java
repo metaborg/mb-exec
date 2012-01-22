@@ -17,9 +17,11 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.LineNumberNode;
@@ -105,6 +107,8 @@ public class ASMFactory extends SkeletonTermFactory {
 			return wrap((ClassNode) node);
 		} else if(node instanceof AnnotationNode) {
 			return wrap((AnnotationNode) node);
+		} else if(node instanceof Integer) {
+			return wrap((Integer) node);
 		}
 		
         throw new NotImplementedException("Unknown ASM node type " + node.getClass());
@@ -124,7 +128,7 @@ public class ASMFactory extends SkeletonTermFactory {
 		case AbstractInsnNode.FIELD_INSN:
 			return wrap((FieldInsnNode) node);
 		case AbstractInsnNode.FRAME:
-			throw new NotImplementedException();
+			return wrap((FrameNode) node);
 		case AbstractInsnNode.IINC_INSN:
 			throw new NotImplementedException();
 		case AbstractInsnNode.INSN:
@@ -134,7 +138,7 @@ public class ASMFactory extends SkeletonTermFactory {
 		case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
 			throw new NotImplementedException();
 		case AbstractInsnNode.JUMP_INSN:
-			throw new NotImplementedException();
+			return wrap((JumpInsnNode) node);
 		case AbstractInsnNode.LABEL:
 			return wrap((LabelNode) node);
 		case AbstractInsnNode.LDC_INSN:
@@ -217,6 +221,20 @@ public class ASMFactory extends SkeletonTermFactory {
 			return None.INSTANCE;
 		else
 			return new WrappedVarInsnNode(node);
+	}
+
+	private static IStrategoTerm wrap(FrameNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new ASMFrameNode(node);
+	}
+
+	private static IStrategoTerm wrap(JumpInsnNode node) {
+		if(node == null)
+			return None.INSTANCE;
+		else
+			return new ASMJumpInsnNode(node);
 	}
 
 	private static IStrategoTerm wrap(LineNumberNode node) {
