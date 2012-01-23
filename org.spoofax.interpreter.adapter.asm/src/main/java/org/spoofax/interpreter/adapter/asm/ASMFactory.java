@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
+import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
@@ -130,13 +131,35 @@ public class ASMFactory extends SkeletonTermFactory {
 			return wrap((Boolean) node);
 		} else if(node instanceof List) {
 			return wrap((List<?>) node);
+		} else if(node instanceof String[]) {
+			return wrap((String[]) node);
+		} else if(node instanceof Byte) {
+			return wrap((Byte) node);
+		} else if(node instanceof Character) {
+			return wrap((Character) node);
+		} else if(node instanceof Short) {
+			return wrap((Short) node);
+		} else if(node instanceof Attribute) {
+			return wrap((Attribute) node);
 		}
 		 
         throw new NotImplementedException("Unknown ASM node type " + node.getClass());
 	}
 	
 	
-	private static IStrategoTerm wrap(boolean node) {
+	private static IStrategoTerm wrap(Attribute node) {
+		if(node == null)
+			return None.INSTANCE;
+		return new ASMAttribute(node);
+	}
+
+	private static IStrategoTerm wrap(String[] node) {
+		if(node == null)
+			return None.INSTANCE;
+		return new ASMArray(node);
+	}
+
+	static IStrategoTerm wrap(boolean node) {
 		if(node)
 			return new ASMBoolean(True.INSTANCE);
 		else

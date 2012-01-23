@@ -33,7 +33,8 @@ public class TestASMLibrary {
 
 	@Test
 	public void shouldParseM2RepoAndPrettyPrintWithoutExceptions() throws FileNotFoundException, IOException {
-		File m2 = new File(System.getProperty("user.home") + "/.m2");
+		//File m2 = new File(System.getProperty("user.home") + "/.m2");
+		File m2 = new File("/home/armijn/maven");
 		if(m2.exists() && m2.isDirectory()) {
 			Deque<File> q = new ArrayDeque<File>();
 			q.addAll(Arrays.asList(m2.listFiles()));
@@ -42,6 +43,7 @@ public class TestASMLibrary {
 				if(next.isDirectory()) {
 					q.addAll(Arrays.asList(next.listFiles()));
 				} else if(next.getName().endsWith(".jar")) {
+					System.out.println(next.getName());
 					JarFile jar = new JarFile(next);
 					Enumeration<JarEntry> es = jar.entries();
 					while(es.hasMoreElements()) {

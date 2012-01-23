@@ -29,11 +29,22 @@ public class ASMType extends AbstractASMNode {
 		case 1:
 			return ASMFactory.wrap(wrappee.getDescriptor());
 		case 2:
-			return ASMFactory.wrap(wrappee.getInternalName());
+			if(wrappee.getSort() == Type.ARRAY ||
+			   wrappee.getSort() == Type.OBJECT) {
+				return ASMFactory.wrap(wrappee.getInternalName());
+			} else { 
+				return None.INSTANCE;
+			}
 		case 3:
-			return ASMFactory.wrap(wrappee.getDimensions());
+			if(wrappee.getSort() == Type.ARRAY)
+				return ASMFactory.wrap(wrappee.getDimensions());
+			else
+				return None.INSTANCE;
 		case 4:
-			return ASMFactory.wrap(wrappee.getSize());
+			if(wrappee.getSort() != Type.METHOD)
+				return ASMFactory.wrap(wrappee.getSize());
+			else
+				return None.INSTANCE;	
 		case 5:
 			return ASMFactory.wrap(wrappee.getSort());
 		}
