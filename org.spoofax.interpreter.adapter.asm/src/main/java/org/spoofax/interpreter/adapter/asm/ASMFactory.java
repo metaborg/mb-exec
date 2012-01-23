@@ -5,6 +5,8 @@
  */
 package org.spoofax.interpreter.adapter.asm;
 
+import static java.lang.Math.min;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +50,10 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
+import org.spoofax.terms.StrategoAppl;
+import org.spoofax.terms.StrategoList;
 import org.spoofax.terms.StrategoReal;
+import org.spoofax.terms.StrategoTuple;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.skeleton.SkeletonTermFactory;
 
@@ -409,7 +414,7 @@ public class ASMFactory extends SkeletonTermFactory {
 
 	@Override
 	public IStrategoList makeList() {
-		throw new NotImplementedException();
+    	return isTermSharingAllowed() ? TermFactory.EMPTY_LIST : new StrategoList(null, null, null, defaultStorageType);
 	}
 
 	@Override
@@ -418,9 +423,14 @@ public class ASMFactory extends SkeletonTermFactory {
 	}
 
 	@Override
-	public IStrategoAppl makeAppl(IStrategoConstructor constructor,
-			IStrategoTerm[] kids, IStrategoList annotations) {
-		throw new NotImplementedException();
+	public IStrategoAppl makeAppl(IStrategoConstructor ctr,
+			IStrategoTerm[] terms, IStrategoList annotations) {
+    	int storageType = defaultStorageType;
+		storageType = min(storageType, getStorageType(terms));
+    	if (storageType != 0)
+        	storageType = min(storageType, getStorageType(annotations));
+    	assert ctr.getArity() == terms.length;
+        return new StrategoAppl(ctr, terms, annotations, storageType);
 	}
 
 	@Override
@@ -432,13 +442,17 @@ public class ASMFactory extends SkeletonTermFactory {
 	@Override
 	public IStrategoList makeListCons(IStrategoTerm head, IStrategoList tail,
 			IStrategoList annotations) {
-		throw new NotImplementedException();
+    	int storageType = min(defaultStorageType, getStorageType(head, tail));
+    	
+    	if (head == null) return makeList();
+    	return new StrategoList(head, tail, annotations, storageType);
 	}
 
 	@Override
-	public IStrategoTuple makeTuple(IStrategoTerm[] kids,
-			IStrategoList annotations) {
-		throw new NotImplementedException();
+	public IStrategoTuple makeTuple(IStrategoTerm[] terms,
+			IStrategoList annos) {
+        int storageType = min(defaultStorageType, getStorageType(terms));
+		return new StrategoTuple(terms, annos, storageType);
 	}
 
 	@Override

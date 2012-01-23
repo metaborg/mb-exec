@@ -1,0 +1,8 @@
+module spoofax/bindings/asm/test-asm
+imports
+	libstratego-lib
+	spoofax/bindings/asm
+	
+strategies
+	
+	simple-topdown = topdown(debug)	

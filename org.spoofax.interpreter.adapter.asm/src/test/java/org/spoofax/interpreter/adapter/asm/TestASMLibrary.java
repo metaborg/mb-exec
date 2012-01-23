@@ -22,7 +22,10 @@ import java.util.jar.JarFile;
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
+import org.spoofax.interpreter.core.Interpreter;
+import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.TermFactory;
 
 public class TestASMLibrary {
 
@@ -31,7 +34,6 @@ public class TestASMLibrary {
 		parseAndPretty(new FileInputStream("bin/org/spoofax/interpreter/adapter/asm/TestASMLibrary.class"));
 	}
 
-	@Test
 	public void shouldParseM2RepoAndPrettyPrintWithoutExceptions() throws FileNotFoundException, IOException {
 		File m2 = new File(System.getProperty("user.home") + "/.m2");
 		//File m2 = new File("/home/armijn/maven");
@@ -58,6 +60,13 @@ public class TestASMLibrary {
 	}
 
 	private void parseAndPretty(InputStream stream) throws FileNotFoundException, IOException {
+		IStrategoTerm term = parse(stream);
+		String s = term.toString();
+		assertTrue(s.length() > 100);
+		//System.out.println(s);
+	}
+
+	private IStrategoTerm parse(InputStream stream) throws IOException {
 		ClassNode cn = null;
 		try {
 			ClassReader cr = new ClassReader(stream);
@@ -65,12 +74,19 @@ public class TestASMLibrary {
 			cr.accept(cn, ClassReader.SKIP_FRAMES); //EXPAND_FRAMES);
 		} catch(RuntimeException e) {
 			e.printStackTrace();
-			return;
+			return null;
 		}
-		IStrategoTerm term = ASMFactory.genericWrap(cn);
-		String s = term.toString();
-		assertTrue(s.length() > 100);
-		//System.out.println(s);
+		return ASMFactory.genericWrap(cn);
 	}
 
+	@Test
+	public void shouldParseClassAndTraverse() throws FileNotFoundException, IOException, InterpreterException {
+		Interpreter itp = new Interpreter(new ASMFactory(), new TermFactory());
+		itp.load("target/resources/share/libstratego-lib.ctree");
+		itp.load("target/resources/share/asm-tests.ctree");
+		itp.setCurrent(parse(new FileInputStream("bin/org/spoofax/interpreter/adapter/asm/TestASMLibrary.class")));
+		assertTrue(itp.invoke("simple_topdown_0_0"));
+	}
+
+	
 }
