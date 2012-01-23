@@ -41,27 +41,6 @@ public class WrappedASTNodeList extends SkeletonStrategoList {
         return ECJFactory.genericWrap(wrappee.get(0));
     }
 
-    @Override
-    public IStrategoList prepend(IStrategoTerm prefix) {
-        
-        // Trying to build a hybrid list. Do on-the-fly conversion.
-        if(prefix instanceof WrappedASTNode) {
-            List<ASTNode> r = new ArrayList<ASTNode>();
-            ASTNode n = ((WrappedASTNode)prefix).getWrappee();
-            r.add(n);
-            r.addAll(wrappee);
-            return new WrappedASTNodeList(r);
-        } else { 
-            final int sz = wrappee.size();
-            IStrategoTerm[] r = new IStrategoTerm[sz + 1];
-            r[0] = prefix;
-            for(int i = 0; i < sz; i++) {
-                r[i + 1] = ECJFactory.genericWrap(wrappee.get(i));
-            }
-            return new ECJGenericList(r);
-        }
-    }
-
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public IStrategoList tail() {
@@ -122,21 +101,5 @@ public class WrappedASTNodeList extends SkeletonStrategoList {
     @Override
     public boolean isEmpty() {
         return wrappee.isEmpty();
-    }
-
-    @Override
-    public <T extends ITermAttachment> T getAttachment(
-            TermAttachmentType<T> type) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void putAttachment(ITermAttachment resourceAttachment) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public ITermAttachment removeAttachment(TermAttachmentType<?> attachmentType) {
-        throw new NotImplementedException();
     }
 }
