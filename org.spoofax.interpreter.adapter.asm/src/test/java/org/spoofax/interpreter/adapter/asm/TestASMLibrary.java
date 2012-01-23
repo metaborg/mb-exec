@@ -34,6 +34,7 @@ public class TestASMLibrary {
 		parseAndPretty(new FileInputStream("bin/org/spoofax/interpreter/adapter/asm/TestASMLibrary.class"));
 	}
 
+	@Test
 	public void shouldParseM2RepoAndPrettyPrintWithoutExceptions() throws FileNotFoundException, IOException {
 		File m2 = new File(System.getProperty("user.home") + "/.m2");
 		//File m2 = new File("/home/armijn/maven");

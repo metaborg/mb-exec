@@ -9,13 +9,13 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.StrategoConstructor;
 
-public class ASMBoolean extends AbstractASMNode {
+public class ASMJavaBoolean extends AbstractASMNode {
 
 	private static final long serialVersionUID = 2625229181042123567L;
 	private static final IStrategoConstructor CTOR = new StrategoConstructor("Boolean", 1);
 	private final IStrategoTerm value;
 
-	ASMBoolean(ASMBooleanValue value) {
+	ASMJavaBoolean(ASMBooleanValue value) {
 		super(CTOR);
 		this.value = value;
 	}

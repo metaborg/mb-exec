@@ -125,25 +125,25 @@ public class ASMFactory extends SkeletonTermFactory {
 		} else if(node instanceof InnerClassNode) {
 			return wrap((InnerClassNode) node);
 		} else if(node instanceof Long) {
-			return wrap((Long) node);
+			return wrapJava((Long) node);
 		} else if(node instanceof Float) {
-			return wrap((Float) node);
+			return wrapJava((Float) node);
 		} else if(node instanceof Double) {
-			return wrap((Double) node);
+			return wrapJava((Double) node);
 		} else if(node instanceof Type) {
 			return wrap((Type) node);
 		} else if(node instanceof Boolean) {
-			return wrap((Boolean) node);
+			return wrapJava((Boolean) node);
 		} else if(node instanceof List) {
 			return wrap((List<?>) node);
 		} else if(node instanceof String[]) {
 			return wrap((String[]) node);
 		} else if(node instanceof Byte) {
-			return wrap((Byte) node);
+			return wrapJava((Byte) node);
 		} else if(node instanceof Character) {
-			return wrap((Character) node);
+			return wrapJava((Character) node);
 		} else if(node instanceof Short) {
-			return wrap((Short) node);
+			return wrapJava((Short) node);
 		} else if(node instanceof Attribute) {
 			return wrap((Attribute) node);
 		}
@@ -164,12 +164,6 @@ public class ASMFactory extends SkeletonTermFactory {
 		return new ASMArray(node);
 	}
 
-	static IStrategoTerm wrap(boolean node) {
-		if(node)
-			return new ASMBoolean(True.INSTANCE);
-		else
-			return new ASMBoolean(False.INSTANCE);
-	}
 
 	private static IStrategoTerm wrap(Type node) {
 		if(node == null)
@@ -495,6 +489,48 @@ public class ASMFactory extends SkeletonTermFactory {
 
 	public static IStrategoTerm wrapAccessFlags(int access) {
 		return new ASMAccessFlags(access);
+	}
+
+	static IStrategoTerm wrapJava(boolean value) {
+		if(value)
+			return new ASMJavaBoolean(True.INSTANCE);
+		else
+			return new ASMJavaBoolean(False.INSTANCE);
+	}
+
+	static IStrategoTerm wrapJava(double value) {
+		return new ASMJavaDouble(value);
+	}
+
+	static IStrategoTerm wrapJava(float value) {
+		return new ASMJavaFloat(value);
+	}
+
+	static IStrategoTerm wrapJava(byte value) {
+		return new ASMJavaByte(value);
+	}
+
+	static IStrategoTerm wrapJava(char value) {
+		return new ASMJavaCharacter(value);
+	}
+
+	static IStrategoTerm wrapJava(short value) {
+		return new ASMJavaShort(value);
+	}
+
+	static IStrategoTerm wrapJava(int value) {
+		return new ASMJavaInt(value);
+	}
+
+	static IStrategoTerm wrapJava(long value) {
+		return new ASMJavaLong(value);
+	}
+
+	public static IStrategoTerm wrap(boolean value) {
+		if(value)
+			return True.INSTANCE;
+		else
+			return False.INSTANCE;
 	}
 
 }
