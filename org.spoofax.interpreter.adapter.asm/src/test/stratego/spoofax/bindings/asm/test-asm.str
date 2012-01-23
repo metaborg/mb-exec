@@ -5,4 +5,6 @@ imports
 	
 strategies
 	
-	simple-topdown = topdown(debug)	
+	simple-topdown-debug = topdown(debug)	
+	
+	simple-topdown = topdown(id)

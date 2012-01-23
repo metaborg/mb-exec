@@ -23,19 +23,37 @@ import org.junit.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spoofax.interpreter.core.Interpreter;
+import org.spoofax.interpreter.core.InterpreterErrorExit;
 import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterExit;
+import org.spoofax.interpreter.core.UndefinedStrategyException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.TermFactory;
 
 public class TestASMLibrary {
 
+	private static interface Strategy {
+		void apply(String fileName, InputStream stream) throws IOException, InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException;
+	}
+	
 	@Test
 	public void shouldParseClassAndPrettyPrintWithoutExceptions() throws FileNotFoundException, IOException {
 		parseAndPretty(new FileInputStream("bin/org/spoofax/interpreter/adapter/asm/TestASMLibrary.class"));
 	}
 
 	@Test
-	public void shouldParseM2RepoAndPrettyPrintWithoutExceptions() throws FileNotFoundException, IOException {
+	public void shouldParseM2RepoAndPrettyPrintWithoutExceptions() throws FileNotFoundException, IOException, InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+		visitAllClassesInM2(new Strategy() {
+			
+			@Override
+			public void apply(String fileName, InputStream stream) throws IOException {
+				parse(stream);
+			}
+		});
+	}
+
+	private void visitAllClassesInM2(Strategy strategy) throws IOException,
+			FileNotFoundException, InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
 		File m2 = new File(System.getProperty("user.home") + "/.m2");
 		//File m2 = new File("/home/armijn/maven");
 		if(m2.exists() && m2.isDirectory()) {
@@ -52,7 +70,7 @@ public class TestASMLibrary {
 					while(es.hasMoreElements()) {
 						JarEntry e = es.nextElement();
 						if(e.getName().endsWith(".class"))
-							parseAndPretty(jar.getInputStream(e));
+							strategy.apply(next.getName() + "!" + e.getName(), jar.getInputStream(e));
 					}
 					
 				}
@@ -82,11 +100,17 @@ public class TestASMLibrary {
 
 	@Test
 	public void shouldParseClassAndTraverse() throws FileNotFoundException, IOException, InterpreterException {
-		Interpreter itp = new Interpreter(new ASMFactory(), new TermFactory());
+		final Interpreter itp = new Interpreter(new ASMFactory(), new TermFactory());
 		itp.load("target/resources/share/libstratego-lib.ctree");
 		itp.load("target/resources/share/asm-tests.ctree");
-		itp.setCurrent(parse(new FileInputStream("bin/org/spoofax/interpreter/adapter/asm/TestASMLibrary.class")));
-		assertTrue(itp.invoke("simple_topdown_0_0"));
+		visitAllClassesInM2(new Strategy() {
+			
+			@Override
+			public void apply(String fileName, InputStream stream) throws IOException, InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+				itp.setCurrent(parse(stream));
+				assertTrue(itp.invoke("simple_topdown_0_0"));
+			}
+		});
 	}
 
 	
