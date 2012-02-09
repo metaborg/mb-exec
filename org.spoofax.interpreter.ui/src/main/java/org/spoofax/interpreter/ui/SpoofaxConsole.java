@@ -96,7 +96,7 @@ public class SpoofaxConsole extends IOConsole implements Runnable {
 					prompt.flush();
 					
 					String line = br.readLine();
-					if (!intp.eval(line))
+					if (line == null || !intp.eval(line))
 						break;
 				} catch (IOException e) {
 					// assume that the console has been closed
