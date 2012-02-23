@@ -10,6 +10,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class InterpreterPlugin extends AbstractUIPlugin {
+	
+	public static final boolean DEBUG_MODE = InterpreterPlugin.class.desiredAssertionStatus();
 
 	private static InterpreterPlugin instance;
 
@@ -21,9 +23,11 @@ public class InterpreterPlugin extends AbstractUIPlugin {
 	}
 	
 	public static void logError(String message, Throwable t) {
-		if (message != null) 
-			System.err.println(message);
-		t.printStackTrace();
+		if (DEBUG_MODE) {
+			if (message != null) 
+				System.err.println(message);
+			t.printStackTrace();
+		}
 
 		if (message == null) 
 			message = t.getLocalizedMessage() == null ? t.getMessage() : t.getLocalizedMessage();
