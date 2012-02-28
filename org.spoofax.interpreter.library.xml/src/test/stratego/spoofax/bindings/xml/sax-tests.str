@@ -147,7 +147,7 @@ strategies
       !"namespace test 1"
     , with-namespaces(xml-parse-string)
     , !"<x xmlns:edi='http://ecommerce.example.org/schema'><edi:foo/></x>"
-    , !Element(QName(None(), "x"), [], [Element(QName("http://ecommerce.example.org/schema", "foo"), [], [])])
+    , !Element(Name(None(), "x"), [], [Element(Name(Some("http://ecommerce.example.org/schema"), "foo"), [], [])])
     )
 
   parse-error-tests =

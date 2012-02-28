@@ -10,10 +10,10 @@ imports
 // namespace aware
 signature
   constructors
-    Element   : QName * List(Attribute) * List(Element) -> Element
-    Attribute : QName * String -> Attribute
+    Element   : Name * List(Attribute) * List(Element) -> Element
+    Attribute : Name * String -> Attribute
     Text      : String -> Element
-    QName     : String * String -> QName
+    Name      : Option(String) * String -> Name
 
 // not namespace aware 
 signature

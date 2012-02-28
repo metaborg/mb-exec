@@ -25,7 +25,7 @@ import org.xml.sax.helpers.DefaultHandler;
  *  Element   : Name * List(Attribute) * List(Element) -> Element
  *  Attribute : Name * String -> Attribute
  *  Text      : String -> Element
- *  Name     : String * String
+ *  Name      : Option(String) * String
  *
  * If the parser is not namespace aware, then it has this structure:
  *
@@ -73,6 +73,8 @@ public class StrategoTermBuilder extends DefaultHandler {
 
 	private final IStrategoConstructor noneCons;
 
+	private final IStrategoConstructor someCons;
+
 	private final ITermFactory factory;
 
 	private final Stack<Element> stack = new Stack<Element>();
@@ -95,6 +97,7 @@ public class StrategoTermBuilder extends DefaultHandler {
 		textCons = factory.makeConstructor("Text", 1);
 		nameCons = factory.makeConstructor("Name", 2);
 		noneCons = factory.makeConstructor("None", 0);
+		someCons = factory.makeConstructor("Some", 1);
 
 		allowMixedContent = library.getAllowMixedContent();
 		allowTextContent = library.getAllowCharacterContent();
@@ -131,7 +134,7 @@ public class StrategoTermBuilder extends DefaultHandler {
 	{
 		if (namespaceAware) {
 			boolean uriIsEmpty = uri.length() == 0;
-			IStrategoTerm uriTerm = uriIsEmpty ? factory.makeAppl(noneCons) : factory.makeString(uri);
+			IStrategoTerm uriTerm = uriIsEmpty ? factory.makeAppl(noneCons) : factory.makeAppl(someCons, factory.makeString(uri));
 			IStrategoTerm localNameTerm = factory.makeString(uriIsEmpty ? qName : localName);
 			return factory.makeAppl(nameCons, uriTerm, localNameTerm);
 		}
