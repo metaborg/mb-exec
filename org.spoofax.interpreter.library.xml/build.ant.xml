@@ -57,4 +57,16 @@
 		<copy todir="share/" file="${ctree-lib.target}" />
 	</target>
 	
+	<target name="check" depends="compile-str">
+		<junit printsummary="yes" showoutput="yes">
+			<!-- FIXME: ideally the classpath is read from MANIFEST.MF -->
+			<classpath>
+				<pathelement path="../org.spoofax.interpreter.core/bin" />
+				<pathelement path="../org.spoofax.terms/bin" />
+				<pathelement path="bin" />
+			</classpath>
+			<test name="org.spoofax.interpreter.library.xml.test.XMLLibraryTest" />
+		</junit>
+	</target>
+
 </project>
