@@ -1,6 +1,5 @@
 module spoofax/interpreter/pack
 imports
-  Stratego-Shell
   libstratego-lib
   libstrc
   libstratego-sglr
@@ -11,32 +10,33 @@ signature
 
 strategies
 
-  spx-pack-stratego(|includePath) = 
+  spx-pack-stratego(frontend | includePath) =
       spx-resolve-path(|includePath) 
-    ; spx-pack-stratego(|includePath, [])
+    ; spx-pack-stratego(frontend | includePath, [])
 
-  spx-pack-stratego(|includePath : List(String), seen : List(String)) :
+  spx-pack-stratego(frontend | includePath : List(String), seen : List(String)) :
     fileName -> spec
   where
      <string-ends-with(|".str")> fileName
   where
       ast := <spx-parse-stratego-file(|"Module", fileName)> fileName
-    ; file* := <collect(\ Import(x) -> x \)> ast
+    ; ast' := <frontend> ast
+    ; file* := <collect(\ Import(x) -> x \)> ast'
     ; resFile* := <map(spx-resolve-path(|includePath))>
     ; seen' := [ fileName | seen] 
     ; seen'' := <union> (resFile*, seen')
     ; imp* := <diff> (resFile*, seen') 
-    ; ast* := <map(spx-pack-stratego(|includePath, seen''))> imp*
-    ; spec := <foldl(spx-merge-specs)> (ast*, <spx-module-to-spec> ast)
+    ; ast* := <map(spx-pack-stratego(frontend | includePath, seen''))> imp*
+    ; spec := <foldl(spx-merge-specs)> (ast*, <spx-module-to-spec> ast')
 
-  spx-pack-stratego(|includePath : List(String), seen : List(String)) :
+  spx-pack-stratego(frontend | includePath : List(String), seen : List(String)) :
     fileName -> spec
   where
      <string-ends-with(|".ctree")> fileName
   where
      spec := <ReadFromFile> fileName
 
-  spx-pack-stratego(|includePath : List(String), seen : List(String)) :
+  spx-pack-stratego(frontend | includePath : List(String), seen : List(String)) :
     InternalLib(x) -> Specification([])
 
   spx-parse-stratego-file(|sort, path) =
@@ -53,7 +53,7 @@ strategies
   spx-resolve-path-with-fallback(|includePath):
     moduleName -> resolvedName
   where
-      res* := <filter(\ x -> rn where rn := <spx-resolve-one-ctree(|x)> moduleName \)> includePath
+      res* := <filter(\ x -> rn where rn := <spx-resolve-one-path(|x)> moduleName \)> includePath
     ; resolvedName := <Hd> res*
 
   spx-resolve-path-with-fallback(|includePath): x@"libstratego-lib" -> InternalLib(x)
@@ -63,13 +63,13 @@ strategies
   spx-resolve-path-with-fallback(|includePath): x@"libstratego-sdf" -> InternalLib(x)
   spx-resolve-path-with-fallback(|includePath): x@"libstrc" -> InternalLib(x)
 
-  spx-resolve-one-str(|prefixPath) :
+  spx-resolve-one-path(|prefixPath) :
     moduleName -> fileName
   where
       fileName := <concat-strings> [prefixPath, "/", moduleName, ".ctree"]
     ; file-exists
 
-  spx-resolve-one-ctree(|prefixPath) :
+  spx-resolve-one-path(|prefixPath) :
     moduleName -> fileName
   where
       fileName := <concat-strings> [prefixPath, "/", moduleName, ".str"]

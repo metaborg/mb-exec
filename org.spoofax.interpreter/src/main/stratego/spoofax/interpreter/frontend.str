@@ -35,12 +35,14 @@ strategies
     spx-shell-is-def : x@RDef(_, _, _) -> x
     spx-shell-is-def : x@RDefNoArgs(_, _) -> x
 
-    spx-inject-current-context :
-      Specification([sig, Strategies(strat*) | rest]) -> 
-      Specification([sig', Strategies(strat'*) | rest])
-    with
-        sig'    := <spx-merge-signatures> (sig, <prim("SPX_interpreter_introspect_constructors")>)
-      ; strat'* := <conc> (strat*, <prim("SPX_interpreter_introspect_strategies")>)
+    // FIXME: the SPX_interpreter_introspect_strategies is not implemented
+
+    // spx-inject-current-context :
+    //   Specification([sig, Strategies(strat*) | rest]) ->
+    //   Specification([sig', Strategies(strat'*) | rest])
+    // with
+    //     sig'    := <spx-merge-signatures> (sig, <prim("SPX_interpreter_introspect_constructors")>)
+    //   ; strat'* := <conc> (strat*, <prim("SPX_interpreter_introspect_strategies"); debug(!"strats: ")>)
 
     spx-merge-signatures :
       (Signature([]), ctor*) -> Signature([Constructors(ctor*)])
@@ -51,9 +53,12 @@ strategies
     spx-shell-frontend-for-import :
       ImportOne(Import(modName)) -> ast
     where
-        <unescape ; spx-pack-stratego(|["."])> modName
-      ; spx-inject-current-context
-      ; m-transform-no-overlays(id
+        <unescape ; spx-pack-stratego(spx-shell-frontend-for-str | ["."])> modName
+      // ; spx-inject-current-context
+      ; spx-shell-frontend => ast
+
+    spx-shell-frontend-for-str =
+        m-transform-no-overlays(id
           ; m-transform-constructors(id
             ; pre-desugar
             ; try(DeclareVarToConst)
@@ -123,7 +128,7 @@ strategies
            ; define-congruences-def
           ]
       )
-     ) => ast
+     )
 
     spx-shell-frontend-for-expr = 
         pre-desugar
