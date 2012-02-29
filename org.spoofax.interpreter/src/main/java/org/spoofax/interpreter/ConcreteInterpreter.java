@@ -63,12 +63,12 @@ public class ConcreteInterpreter extends Interpreter {
 			load(findLibrary("stratego-lib/libstratego-lib.ctree"));
 			load(findLibrary("libstrc.ctree"));
 			load(findLocalResource("share/frontend.ctree"));
-			// load(findLibrary("libstratego-aterm.ctree"));
-			// load(findLibrary("libstratego-gpp.ctree"));
-			// load(findLibrary("libstratego-rtg.ctree"));
-			// load(findLibrary("libstratego-sdf.ctree"));
+			load(findLibrary("libstratego-aterm.ctree"));
+			load(findLibrary("libstratego-gpp.ctree"));
+			load(findLibrary("libstratego-rtg.ctree"));
+			load(findLibrary("libstratego-sdf.ctree"));
 			load(findLibrary("libstratego-sglr.ctree"));
-			// load(findLibrary("libstratego-tool-doc.ctree"));
+			load(findLibrary("libstratego-tool-doc.ctree"));
 
 			ParseTableManager ptm = new ParseTableManager();
 			sugarTable = ptm
