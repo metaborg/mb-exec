@@ -108,9 +108,14 @@ strategies
       not(<foo> 10)
       // actual tests
     ; apply-test(
-      !"strategy definition"
+      !"strategy definition 1"
     , eval(|int)
     , !"foo : 2 -> 2"
+    )
+    ; apply-test(
+      !"strategy definition 2"
+    , eval(|int)
+    , !"bar : 2 -> 2"
     )
     ; apply-test(
       !"load ctree"
@@ -133,6 +138,12 @@ strategies
       !"run strategy 3"
     , eval(|int)
     , !"<foo> 3"
+    , !2
+    )
+    ; apply-test(
+      !"run strategy 4"
+    , eval(|int)
+    , !"<bar> 2"
     , !2
     )
 

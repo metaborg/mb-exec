@@ -27,7 +27,7 @@ public class InterpreterLibraryTest extends AbstractInterpreterTest {
 	}
 
 	public void testInterpreter() throws IOException, InterpreterException {
-		interpTest("interpreter-tests", "(17,0)");
+		interpTest("interpreter-tests", "(19,0)");
 	}
 
 	public void interpTest(String test, String result) throws IOException, InterpreterException {
