@@ -22,6 +22,7 @@ strategies
       ; simple-tests(|int)
       ; error-tests(|int)
       ; gpp-tests(|int)
+      ; ctree-tests(|int)
     )
 
 strategies
@@ -101,6 +102,42 @@ strategies
     , eval(|int)
     , !${<prettyprint-Statements> ["foo", "bar"]}
     )
+
+  ctree-tests(|int) =
+      // ensure compiler does not remove foo strategy from ctree
+      not(<foo> 10)
+      // actual tests
+    ; apply-test(
+      !"strategy definition"
+    , eval(|int)
+    , !"foo : 2 -> 2"
+    )
+    ; apply-test(
+      !"load ctree"
+    , eval(|int)
+    , !"import target/resources/share/interpreter-tests"
+    )
+    ; apply-test(
+      !"run strategy 1"
+    , eval(|int)
+    , !"<foo> 1"
+    , !2
+    )
+    // NOTE: old foo strategy is overridden by the one from the ctree!
+    ; apply-and-fail(
+      !"run strategy 2"
+    , eval(|int)
+    , !"<foo> 2"
+    )
+    ; apply-test(
+      !"run strategy 3"
+    , eval(|int)
+    , !"<foo> 3"
+    , !2
+    )
+
+  foo : 1 -> 2
+  foo : 3 -> 2
 
   // FIXME: overlays do not work in the interpreter
 
