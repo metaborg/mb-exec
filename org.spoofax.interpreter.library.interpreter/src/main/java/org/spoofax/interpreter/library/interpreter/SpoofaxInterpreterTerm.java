@@ -63,10 +63,11 @@ public class SpoofaxInterpreterTerm extends StrategoTerm {
 		setLastError(null);
 
 		try {
-			if(!interpreter.parseAndInvoke(line)) {
-				ioAgent.printError("command failed");
-			}
-			return true;
+			if(interpreter.parseAndInvoke(line))
+				return true;
+
+			err = "command failed";
+			// fall through
 		} catch (TokenExpectedException e) {
 			err = e.getMessage();
 		} catch (InterpreterErrorExit e) {
