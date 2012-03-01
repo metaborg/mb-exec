@@ -99,7 +99,7 @@ public class StrategoSignature {
         CTOR_As = factory.makeConstructor("As", 2);// todo
         CTOR_Wld = factory.makeConstructor("Wld", 0);// todo
         CTOR_Build = factory.makeConstructor("Build", 1);
-        CTOR_ExtSDef = factory.makeConstructor("ExtSDefT", 3);
+        CTOR_ExtSDef = factory.makeConstructor("ExtSDef", 3);
         CTOR_Scope = factory.makeConstructor("Scope", 2);
         CTOR_Seq = factory.makeConstructor("Seq", 2);
 

@@ -405,13 +405,16 @@ public class StrategoCoreLoader {
         }
     }
 
+    @SuppressWarnings("unused")
     private void loadStrategies(IStrategoList list) throws InterpreterException {
         for (int i = 0; i < list.size(); i++) {
             IStrategoAppl t = Tools.applAt(list, i);
             if(Tools.isSDefT(t, context)) {
                 SDefT def = parseSDefT(t);
                 context.addSVar(def.getName(), def);
-            } else if(Tools.isExtSDef(t, context)) {
+            }
+            // FIXME: this has never run, since isExtSDef used to check for ExtSDefT (sic)
+            else if (false && Tools.isExtSDef(t, context)) {
                 ExtSDef def = parseExtSDef(t);
                 context.addSVar(def.getName(), def);
                 // int x = 0;
