@@ -9,8 +9,10 @@ package org.spoofax.interpreter.library.spx;
 
 import java.util.LinkedList;
 
+import org.spoofax.interpreter.core.Context;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.StrategoSignature;
 import org.spoofax.interpreter.core.VarScope;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.SDefT;
@@ -36,9 +38,15 @@ public class SPX_interpreter_introspect_strategies extends AbstractPrimitive {
         while(v.getParent() != null)
             v = v.getParent();
 
-        for(SDefT sdef : v.getSVars()) {
-            // FIXME: this throws NotImplementedException
-            as.addFirst(sdef.toExternalDef(f));
+        StrategoSignature sign = null;
+
+        // FIXME: ugh
+        if (env instanceof Context) {
+            sign = ((Context) env).getStrategoSignature();
+
+            for(SDefT sdef : v.getSVars()) {
+                as.addFirst(sdef.toExternalDef(f, sign));
+            }
         }
 
         env.setCurrent(f.makeList(as));
