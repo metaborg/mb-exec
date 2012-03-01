@@ -23,6 +23,7 @@ strategies
       ; error-tests(|int)
       ; gpp-tests(|int)
       ; ctree-tests(|int)
+      // ; str-tests(|int)
     )
 
 strategies
@@ -53,18 +54,30 @@ strategies
     , ![2,3,4]
     )
     ; apply-test(
-      !"module definition"
+      !"module definition 1"
     , eval(|int)
-      // FIXME: does not work in interpreter
-    , !$[//module example
-         //strategies
-           bar = map(dec)]
+    , !$[module example
+         strategies
+           bar = id]
     )
     ; apply-test(
-      !"module use"
+      !"module use 1"
+    , eval(|int)
+    , !"<bar> 1"
+    , !1
+    )
+    ; apply-test(
+      !"module definition 2"
+    , eval(|int)
+    , !$[module example
+         strategies
+           bar = map(inc)]
+    )
+    ; apply-test(
+      !"module use 2"
     , eval(|int)
     , !"<bar> [1,2,3]"
-    , ![0,1,2]
+    , ![2,3,4]
     )
 
   error-tests(|int) =
@@ -104,6 +117,12 @@ strategies
     )
 
   ctree-tests(|int) =
+    ctree-or-str-tests(|"import target/resources/share/interpreter-tests", int)
+
+  str-tests(|int) =
+    ctree-or-str-tests(|"import src/test/stratego/spoofax/bindings/interpreter/interpreter-tests", int)
+
+  ctree-or-str-tests(|imp, int) =
       // ensure compiler does not remove foo strategy from ctree
       not(<foo> 10)
       // actual tests
@@ -118,9 +137,9 @@ strategies
     , !"bar : 2 -> 2"
     )
     ; apply-test(
-      !"load ctree"
+      !imp
     , eval(|int)
-    , !"import target/resources/share/interpreter-tests"
+    , !imp
     )
     ; apply-test(
       !"run strategy 1"
