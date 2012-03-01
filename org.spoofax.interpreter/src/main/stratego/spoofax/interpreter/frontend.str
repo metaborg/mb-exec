@@ -130,7 +130,7 @@ strategies
       )
      )
 
-    spx-shell-frontend-for-expr = 
+    spx-shell-frontend-for-expr =
         pre-desugar
       ; desugar-list-matching
       ; desugar
@@ -147,6 +147,7 @@ strategies
       ; strename
       ; desugar-def
       ; rename-sdef
+      ; simplify
       ; spx-shell-fixup-rename-calls
 
     spx-shell-RenameVar:
