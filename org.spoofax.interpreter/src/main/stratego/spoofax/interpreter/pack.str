@@ -20,14 +20,22 @@ strategies
      <string-ends-with(|".str")> fileName
   where
       ast := <spx-parse-stratego-file(|"Module", fileName)> fileName
-    ; ast' := <frontend> ast
-    ; file* := <collect(\ Import(x) -> x \)> ast'
-    ; resFile* := <map(spx-resolve-path(|includePath))>
     ; seen' := [ fileName | seen] 
+    ; spec := <spx-pack-stratego-ast(frontend | includePath, seen')>
+
+  spx-pack-stratego-ast(frontend | includePath) =
+    spx-pack-stratego-ast(frontend | includePath, [])
+
+  spx-pack-stratego-ast(frontend | includePath : List(String), seen' : List(String)) :
+    ast -> spec
+  where
+      ast' := <spx-module-to-spec; frontend> ast
+    ; file* := <collect(\ Import(x) -> x \)> ast
+    ; resFile* := <map(spx-resolve-path(|includePath))>
     ; seen'' := <union> (resFile*, seen')
     ; imp* := <diff> (resFile*, seen') 
     ; ast* := <map(spx-pack-stratego(frontend | includePath, seen''))> imp*
-    ; spec := <foldl(spx-merge-specs)> (ast*, <spx-module-to-spec> ast')
+    ; spec := <foldl(spx-merge-specs)> (ast*, ast')
 
   spx-pack-stratego(frontend | includePath : List(String), seen : List(String)) :
     fileName -> spec
@@ -76,7 +84,13 @@ strategies
     ; file-exists
 
   spx-module-to-spec: 
-    Module(m, sec1*) -> Specification(sec*)
+    Module(m, sec*) -> Specification(<spx-merge-sections> sec*)
+
+  spx-module-to-spec:
+    Specification(sec*) -> Specification(<spx-merge-sections> sec*)
+
+  spx-merge-sections:
+    sec1* -> sec*
   where
     let fc(s) = filter(s) ; concat
     in

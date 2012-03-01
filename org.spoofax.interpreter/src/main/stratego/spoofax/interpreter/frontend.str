@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
+ * Copyright (c) 2012, Tobi Vollebregt
  *
  * Licensed under the GNU Lesser General Public License, v2.1
  */
@@ -17,16 +18,20 @@ strategies
 
     fake-main = spx-shell-frontend
 
-    spx-shell-frontend = 
-        where(<set-config> ("program", "interpreter")) 
+    spx-shell-frontend =
+        where(<set-config> ("program", "interpreter"))
       ; (
-          spx-shell-is-def    < spx-shell-frontend-for-def 
-        + spx-shell-is-import < spx-shell-frontend-for-import 
-        + id                  < spx-shell-frontend-for-expr 
+          spx-shell-is-def    < spx-shell-frontend-for-def
+        + spx-shell-is-import < spx-shell-frontend-for-import
+        + spx-shell-is-spec   < spx-shell-frontend-for-spec
+        + id                  < spx-shell-frontend-for-expr
         + fail
-        ) 
+        )
 
     spx-shell-is-import : x@ImportOne(_) -> x
+
+    spx-shell-is-spec : x@Specification(_) -> x
+    spx-shell-is-spec : x@Module(_, _) -> x
 
     spx-shell-is-def : x@SDefT(_, _, _, _) -> x
     spx-shell-is-def : x@SDef(_, _, _) -> x
@@ -35,14 +40,12 @@ strategies
     spx-shell-is-def : x@RDef(_, _, _) -> x
     spx-shell-is-def : x@RDefNoArgs(_, _) -> x
 
-    // FIXME: the SPX_interpreter_introspect_strategies is not implemented
-
-    // spx-inject-current-context :
-    //   Specification([sig, Strategies(strat*) | rest]) ->
-    //   Specification([sig', Strategies(strat'*) | rest])
-    // with
-    //     sig'    := <spx-merge-signatures> (sig, <prim("SPX_interpreter_introspect_constructors")>)
-    //   ; strat'* := <conc> (strat*, <prim("SPX_interpreter_introspect_strategies"); debug(!"strats: ")>)
+    spx-inject-current-context :
+      Specification([sig, Strategies(strat*) | rest]) ->
+      Specification([sig', Strategies(strat'*) | rest])
+    with
+        sig'    := <spx-merge-signatures> (sig, <prim("SPX_interpreter_introspect_constructors")>)
+      ; strat'* := <conc> (strat*, <prim("SPX_interpreter_introspect_strategies")>)
 
     spx-merge-signatures :
       (Signature([]), ctor*) -> Signature([Constructors(ctor*)])
@@ -53,9 +56,12 @@ strategies
     spx-shell-frontend-for-import :
       ImportOne(Import(modName)) -> ast
     where
-        <unescape ; spx-pack-stratego(spx-shell-frontend-for-str | ["."])> modName
-      // ; spx-inject-current-context
-      ; spx-shell-frontend => ast
+        <unescape ; spx-pack-stratego(spx-shell-frontend-for-str | ["."])> modName => ast
+
+    spx-shell-frontend-for-spec =
+        spx-module-to-spec
+      ; spx-inject-current-context
+      ; spx-pack-stratego-ast(spx-shell-frontend-for-str | ["."])
 
     spx-shell-frontend-for-str =
         m-transform-no-overlays(id
@@ -105,30 +111,30 @@ strategies
                 ; desugar-def
                 ; check-patterns
               )
-           )
-         ; m-transform-local-defs(id
-         ; ![<joindefs>] 
-         ; [RenameSDef]
-      )
-/*
-      ; m-transform-external-defs(id
-          ; if ?[_,_|_] then
-              warn(|"multiple external definitions with same signature")
-            ; [rules(SameSigExtDef :+= <id>) | ![]]
-            end
-          ; [RenameSDef
-             ; desugar-DefaultVarDec
-             ; strename
-            ]
-      )
-*/
-      ; m-transform-local-defs(
-          [rename-calls
-           ; simplify
-           ; define-congruences-def
-          ]
-      )
-     )
+          )
+          ; m-transform-local-defs(id
+              ; ![<joindefs>]
+              ; [RenameSDef]
+          )
+		      ; m-transform-external-defs(id
+            /*
+		          ; if ?[_,_|_] then
+		              warn(|"multiple external definitions with same signature")
+		            ; [rules(SameSigExtDef :+= <id>) | ![]]
+		            end
+            */
+		          ; [RenameSDef
+		             ; desugar-DefaultVarDec
+		             ; strename
+		            ]
+		      )
+		      ; m-transform-local-defs(
+		          [rename-calls
+		           ; simplify
+		           ; define-congruences-def
+		          ]
+		      )
+        )
 
     spx-shell-frontend-for-expr =
         pre-desugar
@@ -142,7 +148,7 @@ strategies
         stratego-desugar
       ; raise-annotations
       ; desugar-list-matching
-      ; rules-to-sdefs-def 
+      ; rules-to-sdefs-def
       ; desugar-DefaultVarDec
       ; strename
       ; desugar-def
@@ -165,9 +171,9 @@ strategies
 
     spx-shell-RenameCall :
     CallT(SVar(x), ss, ts) -> CallT(SVar(y), ss, ts)
-    where 
+    where
       <not(spx-shell-ends-with-arity)> x
-    with 
+    with
         <length> ss => n
       ; <length> ts => m
       ; ( <spx-shell-RenameVar> (x,(n,m)) => y <+ <spx-shell-HoArg> x => y )
@@ -178,4 +184,4 @@ strategies
     pain = !SDefT("zz",[],[],CallT(SVar("inc"),[],[])) ; spx-shell-frontend
 
     main = !RDefT("R",[],[],Rule(Anno(Int("0"),Wld()),Anno(Int("1"),Op("Nil",[])),Id())) ; spx-shell-frontend
-*/    
+*/

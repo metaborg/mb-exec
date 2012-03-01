@@ -9,9 +9,10 @@ exports
 
     "import" ImportModName -> ImportOne{cons("ImportOne")}
 
-    Strategy -> Toplevel
-    Def      -> Toplevel
-    ImportOne   -> Toplevel
+    Strategy  -> Toplevel
+    Def       -> Toplevel
+    ImportOne -> Toplevel
+    Module    -> Toplevel
 
   context-free start-symbols
     Toplevel
