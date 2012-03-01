@@ -84,7 +84,7 @@ public class XML_set_feature extends XMLAbstractPrimitive {
 				library.setLastException(e);
 			} catch (ParserConfigurationException e) {
 				library.setLastException(e);
-			} 
+			}
 
 			return false;
 		}

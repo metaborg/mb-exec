@@ -116,24 +116,24 @@ strategies
               ; ![<joindefs>]
               ; [RenameSDef]
           )
-		      ; m-transform-external-defs(id
+          ; m-transform-external-defs(id
             /*
-		          ; if ?[_,_|_] then
-		              warn(|"multiple external definitions with same signature")
-		            ; [rules(SameSigExtDef :+= <id>) | ![]]
-		            end
+              ; if ?[_,_|_] then
+                  warn(|"multiple external definitions with same signature")
+                ; [rules(SameSigExtDef :+= <id>) | ![]]
+                end
             */
-		          ; [RenameSDef
-		             ; desugar-DefaultVarDec
-		             ; strename
-		            ]
-		      )
-		      ; m-transform-local-defs(
-		          [rename-calls
-		           ; simplify
-		           ; define-congruences-def
-		          ]
-		      )
+              ; [RenameSDef
+                 ; desugar-DefaultVarDec
+                 ; strename
+                ]
+          )
+          ; m-transform-local-defs(
+              [rename-calls
+               ; simplify
+               ; define-congruences-def
+              ]
+          )
         )
 
     spx-shell-frontend-for-expr =

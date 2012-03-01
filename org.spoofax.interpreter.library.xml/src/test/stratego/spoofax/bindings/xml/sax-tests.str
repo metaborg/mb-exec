@@ -7,7 +7,7 @@ module spoofax/bindings/xml/sax-tests
 imports 
   libstratego-lib
   spoofax/bindings/xml/sax
-  
+
 strategies
 
   main =
