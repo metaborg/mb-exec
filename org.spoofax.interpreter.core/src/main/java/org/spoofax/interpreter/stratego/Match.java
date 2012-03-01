@@ -582,7 +582,7 @@ public class Match extends Strategy {
         String c = Tools.javaStringAt(p, 0);
 
         if(c.equals("Nil")) {
-            if(t.size() == 0)
+            if(t.isEmpty())
                 return emptyList();
         } 
         else if(c.equals("Cons")) {

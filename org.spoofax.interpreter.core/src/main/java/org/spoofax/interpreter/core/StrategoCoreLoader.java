@@ -391,11 +391,11 @@ public class StrategoCoreLoader {
     }
 
     private void loadConstructors(IStrategoList list) {
-        for (int i = 0; i < list.size(); i++) {
+        for (; !list.isEmpty(); list = list.tail()) {
          // TODO Added the ExtOpDeclInj here, not sure this should be handled differently,
          //      but this extra check will at least prevent the class cast exception otherwise
          //      thrown and allow the loading to recover.
-        	IStrategoAppl opDecl = Tools.applAt(list, i);
+            IStrategoAppl opDecl = (IStrategoAppl) list.head();
         	if (!opDecl.getConstructor().getName().equals("OpDeclInj") &&
         	    !opDecl.getConstructor().getName().equals("ExtOpDeclInj")  ) {
         		String name = Tools.javaStringAt(opDecl, 0);
@@ -407,8 +407,8 @@ public class StrategoCoreLoader {
 
     @SuppressWarnings("unused")
     private void loadStrategies(IStrategoList list) throws InterpreterException {
-        for (int i = 0; i < list.size(); i++) {
-            IStrategoAppl t = Tools.applAt(list, i);
+        for (; !list.isEmpty(); list = list.tail()) {
+            IStrategoAppl t = (IStrategoAppl) list.head();
             if(Tools.isSDefT(t, context)) {
                 SDefT def = parseSDefT(t);
                 context.addSVar(def.getName(), def);
@@ -423,7 +423,6 @@ public class StrategoCoreLoader {
                 throw new InterpreterException("Illegal ExtSDef in StrategoCore file");
             }
         }
-
     }
 
     @Deprecated
