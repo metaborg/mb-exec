@@ -379,15 +379,19 @@ public class StrategoCoreLoader {
 //        prg.prettyPrint(pp);
 //        System.out.println(pp.getString());
 
-        IStrategoAppl sign = Tools.applAt(Tools.listAt(prg, 0), 0);
-        IStrategoAppl strats = Tools.applAt(Tools.listAt(prg, 0), 1);
-
         if (DebugUtil.isDebugging()) {
             DebugUtil.debug(prg);
         }
 
-        loadConstructors(Tools.listAt(Tools.applAt(Tools.listAt(sign, 0), 0), 0));
-        loadStrategies(Tools.listAt(strats, 0));
+        IStrategoList list = Tools.listAt(prg, 0);
+
+        if (!list.isEmpty()) {
+            IStrategoAppl sign = Tools.applAt(list, 0);
+            IStrategoAppl strats = Tools.applAt(list, 1);
+
+            loadConstructors(Tools.listAt(Tools.applAt(Tools.listAt(sign, 0), 0), 0));
+            loadStrategies(Tools.listAt(strats, 0));
+        }
     }
 
     private void loadConstructors(IStrategoList list) {
