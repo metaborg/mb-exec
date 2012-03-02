@@ -35,6 +35,8 @@ public class StrategoSignature {
 
     public final IStrategoConstructor CTOR_VarDec;
 
+    public final IStrategoConstructor CTOR_SVar;
+
     public final IStrategoConstructor CTOR_Explode;
 
     public final IStrategoConstructor CTOR_ConstType;
@@ -94,6 +96,7 @@ public class StrategoSignature {
         CTOR_Str = factory.makeConstructor("Str", 1);
         CTOR_Var = factory.makeConstructor("Var", 1);
         CTOR_VarDec = factory.makeConstructor("VarDec", 2);
+        CTOR_SVar = factory.makeConstructor("SVar", 1);
         CTOR_Explode = factory.makeConstructor("Explode", 2);
         CTOR_ConstType = factory.makeConstructor("ConstType", 1);// todo
         CTOR_FunType = factory.makeConstructor("FunType", 2);// todo
@@ -147,6 +150,10 @@ public class StrategoSignature {
     }
 
     public IStrategoConstructor getVarDec() {
+        return CTOR_VarDec;
+    }
+
+    public IStrategoConstructor getSVar() {
         return CTOR_VarDec;
     }
 

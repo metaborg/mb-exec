@@ -41,11 +41,11 @@ strategies
     spx-shell-is-def : x@RDefNoArgs(_, _) -> x
 
     spx-inject-current-context :
-      Specification([sig, Strategies(strat*) | rest]) ->
-      Specification([sig', Strategies(strat'*) | rest])
+      Specification([sig, Strategies(strats), Rules(rls) | rest]) ->
+      Specification([sig', Strategies(strats'), Rules(rls) | rest])
     with
         sig'    := <spx-merge-signatures> (sig, <prim("SPX_interpreter_introspect_constructors")>)
-      ; strat'* := <conc> (strat*, <prim("SPX_interpreter_introspect_strategies")>)
+      ; strats' := <conc> (strats, <prim("SPX_interpreter_introspect_strategies_fast", (strats, rls))>)
 
     spx-merge-signatures :
       (Signature([]), ctor*) -> Signature([Constructors(ctor*)])

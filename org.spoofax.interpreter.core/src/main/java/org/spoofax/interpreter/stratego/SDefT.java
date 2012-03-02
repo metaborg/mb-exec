@@ -142,6 +142,10 @@ public class SDefT implements IConstruct {
         return name;
     }
 
+    public String getUncifiedName() {
+        return uncify(name);
+    }
+
     protected void setName(String name) {
         this.name = name;
     }
@@ -227,7 +231,7 @@ public class SDefT implements IConstruct {
             tArgs[i] = f.makeAppl(sig.CTOR_VarDec, f.makeString(termArgs[i]), ConstType.INSTANCE.toTerm(f, sig));
         }
 
-        return f.makeAppl(sig.CTOR_ExtSDef, f.makeString(uncify(name)), f.makeList(sArgs), f.makeList(tArgs));
+        return f.makeAppl(sig.CTOR_ExtSDef, f.makeString(getUncifiedName()), f.makeList(sArgs), f.makeList(tArgs));
     }
 
     // FIXME: next 3 methods copied from org.spoofax.interpreter.cli.StrategyCompletor

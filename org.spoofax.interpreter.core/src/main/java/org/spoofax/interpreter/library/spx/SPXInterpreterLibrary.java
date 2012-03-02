@@ -20,5 +20,6 @@ public class SPXInterpreterLibrary extends AbstractStrategoOperatorRegistry {
     public SPXInterpreterLibrary() {
         add(new SPX_interpreter_introspect_constructors());
         add(new SPX_interpreter_introspect_strategies());
+        add(new SPX_interpreter_introspect_strategies_fast());
     }
 }
