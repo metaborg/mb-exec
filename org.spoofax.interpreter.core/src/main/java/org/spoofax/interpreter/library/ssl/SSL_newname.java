@@ -62,7 +62,7 @@ public class SSL_newname extends AbstractPrimitive {
 	    
         String result;
         IStrategoTerm resultTerm;
-        synchronized (TermFactory.class) { // additional, non-essential lock
+        synchronized (TermFactory.class) { // additional, non-essential lock to avoid contention
             do {
                 int counterValue = getNextValue(prefix, counter);
                 result = prefix + counterValue;

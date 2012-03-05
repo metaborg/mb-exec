@@ -32,10 +32,10 @@ public class SSL_new extends AbstractPrimitive {
 
         ITermFactory factory = env.getFactory();
 
-        synchronized (TermFactory.class) { // protect SSL_new data and hope for JVM lock elimination in loop
-            String s = (char)(letterA + alphaCounter) + "_" + counter;
+        synchronized (TermFactory.class) {
+            String s;
             IStrategoString result;
-            while((result = factory.tryMakeUniqueString(s)) == null) {
+            do {
                 alphaCounter++;
                 if(alphaCounter > 25) {
                     alphaCounter = 0;
@@ -43,7 +43,7 @@ public class SSL_new extends AbstractPrimitive {
                     if (counter < 0) counter = 0;
                 }
                 s = (char)(letterA + alphaCounter) + "_" + counter;
-            }
+            } while ((result = factory.tryMakeUniqueString(s)) == null);
             env.setCurrent(result);
         }
 
