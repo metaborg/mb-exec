@@ -31,8 +31,9 @@ public class InterpreterPlugin extends AbstractUIPlugin {
 
 		if (message == null) 
 			message = t.getLocalizedMessage() == null ? t.getMessage() : t.getLocalizedMessage();
-			
-		instance().getLog().log(new SpoofaxStatus(IStatus.ERROR, 0, message, t));
+		
+		if(instance() != null && instance().getBundle() != null)
+			instance().getLog().log(new SpoofaxStatus(IStatus.ERROR, 0, message, t));
 	}
 	
 	private static class SpoofaxStatus extends Status {
