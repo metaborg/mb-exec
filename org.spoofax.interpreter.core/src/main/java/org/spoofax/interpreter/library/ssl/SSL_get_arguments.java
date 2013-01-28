@@ -33,6 +33,7 @@ public class SSL_get_arguments extends AbstractPrimitive {
         case IStrategoTerm.INT:
         case IStrategoTerm.STRING:
         case IStrategoTerm.REAL:
+        case IStrategoTerm.BLOB:
             env.setCurrent(env.getFactory().makeList());
             return true;
         case IStrategoTerm.LIST:

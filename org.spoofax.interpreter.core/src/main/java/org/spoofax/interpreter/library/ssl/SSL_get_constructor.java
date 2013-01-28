@@ -36,6 +36,9 @@ public class SSL_get_constructor extends AbstractPrimitive {
             return true;
         case IStrategoTerm.REAL:
             return true;
+        case IStrategoTerm.BLOB:
+            env.setCurrent(factory.makeString("BLOB_" + tvars[0].toString()));
+            return true;
         case IStrategoTerm.LIST:
             env.setCurrent(factory.makeList());
             return true;
