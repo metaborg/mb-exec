@@ -1,0 +1,62 @@
+<project name="spoofax-interpreter-adapter-ecj" default="bundle-ctree">
+
+	<property name="build.dir" value="target" />
+	<property name="src.dir" value="src/main/java" />
+	<property name="strategoxt.dir" value="${user.home}/.nix-profile" />
+
+	<property file="version.properties" />
+
+	<target 
+		name="compile-str"
+		depends="compile-lib-to-ctree, compile-tests-to-ctree"
+		description="--> compile Stratego code">
+	</target>
+	
+	<property name="ctree-lib.target" value="${build.dir}/resources/share/ecj-library.ctree" />
+
+	<uptodate property="compile-lib-to-ctree.notRequired" targetfile="${ctree-lib.target}">
+	    <srcfiles dir="src/main/stratego" includes="**/*.str" />
+	</uptodate>
+
+	<target name="compile-lib-to-ctree" unless="${compile-lib-to-ctree.notRequired}">
+		<mkdir dir="${build.dir}/resources/share" />
+		<exec executable="${strategoxt.dir}/bin/strc" failonerror="true">
+			<arg value="-i" />
+			<arg value="src/main/stratego/spoofax/bindings/eclipse/eclipse-compiler-ffi.str" />
+			<arg value="-I" />
+			<arg value="src/main/stratego" />
+			<arg value="-F" />
+			<arg value="-c" />
+			<arg value="--library" />
+			<arg value="-o" />
+			<arg value="${ctree-lib.target}" />
+		</exec>
+	</target>
+	
+	<property name="ctree-tests.target" value="${build.dir}/resources/share/ecj-tests.ctree" />
+
+	<uptodate property="compile-tests-to-ctree.notRequired" targetfile="${ctree-tests.target}">
+	    <srcfiles dir="src/test/stratego" includes="**/*.str" />
+	</uptodate>
+	
+	<target name="compile-tests-to-ctree" unless="${compile-tests-to-ctree.notRequired}">
+		<exec executable="${strategoxt.dir}/bin/strc" failonerror="true">
+			<arg value="-i" />
+			<arg value="src/test/stratego/spoofax/bindings/eclipse/test-eclipse-compiler-ffi.str" />
+			<arg value="-I" />
+			<arg value="src/main/stratego" />
+			<arg value="-I" />
+			<arg value="src/test/stratego" />
+			<arg value="-F" />
+			<arg value="-c" />
+			<arg value="--library" />
+			<arg value="-o" />
+			<arg value="${ctree-tests.target}" />
+		</exec>
+	</target>
+
+	<target name="bundle-ctree" depends="compile-str">
+	  <copy todir="bin/share/" file="${ctree-lib.target}" />
+	</target>
+	
+</project>

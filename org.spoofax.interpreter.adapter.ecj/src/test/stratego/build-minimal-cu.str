@@ -1,8 +1,0 @@
-module build-minimal-cu
-imports
-  libstratego-lib
-  spoofax/bindings/eclipse/EclipseJava
-  
-strategies
-  
-  main = !CompilationUnit(PackageDeclaration(None(), [], SimpleName("foo")), [], [])

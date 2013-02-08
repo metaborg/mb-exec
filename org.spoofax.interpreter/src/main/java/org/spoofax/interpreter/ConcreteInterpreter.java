@@ -16,6 +16,8 @@ import org.spoofax.interpreter.core.InterpreterErrorExit;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.InterpreterExit;
 import org.spoofax.interpreter.core.UndefinedStrategyException;
+import org.spoofax.interpreter.library.IOAgent;
+import org.spoofax.interpreter.library.jsglr.JSGLRLibrary;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -37,6 +39,20 @@ public class ConcreteInterpreter extends Interpreter {
 	private final ParseTable sugarTable;
 	private final SGLR sugarParser;
 
+	private static class ConcreteIOAgent extends IOAgent {
+
+		@Override
+		public InputStream openInputStream(String fn, boolean isDefinitionFile) throws FileNotFoundException {
+			if(isDefinitionFile) {
+				InputStream r = ConcreteInterpreter.class.getClassLoader().getResourceAsStream(fn);
+				return r;
+			}
+			else {
+				return super.openInputStream(fn, isDefinitionFile);
+			}
+		}
+	}
+
 	public ConcreteInterpreter() {
 		this(new TermFactory());
 	}
@@ -46,20 +62,22 @@ public class ConcreteInterpreter extends Interpreter {
 		try {
 			load(findLibrary("stratego-lib/libstratego-lib.ctree"));
 			load(findLibrary("libstrc.ctree"));
-			load(findLocalLibrary("share/frontend.ctree"));
-			// load(findLibrary("libstratego-aterm.ctree"));
-			// load(findLibrary("libstratego-gpp.ctree"));
-			// load(findLibrary("libstratego-rtg.ctree"));
-			// load(findLibrary("libstratego-sdf.ctree"));
-			// load(findLibrary("libstratego-sglr.ctree"));
-			// load(findLibrary("libstratego-tool-doc.ctree"));
+			load(findLocalResource("share/frontend.ctree"));
+			load(findLibrary("libstratego-aterm.ctree"));
+			load(findLibrary("libstratego-gpp.ctree"));
+			load(findLibrary("libstratego-rtg.ctree"));
+			load(findLibrary("libstratego-sdf.ctree"));
+			load(findLibrary("libstratego-sglr.ctree"));
+			load(findLibrary("libstratego-tool-doc.ctree"));
 
 			ParseTableManager ptm = new ParseTableManager();
 			sugarTable = ptm
-					.loadFromStream(findLocalLibrary("/share/Stratego-Shell.tbl"));
+					.loadFromStream(findLocalResource("share/Stratego-Shell.tbl"));
 			sugarParser = new SGLR(new TreeBuilder(), sugarTable);
 			sugarParser.setUseStructureRecovery(false);
 			setCurrent(getFactory().makeList());
+			setIOAgent(new ConcreteIOAgent());
+			JSGLRLibrary.attach(this);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} catch (InterpreterException e) {
@@ -72,10 +90,10 @@ public class ConcreteInterpreter extends Interpreter {
 
 	}
 
-	private InputStream findLocalLibrary(String path) throws IOException {
+	private InputStream findLocalResource(String path) throws IOException {
 		InputStream ins = ConcreteInterpreter.class.getClassLoader().getResourceAsStream(path);
 		if(ins == null)
-			throw new IOException("Failed to load internal library " + path);
+			throw new IOException("Failed to load internal resource " + path);
 		return ins;
 	}
 
@@ -101,7 +119,8 @@ public class ConcreteInterpreter extends Interpreter {
 		IStrategoTerm tree = (IStrategoTerm) sugarParser.parse(codeAsString, "stdin", startSymbol);
 		IStrategoTerm old = current();
 		setCurrent(tree);
-		invoke(frontendStrategy);
+		if(!invoke(frontendStrategy))
+			return null;
 		IStrategoAppl ret = (IStrategoAppl) current();
 		setCurrent(old);
 		return ret;
@@ -114,6 +133,9 @@ public class ConcreteInterpreter extends Interpreter {
 		} else if(program.getName().equals("SDefT")) {
 			SDefT def = loader.parseSDefT(program);
 			context.addSVar(def.getName(), def);
+			return true;
+		} else if(program.getName().equals("Specification")) {
+			load(program);
 			return true;
 		} else {
 			return evaluate(program);

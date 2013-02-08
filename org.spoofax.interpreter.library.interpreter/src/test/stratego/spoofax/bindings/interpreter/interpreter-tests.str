@@ -1,0 +1,185 @@
+/*
+ * Copyright (c) 2011-2012, Tobi Vollebregt
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
+module spoofax/bindings/interpreter/interpreter-tests
+imports
+  libstratego-lib
+  spoofax/bindings/interpreter/interpreter
+
+strategies
+
+  main =
+    test-suite(!"interpreter-test",
+      // all subsequent tests depend on this test
+      // (creating an interpreter is pretty slow)
+      apply-test(
+        !"create interpreter"
+      , create-interpreter => int
+      , !()
+      )
+      ; simple-tests(|int)
+      ; error-tests(|int)
+      ; gpp-tests(|int)
+      ; ctree-tests(|int)
+      // ; str-tests(|int)
+    )
+
+strategies
+
+  simple-tests(|int) =
+    apply-test(
+      !"build a term"
+    , eval(|int)
+    , !"!42"
+    , !42
+    )
+    ; apply-test(
+      !"interpreter maintains state"
+    , eval(|int)
+    , !"inc"
+    , !43
+    )
+    ; apply-test(
+      !"strategy definition"
+    , eval(|int)
+    , !"foo = map(inc)"
+    , !43
+    )
+    ; apply-test(
+      !"strategy use"
+    , eval(|int)
+    , !"<foo> [1,2,3]"
+    , ![2,3,4]
+    )
+    ; apply-test(
+      !"module definition 1"
+    , eval(|int)
+    , !$[module example
+         strategies
+           bar = id]
+    )
+    ; apply-test(
+      !"module use 1"
+    , eval(|int)
+    , !"<bar> 1"
+    , !1
+    )
+    ; apply-test(
+      !"module definition 2"
+    , eval(|int)
+    , !$[module example
+         strategies
+           bar = map(inc)]
+    )
+    ; apply-test(
+      !"module use 2"
+    , eval(|int)
+    , !"<bar> [1,2,3]"
+    , ![2,3,4]
+    )
+
+  error-tests(|int) =
+    apply-and-fail(
+      !"syntax error"
+    , eval(|int)
+    , !"!Foo)"
+    )
+    ; apply-and-show(
+      !"syntax error message"
+    , get-interpreter-error(|int)
+    , !()
+    )
+
+  gpp-tests(|int) =
+    apply-test(
+      !"abox2text use"
+    , eval(|int)
+    , !"<abox2text(|80)> S(\"hi\")"
+    , !"hi"
+    )
+    ; apply-test(
+      !"pretty printer definition"
+    , map(eval(|int) <+ debug(!"failed : "); fail)
+    , !${
+        pp-one-V(s) = !V([], <s>)
+        pp-v-list(s)   = ?[] < id + !V([], <map(pp-one-V(s))>)
+        prettyprint-Statements: a -> [H([SOpt(HS(), "0")], [<pp-v-list(prettyprint-Statement)> a])]
+        prettyprint-Statement = ![S(<is-string>)]
+      }
+      ; string-tokenize(|['\n'])
+    )
+    ; apply-and-show(
+      !"pretty printer use"
+    , eval(|int)
+    , !${<prettyprint-Statements> ["foo", "bar"]}
+    )
+
+  ctree-tests(|int) =
+    ctree-or-str-tests(|"import target/resources/share/interpreter-tests", int)
+
+  str-tests(|int) =
+    ctree-or-str-tests(|"import src/test/stratego/spoofax/bindings/interpreter/interpreter-tests", int)
+
+  ctree-or-str-tests(|imp, int) =
+      // ensure compiler does not remove foo strategy from ctree
+      not(<foo> 10)
+      // actual tests
+    ; apply-test(
+      !"strategy definition 1"
+    , eval(|int)
+    , !"foo : 2 -> 2"
+    )
+    ; apply-test(
+      !"strategy definition 2"
+    , eval(|int)
+    , !"bar : 2 -> 2"
+    )
+    ; apply-test(
+      !imp
+    , eval(|int)
+    , !imp
+    )
+    ; apply-test(
+      !"run strategy 1"
+    , eval(|int)
+    , !"<foo> 1"
+    , !2
+    )
+    // NOTE: old foo strategy is overridden by the one from the ctree!
+    ; apply-and-fail(
+      !"run strategy 2"
+    , eval(|int)
+    , !"<foo> 2"
+    )
+    ; apply-test(
+      !"run strategy 3"
+    , eval(|int)
+    , !"<foo> 3"
+    , !2
+    )
+    ; apply-test(
+      !"run strategy 4"
+    , eval(|int)
+    , !"<bar> 2"
+    , !2
+    )
+
+  foo : 1 -> 2
+  foo : 3 -> 2
+
+  // FIXME: overlays do not work in the interpreter
+
+  // overlay-tests(|int) =
+  //   apply-test(
+  //     !"overlay definition"
+  //   , eval(|int)
+  //   , !"Line(xs) = H([SOpt(HS(), \"0\")], xs)"
+  //   )
+  //   ; apply-test(
+  //     !"overlay use"
+  //   , eval(|int)
+  //   , !"!Line([1])"
+  //   , !H([SOpt(HS(), "0")], [1])
+  //   )

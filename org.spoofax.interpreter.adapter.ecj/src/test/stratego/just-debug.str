@@ -1,7 +1,0 @@
-module just-debug
-imports
-  libstratego-lib
- 
-strategies
-
-  main = debug

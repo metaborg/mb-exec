@@ -10,13 +10,12 @@ to execute the following steps:
 
 1) Fetch ant-junit-1.6.5.jar and junit-3.8.1.jar from 
    http://www.ii.uib.no/~karltk/spoofax/extras/
-   and place them into ext/
+   and place them into lib/
 
 2) Compile the jar with 
-   ant -f build/build.xml jar
+   ant -f build.ant.xml jar
    
-   This will produce the file interpreter-x.y.z.jar in the root 
-   directory of this project. 
+   This will produce the file interpreter-x.y.z.jar into target/
 
 3) Compile the unit tests by entering the tests/ directory and
    executing
@@ -24,5 +23,5 @@ to execute the following steps:
    (This requires strc to be in your path.)
 
 3) Execute the unit tests with ant 
-   ant -f build/build.xml run.tests
+   ant -f build.ant.xml run.tests
 

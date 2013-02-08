@@ -1,0 +1,7 @@
+module spoofax/bindings/asm
+imports
+	libstratego-lib
+	
+strategies
+	
+	asm-parse-class = fail	

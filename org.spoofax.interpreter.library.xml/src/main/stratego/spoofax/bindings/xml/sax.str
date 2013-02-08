@@ -1,0 +1,36 @@
+/*
+ * Copyright (c) 2011-2012, Tobi Vollebregt
+ *
+ * Licensed under the GNU Lesser General Public License, v2.1
+ */
+module spoofax/bindings/xml/sax
+imports
+	libstratego-lib
+
+// namespace aware
+signature
+  constructors
+    Element   : Name * List(Attribute) * List(Element) -> Element
+    Attribute : Name * String -> Attribute
+    Text      : String -> Element
+    Name      : Option(String) * String -> Name
+
+// not namespace aware 
+signature
+  constructors
+    Element   : String * List(Attribute) * List(Element) -> Element
+    Attribute : String * String -> Attribute
+    Text      : String -> Element
+
+strategies
+	
+  xml-set-feature = ?(a, b); prim("XML_set_feature", a, b)
+  xml-set-feature(|a, b) = prim("XML_set_feature", a, b)
+  xml-parse-string = ?t; prim("XML_parse_string", t)
+  xml-get-parse-errors = prim("XML_get_parse_errors")
+
+  xml-with-feature(s | feature, enable) =
+  	xml-set-feature(|feature, enable); s;
+  	xml-set-feature(|feature, <subti> (1, enable)) 
+
+  
