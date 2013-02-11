@@ -115,7 +115,10 @@ public class ConcreteInterpreter extends Interpreter {
 			throws IOException, InterpreterException {
 	}
 
-	private IStrategoAppl parseAndCompile(String codeAsString, String frontendStrategy, String startSymbol) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
+	private IStrategoAppl parseAndCompile(String codeAsString, String frontendStrategy, String startSymbol) 
+			throws TokenExpectedException, BadTokenException, ParseException, 
+			SGLRException, InterpreterErrorExit, InterpreterExit, 
+			UndefinedStrategyException, InterpreterException, InterruptedException {
 		IStrategoTerm tree = (IStrategoTerm) sugarParser.parse(codeAsString, "stdin", startSymbol);
 		IStrategoTerm old = current();
 		setCurrent(tree);
@@ -126,7 +129,10 @@ public class ConcreteInterpreter extends Interpreter {
 		return ret;
 	}
 
-	public boolean parseAndInvoke(String codeAsString) throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
+	public boolean parseAndInvoke(String codeAsString) 
+			throws TokenExpectedException, InterpreterErrorExit, BadTokenException, 
+			ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, 
+			InterpreterException, InterruptedException {
 		IStrategoAppl program = parseAndCompile(codeAsString, "spx_shell_frontend_0_0", "Toplevel");
 		if(program == null) {
 			throw new InterpreterException("Failed to compile fragment");
