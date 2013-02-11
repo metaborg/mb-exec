@@ -40,7 +40,7 @@ public class ConcreteInterpreter extends Interpreter {
 	private final SGLR sugarParser;
 
 	private static class ConcreteIOAgent extends IOAgent {
-
+		
 		@Override
 		public InputStream openInputStream(String fn, boolean isDefinitionFile) throws FileNotFoundException {
 			if(isDefinitionFile) {
@@ -87,7 +87,6 @@ public class ConcreteInterpreter extends Interpreter {
 		} catch (InvalidParseTableException e) {
 			throw new RuntimeException(e);
 		}
-
 	}
 
 	private InputStream findLocalResource(String path) throws IOException {
