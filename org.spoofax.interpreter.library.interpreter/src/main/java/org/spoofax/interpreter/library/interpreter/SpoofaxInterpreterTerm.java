@@ -87,6 +87,8 @@ public class SpoofaxInterpreterTerm extends StrategoTerm {
 				err = e.getCause().getMessage();
 			else
 				err = e.getMessage();
+		} catch (InterruptedException e) {
+			err = e.getMessage();
 		}
 
 		if (err != null) {
