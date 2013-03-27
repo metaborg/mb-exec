@@ -87,6 +87,10 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
             r.add(x.t);
         return r;
     }
+    
+    public IStrategoTerm any() {
+        return map.keySet().iterator().next();
+    }
 
     public boolean containsKey(IStrategoTerm t) {
         return map.containsKey(t);
