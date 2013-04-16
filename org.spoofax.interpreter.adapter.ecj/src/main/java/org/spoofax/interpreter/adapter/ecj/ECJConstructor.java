@@ -8,7 +8,9 @@
 package org.spoofax.interpreter.adapter.ecj;
 
 import java.io.IOException;
+import java.util.Iterator;
 
+import org.spoofax.EmptyIterator;
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
@@ -115,5 +117,10 @@ public class ECJConstructor implements IStrategoConstructor {
     @Override
     public boolean isList() {
         throw new NotImplementedException();
+    }
+
+    @Override
+    public Iterator<IStrategoTerm> iterator() {
+        return new EmptyIterator<IStrategoTerm>();
     }
 }

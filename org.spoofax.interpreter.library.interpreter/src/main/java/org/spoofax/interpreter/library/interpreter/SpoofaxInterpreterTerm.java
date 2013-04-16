@@ -6,7 +6,9 @@
 package org.spoofax.interpreter.library.interpreter;
 
 import java.io.IOException;
+import java.util.Iterator;
 
+import org.spoofax.EmptyIterator;
 import org.spoofax.interpreter.ConcreteInterpreter;
 import org.spoofax.interpreter.core.InterpreterErrorExit;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -132,6 +134,10 @@ public class SpoofaxInterpreterTerm extends StrategoTerm {
 	@Override
 	protected int hashFunction() {
 		return System.identityHashCode(this);
+	}
+
+	public Iterator<IStrategoTerm> iterator() {
+		return new EmptyIterator<IStrategoTerm>();
 	}
 
 }
