@@ -33,6 +33,10 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         }
     };
 
+    public StrategoHashMap() {
+        super();
+    }
+    
     public StrategoHashMap(int initialSize, int maxLoad) {
         super(initialSize, 1.0f * maxLoad / 100);
     }
@@ -105,6 +109,6 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
     }
 
     public Iterator<IStrategoTerm> iterator() {
-        return this.iterator();
+        return this.values().iterator();
     }
 }
