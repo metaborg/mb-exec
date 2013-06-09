@@ -8,6 +8,7 @@
 package org.spoofax.interpreter.core;
 
 import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoReal;
@@ -197,6 +198,11 @@ public class Tools {
         return t.getConstructor().getName().equals(ctorName);
     }
 
+    public static boolean hasConstructor(IStrategoAppl t, String ctorName, int arity) {
+        final IStrategoConstructor constructor = t.getConstructor();
+        return constructor.getName().equals(ctorName) && constructor.getArity() == arity;
+    }
+    
     public static boolean isTermTuple(IStrategoTerm t) {
         return t.getTermType() == IStrategoTerm.TUPLE;
     }
