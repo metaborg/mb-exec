@@ -5,7 +5,6 @@ Bundle-SymbolicName: org.spoofax.interpreter.library.xml
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.junit,
- org.junit4,
  org.spoofax.interpreter.core,
  org.spoofax.terms
 Export-Package: org.spoofax.interpreter.library.xml
