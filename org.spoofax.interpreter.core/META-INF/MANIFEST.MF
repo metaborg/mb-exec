@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Stratego/J Interpreter Core
 Bundle-SymbolicName: org.spoofax.interpreter.core;singleton=true
 Bundle-Version: 0.4.1.qualifier
-Require-Bundle: org.junit4,
+Require-Bundle: org.junit,
  org.spoofax.terms
 Eclipse-LazyStart: false
 Export-Package: org.spoofax,
