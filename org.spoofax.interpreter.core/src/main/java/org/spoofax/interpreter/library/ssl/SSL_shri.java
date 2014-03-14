@@ -1,7 +1,5 @@
 /*
- * Created on 08.aug.2005
- *
- * Copyright (c) 2005, Karl Trygve Kalleberg <karltk near strategoxt.org>
+ * Created on 03.mar.2014
  * 
  * Licensed under the GNU Lesser General Public License, v2.1
  */
