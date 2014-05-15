@@ -97,12 +97,14 @@ rules // actual matching
     getAllSubterms[aappl]() => aats,
     T aats |- (ml(pts), E env, D def) --> (S(aats'), E env', D def')
 
+  // match an empty list (not a Nil())
   T t |- (ml([]), E env, D def) --> (S(t), E env, D def)
   where
     isATermList(t) => True(),
     asATermList(t) => alist,
     isEmpty[alist](t) => True()
   
+  // match a non-empty list (not a Cons(_, _))
   T t |- ml([p | ps]) --> S(t)
   where
     isATermList(t) => True(),
@@ -115,6 +117,7 @@ rules // actual matching
   
   T t |- ml(l) --> F()
   where all-fail
+
 
 // // 
 // // // signature
