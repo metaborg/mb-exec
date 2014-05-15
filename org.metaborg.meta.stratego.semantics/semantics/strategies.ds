@@ -23,19 +23,6 @@ rules // environment manipulation
   lookup(env, x) --> F()
   where all-fail
 
-// signature
-//   sorts
-//     MatchRes
-//   
-//   native-operators
-//     match : Term * Term * E -> MatchRes
-// 
-// rules // match (implicit)
-// 
-//   T t |- (Match(p), E env) --> (v, E env')
-//   where
-//     match(p, t, env) => MatchRes(v, env')
-
 signature
   internal-constructors
     m : PreTerm -> Term
@@ -122,16 +109,12 @@ rules // actual matching
     asATermList(t) => alist,
     isEmpty[alist](t) => False(),
     head[alist](t) => th,
-    T th |- m(p) --> S(t')
+    T th |- m(p) --> S(t'),
+    tail[alist](t) => tl,
+    T tl |- ml(p) --> S(t'')
   
-  T t |- ml([p | ps]) --> F()
-  where
-    isATermList(t) => True(),
-    asATermList(t) => alist,
-    isEmpty[alist](t) => False(),
-    head[alist](t) => th,
-    T th |- m(p) --> F()
-
+  T t |- ml(l) --> F()
+  where all-fail
 
 // // 
 // // // signature
