@@ -16,6 +16,7 @@ import java.util.List;
 import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.stratego.All;
 import org.spoofax.interpreter.stratego.Build;
+import org.spoofax.interpreter.stratego.CallDynamic;
 import org.spoofax.interpreter.stratego.CallT;
 import org.spoofax.interpreter.stratego.ExtSDef;
 import org.spoofax.interpreter.stratego.Fail;
@@ -105,6 +106,8 @@ public class StrategoCoreLoader {
             return makeSome(appl);
         } else if (ctor.equals(sign.getImportTerm())) {
         	return makeImportTerm(appl);
+        } else if (ctor.equals(sign.getCallDynamic())){
+        	return parseCallDynamic(appl);
         }
 
         throw new InterpreterException("Unknown op '" + ctor + "'");
@@ -283,6 +286,31 @@ public class StrategoCoreLoader {
             DebugUtil.debug(" -tvars : ", realtvars);
         }
         return new CallT(name, realsvars, realtvars);
+    }
+
+    private Strategy parseCallDynamic(IStrategoAppl t) throws InterpreterException {
+    	
+    	if (DebugUtil.isDebugging()) {
+    		DebugUtil.debug("parseDynamicCall()");
+    	}
+    	IStrategoTerm sref = Tools.termAt(t, 0);
+    	
+    	if (DebugUtil.isDebugging()) {
+    		DebugUtil.debug(" name  : ", sref);
+    	}
+    	
+    	IStrategoList svars = Tools.listAt(t, 1);
+    	Strategy[] realsvars = parseStrategyList(svars);
+    	
+    	IStrategoTerm[] realtvars = parseTermList(Tools.listAt(t, 2));
+    	
+    	if (DebugUtil.isDebugging()) {
+    		DebugUtil.debug(" -svars : ", realsvars);
+    	}
+    	if (DebugUtil.isDebugging()) {
+    		DebugUtil.debug(" -tvars : ", realtvars);
+    	}
+    	return new CallDynamic(sref, realsvars, realtvars);
     }
 
     private IStrategoTerm[] parseTermList(IStrategoList tvars) {
