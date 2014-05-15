@@ -1,0 +1,15 @@
+module shared
+
+imports
+  aterm
+
+signature
+
+  // success and failure values
+  values
+    S : T
+    F :
+  
+  semantic-components
+    E -> Map
+    D -> Map

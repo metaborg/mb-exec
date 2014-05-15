@@ -1,0 +1,384 @@
+module
+  stratego/core/strategies
+
+imports
+  shared
+  terms
+  aterm
+  stratego-signatures
+
+signature
+
+  native-operators
+  
+    lookup : E * String -> Term
+
+rules // environment manipulation
+
+  lookup(env, x) --> S(at)
+  where
+    env[x] => t,
+    asATerm(t) => at // only required for type checking
+  
+  lookup(env, x) --> F()
+  where all-fail
+
+// signature
+//   sorts
+//     MatchRes
+//   
+//   native-operators
+//     match : Term * Term * E -> MatchRes
+// 
+// rules // match (implicit)
+// 
+//   T t |- (Match(p), E env) --> (v, E env')
+//   where
+//     match(p, t, env) => MatchRes(v, env')
+
+signature
+  internal-constructors
+    m : PreTerm -> Term
+    ml: List(Term) -> Term
+
+rules // match dispatch annotations
+
+  T t |- Match(NoAnnoList(mp)) --> v
+  where
+    T t |- m(mp) --> v
+
+  T t |- Match(Anno(mp, ma)) --> S(t')
+  where
+    T t |- m(mp) --> S(t'),
+    getAnnotations[t]() => aa,
+    T aa |- m(ma) --> S(t'')
+
+  T t |- Match(x) --> F()
+  where
+    all-fail
+
+rules // actual matching
+
+  T t |- m(Wld()) --> S(t)
+
+  T t |- m(Int(i)) --> S(t)
+  where
+    isATermInt(t) => True(),
+    asATermInt(t) => aint,
+    intValue[aint]() => i',
+    i == i'
+  
+  T t |- m(Str(s)) --> S(t)
+  where
+    isATermString(t) => True(),
+    asATermString(t) => astr,
+    stringValue[astr]() => s',
+    s == s'
+  
+  // match against unbound variable
+  T t |- (m(Var(x)), E env, D def) --> (S(t), E { x |--> t, env }, D def)
+  where
+    lookup(env, x) --> F()
+  
+  // match against bound variable
+  T t |- (m(Var(x)), E env, D def) --> (S(t), E env, D def)
+  where
+    lookup(env, x) --> S(t'),
+    t == t'
+
+  // compound as with unbound variable
+  T t |- (m(As(Var(x), p)), E env, D def) --> (S(t), E { x |--> t, env'}, D def)
+  where
+    lookup(env, x) --> F(),
+    T t |- (m(p), E env, D def) --> (S(t'), E env', D def') 
+  
+  // compound as with bound variable
+  T t |- (m(As(Var(x), p)), E env, D def) --> (S(t), E env', D def)
+  where
+    lookup(env, x) --> S(t'),
+    t' == t,
+    T t |- (m(p), E env, D def) --> (S(t''), E env', D def')
+  
+  // match application
+  T t |- (m(Op(c, pts)), E env, D def) --> (S(t), E env', D def)
+  where
+    isATermAppl(t) => True(),
+    asATermAppl(t) => aappl,
+    getConstructor[aappl]() => aconstr,
+    getName[aconstr]() => c',
+    c == c',
+    getAllSubterms[aappl]() => aats,
+    T aats |- (ml(pts), E env, D def) --> (S(aats'), E env', D def')
+
+  T t |- (ml([]), E env, D def) --> (S(t), E env, D def)
+  where
+    isATermList(t) => True(),
+    asATermList(t) => alist,
+    isEmpty[alist](t) => True()
+  
+  T t |- ml([p | ps]) --> S(t)
+  where
+    isATermList(t) => True(),
+    asATermList(t) => alist,
+    isEmpty[alist](t) => False(),
+    head[alist](t) => th,
+    T th |- m(p) --> S(t')
+  
+  T t |- ml([p | ps]) --> F()
+  where
+    isATermList(t) => True(),
+    asATermList(t) => alist,
+    isEmpty[alist](t) => False(),
+    head[alist](t) => th,
+    T th |- m(p) --> F()
+
+
+// // 
+// // // signature
+// // //   native-operators
+// // //     substitute : Term * E -> Term
+// // // 
+// // // rules // build (implicit)
+// // //     
+// // //    T t |- (Build(p), E env) --> (t', E env)
+// // //    where substitute(p, env) => t'
+// // 
+// // rules // build (explicit)
+// // 
+// //   Build(Int(i)) --> S(IT(i))
+// // 
+// //   Build(Str(s)) --> S(ST(s))
+// // 
+// //   (Build(Var(x)), E env, D defs) --> (S(t'), E env, D defs)
+// //   where
+// //     env[x] => t'
+// // 
+// //   (Build(Op(c, ts)), E env, D defs) --> (S(t'), E Env, D defs)
+// //   where
+// //     (Build(ts), E env, D defs) --> (S(ts'), E env', D defs'),
+// //     T(c, ts', []) => t'
+// // 
+// //   Build([]) --> S([])
+// //   
+// //   (Build([t | ts]), E env, D defs) --> (S([t' | ts']), E env, D defs)
+// //   where
+// //     (Build(t), E env, D defs) --> (S(t'), E env', D defs'),
+// //     (Build(ts), E env, D defs) --> (S(ts'), E env'', D defs'')
+// // 
+// // 
+// // 
+// // 
+// // 
+// // 
+// // rules // scope 
+// // 
+// //   Scope([], s) --> t'
+// //   where 
+// //     s --> t'
+// //   
+// //   T t |- (Scope([x | xs]), E env, D defs) --> (t', E {x |--> oldx, env''}, D defs)
+// //   where
+// //     lookup(env, x) --> oldx, // store current value
+// //     T t |- (Scope(xs, s), E env, D defs) --> (t', E env'', D defs')
+// // 
+// // 
+// // 
+// // 
+// // 
+// // rules // identity and failure
+// // 
+// //   T t |- Id() --> S(t)
+// //   
+// //   Fail() --> F()
+// // 
+// // 
+// // 
+// // 
+// // 
+// // rules // proceed
+// // 
+// //   // ProceedT(s*, t*) ?
+// //   
+// //   // ProceedNoArgs() ?
+// // 
+// // rules // sequential composition
+// //   
+// //   T t |- Seq(s1, s2) --> v
+// //   where
+// //     T t  |- s1 --> S(t'),
+// //     T t' |- s2 --> v 
+// //         
+// //   T t |- Seq(s1, s2) --> F()
+// //   where
+// //     T t |- s1 --> F()
+// //                    
+// // rules // guarded choice   
+// //         
+// //   T t |- (GuardedLChoice(s1, s2, s3), E env) --> (v, E env'')
+// //   where
+// //     T t  |- (s1, E env) --> (S(t'), E env'), 
+// //     T t' |- (s2, E env') --> (v, E env'') 
+// //                 
+// //   T t |- (GuardedLChoice(s1, s2, s3), E env) --> (v, E env'')
+// //   where
+// //     T t |- (s1, E env) --> (F(), E env'),
+// //     T t |- (s3, E env) --> (v, E env'')
+// // 
+// // 
+// // 
+// // 
+// // 
+// // 
+// // 
+// // 
+// // // rules // left choice (rewriting)
+// // // 
+// // //   T t |- (LChoice(s1, s2), E env) --> (v, E env')
+// // //   where
+// // //     T t |- (GuardedLChoice(s1, Id(), s2), E env) --> (v, E env')
+// // 
+// // rules // left choice (explicit)
+// // 
+// //   T t |- (LChoice(s1, s2), E env) --> (S(t'), E env')
+// //   where
+// //     T t |- (s1, E env) --> (S(t'), E env')
+// //   
+// //   T t |- (LChoice(s1, s2), E env) --> (v, E env'')
+// //   where
+// //     T t |- (s1, E env) --> (F(), E env'),
+// //     T t |- (s2, E env) --> (v, E env'')
+// // 
+// // 
+// // 
+// // 
+// // 
+// // signature
+// //   internal-constructors
+// //     map : Strategy -> Strategy
+// // 
+// // rules // term traversal: all
+// // 
+// //   T t |- All(s) --> S(T(c, ts', []))
+// //   where
+// //     t => T(c, ts, []),
+// //     T ts |- map(s) --> S(ts')
+// // 
+// //   T t |- All(s) --> F()
+// //   where
+// //     all-fail
+// // 
+// //   T t |- map(s) --> S([])
+// //   where
+// //     t => []
+// //   
+// //   T t |- map(s) --> S([te' | tes'])
+// //   where
+// //     t => [te, tes],
+// //     T te |- s --> S(te'),
+// //     T tes |- map(s) --> S(tes')
+// // 
+// //   T t |- map(s) --> F()
+// //   where
+// //     all-fail
+// // 
+// // signature
+// //   internal-constructors
+// //     first : Strategy -> Strategy
+// // 
+// // rules // term traversal: one
+// //   
+// //   T t |- One(s) --> S(T(c, ts', []))
+// //   where
+// //     t => T(c, ts, []),
+// //     T ts |- first(s) --> S(ts')
+// //   
+// //   T t |- One(s) --> S(T(c, ts', []))
+// //   where
+// //     all-fail
+// //   
+// //   T t |- first(s) --> F()
+// //   where
+// //     t => []
+// //   
+// //   T t |- first(s) --> S([te' | tes'])
+// //   where
+// //     t => [te | tes],
+// //     T te |- s --> S(te')
+// // 
+// //   T t |- first(s) --> S([te' | tes'])
+// //   where
+// //     t => [te | tes],
+// //     T te  |- s --> F(),
+// //     T tes |- first(s) --> S(tes')
+// //   
+// //   T t |- first(s) --> F()
+// //   where
+// //     all-fail
+// // 
+// // 
+// // 
+// // 
+// // 
+// // 
+// // signature
+// //   internal-sorts
+// //     S
+// //     
+// //   internal-constructors
+// //     SS : List(String) * List(String) * Strategy -> Term
+// //     nameof: -> Term  
+// //     
+// // rules // strategy definitions
+// // 
+// //   // extremely simple because desugaring joins and renames strategy definitions
+// //   T t |- (SDefT(sname, ss, ts, s), E env, D defs) --> (S(t), E env, D { sname |--> sdef, defs })
+// //   where
+// //     T ss |- nameof() --> (S(ss'), E env', D defs'),
+// //     T ts |- nameof() --> (S(ts'), E env'', D defs''),
+// //     SS(ss', ts', s) => sdef
+// //   
+// //   T t |- nameof() --> S([])
+// //   where
+// //     t => []
+// //   
+// //   T t |- (nameof(), E env, D defs) --> (S([v | txs']), E env, D defs)
+// //   where
+// //     t => [DefaultVarDec(v) | txs],
+// //     T txs |- (nameof(), E env, D defs) --> (S(txs'), E env', D defs')
+// // 
+// // 
+// // signature
+// //   internal-constructors
+// //     closure: Term * E -> Term
+// //     bind: List(String) * List(String) * Map -> Term
+// // 
+// // rules // calls
+// //   
+// //   T t |- (CallT(SVar(sname), ass, ats), E env, D defs) --> (v, E env', D defs)
+// //   where
+// //     defs[s] => SS(fss, fts, s),
+// //     // T t |- (bind(fss, ass, defs), E env, D defs) --> (S([]), E env', D defs'), 
+// //     // T t |- (bind(fts, ats, defs), E env', D defs') --> (S([]), E env'', D defs'') 
+// //     
+// // 
+// // 
+// // 
+// // rules // let - in - end
+// // 
+// //   T t |- (Let([], s), E env, D defs) --> (v, E env', D defs)
+// //   where
+// //     T t |- (s, E env, D defs) --> (v, E env', D defs)
+// //   
+// //   T t |- (Let([sdef | sdefs], s), E env, D defs) --> (v, E env'', D defs)
+// //   where
+// //     T t |- (sdef, E env, D defs) --> (S(t'), E env', D defs'),
+// //     T t |- (Let(sdefs), E env, D defs') --> (v, E env'', D defs'')
+// // 
+// //     
+// //     
+// //     
+// //     
+// // 
+// // 
+// // 
+// // 

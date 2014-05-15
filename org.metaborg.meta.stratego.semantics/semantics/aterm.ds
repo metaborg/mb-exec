@@ -1,0 +1,73 @@
+module aterm
+
+imports
+  shared
+
+signature
+
+  native-datatypes
+  
+    org.spoofax.interpreter.terms.IStrategoTerm as T {
+      getSubtermCount : Int
+      getSubterm : Int -> T
+      getAllSubterms : List(T)
+      getAnnotations : TLIST
+    }
+    
+    org.spoofax.interpreter.terms.IStrategoString as TSTR -> T {
+      stringValue : String
+    }
+    
+    org.spoofax.interpreter.terms.IStrategoInt as TINT-> T {
+      intValue : Int
+    }
+    
+    org.spoofax.interpreter.terms.IStrategoAppl as TAPPL -> T {
+      getConstructor : TCONSTR
+    }
+    
+    org.spoofax.interpreter.terms.IStrategoConstructor as TCONSTR-> T {
+      getName : String
+      arity   : Int
+    }
+    
+    org.spoofax.interpreter.terms.IStrategoTuple as TTUP -> T {
+    	
+    }
+    
+    org.spoofax.interpreter.terms.IStrategoList as TLIST -> T {
+      head   : T
+      tail   : TLIST
+      isEmpty: Bool
+    }
+    
+    org.spoofax.interpreter.terms.ITermFactory as TFACTORY {
+      makeString : String -> TSTR
+      makeInt : Int -> TINT
+      makeTuple : List(T) * TLIST -> TTUP
+      
+    	makeConstructor : String * Int -> TCONSTR
+    	makeAppl : TCONSTR * List(T) -> TAPPL
+    	
+    	makeList : List(IStrategoTerm) -> TLIST
+    	makeListCons : T * TLIST* TLIST -> TLIST
+    	
+    	annotateTerm : T * TLIST -> T
+    }
+
+  native-operators
+  
+    isATermString : T -> Bool
+    isATermInt    : T -> Bool
+    isATermAppl   : T -> Bool
+    isATermList   : T -> Bool
+    
+    asATermString : T -> TSTR
+    asATermInt    : T -> TINT
+    asATermAppl   : T -> TAPPL
+    asATermList   : T -> TLIST
+    
+    asATerm       : Term -> T
+    
+    getTermFactory : E -> TFACTORY
+  
