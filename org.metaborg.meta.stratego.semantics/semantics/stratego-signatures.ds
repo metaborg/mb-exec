@@ -122,7 +122,7 @@ signature
     // RealCong                 : Real -> Strategy
     // IntCong                  : Int -> Strategy
     // StrCong                  : String -> Strategy
-    // Prim                     : String * List(Term) -> Strategy
+    Prim                     : String * List(Term) -> Strategy
     // PrimNoArgs               : String -> Strategy
     // Test                     : Strategy -> Strategy
     // With                     : Strategy -> Strategy
@@ -132,7 +132,7 @@ signature
     // LChoice                  : Strategy * Strategy -> Strategy
     // BA                       : StrategyAngle * Term -> Strategy
     // ScopeDefault             : Strategy -> Strategy
-    // Call                     : SVar * List(Strategy) -> Strategy
+    Call                     : SVar * List(Strategy) -> Strategy
     // ImportTerm               : ModName -> Strategy
     All                      : Strategy -> Strategy
     One                      : Strategy -> Strategy
@@ -147,7 +147,7 @@ signature
     // ProceedT                 : List(Strategy) * List(Term) -> Strategy
     Id                       : -> Strategy
     Fail                     : -> Strategy
-    // CallDynamic              : Term * List(Strategy) * List(Term) -> Strategy
+    CallDynamic              : Term * List(Strategy) * List(Term) -> Strategy
     // CallT                    : SVar * List(Strategy) * List(Term) -> Strategy
     // Let                      : List(Def) * Strategy -> Strategy
     // SVar                     : Id -> SVar
