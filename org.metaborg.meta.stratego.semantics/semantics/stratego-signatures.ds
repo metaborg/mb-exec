@@ -187,7 +187,7 @@ signature
     // Char                     : Char -> PreTerm
     //                          : StringQuotation -> PreTerm
     As                       : Var * PreTerm -> PreTerm
-    // Explode                  : Term * Term -> PreTerm
+    Explode                  : Term * Term -> PreTerm
     // OpQ                      : String * List(Term) -> PreTerm
     Op                       : String * List(Term) -> PreTerm
     Str                      : String -> PreTerm

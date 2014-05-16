@@ -97,7 +97,10 @@ rules // actual matching
     getAllSubterms[aappl]() => aats,
     T aats |- (ml(pts), E env, D def) --> (S(aats'), E env', D def')
 
-  // TODO match explode/implode
+  // TODO match explode
+  // T t |- (m(Explode(c, ts)), E env, D def) --> (S(t), E env', D def)
+  // where
+    
 
   // match an empty list (not a Nil())
   T t |- (ml([]), E env, D def) --> (S(t), E env, D def)
