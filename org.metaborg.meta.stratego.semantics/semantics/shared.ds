@@ -13,3 +13,8 @@ signature
   semantic-components
     E -> Map
     D -> Map
+
+signature
+  native-operators
+    length : List(Term) -> Int
+

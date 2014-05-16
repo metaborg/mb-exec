@@ -50,7 +50,7 @@ signature
     	makeAppl : TCONSTR * List(T) -> TAPPL
     	
     	makeList : List(IStrategoTerm) -> TLIST
-    	makeListCons : T * TLIST* TLIST -> TLIST
+    	makeListCons : T * TLIST -> TLIST
     	
     	annotateTerm : T * TLIST -> T
     }
@@ -71,3 +71,4 @@ signature
     
     getTermFactory : E -> TFACTORY
   
+    toNativeList  : TLIST -> List(Term)

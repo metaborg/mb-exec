@@ -9,7 +9,7 @@ imports
 
 signature
 
-  native-operators
+  internal-constructors
   
     lookup : E * String -> Term
 
@@ -97,6 +97,8 @@ rules // actual matching
     getAllSubterms[aappl]() => aats,
     T aats |- (ml(pts), E env, D def) --> (S(aats'), E env', D def')
 
+  // TODO match explode/implode
+
   // match an empty list (not a Nil())
   T t |- (ml([]), E env, D def) --> (S(t), E env, D def)
   where
@@ -111,14 +113,72 @@ rules // actual matching
     asATermList(t) => alist,
     isEmpty[alist](t) => False(),
     head[alist](t) => th,
-    T th |- m(p) --> S(t'),
+    T th |- Match(p) --> S(t'),
     tail[alist](t) => tl,
     T tl |- ml(p) --> S(t'')
   
   T t |- ml(l) --> F()
   where all-fail
 
+signature
+  internal-constructors
+    b : PreTerm -> Term
+    bl : List(Term) -> Term
 
+rules // build
+
+  (Build(Anno(t, as)), E env, D def) --> S(aterm)
+  where
+    b(t) --> S(at),
+    b(as) --> S(aas),
+    getTermFactory(env) => tf,
+    annotateTerm[tf](at, aas) => aterm
+  
+  Build(Var(x)) --> S(aterm)
+  where
+    b(Var(x)) --> S(aterm)
+  
+  (b(Int(i)), E env, D def) --> S(aint)
+  where
+    getTermFactory(env) => tf,
+    makeInt[tf](i) => aint
+  
+  (b(Str(s)), E env, D def) --> S(astr)
+  where
+    getTermFactory(env) => tf,
+    makeString[tf](s) => astr
+  
+  (b(Var(x)), E env, D def) --> S(avar)
+  where
+    getTermFactory(env) => tf,
+    makeConstructor[tf]("Var", 1) => constr,
+    makeAppl[tf](constr, [x]) => avar
+  
+  // FUGLY
+  (b(Op(c, ts)), E env, D def) --> S(aappl)
+  where
+    length(ts) => tslen,
+    getTermFactory(env) => tf,
+    makeConstructor[tf](c, tslen) => constr,
+    bl(ts) --> S(ats),
+    toNativeList(asATermList(ats)) => nts, // quite unfortunate
+    makeAppl[tf](c, nts) => aappl
+  
+  (bl([]), E env, D def) --> S(alist)
+  where
+    getTermFactory(env) => tf,
+    makeList[tf]([]) => anil
+  
+  (bl([t | ts]), E env, D def) --> S(alist)
+  where
+    getTermFactory(env) => tf,
+    Build(t) --> S(at),
+    bl(ts) --> S(ats),
+    makeListCons[tf](at, ats) => alist
+    
+  // TODO build explode/implode
+  
+  
 // // 
 // // // signature
 // // //   native-operators
