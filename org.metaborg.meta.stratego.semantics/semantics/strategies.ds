@@ -34,11 +34,15 @@ rules // match dispatch annotations
   where
     T t |- m(mp) --> v
 
-  T t |- Match(Anno(mp, ma)) --> S(t')
+  T t |- Match(Anno(mp, ma)) --> S(t)
   where
     T t |- m(mp) --> S(t'),
     getAnnotations[t]() => aa,
     T aa |- m(ma) --> S(t'')
+
+  T t |- Match(Var(x)) --> S(t)
+  where
+    T t |- m(Var(x)) --> S(t')
 
   T t |- Match(x) --> F()
   where
@@ -83,7 +87,7 @@ rules // actual matching
   T t |- (m(As(Var(x), p)), E env, D def) --> (S(t), E env', D def)
   where
     lookup(env, x) --> S(t'),
-    t' == t,
+    t == t',
     T t |- (m(p), E env, D def) --> (S(t''), E env', D def')
   
   // match application
@@ -103,7 +107,7 @@ rules // actual matching
     
 
   // match an empty list (not a Nil())
-  T t |- (ml([]), E env, D def) --> (S(t), E env, D def)
+  T t |- ml([]) --> S(t)
   where
     isATermList(t) => True(),
     asATermList(t) => alist,
@@ -118,7 +122,7 @@ rules // actual matching
     head[alist](t) => th,
     T th |- Match(p) --> S(t'),
     tail[alist](t) => tl,
-    T tl |- ml(p) --> S(t'')
+    T tl |- ml(ps) --> S(t'')
   
   T t |- ml(l) --> F()
   where all-fail
@@ -130,20 +134,18 @@ signature
 
 rules // build
 
-  (Build(Anno(t, as)), E env, D def) --> S(aterm)
+  TF tf |- Build(Anno(t, as)) --> S(aterm)
   where
     b(t) --> S(at),
     b(as) --> S(aas),
-    getTermFactory(env) => tf,
     annotateTerm[tf](at, aas) => aterm
   
   Build(Var(x)) --> S(aterm)
   where
     b(Var(x)) --> S(aterm)
   
-  (b(Int(i)), E env, D def) --> S(aint)
+  TF tf |- b(Int(i)) --> S(aint)
   where
-    getTermFactory(env) => tf,
     makeInt[tf](i) => aint
   
   (b(Str(s)), E env, D def) --> S(astr)
@@ -151,20 +153,17 @@ rules // build
     getTermFactory(env) => tf,
     makeString[tf](s) => astr
   
-  (b(Var(x)), E env, D def) --> S(avar)
+  (b(Var(x)), E env) --> S(at)
   where
-    getTermFactory(env) => tf,
-    makeConstructor[tf]("Var", 1) => constr,
-    makeAppl[tf](constr, [x]) => avar
+    lookup(env, x) --> S(at)
   
-  // FUGLY
-  (b(Op(c, ts)), E env, D def) --> S(aappl)
+  // FUGLY, maybe replace with higher level makeAppl(String, List(Term))
+  TF tf |- (b(Op(c, ts)), E env) --> S(aappl)
   where
     length(ts) => tslen,
-    getTermFactory(env) => tf,
     makeConstructor[tf](c, tslen) => constr,
     bl(ts) --> S(ats),
-    toNativeList(asATermList(ats)) => nts, // quite unfortunate
+    toNonNativeList(asATermList(ats)) => nts, // quite unfortunate
     makeAppl[tf](c, nts) => aappl
   
   (bl([]), E env, D def) --> S(alist)
@@ -172,9 +171,8 @@ rules // build
     getTermFactory(env) => tf,
     makeList[tf]([]) => anil
   
-  (bl([t | ts]), E env, D def) --> S(alist)
+  TF tf |- bl([t | ts]) --> S(alist)
   where
-    getTermFactory(env) => tf,
     Build(t) --> S(at),
     bl(ts) --> S(ats),
     makeListCons[tf](at, ats) => alist
@@ -213,7 +211,6 @@ rules // build
 // //   where
 // //     (Build(t), E env, D defs) --> (S(t'), E env', D defs'),
 // //     (Build(ts), E env, D defs) --> (S(ts'), E env'', D defs'')
-// // 
 // // 
 // // 
 // // 

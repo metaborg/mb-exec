@@ -41,7 +41,7 @@ signature
       isEmpty: Bool
     }
     
-    org.spoofax.interpreter.terms.ITermFactory as TFACTORY {
+    org.spoofax.interpreter.terms.ITermFactory as TF {
       makeString : String -> TSTR
       makeInt : Int -> TINT
       makeTuple : List(T) * TLIST -> TTUP
@@ -69,6 +69,4 @@ signature
     
     asATerm       : Term -> T
     
-    getTermFactory : E -> TFACTORY
-  
     toNativeList  : TLIST -> List(Term)
