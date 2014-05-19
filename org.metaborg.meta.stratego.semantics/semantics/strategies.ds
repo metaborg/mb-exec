@@ -180,7 +180,7 @@ rules // build
     makeConstructor[tf](c, tslen) => constr,
     makeAppl[tf](constr, ts') => t
   
-  TF tf |- bl([]) --> S(alist)
+  TF tf |- bl([]) --> S(anil)
   where
     makeList[tf]([]) => anil
   
@@ -192,14 +192,14 @@ rules // build
 
 rules // scope 
 
-  Scope([], s) --> t'
-  where 
+  Scope([x], s) --> t'
+  where
     s --> t'
   
-  (Scope([x | xs]), E env) --> (v, E {x |--> oldx, env''})
+  (Scope([x | xs], s), E env) --> (v, E {x |--> oldx, env'})
   where
-    lookup(env, x) => oldx, // store current value
-    (Scope(xs, s), E env) --> (v, E env'')
+    lookup(env, x) => oldx, // backup current value
+    (Scope(xs, s), E env) --> (v, E env')
 
 rules // identity and failure
 

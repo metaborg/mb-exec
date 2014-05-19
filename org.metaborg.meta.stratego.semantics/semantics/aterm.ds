@@ -49,7 +49,7 @@ signature
     	makeConstructor : String * Int -> TCONSTR
     	makeAppl : TCONSTR * List(T) -> TAPPL
     	
-    	makeList : List(IStrategoTerm) -> TLIST
+    	makeList : List(T) -> TLIST
     	makeListCons : T * TLIST -> TLIST
     	
     	annotateTerm : T * TLIST -> T

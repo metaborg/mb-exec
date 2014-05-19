@@ -10,6 +10,7 @@ signature
     Real
     Typedid
     StrategyDef
+    SVar
     
   constructors
     // RuleNames                : Term -> RuleNames
@@ -140,7 +141,7 @@ signature
     // PrimT                    : String * List(Strategy) * List(Term) -> Strategy
     GuardedLChoice           : Strategy * Strategy * Strategy -> Strategy
     Seq                      : Strategy * Strategy -> Strategy
-    Scope                    : List(ID) * Strategy -> Strategy
+    Scope                    : List(String) * Strategy -> Strategy
     Build                    : Term -> Strategy
     Match                    : Term -> Strategy
     // ProceedNoArgs            : Strategy
@@ -150,7 +151,7 @@ signature
     CallDynamic              : Term * List(Strategy) * List(Term) -> Strategy
     // CallT                    : SVar * List(Strategy) * List(Term) -> Strategy
     // Let                      : List(Def) * Strategy -> Strategy
-    // SVar                     : Id -> SVar
+    SVar                     : String -> SVar
     //                          : RuleDef -> Def
     // AnnoDef                  : List(Anno) * RuleDef -> Def
     // AnnoDef                  : List(Anno) * StrategyDef -> Def
@@ -202,7 +203,7 @@ signature
     Anno                     : PreTerm * PreTerm -> Term
     //                          : Wld -> Term
     //                          : Var -> Term
-    //                          : LID -> ID
+                             // : LID -> ID
     // Var                      : LID -> Var
     Var                      : String -> Var
     //                          : String -> String
