@@ -100,15 +100,16 @@ rules // actual matching
     T aats |- (ml(pts), E env, D def) --> (S(aats'), E env', D def')
 
   // match explode
-  T t |- m(Explode(ct, ts)) --> S(t)
+  T t, TF tf |- m(Explode(ct, ts)) --> S(t)
   where
     isATermAppl(t) => True(),
     asATermAppl(t) => aappl,
     getConstructor[aappl]() => aconstr,
     getName[aconstr]() => c',
-    T c' |- m(ct) --> S(ct'), // ct can be a variable, c' should be a string term
+    makeString[tf](c') => ac',
+    T ac' |- Match(ct) --> S(ct'),
     getAllSubterms[aappl]() => aats,
-    T aats |- ml(ts) --> S(aats') // ts may not be of the right type
+    T aats |- Match(ts) --> S(aats')
     
   // match an empty list (not a Nil())
   T t |- ml([]) --> S(t)
@@ -165,17 +166,19 @@ rules // build
     length(ts) => tslen,
     makeConstructor[tf](c, tslen) => constr,
     bl(ts) --> S(ats),
-    //toNonNativeList(asATermList(ats)) => nts, // quite unfortunate
     makeAppl[tf](c, ats) => aappl // maybe replace with higher level makeAppl(String, List(Term))
     
   TF tf |- b(Explode(ct, ts)) --> S(t)
   where
-    b(ct) --> S(c),
-    isATermString(c) => True(),
-    length(ts) => tslen,
+    Build(ct) --> S(ac), // constructor name
+    isATermString(ac) => True(),
+    stringValue[asATermString(ac)]() => c,  
+    Build(ts) => S(ats), // subterms
+    isATermList(ats) => True(),
+    toNativeList(asATermList(ats)) => ts',
+    length(ts') => tslen,
     makeConstructor[tf](c, tslen) => constr,
-    bl(ts) --> S(ats)
-    mapAppl[tf](c, ats) => t // correct typing?
+    makeAppl[tf](constr, ts') => t
   
   TF tf |- bl([]) --> S(alist)
   where
