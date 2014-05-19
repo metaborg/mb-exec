@@ -252,6 +252,8 @@ signature
 
 rules // term traversal: all
 
+  // TODO distinguish between INT, REAL, STRING, LIST, TUPLE, APPL
+
   T t, TF tf |- All(s) --> S(t'')
   where  
     isATermAppl(t) => True(),
@@ -262,6 +264,7 @@ rules // term traversal: all
     makeAppl[tf](ac, ats') => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over the old annotations
 
+  // XXX this might be wrong
   T t |- All(s) --> F()
   where all-fail
 
@@ -291,32 +294,48 @@ signature
 
 rules // term traversal: one
   
-  T t |- One(s) --> S(t')
+  // TODO distinguish between INT, REAL, STRING, LIST, TUPLE, APPL
+  
+  T t, TF tf |- One(s) --> S(t'')
   where
     isATermAppl(t) => True(),
     asATermAppl(t) => at,
     getConstructor[at]() => ac,
     getAllSubterms[at]() => ats,
     T ats |- first(s) --> S(ats'),
-    makeAppl[tf](ac, ats') => t' // annotations?
-     
+    makeAppl[tf](ac, ats') => t',
+    annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
+  
+  // XXX this might be wrong
   T t |- One(s) --> F()
   where all-fail
   
   T t |- first(s) --> F()
   where
-    t => [] // change to aterm ops
+    isATermList(t) => True(),
+    asATermList(t) => lt,
+    isEmpty[lt]() => True()
   
-  T t |- first(s) --> S([te' | tes'])  // change to aterm ops
+  T t, TF tf |- first(s) --> S(t')
   where
-    t => [te | tes],  // change to aterm ops
-    T te |- s --> S(te')
+    isATermList(t) => True(),
+    asATermList(t) => lt,
+    isEmpty[lt]() => False(),
+    head[lt]() => te,
+    tail[lt]() => tes,
+    T te |- s --> S(te'),
+    makeListCons[tf](te', tes) => t'
 
-  T t |- first(s) --> S([te' | tes'])  // change to aterm ops
+  T t, TF tf |- first(s) --> S(t')  // change to aterm ops
   where
-    t => [te | tes],  // change to aterm ops
+    isATermList(t) => True(),
+    asATermList(t) => lt,
+    isEmpty[lt]() => False(),
+    head[lt]() => te,
+    tail[lt]() => tes,
     T te  |- s --> F(),
-    T tes |- first(s) --> S(tes')
+    T tes |- first(s) --> S(tes'),
+    makeListCons[tf](te, tes') => t'
   
   T t |- first(s) --> F()
   where all-fail
