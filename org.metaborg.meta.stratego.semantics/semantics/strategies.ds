@@ -216,7 +216,9 @@ rules // proceed
 rules // sequential composition
   
   Seq(s1, s2) --> v
-  where s1 --> S(t'), T t' |- s2 --> v 
+  where
+    s1 --> S(t),
+    T t |- s2 --> v 
         
   Seq(s1, s2) --> F()
   where s1 --> F()
@@ -224,18 +226,25 @@ rules // sequential composition
 rules // guarded choice   
         
   GuardedLChoice(s1, s2, s3) --> v
-  where s1 --> S(t), T t |- s2 --> v
+  where
+    s1 --> S(t),
+    T t |- s2 --> v
                 
   GuardedLChoice(s1, s2, s3) --> v
-  where s1 --> F(), s3 --> v
+  where
+    s1 --> F(),
+    s3 --> v
 
 rules // left choice (explicit)
 
-  LChoice(s1, s2) --> S(t')
-  where s1 --> S(t')
+  LChoice(s1, s2) --> S(t)
+  where
+    s1 --> S(t)
   
   LChoice(s1, s2) --> v
-  where s1 --> F(), s2 --> v
+  where
+    s1 --> F(),
+    s2 --> v
 
 signature
   internal-constructors
@@ -243,32 +252,35 @@ signature
 
 rules // term traversal: all
 
-  T t, TF tf |- All(s) --> S(t')
+  T t, TF tf |- All(s) --> S(t'')
   where  
     isATermAppl(t) => True(),
     asATermAppl(t) => at,
     getConstructor[at]() => ac,
     getAllSubterms[at]() => ats,
     T ats |- map(s)--> S(ats'),
-    makeAppl[tf](ac, ats') => t' // annotations?
+    makeAppl[tf](ac, ats') => t',
+    annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over the old annotations
 
   T t |- All(s) --> F()
   where all-fail
 
-  T t |- map(s) --> S([])
+  T t |- map(s) --> S(t)
   where
-    isATermList[t]() => True(),
-    isEmpty[t] => True()
+    isATermList(t) => True(),
+    asATermList(t) => lt,
+    isEmpty[lt]() => True()
   
-  T t |- map(s) --> S(ts'')
+  T t, TF tf |- map(s) --> S(ts'')
   where
-    isATermList[t]() => True(),
-    isEmpty[t] => False(),
-    head[t] => th,
-    tail[t] => ts,
+    isATermList(t) => True(),
+    asATermList(t) => lt,
+    isEmpty[lt]() => False(),
+    head[lt]() => th,
+    tail[lt]() => ts,
     T th |- s --> S(th'),
     T ts |- map(s) --> S(ts'),
-    makeListCons(th', ts') => ts''
+    makeListCons[tf](th', ts') => ts''
 
   T t |- map(s) --> F()
   where all-fail

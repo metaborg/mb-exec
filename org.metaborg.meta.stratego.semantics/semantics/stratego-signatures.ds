@@ -130,7 +130,7 @@ signature
     // Where                    : Strategy -> Strategy
     // Not                      : Strategy -> Strategy
     // Rec                      : Id * Strategy -> Strategy
-    // LChoice                  : Strategy * Strategy -> Strategy
+    LChoice                  : Strategy * Strategy -> Strategy
     // BA                       : StrategyAngle * Term -> Strategy
     // ScopeDefault             : Strategy -> Strategy
     Call                     : SVar * List(Strategy) -> Strategy
