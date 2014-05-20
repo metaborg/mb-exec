@@ -119,17 +119,17 @@ rules // actual matching
   where
     isATermList(t) => True(),
     asATermList(t) => alist,
-    isEmpty[alist](t) => True()
+    isEmpty[alist]() => True()
   
   // match a non-empty list (not a Cons(_, _))
   T t |- ml([p | ps]) --> S(t)
   where
     isATermList(t) => True(),
     asATermList(t) => alist,
-    isEmpty[alist](t) => False(),
-    head[alist](t) => th,
+    isEmpty[alist]() => False(),
+    head[alist]() => th,
     T th |- Match(p) --> S(t'),
-    tail[alist](t) => tl,
+    tail[alist]() => tl,
     T tl |- ml(ps) --> S(t'')
   
   T t |- ml(l) --> F()
@@ -146,7 +146,10 @@ rules // build
   where
     b(t) --> S(at),
     b(as) --> S(aas),
-    annotateTerm[tf](at, aas) => aterm
+    isATermList(aas) => True(),
+    asATermList(aas) => aas',
+    annotateTerm[tf](
+      at, aas') => aterm
   
   Build(Var(x)) --> S(aterm)
   where
@@ -169,7 +172,10 @@ rules // build
     length(ts) => tslen,
     makeConstructor[tf](c, tslen) => constr,
     bl(ts) --> S(ats),
-    makeAppl[tf](c, ats) => aappl // maybe replace with higher level makeAppl(String, List(Term))
+    isATermList(ats) => True(),
+    asATermList(ats) => ats',
+    toNativeList(ats') => ts',
+    makeAppl[tf](constr, ts') => aappl // maybe replace with higher level makeAppl(String, List(Term))
     
   TF tf |- b(Explode(ct, ts)) --> S(t)
   where
@@ -178,10 +184,13 @@ rules // build
     stringValue[asATermString(ac)]() => c,  
     Build(ts) => S(ats), // subterms
     isATermList(ats) => True(),
-    toNativeList(asATermList(ats)) => ts',
-    length(ts') => tslen,
+    asATermList(ats) => ats',
+    size[ats']() => tslen,
     makeConstructor[tf](c, tslen) => constr,
-    makeAppl[tf](constr, ts') => t
+    toNativeList(ats') => ts',
+    makeAppl[tf](
+      constr, ts'
+      ) => t
   
   TF tf |- bl([]) --> S(anil)
   where
@@ -191,22 +200,20 @@ rules // build
   where
     Build(t) --> S(at),
     bl(ts) --> S(ats),
-    makeListCons[tf](at, ats) => alist
+    isATermList(ats) => True(),
+    asATermList(ats) => ats',
+    makeListCons[tf](at, ats') => alist
 
 rules // scope 
   
-  /*
-   XXX: this is incorect according to spec: 
-     ... That is, the binding to a variable xi outside the scope {x1,...,xn:s} is not visible inside it, 
-     nor is the binding to xi inside the scope visible outside it
-  */
   Scope([], s) --> t'
   where
+    s => True(),
     s --> t'
   
   (Scope([x | xs], s), E env) --> (v, E {x |--> oldx, env'})
   where
-    lookup(env, x) => oldx, // backup current value
+    lookup(env, x) => oldx,
     (Scope(xs, s), E {x |--> F(), env}) --> (v, E env')
 
 rules // identity and failure
@@ -269,7 +276,10 @@ rules // term traversal: all
     getConstructor[at]() => ac,
     getAllSubterms[at]() => ats,
     T ats |- map(s)--> S(ats'),
-    makeAppl[tf](ac, ats') => t',
+    isATermList(ats') => True(),
+    asATermList(ats') => ats'',
+    toNativeList(ats'') => ts,
+    makeAppl[tf](ac, ts) => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over the old annotations
 
   // XXX this might be wrong
@@ -291,7 +301,9 @@ rules // term traversal: all
     tail[lt]() => ts,
     T th |- s --> S(th'),
     T ts |- map(s) --> S(ts'),
-    makeListCons[tf](th', ts') => ts''
+    isATermList(ts') => True(),
+    asATermList(ts') => ats,
+    makeListCons[tf](th', ats) => ts''
 
   T t |- map(s) --> F()
   where all-fail
@@ -311,7 +323,10 @@ rules // term traversal: one
     getConstructor[at]() => ac,
     getAllSubterms[at]() => ats,
     T ats |- first(s) --> S(ats'),
-    makeAppl[tf](ac, ats') => t',
+    isATermList(ats') => True(),
+    asATermList(ats') => ats'',
+    toNativeList(ats'') => ts,
+    makeAppl[tf](ac, ts) => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
   
   // XXX this might be wrong
@@ -343,7 +358,9 @@ rules // term traversal: one
     tail[lt]() => tes,
     T te  |- s --> F(),
     T tes |- first(s) --> S(tes'),
-    makeListCons[tf](te, tes') => t'
+    isATermList(tes') => True(),
+    asATermList(tes') => tes'',
+    makeListCons[tf](te, tes'') => t'
   
   T t |- first(s) --> F()
   where all-fail

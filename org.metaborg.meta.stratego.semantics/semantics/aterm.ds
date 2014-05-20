@@ -39,6 +39,7 @@ signature
       head   : T
       tail   : TLIST
       isEmpty: Bool
+      size   : Int
     }
     
     org.spoofax.interpreter.terms.ITermFactory as TF {
@@ -69,4 +70,4 @@ signature
     
     asATerm       : Term -> T
     
-    toNativeList  : TLIST -> List(Term)
+    toNativeList  : TLIST -> List(T)
