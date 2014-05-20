@@ -7,15 +7,18 @@ imports
   aterm
   stratego-signatures
 
-signature 
+signature
   internal-constructors 
     lookup : E * String -> Term
 
 rules // environment manipulation
 
+  // TODO rewrite to equation
+  
   lookup(env, x) --> S(at)
   where
     env[x] => t,
+    t != F(),
     asATerm(t) => at // only required for type checking
   
   lookup(env, x) --> F()
@@ -89,7 +92,7 @@ rules // actual matching
     T t |- (m(p), E env) --> (S(t''), E env')
   
   // match application
-  T t |- (m(Op(c, pts)), E env, D def) --> (S(t), E env', D def)
+  T t |- (m(Op(c, pts)), E env) --> (S(t), E env')
   where
     isATermAppl(t) => True(),
     asATermAppl(t) => aappl,
@@ -97,7 +100,7 @@ rules // actual matching
     getName[aconstr]() => c',
     c == c',
     getAllSubterms[aappl]() => aats,
-    T aats |- (ml(pts), E env, D def) --> (S(aats'), E env', D def')
+    T aats |- (ml(pts), E env) --> (S(aats'), E env')
 
   // match explode
   T t, TF tf |- m(Explode(ct, ts)) --> S(t)
@@ -197,14 +200,14 @@ rules // scope
      ... That is, the binding to a variable xi outside the scope {x1,...,xn:s} is not visible inside it, 
      nor is the binding to xi inside the scope visible outside it
   */
-  Scope([x], s) --> t'
+  Scope([], s) --> t'
   where
     s --> t'
   
   (Scope([x | xs], s), E env) --> (v, E {x |--> oldx, env'})
   where
     lookup(env, x) => oldx, // backup current value
-    (Scope(xs, s), E env) --> (v, E env')
+    (Scope(xs, s), E {x |--> F(), env}) --> (v, E env')
 
 rules // identity and failure
 
@@ -257,7 +260,7 @@ signature
 
 rules // term traversal: all
 
-  // TODO distinguish between INT, REAL, STRING, LIST, TUPLE, APPL
+  // TODO add cases for INT, REAL, STRING, LIST, TUPLE
 
   T t, TF tf |- All(s) --> S(t'')
   where  
@@ -344,16 +347,25 @@ rules // term traversal: one
   
   T t |- first(s) --> F()
   where all-fail
-    
+  
+signature
+  internal-constructors
+    specDefs : Module -> D
+    defs : List(Def) -> D
+
 rules // strategy definitions
+  
+  // TODO rewrite to equations
+  // TODO do something with the signatures (store them)
+  
+  specDefs(Specification([sigs, Strategies(ss)])) --> defs(ss)
 
   // top-level definitions are added to global definition environment
-  
   defs([]) --> {}
   
   defs([SDefT(sname, ss, ts, s) | ds]) --> { sname |--> SDefT(sname, ss, ts, s), defs }
   where 
-    defs(ds) --> defs
+    defs(ds) => defs
   
   // future: consider doing proper closures
 
@@ -361,63 +373,60 @@ signature
   internal-constructors
     // closure: Term * E -> Term
     // bind: List(String) * List(String) * E -> Term
-    bindASVars: List(Typedid) * List(Strategy) -> Term
-    bindASVar: Typedid * Strategy -> Term 
+    bindASVars: List(Typedid) * List(Strategy) -> D
+    bindASVar: Typedid * Strategy -> D 
     
 rules // calls
 
-  /*
-    EV: TODO: restore original values of ts in env'
-    VV: how can the values of ts change in env'? Only through svars passing ?varname. Do we need to restore then?
-  */
-  (CallT(SVar(sname), asargs, atargs), E env, D defs) --> (v, E env', D defs)
+  D defs |- (CallT(SVar(sname), asargs, atargs), E env) --> (v, E env')
   where
     bl(atargs) --> atargs', // evaluate term argument expressions
     defs[sname] => SDefT(sname', fsargs, ftargs, s),
     sname == sname', // sanity check
-    // asvars can be CallT or some other body
-    // difficulty is that SDefT is not a value and D defs cannot be returned from reductions
-    bindASVars(fsargs, asargs) --> (F(), D defs'),
-    (s, E {ftargs |*-> atargs', env}) --> (v, E env')
-    // D { ss |*-> ass, defs } |- (s, E {ts |*-> ats', env}) --> (v, E env')
+    bindASVars(fsargs, asargs) => defs',
+    D {defs', defs} |- (s, E {ftargs |*-> atargs', env}) --> (v, E env')
+  
   
   // TODO reduction for CallT calling a strategy in the manual interpreter or in compiled code
   
-  bindASVars([], []) --> F()
+  // TODO rewrite to equations
   
-  bindASVars([tid | tidxs], [s | sxs]) --> F()
+  bindASVars([], []) --> {}
+  
+  bindASVars([tid | tidxs], [s | sxs]) --> {bindASVar(tid, s), bindASVars(tidxs, sxs)}
+  
+  bindASVar(VarDec(x, t), s) --> { x |--> SDefT(x, [], [], s) }
+  
+rules // let - in - end
+
+  Let([], s) --> v
   where
-    bindASVar(tid, s) --> F(),
-    bindASVars(tidxs, sxs) --> F()
+    s --> v
   
-  // TODO eval to SDefT into Defs
-  (bindASVar(VarDec(x, t), CallT(SVar(sname), asargs, atargs)), D defs) --> (F(), D defs')
+  D defs |- Let([SDefT(sname, ss, ts, s1) | sdefs], s2) --> v
+  where
+    D { sname |--> SDefT(sname, ss, ts, s1), defs } |- Let(sdefs, s2) --> v
+
+signature
+  internal-constructors
+    primitive : String * List(Strategy) * TLIST -> Term
+
+rules // primitives
+
+  PrimT(name, asargs, atargs) --> v
+  where
+    bl(atargs) --> S(ats),
+    isATermList(ats) => True(),
+    asATermList(ats) => ats',
+    primitive(name, asargs, ats') --> v // implement in Java
   
-  (bindASVar(VarDec(x, t), s), D defs) --> (F(), D { x |--> SDefT(x, [], [], s), defs })
+rules // dynamic call
   
-// rules // let - in - end
-// 
-//   Let([], s) --> v
-//   where s --> v
-//   
-//   D defs |- Let([SDefT(sname, ss, ts, s) | sdefs], s) --> v
-//   where
-//     D { sname |--> SDefT(sname, ss, ts, s), defs } |- Let(sdefs, s) --> v
-// 
-// rules // primitives
-// 
-//   Prim(name, ts) --> v
-//   where primitive(name, ts) --> v // implement in Java
-//   
-// rules // dynamic call
-// 
-//   CallDynamic(t, sts, tts) --> v
-//   where Build(t) --> f,
-//         CallT(f, sts, tts) --> v
+  CallDynamic(t, sts, tts) --> v
+  where
+    Build(t) --> S(asname),
+    isATermString(asname) => True(),
+    asATermString(asname) => asname',
+    stringValue[asname']() => sname,
+    CallT(SVar(sname), sts, tts) --> v
       
-    
-    
-
-
-
-

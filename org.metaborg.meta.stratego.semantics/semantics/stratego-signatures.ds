@@ -9,11 +9,16 @@ signature
     Wld -> PreTerm
     Real
     Typedid
-    StrategyDef
+    Def
+    StrategyDef -> Def
     SVar
     Type
     ConstType -> Type
     FunType -> Type
+    Decl
+    Module
+    Opdecl
+    Sdecl
     
   constructors
     // RuleNames                : Term -> RuleNames
@@ -76,10 +81,10 @@ signature
     // Import                   : ModName -> ImportModName
     // Overlays                 : List(Overlay) -> Decl
     // Rules                    : List(Def) -> Decl
-    // Signature                : List(Sdecl) -> Decl
-    // Strategies               : List(Def) -> Decl
+    Signature                : List(Sdecl) -> Decl
+    Strategies               : List(Def) -> Decl
     // Imports                  : List(ImportModName) -> Decl
-    // Specification            : List(Decl) -> Module
+    Specification            : List(Decl) -> Module
     // Module                   : ModName * List(Decl) -> Module
     //                          : Strategy -> StrategyMid
     // ParenStrat               : Strategy -> StrategyParen
@@ -126,7 +131,7 @@ signature
     // RealCong                 : Real -> Strategy
     // IntCong                  : Int -> Strategy
     // StrCong                  : String -> Strategy
-    Prim                     : String * List(Term) -> Strategy
+    // Prim                     : String * List(Term) -> Strategy
     // PrimNoArgs               : String -> Strategy
     // Test                     : Strategy -> Strategy
     // With                     : Strategy -> Strategy
@@ -141,7 +146,7 @@ signature
     All                      : Strategy -> Strategy
     One                      : Strategy -> Strategy
     Some                     : Strategy -> Strategy
-    // PrimT                    : String * List(Strategy) * List(Term) -> Strategy
+    PrimT                    : String * List(Strategy) * List(Term) -> Strategy
     GuardedLChoice           : Strategy * Strategy * Strategy -> Strategy
     Seq                      : Strategy * Strategy -> Strategy
     Scope                    : List(String) * Strategy -> Strategy
@@ -151,32 +156,31 @@ signature
     // ProceedT                 : List(Strategy) * List(Term) -> Strategy
     Id                       : -> Strategy
     Fail                     : -> Strategy
-    // CallDynamic              : Term * List(Strategy) * List(Term) -> Strategy
+    CallDynamic              : Term * List(Strategy) * List(Term) -> Strategy
     CallT                    : SVar * List(Strategy) * List(Term) -> Strategy
-    // Let                      : List(Def) * Strategy -> Strategy
+    Let                      : List(Def) * Strategy -> Strategy
     SVar                     : String -> SVar
     //                          : RuleDef -> Def
     // AnnoDef                  : List(Anno) * RuleDef -> Def
     // AnnoDef                  : List(Anno) * StrategyDef -> Def
-    //                          : StrategyDef -> Def
     //                          : Type -> RetType
     //                          : ConstType -> ArgType
     //                          : Type -> ArgType
     // FunType                  : List(ArgType) * RetType -> FunType
     // ConstType                : Sort -> ConstType
-    // ExtOpDeclInj             : Type -> Opdecl
-    // ExtOpDeclQ               : String * Type -> Opdecl
-    // ExtOpDecl                : Id * Type -> Opdecl
-    // OpDeclInj                : Type -> Opdecl
-    // OpDeclQ                  : String * Type -> Opdecl
-    // OpDecl                   : Id * Type -> Opdecl
+    ExtOpDeclInj             : Type -> Opdecl
+    ExtOpDeclQ               : String * Type -> Opdecl
+    ExtOpDecl                : String * Type -> Opdecl
+    OpDeclInj                : Type -> Opdecl
+    OpDeclQ                  : String * Type -> Opdecl
+    OpDecl                   : String * Type -> Opdecl
     // SortTuple                : List(Sort) -> Sort
     // SortListTl               : List(Sort) * Sort -> Sort
     // SortList                 : List(Sort) -> Sort
     // Sort                     : Id * List(Sort) -> Sort
     // SortNoArgs               : UCID -> Sort
     // SortVar                  : LCID -> Sort
-    // Constructors             : List(Opdecl) -> Sdecl
+    Constructors             : List(Opdecl) -> Sdecl
     // Sorts                    : List(Sort) -> Sdec
    
     Wld                      : -> Wld
