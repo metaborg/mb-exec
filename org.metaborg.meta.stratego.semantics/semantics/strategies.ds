@@ -13,7 +13,7 @@ signature
 
 rules // environment manipulation
 
-  // TODO rewrite to equation
+  // TODO rewrite to equation ?
   
   lookup(env, x) --> S(at)
   where
@@ -275,7 +275,7 @@ rules // term traversal: all
     asATermAppl(t) => at,
     getConstructor[at]() => ac,
     getAllSubterms[at]() => ats,
-    T ats |- map(s)--> S(ats'),
+    T ats |- map(s) --> S(ats'),
     isATermList(ats') => True(),
     asATermList(ats') => ats'',
     toNativeList(ats'') => ts,
@@ -388,8 +388,6 @@ rules // strategy definitions
 
 signature
   internal-constructors
-    // closure: Term * E -> Term
-    // bind: List(String) * List(String) * E -> Term
     bindASVars: List(Typedid) * List(Strategy) -> D
     bindASVar: Typedid * Strategy -> D 
     
@@ -408,11 +406,11 @@ rules // calls
   
   // TODO rewrite to equations
   
-  bindASVars([], []) --> {}
+  bindASVars([], []) --defs> {}
   
-  bindASVars([tid | tidxs], [s | sxs]) --> {bindASVar(tid, s), bindASVars(tidxs, sxs)}
+  bindASVars([tid | tidxs], [s | sxs]) --defs> {bindASVar(tid, s), bindASVars(tidxs, sxs)}
   
-  bindASVar(VarDec(x, t), s) --> { x |--> SDefT(x, [], [], s) }
+  bindASVar(VarDec(x, t), s) --defs> { x |--> SDefT(x, [], [], s) }
   
 rules // let - in - end
 

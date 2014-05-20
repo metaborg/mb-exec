@@ -6,6 +6,10 @@ imports
 
 signature
 
+  arrows
+    Term --defs> D
+    Term --default> Value
+    
   // success and failure values
   values
     S : T
