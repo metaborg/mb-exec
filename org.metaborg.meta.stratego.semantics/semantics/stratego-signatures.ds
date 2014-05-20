@@ -11,6 +11,9 @@ signature
     Typedid
     StrategyDef
     SVar
+    Type
+    ConstType -> Type
+    FunType -> Type
     
   constructors
     // RuleNames                : Term -> RuleNames
@@ -80,8 +83,8 @@ signature
     // Module                   : ModName * List(Decl) -> Module
     //                          : Strategy -> StrategyMid
     // ParenStrat               : Strategy -> StrategyParen
-    DefaultVarDec            : String -> Typedid
-    // VarDec                   : ID * Type -> Typedid
+    // DefaultVarDec            : String -> Typedid
+    VarDec                   : String * Type -> Typedid
     // Internal                 : Anno
     // Override                 : Anno
     // Extend                   : Anno
@@ -148,16 +151,14 @@ signature
     // ProceedT                 : List(Strategy) * List(Term) -> Strategy
     Id                       : -> Strategy
     Fail                     : -> Strategy
-    CallDynamic              : Term * List(Strategy) * List(Term) -> Strategy
-    // CallT                    : SVar * List(Strategy) * List(Term) -> Strategy
+    // CallDynamic              : Term * List(Strategy) * List(Term) -> Strategy
+    CallT                    : SVar * List(Strategy) * List(Term) -> Strategy
     // Let                      : List(Def) * Strategy -> Strategy
     SVar                     : String -> SVar
     //                          : RuleDef -> Def
     // AnnoDef                  : List(Anno) * RuleDef -> Def
     // AnnoDef                  : List(Anno) * StrategyDef -> Def
     //                          : StrategyDef -> Def
-    //                          : ConstType -> Type
-    //                          : FunType -> Type
     //                          : Type -> RetType
     //                          : ConstType -> ArgType
     //                          : Type -> ArgType

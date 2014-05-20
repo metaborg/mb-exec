@@ -191,7 +191,12 @@ rules // build
     makeListCons[tf](at, ats) => alist
 
 rules // scope 
-
+  
+  /*
+   XXX: this is incorect according to spec: 
+     ... That is, the binding to a variable xi outside the scope {x1,...,xn:s} is not visible inside it, 
+     nor is the binding to xi inside the scope visible outside it
+  */
   Scope([x], s) --> t'
   where
     s --> t'
@@ -354,37 +359,61 @@ rules // strategy definitions
 
 signature
   internal-constructors
-    closure: Term * E -> Term
-    bind: List(String) * List(String) * Map -> Term
-
+    // closure: Term * E -> Term
+    // bind: List(String) * List(String) * E -> Term
+    bindASVars: List(Typedid) * List(Strategy) -> Term
+    bindASVar: Typedid * Strategy -> Term 
+    
 rules // calls
-  
-  D defs |- (CallT(SVar(sname), ass, ats), E env) --> (v, E env')
-  where    
-    bl(ats) --> ats', // evaluate term argument expressions
-    defs[sname] => SDefT(sname, ss, ts, s),   
-    D { ss |*-> ass, defs } |- (s, E {ts |*-> ats', env}) --> (v, E env')
-    // todo: restore original values of ts in env'
-      
-rules // let - in - end
 
-  Let([], s) --> v
-  where s --> v
-  
-  D defs |- Let([SDefT(sname, ss, ts, s) | sdefs], s) --> v
+  /*
+    EV: TODO: restore original values of ts in env'
+    VV: how can the values of ts change in env'? Only through svars passing ?varname. Do we need to restore then?
+  */
+  (CallT(SVar(sname), asargs, atargs), E env, D defs) --> (v, E env', D defs)
   where
-    D { sname |--> SDefT(sname, ss, ts, s), defs } |- Let(sdefs, s) --> v
-
-rules // primitives
-
-  Prim(name, ts) --> v
-  where primitive(name, ts) --> v // implement in Java
+    bl(atargs) --> atargs', // evaluate term argument expressions
+    defs[sname] => SDefT(sname', fsargs, ftargs, s),
+    sname == sname', // sanity check
+    // asvars can be CallT or some other body
+    // difficulty is that SDefT is not a value and D defs cannot be returned from reductions
+    bindASVars(fsargs, asargs) --> (F(), D defs'),
+    (s, E {ftargs |*-> atargs', env}) --> (v, E env')
+    // D { ss |*-> ass, defs } |- (s, E {ts |*-> ats', env}) --> (v, E env')
   
-rules // dynamic call
-
-  CallDynamic(t, sts, tts) --> v
-  where Build(t) --> f,
-        CallT(f, sts, tts) --> v
+  // TODO reduction for CallT calling a strategy in the manual interpreter or in compiled code
+  
+  bindASVars([], []) --> F()
+  
+  bindASVars([tid | tidxs], [s | sxs]) --> F()
+  where
+    bindASVar(tid, s) --> F(),
+    bindASVars(tidxs, sxs) --> F()
+  
+  // TODO eval to SDefT into Defs
+  (bindASVar(VarDec(x, t), CallT(SVar(sname), asargs, atargs)), D defs) --> (F(), D defs')
+  
+  (bindASVar(VarDec(x, t), s), D defs) --> (F(), D { x |--> SDefT(x, [], [], s), defs })
+  
+// rules // let - in - end
+// 
+//   Let([], s) --> v
+//   where s --> v
+//   
+//   D defs |- Let([SDefT(sname, ss, ts, s) | sdefs], s) --> v
+//   where
+//     D { sname |--> SDefT(sname, ss, ts, s), defs } |- Let(sdefs, s) --> v
+// 
+// rules // primitives
+// 
+//   Prim(name, ts) --> v
+//   where primitive(name, ts) --> v // implement in Java
+//   
+// rules // dynamic call
+// 
+//   CallDynamic(t, sts, tts) --> v
+//   where Build(t) --> f,
+//         CallT(f, sts, tts) --> v
       
     
     
