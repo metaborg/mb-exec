@@ -3,12 +3,13 @@ module shared
 imports
   aterm
   stratego-signatures
+  terms
 
 signature
-
+  
   arrows
+    Term --> Value
     Term --defs> D
-    Term --default> Value
     
   // success and failure values
   values
@@ -22,4 +23,3 @@ signature
 signature
   native-operators
     length : List(Term) -> Int
-  

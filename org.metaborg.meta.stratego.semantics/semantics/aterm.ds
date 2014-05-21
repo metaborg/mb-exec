@@ -61,11 +61,13 @@ signature
     isATermString : T -> Bool
     isATermInt    : T -> Bool
     isATermAppl   : T -> Bool
+    isATermTuple  : T -> Bool
     isATermList   : T -> Bool
     
     asATermString : T -> TSTR
     asATermInt    : T -> TINT
     asATermAppl   : T -> TAPPL
+    asATermTuple  : T -> TLIST
     asATermList   : T -> TLIST
     
     asATerm       : Term -> T

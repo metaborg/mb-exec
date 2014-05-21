@@ -155,9 +155,9 @@ rules // build
   where
     b(Var(x)) --> S(aterm)
 
-  (b(Var(x)), E env) --> v
+  (b(Var(x)), E env) --> (v, E env)
   where
-    lookup(env, x) --> v // may be F() when x is unbound
+    lookup(env, x) --> v // FIXME may be F() when x is unbound
       
   TF tf |- b(Int(i)) --> S(aint)
   where
@@ -269,6 +269,26 @@ rules // term traversal: all
 
   // TODO add cases for INT, REAL, STRING, LIST, TUPLE
 
+  // T t |- All(s) --> F()
+  // where
+  //   isATermInt(t) => True()
+  // 
+  // T t |- All(s) --> F()
+  // where
+  //   isATermString(t) => True()
+  // 
+  // T t |- All(s) --> S(t')
+  // where
+  //   isATermTuple(t) => True(),
+  //   getAllSubterms[t]() => ats,
+  //   T ats |- first(s) --> S(t')
+  // 
+  // T t |- All(s) --> S(t')
+  // where
+  //   isATermList(t) => True(),
+  //   getAllSubterms[t]() => ats,
+  //   T ats |- first(s) --> S(t')
+
   T t, TF tf |- All(s) --> S(t'')
   where  
     isATermAppl(t) => True(),
@@ -314,7 +334,27 @@ signature
 
 rules // term traversal: one
   
-  // TODO distinguish between INT, REAL, STRING, LIST, TUPLE, APPL
+  // TODO add case for REAL
+  
+  T t |- One(s) --> F()
+  where
+    isATermInt(t) => True()
+  
+  T t |- One(s) --> F()
+  where
+    isATermString(t) => True()
+  
+  T t |- One(s) --> S(t')
+  where
+    isATermTuple(t) => True(),
+    getAllSubterms[t]() => ats,
+    T ats |- first(s) --> S(t')
+  
+  T t |- One(s) --> S(t')
+  where
+    isATermList(t) => True(),
+    getAllSubterms[t]() => ats,
+    T ats |- first(s) --> S(t')
   
   T t, TF tf |- One(s) --> S(t'')
   where
@@ -329,7 +369,6 @@ rules // term traversal: one
     makeAppl[tf](ac, ts) => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
   
-  // XXX this might be wrong
   T t |- One(s) --> F()
   where all-fail
   
@@ -375,21 +414,22 @@ rules // strategy definitions
   // TODO rewrite to equations
   // TODO do something with the signatures (store them)
   
-  specDefs(Specification([sigs, Strategies(ss)])) --> defs(ss)
+  specDefs(Specification([sigs, Strategies(ss)])) --defs> defs(ss)
 
   // top-level definitions are added to global definition environment
-  defs([]) --> {}
+  defs([]) --defs> {}
   
-  defs([SDefT(sname, ss, ts, s) | ds]) --> { sname |--> SDefT(sname, ss, ts, s), defs }
+  defs([SDefT(sname, ss, ts, s) | ds]) --defs> { sname |--> SDefT(sname, ss, ts, s), defs }
   where 
     defs(ds) => defs
   
   // future: consider doing proper closures
 
 signature
-  internal-constructors
+  internal-constructors // axioms
     bindASVars: List(Typedid) * List(Strategy) -> D
-    bindASVar: Typedid * Strategy -> D 
+    bindASVar: Typedid * Strategy -> D
+      
     
 rules // calls
 
@@ -401,16 +441,19 @@ rules // calls
     bindASVars(fsargs, asargs) => defs',
     D {defs', defs} |- (s, E {ftargs |*-> atargs', env}) --> (v, E env')
   
-  
   // TODO reduction for CallT calling a strategy in the manual interpreter or in compiled code
   
   // TODO rewrite to equations
   
-  bindASVars([], []) --defs> {}
+  bindASVars([], []) == {}
+  // should rewrite to: 
+  //    bindASVars([], []) --axiom_bindASVars_2> {}
   
-  bindASVars([tid | tidxs], [s | sxs]) --defs> {bindASVar(tid, s), bindASVars(tidxs, sxs)}
+  bindASVars([tid | tidxs], [s | sxs]) == {bindASVar(tid, s), bindASVars(tidxs, sxs)}
   
-  bindASVar(VarDec(x, t), s) --defs> { x |--> SDefT(x, [], [], s) }
+  bindASVar(VarDec(x, t), s) == { x |--> SDefT(x, [], [], s) }
+  // should rewrite to:
+  //    bindASVar(VarDEc(x,))
   
 rules // let - in - end
 
