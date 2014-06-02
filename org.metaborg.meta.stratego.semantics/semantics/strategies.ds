@@ -1,9 +1,9 @@
 module
-  stratego/core/strategies
+  strategies
 
 imports
-  shared 
-  terms
+  base
+  shared
   aterm
   stratego-signatures
 
@@ -409,21 +409,21 @@ signature
     specDefs : Module -> D
     defs : List(Def) -> D
 
-rules // strategy definitions
-  
-  // TODO rewrite to equations
-  // TODO do something with the signatures (store them)
-  
-  specDefs(Specification([sigs, Strategies(ss)])) --defs> defs(ss)
-
-  // top-level definitions are added to global definition environment
-  defs([]) --defs> {}
-  
-  defs([SDefT(sname, ss, ts, s) | ds]) --defs> { sname |--> SDefT(sname, ss, ts, s), defs }
-  where 
-    defs(ds) => defs
-  
-  // future: consider doing proper closures
+// rules // strategy definitions
+//   
+//   // TODO rewrite to equations
+//   // TODO do something with the signatures (store them)
+//   
+//   specDefs(Specification([sigs, Strategies(ss)])) -defs-> defs(ss)
+// 
+//   // top-level definitions are added to global definition environment
+//   defs([]) -defs-> {}
+//   
+//   defs([SDefT(sname, ss, ts, s) | ds]) -defs-> { sname |--> SDefT(sname, ss, ts, s), defs }
+//   where 
+//     defs(ds) => defs
+//   
+//   // future: consider doing proper closures
 
 signature
   internal-constructors // axioms
@@ -445,13 +445,13 @@ rules // calls
   
   // TODO rewrite to equations
   
-  bindASVars([], []) == {}
-  // should rewrite to: 
+  // bindASVars([], []) == {}
+  // should rewrite to:
   //    bindASVars([], []) --axiom_bindASVars_2> {}
   
-  bindASVars([tid | tidxs], [s | sxs]) == {bindASVar(tid, s), bindASVars(tidxs, sxs)}
+  // bindASVars([tid | tidxs], [s | sxs]) == {bindASVar(tid, s), bindASVars(tidxs, sxs)}
   
-  bindASVar(VarDec(x, t), s) == { x |--> SDefT(x, [], [], s) }
+  // bindASVar(VarDec(x, t), s) == { x |--> SDefT(x, [], [], s) }
   // should rewrite to:
   //    bindASVar(VarDEc(x,))
   

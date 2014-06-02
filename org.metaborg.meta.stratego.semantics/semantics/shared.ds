@@ -1,15 +1,14 @@
 module shared
 
 imports
+  base
   aterm
-  stratego-signatures
-  terms
 
 signature
   
   arrows
-    Term --> Value
-    Term --defs> D
+    Term -default-> Value
+    Term -defs-> D
     
   // success and failure values
   values

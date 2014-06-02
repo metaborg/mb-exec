@@ -1,5 +1,8 @@
 module stratego-signatures
 
+imports
+  base
+
 signature
   
   sorts
@@ -19,8 +22,48 @@ signature
     Module
     Opdecl
     Sdecl
-    
+  
   constructors
+    Signature                : List(Sdecl) -> Decl
+    Strategies               : List(Def) -> Decl
+    Specification            : List(Decl) -> Module
+    VarDec                   : String * Type -> Typedid
+    SDefT                    : String * List(Typedid) * List(Typedid) * Strategy -> StrategyDef
+    LChoice                  : Strategy * Strategy -> Strategy
+    Call                     : SVar * List(Strategy) -> Strategy
+    All                      : Strategy -> Strategy
+    One                      : Strategy -> Strategy
+    Some                     : Strategy -> Strategy
+    PrimT                    : String * List(Strategy) * List(Term) -> Strategy
+    GuardedLChoice           : Strategy * Strategy * Strategy -> Strategy
+    Seq                      : Strategy * Strategy -> Strategy
+    Scope                    : List(String) * Strategy -> Strategy
+    Build                    : Term -> Strategy
+    Match                    : Term -> Strategy
+    Id                       : -> Strategy
+    Fail                     : -> Strategy
+    CallDynamic              : Term * List(Strategy) * List(Term) -> Strategy
+    CallT                    : SVar * List(Strategy) * List(Term) -> Strategy
+    Let                      : List(Def) * Strategy -> Strategy
+    SVar                     : String -> SVar
+    ExtOpDeclInj             : Type -> Opdecl
+    ExtOpDeclQ               : String * Type -> Opdecl
+    ExtOpDecl                : String * Type -> Opdecl
+    OpDeclInj                : Type -> Opdecl
+    OpDeclQ                  : String * Type -> Opdecl
+    OpDecl                   : String * Type -> Opdecl
+    Constructors             : List(Opdecl) -> Sdecl
+    Wld                      : -> Wld
+    As                       : Var * PreTerm -> PreTerm
+    Explode                  : Term * Term -> PreTerm
+    Op                       : String * List(Term) -> PreTerm
+    Str                      : String -> PreTerm
+    Int                      : Int -> PreTerm
+    NoAnnoList               : PreTerm -> Term
+    Anno                     : PreTerm * PreTerm -> Term
+    Var                      : String -> Var
+    
+  // constructors
     // RuleNames                : Term -> RuleNames
     //                          : List(Id) -> RuleNames
     // RDecT                    : Id * List(Typedid) * List(Typedid) -> RuleDec
@@ -81,15 +124,11 @@ signature
     // Import                   : ModName -> ImportModName
     // Overlays                 : List(Overlay) -> Decl
     // Rules                    : List(Def) -> Decl
-    Signature                : List(Sdecl) -> Decl
-    Strategies               : List(Def) -> Decl
     // Imports                  : List(ImportModName) -> Decl
-    Specification            : List(Decl) -> Module
     // Module                   : ModName * List(Decl) -> Module
     //                          : Strategy -> StrategyMid
     // ParenStrat               : Strategy -> StrategyParen
     // DefaultVarDec            : String -> Typedid
-    VarDec                   : String * Type -> Typedid
     // Internal                 : Anno
     // Override                 : Anno
     // Extend                   : Anno
@@ -99,7 +138,6 @@ signature
     // ExtSDef                  : EmptyId * List(Typedid) * List(Typedid) -> StrategyDef
     // ExtSDef                  : Id * List(Typedid) * List(Typedid) -> StrategyDef
     // ExtSDefInl               : Id * List(Typedid) * List(Typedid) * Strategy -> StrategyDef
-    SDefT                    : String * List(Typedid) * List(Typedid) * Strategy -> StrategyDef
     // DynRuleIntersectUnion    : Strategy * RuleNames * RuleNames * Strategy -> Strategy
     // DynRuleUnion             : Strategy * RuleNames * Strategy -> Strategy
     // DynRuleIntersect         : Strategy * RuleNames * Strategy -> Strategy
@@ -138,28 +176,11 @@ signature
     // Where                    : Strategy -> Strategy
     // Not                      : Strategy -> Strategy
     // Rec                      : Id * Strategy -> Strategy
-    LChoice                  : Strategy * Strategy -> Strategy
     // BA                       : StrategyAngle * Term -> Strategy
     // ScopeDefault             : Strategy -> Strategy
-    Call                     : SVar * List(Strategy) -> Strategy
     // ImportTerm               : ModName -> Strategy
-    All                      : Strategy -> Strategy
-    One                      : Strategy -> Strategy
-    Some                     : Strategy -> Strategy
-    PrimT                    : String * List(Strategy) * List(Term) -> Strategy
-    GuardedLChoice           : Strategy * Strategy * Strategy -> Strategy
-    Seq                      : Strategy * Strategy -> Strategy
-    Scope                    : List(String) * Strategy -> Strategy
-    Build                    : Term -> Strategy
-    Match                    : Term -> Strategy
     // ProceedNoArgs            : Strategy
     // ProceedT                 : List(Strategy) * List(Term) -> Strategy
-    Id                       : -> Strategy
-    Fail                     : -> Strategy
-    CallDynamic              : Term * List(Strategy) * List(Term) -> Strategy
-    CallT                    : SVar * List(Strategy) * List(Term) -> Strategy
-    Let                      : List(Def) * Strategy -> Strategy
-    SVar                     : String -> SVar
     //                          : RuleDef -> Def
     // AnnoDef                  : List(Anno) * RuleDef -> Def
     // AnnoDef                  : List(Anno) * StrategyDef -> Def
@@ -168,22 +189,14 @@ signature
     //                          : Type -> ArgType
     // FunType                  : List(ArgType) * RetType -> FunType
     // ConstType                : Sort -> ConstType
-    ExtOpDeclInj             : Type -> Opdecl
-    ExtOpDeclQ               : String * Type -> Opdecl
-    ExtOpDecl                : String * Type -> Opdecl
-    OpDeclInj                : Type -> Opdecl
-    OpDeclQ                  : String * Type -> Opdecl
-    OpDecl                   : String * Type -> Opdecl
     // SortTuple                : List(Sort) -> Sort
     // SortListTl               : List(Sort) * Sort -> Sort
     // SortList                 : List(Sort) -> Sort
     // Sort                     : Id * List(Sort) -> Sort
     // SortNoArgs               : UCID -> Sort
     // SortVar                  : LCID -> Sort
-    Constructors             : List(Opdecl) -> Sdecl
     // Sorts                    : List(Sort) -> Sdec
    
-    Wld                      : -> Wld
     // BuildDefaultPT           : PreTerm -> PreTerm
     // ListTail                 : List(Term) * Term -> PreTerm
     // List                     : List(Term) -> PreTerm
@@ -192,25 +205,17 @@ signature
     // App                      : Strategy * Term -> PreTerm
     // Char                     : Char -> PreTerm
     //                          : StringQuotation -> PreTerm
-    As                       : Var * PreTerm -> PreTerm
-    Explode                  : Term * Term -> PreTerm
     // OpQ                      : String * List(Term) -> PreTerm
-    Op                       : String * List(Term) -> PreTerm
-    Str                      : String -> PreTerm
     // Real                     : Real -> PreTerm
-    Int                      : Int -> PreTerm
     // RootApp                  : StrategyAngle -> Term
     // App                      : Strategy * Term -> Term
-    NoAnnoList               : PreTerm -> Term
     // AnnoList                 : PreTerm * List(Term) -> Term
     // BuildDefault             : Term -> Term
     // As                       : Var * Term -> Term
-    Anno                     : PreTerm * PreTerm -> Term
     //                          : Wld -> Term
     //                          : Var -> Term
                              // : LID -> ID
     // Var                      : LID -> Var
-    Var                      : String -> Var
     //                          : String -> String
     //                          : String -> Real
     //                          : String -> Int
