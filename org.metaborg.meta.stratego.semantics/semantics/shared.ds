@@ -3,7 +3,8 @@ module shared
 imports
   base
   aterm
-
+  stratego-signatures
+  
 signature
   
   arrows
