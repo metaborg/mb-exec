@@ -49,7 +49,6 @@ rules // match dispatch annotations
     all-fail,
     F() => v
 
-
 signature
   internal-constructors
     m : PreTerm -> Term
@@ -134,376 +133,383 @@ rules // actual matching
     all-fail
     
   // match an empty list (not a Nil())
-  T t |- ml([]) --> S(t)
+  T t, TF tf |- ml([]) --> S(t)
   where
-    isATermList(t) => True(),
+    isATermList(t) == true,
     asATermList(t) => alist,
-    isEmpty[alist]() => True()
+    isEmpty[alist]() == true
   
   // match a non-empty list (not a Cons(_, _))
-  T t |- ml([p | ps]) --> S(t)
+  T t, TF tf |- ml([p | ps]) --> S(t)
   where
-    isATermList(t) => True(),
+    isATermList(t) == true,
     asATermList(t) => alist,
-    isEmpty[alist]() => False(),
+    isEmpty[alist]() == false,
     head[alist]() => th,
-    T th |- Match(p) --> S(t'),
+    T th, TF tf |- Match(p) --> S(t'),
     tail[alist]() => tl,
-    T tl |- ml(ps) --> S(t'')
+    T tl, TF tf |- ml(ps) --> S(t'')
   
-  T t |- ml(l) --> F()
-  where all-fail
+  ml(l) --> F()
+  where
+    all-fail
 
 signature
   internal-constructors
     b : PreTerm -> Term
-    bl : List(Term) -> Term
+    bl : List(STerm) -> Term
 
 rules // build
 
-  TF tf |- Build(Anno(t, as)) --> S(aterm)
+  T ct, TF tf |- Build(Anno(t, as)) --> S(aterm)
   where
     b(t) --> S(at),
     b(as) --> S(aas),
-    isATermList(aas) => True(),
+    isATermList(aas) == true,
     asATermList(aas) => aas',
-    annotateTerm[tf](
-      at, aas') => aterm
+    annotateTerm[tf](at, aas') => aterm
   
-  Build(Var(x)) --> S(aterm)
+  Build(Var(x)) --> v
   where
-    b(Var(x)) --> S(aterm)
+    b(Var(x)) --> v,
+    v => S(aterm)
 
   (b(Var(x)), E env) --> (v, E env)
   where
-    lookup(env, x) --> v // FIXME may be F() when x is unbound
+    lookup(env, x) --> v,
+    v => S(aterm) // force lookup of x to be a success
       
-  TF tf |- b(Int(i)) --> S(aint)
+  T t, TF tf |- b(Int(i)) --> v
   where
-    makeInt[tf](i) => aint
+    makeInt[tf](i) => aint,
+    S(aint) => v
   
-  TF tf |- b(Str(s)) --> S(astr)
+  T t, TF tf |- b(Str(s)) --> v
   where
-    makeString[tf](s) => astr
+    makeString[tf](s) => astr,
+    S(astr) => v
    
-  TF tf |- b(Op(c, ts)) --> S(aappl)
+  T t, TF tf |- b(Op(c, ts)) --> v
   where
     length(ts) => tslen,
     makeConstructor[tf](c, tslen) => constr,
     bl(ts) --> S(ats),
-    isATermList(ats) => True(),
+    isATermList(ats) == true,
     asATermList(ats) => ats',
     toNativeList(ats') => ts',
-    makeAppl[tf](constr, ts') => aappl // maybe replace with higher level makeAppl(String, List(Term))
+    makeAppl(tf, constr, ts') => aappl, // maybe replace with higher level makeAppl(String, List(Term))
+    S(aappl) => v
     
-  TF tf |- b(Explode(ct, ts)) --> S(t)
+  T cat, TF tf |- b(Explode(ct, ts)) --> v
   where
     Build(ct) --> S(ac), // constructor name
-    isATermString(ac) => True(),
-    stringValue[asATermString(ac)]() => c,  
+    isATermString(ac) == true,
+    asATermString(ac) => atermstr,
+    stringValue[atermstr]() => c,  
     Build(ts) => S(ats), // subterms
-    isATermList(ats) => True(),
+    isATermList(ats) == true,
     asATermList(ats) => ats',
     size[ats']() => tslen,
     makeConstructor[tf](c, tslen) => constr,
     toNativeList(ats') => ts',
-    makeAppl[tf](
-      constr, ts'
-      ) => t
-  
-  TF tf |- bl([]) --> S(anil)
+    makeAppl(tf, constr, ts') => t,
+    S(t) => v
+    
+  T t, TF tf |- bl([]) --> v
   where
-    makeList[tf]([]) => anil
+    makeList(tf, []) => anil,
+    S(anil) => v
   
-  TF tf |- bl([t | ts]) --> S(alist)
+  T ct, TF tf |- bl([t | ts]) --> v
   where
     Build(t) --> S(at),
     bl(ts) --> S(ats),
-    isATermList(ats) => True(),
+    isATermList(ats) == true,
     asATermList(ats) => ats',
-    makeListCons[tf](at, ats') => alist
+    makeListCons[tf](at, ats') => alist,
+    S(alist) => v
 
-rules // scope 
-  
-  Scope([], s) --> t'
-  where
-    s => True(),
-    s --> t'
-  
-  (Scope([x | xs], s), E env) --> (v, E {x |--> oldx, env'})
-  where
-    lookup(env, x) => oldx,
-    (Scope(xs, s), E {x |--> F(), env}) --> (v, E env')
-
-rules // identity and failure
-
-  T t |- Id() --> S(t)
-  
-  Fail() --> F()
-  
-rules // proceed
-
-  // ProceedT(s*, t*) ?
-  
-  // ProceedNoArgs() ?
-
-rules // sequential composition
-  
-  Seq(s1, s2) --> v
-  where
-    s1 --> S(t),
-    T t |- s2 --> v 
-        
-  Seq(s1, s2) --> F()
-  where s1 --> F()
-                   
-rules // guarded choice   
-        
-  GuardedLChoice(s1, s2, s3) --> v
-  where
-    s1 --> S(t),
-    T t |- s2 --> v
-                
-  GuardedLChoice(s1, s2, s3) --> v
-  where
-    s1 --> F(),
-    s3 --> v
-
-rules // left choice (explicit)
-
-  LChoice(s1, s2) --> S(t)
-  where
-    s1 --> S(t)
-  
-  LChoice(s1, s2) --> v
-  where
-    s1 --> F(),
-    s2 --> v
-
-signature
-  internal-constructors
-    map : Strategy -> Strategy
-
-rules // term traversal: all
-
-  // TODO add cases for INT, REAL, STRING, LIST, TUPLE
-
-  // T t |- All(s) --> F()
-  // where
-  //   isATermInt(t) => True()
-  // 
-  // T t |- All(s) --> F()
-  // where
-  //   isATermString(t) => True()
-  // 
-  // T t |- All(s) --> S(t')
-  // where
-  //   isATermTuple(t) => True(),
-  //   getAllSubterms[t]() => ats,
-  //   T ats |- first(s) --> S(t')
-  // 
-  // T t |- All(s) --> S(t')
-  // where
-  //   isATermList(t) => True(),
-  //   getAllSubterms[t]() => ats,
-  //   T ats |- first(s) --> S(t')
-
-  T t, TF tf |- All(s) --> S(t'')
-  where  
-    isATermAppl(t) => True(),
-    asATermAppl(t) => at,
-    getConstructor[at]() => ac,
-    getAllSubterms[at]() => ats,
-    T ats |- map(s) --> S(ats'),
-    isATermList(ats') => True(),
-    asATermList(ats') => ats'',
-    toNativeList(ats'') => ts,
-    makeAppl[tf](ac, ts) => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over the old annotations
-
-  // XXX this might be wrong
-  T t |- All(s) --> F()
-  where all-fail
-
-  T t |- map(s) --> S(t)
-  where
-    isATermList(t) => True(),
-    asATermList(t) => lt,
-    isEmpty[lt]() => True()
-  
-  T t, TF tf |- map(s) --> S(ts'')
-  where
-    isATermList(t) => True(),
-    asATermList(t) => lt,
-    isEmpty[lt]() => False(),
-    head[lt]() => th,
-    tail[lt]() => ts,
-    T th |- s --> S(th'),
-    T ts |- map(s) --> S(ts'),
-    isATermList(ts') => True(),
-    asATermList(ts') => ats,
-    makeListCons[tf](th', ats) => ts''
-
-  T t |- map(s) --> F()
-  where all-fail
-
-signature
-  internal-constructors
-    first : Strategy -> Strategy
-
-rules // term traversal: one
-  
-  // TODO add case for REAL
-  
-  T t |- One(s) --> F()
-  where
-    isATermInt(t) => True()
-  
-  T t |- One(s) --> F()
-  where
-    isATermString(t) => True()
-  
-  T t |- One(s) --> S(t')
-  where
-    isATermTuple(t) => True(),
-    getAllSubterms[t]() => ats,
-    T ats |- first(s) --> S(t')
-  
-  T t |- One(s) --> S(t')
-  where
-    isATermList(t) => True(),
-    getAllSubterms[t]() => ats,
-    T ats |- first(s) --> S(t')
-  
-  T t, TF tf |- One(s) --> S(t'')
-  where
-    isATermAppl(t) => True(),
-    asATermAppl(t) => at,
-    getConstructor[at]() => ac,
-    getAllSubterms[at]() => ats,
-    T ats |- first(s) --> S(ats'),
-    isATermList(ats') => True(),
-    asATermList(ats') => ats'',
-    toNativeList(ats'') => ts,
-    makeAppl[tf](ac, ts) => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
-  
-  T t |- One(s) --> F()
-  where all-fail
-  
-  T t |- first(s) --> F()
-  where
-    isATermList(t) => True(),
-    asATermList(t) => lt,
-    isEmpty[lt]() => True()
-  
-  T t, TF tf |- first(s) --> S(t')
-  where
-    isATermList(t) => True(),
-    asATermList(t) => lt,
-    isEmpty[lt]() => False(),
-    head[lt]() => te,
-    tail[lt]() => tes,
-    T te |- s --> S(te'),
-    makeListCons[tf](te', tes) => t'
-
-  T t, TF tf |- first(s) --> S(t')  // change to aterm ops
-  where
-    isATermList(t) => True(),
-    asATermList(t) => lt,
-    isEmpty[lt]() => False(),
-    head[lt]() => te,
-    tail[lt]() => tes,
-    T te  |- s --> F(),
-    T tes |- first(s) --> S(tes'),
-    isATermList(tes') => True(),
-    asATermList(tes') => tes'',
-    makeListCons[tf](te, tes'') => t'
-  
-  T t |- first(s) --> F()
-  where all-fail
-  
-signature
-  internal-constructors
-    specDefs : Module -> D
-    defs : List(Def) -> D
-
-// rules // strategy definitions
+// rules // scope 
+//   
+//   Scope([], s) --> t'
+//   where
+//     s => True(),
+//     s --> t'
+//   
+//   (Scope([x | xs], s), E env) --> (v, E {x |--> oldx, env'})
+//   where
+//     lookup(env, x) => oldx,
+//     (Scope(xs, s), E {x |--> F(), env}) --> (v, E env')
+// 
+// rules // identity and failure
+// 
+//   T t |- Id() --> S(t)
+//   
+//   Fail() --> F()
+//   
+// rules // proceed
+// 
+//   // ProceedT(s*, t*) ?
+//   
+//   // ProceedNoArgs() ?
+// 
+// rules // sequential composition
+//   
+//   Seq(s1, s2) --> v
+//   where
+//     s1 --> S(t),
+//     T t |- s2 --> v 
+//         
+//   Seq(s1, s2) --> F()
+//   where s1 --> F()
+//                    
+// rules // guarded choice   
+//         
+//   GuardedLChoice(s1, s2, s3) --> v
+//   where
+//     s1 --> S(t),
+//     T t |- s2 --> v
+//                 
+//   GuardedLChoice(s1, s2, s3) --> v
+//   where
+//     s1 --> F(),
+//     s3 --> v
+// 
+// rules // left choice (explicit)
+// 
+//   LChoice(s1, s2) --> S(t)
+//   where
+//     s1 --> S(t)
+//   
+//   LChoice(s1, s2) --> v
+//   where
+//     s1 --> F(),
+//     s2 --> v
+// 
+// signature
+//   internal-constructors
+//     map : Strategy -> Strategy
+// 
+// rules // term traversal: all
+// 
+//   // TODO add cases for INT, REAL, STRING, LIST, TUPLE
+// 
+//   // T t |- All(s) --> F()
+//   // where
+//   //   isATermInt(t) => True()
+//   // 
+//   // T t |- All(s) --> F()
+//   // where
+//   //   isATermString(t) => True()
+//   // 
+//   // T t |- All(s) --> S(t')
+//   // where
+//   //   isATermTuple(t) => True(),
+//   //   getAllSubterms[t]() => ats,
+//   //   T ats |- first(s) --> S(t')
+//   // 
+//   // T t |- All(s) --> S(t')
+//   // where
+//   //   isATermList(t) => True(),
+//   //   getAllSubterms[t]() => ats,
+//   //   T ats |- first(s) --> S(t')
+// 
+//   T t, TF tf |- All(s) --> S(t'')
+//   where  
+//     isATermAppl(t) => True(),
+//     asATermAppl(t) => at,
+//     getConstructor[at]() => ac,
+//     getAllSubterms[at]() => ats,
+//     T ats |- map(s) --> S(ats'),
+//     isATermList(ats') => True(),
+//     asATermList(ats') => ats'',
+//     toNativeList(ats'') => ts,
+//     makeAppl[tf](ac, ts) => t',
+//     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over the old annotations
+// 
+//   // XXX this might be wrong
+//   T t |- All(s) --> F()
+//   where all-fail
+// 
+//   T t |- map(s) --> S(t)
+//   where
+//     isATermList(t) => True(),
+//     asATermList(t) => lt,
+//     isEmpty[lt]() => True()
+//   
+//   T t, TF tf |- map(s) --> S(ts'')
+//   where
+//     isATermList(t) => True(),
+//     asATermList(t) => lt,
+//     isEmpty[lt]() => False(),
+//     head[lt]() => th,
+//     tail[lt]() => ts,
+//     T th |- s --> S(th'),
+//     T ts |- map(s) --> S(ts'),
+//     isATermList(ts') => True(),
+//     asATermList(ts') => ats,
+//     makeListCons[tf](th', ats) => ts''
+// 
+//   T t |- map(s) --> F()
+//   where all-fail
+// 
+// signature
+//   internal-constructors
+//     first : Strategy -> Strategy
+// 
+// rules // term traversal: one
+//   
+//   // TODO add case for REAL
+//   
+//   T t |- One(s) --> F()
+//   where
+//     isATermInt(t) => True()
+//   
+//   T t |- One(s) --> F()
+//   where
+//     isATermString(t) => True()
+//   
+//   T t |- One(s) --> S(t')
+//   where
+//     isATermTuple(t) => True(),
+//     getAllSubterms[t]() => ats,
+//     T ats |- first(s) --> S(t')
+//   
+//   T t |- One(s) --> S(t')
+//   where
+//     isATermList(t) => True(),
+//     getAllSubterms[t]() => ats,
+//     T ats |- first(s) --> S(t')
+//   
+//   T t, TF tf |- One(s) --> S(t'')
+//   where
+//     isATermAppl(t) => True(),
+//     asATermAppl(t) => at,
+//     getConstructor[at]() => ac,
+//     getAllSubterms[at]() => ats,
+//     T ats |- first(s) --> S(ats'),
+//     isATermList(ats') => True(),
+//     asATermList(ats') => ats'',
+//     toNativeList(ats'') => ts,
+//     makeAppl[tf](ac, ts) => t',
+//     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
+//   
+//   T t |- One(s) --> F()
+//   where all-fail
+//   
+//   T t |- first(s) --> F()
+//   where
+//     isATermList(t) => True(),
+//     asATermList(t) => lt,
+//     isEmpty[lt]() => True()
+//   
+//   T t, TF tf |- first(s) --> S(t')
+//   where
+//     isATermList(t) => True(),
+//     asATermList(t) => lt,
+//     isEmpty[lt]() => False(),
+//     head[lt]() => te,
+//     tail[lt]() => tes,
+//     T te |- s --> S(te'),
+//     makeListCons[tf](te', tes) => t'
+// 
+//   T t, TF tf |- first(s) --> S(t')  // change to aterm ops
+//   where
+//     isATermList(t) => True(),
+//     asATermList(t) => lt,
+//     isEmpty[lt]() => False(),
+//     head[lt]() => te,
+//     tail[lt]() => tes,
+//     T te  |- s --> F(),
+//     T tes |- first(s) --> S(tes'),
+//     isATermList(tes') => True(),
+//     asATermList(tes') => tes'',
+//     makeListCons[tf](te, tes'') => t'
+//   
+//   T t |- first(s) --> F()
+//   where all-fail
+//   
+// signature
+//   internal-constructors
+//     specDefs : Module -> D
+//     defs : List(Def) -> D
+// 
+// // rules // strategy definitions
+// //   
+// //   // TODO rewrite to equations
+// //   // TODO do something with the signatures (store them)
+// //   
+// //   specDefs(Specification([sigs, Strategies(ss)])) -defs-> defs(ss)
+// // 
+// //   // top-level definitions are added to global definition environment
+// //   defs([]) -defs-> {}
+// //   
+// //   defs([SDefT(sname, ss, ts, s) | ds]) -defs-> { sname |--> SDefT(sname, ss, ts, s), defs }
+// //   where 
+// //     defs(ds) => defs
+// //   
+// //   // future: consider doing proper closures
+// 
+// signature
+//   internal-constructors // axioms
+//     bindASVars: List(Typedid) * List(Strategy) -> D
+//     bindASVar: Typedid * Strategy -> D
+//       
+//     
+// rules // calls
+// 
+//   D defs |- (CallT(SVar(sname), asargs, atargs), E env) --> (v, E env')
+//   where
+//     bl(atargs) --> atargs', // evaluate term argument expressions
+//     defs[sname] => SDefT(sname', fsargs, ftargs, s),
+//     sname == sname', // sanity check
+//     bindASVars(fsargs, asargs) => defs',
+//     D {defs', defs} |- (s, E {ftargs |*-> atargs', env}) --> (v, E env')
+//   
+//   // TODO reduction for CallT calling a strategy in the manual interpreter or in compiled code
 //   
 //   // TODO rewrite to equations
-//   // TODO do something with the signatures (store them)
 //   
-//   specDefs(Specification([sigs, Strategies(ss)])) -defs-> defs(ss)
+//   // bindASVars([], []) == {}
+//   // should rewrite to:
+//   //    bindASVars([], []) --axiom_bindASVars_2> {}
+//   
+//   // bindASVars([tid | tidxs], [s | sxs]) == {bindASVar(tid, s), bindASVars(tidxs, sxs)}
+//   
+//   // bindASVar(VarDec(x, t), s) == { x |--> SDefT(x, [], [], s) }
+//   // should rewrite to:
+//   //    bindASVar(VarDEc(x,))
+//   
+// rules // let - in - end
 // 
-//   // top-level definitions are added to global definition environment
-//   defs([]) -defs-> {}
+//   Let([], s) --> v
+//   where
+//     s --> v
 //   
-//   defs([SDefT(sname, ss, ts, s) | ds]) -defs-> { sname |--> SDefT(sname, ss, ts, s), defs }
-//   where 
-//     defs(ds) => defs
+//   D defs |- Let([SDefT(sname, ss, ts, s1) | sdefs], s2) --> v
+//   where
+//     D { sname |--> SDefT(sname, ss, ts, s1), defs } |- Let(sdefs, s2) --> v
+// 
+// signature
+//   internal-constructors
+//     primitive : String * List(Strategy) * TLIST -> Term
+// 
+// rules // primitives
+// 
+//   PrimT(name, asargs, atargs) --> v
+//   where
+//     bl(atargs) --> S(ats),
+//     isATermList(ats) => True(),
+//     asATermList(ats) => ats',
+//     primitive(name, asargs, ats') --> v // implement in Java
 //   
-//   // future: consider doing proper closures
-
-signature
-  internal-constructors // axioms
-    bindASVars: List(Typedid) * List(Strategy) -> D
-    bindASVar: Typedid * Strategy -> D
-      
-    
-rules // calls
-
-  D defs |- (CallT(SVar(sname), asargs, atargs), E env) --> (v, E env')
-  where
-    bl(atargs) --> atargs', // evaluate term argument expressions
-    defs[sname] => SDefT(sname', fsargs, ftargs, s),
-    sname == sname', // sanity check
-    bindASVars(fsargs, asargs) => defs',
-    D {defs', defs} |- (s, E {ftargs |*-> atargs', env}) --> (v, E env')
-  
-  // TODO reduction for CallT calling a strategy in the manual interpreter or in compiled code
-  
-  // TODO rewrite to equations
-  
-  // bindASVars([], []) == {}
-  // should rewrite to:
-  //    bindASVars([], []) --axiom_bindASVars_2> {}
-  
-  // bindASVars([tid | tidxs], [s | sxs]) == {bindASVar(tid, s), bindASVars(tidxs, sxs)}
-  
-  // bindASVar(VarDec(x, t), s) == { x |--> SDefT(x, [], [], s) }
-  // should rewrite to:
-  //    bindASVar(VarDEc(x,))
-  
-rules // let - in - end
-
-  Let([], s) --> v
-  where
-    s --> v
-  
-  D defs |- Let([SDefT(sname, ss, ts, s1) | sdefs], s2) --> v
-  where
-    D { sname |--> SDefT(sname, ss, ts, s1), defs } |- Let(sdefs, s2) --> v
-
-signature
-  internal-constructors
-    primitive : String * List(Strategy) * TLIST -> Term
-
-rules // primitives
-
-  PrimT(name, asargs, atargs) --> v
-  where
-    bl(atargs) --> S(ats),
-    isATermList(ats) => True(),
-    asATermList(ats) => ats',
-    primitive(name, asargs, ats') --> v // implement in Java
-  
-rules // dynamic call
-  
-  CallDynamic(t, sts, tts) --> v
-  where
-    Build(t) --> S(asname),
-    isATermString(asname) => True(),
-    asATermString(asname) => asname',
-    stringValue[asname']() => sname,
-    CallT(SVar(sname), sts, tts) --> v
-      
+// rules // dynamic call
+//   
+//   CallDynamic(t, sts, tts) --> v
+//   where
+//     Build(t) --> S(asname),
+//     isATermString(asname) => True(),
+//     asATermString(asname) => asname',
+//     stringValue[asname']() => sname,
+//     CallT(SVar(sname), sts, tts) --> v
+//       
