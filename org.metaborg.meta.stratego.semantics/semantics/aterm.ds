@@ -48,7 +48,7 @@ signature
       makeTuple : List(T) * TLIST -> TTUP
       
     	makeConstructor : String * Int -> TCONSTR
-    	makeAppl : TCONSTR * List(T) -> TAPPL
+    	// makeAppl : TCONSTR * List(T) -> TAPPL
     	
     	// makeList : List(T) -> TLIST
     	makeListCons : T * TLIST -> TLIST
@@ -74,3 +74,6 @@ signature
     makeList : TF * List(T) -> TLIST // FIXME: introduce ARRAY suppory in DynSem to fix this.
     
     toNativeList  : TLIST -> List(T) // FIXME: this not be necessary once we introduce support for arrays
+
+    // makeAppl(tf, constr, ts') => aappl
+    makeAppl : TF * TCONSTR * List(T) -> TAPPL
