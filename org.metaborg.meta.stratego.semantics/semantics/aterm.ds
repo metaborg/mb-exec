@@ -10,7 +10,7 @@ signature
     org.spoofax.interpreter.terms.IStrategoTerm as T {
       getSubtermCount : Int
       getSubterm : Int -> T
-      getAllSubterms : List(T)
+      // getAllSubterms : List(T) // NOT SUPPORTED because of LIST =!= Array
       getAnnotations : TLIST
     }
     
@@ -50,7 +50,7 @@ signature
     	makeConstructor : String * Int -> TCONSTR
     	makeAppl : TCONSTR * List(T) -> TAPPL
     	
-    	makeList : List(T) -> TLIST
+    	// makeList : List(T) -> TLIST
     	makeListCons : T * TLIST -> TLIST
     	
     	annotateTerm : T * TLIST -> T
@@ -70,6 +70,7 @@ signature
     asATermTuple  : T -> TLIST
     asATermList   : T -> TLIST
     
-    asATerm       : Term -> T
+    getAllSubterms : T -> List(T) // FIXME: introduce ARRAY suppory in DynSem to fix this.
+    makeList : TF * List(T) -> TLIST // FIXME: introduce ARRAY suppory in DynSem to fix this.
     
-    toNativeList  : TLIST -> List(T)
+    toNativeList  : TLIST -> List(T) // FIXME: this not be necessary once we introduce support for arrays
