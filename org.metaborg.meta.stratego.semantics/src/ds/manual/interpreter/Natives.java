@@ -2,6 +2,7 @@ package ds.manual.interpreter;
 
 import org.metaborg.meta.interpreter.framework.INodeList;
 import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
@@ -9,6 +10,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
 import ds.generated.interpreter.I_Node;
+import ds.generated.interpreter.I_STerm;
 
 public class Natives {
 
@@ -46,6 +48,27 @@ public class Natives {
 
 	public static IStrategoList makeList_2(ITermFactory tf,
 			INodeList<IStrategoTerm> subterms) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	public static boolean isATermList_1(IStrategoTerm t) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	public static IStrategoList asATermList_1(IStrategoTerm t) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	public static int length_1(INodeList<I_STerm> ts) {
+		return ts.size();
+	}
+
+	public static INodeList<IStrategoTerm> toNativeList_1(IStrategoList ats_) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	public static IStrategoAppl makeAppl_3(ITermFactory tf,
+			IStrategoConstructor constr, INodeList<IStrategoTerm> ts_) {
 		throw new RuntimeException("Not implemented");
 	}
 
