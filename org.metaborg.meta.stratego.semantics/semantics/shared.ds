@@ -17,8 +17,8 @@ signature
     F :
   
   semantic-components
-    E -> Map
-    D -> Map
+    E -> Map<String, T>
+    D -> Map<Term, Term>
 
 signature
   native-operators
