@@ -15,104 +15,123 @@ rules // environment manipulation
 
   // TODO rewrite to equation ?
   
-  lookup(env, x) --> S(at)
+  lookup(env, x) --> v
   where
     env[x] => t,
     t != F(),
-    asATerm(t) => at // only required for type checking
+    S(t) => v
   
-  lookup(env, x) --> F()
-  where all-fail
+  lookup(env, x) --> v
+  where
+    all-fail,
+    F() => v
+
+rules // match dispatch annotations
+
+  T t, TF tf |- (Match(NoAnnoList(mp)), E env) --> (v, E env)
+  where
+    T t, TF tf |- m(mp) --> v
+
+  T t, TF tf |- Match(Anno(mp, ma)) --> v
+  where
+    T t, TF tf |- m(mp) --> S(t'),
+    getAnnotations[t]() => aa,
+    T aa, TF tf |- m(ma) --> S(t''),
+    S(t) => v
+
+  T t, TF tf |- Match(Var(x)) --> v
+  where
+    T t, TF tf |- m(Var(x)) --> S(t'),
+    S(t) => v
+
+  T t, TF tf |- Match(x) --> v
+  where
+    all-fail,
+    F() => v
+
 
 signature
   internal-constructors
     m : PreTerm -> Term
-    ml: List(Term) -> Term
-
-rules // match dispatch annotations
-
-  T t |- Match(NoAnnoList(mp)) --> v
-  where
-    T t |- m(mp) --> v
-
-  T t |- Match(Anno(mp, ma)) --> S(t)
-  where
-    T t |- m(mp) --> S(t'),
-    getAnnotations[t]() => aa,
-    T aa |- m(ma) --> S(t'')
-
-  T t |- Match(Var(x)) --> S(t)
-  where
-    T t |- m(Var(x)) --> S(t')
-
-  T t |- Match(x) --> F()
-  where
-    all-fail
-
+    ml: List(STerm) -> Term
+    
 rules // actual matching
 
-  T t |- m(Wld()) --> S(t)
-
-  T t |- m(Int(i)) --> S(t)
+  T t, TF tf |- m(Wld()) --> v
   where
-    isATermInt(t) => True(),
+    S(t) => v
+
+  T t, TF tf |- m(Int(i)) --> v
+  where
+    isATermInt(t) == true,
     asATermInt(t) => aint,
     intValue[aint]() => i',
-    i == i'
+    i == i',
+    S(t) => v
   
-  T t |- m(Str(s)) --> S(t)
+  T t, TF tf |- m(Str(s)) --> v
   where
-    isATermString(t) => True(),
+    isATermString(t) == true,
     asATermString(t) => astr,
     stringValue[astr]() => s',
-    s == s'
-  
-  // match against unbound variable
-  T t |- (m(Var(x)), E env) --> (S(t), E { x |--> t, env })
-  where
-    lookup(env, x) --> F()
-  
-  // match against bound variable
-  T t |- (m(Var(x)), E env) --> S(t)
-  where
-    lookup(env, x) --> S(t'),
-    t == t'
+    s == s',
+    S(t) => v
 
-  // compound as with unbound variable
-  T t |- (m(As(Var(x), p)), E env) --> (S(t), E { x |--> t, env'})
+  // match against unbound variable
+  T t, TF tf |- (m(Var(x)), E env) --> (v, E { x |--> t, env })
   where
     lookup(env, x) --> F(),
-    T t |- (m(p), E env) --> (S(t'), E env')
-  
-  // compound as with bound variable
-  T t |- (m(As(Var(x), p)), E env) --> (S(t), E env')
+    S(t) => v
+
+  // match against bound variable
+  T t, TF tf |- (m(Var(x)), E env) --> v
   where
     lookup(env, x) --> S(t'),
     t == t',
-    T t |- (m(p), E env) --> (S(t''), E env')
+    S(t) => v
+
+  // compound as with unbound variable
+  T t, TF tf |- (m(As(Var(x), p)), E env) --> (S(t), E { x |--> t, env'})
+  where
+    lookup(env, x) --> F(),
+    T t , TF tf |- (m(p), E env) --> (S(t'), E env')
+  
+  // compound as with bound variable
+  T t, TF tf |- (m(As(Var(x), p)), E env) --> (S(t), E env')
+  where
+    lookup(env, x) --> S(t'),
+    t == t',
+    T t, TF tf |- (m(p), E env) --> (S(t''), E env')
   
   // match application
-  T t |- (m(Op(c, pts)), E env) --> (S(t), E env')
+  T t, TF tf |- (m(Op(c, pts)), E env) --> (S(t), E env')
   where
-    isATermAppl(t) => True(),
+    isATermAppl(t) == true,
     asATermAppl(t) => aappl,
     getConstructor[aappl]() => aconstr,
     getName[aconstr]() => c',
     c == c',
-    getAllSubterms[aappl]() => aats,
-    T aats |- (ml(pts), E env) --> (S(aats'), E env')
+    getAllSubterms(aappl) => subterms,
+    makeList(tf, subterms) => asubterms,
+    T asubterms, TF tf |- (ml(pts), E env) --> (S(aats'), E env')
 
   // match explode
   T t, TF tf |- m(Explode(ct, ts)) --> S(t)
   where
-    isATermAppl(t) => True(),
+    isATermAppl(t) == true,
     asATermAppl(t) => aappl,
     getConstructor[aappl]() => aconstr,
     getName[aconstr]() => c',
     makeString[tf](c') => ac',
-    T ac' |- Match(ct) --> S(ct'),
-    getAllSubterms[aappl]() => aats,
-    T aats |- Match(ts) --> S(aats')
+    T ac', TF tf |- Match(ct) --> S(ct'),
+    getAllSubterms(aappl) => subterms,
+    makeList(tf, subterms) => asubterms, 
+    T asubterms, TF tf |- Match(ts) --> S(aats')
+    
+  // match failure
+  m(dc) --> F()
+  where
+    all-fail
     
   // match an empty list (not a Nil())
   T t |- ml([]) --> S(t)
