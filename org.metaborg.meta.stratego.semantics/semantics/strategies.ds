@@ -229,18 +229,17 @@ rules // build
     makeListCons[tf](at, ats') => alist,
     S(alist) => v
 
-// rules // scope 
-//   
-//   Scope([], s) --> t'
-//   where
-//     s => True(),
-//     s --> t'
-//   
-//   (Scope([x | xs], s), E env) --> (v, E {x |--> oldx, env'})
-//   where
-//     lookup(env, x) => oldx,
-//     (Scope(xs, s), E {x |--> F(), env}) --> (v, E env')
-// 
+rules // scope 
+  
+  Scope([], s) --> t'
+  where
+    s --> t'
+  
+  (Scope([x | xs], s), E env) --> (v, E {x |--> oldx, env'})
+  where
+    lookup(env, x) => oldx,
+    (Scope(xs, s), E {x |--> F(), env}) --> (v, E env')
+
 // rules // identity and failure
 // 
 //   T t |- Id() --> S(t)
