@@ -240,51 +240,56 @@ rules // scope
     lookup(env, x) => oldx,
     (Scope(xs, s), E {x |--> F(), env}) --> (v, E env')
 
-// rules // identity and failure
-// 
-//   T t |- Id() --> S(t)
-//   
-//   Fail() --> F()
-//   
-// rules // proceed
-// 
-//   // ProceedT(s*, t*) ?
-//   
-//   // ProceedNoArgs() ?
-// 
-// rules // sequential composition
-//   
-//   Seq(s1, s2) --> v
-//   where
-//     s1 --> S(t),
-//     T t |- s2 --> v 
-//         
-//   Seq(s1, s2) --> F()
-//   where s1 --> F()
-//                    
-// rules // guarded choice   
-//         
-//   GuardedLChoice(s1, s2, s3) --> v
-//   where
-//     s1 --> S(t),
-//     T t |- s2 --> v
-//                 
-//   GuardedLChoice(s1, s2, s3) --> v
-//   where
-//     s1 --> F(),
-//     s3 --> v
-// 
-// rules // left choice (explicit)
-// 
-//   LChoice(s1, s2) --> S(t)
-//   where
-//     s1 --> S(t)
-//   
-//   LChoice(s1, s2) --> v
-//   where
-//     s1 --> F(),
-//     s2 --> v
-// 
+rules // identity and failure
+
+  T t |- Id() --> S(t)
+  
+  Fail() --> F()
+  
+rules // proceed
+
+  // ProceedT(s*, t*) ?
+  
+  // ProceedNoArgs() ?
+
+rules // sequential composition
+  
+  Seq(s1, s2) --> v2
+  where
+    s1 --> v1,
+    v1 => S(t),
+    T t |- s2 --> v2
+        
+  Seq(s1, s2) --> v1
+  where
+    s1 --> v1,
+    v1 => F()
+                    
+rules // guarded choice   
+        
+  GuardedLChoice(s1, s2, s3) --> v
+  where
+    s1 --> S(t),
+    T t |- s2 --> v
+                
+  GuardedLChoice(s1, s2, s3) --> v
+  where
+    s1 --> F(),
+    s3 --> v
+
+rules // left choice
+
+  LChoice(s1, s2) --> v1
+  where
+    s1 --> v1,
+    v1 => S(t)
+  
+  LChoice(s1, s2) --> v2
+  where
+    s1 --> v1,
+    v1 => F(),
+    s2 --> v2
+
 // signature
 //   internal-constructors
 //     map : Strategy -> Strategy
