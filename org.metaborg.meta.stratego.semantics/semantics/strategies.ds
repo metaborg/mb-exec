@@ -254,11 +254,11 @@ rules // proceed
 
 rules // sequential composition
   
-  Seq(s1, s2) --> v2
+  T t , TF tf |- Seq(s1, s2) --> v2
   where
     s1 --> v1,
-    v1 => S(t),
-    T t |- s2 --> v2
+    v1 => S(t'),
+    T t', TF tf |- s2 --> v2
         
   Seq(s1, s2) --> v1
   where
@@ -372,7 +372,7 @@ signature
 
 rules // term traversal: one
   
-
+/*
   // <one> 42  
   T t, TF tf |- One(s) --> v
   where
@@ -386,6 +386,7 @@ rules // term traversal: one
   where
     isATermString(t) == true,
     F() => v
+*/
 
   // <one> (tup1, tup2, ...)
   T t, TF tf |- One(s) --> v
@@ -417,40 +418,48 @@ rules // term traversal: one
     annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over annotations
     S(t'') => v
   
-  T t, TF tf |- One(s) --> F()
+  One(s) --> F()
   where all-fail
   
-//   T t |- first(s) --> F()
-//   where
-//     isATermList(t) => True(),
-//     asATermList(t) => lt,
-//     isEmpty[lt]() => True()
-//   
-//   T t, TF tf |- first(s) --> S(t')
-//   where
-//     isATermList(t) => True(),
-//     asATermList(t) => lt,
-//     isEmpty[lt]() => False(),
-//     head[lt]() => te,
-//     tail[lt]() => tes,
-//     T te |- s --> S(te'),
-//     makeListCons[tf](te', tes) => t'
-// 
-//   T t, TF tf |- first(s) --> S(t')  // change to aterm ops
-//   where
-//     isATermList(t) => True(),
-//     asATermList(t) => lt,
-//     isEmpty[lt]() => False(),
-//     head[lt]() => te,
-//     tail[lt]() => tes,
-//     T te  |- s --> F(),
-//     T tes |- first(s) --> S(tes'),
-//     isATermList(tes') => True(),
-//     asATermList(tes') => tes'',
-//     makeListCons[tf](te, tes'') => t'
-//   
-//   T t |- first(s) --> F()
-//   where all-fail
+  // empty candidate list
+  T t, TF tf |- first(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => lt,
+    isEmpty[lt]() == true,
+    F() => v
+  
+  // non-empty head success
+  T t, TF tf |- first(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => lt,
+    isEmpty[lt]() == false,
+    head[lt]() => th,
+    tail[lt]() => tl,
+    T th, TF tf |- s --> v1,
+    v1 => S(th'),
+    makeListCons[tf](th', tl) => t',
+    S(t') => v
+  
+  // non-empty head success
+  T t, TF tf |- first(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => lt,
+    isEmpty[lt]() == false,
+    head[lt]() => th,
+    tail[lt]() => tl,
+    T th, TF tf |- s --> v1,
+    v1 => F(),
+    T tl, TF tf |- first(s) --> S(tl'),
+    isATermList(tl') == true,
+    asATermList(tl') => tl'',
+    makeListCons[tf](th, asATermList(tl')) => t',
+    S(t') => v
+  
+  first(s) --> F()
+  where all-fail
   
 // signature
 //   internal-constructors

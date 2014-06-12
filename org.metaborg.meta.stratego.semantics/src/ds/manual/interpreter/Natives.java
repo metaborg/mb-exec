@@ -42,7 +42,7 @@ public class Natives {
 		throw new RuntimeException("Not implemented");
 	}
 
-	public static INodeList<IStrategoTerm> getAllSubterms_1(IStrategoAppl aappl) {
+	public static INodeList<IStrategoTerm> getAllSubterms_1(IStrategoTerm aappl) {
 		throw new RuntimeException("Not implemented");
 	}
 
@@ -69,6 +69,10 @@ public class Natives {
 
 	public static IStrategoAppl makeAppl_3(ITermFactory tf,
 			IStrategoConstructor constr, INodeList<IStrategoTerm> ts_) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	public static boolean isATermTuple_1(IStrategoTerm t) {
 		throw new RuntimeException("Not implemented");
 	}
 
