@@ -242,7 +242,7 @@ rules // scope
 
 rules // identity and failure
 
-  T t |- Id() --> S(t)
+  T t, TF tf |- Id() --> S(t)
   
   Fail() --> F()
   
@@ -290,117 +290,136 @@ rules // left choice
     v1 => F(),
     s2 --> v2
 
-// signature
-//   internal-constructors
-//     map : Strategy -> Strategy
-// 
-// rules // term traversal: all
-// 
-//   // TODO add cases for INT, REAL, STRING, LIST, TUPLE
-// 
-//   // T t |- All(s) --> F()
-//   // where
-//   //   isATermInt(t) => True()
-//   // 
-//   // T t |- All(s) --> F()
-//   // where
-//   //   isATermString(t) => True()
-//   // 
-//   // T t |- All(s) --> S(t')
-//   // where
-//   //   isATermTuple(t) => True(),
-//   //   getAllSubterms[t]() => ats,
-//   //   T ats |- first(s) --> S(t')
-//   // 
-//   // T t |- All(s) --> S(t')
-//   // where
-//   //   isATermList(t) => True(),
-//   //   getAllSubterms[t]() => ats,
-//   //   T ats |- first(s) --> S(t')
-// 
-//   T t, TF tf |- All(s) --> S(t'')
-//   where  
-//     isATermAppl(t) => True(),
-//     asATermAppl(t) => at,
-//     getConstructor[at]() => ac,
-//     getAllSubterms[at]() => ats,
-//     T ats |- map(s) --> S(ats'),
-//     isATermList(ats') => True(),
-//     asATermList(ats') => ats'',
-//     toNativeList(ats'') => ts,
-//     makeAppl[tf](ac, ts) => t',
-//     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over the old annotations
-// 
-//   // XXX this might be wrong
-//   T t |- All(s) --> F()
-//   where all-fail
-// 
-//   T t |- map(s) --> S(t)
-//   where
-//     isATermList(t) => True(),
-//     asATermList(t) => lt,
-//     isEmpty[lt]() => True()
-//   
-//   T t, TF tf |- map(s) --> S(ts'')
-//   where
-//     isATermList(t) => True(),
-//     asATermList(t) => lt,
-//     isEmpty[lt]() => False(),
-//     head[lt]() => th,
-//     tail[lt]() => ts,
-//     T th |- s --> S(th'),
-//     T ts |- map(s) --> S(ts'),
-//     isATermList(ts') => True(),
-//     asATermList(ts') => ats,
-//     makeListCons[tf](th', ats) => ts''
-// 
-//   T t |- map(s) --> F()
-//   where all-fail
-// 
-// signature
-//   internal-constructors
-//     first : Strategy -> Strategy
-// 
-// rules // term traversal: one
-//   
-//   // TODO add case for REAL
-//   
-//   T t |- One(s) --> F()
-//   where
-//     isATermInt(t) => True()
-//   
-//   T t |- One(s) --> F()
-//   where
-//     isATermString(t) => True()
-//   
-//   T t |- One(s) --> S(t')
-//   where
-//     isATermTuple(t) => True(),
-//     getAllSubterms[t]() => ats,
-//     T ats |- first(s) --> S(t')
-//   
-//   T t |- One(s) --> S(t')
-//   where
-//     isATermList(t) => True(),
-//     getAllSubterms[t]() => ats,
-//     T ats |- first(s) --> S(t')
-//   
-//   T t, TF tf |- One(s) --> S(t'')
-//   where
-//     isATermAppl(t) => True(),
-//     asATermAppl(t) => at,
-//     getConstructor[at]() => ac,
-//     getAllSubterms[at]() => ats,
-//     T ats |- first(s) --> S(ats'),
-//     isATermList(ats') => True(),
-//     asATermList(ats') => ats'',
-//     toNativeList(ats'') => ts,
-//     makeAppl[tf](ac, ts) => t',
-//     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
-//   
-//   T t |- One(s) --> F()
-//   where all-fail
-//   
+signature
+  internal-constructors
+    map : Strategy -> Strategy
+
+rules // term traversal: all
+
+/*
+  // <all> 42
+  T t, TF tf |- All(s) --> v
+  where
+    isATermInt(t) == true,
+    F() => v
+  
+  // <all> "string"
+  T t, TF tf |- All(s) --> v
+  where
+    isATermString(t) == true,
+    F() => v
+  
+  // TODO case for <all> "4.5"
+  
+*/
+  
+  // <all> (tup1, tup2, ...)
+  T t, TF tf |- All(s) --> v
+  where
+    isATermTuple(t) == true,
+    getAllSubterms(t) => ts,
+    makeList(tf, ts) => ats,
+    T ats, TF tf |- map(s) --> v,
+    v => S(t')
+
+  T t, TF tf |- All(s) --> v
+  where  
+    isATermAppl(t) == true,
+    asATermAppl(t) => at,
+    getConstructor[at]() => ac,
+    getAllSubterms(at) => ts,
+    makeList(tf, ts) => ats,
+    T ats, TF tf |- map(s) --> S(ats'),
+    isATermList(ats') == true,
+    asATermList(ats') => ats'',
+    toNativeList(ats'') => ts',
+    makeAppl(tf, ac, ts') => t',
+    annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over the old annotations,
+    S(t'') => v
+
+  All(s) --> F()
+  where
+    all-fail
+
+  T t, TF tf |- map(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => lt,
+    isEmpty[lt]() == true,
+    S(t) => v
+  
+  T t, TF tf |- map(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => lt,
+    isEmpty[lt]() == false,
+    head[lt]() => th,
+    tail[lt]() => ts,
+    T th, TF tf |- s --> S(th'),
+    T ts, TF tf |- map(s) --> S(ts'),
+    isATermList(ts') == true,
+    asATermList(ts') => ats,
+    makeListCons[tf](th', ats) => ts'',
+    S(ts'') => v
+
+  map(s) --> F()
+  where
+    all-fail
+
+signature
+  internal-constructors
+    first : Strategy -> Strategy
+
+rules // term traversal: one
+  
+
+  // <one> 42  
+  T t, TF tf |- One(s) --> v
+  where
+    isATermInt(t) == true,
+    F() => v
+
+  // TODO add case for <one> 42.5
+  
+  // <one> "string"
+  T t, TF tf |- One(s) --> v
+  where
+    isATermString(t) == true,
+    F() => v
+
+  // <one> (tup1, tup2, ...)
+  T t, TF tf |- One(s) --> v
+  where
+    isATermTuple(t) == true,
+    getAllSubterms(t) => ts,
+    makeList(tf, ts) => ats,
+    T ats, TF tf |- first(s) --> S(t'),
+    S(t') => v
+  
+  T t, TF tf |- One(s) --> v
+  where
+    isATermList(t) == true,
+    getAllSubterms(t) => ts,
+    makeList(tf, ts) => ats,
+    T ats, TF tf |- first(s) --> v,
+    v => S(t')
+  
+  T t, TF tf |- One(s) --> v
+  where
+    isATermAppl(t) == true,
+    asATermAppl(t) => at,
+    getConstructor[at]() => ac,
+    getAllSubterms(at) => ts,
+    makeList(tf, ts) => ats,
+    T ats, TF tf |- first(s) --> S(ats'),
+    isATermList(ats') == true,
+    makeAppl(tf, ac, ts) => t',
+    annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over annotations
+    S(t'') => v
+  
+  T t, TF tf |- One(s) --> F()
+  where all-fail
+  
 //   T t |- first(s) --> F()
 //   where
 //     isATermList(t) => True(),
@@ -432,7 +451,7 @@ rules // left choice
 //   
 //   T t |- first(s) --> F()
 //   where all-fail
-//   
+  
 // signature
 //   internal-constructors
 //     specDefs : Module -> D
