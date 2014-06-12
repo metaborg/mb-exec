@@ -18,7 +18,7 @@ signature
   
   semantic-components
     E -> Map<String, T>
-    D -> Map<Term, Term>
+    D -> Map<String, StrategyDef>
 
 signature
   native-operators
