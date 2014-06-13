@@ -13,8 +13,6 @@ signature
 
 rules // environment manipulation
 
-  // TODO rewrite to equation ?
-  
   lookup(env, x) --> v
   where
     env[x] => t,
@@ -28,23 +26,23 @@ rules // environment manipulation
 
 rules // match dispatch annotations
 
-  T t, TF tf |- (Match(NoAnnoList(mp)), E env) --> (v, E env)
+  Match(NoAnnoList(mp)) --> v
   where
-    T t, TF tf |- m(mp) --> v
+    m(mp) --> v
 
-  T t, TF tf |- Match(Anno(mp, ma)) --> v
+  T t |- Match(Anno(mp, ma)) --> v
   where
-    T t, TF tf |- m(mp) --> S(t'),
+    T t  |- m(mp) --> S(t'),
     getAnnotations[t]() => aa,
-    T aa, TF tf |- m(ma) --> S(t''),
+    T aa |- m(ma) --> S(t''),
     S(t) => v
 
-  T t, TF tf |- Match(Var(x)) --> v
+  T t |- Match(Var(x)) --> v
   where
-    T t, TF tf |- m(Var(x)) --> S(t'),
+    T t |- m(Var(x)) --> S(t'),
     S(t) => v
 
-  T t, TF tf |- Match(x) --> v
+  Match(x) --> v
   where
     all-fail,
     F() => v
@@ -56,11 +54,11 @@ signature
     
 rules // actual matching
 
-  T t, TF tf |- m(Wld()) --> v
+  T t |- m(Wld()) --> v
   where
     S(t) => v
 
-  T t, TF tf |- m(Int(i)) --> v
+  T t |- m(Int(i)) --> v
   where
     isATermInt(t) == true,
     asATermInt(t) => aint,
@@ -68,7 +66,7 @@ rules // actual matching
     i == i',
     S(t) => v
   
-  T t, TF tf |- m(Str(s)) --> v
+  T t |- m(Str(s)) --> v
   where
     isATermString(t) == true,
     asATermString(t) => astr,
@@ -77,30 +75,30 @@ rules // actual matching
     S(t) => v
 
   // match against unbound variable
-  T t, TF tf |- (m(Var(x)), E env) --> (v, E { x |--> t, env })
+  T t |- (m(Var(x)), E env) --> (v, E { x |--> t, env })
   where
     lookup(env, x) --> F(),
     S(t) => v
 
   // match against bound variable
-  T t, TF tf |- (m(Var(x)), E env) --> v
+  T t |- (m(Var(x)), E env) --> (v, E env)
   where
     lookup(env, x) --> S(t'),
     t == t',
     S(t) => v
 
-  // compound as with unbound variable
-  T t, TF tf |- (m(As(Var(x), p)), E env) --> (S(t), E { x |--> t, env'})
+  // compound As with unbound variable. The variable is only bound if the match succeeds.
+  T t |- (m(As(Var(x), p)), E env) --> (S(t), E { x |--> t, env'})
   where
     lookup(env, x) --> F(),
-    T t , TF tf |- (m(p), E env) --> (S(t'), E env')
+    T t |- (m(p), E env) --> (S(t'), E env')
   
-  // compound as with bound variable
-  T t, TF tf |- (m(As(Var(x), p)), E env) --> (S(t), E env')
+  // compound As with bound variable
+  T t |- (m(As(Var(x), p)), E env) --> (S(t), E env')
   where
-    lookup(env, x) --> S(t'),
-    t == t',
-    T t, TF tf |- (m(p), E env) --> (S(t''), E env')
+    lookup(env, x) --> S(xt),
+    t == xt, // VV: there might be an issue here since TermEq does an t.equals(xt) check and not t == xt.
+    T t |- (m(p), E env) --> (S(t''), E env')
   
   // match application
   T t, TF tf |- (m(Op(c, pts)), E env) --> (S(t), E env')
@@ -112,7 +110,7 @@ rules // actual matching
     c == c',
     getAllSubterms(aappl) => subterms,
     makeList(tf, subterms) => asubterms,
-    T asubterms, TF tf |- (ml(pts), E env) --> (S(aats'), E env')
+    T asubterms |- (ml(pts), E env) --> (S(aats'), E env')
 
   // match explode
   T t, TF tf |- m(Explode(ct, ts)) --> S(t)
@@ -122,33 +120,33 @@ rules // actual matching
     getConstructor[aappl]() => aconstr,
     getName[aconstr]() => c',
     makeString[tf](c') => ac',
-    T ac', TF tf |- Match(ct) --> S(ct'),
+    T ac' |- Match(ct) --> S(ct'),
     getAllSubterms(aappl) => subterms,
-    makeList(tf, subterms) => asubterms, 
-    T asubterms, TF tf |- Match(ts) --> S(aats')
+    makeList(tf, subterms) => asubterms,
+    T asubterms |- Match(ts) --> S(aats')
     
   // match failure
   m(dc) --> F()
   where
     all-fail
     
-  // match an empty list (not a Nil())
-  T t, TF tf |- ml([]) --> S(t)
+  // match an empty list
+  T t |- ml([]) --> S(t)
   where
     isATermList(t) == true,
     asATermList(t) => alist,
     isEmpty[alist]() == true
   
-  // match a non-empty list (not a Cons(_, _))
-  T t, TF tf |- ml([p | ps]) --> S(t)
+  // match a non-empty list
+  T t |- ml([p | ps]) --> S(t)
   where
     isATermList(t) == true,
     asATermList(t) => alist,
     isEmpty[alist]() == false,
     head[alist]() => th,
-    T th, TF tf |- Match(p) --> S(t'),
+    T th |- Match(p) --> S(t'),
     tail[alist]() => tl,
-    T tl, TF tf |- ml(ps) --> S(t'')
+    T tl |- ml(ps) --> S(t'')
   
   ml(l) --> F()
   where
@@ -161,7 +159,7 @@ signature
 
 rules // build
 
-  T ct, TF tf |- Build(Anno(t, as)) --> S(aterm)
+  TF tf |- Build(Anno(t, as)) --> S(aterm)
   where
     b(t) --> S(at),
     b(as) --> S(aas),
@@ -179,17 +177,17 @@ rules // build
     lookup(env, x) --> v,
     v => S(aterm) // force lookup of x to be a success
       
-  T t, TF tf |- b(Int(i)) --> v
+  TF tf |- b(Int(i)) --> v
   where
     makeInt[tf](i) => aint,
     S(aint) => v
   
-  T t, TF tf |- b(Str(s)) --> v
+  TF tf |- b(Str(s)) --> v
   where
     makeString[tf](s) => astr,
     S(astr) => v
    
-  T t, TF tf |- b(Op(c, ts)) --> v
+  TF tf |- b(Op(c, ts)) --> v
   where
     length(ts) => tslen,
     makeConstructor[tf](c, tslen) => constr,
@@ -197,10 +195,10 @@ rules // build
     isATermList(ats) == true,
     asATermList(ats) => ats',
     toNativeList(ats') => ts',
-    makeAppl(tf, constr, ts') => aappl, // maybe replace with higher level makeAppl(String, List(Term))
+    makeAppl(tf, constr, ts') => aappl,
     S(aappl) => v
     
-  T cat, TF tf |- b(Explode(ct, ts)) --> v
+  TF tf |- b(Explode(ct, ts)) --> v
   where
     Build(ct) --> S(ac), // constructor name
     isATermString(ac) == true,
@@ -215,12 +213,12 @@ rules // build
     makeAppl(tf, constr, ts') => t,
     S(t) => v
     
-  T t, TF tf |- bl([]) --> v
+  TF tf |- bl([]) --> v
   where
     makeList(tf, []) => anil,
     S(anil) => v
   
-  T ct, TF tf |- bl([t | ts]) --> v
+  TF tf |- bl([t | ts]) --> v
   where
     Build(t) --> S(at),
     bl(ts) --> S(ats),
@@ -242,23 +240,23 @@ rules // scope
 
 rules // identity and failure
 
-  T t, TF tf |- Id() --> S(t)
+  T t |- Id() --> S(t)
   
   Fail() --> F()
   
-rules // proceed
-
-  // ProceedT(s*, t*) ?
-  
-  // ProceedNoArgs() ?
-
+// rules // proceed
+// 
+//   // ProceedT(s*, t*) ?
+//   
+//   // ProceedNoArgs() ?
+// 
 rules // sequential composition
   
-  T t , TF tf |- Seq(s1, s2) --> v2
+  T t |- Seq(s1, s2) --> v2
   where
     s1 --> v1,
     v1 => S(t'),
-    T t', TF tf |- s2 --> v2
+    T t' |- s2 --> v2
         
   Seq(s1, s2) --> v1
   where
@@ -267,15 +265,17 @@ rules // sequential composition
                     
 rules // guarded choice   
         
-  GuardedLChoice(s1, s2, s3) --> v
+  GuardedLChoice(s1, s2, s3) --> v2
   where
-    s1 --> S(t),
-    T t |- s2 --> v
+    s1 --> v1,
+    v1 => S(t),
+    T t |- s2 --> v2
                 
-  GuardedLChoice(s1, s2, s3) --> v
+  GuardedLChoice(s1, s2, s3) --> v3
   where
-    s1 --> F(),
-    s3 --> v
+    s1 --> v1,
+    v1 => F(),
+    s3 --> v3
 
 rules // left choice
 
@@ -319,7 +319,7 @@ rules // term traversal: all
     isATermTuple(t) == true,
     getAllSubterms(t) => ts,
     makeList(tf, ts) => ats,
-    T ats, TF tf |- map(s) --> v,
+    T ats |- map(s) --> v,
     v => S(t')
 
   T t, TF tf |- All(s) --> v
@@ -329,7 +329,7 @@ rules // term traversal: all
     getConstructor[at]() => ac,
     getAllSubterms(at) => ts,
     makeList(tf, ts) => ats,
-    T ats, TF tf |- map(s) --> S(ats'),
+    T ats |- map(s) --> S(ats'),
     isATermList(ats') == true,
     asATermList(ats') => ats'',
     toNativeList(ats'') => ts',
@@ -341,7 +341,7 @@ rules // term traversal: all
   where
     all-fail
 
-  T t, TF tf |- map(s) --> v
+  T t |- map(s) --> v
   where
     isATermList(t) == true,
     asATermList(t) => lt,
@@ -355,8 +355,8 @@ rules // term traversal: all
     isEmpty[lt]() == false,
     head[lt]() => th,
     tail[lt]() => ts,
-    T th, TF tf |- s --> S(th'),
-    T ts, TF tf |- map(s) --> S(ts'),
+    T th |- s --> S(th'),
+    T ts |- map(s) --> S(ts'),
     isATermList(ts') == true,
     asATermList(ts') => ats,
     makeListCons[tf](th', ats) => ts'',
@@ -394,7 +394,7 @@ rules // term traversal: one
     isATermTuple(t) == true,
     getAllSubterms(t) => ts,
     makeList(tf, ts) => ats,
-    T ats, TF tf |- first(s) --> S(t'),
+    T ats |- first(s) --> S(t'),
     S(t') => v
   
   T t, TF tf |- One(s) --> v
@@ -402,7 +402,7 @@ rules // term traversal: one
     isATermList(t) == true,
     getAllSubterms(t) => ts,
     makeList(tf, ts) => ats,
-    T ats, TF tf |- first(s) --> v,
+    T ats |- first(s) --> v,
     v => S(t')
   
   T t, TF tf |- One(s) --> v
@@ -412,7 +412,7 @@ rules // term traversal: one
     getConstructor[at]() => ac,
     getAllSubterms(at) => ts,
     makeList(tf, ts) => ats,
-    T ats, TF tf |- first(s) --> S(ats'),
+    T ats |- first(s) --> S(ats'),
     isATermList(ats') == true,
     makeAppl(tf, ac, ts) => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over annotations
@@ -422,7 +422,7 @@ rules // term traversal: one
   where all-fail
   
   // empty candidate list
-  T t, TF tf |- first(s) --> v
+  T t |- first(s) --> v
   where
     isATermList(t) == true,
     asATermList(t) => lt,
@@ -437,7 +437,7 @@ rules // term traversal: one
     isEmpty[lt]() == false,
     head[lt]() => th,
     tail[lt]() => tl,
-    T th, TF tf |- s --> v1,
+    T th |- s --> v1,
     v1 => S(th'),
     makeListCons[tf](th', tl) => t',
     S(t') => v
@@ -450,9 +450,9 @@ rules // term traversal: one
     isEmpty[lt]() == false,
     head[lt]() => th,
     tail[lt]() => tl,
-    T th, TF tf |- s --> v1,
+    T th |- s --> v1,
     v1 => F(),
-    T tl, TF tf |- first(s) --> S(tl'),
+    T tl |- first(s) --> S(tl'),
     isATermList(tl') == true,
     asATermList(tl') => tl'',
     makeListCons[tf](th, asATermList(tl')) => t',

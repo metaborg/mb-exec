@@ -19,7 +19,9 @@ signature
   semantic-components
     E -> Map<String, T>
     D -> Map<String, StrategyDef>
-
+    C -> Map<Term, Term>
+    
 signature
   native-operators
     length : List(Term) -> Int
+    concatStrings : String * String -> String
