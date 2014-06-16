@@ -1,0 +1,22 @@
+module util
+
+imports
+  base
+  shared
+
+signature
+  internal-constructors 
+    lookup : E * String -> Term
+
+rules // environment manipulation
+
+  lookup(env, x) --> v
+  where
+    env[x] => t,
+    t != F(),
+    S(t) => v
+  
+  lookup(env, x) --> v
+  where
+    all-fail,
+    F() => v

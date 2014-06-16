@@ -1,0 +1,70 @@
+module calls
+
+imports
+  base
+  stratego-signatures
+  shared
+  build
+  
+signature
+  internal-constructors
+    bindASVars: List(Typedid) * List(Strategy) -> Term
+    bindASVar: Typedid * Strategy -> Term
+    
+rules // calls
+
+  D defs |- (CallT(SVar(sname), asargs, atargs), E env) --> (v, E env')
+  where
+    defs[sname] => SDefT(sname', fsargs, ftargs, s),
+    sname == sname', // sanity check
+    bl(atargs) --> atargs', // evaluate term argument expressions
+    bindASVars(fsargs, asargs) -defs-> defs',
+    D {defs', defs} |- (s, E {ftargs |*-> atargs', env}) --> (v, E env')
+  
+//   // TODO reduction for CallT calling a strategy in the manual interpreter or in compiled code
+//   
+//   // TODO rewrite to equations
+//   
+//   // bindASVars([], []) == {}
+//   // should rewrite to:
+//   //    bindASVars([], []) --axiom_bindASVars_2> {}
+//   
+//   // bindASVars([tid | tidxs], [s | sxs]) == {bindASVar(tid, s), bindASVars(tidxs, sxs)}
+//   
+//   // bindASVar(VarDec(x, t), s) == { x |--> SDefT(x, [], [], s) }
+//   // should rewrite to:
+//   //    bindASVar(VarDEc(x,))
+//   
+// rules // let - in - end
+// 
+//   Let([], s) --> v
+//   where
+//     s --> v
+//   
+//   D defs |- Let([SDefT(sname, ss, ts, s1) | sdefs], s2) --> v
+//   where
+//     D { sname |--> SDefT(sname, ss, ts, s1), defs } |- Let(sdefs, s2) --> v
+// 
+// signature
+//   internal-constructors
+//     primitive : String * List(Strategy) * TLIST -> Term
+// 
+// rules // primitives
+// 
+//   PrimT(name, asargs, atargs) --> v
+//   where
+//     bl(atargs) --> S(ats),
+//     isATermList(ats) => True(),
+//     asATermList(ats) => ats',
+//     primitive(name, asargs, ats') --> v // implement in Java
+//   
+// rules // dynamic call
+//   
+//   CallDynamic(t, sts, tts) --> v
+//   where
+//     Build(t) --> S(asname),
+//     isATermString(asname) => True(),
+//     asATermString(asname) => asname',
+//     stringValue[asname']() => sname,
+//     CallT(SVar(sname), sts, tts) --> v
+//       

@@ -1,0 +1,205 @@
+module core-strategies
+/*
+ *
+ * Specifications for:
+ *   - id
+ *   - fail
+ *   - variable scoping
+ *   - all
+ *   - one
+ *
+*/
+imports
+  base
+  stratego-signatures
+  aterm
+  shared
+  util
+  
+rules // identity and failure
+
+  T t |- Id() --> S(t)
+  
+  Fail() --> F()
+
+rules // scope 
+  
+  Scope([], s) --> t'
+  where
+    s --> t'
+  
+  (Scope([x | xs], s), E env) --> (v, E {x |--> oldx, env'})
+  where
+    lookup(env, x) => oldx,
+    (Scope(xs, s), E {x |--> F(), env}) --> (v, E env')
+
+signature
+  internal-constructors
+    map : Strategy -> Strategy
+
+rules // term traversal: all
+
+/*
+  // <all> 42
+  T t, TF tf |- All(s) --> v
+  where
+    isATermInt(t) == true,
+    F() => v
+  
+  // <all> "string"
+  T t, TF tf |- All(s) --> v
+  where
+    isATermString(t) == true,
+    F() => v
+  
+  // TODO case for <all> "4.5"
+  
+*/
+  
+  // <all> (tup1, tup2, ...)
+  T t, TF tf |- All(s) --> v
+  where
+    isATermTuple(t) == true,
+    getAllSubterms(t) => ts,
+    makeList(tf, ts) => ats,
+    T ats |- map(s) --> v,
+    v => S(t')
+
+  T t, TF tf |- All(s) --> v
+  where  
+    isATermAppl(t) == true,
+    asATermAppl(t) => at,
+    getConstructor[at]() => ac,
+    getAllSubterms(at) => ts,
+    makeList(tf, ts) => ats,
+    T ats |- map(s) --> S(ats'),
+    isATermList(ats') == true,
+    asATermList(ats') => ats'',
+    toNativeList(ats'') => ts',
+    makeAppl(tf, ac, ts') => t',
+    annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over the old annotations,
+    S(t'') => v
+
+  All(s) --> F()
+  where
+    all-fail
+
+  T t |- map(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => lt,
+    isEmpty[lt]() == true,
+    S(t) => v
+  
+  T t, TF tf |- map(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => lt,
+    isEmpty[lt]() == false,
+    head[lt]() => th,
+    tail[lt]() => ts,
+    T th |- s --> S(th'),
+    T ts |- map(s) --> S(ts'),
+    isATermList(ts') == true,
+    asATermList(ts') => ats,
+    makeListCons[tf](th', ats) => ts'',
+    S(ts'') => v
+
+  map(s) --> F()
+  where
+    all-fail
+
+signature
+  internal-constructors
+    first : Strategy -> Strategy
+
+rules // term traversal: one
+  
+/*
+  // <one> 42  
+  T t, TF tf |- One(s) --> v
+  where
+    isATermInt(t) == true,
+    F() => v
+
+  // TODO add case for <one> 42.5
+  
+  // <one> "string"
+  T t, TF tf |- One(s) --> v
+  where
+    isATermString(t) == true,
+    F() => v
+*/
+
+  // <one> (tup1, tup2, ...)
+  T t, TF tf |- One(s) --> v
+  where
+    isATermTuple(t) == true,
+    getAllSubterms(t) => ts,
+    makeList(tf, ts) => ats,
+    T ats |- first(s) --> S(t'),
+    S(t') => v
+  
+  T t, TF tf |- One(s) --> v
+  where
+    isATermList(t) == true,
+    getAllSubterms(t) => ts,
+    makeList(tf, ts) => ats,
+    T ats |- first(s) --> v,
+    v => S(t')
+  
+  T t, TF tf |- One(s) --> v
+  where
+    isATermAppl(t) == true,
+    asATermAppl(t) => at,
+    getConstructor[at]() => ac,
+    getAllSubterms(at) => ts,
+    makeList(tf, ts) => ats,
+    T ats |- first(s) --> S(ats'),
+    isATermList(ats') == true,
+    makeAppl(tf, ac, ts) => t',
+    annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over annotations
+    S(t'') => v
+  
+  One(s) --> F()
+  where all-fail
+  
+  // empty candidate list
+  T t |- first(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => lt,
+    isEmpty[lt]() == true,
+    F() => v
+  
+  // non-empty head success
+  T t, TF tf |- first(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => lt,
+    isEmpty[lt]() == false,
+    head[lt]() => th,
+    tail[lt]() => tl,
+    T th |- s --> v1,
+    v1 => S(th'),
+    makeListCons[tf](th', tl) => t',
+    S(t') => v
+  
+  // non-empty head success
+  T t, TF tf |- first(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => lt,
+    isEmpty[lt]() == false,
+    head[lt]() => th,
+    tail[lt]() => tl,
+    T th |- s --> v1,
+    v1 => F(),
+    T tl |- first(s) --> S(tl'),
+    isATermList(tl') == true,
+    asATermList(tl') => tl'',
+    makeListCons[tf](th, asATermList(tl')) => t',
+    S(t') => v
+  
+  first(s) --> F()
+  where all-fail

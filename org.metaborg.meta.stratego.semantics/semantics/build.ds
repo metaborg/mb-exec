@@ -1,0 +1,85 @@
+module build
+
+imports
+  base
+  stratego-signatures
+  shared
+  aterm
+  util
+
+signature
+  internal-constructors
+    b : PreTerm -> Term
+    bl : List(STerm) -> Term
+
+rules // build
+
+  TF tf |- Build(Anno(t, as)) --> S(aterm)
+  where
+    b(t) --> S(at),
+    b(as) --> S(aas),
+    isATermList(aas) == true,
+    asATermList(aas) => aas',
+    annotateTerm[tf](at, aas') => aterm
+  
+  Build(Var(x)) --> v
+  where
+    b(Var(x)) --> v,
+    v => S(aterm)
+
+rules // actual term building
+
+  (b(Var(x)), E env) --> (v, E env)
+  where
+    lookup(env, x) --> v,
+    v => S(aterm) // force lookup of x to be a success
+      
+  TF tf |- b(Int(i)) --> v
+  where
+    makeInt[tf](i) => aint,
+    S(aint) => v
+  
+  TF tf |- b(Str(s)) --> v
+  where
+    makeString[tf](s) => astr,
+    S(astr) => v
+   
+  TF tf |- b(Op(c, ts)) --> v
+  where
+    length(ts) => tslen,
+    makeConstructor[tf](c, tslen) => constr,
+    bl(ts) --> S(ats),
+    isATermList(ats) == true,
+    asATermList(ats) => ats',
+    toNativeList(ats') => ts',
+    makeAppl(tf, constr, ts') => aappl,
+    S(aappl) => v
+    
+  TF tf |- b(Explode(ct, ts)) --> v
+  where
+    Build(ct) --> S(ac), // constructor name
+    isATermString(ac) == true,
+    asATermString(ac) => atermstr,
+    stringValue[atermstr]() => c,  
+    Build(ts) => S(ats), // subterms
+    isATermList(ats) == true,
+    asATermList(ats) => ats',
+    size[ats']() => tslen,
+    makeConstructor[tf](c, tslen) => constr,
+    toNativeList(ats') => ts',
+    makeAppl(tf, constr, ts') => t,
+    S(t) => v
+    
+  TF tf |- bl([]) --> v
+  where
+    makeList(tf, []) => anil,
+    S(anil) => v
+  
+  TF tf |- bl([t | ts]) --> v
+  where
+    Build(t) --> S(at),
+    bl(ts) --> S(ats),
+    isATermList(ats) == true,
+    asATermList(ats) => ats',
+    makeListCons[tf](at, ats') => alist,
+    S(alist) => v

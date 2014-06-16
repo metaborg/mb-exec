@@ -1,0 +1,54 @@
+module combinators
+/*
+ *
+ * Specifications for:
+ *   - s1 ; s2
+ *   - s1 < s2 + s3
+ *   - s1 <+ s2
+ *
+*/
+imports
+  base
+  stratego-signatures
+  shared
+  aterm
+
+rules // sequential composition
+  
+  T t |- Seq(s1, s2) --> v2
+  where
+    s1 --> v1,
+    v1 => S(t'),
+    T t' |- s2 --> v2
+        
+  Seq(s1, s2) --> v1
+  where
+    s1 --> v1,
+    v1 => F()
+                    
+rules // guarded choice   
+        
+  GuardedLChoice(s1, s2, s3) --> v2
+  where
+    s1 --> v1,
+    v1 => S(t),
+    T t |- s2 --> v2
+                
+  GuardedLChoice(s1, s2, s3) --> v3
+  where
+    s1 --> v1,
+    v1 => F(),
+    s3 --> v3
+
+rules // left choice
+
+  LChoice(s1, s2) --> v1
+  where
+    s1 --> v1,
+    v1 => S(t)
+  
+  LChoice(s1, s2) --> v2
+  where
+    s1 --> v1,
+    v1 => F(),
+    s2 --> v2

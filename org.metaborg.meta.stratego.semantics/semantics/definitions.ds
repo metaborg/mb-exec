@@ -1,0 +1,23 @@
+module definitions
+
+imports
+  base
+  shared
+  stratego-signatures
+
+signature
+  internal-constructors
+    specDefs : Module -> Term
+    defs : List(Def) -> Term
+
+rules // strategy definitions
+  
+  specDefs(Specification([sigs, Strategies(ss)])) -defs-> v
+  where
+    defs(ss) -defs-> v
+
+  defs([]) -defs-> {}
+
+  defs([SDefT(sname, ss, ts, s) | ds]) -defs-> { sname |--> SDefT(sname, ss, ts, s), defs}
+  where
+    defs(ds) -defs-> defs
