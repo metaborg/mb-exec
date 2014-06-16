@@ -17,13 +17,14 @@ signature
 
   arrows
     Builder -bld-> T
+    Builder -blds-> List(T)
 
 rules // build
 
   TF tf |- Build(Anno(t, as)) --> S(aterm)
   where
     b(t) -bld-> at,
-    b(as) -bld-> aas,
+    b(as) -bld-> aas, // FIXME
     isATermList(aas) == true,
     asATermList(aas) => aas',
     annotateTerm[tf](at, aas') => aterm
@@ -47,39 +48,34 @@ rules // actual term building
   TF tf |- b(Str(s)) -bld-> astr
   where
     makeString[tf](s) => astr
-   
-  TF tf |- b(Op(c, ts)) -bld-> aappl
-  where
-    length(ts) => tslen,
-    makeConstructor[tf](c, tslen) => constr,
-    bl(ts) -bld-> ats,
-    isATermList(ats) == true,
-    asATermList(ats) => ats',
-    toNativeList(ats') => ts',
-    makeAppl(tf, constr, ts') => aappl
-    
-  TF tf |- b(Explode(ct, ts)) -bld-> t
-  where
-    Build(ct) --> S(ac), // constructor name
-    isATermString(ac) == true,
-    asATermString(ac) => atermstr,
-    stringValue[atermstr]() => c,  
-    Build(ts) => S(ats), // subterms
-    isATermList(ats) == true,
-    asATermList(ats) => ats',
-    size[ats']() => tslen,
-    makeConstructor[tf](c, tslen) => constr,
-    toNativeList(ats') => ts',
-    makeAppl(tf, constr, ts') => t
-    
-  TF tf |- bl([]) -bld-> anil
-  where
-    makeList(tf, []) => anil
   
-  TF tf |- bl([t | ts]) -bld-> alist
+  TF tf |- b(Op(cname, ts)) -bld-> appl
   where
-    Build(t) --> S(at),
-    bl(ts) -bld-> ats,
-    isATermList(ats) == true,
-    asATermList(ats) => ats',
-    makeListCons[tf](at, ats') => alist
+    length(ts) => numts,
+    makeConstructor[tf](cname, numts) => constr,
+    bl(ts) -blds-> ts',
+    makeAppl(tf, constr, ts') => appl
+  
+  // cname_expr can be a Var or an Anno
+  // ts_expr can a Var or an Anno
+  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> appl
+  where
+    Build(cname_expr) --> S(cname_aterm),
+    isATermString(cname_aterm) == true,
+    asATermString(cname_aterm) => cname_aterm_str,
+    stringValue[cname_aterm_str]() => cname,
+    Build(ts_expr) --> S(ts_aterm),
+    isATermList(ts_aterm) == true,
+    asATermList(ts_aterm) => ts_aterm_list,
+    size[ts_aterm_list]() => ts_aterm_list_len,
+    makeConstructor[tf](cname, ts_aterm_list_len) => constr,
+    toNativeList(ts_aterm_list) => ts_list_aterm,
+    makeAppl(tf, constr, ts_list_aterm) => appl
+
+  TF tf |- bl([]) -blds-> []
+
+  TF tf |- bl([texpr | texprs]) -blds-> [tx | txs]
+  where
+    Build(texpr) --> S(tx),
+    bl(texprs) -blds-> txs
+  

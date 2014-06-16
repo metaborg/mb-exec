@@ -5,36 +5,61 @@ imports
   stratego-signatures
   shared
   build
+  definitions
   
-signature
-  internal-constructors
-    bindASVars: List(Typedid) * List(Strategy) -> Term
-    bindASVar: Typedid * Strategy -> Term
-    
 rules // calls
 
-  D defs |- (CallT(SVar(sname), asargs, atargs), E env) --> (v, E env')
+  D defs |- (CallT(SVar(sname), ass, ats), E env) --> (v, E env')
   where
-    defs[sname] => SDefT(sname', fsargs, ftargs, s),
+    defs[sname] => SDefT(sname', fss, fts, s),
     sname == sname', // sanity check
-    bl(atargs) --> atargs', // evaluate term argument expressions
-    bindASVars(fsargs, asargs) -defs-> defs',
-    D {defs', defs} |- (s, E {ftargs |*-> atargs', env}) --> (v, E env')
+    bindSVars(ass, fss) -bind-> defs',
+    bl(ats) -blds-> ats', // evaluate term argument expressions
+    typedIds(fts) -exid-> fts',
+    D {defs', defs} |- (s, E {fts' |*-> ats', env}) --> (v, E env')
   
-//   // TODO reduction for CallT calling a strategy in the manual interpreter or in compiled code
-//   
-//   // TODO rewrite to equations
-//   
-//   // bindASVars([], []) == {}
-//   // should rewrite to:
-//   //    bindASVars([], []) --axiom_bindASVars_2> {}
-//   
-//   // bindASVars([tid | tidxs], [s | sxs]) == {bindASVar(tid, s), bindASVars(tidxs, sxs)}
-//   
-//   // bindASVar(VarDec(x, t), s) == { x |--> SDefT(x, [], [], s) }
-//   // should rewrite to:
-//   //    bindASVar(VarDEc(x,))
-//   
+  D defs |- SVar(sname) --> v
+  where
+    defs[sname] => SDefT(sname', fss, fts, s),
+    sname == sname', // sanity check
+    s --> v
+
+signature
+  internal-sorts
+    NameExtractor
+  
+  internal-constructors
+    typedIds: List(Typedid) -> NameExtractor
+  
+  arrows
+    NameExtractor -exid-> List(String)
+  
+rules
+  
+  typedIds([]) -exid-> []
+ 
+  typedIds([VarDec(x, dc) | xs]) -exid-> [ x | xs' ]
+  where
+    typedIds(xs) -exid-> xs'
+
+signature
+  internal-sorts
+    SBinder
+    
+  internal-constructors
+    bindSVars: List(Strategy) * List(Typedid) -> SBinder
+  
+  arrows
+    SBinder -bind-> D
+
+rules
+
+  bindSVars([], []) -bind-> {}
+  
+  bindSVars([s | ss], [VarDec(x, dc) | tids]) -bind-> { x |--> SDefT(x, [], [], s), binds }
+  where
+    bindSVars(ss, tids) -bind-> binds
+    
 // rules // let - in - end
 // 
 //   Let([], s) --> v

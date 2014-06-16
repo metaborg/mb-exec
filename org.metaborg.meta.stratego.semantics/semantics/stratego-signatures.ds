@@ -12,10 +12,10 @@ signature
     Var -> PreTerm
     Wld -> PreTerm
     Real
-    Typedid
     Def
     StrategyDef -> Def
     SVar
+    Typedid
     Type
     ConstType -> Type
     FunType -> Type
@@ -29,6 +29,7 @@ signature
     Strategies               : List(Def) -> Decl
     Specification            : List(Decl) -> Module
     VarDec                   : String * Type -> Typedid
+    FunType                  : List(Type) * Type -> FunType
     SDefT                    : String * List(Typedid) * List(Typedid) * Strategy -> StrategyDef
     LChoice                  : Strategy * Strategy -> Strategy
     Call                     : SVar * List(Strategy) -> Strategy
@@ -71,6 +72,7 @@ signature
     // RDec                     : Id * List(Typedid) -> RuleDec
     // RDecNoArgs               : Id -> RuleDec
     // DynRuleScopeId           : Id -> DynRuleScopeId
+    // ConstType                : Sort -> ConstType
     // LabeledDynRuleScopeId    : Id * Term -> DynRuleScopeId
     // DynRuleId                : RuleDec -> DynRuleId
     // AddLabelDynRuleId        : RuleDec * Term -> DynRuleId
@@ -185,11 +187,6 @@ signature
     //                          : RuleDef -> Def
     // AnnoDef                  : List(Anno) * RuleDef -> Def
     // AnnoDef                  : List(Anno) * StrategyDef -> Def
-    //                          : Type -> RetType
-    //                          : ConstType -> ArgType
-    //                          : Type -> ArgType
-    // FunType                  : List(ArgType) * RetType -> FunType
-    // ConstType                : Sort -> ConstType
     // SortTuple                : List(Sort) -> Sort
     // SortListTl               : List(Sort) * Sort -> Sort
     // SortList                 : List(Sort) -> Sort
