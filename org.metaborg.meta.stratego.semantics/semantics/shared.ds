@@ -9,7 +9,7 @@ signature
   
   arrows
     Term -default-> Value
-    Term -defs-> D
+    // STerm -defs-> D
     
   // success and failure values
   values
@@ -18,8 +18,8 @@ signature
   
   semantic-components
     E -> Map<String, T>
-    D -> Map<String, StrategyDef>
-    C -> Map<Term, Term>
+    // D -> Map<String, StrategyDef>
+    // C -> Map<Term, Term>
     
 signature
   native-operators

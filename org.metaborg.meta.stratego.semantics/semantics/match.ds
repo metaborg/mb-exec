@@ -7,22 +7,33 @@ imports
   aterm
   util
 
+signature
+  internal-sorts
+    Matcher
+    
+  internal-constructors
+    m : PreTerm -> Matcher
+    ml: List(STerm) -> Matcher
+
+  arrows
+    Matcher -ma-> Value
+
 rules // match dispatch annotations
 
   Match(NoAnnoList(mp)) --> v
   where
-    m(mp) --> v
+    m(mp) -ma-> v
 
   T t |- Match(Anno(mp, ma)) --> v
   where
-    T t  |- m(mp) --> S(t'),
+    T t  |- m(mp) -ma-> S(t'),
     getAnnotations[t]() => aa,
-    T aa |- m(ma) --> S(t''),
+    T aa |- m(ma) -ma-> S(t''),
     S(t) => v
 
   T t |- Match(Var(x)) --> v
   where
-    T t |- m(Var(x)) --> S(t'),
+    T t |- m(Var(x)) -ma-> S(t'),
     S(t) => v
 
   Match(x) --> v
@@ -30,18 +41,13 @@ rules // match dispatch annotations
     all-fail,
     F() => v
 
-signature
-  internal-constructors
-    m : PreTerm -> Term
-    ml: List(STerm) -> Term
-    
 rules // actual matching
 
-  T t |- m(Wld()) --> v
+  T t |- m(Wld()) -ma-> v
   where
     S(t) => v
 
-  T t |- m(Int(i)) --> v
+  T t |- m(Int(i)) -ma-> v
   where
     isATermInt(t) == true,
     asATermInt(t) => aint,
@@ -49,7 +55,7 @@ rules // actual matching
     i == i',
     S(t) => v
   
-  T t |- m(Str(s)) --> v
+  T t |- m(Str(s)) -ma-> v
   where
     isATermString(t) == true,
     asATermString(t) => astr,
@@ -58,33 +64,33 @@ rules // actual matching
     S(t) => v
 
   // match against unbound variable
-  T t |- (m(Var(x)), E env) --> (v, E { x |--> t, env })
+  T t |- (m(Var(x)), E env) -ma-> (v, E { x |--> t, env })
   where
-    lookup(env, x) --> F(),
+    E env |- lookup(x) -look-> F(),
     S(t) => v
 
   // match against bound variable
-  T t |- (m(Var(x)), E env) --> (v, E env)
+  T t |- (m(Var(x)), E env) -ma-> (v, E env)
   where
-    lookup(env, x) --> S(t'),
+    E env |- lookup(x) -look-> S(t'),
     t == t',
     S(t) => v
 
   // compound As with unbound variable. The variable is only bound if the match succeeds.
-  T t |- (m(As(Var(x), p)), E env) --> (S(t), E { x |--> t, env'})
+  T t |- (m(As(Var(x), p)), E env) -ma-> (S(t), E { x |--> t, env'})
   where
-    lookup(env, x) --> F(),
-    T t |- (m(p), E env) --> (S(t'), E env')
+    E env |- lookup(x) -look-> F(),
+    T t |- (m(p), E env) -ma-> (S(t'), E env')
   
   // compound As with bound variable
-  T t |- (m(As(Var(x), p)), E env) --> (S(t), E env')
+  T t |- (m(As(Var(x), p)), E env) -ma-> (S(t), E env')
   where
-    lookup(env, x) --> S(xt),
+    E env |- lookup(x) -look-> S(xt),
     t == xt, // VV: there might be an issue here since TermEq does an t.equals(xt) check and not t == xt.
-    T t |- (m(p), E env) --> (S(t''), E env')
+    T t |- (m(p), E env) -ma-> (S(t''), E env')
   
   // match application
-  T t, TF tf |- (m(Op(c, pts)), E env) --> (S(t), E env')
+  T t, TF tf |- (m(Op(c, pts)), E env) -ma-> (S(t), E env')
   where
     isATermAppl(t) == true,
     asATermAppl(t) => aappl,
@@ -93,10 +99,10 @@ rules // actual matching
     c == c',
     getAllSubterms(aappl) => subterms,
     makeList(tf, subterms) => asubterms,
-    T asubterms |- (ml(pts), E env) --> (S(aats'), E env')
+    T asubterms |- (ml(pts), E env) -ma-> (S(aats'), E env')
 
   // match explode
-  T t, TF tf |- m(Explode(ct, ts)) --> S(t)
+  T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
     isATermAppl(t) == true,
     asATermAppl(t) => aappl,
@@ -109,19 +115,19 @@ rules // actual matching
     T asubterms |- Match(ts) --> S(aats')
     
   // match failure
-  m(dc) --> F()
+  m(dc) -ma-> F()
   where
     all-fail
     
   // match an empty list
-  T t |- ml([]) --> S(t)
+  T t |- ml([]) -ma-> S(t)
   where
     isATermList(t) == true,
     asATermList(t) => alist,
     isEmpty[alist]() == true
   
   // match a non-empty list
-  T t |- ml([p | ps]) --> S(t)
+  T t |- ml([p | ps]) -ma-> S(t)
   where
     isATermList(t) == true,
     asATermList(t) => alist,
@@ -129,8 +135,8 @@ rules // actual matching
     head[alist]() => th,
     T th |- Match(p) --> S(t'),
     tail[alist]() => tl,
-    T tl |- ml(ps) --> S(t'')
+    T tl |- ml(ps) -ma-> S(t'')
   
-  ml(l) --> F()
+  ml(l) -ma-> F()
   where
     all-fail

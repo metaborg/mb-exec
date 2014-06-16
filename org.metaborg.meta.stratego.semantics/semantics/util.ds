@@ -5,18 +5,24 @@ imports
   shared
 
 signature
+  internal-sorts
+    Lookup
+
   internal-constructors 
-    lookup : E * String -> Term
+    lookup : String -> Lookup
+  
+  arrows
+    Lookup -look-> Value 
 
-rules // environment manipulation
+rules // environment lookups
 
-  lookup(env, x) --> v
+  E env |- lookup(x) -look-> v
   where
     env[x] => t,
     t != F(),
     S(t) => v
   
-  lookup(env, x) --> v
+  E env |- lookup(x) -look-> v
   where
     all-fail,
     F() => v

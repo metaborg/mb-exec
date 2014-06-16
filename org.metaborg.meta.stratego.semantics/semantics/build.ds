@@ -8,54 +8,57 @@ imports
   util
 
 signature
+  internal-sorts
+    Builder
+    
   internal-constructors
-    b : PreTerm -> Term
-    bl : List(STerm) -> Term
+    b : PreTerm -> Builder
+    bl : List(STerm) -> Builder
+
+  arrows
+    Builder -bld-> T
 
 rules // build
 
   TF tf |- Build(Anno(t, as)) --> S(aterm)
   where
-    b(t) --> S(at),
-    b(as) --> S(aas),
+    b(t) -bld-> at,
+    b(as) -bld-> aas,
     isATermList(aas) == true,
     asATermList(aas) => aas',
     annotateTerm[tf](at, aas') => aterm
   
   Build(Var(x)) --> v
   where
-    b(Var(x)) --> v,
-    v => S(aterm)
+    b(Var(x)) -bld-> t,
+    S(t) => v
 
 rules // actual term building
 
-  (b(Var(x)), E env) --> (v, E env)
+  E env |- b(Var(x)) -bld-> t
   where
-    lookup(env, x) --> v,
-    v => S(aterm) // force lookup of x to be a success
+    E env |- lookup(x) -look-> v,
+    v => S(t) // the lookup has to be successful
       
-  TF tf |- b(Int(i)) --> v
+  TF tf |- b(Int(i)) -bld-> aint
   where
-    makeInt[tf](i) => aint,
-    S(aint) => v
+    makeInt[tf](i) => aint
   
-  TF tf |- b(Str(s)) --> v
+  TF tf |- b(Str(s)) -bld-> astr
   where
-    makeString[tf](s) => astr,
-    S(astr) => v
+    makeString[tf](s) => astr
    
-  TF tf |- b(Op(c, ts)) --> v
+  TF tf |- b(Op(c, ts)) -bld-> aappl
   where
     length(ts) => tslen,
     makeConstructor[tf](c, tslen) => constr,
-    bl(ts) --> S(ats),
+    bl(ts) -bld-> ats,
     isATermList(ats) == true,
     asATermList(ats) => ats',
     toNativeList(ats') => ts',
-    makeAppl(tf, constr, ts') => aappl,
-    S(aappl) => v
+    makeAppl(tf, constr, ts') => aappl
     
-  TF tf |- b(Explode(ct, ts)) --> v
+  TF tf |- b(Explode(ct, ts)) -bld-> t
   where
     Build(ct) --> S(ac), // constructor name
     isATermString(ac) == true,
@@ -67,19 +70,16 @@ rules // actual term building
     size[ats']() => tslen,
     makeConstructor[tf](c, tslen) => constr,
     toNativeList(ats') => ts',
-    makeAppl(tf, constr, ts') => t,
-    S(t) => v
+    makeAppl(tf, constr, ts') => t
     
-  TF tf |- bl([]) --> v
+  TF tf |- bl([]) -bld-> anil
   where
-    makeList(tf, []) => anil,
-    S(anil) => v
+    makeList(tf, []) => anil
   
-  TF tf |- bl([t | ts]) --> v
+  TF tf |- bl([t | ts]) -bld-> alist
   where
     Build(t) --> S(at),
-    bl(ts) --> S(ats),
+    bl(ts) -bld-> ats,
     isATermList(ats) == true,
     asATermList(ats) => ats',
-    makeListCons[tf](at, ats') => alist,
-    S(alist) => v
+    makeListCons[tf](at, ats') => alist
