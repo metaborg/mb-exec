@@ -30,13 +30,19 @@ rules // scope
   
   (Scope([x | xs], s), E env) --> (v, E {x |--> oldx, env'})
   where
-    lookup(env, x) => oldx,
+    E env |- lookup(x) -look-> oldx,
     (Scope(xs, s), E {x |--> F(), env}) --> (v, E env')
 
 signature
+  internal-sorts
+    Mapper
+    
   internal-constructors
-    map : Strategy -> Strategy
+    map : Strategy -> Mapper
 
+  arrows
+    Mapper -map-> Value
+    
 rules // term traversal: all
 
 /*
@@ -62,7 +68,7 @@ rules // term traversal: all
     isATermTuple(t) == true,
     getAllSubterms(t) => ts,
     makeList(tf, ts) => ats,
-    T ats |- map(s) --> v,
+    T ats |- map(s) -map-> v,
     v => S(t')
 
   T t, TF tf |- All(s) --> v
@@ -72,7 +78,7 @@ rules // term traversal: all
     getConstructor[at]() => ac,
     getAllSubterms(at) => ts,
     makeList(tf, ts) => ats,
-    T ats |- map(s) --> S(ats'),
+    T ats |- map(s) -map-> S(ats'),
     isATermList(ats') == true,
     asATermList(ats') => ats'',
     toNativeList(ats'') => ts',
@@ -84,14 +90,14 @@ rules // term traversal: all
   where
     all-fail
 
-  T t |- map(s) --> v
+  T t |- map(s) -map-> v
   where
     isATermList(t) == true,
     asATermList(t) => lt,
     isEmpty[lt]() == true,
     S(t) => v
   
-  T t, TF tf |- map(s) --> v
+  T t, TF tf |- map(s) -map-> v
   where
     isATermList(t) == true,
     asATermList(t) => lt,
@@ -99,19 +105,25 @@ rules // term traversal: all
     head[lt]() => th,
     tail[lt]() => ts,
     T th |- s --> S(th'),
-    T ts |- map(s) --> S(ts'),
+    T ts |- map(s) -map-> S(ts'),
     isATermList(ts') == true,
     asATermList(ts') => ats,
     makeListCons[tf](th', ats) => ts'',
     S(ts'') => v
 
-  map(s) --> F()
+  map(s) -map-> F()
   where
     all-fail
 
 signature
+  internal-sorts
+    First
+    
   internal-constructors
-    first : Strategy -> Strategy
+    first : Strategy -> First
+  
+  arrows
+    First -first-> Value
 
 rules // term traversal: one
   
@@ -137,7 +149,7 @@ rules // term traversal: one
     isATermTuple(t) == true,
     getAllSubterms(t) => ts,
     makeList(tf, ts) => ats,
-    T ats |- first(s) --> S(t'),
+    T ats |- first(s) -first-> S(t'),
     S(t') => v
   
   T t, TF tf |- One(s) --> v
@@ -145,7 +157,7 @@ rules // term traversal: one
     isATermList(t) == true,
     getAllSubterms(t) => ts,
     makeList(tf, ts) => ats,
-    T ats |- first(s) --> v,
+    T ats |- first(s) -first-> v,
     v => S(t')
   
   T t, TF tf |- One(s) --> v
@@ -155,7 +167,7 @@ rules // term traversal: one
     getConstructor[at]() => ac,
     getAllSubterms(at) => ts,
     makeList(tf, ts) => ats,
-    T ats |- first(s) --> S(ats'),
+    T ats |- first(s) -first-> S(ats'),
     isATermList(ats') == true,
     makeAppl(tf, ac, ts) => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over annotations
@@ -165,7 +177,7 @@ rules // term traversal: one
   where all-fail
   
   // empty candidate list
-  T t |- first(s) --> v
+  T t |- first(s) -first-> v
   where
     isATermList(t) == true,
     asATermList(t) => lt,
@@ -173,7 +185,7 @@ rules // term traversal: one
     F() => v
   
   // non-empty head success
-  T t, TF tf |- first(s) --> v
+  T t, TF tf |- first(s) -first-> v
   where
     isATermList(t) == true,
     asATermList(t) => lt,
@@ -186,7 +198,7 @@ rules // term traversal: one
     S(t') => v
   
   // non-empty head success
-  T t, TF tf |- first(s) --> v
+  T t, TF tf |- first(s) -first-> v
   where
     isATermList(t) == true,
     asATermList(t) => lt,
@@ -195,11 +207,11 @@ rules // term traversal: one
     tail[lt]() => tl,
     T th |- s --> v1,
     v1 => F(),
-    T tl |- first(s) --> S(tl'),
+    T tl |- first(s) -first-> S(tl'),
     isATermList(tl') == true,
     asATermList(tl') => tl'',
     makeListCons[tf](th, asATermList(tl')) => t',
     S(t') => v
   
-  first(s) --> F()
+  first(s) -first-> F()
   where all-fail
