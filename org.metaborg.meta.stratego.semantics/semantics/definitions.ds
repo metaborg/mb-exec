@@ -8,7 +8,17 @@ imports
 signature
   semantic-components
     D -> Map<String, StrategyDef>
+
+rules // let - in - end
+
+  Let([], s) --> v
+  where
+    s --> v
   
+  D defs |- Let([SDefT(sname, ss, ts, s) | sdefs], in-s) --> v
+  where
+    D { sname |--> SDefT(sname, ss, ts, s), defs } |- Let(sdefs, in-s) --> v
+
 signature
   internal-sorts
     Deffer

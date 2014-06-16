@@ -6,6 +6,7 @@ imports
   shared
   build
   definitions
+  aterm
   
 rules // calls
 
@@ -57,37 +58,25 @@ rules
   bindSVars([s | ss], [VarDec(x, dc) | tids]) -bind-> { x |--> SDefT(x, [], [], s), binds }
   where
     bindSVars(ss, tids) -bind-> binds
-    
-// rules // let - in - end
-// 
-//   Let([], s) --> v
-//   where
-//     s --> v
-//   
-//   D defs |- Let([SDefT(sname, ss, ts, s1) | sdefs], s2) --> v
-//   where
-//     D { sname |--> SDefT(sname, ss, ts, s1), defs } |- Let(sdefs, s2) --> v
-// 
-// signature
-//   internal-constructors
-//     primitive : String * List(Strategy) * TLIST -> Term
-// 
-// rules // primitives
-// 
-//   PrimT(name, asargs, atargs) --> v
-//   where
-//     bl(atargs) --> S(ats),
-//     isATermList(ats) => True(),
-//     asATermList(ats) => ats',
-//     primitive(name, asargs, ats') --> v // implement in Java
-//   
-// rules // dynamic call
-//   
-//   CallDynamic(t, sts, tts) --> v
-//   where
-//     Build(t) --> S(asname),
-//     isATermString(asname) => True(),
-//     asATermString(asname) => asname',
-//     stringValue[asname']() => sname,
-//     CallT(SVar(sname), sts, tts) --> v
-//       
+
+
+signature
+  native-operators
+    primCall : String * List(Strategy) * List(T) -> Value
+
+rules // primitives
+
+  PrimT(name, ass, ats) --> v
+  where
+    bl(ats) -blds-> ats_aterms,
+    primCall(name, ass, ats_aterms) => v // implement in Java
+  
+rules // dynamic call
+  
+  CallDynamic(target, ass, ats) --> v
+  where
+    Build(target) --> S(sname_aterm),
+    isATermString(sname_aterm) == true,
+    asATermString(sname_aterm) => sname_aterm_str,
+    stringValue[sname_aterm_str]() => sname,
+    CallT(SVar(sname), ass, ats) --> v
