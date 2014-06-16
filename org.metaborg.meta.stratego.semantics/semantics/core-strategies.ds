@@ -117,13 +117,13 @@ rules // term traversal: all
 
 signature
   internal-sorts
-    First
+    Firster
     
   internal-constructors
-    first : Strategy -> First
+    first : Strategy -> Firster
   
   arrows
-    First -first-> Value
+    Firster -first-> Value
 
 rules // term traversal: one
   

@@ -6,18 +6,30 @@ imports
   stratego-signatures
 
 signature
+  semantic-components
+    D -> Map<String, StrategyDef>
+  
+signature
+  internal-sorts
+    Deffer
+
   internal-constructors
-    specDefs : Module -> Term
-    defs : List(Def) -> Term
+    topdefs : Module -> Deffer
+    defs : List(Def) -> Deffer
+
+  arrows
+    Deffer -sdefs-> D
 
 rules // strategy definitions
   
-  specDefs(Specification([sigs, Strategies(ss)])) -defs-> v
+  topdefs(Specification([sigs, Strategies(ss)])) -sdefs-> v
   where
-    defs(ss) -defs-> v
+    defs(ss) -sdefs-> v
 
-  defs([]) -defs-> {}
+  defs([]) -sdefs-> {}
 
-  defs([SDefT(sname, ss, ts, s) | ds]) -defs-> { sname |--> SDefT(sname, ss, ts, s), defs}
+  defs([SDefT(sname, ss, ts, s) | ds]) -sdefs-> { sname |--> SDefT(sname, ss, ts, s), defs}
   where
-    defs(ds) -defs-> defs
+    defs(ds) -sdefs-> defs
+
+rules // TODO store constructor declarations
