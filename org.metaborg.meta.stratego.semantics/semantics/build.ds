@@ -21,13 +21,13 @@ signature
 
 rules // build
 
-  TF tf |- Build(Anno(t, as)) --> S(aterm)
+  TF tf |- Build(Anno(t, annos)) --> S(aterm)
   where
     b(t) -bld-> at,
-    b(as) -bld-> aas, // FIXME
-    isATermList(aas) == true,
-    asATermList(aas) => aas',
-    annotateTerm[tf](at, aas') => aterm
+    b(annos) -bld-> annos_aterm,
+    isATermList(annos_aterm) == true,
+    asATermList(annos_aterm) => annos_aterm_list,
+    annotateTerm[tf](at, annos_aterm_list) => aterm
   
   Build(Var(x)) --> v
   where
