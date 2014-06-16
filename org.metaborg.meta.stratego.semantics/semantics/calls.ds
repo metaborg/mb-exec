@@ -18,11 +18,9 @@ rules // calls
     typedIds(fts) -exid-> fts',
     D {defs', defs} |- (s, E {fts' |*-> ats', env}) --> (v, E env')
   
-  D defs |- SVar(sname) --> v
+  SVar(sname) --> v
   where
-    defs[sname] => SDefT(sname', fss, fts, s),
-    sname == sname', // sanity check
-    s --> v
+    CallT(SVar(sname), [], []) --> v
 
 signature
   internal-sorts
