@@ -86,7 +86,7 @@ rules // actual matching
   T t |- (m(As(Var(x), p)), E env) -ma-> (S(t), E env')
   where
     E env |- lookup(x) -look-> S(xt),
-    t == xt, // VV: there might be an issue here since TermEq does an t.equals(xt) check and not t == xt.
+    t == xt,
     T t |- (m(p), E env) -ma-> (S(t''), E env')
   
   // match application
