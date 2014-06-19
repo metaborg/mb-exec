@@ -15,9 +15,9 @@ rules // let - in - end
   where
     s --> v
   
-  D defs |- Let([SDefT(sname, ss, ts, s) | sdefs], in-s) --> v
+  D defs |- Let([SDefT(sname, ss, ts, s) | sdefs], in_s) --> v
   where
-    D { sname |--> SDefT(sname, ss, ts, s), defs } |- Let(sdefs, in-s) --> v
+    D { sname |--> SDefT(sname, ss, ts, s), defs } |- Let(sdefs, in_s) --> v
 
 signature
   internal-sorts
