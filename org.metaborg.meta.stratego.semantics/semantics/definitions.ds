@@ -20,7 +20,7 @@ rules // let - in - end
     D { sname |--> SDefT(sname, ss, ts, s), defs } |- Let(sdefs, in_s) --> v
 
 signature
-  internal-sorts
+  sorts
     Deffer
 
   internal-constructors
@@ -29,6 +29,8 @@ signature
 
   arrows
     Deffer -sdefs-> D
+  native-operators
+    asD : Map<Term, Term> -> D
 
 rules // strategy definitions
   
@@ -36,7 +38,7 @@ rules // strategy definitions
   where
     defs(ss) -sdefs-> v
 
-  defs([]) -sdefs-> {}
+  defs([]) -sdefs-> asD({})
 
   defs([SDefT(sname, ss, ts, s) | ds]) -sdefs-> { sname |--> SDefT(sname, ss, ts, s), defs}
   where

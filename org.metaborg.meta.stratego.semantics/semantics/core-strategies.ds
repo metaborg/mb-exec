@@ -34,7 +34,7 @@ rules // scope
     (Scope(xs, s), E {x |--> F(), env}) --> (v, E env')
 
 signature
-  internal-sorts
+  sorts
     Mapper
     
   internal-constructors
@@ -116,7 +116,7 @@ rules // term traversal: all
     all-fail
 
 signature
-  internal-sorts
+  sorts
     Firster
     
   internal-constructors

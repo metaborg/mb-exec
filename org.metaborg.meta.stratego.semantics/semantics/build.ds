@@ -8,7 +8,7 @@ imports
   util
 
 signature
-  internal-sorts
+  sorts
     Builder
     
   internal-constructors
@@ -72,7 +72,7 @@ rules // actual term building
     toNativeList(ts_aterm_list) => ts_list_aterm,
     makeAppl(tf, constr, ts_list_aterm) => appl
 
-  TF tf |- bl([]) -blds-> []
+  TF tf |- bl([]) -blds-> asNILofT([])
 
   TF tf |- bl([texpr | texprs]) -blds-> [tx | txs]
   where

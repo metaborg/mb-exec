@@ -10,39 +10,51 @@ imports
   
 rules // calls
 
-  D defs |- (CallT(SVar(sname), ass, ats), E env) --> (v, E env')
+  D defs |- (CallT(SVar(sname), ass, ats), E env) --> (v, E env'')
   where
     defs[sname] => SDefT(sname', fss, fts, s),
     sname == sname', // sanity check
     bindSVars(ass, fss) -bind-> defs',
     bl(ats) -blds-> ats', // evaluate term argument expressions
     typedIds(fts) -exid-> fts',
-    D {defs', defs} |- (s, E {fts' |*-> ats', env}) --> (v, E env')
+    E env |- binder(fts', ats') -binder-> env',
+    D {defs', defs} |- (s, E env') --> (v, E env'')
   
   SVar(sname) --> v
   where
     CallT(SVar(sname), [], []) --> v
 
 signature
-  internal-sorts
+  sorts
     NameExtractor
-  
+    MultiExtender
+
   internal-constructors
     typedIds: List(Typedid) -> NameExtractor
+    binder: List(String) * List(T) -> MultiExtender   
   
   arrows
     NameExtractor -exid-> List(String)
+    MultiExtender   -binder-> E
+
+rules
+
+  E e |- binder([], []) -binder-> e
   
+  E e |- binder([k | kxs], [v | vxs]) -binder-> e'
+  where
+    E {k |--> v, e} |- binder(kxs, vxs) -binder-> e'
+
 rules
   
-  typedIds([]) -exid-> []
+  typedIds([]) -exid-> asNILofString([])
  
   typedIds([VarDec(x, dc) | xs]) -exid-> [ x | xs' ]
   where
     typedIds(xs) -exid-> xs'
 
 signature
-  internal-sorts
+  sorts
     SBinder
     
   internal-constructors
@@ -53,7 +65,7 @@ signature
 
 rules
 
-  bindSVars([], []) -bind-> {}
+  bindSVars([], []) -bind-> asD({})
   
   bindSVars([s | ss], [VarDec(x, dc) | tids]) -bind-> { x |--> SDefT(x, [], [], s), binds }
   where

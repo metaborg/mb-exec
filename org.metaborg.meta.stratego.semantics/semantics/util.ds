@@ -5,7 +5,7 @@ imports
   shared
 
 signature
-  internal-sorts
+  sorts
     Lookup
 
   internal-constructors 

@@ -8,7 +8,7 @@ imports
   util
 
 signature
-  internal-sorts
+  sorts
     Matcher
     
   internal-constructors
