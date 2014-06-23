@@ -97,8 +97,8 @@ rules // actual matching
     getConstructor[aappl]() => aconstr,
     getName[aconstr]() => c',
     c == c',
-    getAllSubterms(aappl) => subterms,
-    makeList(tf, subterms) => asubterms,
+    getAllSubterms[aappl]() => subterms,
+    makeList[tf](subterms) => asubterms,
     T asubterms |- (ml(pts), E env) -ma-> (S(aats'), E env')
 
   // match explode
@@ -110,8 +110,8 @@ rules // actual matching
     getName[aconstr]() => c',
     makeString[tf](c') => ac',
     T ac' |- Match(ct) --> S(ct'),
-    getAllSubterms(aappl) => subterms,
-    makeList(tf, subterms) => asubterms,
+    getAllSubterms[aappl]() => subterms,
+    makeList[tf](subterms) => asubterms,
     T asubterms |- Match(ts) --> S(aats')
     
   // match failure

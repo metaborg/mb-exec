@@ -54,7 +54,8 @@ rules // actual term building
     length(ts) => numts,
     makeConstructor[tf](cname, numts) => constr,
     bl(ts) -blds-> ts',
-    makeAppl(tf, constr, ts') => appl
+    List2TARRAY(ts') => ts'',
+    makeAppl[tf](constr, ts'') => appl
   
   // cname_expr can be a Var or an Anno
   // ts_expr can a Var or an Anno
@@ -69,8 +70,8 @@ rules // actual term building
     asATermList(ts_aterm) => ts_aterm_list,
     size[ts_aterm_list]() => ts_aterm_list_len,
     makeConstructor[tf](cname, ts_aterm_list_len) => constr,
-    toNativeList(ts_aterm_list) => ts_list_aterm,
-    makeAppl(tf, constr, ts_list_aterm) => appl
+    getAllSubterms[ts_aterm_list]() => tarray,
+    makeAppl[tf](constr, tarray) => appl
 
   TF tf |- bl([]) -blds-> asNILofT([])
 

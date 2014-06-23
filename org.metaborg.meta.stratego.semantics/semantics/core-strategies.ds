@@ -66,24 +66,29 @@ rules // term traversal: all
   T t, TF tf |- All(s) --> v
   where
     isATermTuple(t) == true,
-    getAllSubterms(t) => ts,
-    makeList(tf, ts) => ats,
-    T ats |- map(s) -map-> v,
-    v => S(t')
+    getAllSubterms[t]() => ts,
+    makeList[tf](ts) => ats, // FIXME: extremely inefficient
+    T ats |- map(s) -map-> S(ats'),
+    isATermList(ats') == true,
+    asATermList(ats') => ats'', 
+    getAllSubterms[ats']() => ts',  // FIXME: extremely inefficient
+    makeTuple[tf](ts') => t',
+    annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over the old annotations
+    S(t'') => v
 
   T t, TF tf |- All(s) --> v
   where  
     isATermAppl(t) == true,
     asATermAppl(t) => at,
     getConstructor[at]() => ac,
-    getAllSubterms(at) => ts,
-    makeList(tf, ts) => ats,
+    getAllSubterms[at]() => ts,
+    makeList[tf](ts) => ats, // FIXME: extremely inefficient
     T ats |- map(s) -map-> S(ats'),
     isATermList(ats') == true,
     asATermList(ats') => ats'',
-    toNativeList(ats'') => ts',
-    makeAppl(tf, ac, ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over the old annotations,
+    getAllSubterms[ats'']() => ts', // FIXME: extremely inefficient
+    makeAppl[tf](ac, ts') => t',
+    annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over the old annotations
     S(t'') => v
 
   All(s) --> F()
@@ -147,16 +152,16 @@ rules // term traversal: one
   T t, TF tf |- One(s) --> v
   where
     isATermTuple(t) == true,
-    getAllSubterms(t) => ts,
-    makeList(tf, ts) => ats,
+    getAllSubterms[t]() => ts,
+    makeList[tf](ts) => ats,
     T ats |- first(s) -first-> S(t'),
     S(t') => v
   
   T t, TF tf |- One(s) --> v
   where
     isATermList(t) == true,
-    getAllSubterms(t) => ts,
-    makeList(tf, ts) => ats,
+    getAllSubterms[t]() => ts,
+    makeList[tf](ts) => ats,
     T ats |- first(s) -first-> v,
     v => S(t')
   
@@ -165,11 +170,11 @@ rules // term traversal: one
     isATermAppl(t) == true,
     asATermAppl(t) => at,
     getConstructor[at]() => ac,
-    getAllSubterms(at) => ts,
-    makeList(tf, ts) => ats,
+    getAllSubterms[at]() => ts,
+    makeList[tf](ts) => ats,
     T ats |- first(s) -first-> S(ats'),
     isATermList(ats') == true,
-    makeAppl(tf, ac, ts) => t',
+    makeAppl[tf](ac, ts) => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over annotations
     S(t'') => v
   

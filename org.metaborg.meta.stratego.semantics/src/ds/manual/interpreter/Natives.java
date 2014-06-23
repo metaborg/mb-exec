@@ -99,4 +99,8 @@ public class Natives {
 		throw new RuntimeException("Not implemented");
 	}
 
+	public static IStrategoTerm[] List2TARRAY_1(INodeList<IStrategoTerm> ts_) {
+		throw new RuntimeException("Not implemented");
+	}
+
 }

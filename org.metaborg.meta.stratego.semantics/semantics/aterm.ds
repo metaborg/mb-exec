@@ -7,55 +7,63 @@ signature
 
   native-datatypes
   
-    org.spoofax.interpreter.terms.IStrategoTerm as T {
+   "org.spoofax.interpreter.terms.IStrategoTerm" as T {
       getSubtermCount : Int
       getSubterm : Int -> T
-      // getAllSubterms : List(T) // NOT SUPPORTED because of LIST =!= Array
+      getAllSubterms : TARRAY
       getAnnotations : TLIST
     }
     
-    org.spoofax.interpreter.terms.IStrategoString as TSTR -> T {
+    "org.spoofax.interpreter.terms.IStrategoString" as TSTR -> T {
       stringValue : String
     }
     
-    org.spoofax.interpreter.terms.IStrategoInt as TINT-> T {
+    "org.spoofax.interpreter.terms.IStrategoInt" as TINT-> T {
       intValue : Int
     }
     
-    org.spoofax.interpreter.terms.IStrategoAppl as TAPPL -> T {
+    "org.spoofax.interpreter.terms.IStrategoAppl" as TAPPL -> T {
       getConstructor : TCONSTR
     }
     
-    org.spoofax.interpreter.terms.IStrategoConstructor as TCONSTR-> T {
+    "org.spoofax.interpreter.terms.IStrategoConstructor" as TCONSTR-> T {
       getName : String
       arity   : Int
     }
     
-    org.spoofax.interpreter.terms.IStrategoTuple as TTUP -> T {
+    "org.spoofax.interpreter.terms.IStrategoTuple" as TTUP -> T {
     	
     }
     
-    org.spoofax.interpreter.terms.IStrategoList as TLIST -> T {
+    "org.spoofax.interpreter.terms.IStrategoList" as TLIST -> T {
       head   : T
       tail   : TLIST
       isEmpty: Bool
       size   : Int
     }
     
-    org.spoofax.interpreter.terms.ITermFactory as TF {
+    "org.spoofax.interpreter.terms.ITermFactory" as TF {
       makeString : String -> TSTR
       makeInt : Int -> TINT
-      makeTuple : List(T) * TLIST -> TTUP
-      
+      makeTuple : TARRAY -> TTUP
+            
     	makeConstructor : String * Int -> TCONSTR
-    	// makeAppl : TCONSTR * List(T) -> TAPPL
+    	makeAppl : TCONSTR * TARRAY -> TAPPL
     	
-    	// makeList : List(T) -> TLIST
+    	makeList : TARRAY -> TLIST
     	makeListCons : T * TLIST -> TLIST
     	
     	annotateTerm : T * TLIST -> T
     }
-
+    
+    "org.spoofax.interpreter.terms.IStrategoTerm[]" as TARRAY {
+      
+    }
+  
+  native-operators
+    // TARRAY2List: TARRAY -> List(T)
+    List2TARRAY: List(T) -> TARRAY
+    
   native-operators
   
     isATermString : T -> Bool
@@ -70,11 +78,5 @@ signature
     asATermTuple  : T -> TLIST
     asATermList   : T -> TLIST
     
-    getAllSubterms : T -> List(T) // FIXME: introduce ARRAY suppory in DynSem to fix this.
-    makeList : TF * List(T) -> TLIST // FIXME: introduce ARRAY suppory in DynSem to fix this.
     
-    toNativeList  : TLIST -> List(T) // FIXME: this not be necessary once we introduce support for arrays
-
-    // makeAppl(tf, constr, ts') => aappl
-    makeAppl : TF * TCONSTR * List(T) -> TAPPL
     
