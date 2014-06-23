@@ -1,6 +1,8 @@
 package ds.manual.interpreter;
 
+import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeList;
+import org.metaborg.meta.interpreter.framework.PersistentMap;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
@@ -11,6 +13,7 @@ import org.spoofax.interpreter.terms.ITermFactory;
 
 import ds.generated.interpreter.I_Node;
 import ds.generated.interpreter.I_STerm;
+import ds.generated.interpreter.I_Strategy;
 
 public class Natives {
 
@@ -73,6 +76,26 @@ public class Natives {
 	}
 
 	public static boolean isATermTuple_1(IStrategoTerm t) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	public static AValue primCall_3(String name, INodeList<I_Strategy> ass,
+			INodeList<IStrategoTerm> ats_aterms) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	public static INodeList<IStrategoTerm> asNILofT_1(
+			INodeList<I_Node> tmpbuild861) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	public static PersistentMap<Object, Object> asD_1(
+			PersistentMap<Object, Object> persistentMap) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	public static INodeList<String> asNILofString_1(
+			INodeList<I_Node> tmpbuild1437) {
 		throw new RuntimeException("Not implemented");
 	}
 
