@@ -2,15 +2,13 @@ package ds.manual.interpreter;
 
 import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeList;
-import org.metaborg.meta.interpreter.framework.PersistentMap;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.terms.IStrategoAppl;
-import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.ITermFactory;
+
+import com.github.krukow.clj_ds.PersistentMap;
 
 import ds.generated.interpreter.I_Node;
 import ds.generated.interpreter.I_STerm;

@@ -8,12 +8,14 @@ import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.ImploderNodeSource;
 import org.metaborg.meta.interpreter.framework.NodeList;
 import org.metaborg.meta.interpreter.framework.NodeUtils;
-import org.metaborg.meta.interpreter.framework.PersistentMap;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.imploder.ImploderAttachment;
 import org.spoofax.terms.ParseError;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.io.binary.TermReader;
+
+import com.github.krukow.clj_ds.PersistentMap;
+import com.github.krukow.clj_lang.PersistentTreeMap;
 
 import ds.generated.interpreter.CallT_3;
 import ds.generated.interpreter.Generic_Module;
@@ -46,12 +48,12 @@ public class StrategoInterpreter {
 		System.out.println("PROGRAM NODE " + NodeUtils.toString(programNode));
 
 		// 3. Invoke the exec_defs method on the root node
-		PersistentMap<Object, Object> sdefs = new topdefs_1(
+		com.github.krukow.clj_ds.PersistentMap<Object, Object> sdefs = new topdefs_1(
 				programNode.getSourceInfo(), programNode).exec_sdefs().value;
 		System.out.println("SDEFS " + sdefs);
 
 		// 4. Call the main_0_0 strategy
-		PersistentMap<Object, Object> env = new PersistentMap<>();
+		PersistentMap<Object, Object> env = new PersistentTreeMap<>();
 
 		CallT_3 mainCall = new CallT_3(null, new SVar_1(null, "main_0_0"),
 				NodeList.NIL(I_Strategy.class), NodeList.NIL(I_STerm.class));
