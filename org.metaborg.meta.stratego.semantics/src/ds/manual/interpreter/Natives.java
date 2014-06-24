@@ -3,6 +3,7 @@ package ds.manual.interpreter;
 import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeList;
 import org.metaborg.meta.interpreter.framework.PersistentMap;
+import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
@@ -22,61 +23,43 @@ public class Natives {
 	}
 
 	public static boolean isATermInt_1(IStrategoTerm t) {
-		throw new RuntimeException("Not implemented");
+		return t.getTermType() == IStrategoTerm.INT;
 	}
 
 	public static IStrategoInt asATermInt_1(IStrategoTerm t) {
-		throw new RuntimeException("Not implemented");
+		return (IStrategoInt) t;
 	}
 
 	public static boolean isATermString_1(IStrategoTerm t) {
-		throw new RuntimeException("Not implemented");
+		return t.getTermType() == IStrategoTerm.STRING;
 	}
 
 	public static IStrategoString asATermString_1(IStrategoTerm t) {
-		throw new RuntimeException("Not implemented");
+		return (IStrategoString) t;
 	}
 
 	public static boolean isATermAppl_1(IStrategoTerm t) {
-		throw new RuntimeException("Not implemented");
+		return t.getTermType() == IStrategoString.APPL;
 	}
 
 	public static IStrategoAppl asATermAppl_1(IStrategoTerm t) {
-		throw new RuntimeException("Not implemented");
-	}
-
-	public static INodeList<IStrategoTerm> getAllSubterms_1(IStrategoTerm aappl) {
-		throw new RuntimeException("Not implemented");
-	}
-
-	public static IStrategoList makeList_2(ITermFactory tf,
-			INodeList<IStrategoTerm> subterms) {
-		throw new RuntimeException("Not implemented");
+		return (IStrategoAppl) t;
 	}
 
 	public static boolean isATermList_1(IStrategoTerm t) {
-		throw new RuntimeException("Not implemented");
+		return t.getTermType() == IStrategoTerm.LIST;
 	}
 
 	public static IStrategoList asATermList_1(IStrategoTerm t) {
-		throw new RuntimeException("Not implemented");
+		return (IStrategoList) t;
 	}
 
 	public static int length_1(INodeList<I_STerm> ts) {
 		return ts.size();
 	}
 
-	public static INodeList<IStrategoTerm> toNativeList_1(IStrategoList ats_) {
-		throw new RuntimeException("Not implemented");
-	}
-
-	public static IStrategoAppl makeAppl_3(ITermFactory tf,
-			IStrategoConstructor constr, INodeList<IStrategoTerm> ts_) {
-		throw new RuntimeException("Not implemented");
-	}
-
 	public static boolean isATermTuple_1(IStrategoTerm t) {
-		throw new RuntimeException("Not implemented");
+		return t.getTermType() == IStrategoTerm.TUPLE;
 	}
 
 	public static AValue primCall_3(String name, INodeList<I_Strategy> ass,
@@ -84,23 +67,30 @@ public class Natives {
 		throw new RuntimeException("Not implemented");
 	}
 
-	public static INodeList<IStrategoTerm> asNILofT_1(
-			INodeList<I_Node> tmpbuild861) {
-		throw new RuntimeException("Not implemented");
+	@SuppressWarnings("unchecked")
+	public static INodeList<IStrategoTerm> asNILofT_1(INodeList<?> l) {
+		return (INodeList<IStrategoTerm>) l;
 	}
 
-	public static PersistentMap<Object, Object> asD_1(
-			PersistentMap<Object, Object> persistentMap) {
-		throw new RuntimeException("Not implemented");
-	}
-
-	public static INodeList<String> asNILofString_1(
-			INodeList<I_Node> tmpbuild1437) {
-		throw new RuntimeException("Not implemented");
+	@SuppressWarnings("unchecked")
+	public static INodeList<String> asNILofString_1(INodeList<?> l) {
+		return (INodeList<String>) l;
 	}
 
 	public static IStrategoTerm[] List2TARRAY_1(INodeList<IStrategoTerm> ts_) {
-		throw new RuntimeException("Not implemented");
+		int size = ts_.size();
+		IStrategoTerm[] clone = new IStrategoTerm[size];
+		INodeList<IStrategoTerm> list = ts_;
+		for (int i = 0; i < size; i++) {
+			clone[i] = list.head();
+			list = list.tail();
+		}
+		return clone;
+	}
+
+	public static PersistentMap<Object, Object> asD_1(
+			PersistentMap<Object, Object> map) {
+		return map;
 	}
 
 }
