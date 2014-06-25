@@ -1,0 +1,1 @@
+Specification([Signature([Constructors([])]),Strategies([SDefT("main_0_0",[],[],Seq(Match(Anno(Int("42"),Wld)),CallT(SVar("try_1_0"),[Fail],[]))),ExtSDef("try_1_0",[VarDec("z_22",FunType([ConstType(Sort("ATerm",[]))],ConstType(Sort("ATerm",[]))))],[])])])
