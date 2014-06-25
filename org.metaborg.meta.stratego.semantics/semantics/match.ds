@@ -47,11 +47,12 @@ rules // actual matching
   where
     S(t) => v
 
-  T t |- m(Int(i)) -ma-> v
+  T t |- m(Int(stringI)) -ma-> v
   where
     isATermInt(t) == true,
     asATermInt(t) => aint,
     intValue[aint]() => i',
+    parseInt(stringI) => i,
     i == i',
     S(t) => v
   

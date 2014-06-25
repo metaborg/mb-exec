@@ -95,4 +95,8 @@ public class Natives {
 		return v == null;
 	}
 
+	public static int parseInt_1(String s) {
+		return Integer.parseInt(s);
+	}
+
 }

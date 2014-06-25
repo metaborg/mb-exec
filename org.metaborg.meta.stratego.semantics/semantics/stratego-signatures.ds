@@ -61,7 +61,7 @@ signature
     Explode                  : STerm * STerm -> PreTerm
     Op                       : String * List(STerm) -> PreTerm
     Str                      : String -> PreTerm
-    Int                      : Int -> PreTerm
+    Int                      : String -> PreTerm
     NoAnnoList               : PreTerm -> STerm
     Anno                     : PreTerm * PreTerm -> STerm
     Var                      : String -> Var

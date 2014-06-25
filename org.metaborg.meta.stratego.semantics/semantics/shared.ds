@@ -24,3 +24,4 @@ signature
     concatStrings : String * String -> String
     asNILofT : List(Term) -> List(T)
     asNILofString : List(Term) -> List(String)
+    parseInt : String -> Int

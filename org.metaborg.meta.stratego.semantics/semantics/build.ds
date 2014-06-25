@@ -41,9 +41,10 @@ rules // actual term building
     E env |- lookup(x) -look-> v,
     v => S(t)
       
-  TF tf |- b(Int(i)) -bld-> aint
+  TF tf |- b(Int(stringI)) -bld-> aint
   where
-    makeInt[tf](i) => aint
+    parseInt(stringI) => i',
+    makeInt[tf](i') => aint
   
   TF tf |- b(Str(s)) -bld-> astr
   where
