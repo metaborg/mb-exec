@@ -19,6 +19,7 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
 
 import ds.generated.interpreter.CallT_3;
 import ds.generated.interpreter.Generic_Module;
+import ds.generated.interpreter.I_Module;
 import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.I_Strategy;
 import ds.generated.interpreter.SVar_1;
@@ -41,12 +42,16 @@ public class StrategoInterpreter {
 		System.out.println("CURTERM " + currentTerm);
 
 		// 2. Construct the root node of the interpreter
-		Generic_Module programNode = new Generic_Module(
+		I_Module programNode = new Generic_Module(
 				programATerm.getAttachment(ImploderAttachment.TYPE) != null ? new ImploderNodeSource(
 						programATerm.getAttachment(ImploderAttachment.TYPE))
 						: null, programATerm);
-		System.out.println("PROGRAM NODE " + NodeUtils.toString(programNode));
+		System.out.println("GEN PROGRAM NODE " + NodeUtils.toString(programNode));
 
+		// 2a. Eager specialize the program node
+		programNode = (I_Module) NodeUtils.eagerReplacement(programNode);
+		System.out.println("SPEC PROGRAM NODE " + NodeUtils.toString(programNode));
+		
 		// 3. Invoke the exec_defs method on the root node
 		com.github.krukow.clj_ds.PersistentMap<Object, Object> sdefs = new topdefs_1(
 				programNode.getSourceInfo(), programNode).exec_sdefs().value;

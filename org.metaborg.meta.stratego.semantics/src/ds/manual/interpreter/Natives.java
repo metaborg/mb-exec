@@ -91,4 +91,8 @@ public class Natives {
 		return map;
 	}
 
+	public static boolean isNil_1(Object v) {
+		return v == null;
+	}
+
 }
