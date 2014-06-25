@@ -24,6 +24,7 @@ signature
     Opdecl
     Sdecl
     Sort
+    Anno
   
   constructors
     Signature                : List(Sdecl) -> Decl
@@ -69,8 +70,11 @@ signature
     Sort                     : String * List(Sort) -> Sort
     ConstType                : Sort -> ConstType
     SortVar                  : String -> Sort
+    AnnoDef                  : List(Anno) * StrategyDef -> Def
+    Internal                 : -> Anno
+    Override                 : -> Anno
+    Extend                   : -> Anno
     
-
   // constructors
     // RuleNames                : Term -> RuleNames
     //                          : List(Id) -> RuleNames
@@ -137,9 +141,6 @@ signature
     //                          : Strategy -> StrategyMid
     // ParenStrat               : Strategy -> StrategyParen
     // DefaultVarDec            : String -> Typedid
-    // Internal                 : Anno
-    // Override                 : Anno
-    // Extend                   : Anno
     //                          : String -> EmptyId
     // SDef                     : Id * List(Typedid) * Strategy -> StrategyDef
     // SDefNoArgs               : Id * Strategy -> StrategyDef
@@ -190,7 +191,6 @@ signature
     // ProceedT                 : List(Strategy) * List(Term) -> Strategy
     //                          : RuleDef -> Def
     // AnnoDef                  : List(Anno) * RuleDef -> Def
-    // AnnoDef                  : List(Anno) * StrategyDef -> Def
     // SortTuple                : List(Sort) -> Sort
     // SortListTl               : List(Sort) * Sort -> Sort
     // SortList                 : List(Sort) -> Sort

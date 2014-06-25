@@ -38,17 +38,22 @@ rules // strategy definitions
   where
     defs(ss) -sdefs-> v
 
-  defs([]) -sdefs-> asD({})
+  D defs |- defs([]) -sdefs-> defs
 
-  defs([sdef | ds]) -sdefs-> { sname |--> SDefT(sname, ss, ts, s), defs}
+  D defs |- defs([annosdef | ds]) -sdefs-> defs'
+  where
+    annosdef => AnnoDef(annos, sdef),
+    D defs |- defs([sdef | ds]) -sdefs-> defs'
+
+  D defs |- defs([sdef | ds]) -sdefs-> { sname |--> SDefT(sname, ss, ts, s), defs' }
   where
     sdef => SDefT(sname, ss, ts, s),
-    defs(ds) -sdefs-> defs
+    D defs |- defs(ds) -sdefs-> defs'
 
-  defs([sdef | ds]) -sdefs-> defs
+  D defs |- defs([sdef | ds]) -sdefs-> defs'
   where
     sdef => ExtSDef(a, b, c),
-    defs(ds) -sdefs-> defs
+    D defs |- defs(ds) -sdefs-> defs'
   
 rules // TODO store constructor declarations
 
