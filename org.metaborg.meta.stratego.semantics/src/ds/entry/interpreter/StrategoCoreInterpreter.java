@@ -3,6 +3,10 @@
  */
 package ds.entry.interpreter;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeSource;
 import org.metaborg.meta.interpreter.framework.ImploderNodeSource;
@@ -10,7 +14,9 @@ import org.metaborg.meta.interpreter.framework.NodeList;
 import org.metaborg.meta.interpreter.framework.NodeUtils;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.imploder.ImploderAttachment;
+import org.spoofax.terms.ParseError;
 import org.spoofax.terms.TermFactory;
+import org.spoofax.terms.io.binary.TermReader;
 import org.strategoxt.lang.StrategoErrorExit;
 
 import com.github.krukow.clj_ds.PersistentMap;
@@ -34,6 +40,7 @@ public class StrategoCoreInterpreter {
 
 	private PersistentMap<Object, Object> sdefs;
 	private IStrategoTerm currentTerm;
+	private TermFactory programTermFactory;
 
 	public StrategoCoreInterpreter() {
 
@@ -42,6 +49,7 @@ public class StrategoCoreInterpreter {
 	public void reset() {
 		sdefs = new PersistentTreeMap<>();
 		currentTerm = null;
+		programTermFactory = new TermFactory();
 	}
 
 	public void setCurrentTerm(IStrategoTerm term) {
@@ -52,7 +60,15 @@ public class StrategoCoreInterpreter {
 		return currentTerm;
 	}
 
-	public void loadCtree(IStrategoTerm ctree) {
+	public TermFactory getProgramTermFactory() {
+		return programTermFactory;
+	}
+
+	public void loadCTree(InputStream is) throws IOException {
+		loadCTree(new TermReader(getProgramTermFactory()).parseFromStream(is));
+	}
+
+	public void loadCTree(IStrategoTerm ctree) {
 		INodeSource ctreeSource = ctree.getAttachment(ImploderAttachment.TYPE) != null ? new ImploderNodeSource(
 				ctree.getAttachment(ImploderAttachment.TYPE)) : null;
 		I_Module ctreeNode = new Generic_Module(ctreeSource, ctree);

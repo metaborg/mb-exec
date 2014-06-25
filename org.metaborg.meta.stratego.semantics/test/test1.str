@@ -1,9 +1,0 @@
-module test1
-
-signature
-  constructors
-    FooCons : Term * Term -> Term
-
-rules
-  
-  main = ?x; !x
