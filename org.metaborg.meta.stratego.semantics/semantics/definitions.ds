@@ -40,10 +40,10 @@ rules // strategy definitions
 
   D defs |- defs([]) -sdefs-> defs
 
-  D defs |- defs([annosdef | ds]) -sdefs-> defs'
+  D defs |- defs([sdef | ds]) -sdefs-> defs'
   where
-    annosdef => AnnoDef(annos, sdef),
-    D defs |- defs([sdef | ds]) -sdefs-> defs'
+    sdef => AnnoDef(annos, sdef'),
+    D defs |- defs([sdef' | ds]) -sdefs-> defs'
 
   D defs |- defs([sdef | ds]) -sdefs-> { sname |--> SDefT(sname, ss, ts, s), defs' }
   where

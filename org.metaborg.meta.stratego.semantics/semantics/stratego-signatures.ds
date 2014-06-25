@@ -65,7 +65,7 @@ signature
     Str                      : String -> PreTerm
     Int                      : String -> PreTerm
     NoAnnoList               : PreTerm -> STerm
-    Anno                     : PreTerm * PreTerm -> STerm
+    Anno                     : PreTerm * PreTerm -> PreTerm
     Var                      : String -> Var
     Sort                     : String * List(Sort) -> Sort
     ConstType                : Sort -> ConstType
