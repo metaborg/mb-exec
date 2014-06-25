@@ -32,6 +32,7 @@ signature
     VarDec                   : String * Type -> Typedid
     FunType                  : List(Type) * Type -> FunType
     SDefT                    : String * List(Typedid) * List(Typedid) * Strategy -> StrategyDef
+    ExtSDef                  : String * List(Typedid) * List(Typedid) -> StrategyDef
     LChoice                  : Strategy * Strategy -> Strategy
     Call                     : SVar * List(Strategy) -> Strategy
     All                      : Strategy -> Strategy
@@ -68,6 +69,7 @@ signature
     Sort                     : String * List(Sort) -> Sort
     ConstType                : Sort -> ConstType
     SortVar                  : String -> Sort
+    
 
   // constructors
     // RuleNames                : Term -> RuleNames
@@ -142,7 +144,6 @@ signature
     // SDef                     : Id * List(Typedid) * Strategy -> StrategyDef
     // SDefNoArgs               : Id * Strategy -> StrategyDef
     // ExtSDef                  : EmptyId * List(Typedid) * List(Typedid) -> StrategyDef
-    // ExtSDef                  : Id * List(Typedid) * List(Typedid) -> StrategyDef
     // ExtSDefInl               : Id * List(Typedid) * List(Typedid) * Strategy -> StrategyDef
     // DynRuleIntersectUnion    : Strategy * RuleNames * RuleNames * Strategy -> Strategy
     // DynRuleUnion             : Strategy * RuleNames * Strategy -> Strategy

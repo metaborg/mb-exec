@@ -40,8 +40,18 @@ rules // strategy definitions
 
   defs([]) -sdefs-> asD({})
 
-  defs([SDefT(sname, ss, ts, s) | ds]) -sdefs-> { sname |--> SDefT(sname, ss, ts, s), defs}
+  defs([sdef | ds]) -sdefs-> { sname |--> SDefT(sname, ss, ts, s), defs}
   where
+    sdef => SDefT(sname, ss, ts, s),
     defs(ds) -sdefs-> defs
 
+  defs([sdef | ds]) -sdefs-> defs
+  where
+    sdef => ExtSDef(a, b, c),
+    defs(ds) -sdefs-> defs
+  
 rules // TODO store constructor declarations
+
+
+
+
