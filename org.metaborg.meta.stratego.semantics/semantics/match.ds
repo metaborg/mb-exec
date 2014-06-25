@@ -5,7 +5,7 @@ imports
   stratego-signatures
   shared
   aterm
-  util
+  environment
 
 signature
   sorts
@@ -64,15 +64,18 @@ rules // actual matching
     S(t) => v
 
   // match against unbound variable
-  T t |- (m(Var(x)), E env) -ma-> (v, E { x |--> t, env })
+  T t |- (m(Var(x)), E env) -ma-> (v, E env')
   where
-    E env |- lookup(x) -look-> F(),
-    S(t) => v
+    E env |- lookup(x) -look-> xv,
+    xv => F(),
+    S(t) => v,
+    { x |--> v, env } => env'
 
   // match against bound variable
   T t |- (m(Var(x)), E env) -ma-> (v, E env)
   where
-    E env |- lookup(x) -look-> S(t'),
+    E env |- lookup(x) -look-> xv,
+    xv => S(t'),
     t == t',
     S(t) => v
 

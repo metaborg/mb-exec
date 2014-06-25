@@ -14,7 +14,7 @@ imports
   stratego-signatures
   aterm
   shared
-  util
+  environment
   
 rules // identity and failure
 

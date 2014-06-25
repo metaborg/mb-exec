@@ -14,9 +14,9 @@ signature
   values
     S : T
     F :
-  
+
   semantic-components
-    E -> Map<String, T>
+    E -> Map<String, Value>
     
 signature
   native-operators

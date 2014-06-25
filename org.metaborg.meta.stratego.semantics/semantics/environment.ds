@@ -1,0 +1,40 @@
+module environment
+
+imports
+  base
+  shared
+  aterm
+
+signature
+  sorts
+    Lookup
+
+  internal-constructors 
+    lookup : String -> Lookup
+  
+  arrows
+    Lookup -look-> Value 
+
+  native-operators
+    isNil : Term -> Bool
+
+rules // environment lookups
+
+  E env |- lookup(x) -look-> v
+  where
+    env[x] => v,
+    isNil(v) == false,
+    v => S(t)
+  
+  E env |- lookup(x) -look-> v
+  where
+    env[x] => v,
+    isNil(v) == false,
+    v => F()
+  
+  E env |- lookup(x) -look-> v'
+  where
+    env[x] => v,
+    isNil(v) == true,
+    F() => v'
+

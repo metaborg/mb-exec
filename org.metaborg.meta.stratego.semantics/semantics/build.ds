@@ -5,7 +5,7 @@ imports
   stratego-signatures
   shared
   aterm
-  util
+  environment
 
 signature
   sorts
@@ -39,7 +39,7 @@ rules // actual term building
   E env |- b(Var(x)) -bld-> t
   where
     E env |- lookup(x) -look-> v,
-    v => S(t) // the lookup has to be successful
+    v => S(t)
       
   TF tf |- b(Int(i)) -bld-> aint
   where

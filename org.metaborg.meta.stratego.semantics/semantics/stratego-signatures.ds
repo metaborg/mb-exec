@@ -23,6 +23,7 @@ signature
     Module
     Opdecl
     Sdecl
+    Sort
   
   constructors
     Signature                : List(Sdecl) -> Decl
@@ -64,7 +65,10 @@ signature
     NoAnnoList               : PreTerm -> STerm
     Anno                     : PreTerm * PreTerm -> STerm
     Var                      : String -> Var
-    
+    Sort                     : String * List(Sort) -> Sort
+    ConstType                : Sort -> ConstType
+    SortVar                  : String -> Sort
+
   // constructors
     // RuleNames                : Term -> RuleNames
     //                          : List(Id) -> RuleNames
@@ -72,7 +76,6 @@ signature
     // RDec                     : Id * List(Typedid) -> RuleDec
     // RDecNoArgs               : Id -> RuleDec
     // DynRuleScopeId           : Id -> DynRuleScopeId
-    // ConstType                : Sort -> ConstType
     // LabeledDynRuleScopeId    : Id * Term -> DynRuleScopeId
     // DynRuleId                : RuleDec -> DynRuleId
     // AddLabelDynRuleId        : RuleDec * Term -> DynRuleId
@@ -190,9 +193,8 @@ signature
     // SortTuple                : List(Sort) -> Sort
     // SortListTl               : List(Sort) * Sort -> Sort
     // SortList                 : List(Sort) -> Sort
-    // Sort                     : Id * List(Sort) -> Sort
     // SortNoArgs               : UCID -> Sort
-    // SortVar                  : LCID -> Sort
+    
     // Sorts                    : List(Sort) -> Sdec
    
     // BuildDefaultPT           : PreTerm -> PreTerm
