@@ -60,8 +60,7 @@ public class Natives {
 		return t.getTermType() == IStrategoTerm.TUPLE;
 	}
 
-	public static AValue primCall_3(String name, INodeList<I_Strategy> ass,
-			INodeList<IStrategoTerm> ats_aterms) {
+	public static AValue primCall_3(String name, INodeList<I_Strategy> ass, INodeList<IStrategoTerm> ats_aterms) {
 		throw new RuntimeException("Not implemented");
 	}
 
@@ -86,8 +85,7 @@ public class Natives {
 		return clone;
 	}
 
-	public static PersistentMap<Object, Object> asD_1(
-			PersistentMap<Object, Object> map) {
+	public static PersistentMap<Object, Object> asD_1(PersistentMap<Object, Object> map) {
 		return map;
 	}
 

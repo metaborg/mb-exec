@@ -24,8 +24,7 @@ public class StrategoInterpreterMain {
 		}
 
 		// 2. Read current term into ATerm
-		IStrategoTerm currentTerm = args.length == numCtrees + 2 ? new TermReader(
-				interpreter.getProgramTermFactory())
+		IStrategoTerm currentTerm = args.length == numCtrees + 2 ? new TermReader(interpreter.getProgramTermFactory())
 				.parseFromString(args[numCtrees + 1]) : null;
 		interpreter.setCurrentTerm(currentTerm);
 		System.out.println("Done preping");

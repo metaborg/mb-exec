@@ -22,18 +22,15 @@ public class Test000 {
 		interpreter.reset();
 
 		// load libstratego-lib
-		interpreter.loadCTree(this.getClass().getClassLoader()
-				.getResourceAsStream("libstratego-lib.ctree"));
+		interpreter.loadCTree(this.getClass().getClassLoader().getResourceAsStream("libstratego-lib.ctree"));
 		// load program
-		interpreter.loadCTree(this.getClass().getClassLoader()
-				.getResourceAsStream("test000.ctree"));
+		interpreter.loadCTree(this.getClass().getClassLoader().getResourceAsStream("test000.ctree"));
 
 		interpreter.setCurrentTerm(new TermFactory().makeInt(42));
 
 		interpreter.invoke("main_0_0");
 
-		assertEquals(new TermFactory().makeInt(42),
-				interpreter.getCurrentTerm());
+		assertEquals(new TermFactory().makeInt(42), interpreter.getCurrentTerm());
 	}
 
 }

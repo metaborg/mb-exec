@@ -3,7 +3,6 @@
  */
 package ds.entry.interpreter;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -14,7 +13,6 @@ import org.metaborg.meta.interpreter.framework.NodeList;
 import org.metaborg.meta.interpreter.framework.NodeUtils;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.imploder.ImploderAttachment;
-import org.spoofax.terms.ParseError;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.io.binary.TermReader;
 import org.strategoxt.lang.StrategoErrorExit;
@@ -79,16 +77,15 @@ public class StrategoCoreInterpreter {
 	public void invoke(String sname) throws StrategoErrorExit {
 		PersistentMap<Object, Object> env = new PersistentTreeMap<>();
 
-		CallT_3 mainCall = new CallT_3(null, new SVar_1(null, sname),
-				NodeList.NIL(I_Strategy.class), NodeList.NIL(I_STerm.class));
+		CallT_3 mainCall = new CallT_3(null, new SVar_1(null, sname), NodeList.NIL(I_Strategy.class),
+				NodeList.NIL(I_STerm.class));
 
-		AValue result = mainCall.exec_default(sdefs, new TermFactory(),
-				currentTerm, env).value;
+		AValue result = mainCall.exec_default(sdefs, new TermFactory(), currentTerm, env).value;
 		if (result instanceof F_0) {
 			throw new StrategoErrorExit("Strategy failed");
 		} else {
 			setCurrentTerm(((S_1) result).get_1());
 		}
 	}
-
+	
 }
