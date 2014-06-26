@@ -50,10 +50,30 @@ rules // actual term building
   where
     makeString[tf](s) => astr
   
-  TF tf |- b(Op(cname, ts)) -bld-> appl
+  // build list (nil)
+  TF tf |- b(Op(c, ts)) -bld-> nil
   where
+    c == "Nil",
+    makeNil(tf) => nil
+  
+  // build list (cons)
+  TF tf |- b(Op(c, ts)) -bld-> list
+  where
+    c == "Cons",
+    ts => [t1, t2],
+    TF tf |- Build(t1) --> S(head),
+    TF tf |- Build(t2) --> S(tail),
+    isATermList(tail) == true,
+    asATermList(tail) => tail',
+    makeListCons[tf](head, tail') => list
+    
+  // NB: specialization possible on constant length(ts)
+  TF tf |- b(Op(c, ts)) -bld-> appl
+  where
+    c != "Nil",
+    c != "Cons",
     length(ts) => numts,
-    makeConstructor[tf](cname, numts) => constr,
+    makeConstructor[tf](c, numts) => constr,
     bl(ts) -blds-> ts',
     List2TARRAY(ts') => ts'',
     makeAppl[tf](constr, ts'') => appl
@@ -78,5 +98,5 @@ rules // actual term building
 
   TF tf |- bl([texpr | texprs]) -blds-> [tx | txs]
   where
-    Build(texpr) --> S(tx),
+    Build(texpr) --> S(tx), // tx may be an ATerm list (if it's a varexpr)
     bl(texprs) -blds-> txs

@@ -7,6 +7,7 @@ import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
 
 import com.github.krukow.clj_ds.PersistentMap;
 
@@ -93,8 +94,13 @@ public class Natives {
 		return v == null;
 	}
 
+	public static IStrategoList makeNil_1(ITermFactory tf) {
+		return tf.makeList();
+	}
+
 	public static int parseInt_1(String s) {
 		return Integer.parseInt(s);
 	}
+
 
 }
