@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.spoofax.terms.TermFactory;
+import org.strategoxt.lang.StrategoErrorExit;
 
 import ds.entry.interpreter.StrategoCoreInterpreter;
 
@@ -70,7 +71,11 @@ public class TestTests1 {
 		
 		interpreter.setCurrentTerm(tf.makeList(tf.makeString("Main")));
 
-		interpreter.invoke(strategyName);
+		try{
+			interpreter.invoke(strategyName);
+		} catch(StrategoErrorExit errexit) {
+			fail("Application failed");
+		}
 
 	}
 
