@@ -12,7 +12,7 @@ signature
     Matcher
     
   internal-constructors
-    m : PreTerm -> Matcher
+    m : STerm -> Matcher
     ml: List(STerm) -> Matcher
 
   arrows
@@ -92,10 +92,31 @@ rules // actual matching
     E env |- lookup(x) -look-> S(xt),
     t == xt,
     T t |- (m(p), E env) -ma-> (S(t''), E env')
+
+  T t |- m(Op(c, pts)) -ma-> S(t)
+  where
+    c == "Nil",
+    isATermList(t) == true,
+    asATermList(t) => list,
+    isEmpty[list]() == true
   
+  T t |- m(Op(c, pts)) -ma-> S(t)
+  where
+    c == "Cons",
+    pts => [p1, p2],
+    isATermList(t) == true,
+    asATermList(t) => list,
+    isEmpty[list]() == false,
+    head[list]() => head,
+    T head |- m(p1) -ma-> S(thead),
+    tail[list]() => tail,
+    T tail |- m(p2) -ma-> S(ttail)
+    
   // match application
   T t, TF tf |- (m(Op(c, pts)), E env) -ma-> (S(t), E env')
   where
+    c != "Cons",
+    c != "Nil",
     isATermAppl(t) == true,
     asATermAppl(t) => aappl,
     getConstructor[aappl]() => aconstr,
