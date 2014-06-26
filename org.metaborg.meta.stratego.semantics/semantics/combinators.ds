@@ -21,7 +21,7 @@ rules // sequential composition
     v1 => S(t'),
     T t' |- s2 --> v2
         
-  Seq(s1, s2) --> v1
+  T t |- Seq(s1, s2) --> v1
   where
     s1 --> v1,
     v1 => F()
