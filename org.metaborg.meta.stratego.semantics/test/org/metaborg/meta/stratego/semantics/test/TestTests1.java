@@ -49,8 +49,6 @@ public class TestTests1 {
 		int firstTest = 10;
 		int lastTest = 115;
 
-		// TT[] dynamicTests = new TT[115 - 10 + 1];
-
 		for (int i = firstTest; i <= lastTest; i++) {
 			tests.add(new TT[] { new TT("main_0_0", "libstratego-lib.ctree", "test" + i + ".ctree") });
 		}

@@ -3,8 +3,7 @@ package ds.entry.interpreter;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.terms.io.binary.TermReader;
+import org.spoofax.terms.TermFactory;
 
 public class StrategoInterpreterMain {
 
@@ -24,9 +23,13 @@ public class StrategoInterpreterMain {
 		}
 
 		// 2. Read current term into ATerm
-		IStrategoTerm currentTerm = args.length == numCtrees + 2 ? new TermReader(interpreter.getProgramTermFactory())
-				.parseFromString(args[numCtrees + 1]) : null;
-		interpreter.setCurrentTerm(currentTerm);
+		TermFactory tf = new TermFactory();
+		// IStrategoTerm currentTerm = args.length == numCtrees + 2 ? new
+		// TermReader(interpreter.getProgramTermFactory())
+		// .parseFromString(args[numCtrees + 1]) : null;
+		
+		interpreter.setCurrentTerm(tf.makeList(tf.makeString("Main")));
+		
 		System.out.println("Done preping");
 
 		// 4. Call the main_0_0 strategy
