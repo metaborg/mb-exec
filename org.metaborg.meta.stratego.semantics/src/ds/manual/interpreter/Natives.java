@@ -62,7 +62,7 @@ public class Natives {
 	}
 
 	public static AValue primCall_3(String name, INodeList<I_Strategy> ass, INodeList<IStrategoTerm> ats_aterms) {
-		throw new RuntimeException("Not implemented");
+		throw new RuntimeException("Primitive calls not supported. Attempted call to: " + name);
 	}
 
 	@SuppressWarnings("unchecked")
