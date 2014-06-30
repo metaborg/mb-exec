@@ -45,7 +45,7 @@ rules // strategy definitions
     sdef => AnnoDef(annos, sdef'),
     D defs |- defs([sdef' | ds]) -sdefs-> defs'
 
-  D defs |- defs([sdef | ds]) -sdefs-> { sname |--> SDefT(sname, ss, ts, s), defs' }
+  D defs |- defs([sdef | ds]) -sdefs-> { sname |--> sdef, defs' }
   where
     sdef => SDefT(sname, ss, ts, s),
     D defs |- defs(ds) -sdefs-> defs'

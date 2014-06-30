@@ -13,30 +13,30 @@ rules // calls
   D defs |- (CallT(SVar(sname), ass, ats), E env) --> (v, E env'')
   where
     defs[sname] => SDefT(sname', fss, fts, s),
-    sname == sname', // sanity check
     bindSVars(ass, fss) -bind-> defs',
     bl(ats) -blds-> ats', // evaluate term argument expressions
     typedIds(fts) -exid-> fts',
     E env |- binder(fts', ats') -binder-> env',
     D {defs', defs} |- (s, E env') --> (v, E env'')
   
-  SVar(sname) --> v
-  where
-    CallT(SVar(sname), [], []) --> v
+  
+  // SVar(sname) --> v
+  // where
+  //   CallT(SVar(sname), [], []) --> v
 
 signature
   sorts
     NameExtractor
     MultiExtender
-
+    
   internal-constructors
     typedIds: List(Typedid) -> NameExtractor
-    binder: List(String) * List(T) -> MultiExtender   
-  
+    binder: List(String) * List(T) -> MultiExtender
+    
   arrows
     NameExtractor -exid-> List(String)
-    MultiExtender   -binder-> E
-
+    MultiExtender -binder-> E
+    
 rules
 
   E e |- binder([], []) -binder-> e
@@ -60,18 +60,44 @@ signature
   internal-constructors
     bindSVars: List(Strategy) * List(Typedid) -> SBinder
   
+  native-operators
+    createAnonymousName : String -> String
+  
   arrows
     SBinder -bind-> D
 
 rules
 
-  bindSVars([], []) -bind-> asD({})
-  
-  bindSVars([s | ss], [VarDec(x, dc) | tids]) -bind-> { x |--> SDefT(x, [], [], s), binds }
+  D sdefs |- bindSVars([], []) -bind-> sdefs
+
+  // 1. CallT without arguments
+  D sdefs |- bindSVars([s | ss], [VarDec(x, dc) | tids]) -bind-> { x |--> sdef, binds }
   where
+    s => CallT(SVar(name), ass, ats),
+    ass => [],
+    ats => [],
+    sdefs[name] => sdef,
+    sdef => SDefT(name', fss, fts, fs),
     bindSVars(ss, tids) -bind-> binds
-
-
+  
+  // 2. CallT with arguments
+  D sdefs |- bindSVars([s | ss], [VarDec(x, dc) | tids]) -bind-> { x |--> SDefT(annonx, [], [], s), binds }
+  where
+    s => CallT(SVar(name), ass, ats),
+    ass => [ass1 | ass2],
+    ats => [ats1 | ats2],
+    sdefs[name] => sdef,
+    sdef => SDefT(name', fss, fts, fs),
+    createAnonymousName(x) => annonx,
+    bindSVars(ss, tids) -bind-> binds
+  
+  // 3. not a CallT
+  D sdefs |- bindSVars([s | ss], [VarDec(x, dc) | tids]) -bind-> { x |--> SDefT(annonx, [], [], s), binds }
+  where
+    s =!=> CallT(SVar(name), ass, ats),
+    createAnonymousName(x) => annonx,
+    bindSVars(ss, tids) -bind-> binds
+  
 signature
   native-operators
     primCall : String * List(Strategy) * List(T) -> Value

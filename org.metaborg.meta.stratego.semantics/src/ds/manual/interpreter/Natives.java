@@ -102,5 +102,10 @@ public class Natives {
 		return Integer.parseInt(s);
 	}
 
+	public static String createAnonymousName_1(String x) {
+		return "<anon_" + x + "_" + (counter++) + ">";
+	}
+
+	private static int counter = 0;
 
 }
