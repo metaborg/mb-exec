@@ -2,6 +2,9 @@ package ds.manual.interpreter;
 
 import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeList;
+import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.library.AbstractPrimitive;
+import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
@@ -11,9 +14,11 @@ import org.spoofax.interpreter.terms.ITermFactory;
 
 import com.github.krukow.clj_ds.PersistentMap;
 
+import ds.generated.interpreter.F_0;
 import ds.generated.interpreter.I_Node;
 import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.I_Strategy;
+import ds.generated.interpreter.S_1;
 
 public class Natives {
 
@@ -61,8 +66,20 @@ public class Natives {
 		return t.getTermType() == IStrategoTerm.TUPLE;
 	}
 
-	public static AValue primCall_3(String name, INodeList<I_Strategy> ass, INodeList<IStrategoTerm> ats_aterms) {
-		throw new RuntimeException("Primitive calls not supported. Attempted call to: " + name);
+	public static AValue primCall_5(AutoInterpInteropContext context, String name, INodeList<I_Strategy> ass,
+			INodeList<IStrategoTerm> ats_aterms, IStrategoTerm t) {
+		AbstractPrimitive prim = context.lookupOperator(name);
+		try {
+			context.setCurrent(t);
+			boolean result = prim.call(context, new Strategy[0], List2TARRAY_1(ats_aterms));
+			if (result) {
+				return new S_1(context.current());
+			} else {
+				return new F_0();
+			}
+		} catch (InterpreterException e) {
+			throw new org.metaborg.meta.interpreter.framework.InterpreterException("Primitive application failed", e);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

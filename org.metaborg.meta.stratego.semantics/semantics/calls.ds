@@ -99,15 +99,21 @@ rules
     bindSVars(ss, tids) -bind-> binds
   
 signature
+
+  native-datatypes
+	  "ds.manual.interpreter.AutoInterpInteropContext" as IC {
+	    
+	  }
+
   native-operators
-    primCall : String * List(Strategy) * List(T) -> Value
+    primCall : IC * String * List(Strategy) * List(T) * T -> Value
 
 rules // primitives
 
-  PrimT(name, ass, ats) --> v
+  T t, IC ic |- PrimT(name, ass, ats) --> v
   where
     bl(ats) -blds-> ats_aterms,
-    primCall(name, ass, ats_aterms) => v // implement in Java
+    primCall(ic, name, ass, ats_aterms, t) => v // implement in Java
   
 rules // dynamic call
   

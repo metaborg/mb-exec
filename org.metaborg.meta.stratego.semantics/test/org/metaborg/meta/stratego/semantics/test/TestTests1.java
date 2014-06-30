@@ -50,7 +50,8 @@ public class TestTests1 {
 		int lastTest = 115;
 
 		for (int i = firstTest; i <= lastTest; i++) {
-			tests.add(new TT[] { new TT("main_0_0", "libstratego-lib.ctree", "test" + i + ".ctree") });
+			String fn = "test" + (i < 10 ? "0" + i : i) + ".ctree";
+			tests.add(new TT[] { new TT("main_0_0", "libstratego-lib.ctree", fn) });
 		}
 
 		return tests;
@@ -67,12 +68,12 @@ public class TestTests1 {
 		}
 
 		TermFactory tf = new TermFactory();
-		
+
 		interpreter.setCurrentTerm(tf.makeList(tf.makeString("Main")));
 
-		try{
+		try {
 			interpreter.invoke(strategyName);
-		} catch(StrategoErrorExit errexit) {
+		} catch (StrategoErrorExit errexit) {
 			fail("Application failed");
 		}
 
