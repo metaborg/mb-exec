@@ -91,11 +91,17 @@ rules // term traversal: all
     annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over the old annotations
     S(t'') => v
 
+  T t, TF tf |- All(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => tlist,
+    T tlist |- map(s) -map-> v 
+
   All(s) --> F()
   where
     all-fail
 
-  T t |- map(s) -map-> v
+  T t, TF tf |- map(s) -map-> v
   where
     isATermList(t) == true,
     asATermList(t) => lt,
