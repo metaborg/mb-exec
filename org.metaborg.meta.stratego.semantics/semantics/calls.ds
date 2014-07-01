@@ -46,7 +46,7 @@ rules
   
   E e |- binder([k | kxs], [v | vxs]) -binder-> e'
   where
-    E {k |--> v, e} |- binder(kxs, vxs) -binder-> e'
+    E {k |--> S(v), e} |- binder(kxs, vxs) -binder-> e'
 
 rules
   
