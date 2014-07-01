@@ -10,54 +10,59 @@ imports
 signature
   sorts
     Builder
+  
+  internal-sorts
+    BuildRes
     
   internal-constructors
-    b : PreTerm -> Builder
-    bl : List(STerm) -> Builder
+    b   : PreTerm -> Builder
+    bl  : List(STerm) -> Builder
 
+    BS  : T -> BuildRes
+    BSS : List(T) -> BuildRes
+    BF  : -> BuildRes
+    
   arrows
-    Builder -bld-> T
-    Builder -blds-> List(T)
+    Builder -bld-> BuildRes
+    Builder -blds-> BuildRes
 
 rules // build
 
   TF tf |- Build(Anno(t, annos)) --> S(aterm)
   where
-    b(t) -bld-> at,
-    b(annos) -bld-> annos_aterm,
+    b(t) -bld-> BS(at),
+    b(annos) -bld-> BS(annos_aterm),
     isATermList(annos_aterm) == true,
     asATermList(annos_aterm) => annos_aterm_list,
     annotateTerm[tf](at, annos_aterm_list) => aterm
   
-  Build(Var(x)) --> v
+  Build(Var(x)) --> S(t)
   where
-    b(Var(x)) -bld-> t,
-    S(t) => v
+    b(Var(x)) -bld-> BS(t)
 
 rules // actual term building
 
-  E env |- b(Var(x)) -bld-> t
+  E env |- b(Var(x)) -bld-> BS(t)
   where
-    E env |- lookup(x) -look-> v,
-    v => S(t)
+    E env |- lookup(x) -look-> S(t)
       
-  TF tf |- b(Int(stringI)) -bld-> aint
+  TF tf |- b(Int(stringI)) -bld-> BS(aint)
   where
     parseInt(stringI) => i',
     makeInt[tf](i') => aint
   
-  TF tf |- b(Str(s)) -bld-> astr
+  TF tf |- b(Str(s)) -bld-> BS(astr)
   where
     makeString[tf](s) => astr
   
   // build list (nil)
-  TF tf |- b(Op(c, ts)) -bld-> nil
+  TF tf |- b(Op(c, ts)) -bld-> BS(nil)
   where
     c == "Nil",
     makeNil(tf) => nil
   
   // build list (cons)
-  TF tf |- b(Op(c, ts)) -bld-> list
+  TF tf |- b(Op(c, ts)) -bld-> BS(list)
   where
     c == "Cons",
     ts => [t1, t2],
@@ -68,19 +73,19 @@ rules // actual term building
     makeListCons[tf](head, tail') => list
     
   // NB: specialization possible on constant length(ts)
-  TF tf |- b(Op(c, ts)) -bld-> appl
+  TF tf |- b(Op(c, ts)) -bld-> BS(appl)
   where
     c != "Nil",
     c != "Cons",
     length(ts) => numts,
     makeConstructor[tf](c, numts) => constr,
-    bl(ts) -blds-> ts',
+    bl(ts) -blds-> BSS(ts'),
     List2TARRAY(ts') => ts'',
     makeAppl[tf](constr, ts'') => appl
   
   // cname_expr can be a Var or an Anno
   // ts_expr can a Var or an Anno
-  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> appl
+  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(appl)
   where
     Build(cname_expr) --> S(cname_aterm),
     isATermString(cname_aterm) == true,
@@ -94,9 +99,17 @@ rules // actual term building
     getAllSubterms[ts_aterm_list]() => tarray,
     makeAppl[tf](constr, tarray) => appl
 
-  TF tf |- bl([]) -blds-> asNILofT([])
+  TF tf |- b(x) -bld-> BF()
+  where
+    all-fail
 
-  TF tf |- bl([texpr | texprs]) -blds-> [tx | txs]
+  TF tf |- bl([]) -blds-> BSS(asNILofT([]))
+
+  TF tf |- bl([texpr | texprs]) -blds-> BSS([tx | txs])
   where
     Build(texpr) --> S(tx), // tx may be an ATerm list (if it's a varexpr)
-    bl(texprs) -blds-> txs
+    bl(texprs) -blds-> BSS(txs)
+  
+  TF tf |- bl(x) -blds-> BF()
+  where
+    all-fail

@@ -14,12 +14,15 @@ rules // calls
   where
     defs[sname] => SDefT(sname', fss, fts, s),
     bindSVars(ass, fss) -bind-> defs',
-    bl(ats) -blds-> ats', // evaluate term argument expressions
+    bl(ats) -blds-> BSS(ats'), // evaluate term argument expressions
     typedIds(fts) -exid-> fts',
     E env |- binder(fts', ats') -binder-> env',
     D {defs', defs} |- (s, E env') --> (v, E env'')
   
-  
+  D defs |- CallT(target, ass, ats) --> F()
+  where
+    all-fail
+
   // SVar(sname) --> v
   // where
   //   CallT(SVar(sname), [], []) --> v
@@ -112,9 +115,13 @@ rules // primitives
 
   T t, IC ic |- PrimT(name, ass, ats) --> v
   where
-    bl(ats) -blds-> ats_aterms,
+    bl(ats) -blds-> BSS(ats_aterms),
     primCall(ic, name, ass, ats_aterms, t) => v // implement in Java
   
+  T t, IC ic |- PrimT(name, ass, ats) --> F()
+  where
+    all-fail
+
 rules // dynamic call
   
   CallDynamic(target, ass, ats) --> v
