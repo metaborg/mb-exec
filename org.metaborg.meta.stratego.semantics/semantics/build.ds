@@ -39,6 +39,10 @@ rules // build
   Build(Var(x)) --> S(t)
   where
     b(Var(x)) -bld-> BS(t)
+  
+  Build(e) --> F()
+  where
+    all-fail
 
 rules // actual term building
 
