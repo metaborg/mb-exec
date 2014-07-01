@@ -78,7 +78,6 @@ rules
   where
     s => CallT(SVar(name), ass, ats),
     ass => [],
-    ats => [],
     sdefs[name] => sdef,
     sdef => SDefT(name', fss, fts, fs),
     bindSVars(ss, tids) -bind-> binds
@@ -88,7 +87,6 @@ rules
   where
     s => CallT(SVar(name), ass, ats),
     ass => [ass1 | ass2],
-    ats => [ats1 | ats2],
     sdefs[name] => sdef,
     sdef => SDefT(name', fss, fts, fs),
     createAnonymousName(x) => annonx,
