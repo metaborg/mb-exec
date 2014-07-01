@@ -50,6 +50,7 @@ signature
     CallDynamic              : STerm * List(Strategy) * List(STerm) -> Strategy
     CallT                    : SVar * List(Strategy) * List(STerm) -> Strategy
     Let                      : List(Def) * Strategy -> Strategy
+    ImportTerm               : String -> Strategy
     SVar                     : String -> SVar
     ExtOpDeclInj             : Type -> Opdecl
     ExtOpDeclQ               : String * Type -> Opdecl
@@ -70,6 +71,7 @@ signature
     Sort                     : String * List(Sort) -> Sort
     ConstType                : Sort -> ConstType
     SortVar                  : String -> Sort
+    SortNoArgs               : String -> Sort
     AnnoDef                  : List(Anno) * StrategyDef -> Def
     Internal                 : -> Anno
     Override                 : -> Anno
@@ -186,7 +188,6 @@ signature
     // Rec                      : Id * Strategy -> Strategy
     // BA                       : StrategyAngle * Term -> Strategy
     // ScopeDefault             : Strategy -> Strategy
-    // ImportTerm               : ModName -> Strategy
     // ProceedNoArgs            : Strategy
     // ProceedT                 : List(Strategy) * List(Term) -> Strategy
     //                          : RuleDef -> Def
@@ -194,7 +195,6 @@ signature
     // SortTuple                : List(Sort) -> Sort
     // SortListTl               : List(Sort) * Sort -> Sort
     // SortList                 : List(Sort) -> Sort
-    // SortNoArgs               : UCID -> Sort
     
     // Sorts                    : List(Sort) -> Sdec
    

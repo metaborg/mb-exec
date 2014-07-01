@@ -125,4 +125,8 @@ public class Natives {
 
 	private static int counter = 0;
 
+	public static IStrategoTerm importTerm_1(String p) {
+		throw new RuntimeException("Not implemented");
+	}
+
 }

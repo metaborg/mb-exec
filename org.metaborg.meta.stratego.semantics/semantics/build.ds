@@ -117,3 +117,13 @@ rules // actual term building
   TF tf |- bl(x) -blds-> BF()
   where
     all-fail
+
+signature
+  native-operators
+    importTerm : String -> T
+
+rules // import term
+
+  ImportTerm(p) --> S(t)
+  where
+    importTerm(p) => t
