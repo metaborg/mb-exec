@@ -10,6 +10,7 @@ import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
 
 import com.github.krukow.clj_ds.PersistentMap;
@@ -64,6 +65,10 @@ public class Natives {
 
 	public static boolean isATermTuple_1(IStrategoTerm t) {
 		return t.getTermType() == IStrategoTerm.TUPLE;
+	}
+
+	public static IStrategoTuple asATermTuple_1(IStrategoTerm t) {
+		return (IStrategoTuple) t;
 	}
 
 	public static AValue primCall_5(AutoInterpInteropContext context, String name, INodeList<I_Strategy> ass,

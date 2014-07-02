@@ -76,7 +76,7 @@ signature
     asATermString : T -> TSTR
     asATermInt    : T -> TINT
     asATermAppl   : T -> TAPPL
-    asATermTuple  : T -> TLIST
+    asATermTuple  : T -> TTUP
     asATermList   : T -> TLIST
     
     

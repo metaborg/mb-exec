@@ -20,6 +20,8 @@ signature
 
 rules // match dispatch annotations
 
+  T t |- Match(Wld()) --> S(t)
+
   Match(NoAnnoList(mp)) --> v
   where
     m(mp) -ma-> v
@@ -93,6 +95,7 @@ rules // actual matching
     t == xt,
     T t |- (m(p), E env) -ma-> (S(t''), E env')
 
+  // list Nil()
   T t |- m(Op(c, pts)) -ma-> S(t)
   where
     c == "Nil",
@@ -100,6 +103,7 @@ rules // actual matching
     asATermList(t) => list,
     isEmpty[list]() == true
   
+  // list Cons()
   T t |- m(Op(c, pts)) -ma-> S(t)
   where
     c == "Cons",
@@ -108,15 +112,26 @@ rules // actual matching
     asATermList(t) => list,
     isEmpty[list]() == false,
     head[list]() => head,
-    T head |- m(p1) -ma-> S(thead),
+    T head |- Match(p1) --> S(thead),
     tail[list]() => tail,
-    T tail |- m(p2) -ma-> S(ttail)
-    
+    T tail |- Match(p2) --> S(ttail)
+  
+  // tuple
+  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
+  where
+    c == "",
+    isATermTuple(t) == true,
+    asATermTuple(t) => tupl,
+    getAllSubterms[tupl]() => elems,
+    makeList[tf](elems) => elems',
+    T elems' |- ml(pts) -ma-> S(tupl')
+  
   // match application
-  T t, TF tf |- (m(Op(c, pts)), E env) -ma-> (S(t), E env')
+  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
   where
     c != "Cons",
     c != "Nil",
+    c != "",
     isATermAppl(t) == true,
     asATermAppl(t) => aappl,
     getConstructor[aappl]() => aconstr,
@@ -124,7 +139,7 @@ rules // actual matching
     c == c',
     getAllSubterms[aappl]() => subterms,
     makeList[tf](subterms) => asubterms,
-    T asubterms |- (ml(pts), E env) -ma-> (S(aats'), E env')
+    T asubterms |- ml(pts) -ma-> S(aats')
 
   // match explode
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
