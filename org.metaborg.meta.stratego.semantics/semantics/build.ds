@@ -93,24 +93,49 @@ rules // actual term building
 signature
   internal-constructors
     bAppl : PreTerm -> Builder
-
+    bList : PreTerm -> Builder
+    
 rules
 
-  TF tf |- b(Op(c, ts)) -bld-> BS(nil)
+  TF tf |- b(Op(c, ts)) -bld-> bv
   where
     c == "Nil",
-    ts => [],
-    makeNil(tf) => nil
+    length(ts) == 0,
+    TF tf |- bList(Op(c, ts)) -bld-> bv
+  
+  // Appl dispatch
+  TF tf |- b(Op(c, ts)) -bld-> bv
+  where
+    c == "Nil",
+    length(ts) != 0,
+    bAppl(Op(c, ts)) -bld-> bv
 
-  TF tf |- b(Op(c, ts)) -bld-> BS(list)
+  TF tf |- b(Op(c, ts)) -bld-> bv
   where
     c == "Cons",
+    length(ts) == 2,
+    bList(Op(c, ts)) -bld-> bv
+  
+  TF tf |- bList(Op(c, ts)) -bld-> BS(nil)
+  where
+    ts => [],
+    makeNil(tf) => nil
+  
+  TF tf |- bList(Op(c, ts)) -bld-> BS(list)
+  where
     ts => [t1, t2],
     TF tf |- Build(t1) --> S(head),
     TF tf |- Build(t2) --> S(tail),
     isATermList(tail) == true,
     asATermList(tail) => tail',
     makeListCons[tf](head, tail') => list
+
+  // Appl dispatch
+  TF tf |- b(Op(c, ts)) -bld-> bv
+  where
+    c == "Cons",
+    length(ts) != 2,
+    bAppl(Op(c, ts)) -bld-> bv
   
   TF tf |- b(Op(c, ts)) -bld-> BS(tup)
   where
@@ -119,20 +144,6 @@ rules
     List2TARRAY(ts') => ts'',
     makeTuple[tf](ts'') => tup
 
-  // Appl dispatch
-  TF tf |- b(Op(c, ts)) -bld-> bv
-  where
-    c == "Nil",
-    length(ts) != 0,
-    bAppl(Op(c, ts)) -bld-> bv
-  
-  // Appl dispatch
-  TF tf |- b(Op(c, ts)) -bld-> bv
-  where
-    c == "Cons",
-    length(ts) != 2,
-    bAppl(Op(c, ts)) -bld-> bv
-  
   // Appl dispatch
   TF tf |- b(Op(c, ts)) -bld-> bv
   where

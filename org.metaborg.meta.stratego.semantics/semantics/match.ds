@@ -138,20 +138,43 @@ rules // actual matching
 signature
   internal-constructors
     mAppl : STerm -> Matcher
+    mList : STerm -> Matcher
 
 rules
 
-  T t, TF tf |- m(Op(c, pts)) -ma-> S(list)
+  T t, TF tf |- m(Op(c, pts)) -ma-> mv
   where
     c == "Nil",
+    length(pts) == 0,
+    T t, TF tf |- mList(Op(c, pts)) -ma-> mv
+  
+  T t, TF tf |- m(Op(c, pts)) -ma-> mv
+  where
+    c == "Nil",
+    length(pts) != 0,
+    T t, TF tf |- mAppl(Op(c, pts)) -ma-> mv
+  
+  T t, TF tf |- m(Op(c, pts)) -ma-> mv
+  where
+    c == "Cons",
+    length(pts) == 2,
+    T t, TF tf |- mList(Op(c, pts)) -ma-> mv
+  
+  T t, TF tf |- m(Op(c, pts)) -ma-> mv
+  where
+    c == "Cons",
+    length(pts) != 2,
+    T t, TF tf |- mAppl(Op(c, pts)) -ma-> mv
+  
+  T t, TF tf |- mList(Op(c, pts)) -ma-> S(t)
+  where
     pts => [],
     isATermList(t) == true,
     asATermList(t) => list,
     isEmpty[list]() == true
   
-  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
+  T t, TF tf |- mList(Op(c, pts)) -ma-> S(t)
   where
-    c == "Cons",
     pts => [p1, p2],
     isATermList(t) == true,
     asATermList(t) => list,
@@ -169,18 +192,6 @@ rules
     getAllSubterms[tupl]() => elems,
     makeList[tf](elems) => elems',
     T elems' |- ml(pts) -ma-> S(tupl')
-  
-  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
-  where
-    c == "Nil",
-    length(pts) != 0,
-    T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t')
-  
-  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
-  where
-    c == "Cons",
-    length(pts) != 2,
-    T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t')
   
   T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
   where
