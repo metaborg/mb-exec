@@ -95,52 +95,6 @@ rules // actual matching
     t == xt,
     T t |- (m(p), E env) -ma-> (S(t''), E env')
 
-  // list Nil()
-  T t |- m(Op(c, pts)) -ma-> S(t)
-  where
-    c == "Nil",
-    isATermList(t) == true,
-    asATermList(t) => list,
-    isEmpty[list]() == true
-  
-  // list Cons()
-  T t |- m(Op(c, pts)) -ma-> S(t)
-  where
-    c == "Cons",
-    pts => [p1, p2],
-    isATermList(t) == true,
-    asATermList(t) => list,
-    isEmpty[list]() == false,
-    head[list]() => head,
-    T head |- Match(p1) --> S(thead),
-    tail[list]() => tail,
-    T tail |- Match(p2) --> S(ttail)
-  
-  // tuple
-  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
-  where
-    c == "",
-    isATermTuple(t) == true,
-    asATermTuple(t) => tupl,
-    getAllSubterms[tupl]() => elems,
-    makeList[tf](elems) => elems',
-    T elems' |- ml(pts) -ma-> S(tupl')
-  
-  // match application
-  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
-  where
-    c != "Cons",
-    c != "Nil",
-    c != "",
-    isATermAppl(t) == true,
-    asATermAppl(t) => aappl,
-    getConstructor[aappl]() => aconstr,
-    getName[aconstr]() => c',
-    c == c',
-    getAllSubterms[aappl]() => subterms,
-    makeList[tf](subterms) => asubterms,
-    T asubterms |- ml(pts) -ma-> S(aats')
-
   // match explode
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
@@ -180,3 +134,74 @@ rules // actual matching
   ml(l) -ma-> F()
   where
     all-fail
+
+signature
+  internal-constructors
+    mAppl : STerm -> Matcher
+
+rules
+
+  T t, TF tf |- m(Op(c, pts)) -ma-> S(list)
+  where
+    c == "Nil",
+    pts => [],
+    isATermList(t) == true,
+    asATermList(t) => list,
+    isEmpty[list]() == true
+  
+  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
+  where
+    c == "Cons",
+    pts => [p1, p2],
+    isATermList(t) == true,
+    asATermList(t) => list,
+    isEmpty[list]() == false,
+    head[list]() => head,
+    T head |- Match(p1) --> S(thead),
+    tail[list]() => tail,
+    T tail |- Match(p2) --> S(ttail)
+  
+  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
+  where
+    c == "",
+    isATermTuple(t) == true,
+    asATermTuple(t) => tupl,
+    getAllSubterms[tupl]() => elems,
+    makeList[tf](elems) => elems',
+    T elems' |- ml(pts) -ma-> S(tupl')
+  
+  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
+  where
+    c == "Nil",
+    length(pts) != 0,
+    T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t')
+  
+  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
+  where
+    c == "Cons",
+    length(pts) != 2,
+    T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t')
+  
+  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
+  where
+    c != "Nil",
+    c != "Cons",
+    c != "",
+    T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t')
+     
+  // match application
+  T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t)
+  where
+    isATermAppl(t) == true,
+    asATermAppl(t) => aappl,
+    getConstructor[aappl]() => aconstr,
+    getName[aconstr]() => c',
+    c == c',
+    getAllSubterms[aappl]() => subterms,
+    makeList[tf](subterms) => asubterms,
+    T asubterms |- ml(pts) -ma-> S(aats')
+  
+  T t, TF tf |- mAppl(dc) -ma-> F()
+  where all-fail
+
+

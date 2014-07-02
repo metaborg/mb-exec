@@ -59,43 +59,6 @@ rules // actual term building
   where
     makeString[tf](s) => astr
   
-  // build list (nil)
-  TF tf |- b(Op(c, ts)) -bld-> BS(nil)
-  where
-    c == "Nil",
-    makeNil(tf) => nil
-  
-  // build list (cons)
-  TF tf |- b(Op(c, ts)) -bld-> BS(list)
-  where
-    c == "Cons",
-    ts => [t1, t2],
-    TF tf |- Build(t1) --> S(head),
-    TF tf |- Build(t2) --> S(tail),
-    isATermList(tail) == true,
-    asATermList(tail) => tail',
-    makeListCons[tf](head, tail') => list
-  
-  // tuple
-  TF tf |- b(Op(c, ts)) -bld-> BS(tup)
-  where
-    c == "",
-    TF tf |- bl(ts) -blds-> BSS(ts'),
-    List2TARRAY(ts') => ts'',
-    makeTuple[tf](ts'') => tup
-    
-  // NB: specialization possible on constant length(ts)
-  TF tf |- b(Op(c, ts)) -bld-> BS(appl)
-  where
-    c != "Nil",
-    c != "Cons",
-    c != "",
-    length(ts) => numts,
-    makeConstructor[tf](c, numts) => constr,
-    bl(ts) -blds-> BSS(ts'),
-    List2TARRAY(ts') => ts'',
-    makeAppl[tf](constr, ts'') => appl
-  
   // cname_expr can be a Var or an Anno
   // ts_expr can a Var or an Anno
   TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(appl)
@@ -127,6 +90,69 @@ rules // actual term building
   where
     all-fail
 
+signature
+  internal-constructors
+    bAppl : PreTerm -> Builder
+
+rules
+
+  TF tf |- b(Op(c, ts)) -bld-> BS(nil)
+  where
+    c == "Nil",
+    ts => [],
+    makeNil(tf) => nil
+
+  TF tf |- b(Op(c, ts)) -bld-> BS(list)
+  where
+    c == "Cons",
+    ts => [t1, t2],
+    TF tf |- Build(t1) --> S(head),
+    TF tf |- Build(t2) --> S(tail),
+    isATermList(tail) == true,
+    asATermList(tail) => tail',
+    makeListCons[tf](head, tail') => list
+  
+  TF tf |- b(Op(c, ts)) -bld-> BS(tup)
+  where
+    c == "",
+    TF tf |- bl(ts) -blds-> BSS(ts'),
+    List2TARRAY(ts') => ts'',
+    makeTuple[tf](ts'') => tup
+
+  // Appl dispatch
+  TF tf |- b(Op(c, ts)) -bld-> bv
+  where
+    c == "Nil",
+    length(ts) != 0,
+    bAppl(Op(c, ts)) -bld-> bv
+  
+  // Appl dispatch
+  TF tf |- b(Op(c, ts)) -bld-> bv
+  where
+    c == "Cons",
+    length(ts) != 2,
+    bAppl(Op(c, ts)) -bld-> bv
+  
+  // Appl dispatch
+  TF tf |- b(Op(c, ts)) -bld-> bv
+  where
+    c != "Cons",
+    c != "Nil",
+    c != "",
+    bAppl(Op(c, ts)) -bld-> bv
+  
+  // NB: specialization possible on constant length(ts)
+  TF tf |- bAppl(Op(c, ts)) -bld-> BS(appl)
+  where
+    length(ts) => numts,
+    makeConstructor[tf](c, numts) => constr,
+    bl(ts) -blds-> BSS(ts'),
+    List2TARRAY(ts') => ts'',
+    makeAppl[tf](constr, ts'') => appl
+  
+  TF tf |- bAppl(t) -bld-> BF()
+  where all-fail
+  
 signature
   native-operators
     importTerm : String -> T
