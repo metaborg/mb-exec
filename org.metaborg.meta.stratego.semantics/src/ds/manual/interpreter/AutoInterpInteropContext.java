@@ -71,8 +71,8 @@ public class AutoInterpInteropContext implements IContext {
 	}
 
 	@Override
-	public IOperatorRegistry getOperatorRegistry(String arg0) {
-		throw new UnsupportedOperationException();
+	public IOperatorRegistry getOperatorRegistry(String reg) {
+		return registries.get(reg);
 	}
 
 	@Override
