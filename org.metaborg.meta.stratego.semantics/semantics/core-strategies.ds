@@ -45,22 +45,17 @@ signature
     
 rules // term traversal: all
 
-/*
   // <all> 42
-  T t, TF tf |- All(s) --> v
+  T t |- All(s) --> S(t)
   where
-    isATermInt(t) == true,
-    F() => v
-  
-  // <all> "string"
-  T t, TF tf |- All(s) --> v
-  where
-    isATermString(t) == true,
-    F() => v
-  
+    isATermInt(t) == true
+
   // TODO case for <all> "4.5"
   
-*/
+  // <all> "string"
+  T t |- All(s) --> S(t)
+  where
+    isATermString(t) == true
   
   // <all> (tup1, tup2, ...)
   T t, TF tf |- All(s) --> v
