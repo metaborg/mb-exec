@@ -38,6 +38,10 @@ rules // match dispatch annotations
     T t |- m(Var(x)) -ma-> S(t'),
     S(t) => v
 
+  T t |- Match(As(var, p)) --> v
+  where
+    T t |- m(As(var, p)) -ma-> v
+
   Match(x) --> v
   where
     all-fail,
@@ -83,17 +87,19 @@ rules // actual matching
     S(t) => v
 
   // compound As with unbound variable. The variable is only bound if the match succeeds.
-  T t |- (m(As(Var(x), p)), E env) -ma-> (S(t), E { x |--> t, env'})
+  T t |- (m(As(Var(x), p)), E env) -ma-> (S(t), E { x |--> S(t), env'})
   where
-    E env |- lookup(x) -look-> F(),
-    T t |- (m(p), E env) -ma-> (S(t'), E env')
+    E env |- lookup(x) -look-> lv,
+    lv => F(),
+    T t |- (Match(p), E env) --> (S(t'), E env')
   
   // compound As with bound variable
   T t |- (m(As(Var(x), p)), E env) -ma-> (S(t), E env')
   where
-    E env |- lookup(x) -look-> S(xt),
+    E env |- lookup(x) -look-> lv,
+    lv => S(xt),
     t == xt,
-    T t |- (m(p), E env) -ma-> (S(t''), E env')
+    T t |- (Match(p), E env) --> (S(t''), E env')
 
   // match explode
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
