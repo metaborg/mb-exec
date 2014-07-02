@@ -190,6 +190,9 @@ rules
     tail[list]() => tail,
     T tail |- Match(p2) --> S(ttail)
   
+  T t, TF tf |- mList(dc) -ma-> F()
+  where all-fail
+  
   T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
   where
     c == "",
