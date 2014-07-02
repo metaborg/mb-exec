@@ -5,6 +5,7 @@ package ds.entry.interpreter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeSource;
@@ -95,7 +96,7 @@ public class StrategoCoreInterpreter {
 		CallT_3 mainCall = new CallT_3(null, new SVar_1(null, sname), NodeList.NIL(I_Strategy.class),
 				NodeList.NIL(I_STerm.class));
 
-		AValue result = mainCall.exec_default(context, sdefs, termFactory, currentTerm, env).value;
+		AValue result = mainCall.exec_default(context, sdefs, termFactory, currentTerm, false, env).value;
 		if (result instanceof F_0) {
 			throw new StrategoErrorExit("Strategy failed");
 		} else {

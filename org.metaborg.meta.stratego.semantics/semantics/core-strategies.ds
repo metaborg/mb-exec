@@ -71,6 +71,14 @@ rules // term traversal: all
     annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over the old annotations
     S(t'') => v
 
+  // <all> [a, b, c, ...]
+  T t, TF tf |- All(s) --> v
+  where
+    isATermList(t) == true,
+    asATermList(t) => tlist,
+    T tlist |- map(s) -map-> v
+
+  // <all> TNAME(t1, t2, ...)
   T t, TF tf |- All(s) --> v
   where  
     isATermAppl(t) == true,
@@ -85,12 +93,6 @@ rules // term traversal: all
     makeAppl[tf](ac, ts') => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over the old annotations
     S(t'') => v
-
-  T t, TF tf |- All(s) --> v
-  where
-    isATermList(t) == true,
-    asATermList(t) => tlist,
-    T tlist |- map(s) -map-> v 
 
   All(s) --> F()
   where
@@ -133,22 +135,6 @@ signature
 
 rules // term traversal: one
   
-/*
-  // <one> 42  
-  T t, TF tf |- One(s) --> v
-  where
-    isATermInt(t) == true,
-    F() => v
-
-  // TODO add case for <one> 42.5
-  
-  // <one> "string"
-  T t, TF tf |- One(s) --> v
-  where
-    isATermString(t) == true,
-    F() => v
-*/
-
   // <one> (tup1, tup2, ...)
   T t, TF tf |- One(s) --> v
   where
@@ -158,6 +144,7 @@ rules // term traversal: one
     T ats |- first(s) -first-> S(t'),
     S(t') => v
   
+  // <one> [a, b, c, ...]
   T t, TF tf |- One(s) --> v
   where
     isATermList(t) == true,
@@ -166,6 +153,7 @@ rules // term traversal: one
     T ats |- first(s) -first-> v,
     v => S(t')
   
+  // <one> TNAME(t1, t2, t3, ...)
   T t, TF tf |- One(s) --> v
   where
     isATermAppl(t) == true,
@@ -221,3 +209,73 @@ rules // term traversal: one
   
   first(s) -first-> F()
   where all-fail
+
+rules // term traversal: some
+
+  // TODO <some> (t1, t2, ...)
+  T t, TF tf |- Some(s) --> v
+  where
+    isATermTuple(t) == true,
+    getAllSubterms[t]() => ts,
+    makeList[tf](ts) => ats,
+    T ats |- (oneOrMore(s), Bool false) -some-> (t', Bool f),
+    f == true,
+    S(t') => v
+     
+  
+  // TODO <some> [t1, t2, ...]
+  // TODO <some> TNAME(t1, t2, )
+
+  Some(s) --> F()
+  where all-fail
+
+signature
+  sorts
+    Somer
+    
+  internal-constructors
+    oneOrMore : Strategy -> Somer
+
+  arrows
+    Somer -some-> TLIST
+
+  native-operators
+    booleanOr : Bool * Bool -> Bool
+
+rules
+  
+  // case t == []: return untouched list
+  T t, TF tf |- (oneOrMore(s), Bool f) -some-> (list, Bool false)
+  where
+    isATermList(t) == true,
+    asATermList(t) => list,
+    isEmpty[list]() == true
+  
+  // case t == [t1 | ts] and <not(s)> t1
+  T t, TF tf |- (oneOrMore(s), Bool f) -some-> (list', Bool f'')
+  where
+    isATermList(t) == true,
+    asATermList(t) => list,
+    isEmpty[list]() == false,
+    head[list]() => head,
+    tail[list]() => tail,
+    T head |- s --> vhead,
+    vhead => F(),
+    T tail |- (oneOrMore(s), Bool f) -some-> (tail', Bool f'),
+    makeListCons[tf](head, tail') => list',
+    booleanOr(f, f') => f''
+  
+  // case t == [t1 | t2] and <s> t1 
+  T t, TF tf |- (oneOrMore(s), Bool f) -some-> (list', Bool true)
+  where
+    isATermList(t) == true,
+    asATermList(t) => list,
+    isEmpty[list]() == false,
+    head[list]() => head,
+    tail[list]() => tail,
+    T head |- s --> vhead,
+    vhead => S(head'),
+    T tail |- (oneOrMore(s), Bool true) -some-> (tail', Bool f'),
+    makeListCons[tf](head', tail') => list'
+    
+

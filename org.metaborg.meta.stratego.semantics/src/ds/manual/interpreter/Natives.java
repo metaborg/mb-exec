@@ -134,4 +134,8 @@ public class Natives {
 		throw new RuntimeException("Not implemented");
 	}
 
+	public static boolean booleanOr_2(boolean b1, boolean b2) {
+		return b1 || b2;
+	}
+
 }
