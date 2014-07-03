@@ -59,21 +59,63 @@ rules // actual term building
   where
     makeString[tf](s) => astr
   
-  // cname_expr can be a Var or an Anno
-  // ts_expr can a Var or an Anno
+  // Implode Int
+  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(c)
+  where
+    Build(cname_expr) --> S(c),
+    Build(ts_expr) --> S(ts), // just to make sure we cause the right side-effects
+    isATermList(ts) == true,
+    isATermInt(c) == true
+  
+  // TODO Implode Real
+  
+  // Implode List
+  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(ts)
+  where
+    Build(cname_expr) --> S(c),
+    Build(ts_expr) --> S(ts),
+    isATermList(ts) == true,
+    isATermList(c) == true
+  
+  // Implode Tuple
+  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(tupl)
+  where
+    Build(cname_expr) --> S(c),
+    Build(ts_expr) --> S(ts),
+    isATermList(ts) == true,
+    isATermString(c) == true,
+    asATermString(c) => tc,
+    stringValue[tc]() => cname,
+    cname == "",
+    makeTuple[tf](getAllSubterms[ts]()) => tupl
+
+  // Implode String
+  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(s)
+  where
+    Build(cname_expr) --> S(c),
+    Build(ts_expr) --> S(ts),
+    isATermList(ts) == true,
+    isATermString(c) == true,
+    asATermString(c) => tc,
+    stringValue[tc]() => cname,
+    isQuotedString(cname) == true,
+    unquoteString(cname) => svalue,
+    makeString[tf](svalue) => s
+  
+  // Implode Appl
   TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(appl)
   where
-    Build(cname_expr) --> S(cname_aterm),
-    isATermString(cname_aterm) == true,
-    asATermString(cname_aterm) => cname_aterm_str,
-    stringValue[cname_aterm_str]() => cname,
-    Build(ts_expr) --> S(ts_aterm),
-    isATermList(ts_aterm) == true,
-    asATermList(ts_aterm) => ts_aterm_list,
-    size[ts_aterm_list]() => ts_aterm_list_len,
-    makeConstructor[tf](cname, ts_aterm_list_len) => constr,
-    getAllSubterms[ts_aterm_list]() => tarray,
-    makeAppl[tf](constr, tarray) => appl
+    Build(cname_expr) --> S(c),
+    Build(ts_expr) --> S(ts),
+    isATermList(ts) == true,
+    isATermString(c) == true,
+    asATermString(c) => tc,
+    stringValue[tc]() => cname,
+    isQuotedString(cname) == false,
+    asATermList(ts) => tslist,
+    makeConstructor[tf](cname, size[tslist]()) => constr,
+    getAllSubterms[ts]() => kids,
+    makeAppl[tf](constr, kids) => appl
 
   TF tf |- b(x) -bld-> BF()
   where

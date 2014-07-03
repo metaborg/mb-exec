@@ -138,4 +138,16 @@ public class Natives {
 		return b1 || b2;
 	}
 
+	public static boolean isQuotedString_1(String s) {
+		return s.length() > 1 && s.charAt(0) == '"';
+	}
+
+	public static String unquoteString_1(String s) {
+		if (!isQuotedString_1(s)) {
+			return s;
+		}
+
+		return s.substring(1, s.length() - 1);
+	}
+
 }

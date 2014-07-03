@@ -25,3 +25,5 @@ signature
     asNILofT : List(Term) -> List(T)
     asNILofString : List(Term) -> List(String)
     parseInt : String -> Int
+    isQuotedString : String -> Bool
+    unquoteString : String -> String
