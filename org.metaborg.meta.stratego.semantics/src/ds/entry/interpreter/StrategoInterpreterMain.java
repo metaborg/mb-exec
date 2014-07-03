@@ -27,16 +27,18 @@ public class StrategoInterpreterMain {
 		// IStrategoTerm currentTerm = args.length == numCtrees + 2 ? new
 		// TermReader(interpreter.getProgramTermFactory())
 		// .parseFromString(args[numCtrees + 1]) : null;
-		
+
 		interpreter.setCurrentTerm(tf.makeList(tf.makeString("Main")));
-		
+
 		System.out.println("Done preping");
 
 		// 4. Call the main_0_0 strategy
 		System.out.println("Executing");
+		long st = System.currentTimeMillis();
 		interpreter.invoke("main_0_0");
-
+		long et = System.currentTimeMillis();
 		System.out.println("Completed with: " + interpreter.getCurrentTerm());
+		System.out.println("Execution duration: " + (et - st) / (double) 1000);
 	}
 
 }
