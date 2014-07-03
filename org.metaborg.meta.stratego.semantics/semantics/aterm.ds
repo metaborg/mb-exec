@@ -12,6 +12,7 @@ signature
       getSubterm : Int -> T
       getAllSubterms : TARRAY
       getAnnotations : TLIST
+      toString : String
     }
     
     "org.spoofax.interpreter.terms.IStrategoString" as TSTR -> T {

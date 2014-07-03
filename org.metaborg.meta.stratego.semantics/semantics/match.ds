@@ -101,18 +101,53 @@ rules // actual matching
     t == xt,
     T t |- (Match(p), E env) --> (S(t''), E env')
 
-  // match explode
+  // Explode Appl
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
     isATermAppl(t) == true,
-    asATermAppl(t) => aappl,
-    getConstructor[aappl]() => aconstr,
-    getName[aconstr]() => c',
-    makeString[tf](c') => ac',
-    T ac' |- Match(ct) --> S(ct'),
-    getAllSubterms[aappl]() => subterms,
-    makeList[tf](subterms) => asubterms,
-    T asubterms |- Match(ts) --> S(aats')
+    asATermAppl(t) => appl,
+    makeString[tf](getName[getConstructor[appl]()]()) => constr,
+    T constr |- Match(ct) --> S(constr'),
+    makeList[tf](getAllSubterms[appl]()) => kids,
+    T kids |- Match(ts) --> S(kids')
+  
+  // Explode Int
+  T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
+  where
+    isATermInt(t) == true,
+    t => constr,
+    T constr |- Match(ct) --> S(constr'),
+    makeNil(tf) => kids,
+    T kids |- Match(ts) --> S(kids')
+  
+  // TODO Explode Real
+
+  // Explode String
+  T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
+  where
+    isATermString(t) == true,
+    annotateTerm[tf](t, makeNil(tf)) => tnoanno,
+    makeString[tf](toString[tnoanno]()) => constr,
+    T constr |- Match(ct) --> S(constr'),
+    makeNil(tf) => kids,
+    T kids |- Match(ts) --> S(kids')
+  
+  // Explode List
+  T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
+  where
+    isATermList(t) == true,
+    makeNil(tf) => constr,
+    T constr |- Match(ct) --> S(constr'),
+    T t |- Match(ts) --> S(kids')
+  
+  // Explode Tuple
+  T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
+  where
+    isATermTuple(t) == true,
+    makeString[tf]("") => constr,
+    T constr |- Match(ct) --> S(constr'),
+    makeList[tf](getAllSubterms[t]()) => kids,
+    T kids |- Match(ts) --> S(kids')
     
   // match failure
   m(dc) -ma-> F()
