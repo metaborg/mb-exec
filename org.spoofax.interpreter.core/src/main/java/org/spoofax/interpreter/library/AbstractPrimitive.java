@@ -7,11 +7,11 @@
  */
 package org.spoofax.interpreter.library;
 
-import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.util.DebugUtil;
 
 public abstract class AbstractPrimitive {
 

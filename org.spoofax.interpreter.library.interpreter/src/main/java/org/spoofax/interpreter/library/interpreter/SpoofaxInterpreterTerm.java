@@ -8,7 +8,6 @@ package org.spoofax.interpreter.library.interpreter;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.spoofax.EmptyIterator;
 import org.spoofax.interpreter.ConcreteInterpreter;
 import org.spoofax.interpreter.core.InterpreterErrorExit;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -24,6 +23,7 @@ import org.spoofax.jsglr.shared.SGLRException;
 import org.spoofax.jsglr.shared.TokenExpectedException;
 import org.spoofax.terms.AbstractTermFactory;
 import org.spoofax.terms.StrategoTerm;
+import org.spoofax.terms.util.EmptyIterator;
 
 /**
  * Interpreter instance that can be tossed around as any StrategoTerm.

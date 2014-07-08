@@ -11,11 +11,11 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.core.Interpreter;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.interpreter.util.DebugUtil;
 
 public abstract class AbstractInterpreterTest extends TestCase {
 

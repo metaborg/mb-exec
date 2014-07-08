@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.stratego.All;
 import org.spoofax.interpreter.stratego.Build;
 import org.spoofax.interpreter.stratego.CallDynamic;
@@ -42,6 +41,7 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.util.DebugUtil;
 import org.spoofax.terms.io.binary.TermReader;
 
 public class StrategoCoreLoader {

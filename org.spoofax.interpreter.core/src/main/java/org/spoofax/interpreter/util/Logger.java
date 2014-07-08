@@ -5,7 +5,7 @@
  * 
  * Licensed under the IBM Common Public License, v1.0
  */
-package org.spoofax;
+package org.spoofax.interpreter.util;
 
 /**
  * @author Karl Trygve Kalleberg <karltk near strategoxt.org>

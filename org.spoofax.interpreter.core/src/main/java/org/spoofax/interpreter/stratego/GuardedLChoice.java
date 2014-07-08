@@ -9,13 +9,13 @@ package org.spoofax.interpreter.stratego;
 
 import java.util.List;
 
-import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.core.BindingInfo;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Pair;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.util.DebugUtil;
 
 public class GuardedLChoice extends Strategy {
 

@@ -1,4 +1,4 @@
-package org.spoofax;
+package org.spoofax.interpreter.util;
 
 import org.spoofax.interpreter.core.Context;
 import org.spoofax.interpreter.stratego.CallT;

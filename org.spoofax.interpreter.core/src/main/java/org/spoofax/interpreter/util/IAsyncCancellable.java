@@ -1,4 +1,4 @@
-package org.spoofax;
+package org.spoofax.interpreter.util;
 
 import java.util.concurrent.CancellationException;
 
