@@ -47,7 +47,7 @@ public class TestTests1 {
 		// @formatter:on
 
 		int firstTest = 10;
-		int lastTest = 115;
+		int lastTest = 116;
 
 		for (int i = firstTest; i <= lastTest; i++) {
 			String fn = "test" + (i < 10 ? "0" + i : i) + ".ctree";
