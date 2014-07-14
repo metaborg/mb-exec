@@ -62,8 +62,9 @@ rules
   Int e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { x |--> Thunk(name, fss, fts, sactual, defEnv), binds }
   where
     s => CallT(SVar(name), ass, ats),
-    ass => [],
-    ats => [],
+    isEmpty(ass) => empty_ass,
+    isEmpty(ats) => empty_ats,
+    booleanAnd(empty_ass, empty_ats) == true,
     sdefs[name] => thunk,
     thunk => Thunk(name', fss, fts, sactual, defEnv),
     bindsvars(xs, ss) -bindsvars-> binds
@@ -72,15 +73,9 @@ rules
   Int e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { { x |--> Thunk(annonx, [], [], s, e), binds' }, binds'' }
   where
     s => CallT(SVar(name), ass, ats),
-    ass => [ass1 | ass2],
-    createAnonymousName(x) => annonx,
-    Int e, D sdefs |- bindsvar(x, s) -bindsvars-> binds',
-    Int e, D sdefs |- bindsvars(xs, ss) -bindsvars-> binds''
-  
-  Int e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { { x |--> Thunk(annonx, [], [], s, e), binds' }, binds'' }
-  where
-    s => CallT(SVar(name), ass, ats),
-    ats => [ats1 | ats2],
+    isEmpty(ass) => empty_ass,
+    isEmpty(ats) => empty_ats,
+    booleanAnd(empty_ass, empty_ats) == false,
     createAnonymousName(x) => annonx,
     Int e, D sdefs |- bindsvar(x, s) -bindsvars-> binds',
     Int e, D sdefs |- bindsvars(xs, ss) -bindsvars-> binds''

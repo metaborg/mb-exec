@@ -17,9 +17,12 @@ signature
 
   native-operators
     length : List(Term) -> Int
+    isEmpty : List(Term) -> Bool
     concatStrings : String * String -> String
     asNILofT : List(Term) -> List(T)
     asNILofString : List(Term) -> List(String)
     parseInt : String -> Int
     isQuotedString : String -> Bool
     unquoteString : String -> String
+    booleanOr : Bool * Bool -> Bool
+    booleanAnd : Bool * Bool -> Bool

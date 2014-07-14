@@ -239,9 +239,6 @@ signature
   arrows
     Somer -some-> TLIST
 
-  native-operators
-    booleanOr : Bool * Bool -> Bool
-
 rules
   
   // case t == []: return untouched list

@@ -159,4 +159,12 @@ public class Natives {
 		return fresh_counter++;
 	}
 
+	public static boolean isEmpty_1(INodeList<?> ass) {
+		return ass.isEmpty();
+	}
+
+	public static boolean booleanAnd_2(boolean b1, boolean b2) {
+		return b1 && b2;
+	}
+
 }
