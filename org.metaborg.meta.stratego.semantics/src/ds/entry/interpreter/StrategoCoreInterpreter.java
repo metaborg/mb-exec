@@ -5,7 +5,6 @@ package ds.entry.interpreter;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeSource;
@@ -29,6 +28,7 @@ import ds.generated.interpreter.Generic_Module;
 import ds.generated.interpreter.I_Module;
 import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.I_Strategy;
+import ds.generated.interpreter.Mt_0;
 import ds.generated.interpreter.SVar_1;
 import ds.generated.interpreter.S_1;
 import ds.generated.interpreter.topdefs_1;
@@ -44,6 +44,7 @@ public class StrategoCoreInterpreter {
 	private IStrategoTerm currentTerm;
 	private TermFactory programTermFactory, termFactory;
 	private AutoInterpInteropContext context;
+
 	public StrategoCoreInterpreter() {
 
 	}
@@ -91,12 +92,11 @@ public class StrategoCoreInterpreter {
 	}
 
 	public void invoke(String sname) throws StrategoErrorExit {
-		PersistentMap<Object, Object> env = new PersistentTreeMap<>();
+		PersistentMap<Object, Object> state = new PersistentTreeMap<>().plus(0, new Mt_0(null));
 
 		CallT_3 mainCall = new CallT_3(null, new SVar_1(null, sname), NodeList.NIL(I_Strategy.class),
 				NodeList.NIL(I_STerm.class));
-
-		AValue result = mainCall.exec_default(context, sdefs, termFactory, currentTerm, false, env).value;
+		AValue result = mainCall.exec_default(context, sdefs, 0, termFactory, currentTerm, false, state).value;
 		if (result instanceof F_0) {
 			throw new StrategoErrorExit("Strategy failed");
 		} else {

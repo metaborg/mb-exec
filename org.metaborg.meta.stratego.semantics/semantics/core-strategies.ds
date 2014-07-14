@@ -14,7 +14,7 @@ imports
   stratego-signatures
   aterm
   shared
-  environment
+  state
   
 rules // identity and failure
 
@@ -24,17 +24,17 @@ rules // identity and failure
 
 rules // scope 
   
-  Scope([], s) --> t'
+  Int e |- Scope([], s) --> t'
   where
-    s --> t'
-  
-  (Scope([x | xs], s), E env) --> (v, E {x |--> oldx, env'})
+    Int e |- s --> t'
+
+  Int e |- Scope([x | xs], s)--> v
   where
-    E env |- lookup(x) -look-> oldx,
-    (Scope(xs, s), E {x |--> F(), env}) --> (v, E env')
+    Push(e, x) -init-> e',
+    Int e' |- Scope(xs, s) --> v
 
 signature
-  sorts
+  internal-sorts
     Mapper
     
   internal-constructors
@@ -124,7 +124,7 @@ rules // term traversal: all
     all-fail
 
 signature
-  sorts
+  internal-sorts
     Firster
     
   internal-constructors
@@ -230,7 +230,7 @@ rules // term traversal: some
   where all-fail
 
 signature
-  sorts
+  internal-sorts
     Somer
     
   internal-constructors

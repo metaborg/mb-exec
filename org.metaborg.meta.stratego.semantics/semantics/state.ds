@@ -1,0 +1,87 @@
+module state
+
+imports
+  base
+  shared
+
+signature
+
+  semantic-components
+    State -> Map<Int, Binding>
+  
+  internal-sorts
+    // Env
+    Binding
+    LookupResult
+
+  internal-constructors
+    Mt   : -> Binding
+    Bind : String * Value * Int -> Binding
+    LookupResult : Int * Binding -> LookupResult
+
+  internal-sorts
+    StateOp
+  
+  internal-constructors
+    // NewState : -> StateOp
+    Lookup : Int * String -> StateOp
+    Update : Int * String * Value -> StateOp
+    Push : Int * String -> StateOp
+    PushUpdate : Int * String * Value -> StateOp
+
+  arrows
+    // StateOp -initstate-> Int
+    StateOp -look-> LookupResult
+    StateOp -update-> Int 
+    StateOp -branch-> Int
+    StateOp -init-> Int
+    StateOp -pop-> Int
+  
+  native-operators
+    asState : Map<Int, Binding> -> State
+
+rules 
+  
+  // (NewState(), State s) -initstate-> (0, State s'')
+  // where
+  //   { 0 |--> Mt() } => s',
+  //   asState(s') => s''
+  
+  (Lookup(addr, x), State s) -look-> (LookupResult(addr, Bind(y, v, addr')), State s)
+  where
+    s[addr] => Bind(y, v, addr'),
+    x == y
+  
+  (Lookup(addr, x), State s) -look-> (v', State s)
+  where
+    s[addr] => Bind(y, v, addr'),
+    x != y,
+    (Lookup(addr', x), State s) -look-> (v', State s')
+  
+  (Lookup(addr, x), State s) -look-> (LookupResult(0, Mt()), State s)
+  where
+    s[addr] => Mt()
+  
+  (Update(addr, x, v_new), State s) -update-> (addr, State { addr |--> Bind(x, v_new, addr''), s})
+  where
+    (Lookup(addr, x), State s) -look-> (LookupResult(addr', Bind(y, v_old, addr'')), State s'),
+    addr == addr'
+
+  (Push(addr, x), State s) -init-> (addr', State { addr' |--> Bind(x, F(), addr), s })
+  where
+    fresh => addr'
+  
+  PushUpdate(addr, x, v) -init-> addr'
+  where
+    Push(addr, x) -init-> addr',
+    Update(addr', x, v) -update-> addr''
+  
+  // (PopRange(env_start, env_end), State s) -pop-> (env_end, State s)
+  // where
+  //   env_start == env_end
+  // 
+  // (PopRange(env_start, env_end), State s) -pop-> (env_end', State s')
+  // where
+  //   env_start != env_end,
+  //   s[env_start] => Bind(x, v, env_start'),
+  //   (PopRange(env_start', env_end), State env_start \ s) -pop-> (env_end', State s')

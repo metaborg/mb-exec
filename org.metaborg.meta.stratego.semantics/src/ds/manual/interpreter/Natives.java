@@ -150,4 +150,13 @@ public class Natives {
 		return s.substring(1, s.length() - 1);
 	}
 
+	private static int fresh_counter = 1;
+
+	public static int fresh() {
+		if (fresh_counter == Integer.MAX_VALUE) {
+			throw new RuntimeException("Fresh counter overflow");
+		}
+		return fresh_counter++;
+	}
+
 }

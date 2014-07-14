@@ -5,10 +5,10 @@ imports
   stratego-signatures
   shared
   aterm
-  environment
+  state
 
 signature
-  sorts
+  internal-sorts
     Matcher
     
   internal-constructors
@@ -71,35 +71,35 @@ rules // actual matching
     S(t) => v
 
   // match against unbound variable
-  T t |- (m(Var(x)), E env) -ma-> (v, E env')
+  Int e, T t |- m(Var(x)) -ma-> v
   where
-    E env |- lookup(x) -look-> xv,
+    Lookup(e, x) -look-> LookupResult(e', Bind(y, xv, e'')),
     xv => F(),
     S(t) => v,
-    { x |--> v, env } => env'
+    Update(e', x, v) -update-> e'''
 
   // match against bound variable
-  T t |- (m(Var(x)), E env) -ma-> (v, E env)
+  Int e, T t |- m(Var(x)) -ma-> v
   where
-    E env |- lookup(x) -look-> xv,
+    Lookup(e, x) -look-> LookupResult(e', Bind(y, xv, e'')),
     xv => S(t'),
     t == t',
     S(t) => v
 
   // compound As with unbound variable. The variable is only bound if the match succeeds.
-  T t |- (m(As(Var(x), p)), E env) -ma-> (S(t), E { x |--> S(t), env'})
+  Int e, T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    E env |- lookup(x) -look-> lv,
+    Lookup(e, x) -look-> LookupResult(e', Bind(y, lv, e'')),
     lv => F(),
-    T t |- (Match(p), E env) --> (S(t'), E env')
+    Int e, T t |- Match(p) --> S(t')
   
   // compound As with bound variable
-  T t |- (m(As(Var(x), p)), E env) -ma-> (S(t), E env')
+  Int e, T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    E env |- lookup(x) -look-> lv,
+    Lookup(e, x) -look-> LookupResult(e', Bind(y, lv, e'')),
     lv => S(xt),
     t == xt,
-    T t |- (Match(p), E env) --> (S(t''), E env')
+    Int e, T t |- Match(p) --> S(t'')
 
   // Explode Appl
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)

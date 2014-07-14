@@ -4,23 +4,33 @@ imports
   base
   shared
   stratego-signatures
+  state
 
 signature
+  internal-sorts
+    Thunk
+
   semantic-components
-    D -> Map<String, StrategyDef>
+    D -> Map<String, Thunk>
+
+  internal-constructors
+    Thunk : String * List(String) * List(String) * Strategy * Int -> Thunk
 
 rules // let - in - end
 
-  Let([], s) --> v
+  Int e |- Let([], s) --> v
   where
     s --> v
   
-  D defs |- Let([SDefT(sname, ss, ts, s) | sdefs], in_s) --> v
+  Int e, D defs |- Let([sdef | sdefs], in_s) --> v
   where
-    D { sname |--> SDefT(sname, ss, ts, s), defs } |- Let(sdefs, in_s) --> v
+    sdef => SDefT(sname, ss, ts, s),
+    typedIds(ss) -exid-> ss',
+    typedIds(ts) -exid-> ts',
+    D { sname |--> Thunk(sname, ss', ts', s, e), defs } |- Let(sdefs, in_s) --> v
 
 signature
-  sorts
+  internal-sorts
     Deffer
 
   internal-constructors
@@ -29,6 +39,7 @@ signature
 
   arrows
     Deffer -sdefs-> D
+
   native-operators
     asD : Map<Term, Term> -> D
 
@@ -45,16 +56,36 @@ rules // strategy definitions
     sdef => AnnoDef(annos, sdef'),
     D defs |- defs([sdef' | ds]) -sdefs-> defs'
 
-  D defs |- defs([sdef | ds]) -sdefs-> { sname |--> sdef, defs' }
+  D defs |- defs([sdef | ds]) -sdefs-> { sname |--> Thunk(sname, ss', ts', s, 0), defs' }
   where
     sdef => SDefT(sname, ss, ts, s),
+    typedIds(ss) -exid-> ss',
+    typedIds(ts) -exid-> ts',
     D defs |- defs(ds) -sdefs-> defs'
 
   D defs |- defs([sdef | ds]) -sdefs-> defs'
   where
     sdef => ExtSDef(a, b, c),
     D defs |- defs(ds) -sdefs-> defs'
-  
+
+signature
+  internal-sorts
+    NameExtractor
+
+  arrows
+    NameExtractor -exid-> List(String)
+    
+  internal-constructors
+    typedIds: List(Typedid) -> NameExtractor
+
+rules // typedid unpacker
+
+  typedIds([]) -exid-> asNILofString([])
+ 
+  typedIds([VarDec(x, dc) | xs]) -exid-> [ x | xs' ]
+  where
+    typedIds(xs) -exid-> xs'
+
 rules // TODO store constructor declarations
 
 

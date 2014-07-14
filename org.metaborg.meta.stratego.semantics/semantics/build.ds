@@ -5,13 +5,11 @@ imports
   stratego-signatures
   shared
   aterm
-  environment
+  state
 
 signature
-  sorts
-    Builder
-  
   internal-sorts
+    Builder
     BuildRes
     
   internal-constructors
@@ -46,9 +44,9 @@ rules // build
 
 rules // actual term building
 
-  E env |- b(Var(x)) -bld-> BS(t)
+  Int e |- b(Var(x)) -bld-> BS(t)
   where
-    E env |- lookup(x) -look-> S(t)
+    Lookup(e, x) -look-> LookupResult(env', Bind(y, S(t), env''))
       
   TF tf |- b(Int(stringI)) -bld-> BS(aint)
   where

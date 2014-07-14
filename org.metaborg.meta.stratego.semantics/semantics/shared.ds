@@ -15,10 +15,6 @@ signature
     S : T
     F :
 
-  semantic-components
-    E -> Map<String, Value>
-    
-signature
   native-operators
     length : List(Term) -> Int
     concatStrings : String * String -> String

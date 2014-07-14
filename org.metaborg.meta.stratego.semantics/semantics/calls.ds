@@ -7,97 +7,99 @@ imports
   build
   definitions
   aterm
+  state
   
 rules // calls
 
-  D defs |- (CallT(SVar(sname), ass, ats), E env) --> (v, E env'')
+
+  Int e, D defs |- CallT(SVar(sname), ass, ats) --> v
   where
-    defs[sname] => SDefT(sname', fss, fts, s),
-    bindSVars(ass, fss) -bind-> defs',
-    bl(ats) -blds-> BSS(ats'), // evaluate term argument expressions
-    typedIds(fts) -exid-> fts',
-    E env |- binder(fts', ats') -binder-> env',
-    D {defs', defs} |- (s, E env') --> (v, E env'')
-  
-  D defs |- CallT(target, ass, ats) --> F()
+    defs[sname] => Thunk(sname', fss, fts, s, e_def),
+    Int e |- bl(ats) -blds-> BSS(ats'), // build term arguments
+    Int e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments
+    Int e, D defs |- bindsvars(fss, ass) -bindsvars-> new_defs, // bind svars
+    Int e_call, D {new_defs, defs} |- s --> v
+    
+  Int e, D defs |- CallT(dc1, dc2, dc3) --> F()
   where
     all-fail
 
-  // SVar(sname) --> v
-  // where
-  //   CallT(SVar(sname), [], []) --> v
-
 signature
-  sorts
-    NameExtractor
-    MultiExtender
+  internal-sorts
+    Binder
     
   internal-constructors
-    typedIds: List(Typedid) -> NameExtractor
-    binder: List(String) * List(T) -> MultiExtender
+    bindtvars: List(String) * List(T) -> Binder
     
   arrows
-    NameExtractor -exid-> List(String)
-    MultiExtender -binder-> E
+    Binder -bindtvars-> Int
     
 rules
 
-  E e |- binder([], []) -binder-> e
+  Int e |- bindtvars([], []) -bindtvars-> e
   
-  E e |- binder([k | kxs], [v | vxs]) -binder-> e'
+  Int e |- bindtvars([x | xxs], [t | txs]) -bindtvars-> e''
   where
-    E {k |--> S(v), e} |- binder(kxs, vxs) -binder-> e'
-
-rules
-  
-  typedIds([]) -exid-> asNILofString([])
- 
-  typedIds([VarDec(x, dc) | xs]) -exid-> [ x | xs' ]
-  where
-    typedIds(xs) -exid-> xs'
+    PushUpdate(e, x, S(t)) -init-> e',
+    Int e' |- bindtvars(xxs, txs) -bindtvars-> e''
 
 signature
-  sorts
-    SBinder
-    
   internal-constructors
-    bindSVars: List(Strategy) * List(Typedid) -> SBinder
-  
+    bindsvars: List(String) * List(Strategy) -> Binder
+    bindsvar: String * Strategy -> Binder
+    
+  arrows
+    Binder -bindsvars-> D
+
   native-operators
     createAnonymousName : String -> String
-  
-  arrows
-    SBinder -bind-> D
 
 rules
 
-  D sdefs |- bindSVars([], []) -bind-> sdefs
+  Int e, D sdefs |- bindsvars([], []) -bindsvars-> sdefs
 
   // 1. CallT without arguments
-  D sdefs |- bindSVars([s | ss], [VarDec(x, dc) | tids]) -bind-> { x |--> sdef, binds }
+  Int e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { x |--> Thunk(name, fss, fts, sactual, defEnv), binds }
   where
     s => CallT(SVar(name), ass, ats),
     ass => [],
-    sdefs[name] => sdef,
-    sdef => SDefT(name', fss, fts, fs),
-    bindSVars(ss, tids) -bind-> binds
-  
+    ats => [],
+    sdefs[name] => thunk,
+    thunk => Thunk(name', fss, fts, sactual, defEnv),
+    bindsvars(xs, ss) -bindsvars-> binds
+    
   // 2. CallT with arguments
-  D sdefs |- bindSVars([s | ss], [VarDec(x, dc) | tids]) -bind-> { x |--> SDefT(annonx, [], [], s), binds }
+  Int e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { { x |--> Thunk(annonx, [], [], s, e), binds' }, binds'' }
   where
     s => CallT(SVar(name), ass, ats),
     ass => [ass1 | ass2],
-    sdefs[name] => sdef,
-    sdef => SDefT(name', fss, fts, fs),
     createAnonymousName(x) => annonx,
-    bindSVars(ss, tids) -bind-> binds
+    Int e, D sdefs |- bindsvar(x, s) -bindsvars-> binds',
+    Int e, D sdefs |- bindsvars(xs, ss) -bindsvars-> binds''
   
+  Int e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { { x |--> Thunk(annonx, [], [], s, e), binds' }, binds'' }
+  where
+    s => CallT(SVar(name), ass, ats),
+    ats => [ats1 | ats2],
+    createAnonymousName(x) => annonx,
+    Int e, D sdefs |- bindsvar(x, s) -bindsvars-> binds',
+    Int e, D sdefs |- bindsvars(xs, ss) -bindsvars-> binds''
+  
+  // helper for binding a fully applied svar
+  Int e, D sdefs |- bindsvar(x, s) -bindsvars-> { x |--> Thunk(name, [], [], sactual, e_call), new_defs }
+  where
+    s => CallT(SVar(name), ass, ats),
+    sdefs[name] => Thunk(name', fss, fts, sactual, e_def),
+    Int e |- bl(ats) -blds-> BSS(ats'), // build term arguments
+    Int e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments
+    Int e, D sdefs |- bindsvars(fss, ass) -bindsvars-> new_defs // bind svars
+    
   // 3. not a CallT
-  D sdefs |- bindSVars([s | ss], [VarDec(x, dc) | tids]) -bind-> { x |--> SDefT(annonx, [], [], s), binds }
+  Int e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { x |--> Thunk(annonx, [], [], s, e), binds }
   where
     s =!=> CallT(SVar(name), ass, ats),
     createAnonymousName(x) => annonx,
-    bindSVars(ss, tids) -bind-> binds
+    bindsvars(xs, ss) -bindsvars-> binds
   
 signature
 
