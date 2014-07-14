@@ -12,61 +12,63 @@ signature
   internal-sorts
     Binding
     LookupResult
+    Env
 
   internal-constructors
+    Env  : Int -> Env
     Mt   : -> Binding
     Bind : String * Value * Int -> Binding
-    LookupResult : Int * Binding -> LookupResult
+    LookupResult : Env * Binding -> LookupResult
 
   internal-sorts
     StateOp
   
   internal-constructors
-    Lookup : Int * String -> StateOp
-    Update : Int * String * Value -> StateOp
-    Push : Int * String -> StateOp
-    PushUpdate : Int * String * Value -> StateOp
+    Lookup : Env * String -> StateOp
+    Update : Env * String * Value -> StateOp
+    Push : Env * String -> StateOp
+    PushUpdate : Env * String * Value -> StateOp
 
   arrows
     StateOp -look-> LookupResult
-    StateOp -update-> Int 
-    StateOp -branch-> Int
-    StateOp -init-> Int
-    StateOp -pop-> Int
+    StateOp -update-> Env 
+    StateOp -branch-> Env
+    StateOp -init-> Env
+    StateOp -pop-> Env
   
   native-operators
     asState : Map<Int, Binding> -> State
 
 rules 
   
-  (Lookup(addr, x), State s) -look-> (LookupResult(addr, Bind(y, v, addr')), State s)
+  (Lookup(Env(addr), x), State s) -look-> (LookupResult(Env(addr), Bind(y, v, addr')), State s)
   where
     s[addr] => Bind(y, v, addr'),
     x == y
   
-  (Lookup(addr, x), State s) -look-> (v', State s)
+  (Lookup(Env(addr), x), State s) -look-> (v', State s)
   where
     s[addr] => Bind(y, v, addr'),
     x != y,
-    (Lookup(addr', x), State s) -look-> (v', State s')
+    (Lookup(Env(addr'), x), State s) -look-> (v', State s')
   
-  (Lookup(addr, x), State s) -look-> (LookupResult(0, Mt()), State s)
+  (Lookup(Env(addr), x), State s) -look-> (LookupResult(Env(0), Mt()), State s)
   where
     s[addr] => Mt()
   
-  (Update(addr, x, v_new), State s) -update-> (addr, State { addr |--> Bind(x, v_new, addr''), s})
+  (Update(Env(addr), x, v_new), State s) -update-> (Env(addr), State { addr |--> Bind(x, v_new, addr''), s})
   where
-    (Lookup(addr, x), State s) -look-> (LookupResult(addr', Bind(y, v_old, addr'')), State s'),
+    (Lookup(Env(addr), x), State s) -look-> (LookupResult(Env(addr'), Bind(y, v_old, addr'')), State s'),
     addr == addr'
 
-  (Push(addr, x), State s) -init-> (addr', State { addr' |--> Bind(x, F(), addr), s })
+  (Push(Env(addr), x), State s) -init-> (Env(addr'), State { addr' |--> Bind(x, F(), addr), s })
   where
     fresh => addr'
   
-  PushUpdate(addr, x, v) -init-> addr'
+  PushUpdate(Env(addr), x, v) -init-> Env(addr')
   where
-    Push(addr, x) -init-> addr',
-    Update(addr', x, v) -update-> addr''
+    Push(Env(addr), x) -init-> Env(addr'),
+    Update(Env(addr'), x, v) -update-> Env(addr'')
   
   // (PopRange(env_start, env_end), State s) -pop-> (env_end, State s)
   // where

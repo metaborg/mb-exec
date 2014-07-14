@@ -44,7 +44,7 @@ rules // build
 
 rules // actual term building
 
-  Int e |- b(Var(x)) -bld-> BS(t)
+  Env e |- b(Var(x)) -bld-> BS(t)
   where
     Lookup(e, x) -look-> LookupResult(env', Bind(y, S(t), env''))
       

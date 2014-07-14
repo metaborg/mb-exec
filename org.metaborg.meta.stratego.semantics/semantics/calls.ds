@@ -12,15 +12,15 @@ imports
 rules // calls
 
 
-  Int e, D defs |- CallT(SVar(sname), ass, ats) --> v
+  Env e, D defs |- CallT(SVar(sname), ass, ats) --> v
   where
     defs[sname] => Thunk(sname', fss, fts, s, e_def),
-    Int e |- bl(ats) -blds-> BSS(ats'), // build term arguments
-    Int e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments
-    Int e, D defs |- bindsvars(fss, ass) -bindsvars-> new_defs, // bind svars
-    Int e_call, D {new_defs, defs} |- s --> v
+    Env e |- bl(ats) -blds-> BSS(ats'), // build term arguments
+    Env e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments
+    Env e, D defs |- bindsvars(fss, ass) -bindsvars-> new_defs, // bind svars
+    Env e_call, D {new_defs, defs} |- s --> v
     
-  Int e, D defs |- CallT(dc1, dc2, dc3) --> F()
+  Env e, D defs |- CallT(dc1, dc2, dc3) --> F()
   where
     all-fail
 
@@ -32,16 +32,16 @@ signature
     bindtvars: List(String) * List(T) -> Binder
     
   arrows
-    Binder -bindtvars-> Int
+    Binder -bindtvars-> Env
     
 rules
 
-  Int e |- bindtvars([], []) -bindtvars-> e
+  Env e |- bindtvars([], []) -bindtvars-> e
   
-  Int e |- bindtvars([x | xxs], [t | txs]) -bindtvars-> e''
+  Env e |- bindtvars([x | xxs], [t | txs]) -bindtvars-> e''
   where
     PushUpdate(e, x, S(t)) -init-> e',
-    Int e' |- bindtvars(xxs, txs) -bindtvars-> e''
+    Env e' |- bindtvars(xxs, txs) -bindtvars-> e''
 
 signature
   internal-constructors
@@ -56,10 +56,10 @@ signature
 
 rules
 
-  Int e, D sdefs |- bindsvars([], []) -bindsvars-> sdefs
+  Env e, D sdefs |- bindsvars([], []) -bindsvars-> sdefs
 
   // 1. CallT without arguments
-  Int e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { x |--> Thunk(name, fss, fts, sactual, defEnv), binds }
+  Env e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { x |--> Thunk(name, fss, fts, sactual, defEnv), binds }
   where
     s => CallT(SVar(name), ass, ats),
     isEmpty(ass) => empty_ass,
@@ -70,27 +70,27 @@ rules
     bindsvars(xs, ss) -bindsvars-> binds
     
   // 2. CallT with arguments
-  Int e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { { x |--> Thunk(annonx, [], [], s, e), binds' }, binds'' }
+  Env e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { { x |--> Thunk(annonx, [], [], s, e), binds' }, binds'' }
   where
     s => CallT(SVar(name), ass, ats),
     isEmpty(ass) => empty_ass,
     isEmpty(ats) => empty_ats,
     booleanAnd(empty_ass, empty_ats) == false,
     createAnonymousName(x) => annonx,
-    Int e, D sdefs |- bindsvar(x, s) -bindsvars-> binds',
-    Int e, D sdefs |- bindsvars(xs, ss) -bindsvars-> binds''
+    Env e, D sdefs |- bindsvar(x, s) -bindsvars-> binds',
+    Env e, D sdefs |- bindsvars(xs, ss) -bindsvars-> binds''
   
   // helper for binding a fully applied svar
-  Int e, D sdefs |- bindsvar(x, s) -bindsvars-> { x |--> Thunk(name, [], [], sactual, e_call), new_defs }
+  Env e, D sdefs |- bindsvar(x, s) -bindsvars-> { x |--> Thunk(name, [], [], sactual, e_call), new_defs }
   where
     s => CallT(SVar(name), ass, ats),
     sdefs[name] => Thunk(name', fss, fts, sactual, e_def),
-    Int e |- bl(ats) -blds-> BSS(ats'), // build term arguments
-    Int e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments
-    Int e, D sdefs |- bindsvars(fss, ass) -bindsvars-> new_defs // bind svars
+    Env e |- bl(ats) -blds-> BSS(ats'), // build term arguments
+    Env e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments
+    Env e, D sdefs |- bindsvars(fss, ass) -bindsvars-> new_defs // bind svars
     
   // 3. not a CallT
-  Int e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { x |--> Thunk(annonx, [], [], s, e), binds }
+  Env e, D sdefs |- bindsvars([x | xs], [s | ss]) -bindsvars-> { x |--> Thunk(annonx, [], [], s, e), binds }
   where
     s =!=> CallT(SVar(name), ass, ats),
     createAnonymousName(x) => annonx,

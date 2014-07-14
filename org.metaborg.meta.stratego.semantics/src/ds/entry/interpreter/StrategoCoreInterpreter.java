@@ -23,6 +23,7 @@ import com.github.krukow.clj_ds.PersistentMap;
 import com.github.krukow.clj_lang.PersistentTreeMap;
 
 import ds.generated.interpreter.CallT_3;
+import ds.generated.interpreter.Env_1;
 import ds.generated.interpreter.F_0;
 import ds.generated.interpreter.Generic_Module;
 import ds.generated.interpreter.I_Module;
@@ -96,7 +97,7 @@ public class StrategoCoreInterpreter {
 
 		CallT_3 mainCall = new CallT_3(null, new SVar_1(null, sname), NodeList.NIL(I_Strategy.class),
 				NodeList.NIL(I_STerm.class));
-		AValue result = mainCall.exec_default(context, sdefs, 0, termFactory, currentTerm, false, state).value;
+		AValue result = mainCall.exec_default(context, sdefs, new Env_1(null, 0), termFactory, currentTerm, false, state).value;
 		if (result instanceof F_0) {
 			throw new StrategoErrorExit("Strategy failed");
 		} else {

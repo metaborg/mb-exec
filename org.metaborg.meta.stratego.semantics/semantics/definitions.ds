@@ -14,15 +14,15 @@ signature
     D -> Map<String, Thunk>
 
   internal-constructors
-    Thunk : String * List(String) * List(String) * Strategy * Int -> Thunk
+    Thunk : String * List(String) * List(String) * Strategy * Env -> Thunk
 
 rules // let - in - end
 
-  Int e |- Let([], s) --> v
+  Env e |- Let([], s) --> v
   where
     s --> v
   
-  Int e, D defs |- Let([sdef | sdefs], in_s) --> v
+  Env e, D defs |- Let([sdef | sdefs], in_s) --> v
   where
     sdef => SDefT(sname, ss, ts, s),
     typedIds(ss) -exid-> ss',
@@ -56,7 +56,7 @@ rules // strategy definitions
     sdef => AnnoDef(annos, sdef'),
     D defs |- defs([sdef' | ds]) -sdefs-> defs'
 
-  D defs |- defs([sdef | ds]) -sdefs-> { sname |--> Thunk(sname, ss', ts', s, 0), defs' }
+  D defs |- defs([sdef | ds]) -sdefs-> { sname |--> Thunk(sname, ss', ts', s, Env(0)), defs' }
   where
     sdef => SDefT(sname, ss, ts, s),
     typedIds(ss) -exid-> ss',
