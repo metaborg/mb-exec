@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,14 +45,20 @@ public class TestTests1 {
 				{ new TT("main_0_0", "libstratego-lib.ctree", "test28a.ctree") },
 				{ new TT("main_0_0", "libstratego-lib.ctree", "test28b.ctree") },
 		}));
+		List<Integer> skips = Arrays.asList(new Integer[] {
+			42, 44, 48, 52, 55, 66, 71, 83
+		});
+		
 		// @formatter:on
 
 		int firstTest = 10;
 		int lastTest = 116;
 
 		for (int i = firstTest; i <= lastTest; i++) {
-			String fn = "test" + (i < 10 ? "0" + i : i) + ".ctree";
-			tests.add(new TT[] { new TT("main_0_0", "libstratego-lib.ctree", fn) });
+			if (!skips.contains(i)) {
+				String fn = "test" + (i < 10 ? "0" + i : i) + ".ctree";
+				tests.add(new TT[] { new TT("main_0_0", "libstratego-lib.ctree", fn) });
+			}
 		}
 
 		return tests;

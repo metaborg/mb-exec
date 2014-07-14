@@ -10,7 +10,6 @@ signature
     State -> Map<Int, Binding>
   
   internal-sorts
-    // Env
     Binding
     LookupResult
 
@@ -23,14 +22,12 @@ signature
     StateOp
   
   internal-constructors
-    // NewState : -> StateOp
     Lookup : Int * String -> StateOp
     Update : Int * String * Value -> StateOp
     Push : Int * String -> StateOp
     PushUpdate : Int * String * Value -> StateOp
 
   arrows
-    // StateOp -initstate-> Int
     StateOp -look-> LookupResult
     StateOp -update-> Int 
     StateOp -branch-> Int
@@ -41,11 +38,6 @@ signature
     asState : Map<Int, Binding> -> State
 
 rules 
-  
-  // (NewState(), State s) -initstate-> (0, State s'')
-  // where
-  //   { 0 |--> Mt() } => s',
-  //   asState(s') => s''
   
   (Lookup(addr, x), State s) -look-> (LookupResult(addr, Bind(y, v, addr')), State s)
   where
