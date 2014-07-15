@@ -3,26 +3,30 @@ module state
 imports
   base
   shared
-
+  
 signature
 
   semantic-components
     State -> Map<Int, Binding>
   
   internal-sorts
-    Binding
-    LookupResult
     Env
 
   internal-constructors
     Env  : Int -> Env
+
+  internal-sorts
+    Binding
+    LookupResult
+  
+  internal-constructors
     Mt   : -> Binding
     Bind : String * Value * Int -> Binding
     LookupResult : Env * Binding -> LookupResult
 
   internal-sorts
     StateOp
-  
+
   internal-constructors
     Lookup : Env * String -> StateOp
     Update : Env * String * Value -> StateOp
@@ -35,7 +39,7 @@ signature
     StateOp -branch-> Env
     StateOp -init-> Env
     StateOp -pop-> Env
-  
+    
   native-operators
     asState : Map<Int, Binding> -> State
 
@@ -52,14 +56,14 @@ rules
     x != y,
     (Lookup(Env(addr'), x), State s) -look-> (v', State s')
   
-  (Lookup(Env(addr), x), State s) -look-> (LookupResult(Env(0), Mt()), State s)
-  where
-    s[addr] => Mt()
+  // (Lookup(Env(addr), x), State s) -look-> (LookupResult(Env(0), Mt()), State s)
+  // where
+  //   s[addr] => Mt()
   
   (Update(Env(addr), x, v_new), State s) -update-> (Env(addr), State { addr |--> Bind(x, v_new, addr''), s})
   where
-    (Lookup(Env(addr), x), State s) -look-> (LookupResult(Env(addr'), Bind(y, v_old, addr'')), State s'),
-    addr == addr'
+    (Lookup(Env(addr), x), State s) -look-> (LookupResult(Env(addr'), Bind(y, v_old, addr'')), State s')
+    // addr == addr'
 
   (Push(Env(addr), x), State s) -init-> (Env(addr'), State { addr' |--> Bind(x, F(), addr), s })
   where
