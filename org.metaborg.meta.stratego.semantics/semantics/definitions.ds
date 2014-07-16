@@ -35,12 +35,12 @@ signature
 rules // strategy definitions
   
   // unpack specification
-  SEnv d |- topdefs(Specification([sigs, Strategies(ss)])) -sdefs-> d'
+  VEnv e, SEnv d |- topdefs(Specification([sigs, Strategies(ss)])) -sdefs-> d'
   where
-    SEnv d |- defs(ss) -sdefs-> d'
+    VEnv e, SEnv d |- defs(ss) -sdefs-> d'
   
   // bottom
-  SEnv d |- defs([]) -sdefs-> d
+  VEnv e, SEnv d |- defs([]) -sdefs-> d
 
   // store a definition as a thunk
   VEnv e, SEnv d |- defs([sdef | ds]) -sdefs-> d''
@@ -52,16 +52,16 @@ rules // strategy definitions
     SEnv d' |- defs(ds) -sdefs-> d''
 
   // unpack annotated definition
-  SEnv d |- defs([sdef | ds]) -sdefs-> d'
+  VEnv e, SEnv d |- defs([sdef | ds]) -sdefs-> d'
   where
     sdef => AnnoDef(annos, sdef'),
-    SEnv d |- defs([sdef' | ds]) -sdefs-> d'
+    VEnv e, SEnv d |- defs([sdef' | ds]) -sdefs-> d'
 
   // skip declarations of external
-  SEnv d |- defs([sdef | ds]) -sdefs-> d'
+  VEnv e, SEnv d |- defs([sdef | ds]) -sdefs-> d'
   where
     sdef => ExtSDef(a, b, c),
-    SEnv d |- defs(ds) -sdefs-> d'
+    VEnv e, SEnv d |- defs(ds) -sdefs-> d'
 
 signature
   internal-sorts
