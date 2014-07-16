@@ -93,7 +93,7 @@ rules
   VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
   where
     s =!=> CallT(SVar(tgt), ass, ats),
-    SPush(d, x, Thunk(x, [], [], s, e, d)) -salloc-> d_into',
+    SPush(d_into, x, Thunk(x, [], [], s, e, d)) -salloc-> d_into',
     VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
   
 signature
