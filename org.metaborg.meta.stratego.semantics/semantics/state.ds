@@ -22,7 +22,7 @@ signature
     VLookupResult
   
   internal-constructors
-    VMt   : -> VBinding
+    // VMt   : -> VBinding
     VBind : String * Value * Int -> VBinding
     VLookupResult : VEnv * VBinding -> VLookupResult
 
