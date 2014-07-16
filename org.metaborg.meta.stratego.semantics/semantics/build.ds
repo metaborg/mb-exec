@@ -44,9 +44,9 @@ rules // build
 
 rules // actual term building
 
-  Env e |- b(Var(x)) -bld-> BS(t)
+  VEnv e |- b(Var(x)) -bld-> BS(t)
   where
-    Lookup(e, x) -look-> LookupResult(env', Bind(y, S(t), env''))
+    VLookup(e, x) -vlook-> VLookupResult(env', VBind(y, S(t), env''))
       
   TF tf |- b(Int(stringI)) -bld-> BS(aint)
   where

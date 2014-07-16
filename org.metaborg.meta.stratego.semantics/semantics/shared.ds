@@ -26,3 +26,4 @@ signature
     unquoteString : String -> String
     booleanOr : Bool * Bool -> Bool
     booleanAnd : Bool * Bool -> Bool
+    isNull : Term -> Bool

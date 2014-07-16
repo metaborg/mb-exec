@@ -167,4 +167,9 @@ public class Natives {
 		return b1 && b2;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static PersistentMap<Object, Object> asSHeap_1(Object map) {
+		return (PersistentMap<Object, Object>) map;
+	}
+
 }

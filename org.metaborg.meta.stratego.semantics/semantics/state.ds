@@ -3,83 +3,155 @@ module state
 imports
   base
   shared
+  stratego-signatures
   
+/* === Rules for the Variables === */
 signature
 
   semantic-components
-    State -> Map<Int, Binding>
+    VHeap -> Map<Int, VBinding>
   
   internal-sorts
-    Env
+    VEnv
 
   internal-constructors
-    Env  : Int -> Env
+    VEnv  : Int -> VEnv
 
   internal-sorts
-    Binding
-    LookupResult
+    VBinding
+    VLookupResult
   
   internal-constructors
-    Mt   : -> Binding
-    Bind : String * Value * Int -> Binding
-    LookupResult : Env * Binding -> LookupResult
+    VMt   : -> VBinding
+    VBind : String * Value * Int -> VBinding
+    VLookupResult : VEnv * VBinding -> VLookupResult
 
   internal-sorts
-    StateOp
+    VHeapOp
 
   internal-constructors
-    Lookup : Env * String -> StateOp
-    Update : Env * String * Value -> StateOp
-    Push : Env * String -> StateOp
-    PushUpdate : Env * String * Value -> StateOp
+    VLookup : VEnv * String -> VHeapOp
+    VUpdate : VEnv * String * Value -> VHeapOp
+    VPush : VEnv * String -> VHeapOp
+    VPushUpdate : VEnv * String * Value -> VHeapOp
 
   arrows
-    StateOp -look-> LookupResult
-    StateOp -update-> Env 
-    StateOp -branch-> Env
-    StateOp -init-> Env
-    StateOp -pop-> Env
+    VHeapOp -vlook-> VLookupResult
+    VHeapOp -vupdate-> VEnv 
+    VHeapOp -vbranch-> VEnv
+    VHeapOp -vinit-> VEnv
     
-  native-operators
-    asState : Map<Int, Binding> -> State
-
 rules 
   
-  (Lookup(Env(addr), x), State s) -look-> (LookupResult(Env(addr), Bind(y, v, addr')), State s)
+  (VLookup(VEnv(addr), x), VHeap s) -vlook-> (VLookupResult(VEnv(addr), VBind(y, v, addr')), VHeap s)
   where
-    s[addr] => Bind(y, v, addr'),
+    s[addr] => VBind(y, v, addr'),
     x == y
   
-  (Lookup(Env(addr), x), State s) -look-> (v', State s)
+  (VLookup(VEnv(addr), x), VHeap s) -vlook-> (v', VHeap s)
   where
-    s[addr] => Bind(y, v, addr'),
+    s[addr] => VBind(y, v, addr'),
     x != y,
-    (Lookup(Env(addr'), x), State s) -look-> (v', State s')
+    (VLookup(VEnv(addr'), x), VHeap s) -vlook-> (v', VHeap s')
   
-  // (Lookup(Env(addr), x), State s) -look-> (LookupResult(Env(0), Mt()), State s)
-  // where
-  //   s[addr] => Mt()
-  
-  (Update(Env(addr), x, v_new), State s) -update-> (Env(addr), State { addr |--> Bind(x, v_new, addr''), s})
+  (VUpdate(VEnv(addr), x, v_new), VHeap s) -vupdate-> (VEnv(addr), VHeap { addr |--> VBind(x, v_new, addr''), s})
   where
-    (Lookup(Env(addr), x), State s) -look-> (LookupResult(Env(addr'), Bind(y, v_old, addr'')), State s')
-    // addr == addr'
+    (VLookup(VEnv(addr), x), VHeap s) -vlook-> (VLookupResult(VEnv(addr'), VBind(y, v_old, addr'')), VHeap s')
 
-  (Push(Env(addr), x), State s) -init-> (Env(addr'), State { addr' |--> Bind(x, F(), addr), s })
+  (VPush(VEnv(addr), x), VHeap s) -vinit-> (VEnv(addr'), VHeap { addr' |--> VBind(x, F(), addr), s })
   where
     fresh => addr'
   
-  PushUpdate(Env(addr), x, v) -init-> Env(addr')
+  VPushUpdate(VEnv(addr), x, v) -vinit-> VEnv(addr')
   where
-    Push(Env(addr), x) -init-> Env(addr'),
-    Update(Env(addr'), x, v) -update-> Env(addr'')
+    VPush(VEnv(addr), x) -vinit-> VEnv(addr'),
+    VUpdate(VEnv(addr'), x, v) -vupdate-> VEnv(addr'')
+
+
+/* === Rules for the Strategies === */
+
+signature
+  semantic-components
+    SHeap -> Map<Int, SBinding>
   
-  // (PopRange(env_start, env_end), State s) -pop-> (env_end, State s)
+  internal-sorts
+    SBinding
+    SLookupResult
+    SEnv
+
+  internal-constructors
+    SEnv : Int -> SEnv
+    SMt : -> SBinding
+    SBind : String * Thunk * Int -> SBinding
+    SLookupResult : SEnv * SBinding -> SLookupResult
+
+  internal-sorts
+    Thunk
+  
+  internal-constructors
+    Thunk  : String * List(String) * List(String) * Strategy * VEnv * SEnv -> Thunk
+    ThunkPlaceholder: -> Thunk
+
+  internal-sorts
+    SHeapOp
+  
+  internal-constructors
+    SInit : -> SHeapOp
+    SAlloc: SEnv * String -> SHeapOp
+    SPushBack: SEnv * String * Thunk -> SHeapOp
+    SUpdate : SEnv * String * Thunk -> SHeapOp
+    // SPush: SEnv * String * Thunk -> SHeapOp 
+    SLookup: SEnv * String -> SHeapOp
+    
+  arrows
+    SHeapOp -slook-> SLookupResult
+    SHeapOp -salloc-> SEnv
+  
+  native-operators
+    asSHeap: Map<Int, SBinding> -> SHeap
+  
+rules
+  
+  // init SHeap
+  (SInit(), SHeap s) -salloc-> (SEnv(addr), SHeap s')
+  where
+    fresh => addr,
+    asSHeap({ addr |--> SMt() }) => s'
+  
+  // // Push a new Thunk advancing the address of the top of the stack
+  // (SPush(SEnv(addr), name, thunk), SHeap s) -salloc-> (SEnv(addr'), SHeap s')
   // where
-  //   env_start == env_end
-  // 
-  // (PopRange(env_start, env_end), State s) -pop-> (env_end', State s')
-  // where
-  //   env_start != env_end,
-  //   s[env_start] => Bind(x, v, env_start'),
-  //   (PopRange(env_start', env_end), State env_start \ s) -pop-> (env_end', State s')
+  //   fresh => addr',
+  //   { addr' |--> SBind(name, thunk, addr), s} => s'
+  
+  // Allocate a new location at the top of the SHeap and bind it to a placeholder
+  (SAlloc(SEnv(addr), name), SHeap s) -salloc-> (SEnv(addr'), SHeap s')
+  where
+    fresh => addr',
+    {addr' |--> SBind(name, ThunkPlaceholder(), addr), s} => s'
+  
+  (SUpdate(SEnv(addr), name, thunk), SHeap s) -salloc-> (SEnv(addr), SHeap s'')
+  where
+    (SLookup(SEnv(addr), name), SHeap s) -slook-> (SLookupResult(SEnv(addr'), SBind(name', old_thunk, addr'')), SHeap s'),
+    { addr' |--> SBind(name', thunk, addr''), s'} => s''
+  
+  // Push a new Thunk keeping the address of the top of the stack constant
+  (SPushBack(SEnv(addr), name, thunk), SHeap s) -salloc-> (SEnv(addr), SHeap s'')
+  where
+    s[addr] => prev_top_thunk,
+    fresh => addr',
+    { addr' |--> prev_top_thunk, s } => s',
+    { addr  |--> SBind(name, thunk, addr'), s'} => s''
+  
+  // Lookup a thunk by name at the starting SHeap address
+  (SLookup(SEnv(addr), name), SHeap s) -slook-> (SLookupResult(SEnv(addr), SBind(name', thunk, addr')), SHeap s)
+  where
+    s[addr] => SBind(name', thunk, addr'),
+    name == name'
+  
+  (SLookup(SEnv(addr), name), SHeap s) -slook-> (v, SHeap s)
+  where
+    s[addr] => SBind(name', thunk, addr'),
+    name != name',
+    (SLookup(SEnv(addr'), name), SHeap s) -slook-> (v, SHeap s')
+  

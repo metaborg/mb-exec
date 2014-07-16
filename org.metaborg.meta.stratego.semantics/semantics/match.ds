@@ -71,35 +71,35 @@ rules // actual matching
     S(t) => v
 
   // match against unbound variable
-  Env e, T t |- m(Var(x)) -ma-> v
+  VEnv e, T t |- m(Var(x)) -ma-> v
   where
-    Lookup(e, x) -look-> LookupResult(e', Bind(y, xv, e'')),
+    VLookup(e, x) -vlook-> VLookupResult(e', VBind(y, xv, e'')),
     xv => F(),
     S(t) => v,
-    Update(e', x, v) -update-> e'''
+    VUpdate(e', x, v) -vupdate-> e'''
 
   // match against bound variable
-  Env e, T t |- m(Var(x)) -ma-> v
+  VEnv e, T t |- m(Var(x)) -ma-> v
   where
-    Lookup(e, x) -look-> LookupResult(e', Bind(y, xv, e'')),
+    VLookup(e, x) -vlook-> VLookupResult(e', VBind(y, xv, e'')),
     xv => S(t'),
     t == t',
     S(t) => v
 
   // compound As with unbound variable. The variable is only bound if the match succeeds.
-  Env e, T t |- m(As(Var(x), p)) -ma-> S(t)
+  VEnv e, T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    Lookup(e, x) -look-> LookupResult(e', Bind(y, lv, e'')),
+    VLookup(e, x) -vlook-> VLookupResult(e', VBind(y, lv, e'')),
     lv => F(),
-    Env e, T t |- Match(p) --> S(t')
+    VEnv e, T t |- Match(p) --> S(t')
   
   // compound As with bound variable
-  Env e, T t |- m(As(Var(x), p)) -ma-> S(t)
+  VEnv e, T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    Lookup(e, x) -look-> LookupResult(e', Bind(y, lv, e'')),
+    VLookup(e, x) -vlook-> VLookupResult(e', VBind(y, lv, e'')),
     lv => S(xt),
     t == xt,
-    Env e, T t |- Match(p) --> S(t'')
+    VEnv e, T t |- Match(p) --> S(t'')
 
   // Explode Appl
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)

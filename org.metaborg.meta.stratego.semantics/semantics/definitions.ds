@@ -6,28 +6,20 @@ imports
   stratego-signatures
   state
 
-signature
-  internal-sorts
-    Thunk
-
-  semantic-components
-    D -> Map<String, Thunk>
-
-  internal-constructors
-    Thunk : String * List(String) * List(String) * Strategy * Env -> Thunk
-
 rules // let - in - end
 
-  Env e |- Let([], s) --> v
+  VEnv e, SEnv d |- Let([], s) --> v
   where
-    s --> v
+    VEnv e, SEnv d |- s --> v
   
-  Env e, D defs |- Let([sdef | sdefs], in_s) --> v
+  VEnv e, SEnv d |- Let([sdef | sdefs], in_s) --> v
   where
     sdef => SDefT(sname, ss, ts, s),
     typedIds(ss) -exid-> ss',
     typedIds(ts) -exid-> ts',
-    D { sname |--> Thunk(sname, ss', ts', s, e), defs } |- Let(sdefs, in_s) --> v
+    SAlloc(d, sname) -salloc-> d',
+    SUpdate(d', sname, Thunk(sname, ss', ts', s, e, d')) -salloc-> d'',
+    VEnv e, SEnv d'' |- Let(sdefs, in_s) --> v
 
 signature
   internal-sorts
@@ -38,35 +30,38 @@ signature
     defs : List(Def) -> Deffer
 
   arrows
-    Deffer -sdefs-> D
-
-  native-operators
-    asD : Map<Term, Term> -> D
+    Deffer -sdefs-> SEnv
 
 rules // strategy definitions
   
-  topdefs(Specification([sigs, Strategies(ss)])) -sdefs-> v
+  // unpack specification
+  SEnv d |- topdefs(Specification([sigs, Strategies(ss)])) -sdefs-> d'
   where
-    defs(ss) -sdefs-> v
+    SEnv d |- defs(ss) -sdefs-> d'
+  
+  // bottom
+  SEnv d |- defs([]) -sdefs-> d
 
-  D defs |- defs([]) -sdefs-> defs
-
-  D defs |- defs([sdef | ds]) -sdefs-> defs'
-  where
-    sdef => AnnoDef(annos, sdef'),
-    D defs |- defs([sdef' | ds]) -sdefs-> defs'
-
-  D defs |- defs([sdef | ds]) -sdefs-> { sname |--> Thunk(sname, ss', ts', s, Env(0)), defs' }
+  // store a definition as a thunk
+  VEnv e, SEnv d |- defs([sdef | ds]) -sdefs-> d''
   where
     sdef => SDefT(sname, ss, ts, s),
     typedIds(ss) -exid-> ss',
     typedIds(ts) -exid-> ts',
-    D defs |- defs(ds) -sdefs-> defs'
+    SPushBack(d, sname, Thunk(sname, ss', ts', s, e, d)) -salloc-> d',
+    SEnv d' |- defs(ds) -sdefs-> d''
 
-  D defs |- defs([sdef | ds]) -sdefs-> defs'
+  // unpack annotated definition
+  SEnv d |- defs([sdef | ds]) -sdefs-> d'
+  where
+    sdef => AnnoDef(annos, sdef'),
+    SEnv d |- defs([sdef' | ds]) -sdefs-> d'
+
+  // skip declarations of external
+  SEnv d |- defs([sdef | ds]) -sdefs-> d'
   where
     sdef => ExtSDef(a, b, c),
-    D defs |- defs(ds) -sdefs-> defs'
+    SEnv d |- defs(ds) -sdefs-> d'
 
 signature
   internal-sorts

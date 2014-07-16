@@ -23,15 +23,18 @@ import com.github.krukow.clj_ds.PersistentMap;
 import com.github.krukow.clj_lang.PersistentTreeMap;
 
 import ds.generated.interpreter.CallT_3;
-import ds.generated.interpreter.Env_1;
 import ds.generated.interpreter.F_0;
 import ds.generated.interpreter.Generic_Module;
 import ds.generated.interpreter.I_Module;
+import ds.generated.interpreter.I_SEnv;
 import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.I_Strategy;
-import ds.generated.interpreter.Mt_0;
+import ds.generated.interpreter.SInit_0;
 import ds.generated.interpreter.SVar_1;
 import ds.generated.interpreter.S_1;
+import ds.generated.interpreter.VEnv_1;
+import ds.generated.interpreter.salloc_Result;
+import ds.generated.interpreter.sdefs_Result;
 import ds.generated.interpreter.topdefs_1;
 import ds.manual.interpreter.AutoInterpInteropContext;
 
@@ -41,7 +44,9 @@ import ds.manual.interpreter.AutoInterpInteropContext;
  */
 public class StrategoCoreInterpreter {
 
-	private PersistentMap<Object, Object> sdefs;
+	private PersistentMap<Object, Object> sheap;
+	private I_SEnv senv;
+
 	private IStrategoTerm currentTerm;
 	private TermFactory programTermFactory, termFactory;
 	private AutoInterpInteropContext context;
@@ -51,7 +56,10 @@ public class StrategoCoreInterpreter {
 	}
 
 	public void reset() {
-		sdefs = new PersistentTreeMap<>();
+		sheap = new PersistentTreeMap<>();
+		salloc_Result sheap_init_result = new SInit_0(null).exec_salloc(sheap);
+		sheap = sheap_init_result._1;
+		senv = sheap_init_result.value;
 		currentTerm = null;
 		programTermFactory = new TermFactory();
 		termFactory = new TermFactory();
@@ -81,7 +89,10 @@ public class StrategoCoreInterpreter {
 				ctree.getAttachment(ImploderAttachment.TYPE)) : null;
 		I_Module ctreeNode = new Generic_Module(ctreeSource, ctree);
 		ctreeNode = (I_Module) NodeUtils.eagerReplacement(ctreeNode);
-		sdefs = new topdefs_1(ctreeSource, ctreeNode).exec_sdefs(sdefs).value;
+
+		sdefs_Result sdefs_result = new topdefs_1(ctreeSource, ctreeNode).exec_sdefs(new VEnv_1(null, 0), senv, sheap);
+		sheap = sdefs_result._1;
+		senv = sdefs_result.value;
 	}
 
 	public void addOperatorRegistry(IOperatorRegistry registry) {
@@ -93,11 +104,12 @@ public class StrategoCoreInterpreter {
 	}
 
 	public void invoke(String sname) throws StrategoErrorExit {
-		PersistentMap<Object, Object> state = new PersistentTreeMap<>().plus(0, new Mt_0(null));
+		PersistentMap<Object, Object> vheap = new PersistentTreeMap<>();
 
 		CallT_3 mainCall = new CallT_3(null, new SVar_1(null, sname), NodeList.NIL(I_Strategy.class),
 				NodeList.NIL(I_STerm.class));
-		AValue result = mainCall.exec_default(context, sdefs, new Env_1(null, 0), termFactory, currentTerm, false, state).value;
+		AValue result = mainCall.exec_default(senv, context, new VEnv_1(null, 0), termFactory, currentTerm, sheap,
+				false, vheap).value;
 		if (result instanceof F_0) {
 			throw new StrategoErrorExit("Strategy failed");
 		} else {

@@ -24,14 +24,14 @@ rules // identity and failure
 
 rules // scope 
   
-  Env e |- Scope([], s) --> t'
+  VEnv e |- Scope([], s) --> t'
   where
-    Env e |- s --> t'
+    VEnv e |- s --> t'
 
-  Env e |- Scope([x | xs], s)--> v
+  VEnv e |- Scope([x | xs], s)--> v
   where
-    Push(e, x) -init-> e',
-    Env e' |- Scope(xs, s) --> v
+    VPush(e, x) -vinit-> e',
+    VEnv e' |- Scope(xs, s) --> v
 
 signature
   internal-sorts
