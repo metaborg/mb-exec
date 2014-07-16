@@ -5,98 +5,97 @@ imports
   stratego-signatures
   shared
   build
-  definitions
   aterm
   state
   
-// rules // calls
-// 
-//   Env e, D d |- CallT(SVar(sname), ass, ats) --> v
-//   where
-//     Env e, D d |-  SLookup(sname) -slook-> Thunk(sname', fss, fts, s, e_def, d_def),  
-//     Env e |- bl(ats) -blds-> BSS(ats'), // build term arguments
-//     Env e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments in definition environment
-//     Env e, D d |- bindsvars(fss, ass, d_def) -bindsvars-> d_call, // bind strategy arguments in the definition environment closing over the call site environment if necessary
-//     Env e_call, D d_call |- s --> v // apply the body in the e_call and d_call environments
-//       
-//   Env e, D defs |- CallT(dc1, dc2, dc3) --> F()
-//   where
-//     all-fail
-// 
-// signature
-//   internal-sorts
-//     Binder
-//     
-//   internal-constructors
-//     bindtvars: List(String) * List(T) -> Binder
-//     
-//   arrows
-//     Binder -bindtvars-> Env
-//     
-// rules
-// 
-//   Env e |- bindtvars([], []) -bindtvars-> e
-//   
-//   Env e |- bindtvars([x | xxs], [t | txs]) -bindtvars-> e''
-//   where
-//     PushUpdate(e, x, S(t)) -init-> e',
-//     Env e' |- bindtvars(xxs, txs) -bindtvars-> e''
-// 
-// signature
-//   internal-constructors
-//     bindsvars: List(String) * List(Strategy) * D -> Binder
-//     
-//     /*
-//       bindsvar(formal parameter name, actual parameter strategy, Strategy definitions environment at the definition of the callee)
-//     */
-//     bindsvar: String * Strategy * D -> Binder
-//     
-//   arrows
-//     Binder -bindsvars-> D
-// 
-//   native-operators
-//     createAnonymousName : String -> String
-// 
-// rules
-//   /*
-//     Bind formal strategy parameters to actual strategies.
-//     
-//     We extend the Strategy definition environment at the definition of the callee whose formal parameters need to be bound.
-//     We basically copy into the definition environment mappings from the call-site environmetn.
-//   */
-// 
-// 
-//   Env e, D d |- bindsvars([], [], d_def) -bindsvars-> d_def
-//  
-//   // 1. CallT without arguments
-//   Env e, D d |- bindsvars([x | xs], [s | ss], d_callee) -bindsvars-> { x |--> Thunk(x, fss, fts, sactual, e_tgt, d_tgt), d_callee' }
-//   where
-//     s => CallT(SVar(tgt), ass, ats),
-//     isEmpty(ass) => empty_ass,
-//     isEmpty(ats) => empty_ats,
-//     booleanAnd(empty_ass, empty_ats) == true,
-//     Env e, D d |- SLookup(tgt) -slook-> Thunk(tgt', fss, fts, sactual, e_tgt, d_tgt),
-//     Env e, D d |- bindsvars(xs, ss, d_callee) -bindsvars-> d_callee'
-//   
-//   // 2. CallT with arguments
-//   Env e, D d |- bindsvars([x | xs], [s | ss], d_callee) -bindsvars-> { x |--> Thunk(x, [], [], s, e_tgt', d_tgt'), d_callee' }
-//   where
-//     s => CallT(SVar(tgt), ass, ats),
-//     isEmpty(ass) => empty_ass,
-//     isEmpty(ats) => empty_ats,
-//     booleanAnd(empty_ass, empty_ats) == false,
-//     Env e, D d |- SLookup(tgt) -slook-> Thunk(tgt', fss, fts, sactual, e_tgt, d_tgt),
-//     Env e |- bl(ats) -blds-> BSS(ats'),
-//     Env e_tgt |- bindtvars(fts, ats') -bindtvars-> e_tgt',
-//     Env e, D d |- bindsvars(fss, ass, d_tgt) -bindsvars-> d_tgt',
-//     Env e, D d |- bindsvars(xs, ss, d_callee) -bindsvars-> d_callee'
-//   
-//   // 3. A strategy literal body (not a call)
-//   Env e, D d |- bindsvars([x | xs], [s | ss], d_callee) -bindsvars-> { x |--> Thunk(annonx, [], [], s, e, d), d_callee' }
-//   where
-//     s =!=> CallT(SVar(tgt), ass, ats),
-//     createAnonymousName(x) => annonx,
-//     Env e, D d |- bindsvars(xs, ss, d_callee) -bindsvars-> d_callee'
+rules // calls
+
+  VEnv e, SEnv d |- CallT(SVar(sname), ass, ats) --> v
+  where
+    SLookup(d, sname) -slook-> SLookupResult(d_at_loc, SBind(sname', thunk, d_next_loc)),
+    thunk => Thunk(sname'', fss, fts, s, e_def, d_def),
+    VEnv e |- bl(ats) -blds-> BSS(ats'), // build term arguments     
+    VEnv e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments
+    VEnv e, SEnv d |- bindsvars(fss, ass, d_def) -bindsvars-> d_call, // bind strategy arguments
+    VEnv e_call, SEnv d_call |- s --> v // do the call
+      
+  VEnv e, SEnv d |- CallT(dc1, dc2, dc3) --> F()
+  where
+    all-fail
+
+signature
+  internal-sorts
+    Binder
+    
+  internal-constructors
+    bindtvars: List(String) * List(T) -> Binder
+    
+  arrows
+    Binder -bindtvars-> VEnv
+    
+rules
+
+  VEnv e |- bindtvars([], []) -bindtvars-> e
+  
+  VEnv e |- bindtvars([x | xxs], [t | txs]) -bindtvars-> e''
+  where
+    VPushUpdate(e, x, S(t)) -vinit-> e',
+    VEnv e' |- bindtvars(xxs, txs) -bindtvars-> e''
+
+signature
+  internal-constructors
+    bindsvars: List(String) * List(Strategy) * SEnv -> Binder
+    
+  arrows
+    Binder -bindsvars-> SEnv
+
+  native-operators
+    createAnonymousName : String -> String
+
+rules
+  /*
+    Bind formal strategy parameters to actual strategies.
+    
+    We extend the Strategy definition environment at the definition of the callee whose formal parameters need to be bound.
+    We basically copy into the definition environment mappings from the call-site environmetn.
+  */
+
+
+  VEnv e, SEnv d |- bindsvars([], [], d_into) -bindsvars-> d_into
+ 
+  // 1. CallT without arguments
+  VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
+  where
+    s => CallT(SVar(tgt), ass, ats),
+    isEmpty(ass) => empty_ass,
+    isEmpty(ats) => empty_ats,
+    booleanAnd(empty_ass, empty_ats) == true,
+    SLookup(d, tgt) -slook-> SLookupResult(d_at_loc, SBind(tgt', Thunk(tgt'', fss, fts, sactual, e_tgt, d_tgt), d_next_loc)),
+    SPush(d_into, tgt, Thunk(tgt, fss, fts, sactual, e_tgt, d_tgt)) -salloc-> d_into',
+    VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
+
+  
+  // 2. CallT with arguments
+  VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into'' // { x |--> Thunk(x, [], [], s, e_tgt', d_tgt'), d_callee' }
+  where
+    s => CallT(SVar(tgt), ass, ats),
+    isEmpty(ass) => empty_ass,
+    isEmpty(ats) => empty_ats,
+    booleanAnd(empty_ass, empty_ats) == false,
+    SLookup(d, tgt) -slook-> SLookupResult(d_at_loc, SBind(tgt', Thunk(tgt'', fss, fts, sactual, e_tgt, d_tgt), d_next_loc)),
+    VEnv e, SEnv d |- bl(ats) -blds-> BSS(ats'),
+    VEnv e_tgt |- bindtvars(fts, ats') -bindtvars-> e_tgt',
+    VEnv e, SEnv d |- bindsvars(fss, ass, d_tgt) -bindsvars-> d_tgt',
+    SPush(d_into, tgt, Thunk(tgt, fss, fts, sactual, e_tgt', d_tgt')) -salloc-> d_into',
+    VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
+
+  // 3. A strategy literal body (not a call)
+  VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
+  where
+    s =!=> CallT(SVar(tgt), ass, ats),
+    createAnonymousName(x) => annonx,
+    SPush(d, annonx, Thunk(annonx, [], [], s, e, d)) -salloc-> d_into',
+    VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
   
 signature
 

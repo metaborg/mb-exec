@@ -100,7 +100,7 @@ signature
     SAlloc: SEnv * String -> SHeapOp
     SPushBack: SEnv * String * Thunk -> SHeapOp
     SUpdate : SEnv * String * Thunk -> SHeapOp
-    // SPush: SEnv * String * Thunk -> SHeapOp 
+    SPush: SEnv * String * Thunk -> SHeapOp
     SLookup: SEnv * String -> SHeapOp
     
   arrows
@@ -118,11 +118,19 @@ rules
     fresh => addr,
     asSHeap({ addr |--> SMt() }) => s'
   
-  // // Push a new Thunk advancing the address of the top of the stack
-  // (SPush(SEnv(addr), name, thunk), SHeap s) -salloc-> (SEnv(addr'), SHeap s')
-  // where
-  //   fresh => addr',
-  //   { addr' |--> SBind(name, thunk, addr), s} => s'
+  // Push a new Thunk advancing the address of the top of the stack
+  (SPush(SEnv(addr), name, thunk), SHeap s) -salloc-> (SEnv(addr'), SHeap s')
+  where
+    fresh => addr',
+    { addr' |--> SBind(name, thunk, addr), s} => s'
+  
+  // Push a new Thunk keeping the address of the top of the stack constant
+  (SPushBack(SEnv(addr), name, thunk), SHeap s) -salloc-> (SEnv(addr), SHeap s'')
+  where
+    s[addr] => prev_top_thunk,
+    fresh => addr',
+    { addr' |--> prev_top_thunk, s } => s',
+    { addr  |--> SBind(name, thunk, addr'), s'} => s''
   
   // Allocate a new location at the top of the SHeap and bind it to a placeholder
   (SAlloc(SEnv(addr), name), SHeap s) -salloc-> (SEnv(addr'), SHeap s')
@@ -134,14 +142,6 @@ rules
   where
     (SLookup(SEnv(addr), name), SHeap s) -slook-> (SLookupResult(SEnv(addr'), SBind(name', old_thunk, addr'')), SHeap s'),
     { addr' |--> SBind(name', thunk, addr''), s'} => s''
-  
-  // Push a new Thunk keeping the address of the top of the stack constant
-  (SPushBack(SEnv(addr), name, thunk), SHeap s) -salloc-> (SEnv(addr), SHeap s'')
-  where
-    s[addr] => prev_top_thunk,
-    fresh => addr',
-    { addr' |--> prev_top_thunk, s } => s',
-    { addr  |--> SBind(name, thunk, addr'), s'} => s''
   
   // Lookup a thunk by name at the starting SHeap address
   (SLookup(SEnv(addr), name), SHeap s) -slook-> (SLookupResult(SEnv(addr), SBind(name', thunk, addr')), SHeap s)
