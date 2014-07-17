@@ -98,6 +98,7 @@ signature
   internal-constructors
     SInit : -> SHeapOp
     SAlloc: SEnv * String -> SHeapOp
+    SMAlloc : SEnv * List(String) -> SHeapOp
     SPushBack: SEnv * String * Thunk -> SHeapOp
     SUpdate : SEnv * String * Thunk -> SHeapOp
     SPush: SEnv * String * Thunk -> SHeapOp
@@ -137,6 +138,13 @@ rules
   where
     fresh => addr',
     {addr' |--> SBind(name, ThunkPlaceholder(), addr), s} => s'
+  
+  (SMAlloc(SEnv(addr), []), SHeap s) -salloc-> (SEnv(addr), SHeap s)
+  
+  (SMAlloc(SEnv(addr), [name | names]), SHeap s) -salloc-> (SEnv(addr''), SHeap s'')
+  where
+    (SAlloc(SEnv(addr), name), SHeap s) -salloc-> (SEnv(addr'), SHeap s'),
+    (SMAlloc(SEnv(addr'), names), SHeap s') -salloc-> (SEnv(addr''), SHeap s'')
   
   (SUpdate(SEnv(addr), name, thunk), SHeap s) -salloc-> (SEnv(addr), SHeap s'')
   where
