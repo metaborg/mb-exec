@@ -91,7 +91,8 @@ rules // actual matching
   where
     VLookup(e, x) -vlook-> VLookupResult(e', VBind(y, lv, e'')),
     lv => F(),
-    VEnv e, T t |- Match(p) --> S(t')
+    VEnv e, T t |- Match(p) --> S(t'),
+    VUpdate(e', x, S(t)) -vupdate-> e'''
   
   // compound As with bound variable
   VEnv e, T t |- m(As(Var(x), p)) -ma-> S(t)
