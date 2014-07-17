@@ -65,6 +65,10 @@ signature
     "org.spoofax.interpreter.terms.IStrategoTerm[]" as TARRAY {
       
     }
+    
+    "ds.manual.interpreter.AutoInterpInteropContext" as IC {
+      
+    }
   
   native-operators
     // TARRAY2List: TARRAY -> List(T)

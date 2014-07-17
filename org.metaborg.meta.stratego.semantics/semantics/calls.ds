@@ -98,11 +98,6 @@ rules
   
 signature
 
-  native-datatypes
-	  "ds.manual.interpreter.AutoInterpInteropContext" as IC {
-	    
-	  }
-
   native-operators
     primCall : IC * String * List(Strategy) * List(T) * T -> Value
 

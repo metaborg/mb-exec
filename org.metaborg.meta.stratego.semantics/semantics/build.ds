@@ -211,10 +211,10 @@ rules
   
 signature
   native-operators
-    importTerm : String -> T
+    importTerm : IC * String -> T
 
 rules // import term
 
-  ImportTerm(p) --> S(t)
+  IC ic |- ImportTerm(p) --> S(t)
   where
-    importTerm(p) => t
+    importTerm(ic, p) => t

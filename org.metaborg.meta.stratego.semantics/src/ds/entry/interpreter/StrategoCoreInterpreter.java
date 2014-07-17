@@ -108,7 +108,7 @@ public class StrategoCoreInterpreter {
 
 		CallT_3 mainCall = new CallT_3(null, new SVar_1(null, sname), NodeList.NIL(I_Strategy.class),
 				NodeList.NIL(I_STerm.class));
-		AValue result = mainCall.exec_default(context, senv, new VEnv_1(null, 0), termFactory, currentTerm, sheap,
+		AValue result = mainCall.exec_default(senv, new VEnv_1(null, 0), context, termFactory, currentTerm, sheap,
 				false, vheap).value;
 		if (result instanceof F_0) {
 			throw new StrategoErrorExit("Strategy failed");

@@ -1,5 +1,7 @@
 package ds.manual.interpreter;
 
+import java.io.IOException;
+
 import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeList;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -13,6 +15,8 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.ParseError;
+import org.spoofax.terms.io.binary.TermReader;
 
 import com.github.krukow.clj_ds.PersistentMap;
 
@@ -88,6 +92,15 @@ public class Natives {
 		}
 	}
 
+	public static IStrategoTerm importTerm_2(AutoInterpInteropContext context, String p) {
+		try {
+			return new TermReader(context.getFactory()).parseFromStream(Natives.class.getClassLoader()
+					.getResourceAsStream(p));
+		} catch (IOException e) {
+			throw new org.metaborg.meta.interpreter.framework.InterpreterException("Import term failed", e);
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static INodeList<IStrategoTerm> asNILofT_1(INodeList<?> l) {
 		return (INodeList<IStrategoTerm>) l;
@@ -130,10 +143,6 @@ public class Natives {
 	}
 
 	private static int counter = 0;
-
-	public static IStrategoTerm importTerm_1(String p) {
-		throw new RuntimeException("Not implemented");
-	}
 
 	public static boolean booleanOr_2(boolean b1, boolean b2) {
 		return b1 || b2;
