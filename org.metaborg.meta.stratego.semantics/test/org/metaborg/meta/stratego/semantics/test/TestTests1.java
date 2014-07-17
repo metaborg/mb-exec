@@ -46,7 +46,7 @@ public class TestTests1 {
 				{ new TT("main_0_0", "libstratego-lib.ctree", "test28b.ctree") },
 		}));
 		List<Integer> skips = Arrays.asList(new Integer[] {
-			42, 44, 48, 52, 55, 66, 71, 83
+			26, 42, 44, 48, 50, 52, 55, 66, 71, 83
 		});
 		
 		// @formatter:on
