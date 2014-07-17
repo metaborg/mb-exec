@@ -62,6 +62,15 @@ rules // actual matching
     i == i',
     S(t) => v
   
+  T t |- m(Real(stringR)) -ma-> v
+  where
+    isATermReal(t) == true,
+    asATermReal(t) => areal,
+    realValue[areal]() => r',
+    parseReal(stringR) => r,
+    r == r',
+    S(t) => v
+  
   T t |- m(Str(s)) -ma-> v
   where
     isATermString(t) == true,

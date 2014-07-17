@@ -19,8 +19,12 @@ signature
       stringValue : String
     }
     
-    "org.spoofax.interpreter.terms.IStrategoInt" as TINT-> T {
+    "org.spoofax.interpreter.terms.IStrategoInt" as TINT -> T {
       intValue : Int
+    }
+    
+    "org.spoofax.interpreter.terms.IStrategoReal" as TREAL -> T {
+      realValue : Real
     }
     
     "org.spoofax.interpreter.terms.IStrategoAppl" as TAPPL -> T {
@@ -46,6 +50,7 @@ signature
     "org.spoofax.interpreter.terms.ITermFactory" as TF {
       makeString : String -> TSTR
       makeInt : Int -> TINT
+      makeReal : Real -> TREAL
       makeTuple : TARRAY -> TTUP
             
     	makeConstructor : String * Int -> TCONSTR
@@ -70,12 +75,14 @@ signature
   
     isATermString : T -> Bool
     isATermInt    : T -> Bool
+    isATermReal    : T -> Bool
     isATermAppl   : T -> Bool
     isATermTuple  : T -> Bool
     isATermList   : T -> Bool
     
     asATermString : T -> TSTR
     asATermInt    : T -> TINT
+    asATermReal   : T -> TREAL
     asATermAppl   : T -> TAPPL
     asATermTuple  : T -> TTUP
     asATermList   : T -> TLIST

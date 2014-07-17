@@ -50,7 +50,10 @@ rules // term traversal: all
   where
     isATermInt(t) == true
 
-  // TODO case for <all> "4.5"
+  // <all> "4.5"
+  T t |- All(s) --> S(t)
+  where
+    isATermReal(t) == true
   
   // <all> "string"
   T t |- All(s) --> S(t)

@@ -53,6 +53,11 @@ rules // actual term building
     parseInt(stringI) => i',
     makeInt[tf](i') => aint
   
+  TF tf |- b(Real(stringR)) -bld-> BS(areal)
+  where
+    parseReal(stringR) => r',
+    makeReal[tf](r') => areal
+  
   TF tf |- b(Str(s)) -bld-> BS(astr)
   where
     makeString[tf](s) => astr

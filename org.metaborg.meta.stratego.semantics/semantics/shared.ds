@@ -22,6 +22,7 @@ signature
     asNILofT : List(Term) -> List(T)
     asNILofString : List(Term) -> List(String)
     parseInt : String -> Int
+    parseReal : String -> Real
     isQuotedString : String -> Bool
     unquoteString : String -> String
     booleanOr : Bool * Bool -> Bool

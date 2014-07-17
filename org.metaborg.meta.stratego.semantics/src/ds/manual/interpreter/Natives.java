@@ -8,6 +8,7 @@ import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
@@ -170,6 +171,18 @@ public class Natives {
 	@SuppressWarnings("unchecked")
 	public static PersistentMap<Object, Object> asSHeap_1(Object map) {
 		return (PersistentMap<Object, Object>) map;
+	}
+
+	public static boolean isATermReal_1(IStrategoTerm t) {
+		return t.getTermType() == IStrategoTerm.REAL;
+	}
+
+	public static IStrategoReal asATermReal_1(IStrategoTerm t) {
+		return (IStrategoReal) t;
+	}
+
+	public static double parseReal_1(String s) {
+		return Double.parseDouble(s);
 	}
 
 }
