@@ -57,18 +57,14 @@ rules
 
 signature
   semantic-components
-    SHeap -> Map<Int, SBinding>
-  
+    SHeap -> Map<Int, Thunk>
+    SEnv  -> Map<String, Int>
+
   internal-sorts
-    SBinding
     SLookupResult
-    SEnv
 
   internal-constructors
-    SEnv : Int -> SEnv
-    SMt : -> SBinding
-    SBind : String * Thunk * Int -> SBinding
-    SLookupResult : SEnv * SBinding -> SLookupResult
+    SLookupResult : SEnv * Thunk -> SLookupResult
 
   internal-sorts
     Thunk
@@ -81,10 +77,8 @@ signature
     SHeapOp
   
   internal-constructors
-    SInit : -> SHeapOp
     SAlloc: SEnv * String -> SHeapOp
-    SMAlloc : SEnv * List(String) -> SHeapOp
-    SPushBack: SEnv * String * Thunk -> SHeapOp
+    SParAlloc : SEnv * List(String) -> SHeapOp
     SUpdate : SEnv * String * Thunk -> SHeapOp
     SPush: SEnv * String * Thunk -> SHeapOp
     SLookup: SEnv * String -> SHeapOp
@@ -93,58 +87,33 @@ signature
     SHeapOp -slook-> SLookupResult
     SHeapOp -salloc-> SEnv
   
-  native-operators
-    asSHeap: Map<Int, SBinding> -> SHeap
-  
 rules
-  
-  // init SHeap
-  (SInit(), SHeap s) -salloc-> (SEnv(addr), SHeap s')
+
+  // Lookup a thunk by name at the starting SHeap address
+  (SLookup(senv, name), SHeap s) -slook-> (SLookupResult(senv, thunk), SHeap s)
   where
-    fresh => addr,
-    asSHeap({ addr |--> SMt() }) => s'
+    senv[name] => addr,
+    s[addr] => thunk
   
   // Push a new Thunk advancing the address of the top of the stack
-  (SPush(SEnv(addr), name, thunk), SHeap s) -salloc-> (SEnv(addr'), SHeap s')
+  (SPush(senv, name, thunk), SHeap s) -salloc-> (senv', SHeap s'')
   where
-    fresh => addr',
-    { addr' |--> SBind(name, thunk, addr), s} => s'
-  
-  // Push a new Thunk keeping the address of the top of the stack constant
-  (SPushBack(SEnv(addr), name, thunk), SHeap s) -salloc-> (SEnv(addr), SHeap s'')
-  where
-    s[addr] => prev_top_thunk,
-    fresh => addr',
-    { addr' |--> prev_top_thunk, s } => s',
-    { addr  |--> SBind(name, thunk, addr'), s'} => s''
+    (SAlloc(senv, name), SHeap s) -salloc-> (senv', SHeap s'),
+    (SUpdate(senv', name, thunk), SHeap s') -salloc-> (senv'', SHeap s'')
   
   // Allocate a new location at the top of the SHeap and bind it to a placeholder
-  (SAlloc(SEnv(addr), name), SHeap s) -salloc-> (SEnv(addr'), SHeap s')
+  (SAlloc(senv, name), SHeap s) -salloc-> ({ name |--> addr, senv}, SHeap s)
   where
-    fresh => addr',
-    {addr' |--> SBind(name, ThunkPlaceholder(), addr), s} => s'
+    fresh => addr
   
-  (SMAlloc(SEnv(addr), []), SHeap s) -salloc-> (SEnv(addr), SHeap s)
+  (SParAlloc(senv, []), SHeap s) -salloc-> (senv, SHeap s)
   
-  (SMAlloc(SEnv(addr), [name | names]), SHeap s) -salloc-> (SEnv(addr''), SHeap s'')
+  (SParAlloc(senv, [name | names]), SHeap s) -salloc-> (senv'', SHeap s'')
   where
-    (SAlloc(SEnv(addr), name), SHeap s) -salloc-> (SEnv(addr'), SHeap s'),
-    (SMAlloc(SEnv(addr'), names), SHeap s') -salloc-> (SEnv(addr''), SHeap s'')
+    (SAlloc(senv, name), SHeap s) -salloc-> (senv', SHeap s'),
+    (SParAlloc(senv', names), SHeap s') -salloc-> (senv'', SHeap s'')
   
-  (SUpdate(SEnv(addr), name, thunk), SHeap s) -salloc-> (SEnv(addr), SHeap s'')
+  (SUpdate(senv, name, thunk), SHeap s) -salloc-> (senv, SHeap { addr |--> thunk, s})
   where
-    (SLookup(SEnv(addr), name), SHeap s) -slook-> (SLookupResult(SEnv(addr'), SBind(name', old_thunk, addr'')), SHeap s'),
-    { addr' |--> SBind(name', thunk, addr''), s'} => s''
-  
-  // Lookup a thunk by name at the starting SHeap address
-  (SLookup(SEnv(addr), name), SHeap s) -slook-> (SLookupResult(SEnv(addr), SBind(name', thunk, addr')), SHeap s)
-  where
-    s[addr] => SBind(name', thunk, addr'),
-    name == name'
-  
-  (SLookup(SEnv(addr), name), SHeap s) -slook-> (v, SHeap s)
-  where
-    s[addr] => SBind(name', thunk, addr'),
-    name != name',
-    (SLookup(SEnv(addr'), name), SHeap s) -slook-> (v, SHeap s')
-  
+    senv[name] => addr
+    

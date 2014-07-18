@@ -12,7 +12,7 @@ rules // calls
 
   VEnv e, SEnv d |- CallT(SVar(sname), ass, ats) --> v
   where
-    SLookup(d, sname) -slook-> SLookupResult(d_at_loc, SBind(sname', thunk, d_next_loc)),
+    SLookup(d, sname) -slook-> SLookupResult(e', thunk),
     thunk => Thunk(sname'', fss, fts, s, e_def, d_def),
     VEnv e |- bl(ats) -blds-> BSS(ats'), // build term arguments     
     VEnv e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments
@@ -60,7 +60,6 @@ rules
     We basically copy into the definition environment mappings from the call-site environmetn.
   */
 
-
   VEnv e, SEnv d |- bindsvars([], [], d_into) -bindsvars-> d_into
  
   // 1. CallT without arguments
@@ -70,19 +69,19 @@ rules
     isEmpty(ass) => empty_ass,
     isEmpty(ats) => empty_ats,
     booleanAnd(empty_ass, empty_ats) == true,
-    SLookup(d, tgt) -slook-> SLookupResult(d_at_loc, SBind(tgt', Thunk(tgt'', fss, fts, sactual, e_tgt, d_tgt), d_next_loc)),
+    SLookup(d, tgt) -slook-> SLookupResult(d', Thunk(tgt'', fss, fts, sactual, e_tgt, d_tgt)),
     SPush(d_into, x, Thunk(x, fss, fts, sactual, e_tgt, d_tgt)) -salloc-> d_into',
     VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
 
   
   // 2. CallT with arguments
-  VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into'' // { x |--> Thunk(x, [], [], s, e_tgt', d_tgt'), d_callee' }
+  VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
   where
     s => CallT(SVar(tgt), ass, ats),
     isEmpty(ass) => empty_ass,
     isEmpty(ats) => empty_ats,
     booleanAnd(empty_ass, empty_ats) == false,
-    SLookup(d, tgt) -slook-> SLookupResult(d_at_loc, SBind(tgt', Thunk(tgt'', fss, fts, sactual, e_tgt, d_tgt), d_next_loc)),
+    SLookup(d, tgt) -slook-> SLookupResult(d', Thunk(tgt'', fss, fts, sactual, e_tgt, d_tgt)),
     VEnv e, SEnv d |- bl(ats) -blds-> BSS(ats'),
     VEnv e_tgt |- bindtvars(fts, ats') -bindtvars-> e_tgt',
     VEnv e, SEnv d |- bindsvars(fss, ass, d_tgt) -bindsvars-> d_tgt',

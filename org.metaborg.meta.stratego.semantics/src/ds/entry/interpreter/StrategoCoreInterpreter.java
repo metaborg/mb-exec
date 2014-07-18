@@ -26,15 +26,13 @@ import ds.generated.interpreter.CallT_3;
 import ds.generated.interpreter.F_0;
 import ds.generated.interpreter.Generic_Module;
 import ds.generated.interpreter.I_Module;
-import ds.generated.interpreter.I_SEnv;
 import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.I_Strategy;
-import ds.generated.interpreter.SInit_0;
 import ds.generated.interpreter.SVar_1;
 import ds.generated.interpreter.S_1;
+import ds.generated.interpreter.allocModule_1;
+import ds.generated.interpreter.allocmodule_Result;
 import ds.generated.interpreter.salloc_Result;
-import ds.generated.interpreter.sdefs_Result;
-import ds.generated.interpreter.topdefs_1;
 import ds.manual.interpreter.AutoInterpInteropContext;
 
 /**
@@ -44,7 +42,7 @@ import ds.manual.interpreter.AutoInterpInteropContext;
 public class StrategoCoreInterpreter {
 
 	private PersistentMap<Object, Object> sheap;
-	private I_SEnv senv;
+	private PersistentMap<Object, Object> senv;
 
 	private IStrategoTerm currentTerm;
 	private TermFactory programTermFactory, termFactory;
@@ -55,10 +53,8 @@ public class StrategoCoreInterpreter {
 	}
 
 	public void reset() {
-		sheap = new PersistentTreeMap<>();
-		salloc_Result sheap_init_result = new SInit_0(null).exec_salloc(sheap);
-		sheap = sheap_init_result._1;
-		senv = sheap_init_result.value;
+		sheap = PersistentTreeMap.EMPTY;
+		senv = PersistentTreeMap.EMPTY;
 		currentTerm = null;
 		programTermFactory = new TermFactory();
 		termFactory = new TermFactory();
@@ -88,7 +84,8 @@ public class StrategoCoreInterpreter {
 				ctree.getAttachment(ImploderAttachment.TYPE)) : null;
 		I_Module ctreeNode = new Generic_Module(ctreeSource, ctree);
 		ctreeNode = (I_Module) NodeUtils.eagerReplacement(ctreeNode);
-		sdefs_Result sdefs_result = new topdefs_1(ctreeSource, ctreeNode).exec_sdefs(PersistentTreeMap.EMPTY, senv, sheap);
+		allocmodule_Result sdefs_result = new allocModule_1(ctreeSource, ctreeNode).exec_allocmodule(
+				PersistentTreeMap.EMPTY, senv, sheap);
 		sheap = sdefs_result._1;
 		senv = sdefs_result.value;
 	}

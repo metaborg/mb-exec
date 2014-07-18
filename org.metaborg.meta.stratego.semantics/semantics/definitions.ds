@@ -21,7 +21,7 @@ rules // let - in - end
   SEnv d |- Let(sdefs, s) --> v
   where
     sdefNames(sdefs) -exid-> snames,
-    SMAlloc(d, snames) -salloc-> d',
+    SParAlloc(d, snames) -salloc-> d',
     SEnv d' |- letEval(sdefs, s) -leteval-> v
   
   VEnv e, SEnv d |- letEval([], in_s) -leteval-> v
@@ -36,61 +36,59 @@ rules // let - in - end
     SUpdate(d, sname, Thunk(sname, ss', ts', s, e, d)) -salloc-> d',
     VEnv e, SEnv d |- letEval(sdefs, in_s) -leteval-> v
     
-  // VEnv e, SEnv d |- Let([], s) --> v
-  // where
-  //   VEnv e, SEnv d |- s --> v
-  // 
-  // VEnv e, SEnv d |- Let([sdef | sdefs], in_s) --> v
-  // where
-  //   sdef => SDefT(sname, ss, ts, s),
-  //   typedIds(ss) -exid-> ss',
-  //   typedIds(ts) -exid-> ts',
-  //   SAlloc(d, sname) -salloc-> d',
-  //   SUpdate(d', sname, Thunk(sname, ss', ts', s, e, d')) -salloc-> d'',
-  //   VEnv e, SEnv d'' |- Let(sdefs, in_s) --> v
-
 signature
   internal-sorts
-    Deffer
-
+    Allocator
+    AllocatorResult
+    
   internal-constructors
-    topdefs : Module -> Deffer
-    defs : List(Def) -> Deffer
+    allocModule : Module -> Allocator
+    allocDefs : List(Def) * SEnv -> Allocator
+    allocdDefs : List(Def) * SEnv -> AllocatorResult 
+    storeDefs : List(Def) -> Allocator
 
   arrows
-    Deffer -sdefs-> SEnv
+    Allocator -allocmodule-> SEnv
+    Allocator -allocsdefs-> AllocatorResult
+    Allocator -storesdefs-> Bool
 
 rules // strategy definitions
   
-  // unpack specification
-  VEnv e, SEnv d |- topdefs(Specification([sigs, Strategies(ss)])) -sdefs-> d'
+  VEnv e, SEnv d |- allocModule(Specification([sigs, Strategies(ss)])) -allocmodule-> d'
   where
-    VEnv e, SEnv d |- defs(ss) -sdefs-> d'
+    allocDefs(ss, d) -allocsdefs-> allocdDefs(ss', d'),
+    VEnv e, SEnv d' |- storeDefs(ss') -storesdefs-> b
   
-  // bottom
-  VEnv e, SEnv d |- defs([]) -sdefs-> d
-
-  // store a definition as a thunk
-  VEnv e, SEnv d |- defs([sdef | ds]) -sdefs-> d''
+  allocDefs([], senv) -allocsdefs-> allocdDefs([], senv)
+  
+  allocDefs([sdef | sdefs], senv) -allocsdefs-> ad
+  where
+    sdef => AnnoDef(annos, sdef'),
+    allocDefs([sdef' | sdefs], senv) -allocsdefs-> ad
+  
+  allocDefs([sdef | sdefs], senv) -allocsdefs-> ad
+  where
+    sdef => ExtSDef(a, b, c),
+    allocDefs(sdefs, senv) -allocsdefs-> ad
+  
+  allocDefs([sdef | sdefs], senv) -allocsdefs-> allocdDefs([sdef | sdefs'], senv'')
+  where
+    sdef => SDefT(sname, ss, ts, s),
+    SAlloc(senv, sname) -salloc-> senv',
+    allocDefs(sdefs, senv') -allocsdefs-> allocdDefs(sdefs', senv'')
+  
+  VEnv e, SEnv d |- storeDefs([]) -storesdefs-> v
+  where
+    true => v
+  
+  VEnv e, SEnv d |- storeDefs([sdef | sdefs]) -storesdefs-> b
   where
     sdef => SDefT(sname, ss, ts, s),
     typedIds(ss) -exid-> ss',
     typedIds(ts) -exid-> ts',
-    SPushBack(d, sname, Thunk(sname, ss', ts', s, e, d)) -salloc-> d',
-    SEnv d' |- defs(ds) -sdefs-> d''
-
-  // unpack annotated definition
-  VEnv e, SEnv d |- defs([sdef | ds]) -sdefs-> d'
-  where
-    sdef => AnnoDef(annos, sdef'),
-    VEnv e, SEnv d |- defs([sdef' | ds]) -sdefs-> d'
-
-  // skip declarations of external
-  VEnv e, SEnv d |- defs([sdef | ds]) -sdefs-> d'
-  where
-    sdef => ExtSDef(a, b, c),
-    VEnv e, SEnv d |- defs(ds) -sdefs-> d'
-
+    SUpdate(d, sname, Thunk(sname, ss', ts', s, e, d)) -salloc-> d',
+    VEnv e, SEnv d |- storeDefs(sdefs) -storesdefs-> b
+  
 signature
   internal-sorts
     NameExtractor
