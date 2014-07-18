@@ -9,22 +9,14 @@ imports
 signature
 
   semantic-components
-    VHeap -> Map<Int, VBinding>
-  
-  internal-sorts
-    VEnv
-
-  internal-constructors
-    VEnv  : Int -> VEnv
+    VHeap -> Map<Int, Value>
+    VEnv  -> Map<String, Int>
 
   internal-sorts
-    VBinding
     VLookupResult
   
   internal-constructors
-    // VMt   : -> VBinding
-    VBind : String * Value * Int -> VBinding
-    VLookupResult : VEnv * VBinding -> VLookupResult
+    VLookupResult : VEnv * Value -> VLookupResult
 
   internal-sorts
     VHeapOp
@@ -43,29 +35,22 @@ signature
     
 rules 
   
-  (VLookup(VEnv(addr), x), VHeap s) -vlook-> (VLookupResult(VEnv(addr), VBind(y, v, addr')), VHeap s)
+  (VLookup(venv, x), VHeap s) -vlook-> (VLookupResult(venv, v), VHeap s)
   where
-    s[addr] => VBind(y, v, addr'),
-    x == y
+    venv[x] => addr,
+    s[addr] => v
   
-  (VLookup(VEnv(addr), x), VHeap s) -vlook-> (v', VHeap s)
+  (VUpdate(venv, x, v), VHeap s) -vupdate-> (venv, VHeap { addr |--> v, s})
   where
-    s[addr] => VBind(y, v, addr'),
-    x != y,
-    (VLookup(VEnv(addr'), x), VHeap s) -vlook-> (v', VHeap s')
-  
-  (VUpdate(VEnv(addr), x, v_new), VHeap s) -vupdate-> (VEnv(addr), VHeap { addr |--> VBind(x, v_new, addr''), s})
-  where
-    (VLookup(VEnv(addr), x), VHeap s) -vlook-> (VLookupResult(VEnv(addr'), VBind(y, v_old, addr'')), VHeap s')
+    venv[x] => addr
 
-  (VPush(VEnv(addr), x), VHeap s) -vinit-> (VEnv(addr'), VHeap { addr' |--> VBind(x, F(), addr), s })
+  (VPush(venv, x), VHeap s) -vinit-> ({x |--> addr, venv}, VHeap { addr |--> F(), s })
   where
-    fresh => addr'
+    fresh => addr
   
-  VPushUpdate(VEnv(addr), x, v) -vinit-> VEnv(addr')
+  (VPushUpdate(venv, x, v), VHeap s) -vinit-> ({ x |--> addr, venv}, VHeap { addr |--> v, s})
   where
-    VPush(VEnv(addr), x) -vinit-> VEnv(addr'),
-    VUpdate(VEnv(addr'), x, v) -vupdate-> VEnv(addr'')
+    fresh => addr
 
 
 /* === Rules for the Strategies === */

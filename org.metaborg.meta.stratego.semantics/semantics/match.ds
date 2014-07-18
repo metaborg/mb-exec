@@ -82,15 +82,15 @@ rules // actual matching
   // match against unbound variable
   VEnv e, T t |- m(Var(x)) -ma-> v
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', VBind(y, xv, e'')),
+    VLookup(e, x) -vlook-> VLookupResult(e', xv),
     xv => F(),
     S(t) => v,
-    VUpdate(e', x, v) -vupdate-> e'''
+    VUpdate(e', x, v) -vupdate-> e''
 
   // match against bound variable
   VEnv e, T t |- m(Var(x)) -ma-> v
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', VBind(y, xv, e'')),
+    VLookup(e, x) -vlook-> VLookupResult(e', xv),
     xv => S(t'),
     t == t',
     S(t) => v
@@ -98,15 +98,15 @@ rules // actual matching
   // compound As with unbound variable. The variable is only bound if the match succeeds.
   VEnv e, T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', VBind(y, lv, e'')),
+    VLookup(e, x) -vlook-> VLookupResult(e', lv),
     lv => F(),
     VEnv e, T t |- Match(p) --> S(t'),
-    VUpdate(e', x, S(t)) -vupdate-> e'''
+    VUpdate(e', x, S(t)) -vupdate-> e''
   
   // compound As with bound variable
   VEnv e, T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', VBind(y, lv, e'')),
+    VLookup(e, x) -vlook-> VLookupResult(e', lv),
     lv => S(xt),
     t == xt,
     VEnv e, T t |- Match(p) --> S(t'')

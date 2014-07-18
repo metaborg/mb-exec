@@ -46,7 +46,7 @@ rules // actual term building
 
   VEnv e |- b(Var(x)) -bld-> BS(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(env', VBind(y, S(t), env''))
+    VLookup(e, x) -vlook-> VLookupResult(e', S(t))
       
   TF tf |- b(Int(stringI)) -bld-> BS(aint)
   where
