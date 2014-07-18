@@ -24,9 +24,6 @@ public class StrategoInterpreterMain {
 
 		// 2. Read current term into ATerm
 		TermFactory tf = new TermFactory();
-		// IStrategoTerm currentTerm = args.length == numCtrees + 2 ? new
-		// TermReader(interpreter.getProgramTermFactory())
-		// .parseFromString(args[numCtrees + 1]) : null;
 
 		interpreter.setCurrentTerm(tf.makeList(tf.makeString("Main")));
 
