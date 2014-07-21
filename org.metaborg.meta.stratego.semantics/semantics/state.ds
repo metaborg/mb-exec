@@ -63,8 +63,17 @@ rules
 
 signature
   semantic-components
-    SHeap -> Map<Int, Thunk>
-    SEnv  -> Map<String, Int>
+    SEnv  -> Map<String, SBox>
+
+  native-datatypes
+    "ds.manual.interpreter.SState" as SHeap {
+      lookup : SEnv * String -> Thunk
+      alloc  : SEnv * String -> SEnv
+      allocupdate : SEnv * String * Thunk -> SEnv
+      update : SEnv * String * Thunk -> SEnv
+    }
+    
+    "ds.manual.interpreter.SBox" as SBox { }
 
   internal-sorts
     SLookupResult
@@ -98,20 +107,22 @@ rules
   // Lookup a thunk by name at the starting SHeap address
   (SLookup(senv, name), SHeap s) -slook-> (SLookupResult(senv, thunk), SHeap s)
   where
-    senv[name] => addr,
-    s[addr] => thunk
+    lookup[s](senv, name) => thunk
   
   // Push a new Thunk advancing the address of the top of the stack
-  (SPush(senv, name, thunk), SHeap s) -salloc-> (senv', SHeap s'')
+  (SPush(senv, name, thunk), SHeap s) -salloc-> (senv', SHeap s)
   where
-    (SAlloc(senv, name), SHeap s) -salloc-> (senv', SHeap s'),
-    (SUpdate(senv', name, thunk), SHeap s') -salloc-> (senv'', SHeap s'')
+    allocupdate[s](senv, name, thunk) => senv'
   
   // Allocate a new location at the top of the SHeap and bind it to a placeholder
-  (SAlloc(senv, name), SHeap s) -salloc-> ({ name |--> addr, senv}, SHeap s)
+  (SAlloc(senv, name), SHeap s) -salloc-> (senv', SHeap s)
   where
-    fresh => addr
+    alloc[s](senv, name) => senv'
   
+  (SUpdate(senv, name, thunk), SHeap s) -salloc-> (senv', SHeap s)
+  where
+    update[s](senv, name, thunk) => senv'
+
   (SParAlloc(senv, []), SHeap s) -salloc-> (senv, SHeap s)
   
   (SParAlloc(senv, [name | names]), SHeap s) -salloc-> (senv'', SHeap s'')
@@ -119,7 +130,4 @@ rules
     (SAlloc(senv, name), SHeap s) -salloc-> (senv', SHeap s'),
     (SParAlloc(senv', names), SHeap s') -salloc-> (senv'', SHeap s'')
   
-  (SUpdate(senv, name, thunk), SHeap s) -salloc-> (senv, SHeap { addr |--> thunk, s})
-  where
-    senv[name] => addr
     

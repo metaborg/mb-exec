@@ -32,8 +32,8 @@ import ds.generated.interpreter.SVar_1;
 import ds.generated.interpreter.S_1;
 import ds.generated.interpreter.allocModule_1;
 import ds.generated.interpreter.allocmodule_Result;
-import ds.generated.interpreter.salloc_Result;
 import ds.manual.interpreter.AutoInterpInteropContext;
+import ds.manual.interpreter.SState;
 import ds.manual.interpreter.VState;
 
 /**
@@ -42,7 +42,7 @@ import ds.manual.interpreter.VState;
  */
 public class StrategoCoreInterpreter {
 
-	private PersistentMap<Object, Object> sheap;
+	private SState sheap;
 	private PersistentMap<Object, Object> senv;
 
 	private IStrategoTerm currentTerm;
@@ -54,7 +54,7 @@ public class StrategoCoreInterpreter {
 	}
 
 	public void reset() {
-		sheap = PersistentTreeMap.EMPTY;
+		sheap = new SState();
 		senv = PersistentTreeMap.EMPTY;
 		currentTerm = null;
 		programTermFactory = new TermFactory();
