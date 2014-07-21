@@ -36,7 +36,8 @@ public class StrategoInterpreterMain {
 			long st = System.currentTimeMillis();
 			interpreter.invoke("main_0_0");
 			long et = System.currentTimeMillis();
-			System.out.println("Execution duration: " + (et - st) / (double) 1000);
+			System.out.println("Execution duration: " + (et - st)
+					/ (double) 1000);
 		}
 		System.out.println("Completed with: " + interpreter.getCurrentTerm());
 	}

@@ -9,8 +9,17 @@ imports
 signature
 
   semantic-components
-    VHeap -> Map<Int, Value>
-    VEnv  -> Map<String, Int>
+    VEnv  -> Map<String, VBox>
+
+  native-datatypes
+    "ds.manual.interpreter.VState" as VHeap {
+      lookup : VEnv * String -> Value
+      alloc  : VEnv * String -> VEnv
+      update : VEnv * String * Value -> VEnv
+      allocupdate : VEnv * String * Value -> VEnv
+    }
+    
+    "ds.manual.interpreter.VBox" as VBox { }
 
   internal-sorts
     VLookupResult
@@ -30,28 +39,25 @@ signature
   arrows
     VHeapOp -vlook-> VLookupResult
     VHeapOp -vupdate-> VEnv 
-    VHeapOp -vbranch-> VEnv
     VHeapOp -vinit-> VEnv
     
 rules 
   
   (VLookup(venv, x), VHeap s) -vlook-> (VLookupResult(venv, v), VHeap s)
   where
-    venv[x] => addr,
-    s[addr] => v
+    lookup[s](venv, x) => v
   
-  (VUpdate(venv, x, v), VHeap s) -vupdate-> (venv, VHeap { addr |--> v, s})
+  (VUpdate(venv, x, v), VHeap s) -vupdate-> (venv, VHeap s)
   where
-    venv[x] => addr
+    update[s](venv, x, v) => venv'
 
-  (VPush(venv, x), VHeap s) -vinit-> ({x |--> addr, venv}, VHeap { addr |--> F(), s })
+  (VPush(venv, x), VHeap s) -vinit-> (venv', VHeap s)
   where
-    fresh => addr
+    alloc[s](venv, x) => venv'
   
-  (VPushUpdate(venv, x, v), VHeap s) -vinit-> ({ x |--> addr, venv}, VHeap { addr |--> v, s})
+  (VPushUpdate(venv, x, v), VHeap s) -vinit-> (venv', VHeap s)
   where
-    fresh => addr
-
+    allocupdate[s](venv, x, v) => venv'
 
 /* === Rules for the Strategies === */
 

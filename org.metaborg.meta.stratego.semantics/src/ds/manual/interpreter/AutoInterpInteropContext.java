@@ -102,8 +102,8 @@ public class AutoInterpInteropContext implements IContext {
 			if (t != null)
 				return t;
 		}
-		throw new org.metaborg.meta.interpreter.framework.InterpreterException("Primitive " + primName
-				+ " cannot be found");
+		throw new org.metaborg.meta.interpreter.framework.InterpreterException(
+				"Primitive " + primName + " cannot be found");
 	}
 
 	@Override

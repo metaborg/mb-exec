@@ -76,28 +76,34 @@ public class Natives {
 		return (IStrategoTuple) t;
 	}
 
-	public static AValue primCall_5(AutoInterpInteropContext context, String name, INodeList<I_Strategy> ass,
+	public static AValue primCall_5(AutoInterpInteropContext context,
+			String name, INodeList<I_Strategy> ass,
 			INodeList<IStrategoTerm> ats_aterms, IStrategoTerm t) {
 		AbstractPrimitive prim = context.lookupOperator(name);
 		try {
 			context.setCurrent(t);
-			boolean result = prim.call(context, new Strategy[0], List2TARRAY_1(ats_aterms));
+			boolean result = prim.call(context, new Strategy[0],
+					List2TARRAY_1(ats_aterms));
 			if (result) {
 				return new S_1(context.current());
 			} else {
 				return new F_0();
 			}
 		} catch (InterpreterException e) {
-			throw new org.metaborg.meta.interpreter.framework.InterpreterException("Primitive application failed", e);
+			throw new org.metaborg.meta.interpreter.framework.InterpreterException(
+					"Primitive application failed", e);
 		}
 	}
 
-	public static IStrategoTerm importTerm_2(AutoInterpInteropContext context, String p) {
+	public static IStrategoTerm importTerm_2(AutoInterpInteropContext context,
+			String p) {
 		try {
-			return new TermReader(context.getFactory()).parseFromStream(Natives.class.getClassLoader()
-					.getResourceAsStream(p));
+			return new TermReader(context.getFactory())
+					.parseFromStream(Natives.class.getClassLoader()
+							.getResourceAsStream(p));
 		} catch (IOException e) {
-			throw new org.metaborg.meta.interpreter.framework.InterpreterException("Import term failed", e);
+			throw new org.metaborg.meta.interpreter.framework.InterpreterException(
+					"Import term failed", e);
 		}
 	}
 
@@ -122,7 +128,8 @@ public class Natives {
 		return clone;
 	}
 
-	public static PersistentMap<Object, Object> asD_1(PersistentMap<Object, Object> map) {
+	public static PersistentMap<Object, Object> asD_1(
+			PersistentMap<Object, Object> map) {
 		return map;
 	}
 
