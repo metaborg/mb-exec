@@ -1,6 +1,7 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import org.spoofax.interpreter.terms.ISimpleTerm;
@@ -32,6 +33,10 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         }
     };
 
+    public StrategoHashMap() {
+        super();
+    }
+    
     public StrategoHashMap(int initialSize, int maxLoad) {
         super(initialSize, 1.0f * maxLoad / 100);
     }
@@ -103,4 +108,7 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         return false;
     }
 
+    public Iterator<IStrategoTerm> iterator() {
+        return this.values().iterator();
+    }
 }

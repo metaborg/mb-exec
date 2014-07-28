@@ -118,8 +118,8 @@ public class Build extends Strategy {
             return actualArgs;
         }
 
-        throw new InterpreterException("Unknown term explosion : '" + t + "' " + t.getTermType()
-                                       + " : " + actualCtor + " / " + actualArgs);
+        // According to STR-626 non-string constructor term implosion should fail not crash
+        return null;
     }
 
     private IStrategoTerm doBuildExplode(ITermFactory factory, IStrategoTerm actualCtor, IStrategoTerm actualArgs) throws InterpreterException {

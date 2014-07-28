@@ -10,4 +10,4 @@ Export-Package: org.spoofax.interpreter.adapter.asm
 Require-Bundle: org.spoofax.interpreter.core,
  org.spoofax.terms,
  org.junit
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

@@ -18,7 +18,7 @@ import org.spoofax.terms.StrategoInt;
 public class TestConcreteInterpreter {
 
 	@Test
-	public void load_and_exec_id() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
+	public void load_and_exec_id() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterruptedException, InterruptedException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		assertTrue(ci.parseAndInvoke("id <+ fail"));
@@ -26,7 +26,7 @@ public class TestConcreteInterpreter {
 	}
 
 	@Test
-	public void load_and_exec_inc() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
+	public void load_and_exec_inc() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterruptedException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		assertTrue(ci.parseAndInvoke("inc"));
@@ -34,7 +34,7 @@ public class TestConcreteInterpreter {
 	}
 
 	@Test
-	public void load_and_exec_a_strategy_def() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
+	public void load_and_exec_a_strategy_def() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterruptedException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		ci.parseAndInvoke("zz = inc");
@@ -43,7 +43,7 @@ public class TestConcreteInterpreter {
 	}
 
 	@Test
-	public void load_and_exec_a_rule_def() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
+	public void load_and_exec_a_rule_def() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterruptedException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(0, IStrategoTerm.IMMUTABLE));
 		ci.parseAndInvoke("R : 0 -> 1");
@@ -52,7 +52,7 @@ public class TestConcreteInterpreter {
 	}
 
 	@Test
-	public void load_and_exec_a_higher_order_strategy_def() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
+	public void load_and_exec_a_higher_order_strategy_def() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterruptedException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		ci.parseAndInvoke("zz(s) = s");
@@ -62,7 +62,7 @@ public class TestConcreteInterpreter {
 
 
 	@Test
-	public void load_and_exec_a_build() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterpreterException {
+	public void load_and_exec_a_build() throws TokenExpectedException, InterpreterErrorExit, BadTokenException, ParseException, InterpreterExit, UndefinedStrategyException, SGLRException, InterruptedException, InterpreterException {
 		ConcreteInterpreter ci = new ConcreteInterpreter();
 		ci.setCurrent(new StrategoInt(10, IStrategoTerm.IMMUTABLE));
 		assertTrue(ci.parseAndInvoke("!Foo(1,2,3)"));

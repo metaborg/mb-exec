@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -87,6 +88,10 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
             r.add(x.t);
         return r;
     }
+    
+    public IStrategoTerm any() {
+        return map.keySet().iterator().next();
+    }
 
     public boolean containsKey(IStrategoTerm t) {
         return map.containsKey(t);
@@ -155,4 +160,7 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         return false;
     }
 
+    public Iterator<IStrategoTerm> iterator() {
+        return map.keySet().iterator();
+    }
 }

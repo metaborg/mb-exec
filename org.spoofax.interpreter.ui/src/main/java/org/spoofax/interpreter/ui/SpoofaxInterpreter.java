@@ -66,6 +66,8 @@ public class SpoofaxInterpreter {
 				ioAgent.err.println(e.getCause().getMessage());
 			else
 				ioAgent.err.println(e.getMessage());
+		} catch (InterruptedException e) {
+			logError(e); // FIXME might want to report this sensibly
 		} finally {
 			ioAgent.out.flush();
 			ioAgent.err.flush();

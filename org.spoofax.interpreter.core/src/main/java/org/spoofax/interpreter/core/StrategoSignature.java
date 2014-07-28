@@ -80,6 +80,8 @@ public class StrategoSignature {
     public final IStrategoConstructor CTOR_ImportTerm;
 
     public final IStrategoConstructor CTOR_OpDecl;
+    
+    public final IStrategoConstructor CTOR_CallDynamic;
 
     public StrategoSignature(ITermFactory factory) {
 
@@ -123,6 +125,7 @@ public class StrategoSignature {
         CTOR_Some = factory.makeConstructor("Some", 1);
         CTOR_One = factory.makeConstructor("One", 1);
 
+        CTOR_CallDynamic = factory.makeConstructor("CallDynamic", 3);
     }
 
     public IStrategoConstructor getOp() {
@@ -255,6 +258,10 @@ public class StrategoSignature {
 
 	public Object getImportTerm() {
 		return CTOR_ImportTerm;
+	}
+	
+	public IStrategoConstructor getCallDynamic() {
+		return CTOR_CallDynamic;
 	}
 
 }

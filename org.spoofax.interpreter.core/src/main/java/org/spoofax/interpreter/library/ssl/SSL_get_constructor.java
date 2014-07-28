@@ -12,6 +12,8 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
@@ -33,8 +35,10 @@ public class SSL_get_constructor extends AbstractPrimitive {
             env.setCurrent(factory.makeString(a.getConstructor().getName()));
             return true;
         case IStrategoTerm.INT:
+            env.setCurrent(factory.makeInt(((IStrategoInt) tvars[0]).intValue()));
             return true;
         case IStrategoTerm.REAL:
+            env.setCurrent(factory.makeReal(((IStrategoReal) tvars[0]).realValue()));
             return true;
         case IStrategoTerm.BLOB:
             env.setCurrent(factory.makeString("BLOB_" + tvars[0].toString()));

@@ -40,6 +40,11 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_is_real());
         add(new SSL_addi());
         add(new SSL_addr());
+        add(new SSL_iori());
+        add(new SSL_xori());
+        add(new SSL_andi());
+        add(new SSL_shli());
+        add(new SSL_shri());
         add(new SSL_chdir());
         add(new SSL_mkdir());
         add(new SSL_P_tmpdir());
@@ -145,6 +150,9 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_makePlaceholder());
         add(new SSL_getPlaceholder());
         add(new SSL_filesize());
+        add(new SSL_rmdir());
+        add(new SSL_preserve_annotations_attachments());
+        add(new SSL_cputime());
     }
 
     public AbstractPrimitive lookup(String s) {

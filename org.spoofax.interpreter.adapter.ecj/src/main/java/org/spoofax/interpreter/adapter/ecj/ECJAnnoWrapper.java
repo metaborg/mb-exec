@@ -1,6 +1,7 @@
 package org.spoofax.interpreter.adapter.ecj;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
@@ -144,7 +145,8 @@ public class ECJAnnoWrapper implements IStrategoTerm, IStrategoList,
     }
 
     @Override
-    public ITermAttachment removeAttachment(TermAttachmentType<?> attachmentType) {
+    public ITermAttachment
+        removeAttachment(TermAttachmentType<?> attachmentType) {
         throw new NotImplementedException();
     }
 
@@ -172,6 +174,11 @@ public class ECJAnnoWrapper implements IStrategoTerm, IStrategoList,
     public void writeAsString(Appendable output, int maxDepth)
             throws IOException {
         throw new NotImplementedException();
+    }
+
+    @Override
+    public Iterator<IStrategoTerm> iterator() {
+        return wrappee.iterator();
     }
 
 }

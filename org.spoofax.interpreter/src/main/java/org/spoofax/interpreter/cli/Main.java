@@ -176,6 +176,9 @@ public class Main {
 						e.printStackTrace(out);
 						out.println(e.getClass());
 					}
+				} catch (InterruptedException e) {
+					e.printStackTrace(out);
+					out.println(e.getClass());
 				} finally {
 					intp.setCurrent(old);
 					out.flush();
