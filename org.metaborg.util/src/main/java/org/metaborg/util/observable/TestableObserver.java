@@ -38,6 +38,11 @@ public class TestableObserver<T> implements ITestableObserver<T> {
     }
 
     @Override
+    public int size() {
+        return notifications.size();
+    }
+
+    @Override
     public void clear() {
         notifications.clear();
     }
