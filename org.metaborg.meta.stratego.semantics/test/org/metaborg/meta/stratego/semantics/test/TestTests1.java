@@ -52,7 +52,7 @@ public class TestTests1 {
 		// @formatter:on
 
 		int firstTest = 10;
-		int lastTest = 116;
+		int lastTest = 115;
 
 		for (int i = firstTest; i <= lastTest; i++) {
 			if (!skips.contains(i)) {
