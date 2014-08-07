@@ -97,19 +97,55 @@ rules
   
 signature
 
-  native-operators
-    primCall : IC * String * List(Strategy) * List(T) * T -> Value
+  native-constructors
+    primCall : String * List(Thunk) * List(T) -> Term
 
 rules // primitives
 
-  T t, IC ic |- PrimT(name, ass, ats) --> v
+  IC ic, VEnv e, SEnv d |- PrimT(sname, ass, ats) --> v
   where
-    bl(ats) -blds-> BSS(ats_aterms),
-    primCall(ic, name, ass, ats_aterms, t) => v // implement in Java
-  
+    VEnv e |- bl(ats) -blds-> BSS(ats'),
+    mkThunks(ass) -thunks-> thunks,
+    primCall(sname, thunks, ats') --> v
+    
   T t, IC ic |- PrimT(name, ass, ats) --> F()
   where
     all-fail
+
+signature
+  internal-sorts
+    Thunker
+
+  internal-constructors
+    mkThunk  : Strategy -> Thunker
+    mkThunks : List(Strategy) -> Thunker
+
+  native-operators
+    asListOfThunks : List(Term) -> List(Thunk)
+
+  arrows
+    Thunker -thunks-> List(Thunk)
+    Thunker -thunk-> Thunk
+
+rules
+
+  mkThunks([]) -thunks-> asListOfThunks([])
+  
+  mkThunks([as | ass]) -thunks-> [as' | ass']
+  where
+    mkThunk(as) -thunk-> as',
+    mkThunks(ass) -thunks-> ass'
+
+  VEnv e, SEnv d |- mkThunk(s) -thunk-> thunk
+  where
+    s => CallT(SVar(tgt), ass, ats),
+    SLookup(d, tgt) -slook-> SLookupResult(d', thunk),
+    thunk => Thunk(tgt', fss, fts, sactual, e_tgt, d_tgt)
+  
+  VEnv e, SEnv d |- mkThunk(s) -thunk-> Thunk(x, [], [], s, e, d)
+  where
+    s =!=> CallT(SVar(tgt), ass, ats),
+    createAnonymousName("lifted") => x
 
 rules // dynamic call
   

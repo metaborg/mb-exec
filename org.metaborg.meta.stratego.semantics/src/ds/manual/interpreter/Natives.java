@@ -24,6 +24,7 @@ import ds.generated.interpreter.F_0;
 import ds.generated.interpreter.I_Node;
 import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.I_Strategy;
+import ds.generated.interpreter.I_Thunk;
 import ds.generated.interpreter.S_1;
 
 public class Natives {
@@ -76,24 +77,24 @@ public class Natives {
 		return (IStrategoTuple) t;
 	}
 
-	public static AValue primCall_5(AutoInterpInteropContext context,
-			String name, INodeList<I_Strategy> ass,
-			INodeList<IStrategoTerm> ats_aterms, IStrategoTerm t) {
-		AbstractPrimitive prim = context.lookupOperator(name);
-		try {
-			context.setCurrent(t);
-			boolean result = prim.call(context, new Strategy[0],
-					List2TARRAY_1(ats_aterms));
-			if (result) {
-				return new S_1(context.current());
-			} else {
-				return new F_0();
-			}
-		} catch (InterpreterException e) {
-			throw new org.metaborg.meta.interpreter.framework.InterpreterException(
-					"Primitive application failed", e);
-		}
-	}
+	// public static AValue primCall_5(AutoInterpInteropContext context,
+	// String name, INodeList<I_Strategy> ass,
+	// INodeList<IStrategoTerm> ats_aterms, IStrategoTerm t) {
+	// AbstractPrimitive prim = context.lookupOperator(name);
+	// try {
+	// context.setCurrent(t);
+	// boolean result = prim.call(context, new Strategy[0],
+	// List2TARRAY_1(ats_aterms));
+	// if (result) {
+	// return new S_1(context.current());
+	// } else {
+	// return new F_0();
+	// }
+	// } catch (InterpreterException e) {
+	// throw new org.metaborg.meta.interpreter.framework.InterpreterException(
+	// "Primitive application failed", e);
+	// }
+	// }
 
 	public static IStrategoTerm importTerm_2(AutoInterpInteropContext context,
 			String p) {
@@ -199,6 +200,11 @@ public class Natives {
 
 	public static double parseReal_1(String s) {
 		return Double.parseDouble(s);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static INodeList<I_Thunk> asListOfThunks_1(INodeList<?> l) {
+		return (INodeList<I_Thunk>) l;
 	}
 
 }
