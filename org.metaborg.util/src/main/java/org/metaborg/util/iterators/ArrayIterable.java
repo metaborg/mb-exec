@@ -9,8 +9,7 @@ public class ArrayIterable<T> implements Iterable<T> {
         this.array = array;
     }
 
-    @Override
-    public Iterator<T> iterator() {
+    @Override public Iterator<T> iterator() {
         return new ArrayIterator<T>(array);
     }
 }

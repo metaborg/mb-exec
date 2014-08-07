@@ -12,13 +12,11 @@ final public class SingletonIterator<T> extends UnmodifiableIterator<T> {
         this.value = value;
     }
 
-    @Override
-    public boolean hasNext() {
+    @Override public boolean hasNext() {
         return !done;
     }
 
-    @Override
-    public T next() {
+    @Override public T next() {
         if(done) {
             throw new NoSuchElementException();
         }

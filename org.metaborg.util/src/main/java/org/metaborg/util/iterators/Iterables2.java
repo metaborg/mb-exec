@@ -9,8 +9,7 @@ public final class Iterables2 {
         return new SingletonIterable<T>(t);
     }
 
-    @SafeVarargs
-    public static <T> Iterable<T> from(T... array) {
+    @SafeVarargs public static <T> Iterable<T> from(T... array) {
         return new ArrayIterable<T>(array);
     }
 }

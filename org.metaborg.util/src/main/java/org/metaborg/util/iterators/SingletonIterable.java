@@ -9,13 +9,11 @@ final public class SingletonIterable<T> implements Iterable<T> {
         this.value = value;
     }
 
-    @Override
-    public Iterator<T> iterator() {
+    @Override public Iterator<T> iterator() {
         return new SingletonIterator<T>(value);
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return value.toString();
     }
 }

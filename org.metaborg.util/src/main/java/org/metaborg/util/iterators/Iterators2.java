@@ -7,8 +7,7 @@ public final class Iterators2 {
         return new SingletonIterator<T>(t);
     }
 
-    @SafeVarargs
-    public static <T> Iterator<T> from(T... array) {
+    @SafeVarargs public static <T> Iterator<T> from(T... array) {
         return new ArrayIterator<T>(array);
     }
 }
