@@ -77,7 +77,7 @@ public class AutoInterpInteropContext implements IContext {
 
 	@Override
 	public StackTracer getStackTracer() {
-		throw new UnsupportedOperationException();
+		return new StackTracer();
 	}
 
 	@Override
