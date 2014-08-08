@@ -8,9 +8,11 @@ final public class SingletonIterator<T> extends UnmodifiableIterator<T> {
     private final T value;
     private boolean done;
 
+
     public SingletonIterator(T value) {
         this.value = value;
     }
+
 
     @Override public boolean hasNext() {
         return !done;
