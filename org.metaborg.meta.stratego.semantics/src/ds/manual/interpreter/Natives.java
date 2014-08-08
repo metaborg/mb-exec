@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeList;
 import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.StackTracer;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
@@ -205,6 +206,16 @@ public class Natives {
 	@SuppressWarnings("unchecked")
 	public static INodeList<I_Thunk> asListOfThunks_1(INodeList<?> l) {
 		return (INodeList<I_Thunk>) l;
+	}
+
+	public static boolean popOnFailure_1(StackTracer t) {
+		t.popOnFailure();
+		return true;
+	}
+
+	public static boolean popOnSuccess_1(StackTracer t) {
+		t.popOnSuccess();
+		return true;
 	}
 
 }

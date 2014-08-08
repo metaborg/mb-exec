@@ -5,6 +5,7 @@ import org.metaborg.meta.interpreter.framework.Children;
 import org.metaborg.meta.interpreter.framework.INodeList;
 import org.metaborg.meta.interpreter.framework.INodeSource;
 import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.StackTracer;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -40,25 +41,27 @@ public class primCall_3 extends NoOpNode {
 	@Override
 	public default_Result exec_default(PersistentMap<Object, Object> _1,
 			PersistentMap<Object, Object> _2, AutoInterpInteropContext ctx,
-			ITermFactory _4, IStrategoTerm ct, SState sheap, boolean _7,
-			VState vheap) {
+			ITermFactory _4, IStrategoTerm ct, StackTracer stacktracer,
+			SState sheap, boolean _7, VState vheap) {
 		AbstractPrimitive prim = ctx.lookupOperator(name);
 		ctx.setCurrent(ct);
 		Strategy[] sargs = new Strategy[thunks.size()];
 
 		int i = 0;
 		for (I_Thunk thunk : thunks) {
-			sargs[i] = new InteropStrategy((Thunk_6) thunk, sheap, vheap);
+			sargs[i] = new InteropStrategy((Thunk_6) thunk, stacktracer, sheap,
+					vheap);
 			i++;
 		}
 		try {
 			boolean result = prim
 					.call(ctx, sargs, Natives.List2TARRAY_1(targs));
 			if (result) {
-				return new default_Result(new S_1(ctx.current()), sheap, _7,
-						vheap);
+				return new default_Result(new S_1(ctx.current()), stacktracer,
+						sheap, _7, vheap);
 			} else {
-				return new default_Result(new F_0(), sheap, _7, vheap);
+				return new default_Result(new F_0(), stacktracer, sheap, _7,
+						vheap);
 			}
 		} catch (InterpreterException e) {
 			throw new org.metaborg.meta.interpreter.framework.InterpreterException(

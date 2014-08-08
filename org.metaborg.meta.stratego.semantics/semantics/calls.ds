@@ -7,6 +7,7 @@ imports
   build
   aterm
   state
+  tracing
   
 rules // calls
 
@@ -17,7 +18,7 @@ rules // calls
     VEnv e |- bl(ats) -blds-> BSS(ats'), // build term arguments     
     VEnv e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments
     VEnv e, SEnv d |- bindsvars(fss, ass, d_def) -bindsvars-> d_call, // bind strategy arguments
-    VEnv e_call, SEnv d_call |- s --> v // do the call
+    VEnv e_call, SEnv d_call |- tracing(sname, s) --> v // do the call while tracing
       
   VEnv e, SEnv d |- CallT(dc1, dc2, dc3) --> F()
   where

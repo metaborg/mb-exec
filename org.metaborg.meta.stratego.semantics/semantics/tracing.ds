@@ -1,0 +1,54 @@
+module tracing
+
+imports
+  base
+  shared
+  stratego-signatures
+
+signature
+  native-datatypes
+    "org.spoofax.interpreter.core.StackTracer" as Trace {
+      push : String -> Term
+      // popOnFailure : -> Term
+      // popOnSuccess : -> Term
+    }
+  
+  internal-sorts
+    TraceOp
+  
+  internal-constructors
+    tracing : String * Strategy -> Term
+    pushTrace : String -> TraceOp
+    popTrace : Value -> TraceOp
+  
+  arrows
+    TraceOp -trace-> Bool
+  
+  native-operators
+    popOnFailure : Trace -> Bool
+    popOnSuccess : Trace -> Bool
+
+rules
+  
+  tracing(name, s) --> v
+  where
+    pushTrace(name) -trace-> bpush,
+    s --> v,
+    popTrace(v) -trace-> bpop
+  
+  (pushTrace(name), Trace t) -trace-> (b, Trace t)
+  where
+    true => b
+  
+  (popTrace(v), Trace t) -trace-> (b, Trace t)
+  where
+    v => F(),
+    popOnFailure(t) => bpop,
+    true => b
+  
+  (popTrace(v), Trace t) -trace-> (b, Trace t)
+  where
+    v => S(aterm),
+    popOnSuccess(t) => bpop,
+    true => b
+

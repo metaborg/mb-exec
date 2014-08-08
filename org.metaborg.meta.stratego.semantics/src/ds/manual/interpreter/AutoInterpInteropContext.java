@@ -26,13 +26,13 @@ import org.spoofax.interpreter.terms.ITermFactory;
  */
 public class AutoInterpInteropContext implements IContext {
 	private ITermFactory termFactory;
-
 	private Map<String, IOperatorRegistry> registries;
-
+	private StackTracer stacktracer;
 	private IStrategoTerm ct;
 
 	public AutoInterpInteropContext() {
 		registries = new HashMap<>();
+		stacktracer = new StackTracer();
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class AutoInterpInteropContext implements IContext {
 
 	@Override
 	public StackTracer getStackTracer() {
-		return new StackTracer();
+		return stacktracer;
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class AutoInterpInteropContext implements IContext {
 				return t;
 		}
 		throw new org.metaborg.meta.interpreter.framework.InterpreterException(
-				"Primitive " + primName + " cannot be found");
+				"Operator " + primName + " not found");
 	}
 
 	@Override

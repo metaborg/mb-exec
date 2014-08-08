@@ -104,7 +104,7 @@ public class StrategoCoreInterpreter {
 		CallT_3 mainCall = new CallT_3(null, new SVar_1(null, sname),
 				NodeList.NIL(I_Strategy.class), NodeList.NIL(I_STerm.class));
 		AValue result = mainCall.exec_default(senv, PersistentTreeMap.EMPTY,
-				context, termFactory, currentTerm, sheap, false, new VState()).value;
+				context, termFactory, currentTerm, context.getStackTracer(), sheap, false, new VState()).value;
 		if (result instanceof F_0) {
 			throw new StrategoErrorExit("Strategy failed");
 		} else {

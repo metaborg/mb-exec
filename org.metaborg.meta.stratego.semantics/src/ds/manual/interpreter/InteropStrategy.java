@@ -3,6 +3,7 @@ package ds.manual.interpreter;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.StackTracer;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.stratego.StupidFormatter;
 
@@ -19,9 +20,12 @@ public class InteropStrategy extends Strategy {
 	private Thunk_6 thunk;
 	private SState sheap;
 	private VState vheap;
+	private StackTracer stacktracer;
 
-	public InteropStrategy(Thunk_6 thunk, SState sheap, VState vheap) {
+	public InteropStrategy(Thunk_6 thunk, StackTracer stacktracer,
+			SState sheap, VState vheap) {
 		this.thunk = thunk;
+		this.stacktracer = stacktracer;
 		this.sheap = sheap;
 		this.vheap = vheap;
 	}
@@ -34,7 +38,7 @@ public class InteropStrategy extends Strategy {
 
 		default_Result result = s.exec_default(venv, senv,
 				(AutoInterpInteropContext) e, e.getFactory(), e.current(),
-				sheap, false, vheap);
+				stacktracer, sheap, false, vheap);
 
 		if (result.value instanceof F_0) {
 			return getHook().pop().onFailure(e);
