@@ -4,6 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>org.spoofax.interpreter.library.java</artifactId>
 	<packaging>jar</packaging>
+	<description>Java reflection and IO primitives for the Stratego runtime</description>
+	<url>https://github.com/metaborg/mb-exec</url>
 
 	<parent>
 		<groupId>org.metaborg</groupId>
@@ -42,4 +44,13 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<developers>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:metaborg/mb-exec.git</connection>
+		<developerConnection>scm:git:git@github.com:metaborg/mb-exec.git</developerConnection>
+		<url>https://github.com/metaborg/mb-exec</url>
+	</scm>
 </project>

@@ -4,6 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>org.spoofax.interpreter</artifactId>
 	<packaging>jar</packaging>
+	<description>Stratego interpreter</description>
+	<url>https://github.com/metaborg/mb-exec</url>
 
 	<parent>
 		<groupId>org.metaborg</groupId>
@@ -57,4 +59,13 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<developers>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:metaborg/mb-exec.git</connection>
+		<developerConnection>scm:git:git@github.com:metaborg/mb-exec.git</developerConnection>
+		<url>https://github.com/metaborg/mb-exec</url>
+	</scm>
 </project>
