@@ -4,6 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>org.spoofax.interpreter.adapter.ecj</artifactId>
 	<packaging>eclipse-plugin</packaging>
+	<description>ECJ terms to Spoofax terms adapter</description>
+	<url>https://github.com/metaborg/mb-exec</url>
 
 	<parent>
 		<groupId>org.metaborg</groupId>
@@ -11,4 +13,13 @@
 		<version>1.2.0-SNAPSHOT</version>
 		<relativePath>../../spoofax-deploy/org.metaborg.maven.parent.plugin</relativePath>
 	</parent>
+
+	<developers>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:metaborg/mb-exec.git</connection>
+		<developerConnection>scm:git:git@github.com:metaborg/mb-exec.git</developerConnection>
+		<url>https://github.com/metaborg/mb-exec</url>
+	</scm>
 </project>
