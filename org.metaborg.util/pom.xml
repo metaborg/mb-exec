@@ -2,6 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>org.metaborg.util</artifactId>
+	<description>MetaBorg utility library</description>
+	<url>https://github.com/metaborg/mb-exec</url>
 
 	<parent>
 		<groupId>org.metaborg</groupId>
@@ -38,4 +40,19 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<developers>
+		<developer>
+			<name>Gabriël Konat</name>
+			<email>g.d.p.konat@tudelft.nl</email>
+			<organization>Delft University of Technology</organization>
+			<organizationUrl>http://www.ewi.tudelft.nl/en</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:metaborg/mb-exec.git</connection>
+		<developerConnection>scm:git:git@github.com:metaborg/mb-exec.git</developerConnection>
+		<url>https://github.com/metaborg/mb-exec</url>
+	</scm>
 </project>
