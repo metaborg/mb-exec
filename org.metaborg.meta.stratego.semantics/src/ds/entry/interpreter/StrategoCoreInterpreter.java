@@ -9,6 +9,7 @@ import java.io.InputStream;
 import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeSource;
 import org.metaborg.meta.interpreter.framework.ImploderNodeSource;
+import org.metaborg.meta.interpreter.framework.InterpreterExitException;
 import org.metaborg.meta.interpreter.framework.NodeList;
 import org.metaborg.meta.interpreter.framework.NodeUtils;
 import org.spoofax.interpreter.library.IOperatorRegistry;
@@ -103,8 +104,16 @@ public class StrategoCoreInterpreter {
 	public void invoke(String sname) throws StrategoErrorExit {
 		CallT_3 mainCall = new CallT_3(null, new SVar_1(null, sname),
 				NodeList.NIL(I_Strategy.class), NodeList.NIL(I_STerm.class));
-		AValue result = mainCall.exec_default(senv, PersistentTreeMap.EMPTY,
-				context, termFactory, currentTerm, context.getStackTracer(), sheap, false, new VState()).value;
+		AValue result = null;
+		try {
+			result = mainCall.exec_default(senv, PersistentTreeMap.EMPTY,
+					context, termFactory, currentTerm,
+					context.getStackTracer(), sheap, false, new VState()).value;
+		} catch (InterpreterExitException e) {
+			System.out.println("Exit ....");
+			context.getStackTracer().printStackTrace(System.err, false);
+			return;
+		}
 		if (result instanceof F_0) {
 			throw new StrategoErrorExit("Strategy failed");
 		} else {

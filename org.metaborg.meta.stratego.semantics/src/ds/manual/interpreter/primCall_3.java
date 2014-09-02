@@ -4,7 +4,9 @@ import org.metaborg.meta.interpreter.framework.Child;
 import org.metaborg.meta.interpreter.framework.Children;
 import org.metaborg.meta.interpreter.framework.INodeList;
 import org.metaborg.meta.interpreter.framework.INodeSource;
+import org.metaborg.meta.interpreter.framework.InterpreterExitException;
 import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.InterpreterExit;
 import org.spoofax.interpreter.core.StackTracer;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -63,6 +65,8 @@ public class primCall_3 extends NoOpNode {
 				return new default_Result(new F_0(), stacktracer, sheap, _7,
 						vheap);
 			}
+		} catch (InterpreterExit e) {
+			throw new InterpreterExitException("Exit ... ");
 		} catch (InterpreterException e) {
 			throw new org.metaborg.meta.interpreter.framework.InterpreterException(
 					"Primitive application failed", e);

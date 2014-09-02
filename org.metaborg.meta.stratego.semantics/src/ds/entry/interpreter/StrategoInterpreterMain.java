@@ -7,7 +7,7 @@ import org.spoofax.terms.TermFactory;
 
 public class StrategoInterpreterMain {
 
-	private static final int numRuns = 50;
+	private static final int numRuns = 1;
 
 	public static void main(String[] args) throws IOException {
 		System.out.println("Preping interpreter");
