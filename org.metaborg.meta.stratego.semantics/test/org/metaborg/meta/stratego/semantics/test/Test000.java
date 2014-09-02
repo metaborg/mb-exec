@@ -6,9 +6,8 @@ import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.metaborg.meta.stratego.semantics.StrategoCoreInterpreter;
 import org.spoofax.terms.TermFactory;
-
-import ds.entry.interpreter.StrategoCoreInterpreter;
 
 public class Test000 {
 

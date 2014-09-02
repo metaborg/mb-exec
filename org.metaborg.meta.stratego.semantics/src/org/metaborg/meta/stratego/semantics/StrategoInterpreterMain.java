@@ -1,4 +1,4 @@
-package ds.entry.interpreter;
+package org.metaborg.meta.stratego.semantics;
 
 import java.io.FileInputStream;
 import java.io.IOException;

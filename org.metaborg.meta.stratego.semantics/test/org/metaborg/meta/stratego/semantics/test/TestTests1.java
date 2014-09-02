@@ -12,10 +12,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.metaborg.meta.stratego.semantics.StrategoCoreInterpreter;
 import org.spoofax.terms.TermFactory;
 import org.strategoxt.lang.StrategoErrorExit;
-
-import ds.entry.interpreter.StrategoCoreInterpreter;
 
 @RunWith(Parameterized.class)
 public class TestTests1 {

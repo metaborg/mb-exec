@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ds.entry.interpreter;
+package org.metaborg.meta.stratego.semantics;
 
 import java.io.IOException;
 import java.io.InputStream;
