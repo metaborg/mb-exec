@@ -85,7 +85,11 @@ public class StrategoCoreInterpreter {
 		INodeSource ctreeSource = ctree.getAttachment(ImploderAttachment.TYPE) != null ? new ImploderNodeSource(
 				ctree.getAttachment(ImploderAttachment.TYPE)) : null;
 		I_Module ctreeNode = new Generic_Module(ctreeSource, ctree);
+		
+		
 		ctreeNode = (I_Module) NodeUtils.eagerReplacement(ctreeNode);
+		
+		
 		allocmodule_Result sdefs_result = new allocModule_1(ctreeSource,
 				ctreeNode).exec_allocmodule(PersistentTreeMap.EMPTY, senv,
 				sheap);
