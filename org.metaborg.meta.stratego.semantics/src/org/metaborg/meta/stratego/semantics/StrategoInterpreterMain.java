@@ -39,8 +39,6 @@ public class StrategoInterpreterMain {
 			long et = System.currentTimeMillis();
 			System.out.println("Execution duration: " + (et - st)
 					/ (double) 1000);
-			System.out.println("Sleeping a bit");
-			Thread.sleep(20000);
 		}
 		System.out.println("Completed with: " + interpreter.getCurrentTerm());
 	}

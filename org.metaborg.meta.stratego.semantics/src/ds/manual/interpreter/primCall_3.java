@@ -17,6 +17,7 @@ import com.github.krukow.clj_ds.PersistentMap;
 
 import ds.generated.interpreter.F_0;
 import ds.generated.interpreter.I_Thunk;
+import ds.generated.interpreter.NoOpNode;
 import ds.generated.interpreter.S_1;
 import ds.generated.interpreter.Thunk_6;
 import ds.generated.interpreter.default_Result;
