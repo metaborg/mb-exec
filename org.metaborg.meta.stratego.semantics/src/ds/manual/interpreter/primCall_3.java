@@ -37,7 +37,7 @@ public class primCall_3 extends NoOpNode {
 			INodeList<I_Thunk> thunks, INodeList<IStrategoTerm> ats_) {
 		this.setSourceInfo(sourceInfo);
 		this.name = sname;
-		this.thunks = adoptChild(thunks);
+		this.thunks = adoptChildren(thunks);
 		this.targs = ats_;
 	}
 

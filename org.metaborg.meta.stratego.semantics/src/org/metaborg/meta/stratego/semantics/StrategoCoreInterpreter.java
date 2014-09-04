@@ -84,10 +84,9 @@ public class StrategoCoreInterpreter {
 	public void loadCTree(IStrategoTerm ctree) {
 		INodeSource ctreeSource = ctree.getAttachment(ImploderAttachment.TYPE) != null ? new ImploderNodeSource(
 				ctree.getAttachment(ImploderAttachment.TYPE)) : null;
-		I_Module ctreeNode = new Generic_Module(ctreeSource, ctree);
+		I_Module ctreeNode = (I_Module) new Generic_Module(ctreeSource, ctree).specialize(1);
 		
-		
-		ctreeNode = (I_Module) NodeUtils.eagerReplacement(ctreeNode);
+//		ctreeNode = (I_Module) NodeUtils.eagerReplacement(ctreeNode);
 		
 		
 		allocmodule_Result sdefs_result = new allocModule_1(ctreeSource,
