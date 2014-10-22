@@ -1,0 +1,1 @@
+Specification([Signature([Constructors([OpDecl("Fred",FunType([ConstType(Sort("String",[]))],ConstType(Sort("Fred",[])))),ExtOpDecl("Nil",ConstType(Sort("List",[SortVar("a")])))])]),Strategies([SDefT("main_0_0",[],[],Build(Anno(Op("Fred",[Anno(Str("test"),Op("Nil",[]))]),Op("Nil",[]))))])])

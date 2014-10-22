@@ -1,0 +1,1 @@
+Specification([Signature([Constructors([ExtOpDecl("Nil",ConstType(Sort("List",[SortVar("a")])))])]),Strategies([SDefT("main_0_0",[],[],Seq(ImportTerm("./Java-15.tbl"),Seq(Match(Anno(Explode(Anno(Str("parse-table"),Wld),Wld),Wld)),Build(Anno(Str("ok"),Op("Nil",[]))))))])])

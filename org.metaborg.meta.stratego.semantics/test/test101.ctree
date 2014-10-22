@@ -1,0 +1,1 @@
+Specification([Signature([Constructors([])]),Strategies([SDefT("main_0_0",[],[],CallT(SVar("toplevel_0_0"),[],[])),SDefT("toplevel_0_0",[],[],Let([SDefT("m_0",[],[],All(CallT(SVar("n_0"),[],[]))),SDefT("n_0",[],[],All(CallT(SVar("n_0"),[],[])))],CallT(SVar("m_0"),[],[])))])])

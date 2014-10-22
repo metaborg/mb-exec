@@ -1,0 +1,1 @@
+Specification([Signature([Constructors([])]),Strategies([SDefT("main_0_0",[],[],CallT(SVar("a_0_0"),[],[])),SDefT("a_0_0",[],[],GuardedLChoice(CallT(SVar("b_0_0"),[],[]),Id,Id)),SDefT("b_0_0",[],[],Scope(["i_0"],Match(Var("i_0"))))])])

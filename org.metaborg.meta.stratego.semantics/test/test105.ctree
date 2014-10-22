@@ -1,0 +1,1 @@
+Specification([Signature([Constructors([OpDecl("Nil",ConstType(Sort("List",[SortVar("a")])))])]),Strategies([SDefT("main_0_0",[],[],Scope(["m_0","n_0"],Seq(Match(Var("n_0")),Seq(Build(Anno(Str("test108: "),Op("Nil",[]))),Seq(Match(Var("m_0")),Seq(Build(Var("n_0")),CallT(SVar("dbg_0_1"),[],[Var("m_0")]))))))),ExtSDef("dbg_0_1",[],[VarDec("z_0",ConstType(Sort("ATerm",[])))])])])

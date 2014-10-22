@@ -1,0 +1,1 @@
+Specification([Signature([Constructors([OpDecl("Nil",ConstType(Sort("List",[SortVar("a")])))])]),Strategies([SDefT("main_0_0",[],[],Scope(["b_7","c_7"],Seq(Build(Anno(Op("Nil",[]),Op("Nil",[]))),Seq(Match(Var("c_7")),Seq(Match(Var("b_7")),Seq(Build(Var("c_7")),Build(Anno(Explode(Anno(Str(""),Op("Nil",[])),Var("b_7")),Op("Nil",[])))))))))])])

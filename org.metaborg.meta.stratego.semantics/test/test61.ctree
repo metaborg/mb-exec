@@ -1,0 +1,1 @@
+Specification([Signature([Constructors([OpDecl("Nil",ConstType(Sort("List",[SortVar("a")]))),OpDecl("Cons",ConstType(Sort("Term",[])))])]),Strategies([SDefT("main_0_0",[],[],Seq(Build(Anno(Op("Cons",[]),Op("Nil",[]))),Seq(CallT(SVar("Cons_0_0"),[],[]),Match(Anno(Op("Cons",[]),Wld))))),SDefT("Cons_0_0",[],[],Match(Anno(Op("Cons",[]),Wld)))])])
