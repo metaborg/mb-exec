@@ -17,7 +17,6 @@ import java.util.TreeSet;
 import jline.ANSIBuffer;
 import jline.ConsoleReader;
 
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.ConcreteInterpreter;
 import org.spoofax.interpreter.core.InterpreterErrorExit;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -35,6 +34,7 @@ import org.spoofax.jsglr.client.ParseException;
 import org.spoofax.jsglr.shared.BadTokenException;
 import org.spoofax.jsglr.shared.SGLRException;
 import org.spoofax.jsglr.shared.TokenExpectedException;
+import org.spoofax.terms.util.NotImplementedException;
 
 public class Main {
 

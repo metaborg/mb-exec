@@ -9,7 +9,6 @@ package org.spoofax.interpreter.core;
 
 import java.util.Collection;
 
-import org.spoofax.IAsyncCancellable;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.stratego.Match.Results;
@@ -17,6 +16,7 @@ import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.interpreter.util.IAsyncCancellable;
 
 public interface IContext extends IAsyncCancellable {
 

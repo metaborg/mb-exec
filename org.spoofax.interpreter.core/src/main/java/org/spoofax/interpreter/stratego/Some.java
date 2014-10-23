@@ -9,7 +9,6 @@ package org.spoofax.interpreter.stratego;
 
 import static org.spoofax.interpreter.stratego.All.isCopy;
 
-import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -17,6 +16,7 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
+import org.spoofax.interpreter.util.DebugUtil;
 
 public class Some extends Strategy {
 

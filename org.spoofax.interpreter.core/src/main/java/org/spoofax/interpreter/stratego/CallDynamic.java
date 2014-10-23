@@ -1,12 +1,12 @@
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.util.DebugUtil;
 
 /**
  * Performs a dynamic call to a strategy. Evaluation is done by computing the

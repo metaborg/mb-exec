@@ -6,6 +6,7 @@ Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: Spoofax.org
 Require-Bundle: org.eclipse.ui,
  org.spoofax.interpreter.core,
- org.junit
+ org.junit,
+ org.spoofax.terms
 Export-Package: org.spoofax.interpreter.library.eclipse
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

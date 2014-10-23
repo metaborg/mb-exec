@@ -26,8 +26,6 @@ import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.InfixExpression.Operator;
 import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
-import org.spoofax.DebugUtil;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoInt;
@@ -35,9 +33,11 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
+import org.spoofax.interpreter.util.DebugUtil;
 import org.spoofax.terms.StrategoConstructor;
 import org.spoofax.terms.StrategoList;
 import org.spoofax.terms.skeleton.SkeletonTermFactory;
+import org.spoofax.terms.util.NotImplementedException;
 
 public class ECJFactory extends SkeletonTermFactory {
 

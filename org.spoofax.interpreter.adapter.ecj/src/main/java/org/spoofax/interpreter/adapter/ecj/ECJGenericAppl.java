@@ -7,13 +7,13 @@
  */
 package org.spoofax.interpreter.adapter.ecj;
 
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.attachments.ITermAttachment;
 import org.spoofax.terms.attachments.TermAttachmentType;
 import org.spoofax.terms.skeleton.SkeletonStrategoAppl;
+import org.spoofax.terms.util.NotImplementedException;
 
 public class ECJGenericAppl extends SkeletonStrategoAppl {
 
