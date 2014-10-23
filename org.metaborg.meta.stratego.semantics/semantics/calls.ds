@@ -145,7 +145,7 @@ rules
   
   VEnv e, SEnv d |- mkThunk(s) -thunk-> Thunk(x, [], [], s, e, d)
   where
-    s =!=> CallT(SVar(tgt), ass, ats),
+    s =!=> CallT(_, _, _),
     createAnonymousName("lifted") => x
 
 rules // dynamic call
