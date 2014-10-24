@@ -4,11 +4,11 @@ import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
 
 
-public class ContainsFileFilter implements FileSelector {
+public class ContainsFileSelector implements FileSelector {
     private final String contains;
 
 
-    public ContainsFileFilter(String contains) {
+    public ContainsFileSelector(String contains) {
         this.contains = contains;
     }
 
