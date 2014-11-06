@@ -6,7 +6,7 @@ public final class Arrays2 {
     public static <T> boolean addAll(Collection<T> addTo, T[] elementsToAdd) {
         boolean modified = false;
         for(T e : elementsToAdd) {
-            modified = modified || addTo.add(e);
+            modified = addTo.add(e) || modified;
         }
         return modified;
     }
