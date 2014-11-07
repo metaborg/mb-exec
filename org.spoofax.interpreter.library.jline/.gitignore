@@ -1,3 +1,5 @@
-bin
+target
+META-INF
 .cache
-build
+bin
+jline.jar
