@@ -1,10 +1,7 @@
 module aterm
 
-imports
-  base
-
 signature
-
+    
   native-datatypes
   
    "org.spoofax.interpreter.terms.IStrategoTerm" as T {

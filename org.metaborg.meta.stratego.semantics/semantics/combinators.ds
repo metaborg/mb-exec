@@ -8,7 +8,6 @@ module combinators
  *
 */
 imports
-  base
   stratego-signatures
   shared
   aterm

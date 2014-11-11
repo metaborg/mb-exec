@@ -1,7 +1,6 @@
 module match
 
 imports
-  base
   stratego-signatures
   shared
   aterm

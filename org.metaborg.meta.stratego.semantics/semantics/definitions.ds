@@ -1,7 +1,6 @@
 module definitions
 
 imports
-  base
   shared
   stratego-signatures
   state

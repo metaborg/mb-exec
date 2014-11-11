@@ -1,8 +1,5 @@
 module stratego-signatures
 
-imports
-  base
-
 signature
   
   sorts

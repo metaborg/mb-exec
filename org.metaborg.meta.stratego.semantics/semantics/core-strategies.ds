@@ -10,7 +10,6 @@ module core-strategies
  *
 */
 imports
-  base
   stratego-signatures
   aterm
   shared

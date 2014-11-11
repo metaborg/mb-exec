@@ -1,7 +1,6 @@
 module calls
 
 imports
-  base
   stratego-signatures
   shared
   build
