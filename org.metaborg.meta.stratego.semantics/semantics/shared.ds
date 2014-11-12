@@ -20,5 +20,7 @@ signature
     parseReal : String -> Real
     isQuotedString : String -> Bool
     unquoteString : String -> String
-    // booleanOr : Bool * Bool -> Bool
-    // booleanAnd : Bool * Bool -> Bool
+    length: List(STerm) -> Int
+    isEmpty: List(STerm) -> Bool
+    boolOr : Bool * Bool -> Bool
+    boolAnd : Bool * Bool -> Bool

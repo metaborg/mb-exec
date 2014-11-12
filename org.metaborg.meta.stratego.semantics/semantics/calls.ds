@@ -75,9 +75,7 @@ rules
   VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
   where
     s => CallT(SVar(tgt), ass, ats),
-    isEmpty(ass) => empty_ass,
-    isEmpty(ats) => empty_ats,
-    booleanAnd(empty_ass, empty_ats) == false,
+    boolAnd(isEmpty(ass), isEmpty(ats)) == false,
     SLookup(d, tgt) -slook-> SLookupResult(d', Thunk(tgt'', fss, fts, sactual, e_tgt, d_tgt)),
     VEnv e, SEnv d |- bl(ats) -blds-> BSS(ats'),
     VEnv e_tgt |- bindtvars(fts, ats') -bindtvars-> e_tgt',
@@ -88,14 +86,14 @@ rules
   // 3. A strategy literal body (not a call)
   VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
   where
-    s =!=> CallT(SVar(tgt), ass, ats),
+    s =!=> CallT(SVar(_), _, _),
     SPush(d_into, x, Thunk(x, [], [], s, e, d)) -salloc-> d_into',
     VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
   
 signature
 
   native-constructors
-    primCall : String * List(Thunk) * List(T) -> Term
+    primCall : String * List(Thunk) * List(T) -> Strategy
 
 rules // primitives
 
