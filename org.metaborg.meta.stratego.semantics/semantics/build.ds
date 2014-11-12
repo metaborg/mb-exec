@@ -29,9 +29,8 @@ rules // build
   where
     b(t) -bld-> BS(at),
     b(annos) -bld-> BS(annos_aterm),
-    isATermList(annos_aterm) == true,
-    asATermList(annos_aterm) => annos_aterm_list,
-    annotateTerm[tf](at, annos_aterm_list) => aterm
+    annos_aterm : TLIST,
+    annotateTerm[tf](at, annos_aterm) => aterm
   
   Build(Var(x)) --> S(t)
   where
@@ -66,8 +65,8 @@ rules // actual term building
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts), // just to make sure we cause the right side-effects
-    isATermList(ts) == true,
-    isATermInt(c) == true
+    ts : TLIST,
+    c : TINT
   
   // TODO Implode Real
   
@@ -76,18 +75,17 @@ rules // actual term building
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    isATermList(ts) == true,
-    isATermList(c) == true
+    ts : TLIST,
+    c : TLIST
   
   // Implode Tuple
   TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(tupl)
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    isATermList(ts) == true,
-    isATermString(c) == true,
-    asATermString(c) => tc,
-    stringValue[tc]() => cname,
+    ts : TLIST,
+    c : TSTR,
+    stringValue[c]() => cname,
     cname == "",
     makeTuple[tf](getAllSubterms[ts]()) => tupl
 
@@ -96,10 +94,9 @@ rules // actual term building
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    isATermList(ts) == true,
-    isATermString(c) == true,
-    asATermString(c) => tc,
-    stringValue[tc]() => cname,
+    ts : TLIST,
+    c : TSTR,
+    stringValue[c]() => cname,
     isQuotedString(cname) == true,
     unquoteString(cname) => svalue,
     makeString[tf](svalue) => s
@@ -109,13 +106,11 @@ rules // actual term building
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    isATermList(ts) == true,
-    isATermString(c) == true,
-    asATermString(c) => tc,
-    stringValue[tc]() => cname,
+    ts : TLIST,
+    c : TSTR,
+    stringValue[c]() => cname,
     isQuotedString(cname) == false,
-    asATermList(ts) => tslist,
-    makeConstructor[tf](cname, size[tslist]()) => constr,
+    makeConstructor[tf](cname, size[ts]()) => constr,
     getAllSubterms[ts]() => kids,
     makeAppl[tf](constr, kids) => appl
 
@@ -169,10 +164,10 @@ rules
     makeListCons[tf](head, tail) => list
 
   // Appl dispatch
-  TF tf |- b(Op(c@"Cons", ts)) -bld-> bv
+  TF tf |- b(op@Op("Cons", ts)) -bld-> bv
   where
     length(ts) != 2,
-    bAppl(Op(c, ts)) -bld-> bv
+    bAppl(op) -bld-> bv
   
   TF tf |- b(Op("", ts)) -bld-> BS(tup)
   where
