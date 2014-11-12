@@ -65,10 +65,7 @@ rules
   // 1. CallT without arguments
   VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
   where
-    s => CallT(SVar(tgt), ass, ats),
-    isEmpty(ass) => empty_ass,
-    isEmpty(ats) => empty_ats,
-    booleanAnd(empty_ass, empty_ats) == true,
+    s => CallT(SVar(tgt), [], []),
     SLookup(d, tgt) -slook-> SLookupResult(d', Thunk(tgt'', fss, fts, sactual, e_tgt, d_tgt)),
     SPush(d_into, x, Thunk(x, fss, fts, sactual, e_tgt, d_tgt)) -salloc-> d_into',
     VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
@@ -120,16 +117,13 @@ signature
     mkThunk  : Strategy -> Thunker
     mkThunks : List(Strategy) -> Thunker
 
-  native-operators
-    asListOfThunks : List(Term) -> List(Thunk)
-
   arrows
     Thunker -thunks-> List(Thunk)
     Thunker -thunk-> Thunk
 
 rules
 
-  mkThunks([]) -thunks-> asListOfThunks([])
+  mkThunks([]) -thunks-> []
   
   mkThunks([as | ass]) -thunks-> [as' | ass']
   where

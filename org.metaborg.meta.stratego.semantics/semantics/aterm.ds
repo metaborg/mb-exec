@@ -70,7 +70,7 @@ signature
   native-operators
     // TARRAY2List: TARRAY -> List(T)
     List2TARRAY: List(T) -> TARRAY
-    makeNil : TF -> TLIST 
+    makeNil : TF -> TLIST
     
   native-operators
   

@@ -101,7 +101,7 @@ signature
     
 rules // typedid name extractor
 
-  typedIds([]) -exid-> asNILofString([])
+  typedIds([]) -exid-> []
  
   typedIds([VarDec(x, dc) | xs]) -exid-> [ x | xs' ]
   where
@@ -109,7 +109,7 @@ rules // typedid name extractor
 
 rules // SDefT name extractor
 
-  sdefNames([]) -exid-> asNILofString([])
+  sdefNames([]) -exid-> []
   
   sdefNames([SDefT(sname, ss, ts, s) | sdefs]) -exid-> [sname | snames]
   where

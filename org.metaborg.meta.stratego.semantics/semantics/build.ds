@@ -123,7 +123,7 @@ rules // actual term building
   where
     all-fail
 
-  TF tf |- bl([]) -blds-> BSS(asNILofT([]))
+  TF tf |- bl([]) -blds-> BSS([])
 
   TF tf |- bl([texpr | texprs]) -blds-> BSS([tx | txs])
   where
@@ -141,49 +141,41 @@ signature
     
 rules
 
-  TF tf |- b(Op(c, ts)) -bld-> bv
+  TF tf |- b(op@Op("Nil", ts)) -bld-> bv
   where
-    c == "Nil",
     length(ts) == 0,
-    TF tf |- bList(Op(c, ts)) -bld-> bv
+    TF tf |- bList(op) -bld-> bv
   
   // Appl dispatch
-  TF tf |- b(Op(c, ts)) -bld-> bv
+  TF tf |- b(op@Op("Nil", ts)) -bld-> bv
   where
-    c == "Nil",
     length(ts) != 0,
-    bAppl(Op(c, ts)) -bld-> bv
+    bAppl(op) -bld-> bv
 
-  TF tf |- b(Op(c, ts)) -bld-> bv
+  TF tf |- b(op@Op("Cons", ts)) -bld-> bv
   where
-    c == "Cons",
     length(ts) == 2,
-    bList(Op(c, ts)) -bld-> bv
+    bList(op) -bld-> bv
   
-  TF tf |- bList(Op(c, ts)) -bld-> BS(nil)
+  TF tf |- bList(Op(c, [])) -bld-> BS(nil)
   where
-    ts => [],
     makeNil(tf) => nil
-  
-  TF tf |- bList(Op(c, ts)) -bld-> BS(list)
+
+  TF tf |- bList(Op(_, [t1, t2])) -bld-> BS(list)
   where
-    ts => [t1, t2],
     TF tf |- Build(t1) --> S(head),
     TF tf |- Build(t2) --> S(tail),
-    isATermList(tail) == true,
-    asATermList(tail) => tail',
-    makeListCons[tf](head, tail') => list
+    tail : TLIST,
+    makeListCons[tf](head, tail) => list
 
   // Appl dispatch
-  TF tf |- b(Op(c, ts)) -bld-> bv
+  TF tf |- b(Op(c@"Cons", ts)) -bld-> bv
   where
-    c == "Cons",
     length(ts) != 2,
     bAppl(Op(c, ts)) -bld-> bv
   
-  TF tf |- b(Op(c, ts)) -bld-> BS(tup)
+  TF tf |- b(Op("", ts)) -bld-> BS(tup)
   where
-    c == "",
     TF tf |- bl(ts) -blds-> BSS(ts'),
     List2TARRAY(ts') => ts'',
     makeTuple[tf](ts'') => tup

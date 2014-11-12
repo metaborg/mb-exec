@@ -192,76 +192,63 @@ signature
 
 rules
 
-  T t, TF tf |- m(Op(c, pts)) -ma-> mv
+  T t, TF tf |- m(op@Op("Nil", [])) -ma-> mv
   where
-    c == "Nil",
-    length(pts) == 0,
-    T t, TF tf |- mList(Op(c, pts)) -ma-> mv
+    T t, TF tf |- mList(op) -ma-> mv
   
-  T t, TF tf |- m(Op(c, pts)) -ma-> mv
+  T t, TF tf |- m(op@Op("Nil", [_|_])) -ma-> mv
   where
-    c == "Nil",
-    length(pts) != 0,
-    T t, TF tf |- mAppl(Op(c, pts)) -ma-> mv
+    T t, TF tf |- mAppl(op) -ma-> mv
   
-  T t, TF tf |- m(Op(c, pts)) -ma-> mv
+  T t, TF tf |- m(op@Op("Cons", [_, _])) -ma-> mv
   where
-    c == "Cons",
-    length(pts) == 2,
-    T t, TF tf |- mList(Op(c, pts)) -ma-> mv
+    T t, TF tf |- mList(op) -ma-> mv
   
-  T t, TF tf |- m(Op(c, pts)) -ma-> mv
+  T t, TF tf |- m(op@Op("Cons", pts)) -ma-> mv
   where
-    c == "Cons",
     length(pts) != 2,
-    T t, TF tf |- mAppl(Op(c, pts)) -ma-> mv
+    T t, TF tf |- mAppl(op) -ma-> mv
   
-  T t, TF tf |- mList(Op(c, pts)) -ma-> S(t)
+  T t, TF tf |- mList(Op(c, [])) -ma-> S(t)
   where
-    pts => [],
-    isATermList(t) == true,
-    asATermList(t) => list,
-    isEmpty[list]() == true
+    t : TLIST,
+    isEmpty[t]() == true
   
-  T t, TF tf |- mList(Op(c, pts)) -ma-> S(t)
+  T t, TF tf |- mList(Op(c, [p1, p2])) -ma-> S(t)
   where
-    pts => [p1, p2],
-    isATermList(t) == true,
-    asATermList(t) => list,
-    isEmpty[list]() == false,
-    head[list]() => head,
+    t : TLIST,
+    isEmpty[t]() == false,
+    head[t]() => head,
     T head |- Match(p1) --> S(thead),
-    tail[list]() => tail,
+    tail[t]() => tail,
     T tail |- Match(p2) --> S(ttail)
   
   T t, TF tf |- mList(dc) -ma-> F()
   where all-fail
   
-  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
+  T t, TF tf |- m(Op("", pts)) -ma-> S(t)
   where
-    c == "",
     isATermTuple(t) == true,
     asATermTuple(t) => tupl,
     getAllSubterms[tupl]() => elems,
     makeList[tf](elems) => elems',
     T elems' |- ml(pts) -ma-> S(tupl')
   
-  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
+  T t, TF tf |- m(op@Op(c, _)) -ma-> S(t)
   where
     c != "Nil",
     c != "Cons",
     c != "",
-    T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t')
+    T t, TF tf |- mAppl(op) -ma-> S(t')
      
   // match application
   T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t)
   where
-    isATermAppl(t) == true,
-    asATermAppl(t) => aappl,
-    getConstructor[aappl]() => aconstr,
+    t : TAPPL,
+    getConstructor[t]() => aconstr,
     getName[aconstr]() => c',
     c == c',
-    getAllSubterms[aappl]() => subterms,
+    getAllSubterms[t]() => subterms,
     makeList[tf](subterms) => asubterms,
     T asubterms |- ml(pts) -ma-> S(aats')
   
