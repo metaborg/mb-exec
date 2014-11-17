@@ -45,7 +45,10 @@ rules
 signature
   internal-constructors
     bindsvars: List(String) * List(Strategy) * SEnv -> Binder
-    
+  
+  native-operators
+    isEmptyStrategies: List(Strategy) -> Bool
+
   arrows
     Binder -bindsvars-> SEnv
 
@@ -75,7 +78,7 @@ rules
   VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
   where
     s => CallT(SVar(tgt), ass, ats),
-    boolAnd(isEmpty(ass), isEmpty(ats)) == false,
+    boolAnd(isEmptyStrategies(ass), isEmpty(ats)) == false,
     SLookup(d, tgt) -slook-> SLookupResult(d', Thunk(tgt'', fss, fts, sactual, e_tgt, d_tgt)),
     VEnv e, SEnv d |- bl(ats) -blds-> BSS(ats'),
     VEnv e_tgt |- bindtvars(fts, ats') -bindtvars-> e_tgt',
@@ -102,7 +105,7 @@ rules // primitives
     VEnv e |- bl(ats) -blds-> BSS(ats'),
     mkThunks(ass) -thunks-> thunks,
     primCall(sname, thunks, ats') --> v
-    
+
   T t, IC ic |- PrimT(name, ass, ats) --> F()
   where
     all-fail
