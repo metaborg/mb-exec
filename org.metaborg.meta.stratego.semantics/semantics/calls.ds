@@ -12,14 +12,14 @@ rules // calls
 
   VEnv e, SEnv d |- CallT(SVar(sname), ass, ats) --> v
   where
-    SLookup(d, sname) -slook-> SLookupResult(e', thunk),
-    thunk => Thunk(sname'', fss, fts, s, e_def, d_def),
+    SLookup(d, sname) -slook-> SLookupResult(_, thunk),
+    thunk => Thunk(_, fss, fts, s, e_def, d_def),
     VEnv e |- bl(ats) -blds-> BSS(ats'), // build term arguments     
     VEnv e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments
     VEnv e, SEnv d |- bindsvars(fss, ass, d_def) -bindsvars-> d_call, // bind strategy arguments
     VEnv e_call, SEnv d_call |- tracing(sname, s) --> v // do the call while tracing
       
-  VEnv e, SEnv d |- CallT(dc1, dc2, dc3) --> F()
+  CallT(_, _, _) --> F()
   where
     all-fail
 
@@ -63,7 +63,7 @@ rules
     We basically copy into the definition environment mappings from the call-site environmetn.
   */
 
-  VEnv e, SEnv d |- bindsvars([], [], d_into) -bindsvars-> d_into
+  bindsvars([], [], d_into) -bindsvars-> d_into
  
   // 1. CallT without arguments
   VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''

@@ -36,7 +36,7 @@ rules // build
   where
     b(Var(x)) -bld-> BS(t)
   
-  Build(e) --> F()
+  Build(_) --> F()
   where
     all-fail
 
@@ -44,7 +44,7 @@ rules // actual term building
 
   VEnv e |- b(Var(x)) -bld-> BS(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', S(t))
+    VLookup(e, x) -vlook-> VLookupResult(_, S(t))
       
   TF tf |- b(Int(stringI)) -bld-> BS(aint)
   where
@@ -61,7 +61,7 @@ rules // actual term building
     makeString[tf](s) => astr
   
   // Implode Int
-  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(c)
+  b(Explode(cname_expr, ts_expr)) -bld-> BS(c)
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts), // just to make sure we cause the right side-effects
@@ -71,7 +71,7 @@ rules // actual term building
   // TODO Implode Real
   
   // Implode List
-  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(ts)
+  b(Explode(cname_expr, ts_expr)) -bld-> BS(ts)
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
