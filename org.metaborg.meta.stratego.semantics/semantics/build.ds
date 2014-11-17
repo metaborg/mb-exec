@@ -114,7 +114,7 @@ rules // actual term building
     getAllSubterms[ts]() => kids,
     makeAppl[tf](constr, kids) => appl
 
-  TF tf |- b(x) -bld-> BF()
+  b(_) -bld-> BF()
   where
     all-fail
 
