@@ -181,8 +181,10 @@ rules // term traversal: one
   where
     t : TLIST,
     isEmpty[t]() == false,
-    T head[t]() |- s --> S(th'),
-    makeListCons[tf](th', tail[t]()) => t'
+    head[t]() => th,
+    tail[t]() => tl,
+    T th |- s --> S(th'),
+    makeListCons[tf](th', tl) => t'
   
   // non-empty head failure
   T t, TF tf |- first(s) -first-> S(t')
