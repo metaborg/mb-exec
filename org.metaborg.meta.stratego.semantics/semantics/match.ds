@@ -200,8 +200,9 @@ rules
   where
     T t, TF tf |- mAppl(op) -ma-> mv
   
-  T t, TF tf |- m(op@Op("Cons", [_, _])) -ma-> mv
+  T t, TF tf |- m(op@Op("Cons", pts)) -ma-> mv
   where
+    length(pts) == 2,
     T t, TF tf |- mList(op) -ma-> mv
   
   T t, TF tf |- m(op@Op("Cons", pts)) -ma-> mv
