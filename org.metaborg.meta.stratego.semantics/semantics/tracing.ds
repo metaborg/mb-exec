@@ -30,11 +30,11 @@ rules
   
   tracing(name, s) --> v
   where
-    pushTrace(name) -trace-> bpush,
+    pushTrace(name) -trace-> _,
     s --> v,
-    popTrace(v) -trace-> bpop
+    popTrace(v) -trace-> _
   
-  (pushTrace(name), Trace t) -trace-> (true, Trace t)
+  (pushTrace(_), Trace t) -trace-> (true, Trace t)
   
   (popTrace(v), Trace t) -trace-> (true, Trace t)
   where
@@ -43,6 +43,6 @@ rules
   
   (popTrace(v), Trace t) -trace-> (true, Trace t)
   where
-    v => S(aterm),
+    v => S(_),
     popOnSuccess(t) => bpop
 

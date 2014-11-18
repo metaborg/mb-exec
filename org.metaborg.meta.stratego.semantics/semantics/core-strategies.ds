@@ -54,17 +54,17 @@ signature
 rules // term traversal: all
 
   // <all> 42
-  T t |- All(s) --> S(t)
+  T t |- All(_) --> S(t)
   where
     t : TINT
 
   // <all> "4.5"
-  T t |- All(s) --> S(t)
+  T t |- All(_) --> S(t)
   where
     t : TREAL
   
   // <all> "string"
-  T t |- All(s) --> S(t)
+  T t |- All(_) --> S(t)
   where
     t : TSTR
   
@@ -100,11 +100,11 @@ rules // term traversal: all
     makeAppl[tf](ac, ts') => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over the old annotations
 
-  All(s) --> F()
+  All(_) --> F()
   where
     all-fail
 
-  T t, TF tf |- map(s) -map-> S(t)
+  T t |- map(_) -map-> S(t)
   where
     t : TLIST,
     isEmpty[t]() == true
@@ -120,7 +120,7 @@ rules // term traversal: all
     ts' : TLIST,
     makeListCons[tf](th', ts') => ts''
 
-  map(s) -map-> F()
+  map(_) -map-> F()
   where
     all-fail
 
@@ -167,11 +167,11 @@ rules // term traversal: one
     makeAppl[tf](ac, ts') => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
   
-  One(s) --> F()
+  One(_) --> F()
   where all-fail
   
   // empty candidate list
-  T t, TF tf |- first(s) -first-> F()
+  T t |- first(_) -first-> F()
   where
     t : TLIST,
     isEmpty[t]() == true
@@ -181,10 +181,8 @@ rules // term traversal: one
   where
     t : TLIST,
     isEmpty[t]() == false,
-    head[t]() => th,
-    tail[t]() => tl,
-    T th |- s --> S(th'),
-    makeListCons[tf](th', tl) => t'
+    T head[t]() |- s --> S(th'),
+    makeListCons[tf](th', tail[t]()) => t'
   
   // non-empty head failure
   T t, TF tf |- first(s) -first-> S(t')
@@ -198,7 +196,7 @@ rules // term traversal: one
     tl' : TLIST,
     makeListCons[tf](th, tl') => t'
   
-  first(s) -first-> F()
+  first(_) -first-> F()
   where all-fail
 
 rules // term traversal: some
@@ -235,7 +233,7 @@ rules // term traversal: some
     makeAppl[tf](ac, ts') => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
 
-  Some(s) --> F()
+  Some(_) --> F()
   where all-fail
 
 signature
@@ -251,7 +249,7 @@ signature
 rules
   
   // case t == []: return untouched list
-  T t, TF tf |- (oneOrMore(s), Bool f) -some-> (t, Bool false)
+  T t |- (oneOrMore(_), Bool _) -some-> (t, Bool false)
   where
     t : TLIST,
     isEmpty[t]() == true
@@ -268,13 +266,13 @@ rules
     makeListCons[tf](head, tail') => list'
   
   // case t == [t1 | t2] and <s> t1 
-  T t, TF tf |- (oneOrMore(s), Bool f) -some-> (list', Bool true)
+  T t, TF tf |- (oneOrMore(s), Bool _) -some-> (list', Bool true)
   where
     t : TLIST,
     isEmpty[t]() == false,
     head[t]() => head,
     tail[t]() => tail,
     T head |- s --> S(head'),
-    T tail |- (oneOrMore(s), Bool true) -some-> (tail', Bool f'),
+    T tail |- (oneOrMore(s), Bool true) -some-> (tail', Bool _),
     makeListCons[tf](head', tail') => list'
     

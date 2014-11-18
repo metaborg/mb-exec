@@ -118,14 +118,14 @@ rules // actual term building
   where
     all-fail
 
-  TF tf |- bl([]) -blds-> BSS([])
+  bl([]) -blds-> BSS([])
 
-  TF tf |- bl([texpr | texprs]) -blds-> BSS([tx | txs])
+  bl([texpr | texprs]) -blds-> BSS([tx | txs])
   where
     Build(texpr) --> S(tx), // tx may be an ATerm list (if it's a varexpr)
     bl(texprs) -blds-> BSS(txs)
   
-  TF tf |- bl(x) -blds-> BF()
+  bl(_) -blds-> BF()
   where
     all-fail
 
@@ -136,47 +136,45 @@ signature
     
 rules
 
-  TF tf |- b(op@Op("Nil", ts)) -bld-> bv
+  b(op@Op("Nil", ts)) -bld-> bv
   where
     length(ts) == 0,
-    TF tf |- bList(op) -bld-> bv
+    bList(op) -bld-> bv
   
   // Appl dispatch
-  TF tf |- b(op@Op("Nil", ts)) -bld-> bv
+  b(op@Op("Nil", ts)) -bld-> bv
   where
     length(ts) != 0,
     bAppl(op) -bld-> bv
 
-  TF tf |- b(op@Op("Cons", ts)) -bld-> bv
+  b(op@Op("Cons", ts)) -bld-> bv
   where
     length(ts) == 2,
     bList(op) -bld-> bv
   
-  TF tf |- bList(Op(c, [])) -bld-> BS(nil)
+  TF tf |- bList(Op(_, [])) -bld-> BS(nil)
   where
     makeNil(tf) => nil
 
-  TF tf |- bList(Op(_, [t1, t2])) -bld-> BS(list)
+  TF tf |- bList(Op(_, [t1, t2])) -bld-> BS(makeListCons[tf](head, tail))
   where
     TF tf |- Build(t1) --> S(head),
     TF tf |- Build(t2) --> S(tail),
-    tail : TLIST,
-    makeListCons[tf](head, tail) => list
+    tail : TLIST
 
   // Appl dispatch
-  TF tf |- b(op@Op("Cons", ts)) -bld-> bv
+  b(op@Op("Cons", ts)) -bld-> bv
   where
     length(ts) != 2,
     bAppl(op) -bld-> bv
   
-  TF tf |- b(Op("", ts)) -bld-> BS(tup)
+  TF tf |- b(Op("", ts)) -bld-> BS(makeTuple[tf](ts''))
   where
     TF tf |- bl(ts) -blds-> BSS(ts'),
-    List2TARRAY(ts') => ts'',
-    makeTuple[tf](ts'') => tup
+    List2TARRAY(ts') => ts''
 
   // Appl dispatch
-  TF tf |- b(Op(c, ts)) -bld-> bv
+  b(Op(c, ts)) -bld-> bv
   where
     c != "Cons",
     c != "Nil",
@@ -192,7 +190,7 @@ rules
     List2TARRAY(ts') => ts'',
     makeAppl[tf](constr, ts'') => appl
   
-  TF tf |- bAppl(t) -bld-> BF()
+  bAppl(_) -bld-> BF()
   where all-fail
   
 signature

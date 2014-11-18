@@ -66,20 +66,18 @@ rules
   bindsvars([], [], d_into) -bindsvars-> d_into
  
   // 1. CallT without arguments
-  VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
+  VEnv e, SEnv d |- bindsvars([x | xs], [CallT(SVar(tgt), [], []) | ss], d_into) -bindsvars-> d_into''
   where
-    s => CallT(SVar(tgt), [], []),
-    SLookup(d, tgt) -slook-> SLookupResult(d', Thunk(tgt'', fss, fts, sactual, e_tgt, d_tgt)),
+    SLookup(d, tgt) -slook-> SLookupResult(_, Thunk(_, fss, fts, sactual, e_tgt, d_tgt)),
     SPush(d_into, x, Thunk(x, fss, fts, sactual, e_tgt, d_tgt)) -salloc-> d_into',
     VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
 
   
   // 2. CallT with arguments
-  VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
+  VEnv e, SEnv d |- bindsvars([x | xs], [CallT(SVar(tgt), ass, ats) | ss], d_into) -bindsvars-> d_into''
   where
-    s => CallT(SVar(tgt), ass, ats),
     boolAnd(isEmptyStrategies(ass), isEmpty(ats)) == false,
-    SLookup(d, tgt) -slook-> SLookupResult(d', Thunk(tgt'', fss, fts, sactual, e_tgt, d_tgt)),
+    SLookup(d, tgt) -slook-> SLookupResult(_, Thunk(_, fss, fts, sactual, e_tgt, d_tgt)),
     VEnv e, SEnv d |- bl(ats) -blds-> BSS(ats'),
     VEnv e_tgt |- bindtvars(fts, ats') -bindtvars-> e_tgt',
     VEnv e, SEnv d |- bindsvars(fss, ass, d_tgt) -bindsvars-> d_tgt',
@@ -100,13 +98,13 @@ signature
 
 rules // primitives
 
-  IC ic, VEnv e, SEnv d |- PrimT(sname, ass, ats) --> v
+  VEnv e|- PrimT(sname, ass, ats) --> v
   where
     VEnv e |- bl(ats) -blds-> BSS(ats'),
     mkThunks(ass) -thunks-> thunks,
     primCall(sname, thunks, ats') --> v
 
-  T t, IC ic |- PrimT(name, ass, ats) --> F()
+  PrimT(_, _, _) --> F()
   where
     all-fail
 
@@ -131,11 +129,9 @@ rules
     mkThunk(as) -thunk-> as',
     mkThunks(ass) -thunks-> ass'
 
-  VEnv e, SEnv d |- mkThunk(s) -thunk-> thunk
+  SEnv d |- mkThunk(CallT(SVar(tgt), _, _)) -thunk-> thunk
   where
-    s => CallT(SVar(tgt), ass, ats),
-    SLookup(d, tgt) -slook-> SLookupResult(d', thunk),
-    thunk => Thunk(tgt', fss, fts, sactual, e_tgt, d_tgt)
+    SLookup(d, tgt) -slook-> SLookupResult(_, thunk@Thunk(_, _, _, _, _, _))
   
   VEnv e, SEnv d |- mkThunk(s) -thunk-> Thunk(x, [], [], s, e, d)
   where
