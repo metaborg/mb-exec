@@ -212,7 +212,7 @@ rules // term traversal: some
     T ats |- (oneOrMore(s), Bool false) -some-> (ats', Bool true),
     getAllSubterms[ats']() => ts',
     makeTuple[tf](ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t''
+    annotateTerm[tf](t', getAnnotations[t]()) => _
   
   // <some> [t1, t2, ...]
   T t, TF tf |- Some(s) --> S(ats')
@@ -221,7 +221,7 @@ rules // term traversal: some
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
     T ats |- (oneOrMore(s), Bool false) -some-> (ats', Bool true),
-    annotateTerm[tf](ats', getAnnotations[t]()) => ats''
+    annotateTerm[tf](ats', getAnnotations[t]()) => _
 
   // <some> TNAME(t1, t2, )
   T t, TF tf |- Some(s) --> S(t'')

@@ -50,7 +50,7 @@ rules
   
   (VUpdate(venv, x, v), VHeap s) -vupdate-> (venv, VHeap s)
   where
-    update[s](venv, x, v) => venv'
+    update[s](venv, x, v) => _
 
   (VPush(venv, x), VHeap s) -vinit-> (venv', VHeap s)
   where

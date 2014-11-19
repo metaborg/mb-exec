@@ -39,10 +39,10 @@ rules
   (popTrace(v), Trace t) -trace-> (true, Trace t)
   where
     v => F(),
-    popOnFailure(t) => bpop
+    popOnFailure(t) => _
   
   (popTrace(v), Trace t) -trace-> (true, Trace t)
   where
     v => S(_),
-    popOnSuccess(t) => bpop
+    popOnSuccess(t) => _
 
