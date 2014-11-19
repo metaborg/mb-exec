@@ -1,23 +1,25 @@
 package org.metaborg.util.resource;
 
+import java.util.Set;
+
 import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
 
-import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 
 
-public class ExtensionFileFilter implements FileSelector {
-    private final Iterable<String> extensions;
+public class ExtensionFileSelector implements FileSelector {
+    private final Set<String> extensions;
 
 
-    public ExtensionFileFilter(Iterable<String> extensions) {
-        this.extensions = extensions;
+    public ExtensionFileSelector(Iterable<String> extensions) {
+        this.extensions = Sets.newHashSet(extensions);
     }
 
 
     @Override public boolean includeFile(FileSelectInfo fileInfo) throws Exception {
         final String extension = fileInfo.getFile().getName().getExtension();
-        return Iterables.contains(extensions, extension);
+        return extensions.contains(extension);
     }
 
     @Override public boolean traverseDescendents(FileSelectInfo fileInfo) throws Exception {
