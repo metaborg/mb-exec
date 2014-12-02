@@ -11,9 +11,9 @@ import com.github.krukow.clj_ds.PersistentMap;
 
 import ds.generated.interpreter.F_0;
 import ds.generated.interpreter.I_Strategy;
+import ds.generated.interpreter.R_default_Value;
 import ds.generated.interpreter.S_1;
 import ds.generated.interpreter.Thunk_6;
-import ds.generated.interpreter.default_Result;
 
 public class InteropStrategy extends Strategy {
 
@@ -33,12 +33,12 @@ public class InteropStrategy extends Strategy {
 	@Override
 	public IConstruct eval(IContext e) throws InterpreterException {
 		I_Strategy s = thunk._4;
-		PersistentMap<Object, Object> venv = thunk._5;
-		PersistentMap<Object, Object> senv = thunk._6;
+		PersistentMap<String, VBox> venv = thunk._5;
+		PersistentMap<String, SBox> senv = thunk._6;
 
-		default_Result result = s.exec_default(venv, senv,
-				(AutoInterpInteropContext) e, e.getFactory(), e.current(),
-				stacktracer, sheap, false, vheap);
+		R_default_Value result = s.exec_default((AutoInterpInteropContext) e,
+				senv, venv, e.current(), e.getFactory(), sheap, vheap, false,
+				stacktracer);
 
 		if (result.value instanceof F_0) {
 			return getHook().pop().onFailure(e);

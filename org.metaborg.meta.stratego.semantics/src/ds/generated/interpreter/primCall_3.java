@@ -1,11 +1,12 @@
-package ds.manual.interpreter;
+package ds.generated.interpreter;
 
+import org.metaborg.meta.interpreter.framework.AbstractNode;
 import org.metaborg.meta.interpreter.framework.Child;
 import org.metaborg.meta.interpreter.framework.Children;
 import org.metaborg.meta.interpreter.framework.INodeList;
 import org.metaborg.meta.interpreter.framework.INodeSource;
+import org.metaborg.meta.interpreter.framework.InterpreterException;
 import org.metaborg.meta.interpreter.framework.InterpreterExitException;
-import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.InterpreterExit;
 import org.spoofax.interpreter.core.StackTracer;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -15,14 +16,15 @@ import org.spoofax.interpreter.terms.ITermFactory;
 
 import com.github.krukow.clj_ds.PersistentMap;
 
-import ds.generated.interpreter.F_0;
-import ds.generated.interpreter.I_Thunk;
-import ds.generated.interpreter.NoOpNode;
-import ds.generated.interpreter.S_1;
-import ds.generated.interpreter.Thunk_6;
-import ds.generated.interpreter.default_Result;
+import ds.manual.interpreter.AutoInterpInteropContext;
+import ds.manual.interpreter.InteropStrategy;
+import ds.manual.interpreter.Natives;
+import ds.manual.interpreter.SBox;
+import ds.manual.interpreter.SState;
+import ds.manual.interpreter.VBox;
+import ds.manual.interpreter.VState;
 
-public class primCall_3 extends NoOpNode {
+public class primCall_3 extends AbstractNode implements I_Strategy {
 
 	@Child
 	public String name;
@@ -42,10 +44,15 @@ public class primCall_3 extends NoOpNode {
 	}
 
 	@Override
-	public default_Result exec_default(PersistentMap<Object, Object> _1,
-			PersistentMap<Object, Object> _2, AutoInterpInteropContext ctx,
-			ITermFactory _4, IStrategoTerm ct, StackTracer stacktracer,
-			SState sheap, boolean _7, VState vheap) {
+	public void specializeChildren(int depth) {
+		throw new InterpreterException("Operation not supported");
+	}
+
+	@Override
+	public R_default_Value exec_default(AutoInterpInteropContext ctx,
+			PersistentMap<String, SBox> _2, PersistentMap<String, VBox> _3,
+			IStrategoTerm ct, ITermFactory _5, SState sheap, VState vheap,
+			boolean succ, StackTracer stacktracer) {
 		AbstractPrimitive prim = ctx.lookupOperator(name);
 		ctx.setCurrent(ct);
 		Strategy[] sargs = new Strategy[thunks.size()];
@@ -60,18 +67,18 @@ public class primCall_3 extends NoOpNode {
 			boolean result = prim
 					.call(ctx, sargs, Natives.List2TARRAY_1(targs));
 			if (result) {
-				return new default_Result(new S_1(ctx.current()), stacktracer,
-						sheap, _7, vheap);
+				return new R_default_Value(new S_1(null, ctx.current()), sheap,
+						vheap, succ, stacktracer);
 			} else {
-				return new default_Result(new F_0(), stacktracer, sheap, _7,
-						vheap);
+				return new R_default_Value(new F_0(null), sheap, vheap, succ,
+						stacktracer);
 			}
 		} catch (InterpreterExit e) {
 			throw new InterpreterExitException("Exit ... ");
-		} catch (InterpreterException e) {
+		} catch (org.spoofax.interpreter.core.InterpreterException e) {
 			throw new org.metaborg.meta.interpreter.framework.InterpreterException(
 					"Primitive application failed", e);
 		}
-
 	}
+
 }

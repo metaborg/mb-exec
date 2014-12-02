@@ -72,21 +72,3 @@ signature
     List2TARRAY: List(T) -> TARRAY
     makeNil : TF -> TLIST
     
-  native-operators
-  
-    isATermString : T -> Bool
-    isATermInt    : T -> Bool
-    isATermReal    : T -> Bool
-    isATermAppl   : T -> Bool
-    isATermTuple  : T -> Bool
-    isATermList   : T -> Bool
-    
-    asATermString : T -> TSTR
-    asATermInt    : T -> TINT
-    asATermReal   : T -> TREAL
-    asATermAppl   : T -> TAPPL
-    asATermTuple  : T -> TTUP
-    asATermList   : T -> TLIST
-    
-    
-    
