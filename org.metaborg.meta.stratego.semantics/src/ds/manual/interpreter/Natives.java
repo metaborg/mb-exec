@@ -132,9 +132,6 @@ public class Natives {
 
 	private static int counter = 0;
 
-	public static boolean booleanOr_2(boolean b1, boolean b2) {
-		return b1 || b2;
-	}
 
 	public static boolean isQuotedString_1(String s) {
 		return s.length() > 1 && s.charAt(0) == '"';
@@ -157,18 +154,26 @@ public class Natives {
 		return fresh_counter++;
 	}
 
-//	public static boolean isEmpty_1(INodeList<?> ass) {
-//		return ass.isEmpty();
-//	}
+	public static boolean isEmptyStrategies_1(INodeList<?> sss) {
+		return sss.isEmpty();
+	}
 
-	public static boolean booleanAnd_2(boolean b1, boolean b2) {
+	public static boolean isEmpty_1(INodeList<?> ass) {
+		return ass.isEmpty();
+	}
+
+	public static boolean boolAnd_2(boolean b1, boolean b2) {
 		return b1 && b2;
 	}
 
-//	@SuppressWarnings("unchecked")
-//	public static PersistentMap<Object, Object> asSHeap_1(Object map) {
-//		return (PersistentMap<Object, Object>) map;
-//	}
+	public static boolean boolOr_2(boolean b1, boolean b2) {
+		return b1 || b2;
+	}
+
+	// @SuppressWarnings("unchecked")
+	// public static PersistentMap<Object, Object> asSHeap_1(Object map) {
+	// return (PersistentMap<Object, Object>) map;
+	// }
 
 	// public static boolean isATermReal_1(IStrategoTerm t) {
 	// return t.getTermType() == IStrategoTerm.REAL;

@@ -20,21 +20,21 @@ public class VState {
 		return venv.plus(x, new VBox(failCons));
 	}
 
-	public PersistentMap<Object, Object> allocs(
-			PersistentMap<Object, Object> venv, INodeList<String> xs) {
+	public PersistentMap<String, VBox> allocs(PersistentMap<String, VBox> venv,
+			INodeList<String> xs) {
 		for (String x : xs) {
 			venv = venv.plus(x, new VBox(failCons));
 		}
 		return venv;
 	}
 
-	public PersistentMap<Object, Object> allocupdate(
-			PersistentMap<Object, Object> venv, String x, IValue v) {
+	public PersistentMap<String, VBox> allocupdate(
+			PersistentMap<String, VBox> venv, String x, IValue v) {
 		return venv.plus(x, new VBox(v));
 	}
 
-	public PersistentMap<Object, Object> update(
-			PersistentMap<Object, Object> venv, String x, IValue v) {
+	public PersistentMap<String, VBox> update(PersistentMap<String, VBox> venv,
+			String x, IValue v) {
 		VBox box = (VBox) venv.get(x);
 		box.value = v;
 		return venv;

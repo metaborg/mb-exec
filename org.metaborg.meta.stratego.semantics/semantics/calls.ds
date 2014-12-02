@@ -98,7 +98,7 @@ signature
 
 rules // primitives
 
-  VEnv e|- PrimT(sname, ass, ats) --> v
+  VEnv e |- PrimT(sname, ass, ats) --> v
   where
     VEnv e |- bl(ats) -blds-> BSS(ats'),
     mkThunks(ass) -thunks-> thunks,
