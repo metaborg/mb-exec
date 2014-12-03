@@ -8,47 +8,40 @@ module combinators
  *
 */
 imports
-  base
   stratego-signatures
   shared
   aterm
 
 rules // sequential composition
   
-  T t |- Seq(s1, s2) --> v2
+  Seq(s1, s2) --> v2
   where
-    s1 --> v1,
-    v1 => S(t'),
+    s1 --> S(t'),
     T t' |- s2 --> v2
         
-  T t |- Seq(s1, s2) --> v1
+  Seq(s1, _) --> v1
   where
-    s1 --> v1,
-    v1 => F()
+    s1 --> v1@F()
                     
 rules // guarded choice   
         
-  GuardedLChoice(s1, s2, s3) --> v2
+  GuardedLChoice(s1, s2, _) --> v2
   where
-    s1 --> v1,
-    v1 => S(t),
+    s1 --> S(t),
     T t |- s2 --> v2
                 
-  GuardedLChoice(s1, s2, s3) --> v3
+  GuardedLChoice(s1, _, s3) --> v3
   where
-    s1 --> v1,
-    v1 => F(),
+    s1 --> F(),
     s3 --> v3
 
 rules // left choice
 
-  LChoice(s1, s2) --> v1
+  LChoice(s1, _) --> v1
   where
-    s1 --> v1,
-    v1 => S(t)
+    s1 --> v1@S(_)
   
   LChoice(s1, s2) --> v2
   where
-    s1 --> v1,
-    v1 => F(),
+    s1 --> F(),
     s2 --> v2

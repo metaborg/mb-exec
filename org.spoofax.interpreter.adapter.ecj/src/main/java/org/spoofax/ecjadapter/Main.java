@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.adapter.ecj.ECJFactory;
 import org.spoofax.interpreter.core.Interpreter;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -19,6 +18,7 @@ import org.spoofax.interpreter.library.ecj.ECJLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.interpreter.util.DebugUtil;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.io.InlinePrinter;
 

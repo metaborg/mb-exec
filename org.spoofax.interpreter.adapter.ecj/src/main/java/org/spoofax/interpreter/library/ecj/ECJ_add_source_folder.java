@@ -7,11 +7,11 @@
  */
 package org.spoofax.interpreter.library.ecj;
 
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.NotImplementedException;
 
 public class ECJ_add_source_folder extends ECJPrimitive {
 

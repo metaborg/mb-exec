@@ -6,12 +6,11 @@ package org.metaborg.meta.stratego.semantics;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeSource;
+import org.metaborg.meta.interpreter.framework.IValue;
 import org.metaborg.meta.interpreter.framework.ImploderNodeSource;
 import org.metaborg.meta.interpreter.framework.InterpreterExitException;
 import org.metaborg.meta.interpreter.framework.NodeList;
-import org.metaborg.meta.interpreter.framework.NodeUtils;
 import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -25,15 +24,16 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
 
 import ds.generated.interpreter.CallT_3;
 import ds.generated.interpreter.F_0;
-import ds.generated.interpreter.Generic_Module;
+import ds.generated.interpreter.Generic_I_Module;
 import ds.generated.interpreter.I_Module;
 import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.I_Strategy;
+import ds.generated.interpreter.R_allocmodule_SEnv;
 import ds.generated.interpreter.SVar_1;
 import ds.generated.interpreter.S_1;
 import ds.generated.interpreter.allocModule_1;
-import ds.generated.interpreter.allocmodule_Result;
 import ds.manual.interpreter.AutoInterpInteropContext;
+import ds.manual.interpreter.SBox;
 import ds.manual.interpreter.SState;
 import ds.manual.interpreter.VState;
 
@@ -44,14 +44,14 @@ import ds.manual.interpreter.VState;
 public class StrategoCoreInterpreter {
 
 	private SState sheap;
-	private PersistentMap<Object, Object> senv;
+	private PersistentMap<String, SBox> senv;
 
 	private IStrategoTerm currentTerm;
 	private TermFactory programTermFactory, termFactory;
 	private AutoInterpInteropContext context;
 
 	public StrategoCoreInterpreter() {
-
+		reset();
 	}
 
 	public void reset() {
@@ -84,9 +84,11 @@ public class StrategoCoreInterpreter {
 	public void loadCTree(IStrategoTerm ctree) {
 		INodeSource ctreeSource = ctree.getAttachment(ImploderAttachment.TYPE) != null ? new ImploderNodeSource(
 				ctree.getAttachment(ImploderAttachment.TYPE)) : null;
-		I_Module ctreeNode = (I_Module) new Generic_Module(ctreeSource, ctree).specialize(1);
-		
-		allocmodule_Result sdefs_result = new allocModule_1(ctreeSource,
+
+		I_Module ctreeNode = (I_Module) new Generic_I_Module(ctreeSource, ctree)
+				.specialize(1);
+
+		R_allocmodule_SEnv sdefs_result = new allocModule_1(ctreeSource,
 				ctreeNode).exec_allocmodule(PersistentTreeMap.EMPTY, senv,
 				sheap);
 		sheap = sdefs_result._1;
@@ -104,11 +106,11 @@ public class StrategoCoreInterpreter {
 	public void invoke(String sname) throws StrategoErrorExit {
 		CallT_3 mainCall = new CallT_3(null, new SVar_1(null, sname),
 				NodeList.NIL(I_Strategy.class), NodeList.NIL(I_STerm.class));
-		AValue result = null;
+		IValue result = null;
 		try {
-			result = mainCall.exec_default(senv, PersistentTreeMap.EMPTY,
-					context, termFactory, currentTerm,
-					context.getStackTracer(), sheap, false, new VState()).value;
+			result = mainCall.exec_default(context, senv,
+					PersistentTreeMap.EMPTY, currentTerm, termFactory, sheap,
+					new VState(), false, context.getStackTracer()).value;
 		} catch (InterpreterExitException e) {
 			System.out.println("Exit ....");
 			context.getStackTracer().printStackTrace(System.err, false);

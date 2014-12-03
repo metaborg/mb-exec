@@ -1,10 +1,7 @@
 module aterm
 
-imports
-  base
-
 signature
-
+    
   native-datatypes
   
    "org.spoofax.interpreter.terms.IStrategoTerm" as T {
@@ -73,23 +70,5 @@ signature
   native-operators
     // TARRAY2List: TARRAY -> List(T)
     List2TARRAY: List(T) -> TARRAY
-    makeNil : TF -> TLIST 
-    
-  native-operators
-  
-    isATermString : T -> Bool
-    isATermInt    : T -> Bool
-    isATermReal    : T -> Bool
-    isATermAppl   : T -> Bool
-    isATermTuple  : T -> Bool
-    isATermList   : T -> Bool
-    
-    asATermString : T -> TSTR
-    asATermInt    : T -> TINT
-    asATermReal   : T -> TREAL
-    asATermAppl   : T -> TAPPL
-    asATermTuple  : T -> TTUP
-    asATermList   : T -> TLIST
-    
-    
+    makeNil : TF -> TLIST
     

@@ -9,9 +9,9 @@ package org.spoofax.interpreter.adapter.ecj;
 
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression.Operator;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.NotImplementedException;
 
 public class WrappedPrefixExpressionOperator extends AbstractWrappedECJNode {
 

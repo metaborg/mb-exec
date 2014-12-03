@@ -10,8 +10,6 @@ package org.spoofax.interpreter.adapter.ecj;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.spoofax.EmptyIterator;
-import org.spoofax.NotImplementedException;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
@@ -20,6 +18,8 @@ import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.attachments.ITermAttachment;
 import org.spoofax.terms.attachments.TermAttachmentType;
+import org.spoofax.terms.util.EmptyIterator;
+import org.spoofax.terms.util.NotImplementedException;
 
 public class ECJConstructor implements IStrategoConstructor {
 

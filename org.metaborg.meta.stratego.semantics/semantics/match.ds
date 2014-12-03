@@ -1,7 +1,6 @@
 module match
 
 imports
-  base
   stratego-signatures
   shared
   aterm
@@ -26,163 +25,138 @@ rules // match dispatch annotations
   where
     m(mp) -ma-> v
 
-  T t |- Match(Anno(mp, ma)) --> v
+  T t |- Match(Anno(mp, ma)) --> S(t)
   where
-    T t  |- m(mp) -ma-> S(t'),
+    T t  |- m(mp) -ma-> S(_),
     getAnnotations[t]() => aa,
-    T aa |- m(ma) -ma-> S(t''),
-    S(t) => v
+    T aa |- m(ma) -ma-> S(_)
 
-  T t |- Match(Var(x)) --> v
+  T t |- Match(Var(x)) --> S(t)
   where
-    T t |- m(Var(x)) -ma-> S(t'),
-    S(t) => v
+    T t |- m(Var(x)) -ma-> S(_)
 
   T t |- Match(As(var, p)) --> v
   where
     T t |- m(As(var, p)) -ma-> v
 
-  Match(x) --> v
+  Match(_) --> F()
   where
-    all-fail,
-    F() => v
+    all-fail
 
 rules // actual matching
 
-  T t |- m(Wld()) -ma-> v
-  where
-    S(t) => v
+  T t |- m(Wld()) -ma-> S(t)
 
-  T t |- m(Int(stringI)) -ma-> v
+  T t |- m(Int(stringI)) -ma-> S(t)
   where
-    isATermInt(t) == true,
-    asATermInt(t) => aint,
-    intValue[aint]() => i',
+    t : TINT,
+    intValue[t]() => i',
     parseInt(stringI) => i,
-    i == i',
-    S(t) => v
+    i == i'
   
-  T t |- m(Real(stringR)) -ma-> v
+  T t |- m(Real(stringR)) -ma-> S(t)
   where
-    isATermReal(t) == true,
-    asATermReal(t) => areal,
-    realValue[areal]() => r',
+    t : TREAL,
+    realValue[t]() => r',
     parseReal(stringR) => r,
-    r == r',
-    S(t) => v
+    r == r'
   
-  T t |- m(Str(s)) -ma-> v
+  T t |- m(Str(s)) -ma-> S(t)
   where
-    isATermString(t) == true,
-    asATermString(t) => astr,
-    stringValue[astr]() => s',
-    s == s',
-    S(t) => v
+    t : TSTR,
+    stringValue[t]() => s',
+    s == s'
 
   // match against unbound variable
   VEnv e, T t |- m(Var(x)) -ma-> v
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', xv),
-    xv => F(),
+    VLookup(e, x) -vlook-> VLookupResult(e', F()),
     S(t) => v,
-    VUpdate(e', x, v) -vupdate-> e''
+    VUpdate(e', x, v) -vupdate-> _
 
   // match against bound variable
-  VEnv e, T t |- m(Var(x)) -ma-> v
+  VEnv e, T t |- m(Var(x)) -ma-> S(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', xv),
-    xv => S(t'),
-    t == t',
-    S(t) => v
+    VLookup(e, x) -vlook-> VLookupResult(_, S(t')),
+    t == t'
 
   // compound As with unbound variable. The variable is only bound if the match succeeds.
   VEnv e, T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', lv),
-    lv => F(),
-    VEnv e, T t |- Match(p) --> S(t'),
-    VUpdate(e', x, S(t)) -vupdate-> e''
+    VLookup(e, x) -vlook-> VLookupResult(e', F()),
+    VEnv e, T t  |- Match(p) --> S(_),
+    VUpdate(e', x, S(t)) -vupdate-> _
   
   // compound As with bound variable
   VEnv e, T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', lv),
-    lv => S(xt),
+    VLookup(e, x) -vlook-> VLookupResult(_, S(xt)),
     t == xt,
-    VEnv e, T t |- Match(p) --> S(t'')
+    VEnv e, T t |- Match(p) --> S(_)
 
   // Explode Appl
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    isATermAppl(t) == true,
-    asATermAppl(t) => appl,
-    makeString[tf](getName[getConstructor[appl]()]()) => constr,
-    T constr |- Match(ct) --> S(constr'),
-    makeList[tf](getAllSubterms[appl]()) => kids,
-    T kids |- Match(ts) --> S(kids')
+    t : TAPPL,
+    makeString[tf](getName[getConstructor[t]()]()) => constr,
+    T constr |- Match(ct) --> S(_),
+    makeList[tf](getAllSubterms[t]()) => kids,
+    T kids |- Match(ts) --> S(_)
   
   // Explode Int
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    isATermInt(t) == true,
-    t => constr,
-    T constr |- Match(ct) --> S(constr'),
-    makeNil(tf) => kids,
-    T kids |- Match(ts) --> S(kids')
+    t : TINT,
+    T t |- Match(ct) --> S(_),
+    T makeNil(tf) |- Match(ts) --> S(_)
   
   // TODO Explode Real
 
   // Explode String
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    isATermString(t) == true,
+    t : TSTR,
     annotateTerm[tf](t, makeNil(tf)) => tnoanno,
     makeString[tf](toString[tnoanno]()) => constr,
-    T constr |- Match(ct) --> S(constr'),
-    makeNil(tf) => kids,
-    T kids |- Match(ts) --> S(kids')
+    T constr |- Match(ct) --> S(_),
+    T makeNil(tf) |- Match(ts) --> S(_)
   
   // Explode List
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    isATermList(t) == true,
-    makeNil(tf) => constr,
-    T constr |- Match(ct) --> S(constr'),
-    T t |- Match(ts) --> S(kids')
+    t : TLIST,
+    T makeNil(tf) |- Match(ct) --> S(_),
+    T t |- Match(ts) --> S(_)
   
   // Explode Tuple
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    isATermTuple(t) == true,
+    t : TTUP,
     makeString[tf]("") => constr,
-    T constr |- Match(ct) --> S(constr'),
+    T constr |- Match(ct) --> S(_),
     makeList[tf](getAllSubterms[t]()) => kids,
-    T kids |- Match(ts) --> S(kids')
+    T kids |- Match(ts) --> S(_)
     
   // match failure
-  m(dc) -ma-> F()
+  m(_) -ma-> F()
   where
     all-fail
     
   // match an empty list
   T t |- ml([]) -ma-> S(t)
   where
-    isATermList(t) == true,
-    asATermList(t) => alist,
-    isEmpty[alist]() == true
+    t : TLIST,
+    isEmpty[t]() == true
   
   // match a non-empty list
   T t |- ml([p | ps]) -ma-> S(t)
   where
-    isATermList(t) == true,
-    asATermList(t) => alist,
-    isEmpty[alist]() == false,
-    head[alist]() => th,
-    T th |- Match(p) --> S(t'),
-    tail[alist]() => tl,
-    T tl |- ml(ps) -ma-> S(t'')
+    t : TLIST,
+    isEmpty[t]() == false,
+    T head[t]() |- Match(p) --> S(_),
+    T tail[t]() |- ml(ps) -ma-> S(_)
   
-  ml(l) -ma-> F()
+  ml(_) -ma-> F()
   where
     all-fail
 
@@ -193,80 +167,64 @@ signature
 
 rules
 
-  T t, TF tf |- m(Op(c, pts)) -ma-> mv
+  m(op@Op("Nil", [])) -ma-> mv
   where
-    c == "Nil",
-    length(pts) == 0,
-    T t, TF tf |- mList(Op(c, pts)) -ma-> mv
+    mList(op) -ma-> mv
   
-  T t, TF tf |- m(Op(c, pts)) -ma-> mv
+  m(op@Op("Nil", [_|_])) -ma-> mv
   where
-    c == "Nil",
-    length(pts) != 0,
-    T t, TF tf |- mAppl(Op(c, pts)) -ma-> mv
+    mAppl(op) -ma-> mv
   
-  T t, TF tf |- m(Op(c, pts)) -ma-> mv
+  m(op@Op("Cons", pts)) -ma-> mv
   where
-    c == "Cons",
     length(pts) == 2,
-    T t, TF tf |- mList(Op(c, pts)) -ma-> mv
+    mList(op) -ma-> mv
   
-  T t, TF tf |- m(Op(c, pts)) -ma-> mv
+  m(op@Op("Cons", pts)) -ma-> mv
   where
-    c == "Cons",
     length(pts) != 2,
-    T t, TF tf |- mAppl(Op(c, pts)) -ma-> mv
+    mAppl(op) -ma-> mv
   
-  T t, TF tf |- mList(Op(c, pts)) -ma-> S(t)
+  T t |- mList(Op(_, [])) -ma-> S(t)
   where
-    pts => [],
-    isATermList(t) == true,
-    asATermList(t) => list,
-    isEmpty[list]() == true
+    t : TLIST,
+    isEmpty[t]() == true
   
-  T t, TF tf |- mList(Op(c, pts)) -ma-> S(t)
+  T t |- mList(Op(_, [p1, p2])) -ma-> S(t)
   where
-    pts => [p1, p2],
-    isATermList(t) == true,
-    asATermList(t) => list,
-    isEmpty[list]() == false,
-    head[list]() => head,
-    T head |- Match(p1) --> S(thead),
-    tail[list]() => tail,
-    T tail |- Match(p2) --> S(ttail)
+    t : TLIST,
+    isEmpty[t]() == false,
+    T head[t]() |- Match(p1) --> S(_),
+    T tail[t]() |- Match(p2) --> S(_)
   
-  T t, TF tf |- mList(dc) -ma-> F()
+  mList(_) -ma-> F()
   where all-fail
   
-  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
+  T t, TF tf |- m(Op("", pts)) -ma-> S(t)
   where
-    c == "",
-    isATermTuple(t) == true,
-    asATermTuple(t) => tupl,
-    getAllSubterms[tupl]() => elems,
-    makeList[tf](elems) => elems',
-    T elems' |- ml(pts) -ma-> S(tupl')
+    t : TTUP,
+    getAllSubterms[t]() => elems,
+    T makeList[tf](elems) |- ml(pts) -ma-> S(_)
   
-  T t, TF tf |- m(Op(c, pts)) -ma-> S(t)
+  T t |- m(op@Op(c, _)) -ma-> S(t)
   where
     c != "Nil",
     c != "Cons",
     c != "",
-    T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t')
+    mAppl(op) -ma-> S(_)
      
   // match application
   T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t)
   where
-    isATermAppl(t) == true,
-    asATermAppl(t) => aappl,
-    getConstructor[aappl]() => aconstr,
+    t : TAPPL,
+    getConstructor[t]() => aconstr,
     getName[aconstr]() => c',
     c == c',
-    getAllSubterms[aappl]() => subterms,
+    getAllSubterms[t]() => subterms,
     makeList[tf](subterms) => asubterms,
-    T asubterms |- ml(pts) -ma-> S(aats')
+    T asubterms |- ml(pts) -ma-> S(_)
   
-  T t, TF tf |- mAppl(dc) -ma-> F()
+  mAppl(_) -ma-> F()
   where all-fail
 
 

@@ -10,7 +10,6 @@ module core-strategies
  *
 */
 imports
-  base
   stratego-signatures
   aterm
   shared
@@ -55,85 +54,73 @@ signature
 rules // term traversal: all
 
   // <all> 42
-  T t |- All(s) --> S(t)
+  T t |- All(_) --> S(t)
   where
-    isATermInt(t) == true
+    t : TINT
 
   // <all> "4.5"
-  T t |- All(s) --> S(t)
+  T t |- All(_) --> S(t)
   where
-    isATermReal(t) == true
+    t : TREAL
   
   // <all> "string"
-  T t |- All(s) --> S(t)
+  T t |- All(_) --> S(t)
   where
-    isATermString(t) == true
+    t : TSTR
   
   // <all> (tup1, tup2, ...)
-  T t, TF tf |- All(s) --> v
+  T t, TF tf |- All(s) --> S(t'')
   where
-    isATermTuple(t) == true,
+    t : TTUP,
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats, // FIXME: extremely inefficient
     T ats |- map(s) -map-> S(ats'),
-    isATermList(ats') == true,
-    asATermList(ats') => ats'', 
+    ats' : TLIST, 
     getAllSubterms[ats']() => ts',
     makeTuple[tf](ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t'',
-    S(t'') => v
+    annotateTerm[tf](t', getAnnotations[t]()) => t''
 
   // <all> [a, b, c, ...]
-  T t, TF tf |- All(s) --> v
+  T t, TF tf |- All(s) --> S(ats'')
   where
-    isATermList(t) == true,
-    asATermList(t) => tlist,
-    T tlist |- map(s) -map-> S(ats'),
-    annotateTerm[tf](ats', getAnnotations[t]()) => ats'',
-    S(ats'') => v
+    t : TLIST,
+    T t |- map(s) -map-> S(ats'),
+    annotateTerm[tf](ats', getAnnotations[t]()) => ats''
 
   // <all> TNAME(t1, t2, ...)
-  T t, TF tf |- All(s) --> v
-  where  
-    isATermAppl(t) == true,
-    asATermAppl(t) => at,
-    getConstructor[at]() => ac,
-    getAllSubterms[at]() => ts,
+  T t, TF tf |- All(s) --> S(t'')
+  where
+    t : TAPPL,
+    getConstructor[t]() => ac,
+    getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats, // FIXME: extremely inefficient
     T ats |- map(s) -map-> S(ats'),
-    isATermList(ats') == true,
-    asATermList(ats') => ats'',
-    getAllSubterms[ats'']() => ts', // FIXME: extremely inefficient
+    ats' : TLIST,
+    getAllSubterms[ats']() => ts', // FIXME: extremely inefficient
     makeAppl[tf](ac, ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over the old annotations
-    S(t'') => v
+    annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over the old annotations
 
-  All(s) --> F()
+  All(_) --> F()
   where
     all-fail
 
-  T t, TF tf |- map(s) -map-> v
+  T t |- map(_) -map-> S(t)
   where
-    isATermList(t) == true,
-    asATermList(t) => lt,
-    isEmpty[lt]() == true,
-    S(t) => v
+    t : TLIST,
+    isEmpty[t]() == true
   
-  T t, TF tf |- map(s) -map-> v
+  T t, TF tf |- map(s) -map-> S(ts'')
   where
-    isATermList(t) == true,
-    asATermList(t) => lt,
-    isEmpty[lt]() == false,
-    head[lt]() => th,
-    tail[lt]() => ts,
+    t : TLIST,
+    isEmpty[t]() == false,
+    head[t]() => th,
+    tail[t]() => ts,
     T th |- s --> S(th'),
     T ts |- map(s) -map-> S(ts'),
-    isATermList(ts') == true,
-    asATermList(ts') => ats,
-    makeListCons[tf](th', ats) => ts'',
-    S(ts'') => v
+    ts' : TLIST,
+    makeListCons[tf](th', ts') => ts''
 
-  map(s) -map-> F()
+  map(_) -map-> F()
   where
     all-fail
 
@@ -150,125 +137,103 @@ signature
 rules // term traversal: one
   
   // <one> (tup1, tup2, ...)
-  T t, TF tf |- One(s) --> v
+  T t, TF tf |- One(s) --> S(t'')
   where
-    isATermTuple(t) == true,
+    t : TTUP,
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
     T ats |- first(s) -first-> S(t'),
-    annotateTerm[tf](t', getAnnotations[t]()) => t'',
-    S(t'') => v
+    annotateTerm[tf](t', getAnnotations[t]()) => t''
   
   // <one> [a, b, c, ...]
-  T t, TF tf |- One(s) --> v
+  T t, TF tf |- One(s) --> S(ats'')
   where
-    isATermList(t) == true,
+    t : TLIST,
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
     T ats |- first(s) -first-> S(ats'),
-    annotateTerm[tf](ats', getAnnotations[t]()) => ats'',
-    S(ats'') => v
+    annotateTerm[tf](ats', getAnnotations[t]()) => ats''
   
   // <one> TNAME(t1, t2, t3, ...)
-  T t, TF tf |- One(s) --> v
+  T t, TF tf |- One(s) --> S(t'')
   where
-    isATermAppl(t) == true,
-    asATermAppl(t) => at,
-    getConstructor[at]() => ac,
-    getAllSubterms[at]() => ts,
+    t : TAPPL,
+    getConstructor[t]() => ac,
+    getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
     T ats |- first(s) -first-> S(ats'),
-    isATermList(ats') == true,
+    ats' : TLIST,
     getAllSubterms[ats']() => ts',
     makeAppl[tf](ac, ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over annotations
-    S(t'') => v
+    annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
   
-  One(s) --> F()
+  One(_) --> F()
   where all-fail
   
   // empty candidate list
-  T t, TF tf |- first(s) -first-> v
+  T t |- first(_) -first-> F()
   where
-    isATermList(t) == true,
-    asATermList(t) => lt,
-    isEmpty[lt]() == true,
-    F() => v
+    t : TLIST,
+    isEmpty[t]() == true
   
   // non-empty head success
-  T t, TF tf |- first(s) -first-> v
+  T t, TF tf |- first(s) -first-> S(t')
   where
-    isATermList(t) == true,
-    asATermList(t) => lt,
-    isEmpty[lt]() == false,
-    head[lt]() => th,
-    tail[lt]() => tl,
-    T th |- s --> v1,
-    v1 => S(th'),
-    makeListCons[tf](th', tl) => t',
-    S(t') => v
+    t : TLIST,
+    isEmpty[t]() == false,
+    head[t]() => th,
+    tail[t]() => tl,
+    T th |- s --> S(th'),
+    makeListCons[tf](th', tl) => t'
   
   // non-empty head failure
-  T t, TF tf |- first(s) -first-> v
+  T t, TF tf |- first(s) -first-> S(t')
   where
-    isATermList(t) == true,
-    asATermList(t) => lt,
-    isEmpty[lt]() == false,
-    head[lt]() => th,
-    tail[lt]() => tl,
-    T th |- s --> v1,
-    v1 => F(),
+    t : TLIST,
+    isEmpty[t]() == false,
+    head[t]() => th,
+    tail[t]() => tl,
+    T th |- s --> F(),
     T tl |- first(s) -first-> S(tl'),
-    isATermList(tl') == true,
-    asATermList(tl') => tl'',
-    makeListCons[tf](th, asATermList(tl')) => t',
-    S(t') => v
+    tl' : TLIST,
+    makeListCons[tf](th, tl') => t'
   
-  first(s) -first-> F()
+  first(_) -first-> F()
   where all-fail
 
 rules // term traversal: some
 
   // <some> (t1, t2, ...)
-  T t, TF tf |- Some(s) --> v
+  T t, TF tf |- Some(s) --> S(t'')
   where
-    isATermTuple(t) == true,
+    t : TTUP,
     getAllSubterms[t]() => ts,
-    makeList[tf](ts) => ats,
-    T ats |- (oneOrMore(s), Bool false) -some-> (ats', Bool f),
-    f == true,
-    getAllSubterms[ats']() => ts',
-    makeTuple[tf](ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t'',
-    S(t'') => v
+    T makeList[tf](ts) |- (oneOrMore(s), Bool false) -some-> (ats', Bool true),
+    makeTuple[tf](getAllSubterms[ats']()) => t',
+    annotateTerm[tf](t', getAnnotations[t]()) => t''
   
   // <some> [t1, t2, ...]
-  T t, TF tf |- Some(s) --> v
+  T t, TF tf |- Some(s) --> S(ats'')
   where
-    isATermList(t) == true,
+    t : TLIST,
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
-    T ats |- (oneOrMore(s), Bool false) -some-> (ats', Bool f),
-    f == true,
-    annotateTerm[tf](ats', getAnnotations[t]()) => ats'',
-    S(ats'') => v
+    T ats |- (oneOrMore(s), Bool false) -some-> (ats', Bool true),
+    annotateTerm[tf](ats', getAnnotations[t]()) => ats''
 
   // <some> TNAME(t1, t2, )
-  T t, TF tf |- Some(s) --> v
+  T t, TF tf |- Some(s) --> S(t'')
   where
-    isATermAppl(t) == true,
-    asATermAppl(t) => at,
-    getConstructor[at]() => ac,
-    getAllSubterms[at]() => ts,
+    t : TAPPL,
+    getConstructor[t]() => ac,
+    getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
-    T ats |- (oneOrMore(s), Bool false) -some-> (ats', Bool f),
-    f == true,
+    T ats |- (oneOrMore(s), Bool false) -some-> (ats', Bool true),
     getAllSubterms[ats']() => ts',
     makeAppl[tf](ac, ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t'', // copy over annotations
-    S(t'') => v
+    annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
 
-  Some(s) --> F()
+  Some(_) --> F()
   where all-fail
 
 signature
@@ -282,38 +247,29 @@ signature
     Somer -some-> TLIST
 
 rules
-  
+
   // case t == []: return untouched list
-  T t, TF tf |- (oneOrMore(s), Bool f) -some-> (list, Bool false)
+  T t |- (oneOrMore(_), Bool _) -some-> (t, Bool false)
   where
-    isATermList(t) == true,
-    asATermList(t) => list,
-    isEmpty[list]() == true
+    t : TLIST,
+    isEmpty[t]() == true
   
   // case t == [t1 | ts] and <not(s)> t1
-  T t, TF tf |- (oneOrMore(s), Bool f) -some-> (list', Bool f'')
+  T t, TF tf |- (oneOrMore(s), Bool f) -some-> (list', Bool boolOr(f, f'))
   where
-    isATermList(t) == true,
-    asATermList(t) => list,
-    isEmpty[list]() == false,
-    head[list]() => head,
-    tail[list]() => tail,
-    T head |- s --> vhead,
-    vhead => F(),
-    T tail |- (oneOrMore(s), Bool f) -some-> (tail', Bool f'),
-    makeListCons[tf](head, tail') => list',
-    booleanOr(f, f') => f''
+    t : TLIST,
+    isEmpty[t]() == false,
+    head[t]() => head,
+    T head |- s --> F(),
+    T tail[t]() |- (oneOrMore(s), Bool f) -some-> (tail', Bool f'),
+    makeListCons[tf](head, tail') => list'
   
   // case t == [t1 | t2] and <s> t1 
   T t, TF tf |- (oneOrMore(s), Bool f) -some-> (list', Bool true)
   where
-    isATermList(t) == true,
-    asATermList(t) => list,
-    isEmpty[list]() == false,
-    head[list]() => head,
-    tail[list]() => tail,
-    T head |- s --> vhead,
-    vhead => S(head'),
-    T tail |- (oneOrMore(s), Bool true) -some-> (tail', Bool f'),
+    t : TLIST,
+    isEmpty[t]() == false,
+    T head[t]() |- s --> S(head'),
+    T tail[t]() |- (oneOrMore(s), Bool true) -some-> (tail', Bool f'),
     makeListCons[tf](head', tail') => list'
     

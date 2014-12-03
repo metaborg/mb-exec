@@ -1,7 +1,6 @@
 module build
 
 imports
-  base
   stratego-signatures
   shared
   aterm
@@ -30,15 +29,14 @@ rules // build
   where
     b(t) -bld-> BS(at),
     b(annos) -bld-> BS(annos_aterm),
-    isATermList(annos_aterm) == true,
-    asATermList(annos_aterm) => annos_aterm_list,
-    annotateTerm[tf](at, annos_aterm_list) => aterm
+    annos_aterm : TLIST,
+    annotateTerm[tf](at, annos_aterm) => aterm
   
   Build(Var(x)) --> S(t)
   where
     b(Var(x)) -bld-> BS(t)
   
-  Build(e) --> F()
+  Build(_) --> F()
   where
     all-fail
 
@@ -46,7 +44,7 @@ rules // actual term building
 
   VEnv e |- b(Var(x)) -bld-> BS(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', S(t))
+    VLookup(e, x) -vlook-> VLookupResult(_, S(t))
       
   TF tf |- b(Int(stringI)) -bld-> BS(aint)
   where
@@ -63,32 +61,31 @@ rules // actual term building
     makeString[tf](s) => astr
   
   // Implode Int
-  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(c)
+  b(Explode(cname_expr, ts_expr)) -bld-> BS(c)
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts), // just to make sure we cause the right side-effects
-    isATermList(ts) == true,
-    isATermInt(c) == true
+    ts : TLIST,
+    c : TINT
   
   // TODO Implode Real
   
   // Implode List
-  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(ts)
+  b(Explode(cname_expr, ts_expr)) -bld-> BS(ts)
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    isATermList(ts) == true,
-    isATermList(c) == true
+    ts : TLIST,
+    c : TLIST
   
   // Implode Tuple
   TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(tupl)
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    isATermList(ts) == true,
-    isATermString(c) == true,
-    asATermString(c) => tc,
-    stringValue[tc]() => cname,
+    ts : TLIST,
+    c : TSTR,
+    stringValue[c]() => cname,
     cname == "",
     makeTuple[tf](getAllSubterms[ts]()) => tupl
 
@@ -97,10 +94,9 @@ rules // actual term building
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    isATermList(ts) == true,
-    isATermString(c) == true,
-    asATermString(c) => tc,
-    stringValue[tc]() => cname,
+    ts : TLIST,
+    c : TSTR,
+    stringValue[c]() => cname,
     isQuotedString(cname) == true,
     unquoteString(cname) => svalue,
     makeString[tf](svalue) => s
@@ -110,28 +106,26 @@ rules // actual term building
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    isATermList(ts) == true,
-    isATermString(c) == true,
-    asATermString(c) => tc,
-    stringValue[tc]() => cname,
+    ts : TLIST,
+    c : TSTR,
+    stringValue[c]() => cname,
     isQuotedString(cname) == false,
-    asATermList(ts) => tslist,
-    makeConstructor[tf](cname, size[tslist]()) => constr,
+    makeConstructor[tf](cname, size[ts]()) => constr,
     getAllSubterms[ts]() => kids,
     makeAppl[tf](constr, kids) => appl
 
-  TF tf |- b(x) -bld-> BF()
+  b(_) -bld-> BF()
   where
     all-fail
 
-  TF tf |- bl([]) -blds-> BSS(asNILofT([]))
+  bl([]) -blds-> BSS([])
 
-  TF tf |- bl([texpr | texprs]) -blds-> BSS([tx | txs])
+  bl([texpr | texprs]) -blds-> BSS([tx | txs])
   where
     Build(texpr) --> S(tx), // tx may be an ATerm list (if it's a varexpr)
     bl(texprs) -blds-> BSS(txs)
   
-  TF tf |- bl(x) -blds-> BF()
+  bl(_) -blds-> BF()
   where
     all-fail
 
@@ -142,55 +136,45 @@ signature
     
 rules
 
-  TF tf |- b(Op(c, ts)) -bld-> bv
+  b(op@Op("Nil", ts)) -bld-> bv
   where
-    c == "Nil",
     length(ts) == 0,
-    TF tf |- bList(Op(c, ts)) -bld-> bv
+    bList(op) -bld-> bv
   
   // Appl dispatch
-  TF tf |- b(Op(c, ts)) -bld-> bv
+  b(op@Op("Nil", ts)) -bld-> bv
   where
-    c == "Nil",
     length(ts) != 0,
-    bAppl(Op(c, ts)) -bld-> bv
+    bAppl(op) -bld-> bv
 
-  TF tf |- b(Op(c, ts)) -bld-> bv
+  b(op@Op("Cons", ts)) -bld-> bv
   where
-    c == "Cons",
     length(ts) == 2,
-    bList(Op(c, ts)) -bld-> bv
+    bList(op) -bld-> bv
   
-  TF tf |- bList(Op(c, ts)) -bld-> BS(nil)
+  TF tf |- bList(Op(_, [])) -bld-> BS(nil)
   where
-    ts => [],
     makeNil(tf) => nil
-  
-  TF tf |- bList(Op(c, ts)) -bld-> BS(list)
+
+  TF tf |- bList(Op(_, [t1, t2])) -bld-> BS(makeListCons[tf](head, tail))
   where
-    ts => [t1, t2],
     TF tf |- Build(t1) --> S(head),
     TF tf |- Build(t2) --> S(tail),
-    isATermList(tail) == true,
-    asATermList(tail) => tail',
-    makeListCons[tf](head, tail') => list
+    tail : TLIST
 
   // Appl dispatch
-  TF tf |- b(Op(c, ts)) -bld-> bv
+  b(op@Op("Cons", ts)) -bld-> bv
   where
-    c == "Cons",
     length(ts) != 2,
-    bAppl(Op(c, ts)) -bld-> bv
+    bAppl(op) -bld-> bv
   
-  TF tf |- b(Op(c, ts)) -bld-> BS(tup)
+  TF tf |- b(Op("", ts)) -bld-> BS(makeTuple[tf](ts''))
   where
-    c == "",
     TF tf |- bl(ts) -blds-> BSS(ts'),
-    List2TARRAY(ts') => ts'',
-    makeTuple[tf](ts'') => tup
+    List2TARRAY(ts') => ts''
 
   // Appl dispatch
-  TF tf |- b(Op(c, ts)) -bld-> bv
+  b(Op(c, ts)) -bld-> bv
   where
     c != "Cons",
     c != "Nil",
@@ -206,7 +190,7 @@ rules
     List2TARRAY(ts') => ts'',
     makeAppl[tf](constr, ts'') => appl
   
-  TF tf |- bAppl(t) -bld-> BF()
+  bAppl(_) -bld-> BF()
   where all-fail
   
 signature

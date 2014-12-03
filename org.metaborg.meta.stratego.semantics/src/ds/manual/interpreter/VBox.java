@@ -3,7 +3,7 @@
  */
 package ds.manual.interpreter;
 
-import org.metaborg.meta.interpreter.framework.AValue;
+import org.metaborg.meta.interpreter.framework.IValue;
 
 /**
  * @author vladvergu
@@ -11,9 +11,9 @@ import org.metaborg.meta.interpreter.framework.AValue;
  */
 public class VBox {
 
-	public AValue value;
+	public IValue value;
 
-	public VBox(AValue value) {
+	public VBox(IValue value) {
 		this.value = value;
 	}
 }

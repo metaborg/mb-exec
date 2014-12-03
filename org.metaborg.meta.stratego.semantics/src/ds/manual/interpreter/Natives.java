@@ -2,81 +2,60 @@ package ds.manual.interpreter;
 
 import java.io.IOException;
 
-import org.metaborg.meta.interpreter.framework.AValue;
 import org.metaborg.meta.interpreter.framework.INodeList;
-import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.StackTracer;
-import org.spoofax.interpreter.library.AbstractPrimitive;
-import org.spoofax.interpreter.stratego.Strategy;
-import org.spoofax.interpreter.terms.IStrategoAppl;
-import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoList;
-import org.spoofax.interpreter.terms.IStrategoReal;
-import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
-import org.spoofax.terms.ParseError;
 import org.spoofax.terms.io.binary.TermReader;
 
-import com.github.krukow.clj_ds.PersistentMap;
-
-import ds.generated.interpreter.F_0;
-import ds.generated.interpreter.I_Node;
 import ds.generated.interpreter.I_STerm;
-import ds.generated.interpreter.I_Strategy;
-import ds.generated.interpreter.I_Thunk;
-import ds.generated.interpreter.S_1;
 
 public class Natives {
 
-	public static IStrategoTerm asATerm_1(I_Node t) {
-		throw new RuntimeException("Not implemented");
-	}
-
-	public static boolean isATermInt_1(IStrategoTerm t) {
-		return t.getTermType() == IStrategoTerm.INT;
-	}
-
-	public static IStrategoInt asATermInt_1(IStrategoTerm t) {
-		return (IStrategoInt) t;
-	}
-
-	public static boolean isATermString_1(IStrategoTerm t) {
-		return t.getTermType() == IStrategoTerm.STRING;
-	}
-
-	public static IStrategoString asATermString_1(IStrategoTerm t) {
-		return (IStrategoString) t;
-	}
-
-	public static boolean isATermAppl_1(IStrategoTerm t) {
-		return t.getTermType() == IStrategoString.APPL;
-	}
-
-	public static IStrategoAppl asATermAppl_1(IStrategoTerm t) {
-		return (IStrategoAppl) t;
-	}
-
-	public static boolean isATermList_1(IStrategoTerm t) {
-		return t.getTermType() == IStrategoTerm.LIST;
-	}
-
-	public static IStrategoList asATermList_1(IStrategoTerm t) {
-		return (IStrategoList) t;
-	}
+	// public static boolean isATermInt_1(IStrategoTerm t) {
+	// return t.getTermType() == IStrategoTerm.INT;
+	// }
+	//
+	// public static IStrategoInt asATermInt_1(IStrategoTerm t) {
+	// return (IStrategoInt) t;
+	// }
+	//
+	// public static boolean isATermString_1(IStrategoTerm t) {
+	// return t.getTermType() == IStrategoTerm.STRING;
+	// }
+	//
+	// public static IStrategoString asATermString_1(IStrategoTerm t) {
+	// return (IStrategoString) t;
+	// }
+	//
+	// public static boolean isATermAppl_1(IStrategoTerm t) {
+	// return t.getTermType() == IStrategoString.APPL;
+	// }
+	//
+	// public static IStrategoAppl asATermAppl_1(IStrategoTerm t) {
+	// return (IStrategoAppl) t;
+	// }
+	//
+	// public static boolean isATermList_1(IStrategoTerm t) {
+	// return t.getTermType() == IStrategoTerm.LIST;
+	// }
+	//
+	// public static IStrategoList asATermList_1(IStrategoTerm t) {
+	// return (IStrategoList) t;
+	// }
 
 	public static int length_1(INodeList<I_STerm> ts) {
 		return ts.size();
 	}
 
-	public static boolean isATermTuple_1(IStrategoTerm t) {
-		return t.getTermType() == IStrategoTerm.TUPLE;
-	}
-
-	public static IStrategoTuple asATermTuple_1(IStrategoTerm t) {
-		return (IStrategoTuple) t;
-	}
+	// public static boolean isATermTuple_1(IStrategoTerm t) {
+	// return t.getTermType() == IStrategoTerm.TUPLE;
+	// }
+	//
+	// public static IStrategoTuple asATermTuple_1(IStrategoTerm t) {
+	// return (IStrategoTuple) t;
+	// }
 
 	// public static AValue primCall_5(AutoInterpInteropContext context,
 	// String name, INodeList<I_Strategy> ass,
@@ -109,15 +88,15 @@ public class Natives {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static INodeList<IStrategoTerm> asNILofT_1(INodeList<?> l) {
-		return (INodeList<IStrategoTerm>) l;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static INodeList<String> asNILofString_1(INodeList<?> l) {
-		return (INodeList<String>) l;
-	}
+	// @SuppressWarnings("unchecked")
+	// public static INodeList<IStrategoTerm> asNILofT_1(INodeList<?> l) {
+	// return (INodeList<IStrategoTerm>) l;
+	// }
+	//
+	// @SuppressWarnings("unchecked")
+	// public static INodeList<String> asNILofString_1(INodeList<?> l) {
+	// return (INodeList<String>) l;
+	// }
 
 	public static IStrategoTerm[] List2TARRAY_1(INodeList<IStrategoTerm> ts_) {
 		int size = ts_.size();
@@ -130,14 +109,14 @@ public class Natives {
 		return clone;
 	}
 
-	public static PersistentMap<Object, Object> asD_1(
-			PersistentMap<Object, Object> map) {
-		return map;
-	}
-
-	public static boolean isNil_1(Object v) {
-		return v == null;
-	}
+	// public static PersistentMap<Object, Object> asD_1(
+	// PersistentMap<Object, Object> map) {
+	// return map;
+	// }
+	//
+	// public static boolean isNil_1(Object v) {
+	// return v == null;
+	// }
 
 	public static IStrategoList makeNil_1(ITermFactory tf) {
 		return tf.makeList();
@@ -153,9 +132,6 @@ public class Natives {
 
 	private static int counter = 0;
 
-	public static boolean booleanOr_2(boolean b1, boolean b2) {
-		return b1 || b2;
-	}
 
 	public static boolean isQuotedString_1(String s) {
 		return s.length() > 1 && s.charAt(0) == '"';
@@ -178,35 +154,43 @@ public class Natives {
 		return fresh_counter++;
 	}
 
+	public static boolean isEmptyStrategies_1(INodeList<?> sss) {
+		return sss.isEmpty();
+	}
+
 	public static boolean isEmpty_1(INodeList<?> ass) {
 		return ass.isEmpty();
 	}
 
-	public static boolean booleanAnd_2(boolean b1, boolean b2) {
+	public static boolean boolAnd_2(boolean b1, boolean b2) {
 		return b1 && b2;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static PersistentMap<Object, Object> asSHeap_1(Object map) {
-		return (PersistentMap<Object, Object>) map;
+	public static boolean boolOr_2(boolean b1, boolean b2) {
+		return b1 || b2;
 	}
 
-	public static boolean isATermReal_1(IStrategoTerm t) {
-		return t.getTermType() == IStrategoTerm.REAL;
-	}
+	// @SuppressWarnings("unchecked")
+	// public static PersistentMap<Object, Object> asSHeap_1(Object map) {
+	// return (PersistentMap<Object, Object>) map;
+	// }
 
-	public static IStrategoReal asATermReal_1(IStrategoTerm t) {
-		return (IStrategoReal) t;
-	}
+	// public static boolean isATermReal_1(IStrategoTerm t) {
+	// return t.getTermType() == IStrategoTerm.REAL;
+	// }
+	//
+	// public static IStrategoReal asATermReal_1(IStrategoTerm t) {
+	// return (IStrategoReal) t;
+	// }
 
 	public static double parseReal_1(String s) {
 		return Double.parseDouble(s);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static INodeList<I_Thunk> asListOfThunks_1(INodeList<?> l) {
-		return (INodeList<I_Thunk>) l;
-	}
+	// @SuppressWarnings("unchecked")
+	// public static INodeList<I_Thunk> asListOfThunks_1(INodeList<?> l) {
+	// return (INodeList<I_Thunk>) l;
+	// }
 
 	public static boolean popOnFailure_1(StackTracer t) {
 		t.popOnFailure();

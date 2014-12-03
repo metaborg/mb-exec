@@ -1,7 +1,6 @@
 module definitions
 
 imports
-  base
   shared
   stratego-signatures
   state
@@ -33,7 +32,7 @@ rules // let - in - end
     sdef => SDefT(sname, ss, ts, s),
     typedIds(ss) -exid-> ss',
     typedIds(ts) -exid-> ts',
-    SUpdate(d, sname, Thunk(sname, ss', ts', s, e, d)) -salloc-> d',
+    SUpdate(d, sname, Thunk(sname, ss', ts', s, e, d)) -salloc-> _,
     VEnv e, SEnv d |- letEval(sdefs, in_s) -leteval-> v
     
 signature
@@ -54,39 +53,34 @@ signature
 
 rules // strategy definitions
   
-  VEnv e, SEnv d |- allocModule(Specification([sigs, Strategies(ss)])) -allocmodule-> d'
+  SEnv d |- allocModule(Specification([_, Strategies(ss)])) -allocmodule-> d'
   where
     allocDefs(ss, d) -allocsdefs-> allocdDefs(ss', d'),
-    VEnv e, SEnv d' |- storeDefs(ss') -storesdefs-> b
+    SEnv d' |- storeDefs(ss') -storesdefs-> _
   
   allocDefs([], senv) -allocsdefs-> allocdDefs([], senv)
   
-  allocDefs([sdef | sdefs], senv) -allocsdefs-> ad
+  allocDefs([AnnoDef(_, sdef') | sdefs], senv) -allocsdefs-> ad
   where
-    sdef => AnnoDef(annos, sdef'),
     allocDefs([sdef' | sdefs], senv) -allocsdefs-> ad
   
   allocDefs([sdef | sdefs], senv) -allocsdefs-> ad
   where
-    sdef => ExtSDef(a, b, c),
+    sdef => ExtSDef(_, _, _),
     allocDefs(sdefs, senv) -allocsdefs-> ad
   
-  allocDefs([sdef | sdefs], senv) -allocsdefs-> allocdDefs([sdef | sdefs'], senv'')
+  allocDefs([sdef@SDefT(sname, _, _, _) | sdefs], senv) -allocsdefs-> allocdDefs([sdef | sdefs'], senv'')
   where
-    sdef => SDefT(sname, ss, ts, s),
     SAlloc(senv, sname) -salloc-> senv',
     allocDefs(sdefs, senv') -allocsdefs-> allocdDefs(sdefs', senv'')
   
-  VEnv e, SEnv d |- storeDefs([]) -storesdefs-> v
-  where
-    true => v
+  storeDefs([]) -storesdefs-> true
   
-  VEnv e, SEnv d |- storeDefs([sdef | sdefs]) -storesdefs-> b
+  VEnv e, SEnv d |- storeDefs([SDefT(sname, ss, ts, s) | sdefs]) -storesdefs-> b
   where
-    sdef => SDefT(sname, ss, ts, s),
     typedIds(ss) -exid-> ss',
     typedIds(ts) -exid-> ts',
-    SUpdate(d, sname, Thunk(sname, ss', ts', s, e, d)) -salloc-> d',
+    SUpdate(d, sname, Thunk(sname, ss', ts', s, e, d)) -salloc-> _,
     VEnv e, SEnv d |- storeDefs(sdefs) -storesdefs-> b
   
 signature
@@ -102,17 +96,17 @@ signature
     
 rules // typedid name extractor
 
-  typedIds([]) -exid-> asNILofString([])
+  typedIds([]) -exid-> []
  
-  typedIds([VarDec(x, dc) | xs]) -exid-> [ x | xs' ]
+  typedIds([VarDec(x, _) | xs]) -exid-> [ x | xs' ]
   where
     typedIds(xs) -exid-> xs'
 
 rules // SDefT name extractor
 
-  sdefNames([]) -exid-> asNILofString([])
+  sdefNames([]) -exid-> []
   
-  sdefNames([SDefT(sname, ss, ts, s) | sdefs]) -exid-> [sname | snames]
+  sdefNames([SDefT(sname, _, _, _) | sdefs]) -exid-> [sname | snames]
   where
     sdefNames(sdefs) -exid-> snames
 

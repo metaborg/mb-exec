@@ -11,7 +11,6 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.DebugUtil;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -25,6 +24,8 @@ import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.interpreter.util.DebugUtil;
+
 import static org.spoofax.interpreter.core.Tools.*;
 
 public class Build extends Strategy {
@@ -118,8 +119,8 @@ public class Build extends Strategy {
             return actualArgs;
         }
 
-        throw new InterpreterException("Unknown term explosion : '" + t + "' " + t.getTermType()
-                                       + " : " + actualCtor + " / " + actualArgs);
+        // According to STR-626 non-string constructor term implosion should fail not crash
+        return null;
     }
 
     private IStrategoTerm doBuildExplode(ITermFactory factory, IStrategoTerm actualCtor, IStrategoTerm actualArgs) throws InterpreterException {
