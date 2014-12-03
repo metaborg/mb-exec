@@ -66,12 +66,12 @@ rules
   bindsvars([], [], d_into) -bindsvars-> d_into
  
   // 1. CallT without arguments
-  VEnv e, SEnv d |- bindsvars([x | xs], [CallT(SVar(tgt), [], []) | ss], d_into) -bindsvars-> d_into''
+  VEnv e, SEnv d |- bindsvars([x | xs], [CallT(SVar(tgt), ass, ats) | ss], d_into) -bindsvars-> d_into''
   where
+    boolAnd(isEmptyStrategies(ass), isEmpty(ats)) == true,
     SLookup(d, tgt) -slook-> SLookupResult(_, Thunk(_, fss, fts, sactual, e_tgt, d_tgt)),
     SPush(d_into, x, Thunk(x, fss, fts, sactual, e_tgt, d_tgt)) -salloc-> d_into',
     VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
-
   
   // 2. CallT with arguments
   VEnv e, SEnv d |- bindsvars([x | xs], [CallT(SVar(tgt), ass, ats) | ss], d_into) -bindsvars-> d_into''
@@ -90,7 +90,7 @@ rules
     s =!=> CallT(SVar(_), _, _),
     SPush(d_into, x, Thunk(x, [], [], s, e, d)) -salloc-> d_into',
     VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
-  
+    
 signature
 
   native-constructors
