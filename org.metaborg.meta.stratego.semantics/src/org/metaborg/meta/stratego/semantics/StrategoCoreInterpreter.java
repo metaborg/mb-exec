@@ -51,7 +51,7 @@ public class StrategoCoreInterpreter {
 	private AutoInterpInteropContext context;
 
 	public StrategoCoreInterpreter() {
-
+		reset();
 	}
 
 	public void reset() {

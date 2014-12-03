@@ -66,7 +66,6 @@ public class TestTests1 {
 	@Test
 	public void test() throws IOException {
 		StrategoCoreInterpreter interpreter = new StrategoCoreInterpreter();
-		interpreter.reset();
 
 		// load ctrees
 		for (String ctreePath : ctreePaths) {
@@ -82,7 +81,6 @@ public class TestTests1 {
 		} catch (StrategoErrorExit errexit) {
 			fail("Application failed");
 		}
-
 	}
 
 	public static class TT {
