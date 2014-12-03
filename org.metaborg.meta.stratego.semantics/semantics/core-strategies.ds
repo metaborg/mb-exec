@@ -204,24 +204,22 @@ rules // term traversal: one
 rules // term traversal: some
 
   // <some> (t1, t2, ...)
-  T t, TF tf |- Some(s) --> S(t')
+  T t, TF tf |- Some(s) --> S(t'')
   where
     t : TTUP,
     getAllSubterms[t]() => ts,
-    makeList[tf](ts) => ats,
-    T ats |- (oneOrMore(s), Bool false) -some-> (ats', Bool true),
-    getAllSubterms[ats']() => ts',
-    makeTuple[tf](ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => _
+    T makeList[tf](ts) |- (oneOrMore(s), Bool false) -some-> (ats', Bool true),
+    makeTuple[tf](getAllSubterms[ats']()) => t',
+    annotateTerm[tf](t', getAnnotations[t]()) => t''
   
   // <some> [t1, t2, ...]
-  T t, TF tf |- Some(s) --> S(ats')
+  T t, TF tf |- Some(s) --> S(ats'')
   where
     t : TLIST,
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
     T ats |- (oneOrMore(s), Bool false) -some-> (ats', Bool true),
-    annotateTerm[tf](ats', getAnnotations[t]()) => _
+    annotateTerm[tf](ats', getAnnotations[t]()) => ats''
 
   // <some> TNAME(t1, t2, )
   T t, TF tf |- Some(s) --> S(t'')
@@ -249,7 +247,7 @@ signature
     Somer -some-> TLIST
 
 rules
-  
+
   // case t == []: return untouched list
   T t |- (oneOrMore(_), Bool _) -some-> (t, Bool false)
   where
@@ -262,19 +260,16 @@ rules
     t : TLIST,
     isEmpty[t]() == false,
     head[t]() => head,
-    tail[t]() => tail,
     T head |- s --> F(),
-    T tail |- (oneOrMore(s), Bool f) -some-> (tail', Bool f'),
+    T tail[t]() |- (oneOrMore(s), Bool f) -some-> (tail', Bool f'),
     makeListCons[tf](head, tail') => list'
   
   // case t == [t1 | t2] and <s> t1 
-  T t, TF tf |- (oneOrMore(s), Bool _) -some-> (list', Bool true)
+  T t, TF tf |- (oneOrMore(s), Bool f) -some-> (list', Bool true)
   where
     t : TLIST,
     isEmpty[t]() == false,
-    head[t]() => head,
-    tail[t]() => tail,
-    T head |- s --> S(head'),
-    T tail |- (oneOrMore(s), Bool true) -some-> (tail', Bool _),
+    T head[t]() |- s --> S(head'),
+    T tail[t]() |- (oneOrMore(s), Bool true) -some-> (tail', Bool f'),
     makeListCons[tf](head', tail') => list'
     
