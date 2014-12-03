@@ -2,110 +2,93 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public class sdefNames_1 extends NoOpNode implements I_NameExtractor
-{ 
-  @Children public INodeList<I_Def> _1;
+public class sdefNames_1 extends AbstractNode implements I_NameExtractor {
+	private boolean hasSpecialized;
 
-  public sdefNames_1 (INodeSource source, INodeList<I_Def> _1) 
-  { 
-    this.setSourceInfo(source);
-    this._1 = adoptChildren(_1);
-  }
+	@Children
+	public INodeList<I_Def> _1;
 
-  private boolean hasSpecialized;
+	public sdefNames_1(INodeSource source, INodeList<I_Def> _1) {
+		this.setSourceInfo(source);
+		this._1 = adoptChildren(_1);
+	}
 
-  public void specializeChildren(int depth)
-  { 
-    if(!hasSpecialized)
-    { 
-      for(I_Def _1_elem : _1)
-      { 
-        if(_1_elem instanceof IGenericNode)
-        { 
-          ((IGenericNode)_1_elem).specialize(depth);
-        }
-      }
-      hasSpecialized = true;
-    }
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final sdefNames_1 other = (sdefNames_1) obj;
+		if (_1 == null) {
+			if (other._1 != null) {
+				return false;
+			}
+		} else if (!_1.equals(other._1)) {
+			return false;
+		}
+		return true;
+	}
 
-  public exid_Result exec_exid()
-  { 
-    this.specializeChildren(0);
-    final INodeList<I_Def> lifted_1 = _1;
-    if(lifted_1 != null && lifted_1.isEmpty())
-    { 
-      final INodeList<I_Node> tmpbuild549 = NodeList.NIL(I_Node.class);
-      final INodeList<String> tmpbuild548 = ds.manual.interpreter.Natives.asNILofString_1(tmpbuild549);
-      final INodeList<String> lifted_2 = tmpbuild548;
-      final INodeList<String> lifted_out_1 = lifted_2;
-      final exid_Result exid_Result1 = new exid_Result(lifted_out_1);
-      return exid_Result1;
-    }
-    else
-    { 
-      if(lifted_1 != null && !lifted_1.isEmpty())
-      { 
-        final I_Def lifted_3 = lifted_1.head();
-        final INodeList<I_Def> sdefs = lifted_1.tail();
-        final SDefT_4 tmpbuild552 = lifted_3.match(SDefT_4.class);
-        if(tmpbuild552 != null)
-        { 
-          final String sname = tmpbuild552.get_1();
-          final INodeList<I_Typedid> ss = tmpbuild552.get_2();
-          final INodeList<I_Typedid> ts = tmpbuild552.get_3();
-          final I_Strategy s = tmpbuild552.get_4();
-          final sdefNames_1 tmpbuild551 = new sdefNames_1(getSourceInfo(), sdefs);
-          final I_NameExtractor lifted_4 = tmpbuild551;
-          final exid_Result tmpresult119 = lifted_4.exec_exid();
-          final INodeList<String> snames = tmpresult119.value;
-          final INodeList<String> tmpbuild550 = new NodeList<String>(sname, snames);
-          final INodeList<String> lifted_2 = tmpbuild550;
-          final INodeList<String> lifted_out_1 = lifted_2;
-          final exid_Result exid_Result1 = new exid_Result(lifted_out_1);
-          return exid_Result1;
-        }
-      }
-    }
-    throw new InterpreterException("Rule failure");
-  }
+	@Override
+	public void specializeChildren(int depth) {
+		if (!hasSpecialized) {
+			for (I_Def _1_elem : _1) {
+				if (_1_elem instanceof IGenericNode) {
+					((IGenericNode) _1_elem).specialize(depth);
+				}
+			}
+			hasSpecialized = true;
+		}
+	}
 
-  public INodeList<I_Def> get_1()
-  { 
-    if(this._1 instanceof IGenericNode)
-    { 
-      ((IGenericNode)this._1).specialize(1);
-    }
-    return this._1;
-  }
+	public R_exid_List_String_ exec_exid() {
+		this.specializeChildren(0);
+		final INodeList<I_Def> lifted_31267 = this._1;
+		{
+			if (lifted_31267 != null
+					&& lifted_31267.equals(NodeList.NIL(Object.class))) {
+				final INodeList<String> result_out4536 = NodeList
+						.NIL(String.class);
+				return new R_exid_List_String_(result_out4536);
+			} else {
+				if (lifted_31267 != null && !lifted_31267.isEmpty()) {
+					final I_Def lifted_31287 = lifted_31267.head();
+					final INodeList<I_Def> sdefs944 = lifted_31267.tail();
+					final SDefT_4 $tmp2697 = lifted_31287.match(SDefT_4.class);
+					if ($tmp2697 != null) {
+						final String sname1213 = $tmp2697.get_1();
+						final INodeList<I_Typedid> lifted_29827 = $tmp2697
+								.get_2();
+						final INodeList<I_Typedid> lifted_29837 = $tmp2697
+								.get_3();
+						final I_Strategy lifted_29847 = $tmp2697.get_4();
+						final I_NameExtractor lifted_31297 = new sdefNames_1(
+								null, sdefs944);
+						final R_exid_List_String_ $tmp2698 = lifted_31297
+								.exec_exid();
+						final INodeList<String> snames321 = $tmp2698.value;
+						final INodeList<String> lifted_31277 = new NodeList<String>(
+								sname1213, snames321);
+						final INodeList<String> result_out4536 = lifted_31277;
+						return new R_exid_List_String_(result_out4536);
+					} else {
+					}
+				} else {
+				}
+			}
+		}
+		{
+			throw new InterpreterException("Rule failure");
+		}
+	}
 
-  @Override public boolean equals(Object obj)
-  { 
-    if(this == obj)
-    { 
-      return true;
-    }
-    if(obj == null)
-    { 
-      return false;
-    }
-    if(getClass() != obj.getClass())
-    { 
-      return false;
-    }
-    final sdefNames_1 other = (sdefNames_1)obj;
-    if(_1 == null)
-    { 
-      if(other._1 != null)
-      { 
-        return false;
-      }
-    }
-    else
-      if(!_1.equals(other._1))
-      { 
-        return false;
-      }
-    return true;
-  }
+	public INodeList<I_Def> get_1() {
+		return this._1;
+	}
 }

@@ -2,144 +2,117 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public class Let_2 extends NoOpNode implements I_Strategy
-{ 
-  @Children public INodeList<I_Def> _1;
+public class Let_2 extends AbstractNode implements I_Strategy {
+	private boolean hasSpecialized;
 
-  @Child public I_Strategy _2;
+	@Children
+	public INodeList<I_Def> _1;
 
-  public Let_2 (INodeSource source, INodeList<I_Def> _1, I_Strategy _2) 
-  { 
-    this.setSourceInfo(source);
-    this._1 = adoptChildren(_1);
-    this._2 = adoptChild(_2);
-  }
+	@Child
+	public I_Strategy _2;
 
-  private boolean hasSpecialized;
+	public Let_2(INodeSource source, INodeList<I_Def> _1, I_Strategy _2) {
+		this.setSourceInfo(source);
+		this._1 = adoptChildren(_1);
+		this._2 = adoptChild(_2);
+	}
 
-  public void specializeChildren(int depth)
-  { 
-    if(!hasSpecialized)
-    { 
-      for(I_Def _1_elem : _1)
-      { 
-        if(_1_elem instanceof IGenericNode)
-        { 
-          ((IGenericNode)_1_elem).specialize(depth);
-        }
-      }
-      if(_2 instanceof IGenericNode)
-      { 
-        ((IGenericNode)_2).specialize(depth);
-      }
-      hasSpecialized = true;
-    }
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Let_2 other = (Let_2) obj;
+		if (_1 == null) {
+			if (other._1 != null) {
+				return false;
+			}
+		} else if (!_1.equals(other._1)) {
+			return false;
+		}
+		if (_2 == null) {
+			if (other._2 != null) {
+				return false;
+			}
+		} else if (!_2.equals(other._2)) {
+			return false;
+		}
+		return true;
+	}
 
-  public default_Result exec_default(com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_in_1, com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_in_2, ds.manual.interpreter.AutoInterpInteropContext lifted_in_3, org.spoofax.interpreter.terms.ITermFactory lifted_in_4, org.spoofax.interpreter.terms.IStrategoTerm lifted_in_5, org.spoofax.interpreter.core.StackTracer lifted_in_6, ds.manual.interpreter.SState lifted_in_7, boolean lifted_in_8, ds.manual.interpreter.VState lifted_in_9)
-  { 
-    this.specializeChildren(0);
-    final INodeList<I_Def> lifted_1 = _1;
-    final I_Strategy lifted_2 = _2;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> senv_1 = lifted_in_1;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> venv_1 = lifted_in_2;
-    final ds.manual.interpreter.AutoInterpInteropContext ic_1 = lifted_in_3;
-    final org.spoofax.interpreter.terms.ITermFactory tf_1 = lifted_in_4;
-    final org.spoofax.interpreter.terms.IStrategoTerm t_1 = lifted_in_5;
-    final org.spoofax.interpreter.core.StackTracer trace_1 = lifted_in_6;
-    final ds.manual.interpreter.SState sheap_1 = lifted_in_7;
-    final boolean bool_1 = lifted_in_8;
-    final ds.manual.interpreter.VState vheap_1 = lifted_in_9;
-    final INodeList<I_Def> sdefs = lifted_1;
-    final I_Strategy s = lifted_2;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> d = senv_1;
-    final sdefNames_1 tmpbuild166 = new sdefNames_1(getSourceInfo(), sdefs);
-    final I_NameExtractor lifted_7 = tmpbuild166;
-    final exid_Result tmpresult38 = lifted_7.exec_exid();
-    final INodeList<String> snames = tmpresult38.value;
-    final SParAlloc_2 tmpbuild165 = new SParAlloc_2(getSourceInfo(), d, snames);
-    final I_SHeapOp lifted_8 = tmpbuild165;
-    final salloc_Result tmpresult37 = lifted_8.exec_salloc(sheap_1);
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_ = tmpresult37.value;
-    final ds.manual.interpreter.SState sheap_2 = tmpresult37.get_1();
-    final letEval_2 tmpbuild164 = new letEval_2(getSourceInfo(), sdefs, s);
-    final I_LetHelper lifted_9 = tmpbuild164;
-    final leteval_Result tmpresult36 = lifted_9.exec_leteval(ic_1, tf_1, t_1, venv_1, d_, trace_1, sheap_2, bool_1, vheap_1);
-    final AValue v = tmpresult36.value;
-    final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult36.get_1();
-    final ds.manual.interpreter.SState sheap_3 = tmpresult36.get_2();
-    final boolean bool_2 = tmpresult36.get_3();
-    final ds.manual.interpreter.VState vheap_2 = tmpresult36.get_4();
-    final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_2;
-    final ds.manual.interpreter.SState lifted_4 = sheap_3;
-    final boolean lifted_5 = bool_2;
-    final ds.manual.interpreter.VState lifted_6 = vheap_2;
-    final AValue lifted_out_1 = v;
-    final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-    final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-    final boolean lifted_out_4 = lifted_5;
-    final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-    final default_Result default_Result14 = new default_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-    return default_Result14;
-  }
+	@Override
+	public void specializeChildren(int depth) {
+		if (!hasSpecialized) {
+			for (I_Def _1_elem : _1) {
+				if (_1_elem instanceof IGenericNode) {
+					((IGenericNode) _1_elem).specialize(depth);
+				}
+			}
+			if (_2 instanceof IGenericNode) {
+				((IGenericNode) _2).specialize(depth);
+			}
+			hasSpecialized = true;
+		}
+	}
 
-  public INodeList<I_Def> get_1()
-  { 
-    if(this._1 instanceof IGenericNode)
-    { 
-      ((IGenericNode)this._1).specialize(1);
-    }
-    return this._1;
-  }
+	public R_default_Value exec_default(
+			ds.manual.interpreter.AutoInterpInteropContext _1,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _2,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _3,
+			org.spoofax.interpreter.terms.IStrategoTerm _4,
+			org.spoofax.interpreter.terms.ITermFactory _5,
+			ds.manual.interpreter.SState _6, ds.manual.interpreter.VState _7,
+			boolean _8, org.spoofax.interpreter.core.StackTracer _9) {
+		this.specializeChildren(0);
+		final ds.manual.interpreter.AutoInterpInteropContext ic_in2714 = _1;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> senv_in3074 = _2;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> venv_in3164 = _3;
+		final org.spoofax.interpreter.terms.IStrategoTerm t_in2714 = _4;
+		final org.spoofax.interpreter.terms.ITermFactory tf_in2714 = _5;
+		final ds.manual.interpreter.SState sheap_in3614 = _6;
+		final ds.manual.interpreter.VState vheap_in3254 = _7;
+		final boolean bool_in2714 = _8;
+		final org.spoofax.interpreter.core.StackTracer trace_in2894 = _9;
+		final INodeList<I_Def> sdefs940 = this._1;
+		final I_Strategy s11433 = this._2;
+		final I_NameExtractor lifted_33427 = new sdefNames_1(null, sdefs940);
+		final R_exid_List_String_ $tmp2527 = lifted_33427.exec_exid();
+		final INodeList<String> snames320 = $tmp2527.value;
+		final I_SHeapOp lifted_33437 = new SParAlloc_2(null, senv_in3074,
+				snames320);
+		final R_salloc_SEnv $tmp2528 = lifted_33437.exec_salloc(sheap_in3614);
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> d_20 = $tmp2528.value;
+		final ds.manual.interpreter.SState sheap_29547 = $tmp2528.get_1();
+		final I_LetHelper lifted_33447 = new letEval_2(null, sdefs940, s11433);
+		final R_leteval_Value $tmp2529 = lifted_33447.exec_leteval(ic_in2714,
+				t_in2714, tf_in2714, venv_in3164, d_20, sheap_29547,
+				vheap_in3254, bool_in2714, trace_in2894);
+		final IValue v4123 = $tmp2529.value;
+		final ds.manual.interpreter.SState sheap_34702 = $tmp2529.get_1();
+		final ds.manual.interpreter.VState vheap_28901 = $tmp2529.get_2();
+		final boolean bool_28462 = $tmp2529.get_3();
+		final org.spoofax.interpreter.core.StackTracer trace_28525 = $tmp2529
+				.get_4();
+		final ds.manual.interpreter.SState sheap_out3614 = sheap_34702;
+		final ds.manual.interpreter.VState vheap_out3254 = vheap_28901;
+		final boolean bool_out2714 = bool_28462;
+		final org.spoofax.interpreter.core.StackTracer trace_out2894 = trace_28525;
+		final IValue result_out4514 = v4123;
+		return new R_default_Value(result_out4514, sheap_out3614,
+				vheap_out3254, bool_out2714, trace_out2894);
+	}
 
-  public I_Strategy get_2()
-  { 
-    if(this._2 instanceof IGenericNode)
-    { 
-      ((IGenericNode)this._2).specialize(1);
-    }
-    return this._2;
-  }
+	public INodeList<I_Def> get_1() {
+		return this._1;
+	}
 
-  @Override public boolean equals(Object obj)
-  { 
-    if(this == obj)
-    { 
-      return true;
-    }
-    if(obj == null)
-    { 
-      return false;
-    }
-    if(getClass() != obj.getClass())
-    { 
-      return false;
-    }
-    final Let_2 other = (Let_2)obj;
-    if(_1 == null)
-    { 
-      if(other._1 != null)
-      { 
-        return false;
-      }
-    }
-    else
-      if(!_1.equals(other._1))
-      { 
-        return false;
-      }
-    if(_2 == null)
-    { 
-      if(other._2 != null)
-      { 
-        return false;
-      }
-    }
-    else
-      if(!_2.equals(other._2))
-      { 
-        return false;
-      }
-    return true;
-  }
+	public I_Strategy get_2() {
+		return this._2;
+	}
 }

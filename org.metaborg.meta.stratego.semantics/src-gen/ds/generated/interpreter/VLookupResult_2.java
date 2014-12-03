@@ -2,70 +2,63 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public class VLookupResult_2 extends NoOpNode implements I_VLookupResult
-{ 
-  public com.github.krukow.clj_ds.PersistentMap<Object, Object> _1;
+public class VLookupResult_2 extends AbstractNode implements I_VLookupResult {
+	private boolean hasSpecialized;
 
-  public AValue _2;
+	public com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _1;
 
-  public VLookupResult_2 (INodeSource source, com.github.krukow.clj_ds.PersistentMap<Object, Object> _1, AValue _2) 
-  { 
-    this.setSourceInfo(source);
-    this._1 = _1;
-    this._2 = _2;
-  }
+	public IValue _2;
 
-  private boolean hasSpecialized;
+	public VLookupResult_2(
+			INodeSource source,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _1,
+			IValue _2) {
+		this.setSourceInfo(source);
+		this._1 = _1;
+		this._2 = _2;
+	}
 
-  public void specializeChildren(int depth)
-  { 
-    if(!hasSpecialized)
-    { 
-      hasSpecialized = true;
-    }
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final VLookupResult_2 other = (VLookupResult_2) obj;
+		if (_1 == null) {
+			if (other._1 != null) {
+				return false;
+			}
+		} else if (!_1.equals(other._1)) {
+			return false;
+		}
+		if (_2 == null) {
+			if (other._2 != null) {
+				return false;
+			}
+		} else if (!_2.equals(other._2)) {
+			return false;
+		}
+		return true;
+	}
 
-  public com.github.krukow.clj_ds.PersistentMap<Object, Object> get_1()
-  { 
-    return this._1;
-  }
+	@Override
+	public void specializeChildren(int depth) {
+		if (!hasSpecialized) {
+			hasSpecialized = true;
+		}
+	}
 
-  public AValue get_2()
-  { 
-    return this._2;
-  }
+	public com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> get_1() {
+		return this._1;
+	}
 
-  @Override public boolean equals(Object obj)
-  { 
-    if(this == obj)
-    { 
-      return true;
-    }
-    if(obj == null)
-    { 
-      return false;
-    }
-    if(getClass() != obj.getClass())
-    { 
-      return false;
-    }
-    final VLookupResult_2 other = (VLookupResult_2)obj;
-    if(_1 != other._1)
-    { 
-      return false;
-    }
-    if(_2 == null)
-    { 
-      if(other._2 != null)
-      { 
-        return false;
-      }
-    }
-    else
-      if(!_2.equals(other._2))
-      { 
-        return false;
-      }
-    return true;
-  }
+	public IValue get_2() {
+		return this._2;
+	}
 }

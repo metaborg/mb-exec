@@ -2,340 +2,452 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public class bindsvars_3 extends NoOpNode implements I_Binder
-{ 
-  @Children public INodeList<String> _1;
+public class bindsvars_3 extends AbstractNode implements I_Binder {
+	private boolean hasSpecialized;
 
-  @Children public INodeList<I_Strategy> _2;
+	public INodeList<String> _1;
 
-  public com.github.krukow.clj_ds.PersistentMap<Object, Object> _3;
+	@Children
+	public INodeList<I_Strategy> _2;
 
-  public bindsvars_3 (INodeSource source, INodeList<String> _1, INodeList<I_Strategy> _2, com.github.krukow.clj_ds.PersistentMap<Object, Object> _3) 
-  { 
-    this.setSourceInfo(source);
-    this._1 = _1;
-    this._2 = adoptChildren(_2);
-    this._3 = _3;
-  }
+	public com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _3;
 
-  private boolean hasSpecialized;
+	public bindsvars_3(
+			INodeSource source,
+			INodeList<String> _1,
+			INodeList<I_Strategy> _2,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _3) {
+		this.setSourceInfo(source);
+		this._1 = _1;
+		this._2 = adoptChildren(_2);
+		this._3 = _3;
+	}
 
-  public void specializeChildren(int depth)
-  { 
-    if(!hasSpecialized)
-    { 
-      for(I_Strategy _2_elem : _2)
-      { 
-        if(_2_elem instanceof IGenericNode)
-        { 
-          ((IGenericNode)_2_elem).specialize(depth);
-        }
-      }
-      hasSpecialized = true;
-    }
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final bindsvars_3 other = (bindsvars_3) obj;
+		if (_1 == null) {
+			if (other._1 != null) {
+				return false;
+			}
+		} else if (!_1.equals(other._1)) {
+			return false;
+		}
+		if (_2 == null) {
+			if (other._2 != null) {
+				return false;
+			}
+		} else if (!_2.equals(other._2)) {
+			return false;
+		}
+		if (_3 == null) {
+			if (other._3 != null) {
+				return false;
+			}
+		} else if (!_3.equals(other._3)) {
+			return false;
+		}
+		return true;
+	}
 
-  public bindsvars_Result exec_bindsvars(ds.manual.interpreter.AutoInterpInteropContext lifted_in_1, org.spoofax.interpreter.terms.IStrategoTerm lifted_in_2, org.spoofax.interpreter.terms.ITermFactory lifted_in_3, com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_in_4, com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_in_5, org.spoofax.interpreter.core.StackTracer lifted_in_6, boolean lifted_in_7, ds.manual.interpreter.VState lifted_in_8, ds.manual.interpreter.SState lifted_in_9)
-  { 
-    this.specializeChildren(0);
-    final INodeList<String> lifted_1 = _1;
-    final INodeList<I_Strategy> lifted_2 = _2;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_3 = _3;
-    final ds.manual.interpreter.AutoInterpInteropContext ic_1 = lifted_in_1;
-    final org.spoofax.interpreter.terms.IStrategoTerm t_1 = lifted_in_2;
-    final org.spoofax.interpreter.terms.ITermFactory tf_1 = lifted_in_3;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> venv_1 = lifted_in_4;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> senv_1 = lifted_in_5;
-    final org.spoofax.interpreter.core.StackTracer trace_1 = lifted_in_6;
-    final boolean bool_1 = lifted_in_7;
-    final ds.manual.interpreter.VState vheap_1 = lifted_in_8;
-    final ds.manual.interpreter.SState sheap_1 = lifted_in_9;
-    if(lifted_1 != null && lifted_1.isEmpty())
-    { 
-      if(lifted_2 != null && lifted_2.isEmpty())
-      { 
-        final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_into = lifted_3;
-        final com.github.krukow.clj_ds.PersistentMap<Object, Object> e = venv_1;
-        final com.github.krukow.clj_ds.PersistentMap<Object, Object> d = senv_1;
-        final org.spoofax.interpreter.core.StackTracer lifted_4 = trace_1;
-        final boolean lifted_5 = bool_1;
-        final ds.manual.interpreter.VState lifted_6 = vheap_1;
-        final ds.manual.interpreter.SState lifted_7 = sheap_1;
-        final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_out_1 = d_into;
-        final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_4;
-        final boolean lifted_out_3 = lifted_5;
-        final ds.manual.interpreter.VState lifted_out_4 = lifted_6;
-        final ds.manual.interpreter.SState lifted_out_5 = lifted_7;
-        final bindsvars_Result bindsvars_Result0 = new bindsvars_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-        return bindsvars_Result0;
-      }
-    }
-    else
-    { 
-      if(lifted_1 != null && !lifted_1.isEmpty())
-      { 
-        final String x = lifted_1.head();
-        final INodeList<String> xs = lifted_1.tail();
-        if(lifted_2 != null && !lifted_2.isEmpty())
-        { 
-          final I_Strategy s = lifted_2.head();
-          final INodeList<I_Strategy> ss = lifted_2.tail();
-          final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_into = lifted_3;
-          final com.github.krukow.clj_ds.PersistentMap<Object, Object> e = venv_1;
-          final com.github.krukow.clj_ds.PersistentMap<Object, Object> d = senv_1;
-          final CallT_3 tmpbuild468 = s.match(CallT_3.class);
-          if(tmpbuild468 != null)
-          { 
-            final I_SVar lifted_8 = tmpbuild468.get_1();
-            final INodeList<I_Strategy> lifted_9 = tmpbuild468.get_2();
-            final INodeList<I_STerm> lifted_10 = tmpbuild468.get_3();
-            final SVar_1 tmpbuild491 = lifted_8.match(SVar_1.class);
-            if(tmpbuild491 != null)
-            { 
-              final String tgt = tmpbuild491.get_1();
-              final INodeList<I_Strategy> ass = lifted_9;
-              final INodeList<I_STerm> ats = lifted_10;
-              final boolean tmpbuild490 = ds.manual.interpreter.Natives.isEmpty_1(ass);
-              final boolean empty_ass = tmpbuild490;
-              final boolean tmpbuild489 = ds.manual.interpreter.Natives.isEmpty_1(ats);
-              final boolean empty_ats = tmpbuild489;
-              final boolean tmpbuild469 = ds.manual.interpreter.Natives.booleanAnd_2(empty_ass, empty_ats);
-              if(tmpbuild469 == true)
-              { 
-                final SLookup_2 tmpbuild475 = new SLookup_2(getSourceInfo(), d, tgt);
-                final I_SHeapOp lifted_12 = tmpbuild475;
-                final slook_Result tmpresult91 = lifted_12.exec_slook(sheap_1);
-                final I_SLookupResult lifted_11 = tmpresult91.value;
-                final ds.manual.interpreter.SState sheap_2 = tmpresult91.get_1();
-                final SLookupResult_2 tmpbuild474 = lifted_11.match(SLookupResult_2.class);
-                if(tmpbuild474 != null)
-                { 
-                  final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_13 = tmpbuild474.get_1();
-                  final I_Thunk lifted_14 = tmpbuild474.get_2();
-                  final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_ = lifted_13;
-                  final Thunk_6 tmpbuild473 = lifted_14.match(Thunk_6.class);
-                  if(tmpbuild473 != null)
-                  { 
-                    final String tgt__ = tmpbuild473.get_1();
-                    final INodeList<String> fss = tmpbuild473.get_2();
-                    final INodeList<String> fts = tmpbuild473.get_3();
-                    final I_Strategy sactual = tmpbuild473.get_4();
-                    final com.github.krukow.clj_ds.PersistentMap<Object, Object> e_tgt = tmpbuild473.get_5();
-                    final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_tgt = tmpbuild473.get_6();
-                    final Thunk_6 tmpbuild472 = new Thunk_6(getSourceInfo(), x, fss, fts, sactual, e_tgt, d_tgt);
-                    final SPush_3 tmpbuild471 = new SPush_3(getSourceInfo(), d_into, x, tmpbuild472);
-                    final I_SHeapOp lifted_15 = tmpbuild471;
-                    final salloc_Result tmpresult90 = lifted_15.exec_salloc(sheap_2);
-                    final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_into_ = tmpresult90.value;
-                    final ds.manual.interpreter.SState sheap_3 = tmpresult90.get_1();
-                    final bindsvars_3 tmpbuild470 = new bindsvars_3(getSourceInfo(), xs, ss, d_into_);
-                    final I_Binder lifted_16 = tmpbuild470;
-                    final bindsvars_Result tmpresult89 = lifted_16.exec_bindsvars(ic_1, t_1, tf_1, e, d, trace_1, bool_1, vheap_1, sheap_3);
-                    final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_into__ = tmpresult89.value;
-                    final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult89.get_1();
-                    final boolean bool_2 = tmpresult89.get_2();
-                    final ds.manual.interpreter.VState vheap_2 = tmpresult89.get_3();
-                    final ds.manual.interpreter.SState sheap_4 = tmpresult89.get_4();
-                    final org.spoofax.interpreter.core.StackTracer lifted_4 = trace_2;
-                    final boolean lifted_5 = bool_2;
-                    final ds.manual.interpreter.VState lifted_6 = vheap_2;
-                    final ds.manual.interpreter.SState lifted_7 = sheap_4;
-                    final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_out_1 = d_into__;
-                    final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_4;
-                    final boolean lifted_out_3 = lifted_5;
-                    final ds.manual.interpreter.VState lifted_out_4 = lifted_6;
-                    final ds.manual.interpreter.SState lifted_out_5 = lifted_7;
-                    final bindsvars_Result bindsvars_Result0 = new bindsvars_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                    return bindsvars_Result0;
-                  }
-                }
-              }
-              else
-              { 
-                final boolean tmpbuild488 = ds.manual.interpreter.Natives.booleanAnd_2(empty_ass, empty_ats);
-                if(tmpbuild488 == false)
-                { 
-                  final SLookup_2 tmpbuild487 = new SLookup_2(getSourceInfo(), d, tgt);
-                  final I_SHeapOp lifted_12 = tmpbuild487;
-                  final slook_Result tmpresult97 = lifted_12.exec_slook(sheap_1);
-                  final I_SLookupResult lifted_11 = tmpresult97.value;
-                  final ds.manual.interpreter.SState sheap_2 = tmpresult97.get_1();
-                  final SLookupResult_2 tmpbuild486 = lifted_11.match(SLookupResult_2.class);
-                  if(tmpbuild486 != null)
-                  { 
-                    final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_13 = tmpbuild486.get_1();
-                    final I_Thunk lifted_14 = tmpbuild486.get_2();
-                    final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_ = lifted_13;
-                    final Thunk_6 tmpbuild485 = lifted_14.match(Thunk_6.class);
-                    if(tmpbuild485 != null)
-                    { 
-                      final String tgt__ = tmpbuild485.get_1();
-                      final INodeList<String> fss = tmpbuild485.get_2();
-                      final INodeList<String> fts = tmpbuild485.get_3();
-                      final I_Strategy sactual = tmpbuild485.get_4();
-                      final com.github.krukow.clj_ds.PersistentMap<Object, Object> e_tgt = tmpbuild485.get_5();
-                      final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_tgt = tmpbuild485.get_6();
-                      final bl_1 tmpbuild484 = new bl_1(getSourceInfo(), ats);
-                      final I_Builder lifted_16 = tmpbuild484;
-                      final blds_Result tmpresult96 = lifted_16.exec_blds(d, e, ic_1, t_1, tf_1, trace_1, sheap_2, bool_1, vheap_1);
-                      final I_BuildRes lifted_15 = tmpresult96.value;
-                      final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult96.get_1();
-                      final ds.manual.interpreter.SState sheap_3 = tmpresult96.get_2();
-                      final boolean bool_2 = tmpresult96.get_3();
-                      final ds.manual.interpreter.VState vheap_2 = tmpresult96.get_4();
-                      final BSS_1 tmpbuild483 = lifted_15.match(BSS_1.class);
-                      if(tmpbuild483 != null)
-                      { 
-                        final INodeList<org.spoofax.interpreter.terms.IStrategoTerm> ats_ = tmpbuild483.get_1();
-                        final bindtvars_2 tmpbuild482 = new bindtvars_2(getSourceInfo(), fts, ats_);
-                        final I_Binder lifted_17 = tmpbuild482;
-                        final bindtvars_Result tmpresult95 = lifted_17.exec_bindtvars(e_tgt, vheap_2);
-                        final com.github.krukow.clj_ds.PersistentMap<Object, Object> e_tgt_ = tmpresult95.value;
-                        final ds.manual.interpreter.VState vheap_3 = tmpresult95.get_1();
-                        final bindsvars_3 tmpbuild481 = new bindsvars_3(getSourceInfo(), fss, ass, d_tgt);
-                        final I_Binder lifted_18 = tmpbuild481;
-                        final bindsvars_Result tmpresult94 = lifted_18.exec_bindsvars(ic_1, t_1, tf_1, e, d, trace_2, bool_2, vheap_3, sheap_3);
-                        final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_tgt_ = tmpresult94.value;
-                        final org.spoofax.interpreter.core.StackTracer trace_3 = tmpresult94.get_1();
-                        final boolean bool_3 = tmpresult94.get_2();
-                        final ds.manual.interpreter.VState vheap_4 = tmpresult94.get_3();
-                        final ds.manual.interpreter.SState sheap_4 = tmpresult94.get_4();
-                        final INodeList<String> tmpbuild479 = NodeList.NIL(String.class);
-                        final INodeList<String> tmpbuild480 = NodeList.NIL(String.class);
-                        final Thunk_6 tmpbuild478 = new Thunk_6(getSourceInfo(), x, tmpbuild479, tmpbuild480, sactual, e_tgt_, d_tgt_);
-                        final SPush_3 tmpbuild477 = new SPush_3(getSourceInfo(), d_into, x, tmpbuild478);
-                        final I_SHeapOp lifted_19 = tmpbuild477;
-                        final salloc_Result tmpresult93 = lifted_19.exec_salloc(sheap_4);
-                        final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_into_ = tmpresult93.value;
-                        final ds.manual.interpreter.SState sheap_5 = tmpresult93.get_1();
-                        final bindsvars_3 tmpbuild476 = new bindsvars_3(getSourceInfo(), xs, ss, d_into_);
-                        final I_Binder lifted_20 = tmpbuild476;
-                        final bindsvars_Result tmpresult92 = lifted_20.exec_bindsvars(ic_1, t_1, tf_1, e, d, trace_3, bool_3, vheap_4, sheap_5);
-                        final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_into__ = tmpresult92.value;
-                        final org.spoofax.interpreter.core.StackTracer trace_4 = tmpresult92.get_1();
-                        final boolean bool_4 = tmpresult92.get_2();
-                        final ds.manual.interpreter.VState vheap_5 = tmpresult92.get_3();
-                        final ds.manual.interpreter.SState sheap_6 = tmpresult92.get_4();
-                        final org.spoofax.interpreter.core.StackTracer lifted_4 = trace_4;
-                        final boolean lifted_5 = bool_4;
-                        final ds.manual.interpreter.VState lifted_6 = vheap_5;
-                        final ds.manual.interpreter.SState lifted_7 = sheap_6;
-                        final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_out_1 = d_into__;
-                        final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_4;
-                        final boolean lifted_out_3 = lifted_5;
-                        final ds.manual.interpreter.VState lifted_out_4 = lifted_6;
-                        final ds.manual.interpreter.SState lifted_out_5 = lifted_7;
-                        final bindsvars_Result bindsvars_Result0 = new bindsvars_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                        return bindsvars_Result0;
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-          else
-          { 
-            final CallT_3 tmpbuild497 = s.match(CallT_3.class);
-            if(tmpbuild497 == null)
-            { 
-              final INodeList<String> tmpbuild495 = NodeList.NIL(String.class);
-              final INodeList<String> tmpbuild496 = NodeList.NIL(String.class);
-              final Thunk_6 tmpbuild494 = new Thunk_6(getSourceInfo(), x, tmpbuild495, tmpbuild496, s, e, d);
-              final SPush_3 tmpbuild493 = new SPush_3(getSourceInfo(), d_into, x, tmpbuild494);
-              final I_SHeapOp lifted_8 = tmpbuild493;
-              final salloc_Result tmpresult99 = lifted_8.exec_salloc(sheap_1);
-              final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_into_ = tmpresult99.value;
-              final ds.manual.interpreter.SState sheap_2 = tmpresult99.get_1();
-              final bindsvars_3 tmpbuild492 = new bindsvars_3(getSourceInfo(), xs, ss, d_into_);
-              final I_Binder lifted_9 = tmpbuild492;
-              final bindsvars_Result tmpresult98 = lifted_9.exec_bindsvars(ic_1, t_1, tf_1, e, d, trace_1, bool_1, vheap_1, sheap_2);
-              final com.github.krukow.clj_ds.PersistentMap<Object, Object> d_into__ = tmpresult98.value;
-              final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult98.get_1();
-              final boolean bool_2 = tmpresult98.get_2();
-              final ds.manual.interpreter.VState vheap_2 = tmpresult98.get_3();
-              final ds.manual.interpreter.SState sheap_3 = tmpresult98.get_4();
-              final org.spoofax.interpreter.core.StackTracer lifted_4 = trace_2;
-              final boolean lifted_5 = bool_2;
-              final ds.manual.interpreter.VState lifted_6 = vheap_2;
-              final ds.manual.interpreter.SState lifted_7 = sheap_3;
-              final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_out_1 = d_into__;
-              final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_4;
-              final boolean lifted_out_3 = lifted_5;
-              final ds.manual.interpreter.VState lifted_out_4 = lifted_6;
-              final ds.manual.interpreter.SState lifted_out_5 = lifted_7;
-              final bindsvars_Result bindsvars_Result0 = new bindsvars_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-              return bindsvars_Result0;
-            }
-          }
-        }
-      }
-    }
-    throw new InterpreterException("Rule failure");
-  }
+	@Override
+	public void specializeChildren(int depth) {
+		if (!hasSpecialized) {
+			for (I_Strategy _2_elem : _2) {
+				if (_2_elem instanceof IGenericNode) {
+					((IGenericNode) _2_elem).specialize(depth);
+				}
+			}
+			hasSpecialized = true;
+		}
+	}
 
-  public INodeList<String> get_1()
-  { 
-    return this._1;
-  }
+	public R_bindtvars_VEnv exec_bindtvars(
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _1,
+			ds.manual.interpreter.VState _2) {
+		this.specializeChildren(0);
+		throw new InterpreterException("Rule failure");
+	}
 
-  public INodeList<I_Strategy> get_2()
-  { 
-    if(this._2 instanceof IGenericNode)
-    { 
-      ((IGenericNode)this._2).specialize(1);
-    }
-    return this._2;
-  }
+	public R_bindsvars_SEnv exec_bindsvars(
+			ds.manual.interpreter.AutoInterpInteropContext _1,
+			org.spoofax.interpreter.terms.IStrategoTerm _2,
+			org.spoofax.interpreter.terms.ITermFactory _3,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _4,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _5,
+			boolean _6, org.spoofax.interpreter.core.StackTracer _7,
+			ds.manual.interpreter.VState _8, ds.manual.interpreter.SState _9) {
+		this.specializeChildren(0);
+		final ds.manual.interpreter.AutoInterpInteropContext ic_in2727 = _1;
+		final org.spoofax.interpreter.terms.IStrategoTerm t_in2727 = _2;
+		final org.spoofax.interpreter.terms.ITermFactory tf_in2727 = _3;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> venv_in3178 = _4;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> senv_in3087 = _5;
+		final boolean bool_in2727 = _6;
+		final org.spoofax.interpreter.core.StackTracer trace_in2907 = _7;
+		final ds.manual.interpreter.VState vheap_in3268 = _8;
+		final ds.manual.interpreter.SState sheap_in3627 = _9;
+		final INodeList<String> lifted_34447 = this._1;
+		final INodeList<I_Strategy> lifted_34457 = this._2;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> d_into486 = this._3;
+		{
+			if (lifted_34447 != null
+					&& lifted_34447.equals(NodeList.NIL(Object.class))) {
+				if (lifted_34457 != null
+						&& lifted_34457.equals(NodeList.NIL(Object.class))) {
+					final boolean bool_out2727 = bool_in2727;
+					final org.spoofax.interpreter.core.StackTracer trace_out2907 = trace_in2907;
+					final ds.manual.interpreter.VState vheap_out3268 = vheap_in3268;
+					final ds.manual.interpreter.SState sheap_out3627 = sheap_in3627;
+					final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> result_out4528 = d_into486;
+					return new R_bindsvars_SEnv(result_out4528, bool_out2727,
+							trace_out2907, vheap_out3268, sheap_out3627);
+				} else {
+				}
+			} else {
+				if (lifted_34447 != null && !lifted_34447.isEmpty()) {
+					final String x3753 = lifted_34447.head();
+					final INodeList<String> xs1000 = lifted_34447.tail();
+					if (lifted_34457 != null && !lifted_34457.isEmpty()) {
+						final I_Strategy s11440 = lifted_34457.head();
+						final INodeList<I_Strategy> ss867 = lifted_34457.tail();
+						final CallT_3 $tmp2641 = s11440.match(CallT_3.class);
+						if ($tmp2641 != null) {
+							final I_SVar lifted_34397 = $tmp2641.get_1();
+							final INodeList<I_Strategy> ass1008 = $tmp2641
+									.get_2();
+							final INodeList<I_STerm> ats3828 = $tmp2641.get_3();
+							final SVar_1 $tmp2642 = lifted_34397
+									.match(SVar_1.class);
+							if ($tmp2642 != null) {
+								final String tgt477 = $tmp2642.get_1();
+								if (ds.manual.interpreter.Natives.boolAnd_2(
+										ds.manual.interpreter.Natives
+												.isEmptyStrategies_1(ass1008),
+										ds.manual.interpreter.Natives
+												.isEmpty_1(ats3828)) == true) {
+									final I_SHeapOp lifted_34217 = new SLookup_2(
+											null, senv_in3087, tgt477);
+									final R_slook_SLookupResult $tmp2643 = lifted_34217
+											.exec_slook(sheap_in3627);
+									final I_SLookupResult lifted_34227 = $tmp2643.value;
+									final ds.manual.interpreter.SState sheap_29577 = $tmp2643
+											.get_1();
+									final SLookupResult_2 $tmp2644 = lifted_34227
+											.match(SLookupResult_2.class);
+									if ($tmp2644 != null) {
+										final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> lifted_30617 = $tmp2644
+												.get_1();
+										final I_Thunk lifted_34267 = $tmp2644
+												.get_2();
+										final Thunk_6 $tmp2645 = lifted_34267
+												.match(Thunk_6.class);
+										if ($tmp2645 != null) {
+											final String lifted_30627 = $tmp2645
+													.get_1();
+											final INodeList<String> fss568 = $tmp2645
+													.get_2();
+											final INodeList<String> fts568 = $tmp2645
+													.get_3();
+											final I_Strategy sactual378 = $tmp2645
+													.get_4();
+											final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> e_tgt378 = $tmp2645
+													.get_5();
+											final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> d_tgt378 = $tmp2645
+													.get_6();
+											final I_Thunk lifted_34277 = new Thunk_6(
+													null, x3753, fss568,
+													fts568, sactual378,
+													e_tgt378, d_tgt378);
+											final I_SHeapOp lifted_34237 = new SPush_3(
+													null, d_into486, x3753,
+													lifted_34277);
+											final R_salloc_SEnv $tmp2646 = lifted_34237
+													.exec_salloc(sheap_29577);
+											final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> d_into_30 = $tmp2646.value;
+											final ds.manual.interpreter.SState sheap_34717 = $tmp2646
+													.get_1();
+											final I_Binder lifted_34247 = new bindsvars_3(
+													null, xs1000, ss867,
+													d_into_30);
+											final R_bindsvars_SEnv $tmp2647 = lifted_34247
+													.exec_bindsvars(ic_in2727,
+															t_in2727,
+															tf_in2727,
+															venv_in3178,
+															senv_in3087,
+															bool_in2727,
+															trace_in2907,
+															vheap_in3268,
+															sheap_34717);
+											final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> d_into__30 = $tmp2647.value;
+											final boolean bool_28492 = $tmp2647
+													.get_1();
+											final org.spoofax.interpreter.core.StackTracer trace_28555 = $tmp2647
+													.get_2();
+											final ds.manual.interpreter.VState vheap_28933 = $tmp2647
+													.get_3();
+											final ds.manual.interpreter.SState sheap_4558 = $tmp2647
+													.get_4();
+											final boolean bool_out2727 = bool_28492;
+											final org.spoofax.interpreter.core.StackTracer trace_out2907 = trace_28555;
+											final ds.manual.interpreter.VState vheap_out3268 = vheap_28933;
+											final ds.manual.interpreter.SState sheap_out3627 = sheap_4558;
+											final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> result_out4528 = d_into__30;
+											return new R_bindsvars_SEnv(
+													result_out4528,
+													bool_out2727,
+													trace_out2907,
+													vheap_out3268,
+													sheap_out3627);
+										} else {
+										}
+									} else {
+									}
+								} else {
+									if (ds.manual.interpreter.Natives
+											.boolAnd_2(
+													ds.manual.interpreter.Natives
+															.isEmptyStrategies_1(ass1008),
+													ds.manual.interpreter.Natives
+															.isEmpty_1(ats3828)) == false) {
+										final I_SHeapOp lifted_34317 = new SLookup_2(
+												null, senv_in3087, tgt477);
+										final R_slook_SLookupResult $tmp2648 = lifted_34317
+												.exec_slook(sheap_in3627);
+										final I_SLookupResult lifted_34327 = $tmp2648.value;
+										final ds.manual.interpreter.SState sheap_29578 = $tmp2648
+												.get_1();
+										final SLookupResult_2 $tmp2649 = lifted_34327
+												.match(SLookupResult_2.class);
+										if ($tmp2649 != null) {
+											final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> lifted_30637 = $tmp2649
+													.get_1();
+											final I_Thunk lifted_34407 = $tmp2649
+													.get_2();
+											final Thunk_6 $tmp2650 = lifted_34407
+													.match(Thunk_6.class);
+											if ($tmp2650 != null) {
+												final String lifted_30647 = $tmp2650
+														.get_1();
+												final INodeList<String> fss569 = $tmp2650
+														.get_2();
+												final INodeList<String> fts569 = $tmp2650
+														.get_3();
+												final I_Strategy sactual379 = $tmp2650
+														.get_4();
+												final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> e_tgt379 = $tmp2650
+														.get_5();
+												final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> d_tgt379 = $tmp2650
+														.get_6();
+												final I_Builder lifted_34337 = new bl_1(
+														null, ats3828);
+												final R_blds_BuildRes $tmp2651 = lifted_34337
+														.exec_blds(ic_in2727,
+																senv_in3087,
+																venv_in3178,
+																t_in2727,
+																tf_in2727,
+																sheap_29578,
+																vheap_in3268,
+																bool_in2727,
+																trace_in2907);
+												final I_BuildRes lifted_34347 = $tmp2651.value;
+												final ds.manual.interpreter.SState sheap_34718 = $tmp2651
+														.get_1();
+												final ds.manual.interpreter.VState vheap_28934 = $tmp2651
+														.get_2();
+												final boolean bool_28493 = $tmp2651
+														.get_3();
+												final org.spoofax.interpreter.core.StackTracer trace_28556 = $tmp2651
+														.get_4();
+												final BSS_1 $tmp2652 = lifted_34347
+														.match(BSS_1.class);
+												if ($tmp2652 != null) {
+													final INodeList<org.spoofax.interpreter.terms.IStrategoTerm> ats_120 = $tmp2652
+															.get_1();
+													final I_Binder lifted_34357 = new bindtvars_2(
+															null, fts569,
+															ats_120);
+													final R_bindtvars_VEnv $tmp2653 = lifted_34357
+															.exec_bindtvars(
+																	e_tgt379,
+																	vheap_28934);
+													final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> e_tgt_10 = $tmp2653.value;
+													final ds.manual.interpreter.VState vheap_34255 = $tmp2653
+															.get_1();
+													final I_Binder lifted_34367 = new bindsvars_3(
+															null, fss569,
+															ass1008, d_tgt379);
+													final R_bindsvars_SEnv $tmp2654 = lifted_34367
+															.exec_bindsvars(
+																	ic_in2727,
+																	t_in2727,
+																	tf_in2727,
+																	venv_in3178,
+																	senv_in3087,
+																	bool_28493,
+																	trace_28556,
+																	vheap_34255,
+																	sheap_34718);
+													final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> d_tgt_10 = $tmp2654.value;
+													final boolean bool_33373 = $tmp2654
+															.get_1();
+													final org.spoofax.interpreter.core.StackTracer trace_33694 = $tmp2654
+															.get_2();
+													final ds.manual.interpreter.VState vheap_4419 = $tmp2654
+															.get_3();
+													final ds.manual.interpreter.SState sheap_4559 = $tmp2654
+															.get_4();
+													final I_Thunk lifted_34417 = new Thunk_6(
+															null,
+															x3753,
+															NodeList.NIL(String.class),
+															NodeList.NIL(String.class),
+															sactual379,
+															e_tgt_10, d_tgt_10);
+													final I_SHeapOp lifted_34377 = new SPush_3(
+															null, d_into486,
+															x3753, lifted_34417);
+													final R_salloc_SEnv $tmp2655 = lifted_34377
+															.exec_salloc(sheap_4559);
+													final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> d_into_31 = $tmp2655.value;
+													final ds.manual.interpreter.SState sheap_5279 = $tmp2655
+															.get_1();
+													final I_Binder lifted_34387 = new bindsvars_3(
+															null, xs1000,
+															ss867, d_into_31);
+													final R_bindsvars_SEnv $tmp2656 = lifted_34387
+															.exec_bindsvars(
+																	ic_in2727,
+																	t_in2727,
+																	tf_in2727,
+																	venv_in3178,
+																	senv_in3087,
+																	bool_33373,
+																	trace_33694,
+																	vheap_4419,
+																	sheap_5279);
+													final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> d_into__31 = $tmp2656.value;
+													final boolean bool_4279 = $tmp2656
+															.get_1();
+													final org.spoofax.interpreter.core.StackTracer trace_4418 = $tmp2656
+															.get_2();
+													final ds.manual.interpreter.VState vheap_5279 = $tmp2656
+															.get_3();
+													final ds.manual.interpreter.SState sheap_6139 = $tmp2656
+															.get_4();
+													final boolean bool_out2727 = bool_4279;
+													final org.spoofax.interpreter.core.StackTracer trace_out2907 = trace_4418;
+													final ds.manual.interpreter.VState vheap_out3268 = vheap_5279;
+													final ds.manual.interpreter.SState sheap_out3627 = sheap_6139;
+													final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> result_out4528 = d_into__31;
+													return new R_bindsvars_SEnv(
+															result_out4528,
+															bool_out2727,
+															trace_out2907,
+															vheap_out3268,
+															sheap_out3627);
+												} else {
+												}
+											} else {
+											}
+										} else {
+										}
+									} else {
+									}
+								}
+							} else {
+							}
+						} else {
+							if ($antimatch20(s11440)) {
+								final I_Thunk lifted_34487 = new Thunk_6(null,
+										x3753, NodeList.NIL(String.class),
+										NodeList.NIL(String.class), s11440,
+										venv_in3178, senv_in3087);
+								final I_SHeapOp lifted_34467 = new SPush_3(
+										null, d_into486, x3753, lifted_34487);
+								final R_salloc_SEnv $tmp2660 = lifted_34467
+										.exec_salloc(sheap_in3627);
+								final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> d_into_32 = $tmp2660.value;
+								final ds.manual.interpreter.SState sheap_29579 = $tmp2660
+										.get_1();
+								final I_Binder lifted_34477 = new bindsvars_3(
+										null, xs1000, ss867, d_into_32);
+								final R_bindsvars_SEnv $tmp2661 = lifted_34477
+										.exec_bindsvars(ic_in2727, t_in2727,
+												tf_in2727, venv_in3178,
+												senv_in3087, bool_in2727,
+												trace_in2907, vheap_in3268,
+												sheap_29579);
+								final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> d_into__32 = $tmp2661.value;
+								final boolean bool_28494 = $tmp2661.get_1();
+								final org.spoofax.interpreter.core.StackTracer trace_28557 = $tmp2661
+										.get_2();
+								final ds.manual.interpreter.VState vheap_28935 = $tmp2661
+										.get_3();
+								final ds.manual.interpreter.SState sheap_34719 = $tmp2661
+										.get_4();
+								final boolean bool_out2727 = bool_28494;
+								final org.spoofax.interpreter.core.StackTracer trace_out2907 = trace_28557;
+								final ds.manual.interpreter.VState vheap_out3268 = vheap_28935;
+								final ds.manual.interpreter.SState sheap_out3627 = sheap_34719;
+								final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> result_out4528 = d_into__32;
+								return new R_bindsvars_SEnv(result_out4528,
+										bool_out2727, trace_out2907,
+										vheap_out3268, sheap_out3627);
+							} else {
+							}
+						}
+					} else {
+					}
+				} else {
+				}
+			}
+		}
+		{
+			throw new InterpreterException("Rule failure");
+		}
+	}
 
-  public com.github.krukow.clj_ds.PersistentMap<Object, Object> get_3()
-  { 
-    return this._3;
-  }
+	private boolean $antimatch20(I_Strategy $tmp2657) {
+		final CallT_3 $tmp2658 = $tmp2657.match(CallT_3.class);
+		if ($tmp2658 != null) {
+			final I_SVar lifted_3561 = $tmp2658.get_1();
+			final INodeList<I_Strategy> lifted_3562 = $tmp2658.get_2();
+			final INodeList<I_STerm> lifted_3563 = $tmp2658.get_3();
+			final SVar_1 $tmp2659 = lifted_3561.match(SVar_1.class);
+			if ($tmp2659 != null) {
+				final String lifted_3564 = $tmp2659.get_1();
+				final String lifted_30657 = lifted_3564;
+				final INodeList<I_Strategy> lifted_30667 = lifted_3562;
+				final INodeList<I_STerm> lifted_30677 = lifted_3563;
+				return false;
+			} else {
+			}
+		} else {
+		}
+		return true;
+	}
 
-  @Override public boolean equals(Object obj)
-  { 
-    if(this == obj)
-    { 
-      return true;
-    }
-    if(obj == null)
-    { 
-      return false;
-    }
-    if(getClass() != obj.getClass())
-    { 
-      return false;
-    }
-    final bindsvars_3 other = (bindsvars_3)obj;
-    if(_1 == null)
-    { 
-      if(other._1 != null)
-      { 
-        return false;
-      }
-    }
-    else
-      if(!_1.equals(other._1))
-      { 
-        return false;
-      }
-    if(_2 == null)
-    { 
-      if(other._2 != null)
-      { 
-        return false;
-      }
-    }
-    else
-      if(!_2.equals(other._2))
-      { 
-        return false;
-      }
-    if(_3 != other._3)
-    { 
-      return false;
-    }
-    return true;
-  }
+	public INodeList<String> get_1() {
+		return this._1;
+	}
+
+	public INodeList<I_Strategy> get_2() {
+		return this._2;
+	}
+
+	public com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> get_3() {
+		return this._3;
+	}
 }

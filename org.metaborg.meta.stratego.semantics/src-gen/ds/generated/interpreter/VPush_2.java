@@ -2,79 +2,85 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public class VPush_2 extends NoOpNode implements I_VHeapOp
-{ 
-  public com.github.krukow.clj_ds.PersistentMap<Object, Object> _1;
+public class VPush_2 extends AbstractNode implements I_VHeapOp {
+	private boolean hasSpecialized;
 
-  public String _2;
+	public com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _1;
 
-  public VPush_2 (INodeSource source, com.github.krukow.clj_ds.PersistentMap<Object, Object> _1, String _2) 
-  { 
-    this.setSourceInfo(source);
-    this._1 = _1;
-    this._2 = _2;
-  }
+	public String _2;
 
-  private boolean hasSpecialized;
+	public VPush_2(
+			INodeSource source,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _1,
+			String _2) {
+		this.setSourceInfo(source);
+		this._1 = _1;
+		this._2 = _2;
+	}
 
-  public void specializeChildren(int depth)
-  { 
-    if(!hasSpecialized)
-    { 
-      hasSpecialized = true;
-    }
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final VPush_2 other = (VPush_2) obj;
+		if (_1 == null) {
+			if (other._1 != null) {
+				return false;
+			}
+		} else if (!_1.equals(other._1)) {
+			return false;
+		}
+		if (_2 == null) {
+			if (other._2 != null) {
+				return false;
+			}
+		} else if (!_2.equals(other._2)) {
+			return false;
+		}
+		return true;
+	}
 
-  public vinit_Result exec_vinit(ds.manual.interpreter.VState lifted_in_1)
-  { 
-    this.specializeChildren(0);
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_1 = _1;
-    final String lifted_2 = _2;
-    final ds.manual.interpreter.VState vheap_1 = lifted_in_1;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> venv = lifted_1;
-    final String x = lifted_2;
-    final ds.manual.interpreter.VState s = vheap_1;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> tmpbuild556 = s.alloc(venv, x);
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> venv_ = tmpbuild556;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_out_1 = venv_;
-    final ds.manual.interpreter.VState lifted_out_2 = s;
-    final vinit_Result vinit_Result0 = new vinit_Result(lifted_out_1, lifted_out_2);
-    return vinit_Result0;
-  }
+	@Override
+	public void specializeChildren(int depth) {
+		if (!hasSpecialized) {
+			hasSpecialized = true;
+		}
+	}
 
-  public com.github.krukow.clj_ds.PersistentMap<Object, Object> get_1()
-  { 
-    return this._1;
-  }
+	public R_vlook_VLookupResult exec_vlook(ds.manual.interpreter.VState _1) {
+		this.specializeChildren(0);
+		throw new InterpreterException("Rule failure");
+	}
 
-  public String get_2()
-  { 
-    return this._2;
-  }
+	public R_vupdate_VEnv exec_vupdate(ds.manual.interpreter.VState _1) {
+		this.specializeChildren(0);
+		throw new InterpreterException("Rule failure");
+	}
 
-  @Override public boolean equals(Object obj)
-  { 
-    if(this == obj)
-    { 
-      return true;
-    }
-    if(obj == null)
-    { 
-      return false;
-    }
-    if(getClass() != obj.getClass())
-    { 
-      return false;
-    }
-    final VPush_2 other = (VPush_2)obj;
-    if(_1 != other._1)
-    { 
-      return false;
-    }
-    if(_2 != other._2)
-    { 
-      return false;
-    }
-    return true;
-  }
+	public R_vinit_VEnv exec_vinit(ds.manual.interpreter.VState _1) {
+		this.specializeChildren(0);
+		final ds.manual.interpreter.VState vheap_in3272 = _1;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> venv2267 = this._1;
+		final String x3758 = this._2;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> venv_30 = vheap_in3272
+				.alloc(venv2267, x3758);
+		final ds.manual.interpreter.VState vheap_out3272 = vheap_in3272;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> result_out4539 = venv_30;
+		return new R_vinit_VEnv(result_out4539, vheap_out3272);
+	}
+
+	public com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> get_1() {
+		return this._1;
+	}
+
+	public String get_2() {
+		return this._2;
+	}
 }

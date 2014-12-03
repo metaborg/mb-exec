@@ -2,170 +2,190 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public class bList_1 extends NoOpNode implements I_Builder
-{ 
-  @Child public I_PreTerm _1;
+public class bList_1 extends AbstractNode implements I_Builder {
+	private boolean hasSpecialized;
 
-  public bList_1 (INodeSource source, I_PreTerm _1) 
-  { 
-    this.setSourceInfo(source);
-    this._1 = adoptChild(_1);
-  }
+	@Child
+	public I_PreTerm _1;
 
-  private boolean hasSpecialized;
+	public bList_1(INodeSource source, I_PreTerm _1) {
+		this.setSourceInfo(source);
+		this._1 = adoptChild(_1);
+	}
 
-  public void specializeChildren(int depth)
-  { 
-    if(!hasSpecialized)
-    { 
-      if(_1 instanceof IGenericNode)
-      { 
-        ((IGenericNode)_1).specialize(depth);
-      }
-      hasSpecialized = true;
-    }
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final bList_1 other = (bList_1) obj;
+		if (_1 == null) {
+			if (other._1 != null) {
+				return false;
+			}
+		} else if (!_1.equals(other._1)) {
+			return false;
+		}
+		return true;
+	}
 
-  public bld_Result exec_bld(com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_in_1, ds.manual.interpreter.AutoInterpInteropContext lifted_in_2, org.spoofax.interpreter.terms.IStrategoTerm lifted_in_3, org.spoofax.interpreter.terms.ITermFactory lifted_in_4, com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_in_5, org.spoofax.interpreter.core.StackTracer lifted_in_6, ds.manual.interpreter.SState lifted_in_7, boolean lifted_in_8, ds.manual.interpreter.VState lifted_in_9)
-  { 
-    this.specializeChildren(0);
-    final I_PreTerm lifted_1 = _1;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> senv_1 = lifted_in_1;
-    final ds.manual.interpreter.AutoInterpInteropContext ic_1 = lifted_in_2;
-    final org.spoofax.interpreter.terms.IStrategoTerm t_1 = lifted_in_3;
-    final org.spoofax.interpreter.terms.ITermFactory tf_1 = lifted_in_4;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> venv_1 = lifted_in_5;
-    final org.spoofax.interpreter.core.StackTracer trace_1 = lifted_in_6;
-    final ds.manual.interpreter.SState sheap_1 = lifted_in_7;
-    final boolean bool_1 = lifted_in_8;
-    final ds.manual.interpreter.VState vheap_1 = lifted_in_9;
-    final Op_2 tmpbuild417 = lifted_1.match(Op_2.class);
-    if(tmpbuild417 != null)
-    { 
-      final String c = tmpbuild417.get_1();
-      final INodeList<I_STerm> ts = tmpbuild417.get_2();
-      final org.spoofax.interpreter.terms.ITermFactory tf = tf_1;
-      if(ts != null && ts.isEmpty())
-      { 
-        final org.spoofax.interpreter.terms.IStrategoList tmpbuild408 = ds.manual.interpreter.Natives.makeNil_1(tf);
-        final org.spoofax.interpreter.terms.IStrategoList nil = tmpbuild408;
-        final BS_1 tmpbuild407 = new BS_1(getSourceInfo(), nil);
-        final I_BuildRes lifted_2 = tmpbuild407;
-        final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_1;
-        final ds.manual.interpreter.SState lifted_4 = sheap_1;
-        final boolean lifted_5 = bool_1;
-        final ds.manual.interpreter.VState lifted_6 = vheap_1;
-        final I_BuildRes lifted_out_1 = lifted_2;
-        final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-        final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-        final boolean lifted_out_4 = lifted_5;
-        final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-        final bld_Result bld_Result2 = new bld_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-        return bld_Result2;
-      }
-      else
-      { 
-        if(ts != null && !ts.isEmpty())
-        { 
-          final I_STerm t1 = ts.head();
-          final INodeList<I_STerm> lifted_7 = ts.tail();
-          if(lifted_7 != null && !lifted_7.isEmpty())
-          { 
-            final I_STerm t2 = lifted_7.head();
-            final INodeList<I_STerm> lifted_8 = lifted_7.tail();
-            if(lifted_8 != null && lifted_8.isEmpty())
-            { 
-              final Build_1 tmpbuild416 = new Build_1(getSourceInfo(), t1);
-              final I_Strategy lifted_10 = tmpbuild416;
-              final default_Result tmpresult79 = lifted_10.exec_default(senv_1, venv_1, ic_1, tf, t_1, trace_1, sheap_1, bool_1, vheap_1);
-              final AValue lifted_9 = tmpresult79.value;
-              final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult79.get_1();
-              final ds.manual.interpreter.SState sheap_2 = tmpresult79.get_2();
-              final boolean bool_2 = tmpresult79.get_3();
-              final ds.manual.interpreter.VState vheap_2 = tmpresult79.get_4();
-              final S_1 tmpbuild415 = lifted_9.match(S_1.class);
-              if(tmpbuild415 != null)
-              { 
-                final org.spoofax.interpreter.terms.IStrategoTerm head = tmpbuild415.get_1();
-                final Build_1 tmpbuild414 = new Build_1(getSourceInfo(), t2);
-                final I_Strategy lifted_12 = tmpbuild414;
-                final default_Result tmpresult78 = lifted_12.exec_default(senv_1, venv_1, ic_1, tf, t_1, trace_2, sheap_2, bool_2, vheap_2);
-                final AValue lifted_11 = tmpresult78.value;
-                final org.spoofax.interpreter.core.StackTracer trace_3 = tmpresult78.get_1();
-                final ds.manual.interpreter.SState sheap_3 = tmpresult78.get_2();
-                final boolean bool_3 = tmpresult78.get_3();
-                final ds.manual.interpreter.VState vheap_3 = tmpresult78.get_4();
-                final S_1 tmpbuild413 = lifted_11.match(S_1.class);
-                if(tmpbuild413 != null)
-                { 
-                  final org.spoofax.interpreter.terms.IStrategoTerm tail = tmpbuild413.get_1();
-                  final boolean tmpbuild412 = ds.manual.interpreter.Natives.isATermList_1(tail);
-                  if(tmpbuild412 == true)
-                  { 
-                    final org.spoofax.interpreter.terms.IStrategoList tmpbuild411 = ds.manual.interpreter.Natives.asATermList_1(tail);
-                    final org.spoofax.interpreter.terms.IStrategoList tail_ = tmpbuild411;
-                    final org.spoofax.interpreter.terms.IStrategoList tmpbuild410 = tf.makeListCons(head, tail_);
-                    final org.spoofax.interpreter.terms.IStrategoList list = tmpbuild410;
-                    final BS_1 tmpbuild409 = new BS_1(getSourceInfo(), list);
-                    final I_BuildRes lifted_2 = tmpbuild409;
-                    final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_3;
-                    final ds.manual.interpreter.SState lifted_4 = sheap_3;
-                    final boolean lifted_5 = bool_3;
-                    final ds.manual.interpreter.VState lifted_6 = vheap_3;
-                    final I_BuildRes lifted_out_1 = lifted_2;
-                    final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-                    final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-                    final boolean lifted_out_4 = lifted_5;
-                    final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-                    final bld_Result bld_Result2 = new bld_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                    return bld_Result2;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    throw new InterpreterException("Rule failure");
-  }
+	@Override
+	public void specializeChildren(int depth) {
+		if (!hasSpecialized) {
+			if (_1 instanceof IGenericNode) {
+				((IGenericNode) _1).specialize(depth);
+			}
+			hasSpecialized = true;
+		}
+	}
 
-  public I_PreTerm get_1()
-  { 
-    if(this._1 instanceof IGenericNode)
-    { 
-      ((IGenericNode)this._1).specialize(1);
-    }
-    return this._1;
-  }
+	public R_bld_BuildRes exec_bld(
+			ds.manual.interpreter.AutoInterpInteropContext _1,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _2,
+			org.spoofax.interpreter.terms.IStrategoTerm _3,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _4,
+			org.spoofax.interpreter.terms.ITermFactory _5,
+			ds.manual.interpreter.SState _6, ds.manual.interpreter.VState _7,
+			boolean _8, org.spoofax.interpreter.core.StackTracer _9) {
+		this.specializeChildren(0);
+		final ds.manual.interpreter.AutoInterpInteropContext ic_in2723 = _1;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> senv_in3083 = _2;
+		final org.spoofax.interpreter.terms.IStrategoTerm t_in2723 = _3;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> venv_in3173 = _4;
+		final org.spoofax.interpreter.terms.ITermFactory tf_in2723 = _5;
+		final ds.manual.interpreter.SState sheap_in3623 = _6;
+		final ds.manual.interpreter.VState vheap_in3263 = _7;
+		final boolean bool_in2723 = _8;
+		final org.spoofax.interpreter.core.StackTracer trace_in2903 = _9;
+		final I_PreTerm lifted_33887 = this._1;
+		{
+			final Op_2 $tmp2620 = lifted_33887.match(Op_2.class);
+			if ($tmp2620 != null) {
+				final String lifted_30597 = $tmp2620.get_1();
+				final INodeList<I_STerm> lifted_33907 = $tmp2620.get_2();
+				if (lifted_33907 != null
+						&& lifted_33907.equals(NodeList.NIL(Object.class))) {
+					final org.spoofax.interpreter.terms.IStrategoList nil195 = ds.manual.interpreter.Natives
+							.makeNil_1(tf_in2723);
+					final I_BuildRes lifted_33867 = new BS_1(null, nil195);
+					final ds.manual.interpreter.SState sheap_out3623 = sheap_in3623;
+					final ds.manual.interpreter.VState vheap_out3263 = vheap_in3263;
+					final boolean bool_out2723 = bool_in2723;
+					final org.spoofax.interpreter.core.StackTracer trace_out2903 = trace_in2903;
+					final I_BuildRes result_out4523 = lifted_33867;
+					return new R_bld_BuildRes(result_out4523, sheap_out3623,
+							vheap_out3263, bool_out2723, trace_out2903);
+				} else {
+					if (lifted_33907 != null && !lifted_33907.isEmpty()) {
+						final I_STerm t1196 = lifted_33907.head();
+						final INodeList<I_STerm> lifted_33967 = lifted_33907
+								.tail();
+						if (lifted_33967 != null && !lifted_33967.isEmpty()) {
+							final I_STerm t2195 = lifted_33967.head();
+							final INodeList<I_STerm> lifted_33977 = lifted_33967
+									.tail();
+							if (lifted_33977 != null
+									&& lifted_33977.equals(NodeList
+											.NIL(Object.class))) {
+								final I_Strategy lifted_33917 = new Build_1(
+										null, t1196);
+								final R_default_Value $tmp2621 = lifted_33917
+										.exec_default(ic_in2723, senv_in3083,
+												venv_in3173, t_in2723,
+												tf_in2723, sheap_in3623,
+												vheap_in3263, bool_in2723,
+												trace_in2903);
+								final IValue lifted_33927 = $tmp2621.value;
+								final ds.manual.interpreter.SState sheap_29573 = $tmp2621
+										.get_1();
+								final ds.manual.interpreter.VState vheap_28928 = $tmp2621
+										.get_2();
+								final boolean bool_28488 = $tmp2621.get_3();
+								final org.spoofax.interpreter.core.StackTracer trace_28551 = $tmp2621
+										.get_4();
+								final S_1 $tmp2622 = lifted_33927
+										.match(S_1.class);
+								if ($tmp2622 != null) {
+									final org.spoofax.interpreter.terms.IStrategoTerm head672 = $tmp2622
+											.get_1();
+									final I_Strategy lifted_33937 = new Build_1(
+											null, t2195);
+									final R_default_Value $tmp2623 = lifted_33937
+											.exec_default(ic_in2723,
+													senv_in3083, venv_in3173,
+													t_in2723, tf_in2723,
+													sheap_29573, vheap_28928,
+													bool_28488, trace_28551);
+									final IValue lifted_33947 = $tmp2623.value;
+									final ds.manual.interpreter.SState sheap_34712 = $tmp2623
+											.get_1();
+									final ds.manual.interpreter.VState vheap_34249 = $tmp2623
+											.get_2();
+									final boolean bool_33370 = $tmp2623.get_3();
+									final org.spoofax.interpreter.core.StackTracer trace_33689 = $tmp2623
+											.get_4();
+									final S_1 $tmp2624 = lifted_33947
+											.match(S_1.class);
+									if ($tmp2624 != null) {
+										final org.spoofax.interpreter.terms.IStrategoTerm tail496 = $tmp2624
+												.get_1();
+										if (tail496 instanceof org.spoofax.interpreter.terms.IStrategoList) {
+											final org.spoofax.interpreter.terms.IStrategoList tail4837 = (org.spoofax.interpreter.terms.IStrategoList) tail496;
+											final org.spoofax.interpreter.terms.IStrategoList lifted_33957 = tf_in2723
+													.makeListCons(head672,
+															tail4837);
+											final I_BuildRes lifted_33897 = new BS_1(
+													null, lifted_33957);
+											final ds.manual.interpreter.SState sheap_out3623 = sheap_34712;
+											final ds.manual.interpreter.VState vheap_out3263 = vheap_34249;
+											final boolean bool_out2723 = bool_33370;
+											final org.spoofax.interpreter.core.StackTracer trace_out2903 = trace_33689;
+											final I_BuildRes result_out4523 = lifted_33897;
+											return new R_bld_BuildRes(
+													result_out4523,
+													sheap_out3623,
+													vheap_out3263,
+													bool_out2723, trace_out2903);
+										} else {
+										}
+									} else {
+									}
+								} else {
+								}
+							} else {
+							}
+						} else {
+						}
+					} else {
+					}
+				}
+			} else {
+			}
+		}
+		{
+			throw new InterpreterException("Rule failure");
+		}
+	}
 
-  @Override public boolean equals(Object obj)
-  { 
-    if(this == obj)
-    { 
-      return true;
-    }
-    if(obj == null)
-    { 
-      return false;
-    }
-    if(getClass() != obj.getClass())
-    { 
-      return false;
-    }
-    final bList_1 other = (bList_1)obj;
-    if(_1 == null)
-    { 
-      if(other._1 != null)
-      { 
-        return false;
-      }
-    }
-    else
-      if(!_1.equals(other._1))
-      { 
-        return false;
-      }
-    return true;
-  }
+	public R_blds_BuildRes exec_blds(
+			ds.manual.interpreter.AutoInterpInteropContext _1,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _2,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _3,
+			org.spoofax.interpreter.terms.IStrategoTerm _4,
+			org.spoofax.interpreter.terms.ITermFactory _5,
+			ds.manual.interpreter.SState _6, ds.manual.interpreter.VState _7,
+			boolean _8, org.spoofax.interpreter.core.StackTracer _9) {
+		this.specializeChildren(0);
+		throw new InterpreterException("Rule failure");
+	}
+
+	public I_PreTerm get_1() {
+		return this._1;
+	}
 }

@@ -2,5 +2,5 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public interface I_BuildRes extends I_Node
-{ }
+public interface I_BuildRes extends IMatchableNode {
+}

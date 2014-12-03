@@ -2,5 +2,5 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public interface I_FunType extends I_Type
-{ }
+public interface I_FunType extends I_Type {
+}

@@ -2,64 +2,67 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public class pushTrace_1 extends NoOpNode implements I_TraceOp
-{ 
-  public String _1;
+public class pushTrace_1 extends AbstractNode implements I_TraceOp {
+	private boolean hasSpecialized;
 
-  public pushTrace_1 (INodeSource source, String _1) 
-  { 
-    this.setSourceInfo(source);
-    this._1 = _1;
-  }
+	public String _1;
 
-  private boolean hasSpecialized;
+	public pushTrace_1(INodeSource source, String _1) {
+		this.setSourceInfo(source);
+		this._1 = _1;
+	}
 
-  public void specializeChildren(int depth)
-  { 
-    if(!hasSpecialized)
-    { 
-      hasSpecialized = true;
-    }
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final pushTrace_1 other = (pushTrace_1) obj;
+		if (_1 == null) {
+			if (other._1 != null) {
+				return false;
+			}
+		} else if (!_1.equals(other._1)) {
+			return false;
+		}
+		return true;
+	}
 
-  public trace_Result exec_trace(org.spoofax.interpreter.core.StackTracer lifted_in_1)
-  { 
-    this.specializeChildren(0);
-    final String lifted_1 = _1;
-    final org.spoofax.interpreter.core.StackTracer trace_1 = lifted_in_1;
-    final String name = lifted_1;
-    final org.spoofax.interpreter.core.StackTracer t = trace_1;
-    final boolean b = true;
-    final boolean lifted_out_1 = b;
-    final org.spoofax.interpreter.core.StackTracer lifted_out_2 = t;
-    final trace_Result trace_Result0 = new trace_Result(lifted_out_1, lifted_out_2);
-    return trace_Result0;
-  }
+	@Override
+	public void specializeChildren(int depth) {
+		if (!hasSpecialized) {
+			hasSpecialized = true;
+		}
+	}
 
-  public String get_1()
-  { 
-    return this._1;
-  }
+	public R_default_Value exec_default(
+			ds.manual.interpreter.AutoInterpInteropContext _1,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _2,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _3,
+			org.spoofax.interpreter.terms.IStrategoTerm _4,
+			org.spoofax.interpreter.terms.ITermFactory _5,
+			ds.manual.interpreter.SState _6, ds.manual.interpreter.VState _7,
+			boolean _8, org.spoofax.interpreter.core.StackTracer _9) {
+		this.specializeChildren(0);
+		throw new InterpreterException("Rule failure");
+	}
 
-  @Override public boolean equals(Object obj)
-  { 
-    if(this == obj)
-    { 
-      return true;
-    }
-    if(obj == null)
-    { 
-      return false;
-    }
-    if(getClass() != obj.getClass())
-    { 
-      return false;
-    }
-    final pushTrace_1 other = (pushTrace_1)obj;
-    if(_1 != other._1)
-    { 
-      return false;
-    }
-    return true;
-  }
+	public R_trace_Bool exec_trace(org.spoofax.interpreter.core.StackTracer _1) {
+		this.specializeChildren(0);
+		final org.spoofax.interpreter.core.StackTracer trace_in2910 = _1;
+		final String lifted_29857 = this._1;
+		final org.spoofax.interpreter.core.StackTracer trace_out2910 = trace_in2910;
+		final boolean result_out4548 = true;
+		return new R_trace_Bool(result_out4548, trace_out2910);
+	}
+
+	public String get_1() {
+		return this._1;
+	}
 }

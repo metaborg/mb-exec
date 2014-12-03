@@ -2,81 +2,81 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public class SLookup_2 extends NoOpNode implements I_SHeapOp
-{ 
-  public com.github.krukow.clj_ds.PersistentMap<Object, Object> _1;
+public class SLookup_2 extends AbstractNode implements I_SHeapOp {
+	private boolean hasSpecialized;
 
-  public String _2;
+	public com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _1;
 
-  public SLookup_2 (INodeSource source, com.github.krukow.clj_ds.PersistentMap<Object, Object> _1, String _2) 
-  { 
-    this.setSourceInfo(source);
-    this._1 = _1;
-    this._2 = _2;
-  }
+	public String _2;
 
-  private boolean hasSpecialized;
+	public SLookup_2(
+			INodeSource source,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _1,
+			String _2) {
+		this.setSourceInfo(source);
+		this._1 = _1;
+		this._2 = _2;
+	}
 
-  public void specializeChildren(int depth)
-  { 
-    if(!hasSpecialized)
-    { 
-      hasSpecialized = true;
-    }
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final SLookup_2 other = (SLookup_2) obj;
+		if (_1 == null) {
+			if (other._1 != null) {
+				return false;
+			}
+		} else if (!_1.equals(other._1)) {
+			return false;
+		}
+		if (_2 == null) {
+			if (other._2 != null) {
+				return false;
+			}
+		} else if (!_2.equals(other._2)) {
+			return false;
+		}
+		return true;
+	}
 
-  public slook_Result exec_slook(ds.manual.interpreter.SState lifted_in_1)
-  { 
-    this.specializeChildren(0);
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_1 = _1;
-    final String lifted_2 = _2;
-    final ds.manual.interpreter.SState sheap_1 = lifted_in_1;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> senv = lifted_1;
-    final String name = lifted_2;
-    final ds.manual.interpreter.SState s = sheap_1;
-    final I_Thunk tmpbuild565 = s.lookup(senv, name);
-    final I_Thunk thunk = tmpbuild565;
-    final SLookupResult_2 tmpbuild564 = new SLookupResult_2(getSourceInfo(), senv, thunk);
-    final I_SLookupResult lifted_3 = tmpbuild564;
-    final I_SLookupResult lifted_out_1 = lifted_3;
-    final ds.manual.interpreter.SState lifted_out_2 = s;
-    final slook_Result slook_Result0 = new slook_Result(lifted_out_1, lifted_out_2);
-    return slook_Result0;
-  }
+	@Override
+	public void specializeChildren(int depth) {
+		if (!hasSpecialized) {
+			hasSpecialized = true;
+		}
+	}
 
-  public com.github.krukow.clj_ds.PersistentMap<Object, Object> get_1()
-  { 
-    return this._1;
-  }
+	public R_slook_SLookupResult exec_slook(ds.manual.interpreter.SState _1) {
+		this.specializeChildren(0);
+		final ds.manual.interpreter.SState sheap_in3638 = _1;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> senv3003 = this._1;
+		final String name2464 = this._2;
+		final I_Thunk thunk1741 = sheap_in3638.lookup(senv3003, name2464);
+		final I_SLookupResult lifted_31217 = new SLookupResult_2(null,
+				senv3003, thunk1741);
+		final ds.manual.interpreter.SState sheap_out3638 = sheap_in3638;
+		final I_SLookupResult result_out4546 = lifted_31217;
+		return new R_slook_SLookupResult(result_out4546, sheap_out3638);
+	}
 
-  public String get_2()
-  { 
-    return this._2;
-  }
+	public R_salloc_SEnv exec_salloc(ds.manual.interpreter.SState _1) {
+		this.specializeChildren(0);
+		throw new InterpreterException("Rule failure");
+	}
 
-  @Override public boolean equals(Object obj)
-  { 
-    if(this == obj)
-    { 
-      return true;
-    }
-    if(obj == null)
-    { 
-      return false;
-    }
-    if(getClass() != obj.getClass())
-    { 
-      return false;
-    }
-    final SLookup_2 other = (SLookup_2)obj;
-    if(_1 != other._1)
-    { 
-      return false;
-    }
-    if(_2 != other._2)
-    { 
-      return false;
-    }
-    return true;
-  }
+	public com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> get_1() {
+		return this._1;
+	}
+
+	public String get_2() {
+		return this._2;
+	}
 }

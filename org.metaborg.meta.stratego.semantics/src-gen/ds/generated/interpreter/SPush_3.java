@@ -2,109 +2,99 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public class SPush_3 extends NoOpNode implements I_SHeapOp
-{ 
-  public com.github.krukow.clj_ds.PersistentMap<Object, Object> _1;
+public class SPush_3 extends AbstractNode implements I_SHeapOp {
+	private boolean hasSpecialized;
 
-  public String _2;
+	public com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _1;
 
-  @Child public I_Thunk _3;
+	public String _2;
 
-  public SPush_3 (INodeSource source, com.github.krukow.clj_ds.PersistentMap<Object, Object> _1, String _2, I_Thunk _3) 
-  { 
-    this.setSourceInfo(source);
-    this._1 = _1;
-    this._2 = _2;
-    this._3 = adoptChild(_3);
-  }
+	@Child
+	public I_Thunk _3;
 
-  private boolean hasSpecialized;
+	public SPush_3(
+			INodeSource source,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _1,
+			String _2, I_Thunk _3) {
+		this.setSourceInfo(source);
+		this._1 = _1;
+		this._2 = _2;
+		this._3 = adoptChild(_3);
+	}
 
-  public void specializeChildren(int depth)
-  { 
-    if(!hasSpecialized)
-    { 
-      if(_3 instanceof IGenericNode)
-      { 
-        ((IGenericNode)_3).specialize(depth);
-      }
-      hasSpecialized = true;
-    }
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final SPush_3 other = (SPush_3) obj;
+		if (_1 == null) {
+			if (other._1 != null) {
+				return false;
+			}
+		} else if (!_1.equals(other._1)) {
+			return false;
+		}
+		if (_2 == null) {
+			if (other._2 != null) {
+				return false;
+			}
+		} else if (!_2.equals(other._2)) {
+			return false;
+		}
+		if (_3 == null) {
+			if (other._3 != null) {
+				return false;
+			}
+		} else if (!_3.equals(other._3)) {
+			return false;
+		}
+		return true;
+	}
 
-  public salloc_Result exec_salloc(ds.manual.interpreter.SState lifted_in_1)
-  { 
-    this.specializeChildren(0);
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_1 = _1;
-    final String lifted_2 = _2;
-    final I_Thunk lifted_3 = _3;
-    final ds.manual.interpreter.SState sheap_1 = lifted_in_1;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> senv = lifted_1;
-    final String name = lifted_2;
-    final I_Thunk thunk = lifted_3;
-    final ds.manual.interpreter.SState s = sheap_1;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> tmpbuild563 = s.allocupdate(senv, name, thunk);
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> senv_ = tmpbuild563;
-    final com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_out_1 = senv_;
-    final ds.manual.interpreter.SState lifted_out_2 = s;
-    final salloc_Result salloc_Result3 = new salloc_Result(lifted_out_1, lifted_out_2);
-    return salloc_Result3;
-  }
+	@Override
+	public void specializeChildren(int depth) {
+		if (!hasSpecialized) {
+			if (_3 instanceof IGenericNode) {
+				((IGenericNode) _3).specialize(depth);
+			}
+			hasSpecialized = true;
+		}
+	}
 
-  public com.github.krukow.clj_ds.PersistentMap<Object, Object> get_1()
-  { 
-    return this._1;
-  }
+	public R_slook_SLookupResult exec_slook(ds.manual.interpreter.SState _1) {
+		this.specializeChildren(0);
+		throw new InterpreterException("Rule failure");
+	}
 
-  public String get_2()
-  { 
-    return this._2;
-  }
+	public R_salloc_SEnv exec_salloc(ds.manual.interpreter.SState _1) {
+		this.specializeChildren(0);
+		final ds.manual.interpreter.SState sheap_in3637 = _1;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> senv3002 = this._1;
+		final String name2463 = this._2;
+		final I_Thunk thunk1740 = this._3;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> senv_54 = sheap_in3637
+				.allocupdate(senv3002, name2463, thunk1740);
+		final ds.manual.interpreter.SState sheap_out3637 = sheap_in3637;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> result_out4545 = senv_54;
+		return new R_salloc_SEnv(result_out4545, sheap_out3637);
+	}
 
-  public I_Thunk get_3()
-  { 
-    if(this._3 instanceof IGenericNode)
-    { 
-      ((IGenericNode)this._3).specialize(1);
-    }
-    return this._3;
-  }
+	public com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> get_1() {
+		return this._1;
+	}
 
-  @Override public boolean equals(Object obj)
-  { 
-    if(this == obj)
-    { 
-      return true;
-    }
-    if(obj == null)
-    { 
-      return false;
-    }
-    if(getClass() != obj.getClass())
-    { 
-      return false;
-    }
-    final SPush_3 other = (SPush_3)obj;
-    if(_1 != other._1)
-    { 
-      return false;
-    }
-    if(_2 != other._2)
-    { 
-      return false;
-    }
-    if(_3 == null)
-    { 
-      if(other._3 != null)
-      { 
-        return false;
-      }
-    }
-    else
-      if(!_3.equals(other._3))
-      { 
-        return false;
-      }
-    return true;
-  }
+	public String get_2() {
+		return this._2;
+	}
+
+	public I_Thunk get_3() {
+		return this._3;
+	}
 }

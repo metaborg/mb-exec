@@ -2,865 +2,1077 @@ package ds.generated.interpreter;
 
 import org.metaborg.meta.interpreter.framework.*;
 
-public class m_1 extends NoOpNode implements I_Matcher
-{ 
-  @Child public I_STerm _1;
+public class m_1 extends AbstractNode implements I_Matcher {
+	private boolean hasSpecialized;
 
-  public m_1 (INodeSource source, I_STerm _1) 
-  { 
-    this.setSourceInfo(source);
-    this._1 = adoptChild(_1);
-  }
+	@Child
+	public I_STerm _1;
 
-  private boolean hasSpecialized;
+	public m_1(INodeSource source, I_STerm _1) {
+		this.setSourceInfo(source);
+		this._1 = adoptChild(_1);
+	}
 
-  public void specializeChildren(int depth)
-  { 
-    if(!hasSpecialized)
-    { 
-      if(_1 instanceof IGenericNode)
-      { 
-        ((IGenericNode)_1).specialize(depth);
-      }
-      hasSpecialized = true;
-    }
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final m_1 other = (m_1) obj;
+		if (_1 == null) {
+			if (other._1 != null) {
+				return false;
+			}
+		} else if (!_1.equals(other._1)) {
+			return false;
+		}
+		return true;
+	}
 
-  public ma_Result exec_ma(com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_in_1, ds.manual.interpreter.AutoInterpInteropContext lifted_in_2, org.spoofax.interpreter.terms.ITermFactory lifted_in_3, com.github.krukow.clj_ds.PersistentMap<Object, Object> lifted_in_4, org.spoofax.interpreter.terms.IStrategoTerm lifted_in_5, org.spoofax.interpreter.core.StackTracer lifted_in_6, ds.manual.interpreter.SState lifted_in_7, boolean lifted_in_8, ds.manual.interpreter.VState lifted_in_9)
-  { 
-    this.specializeChildren(0);
-    final I_STerm lifted_1 = _1;
-    { 
-      final com.github.krukow.clj_ds.PersistentMap<Object, Object> senv_1 = lifted_in_1;
-      final ds.manual.interpreter.AutoInterpInteropContext ic_1 = lifted_in_2;
-      final org.spoofax.interpreter.terms.ITermFactory tf_1 = lifted_in_3;
-      final com.github.krukow.clj_ds.PersistentMap<Object, Object> venv_1 = lifted_in_4;
-      final org.spoofax.interpreter.terms.IStrategoTerm t_1 = lifted_in_5;
-      final org.spoofax.interpreter.core.StackTracer trace_1 = lifted_in_6;
-      final ds.manual.interpreter.SState sheap_1 = lifted_in_7;
-      final boolean bool_1 = lifted_in_8;
-      final ds.manual.interpreter.VState vheap_1 = lifted_in_9;
-      final Wld_0 tmpbuild169 = lifted_1.match(Wld_0.class);
-      if(tmpbuild169 != null)
-      { 
-        final org.spoofax.interpreter.terms.IStrategoTerm t = t_1;
-        final S_1 tmpbuild170 = new S_1(t);
-        final AValue v = tmpbuild170;
-        final org.spoofax.interpreter.core.StackTracer lifted_2 = trace_1;
-        final ds.manual.interpreter.SState lifted_3 = sheap_1;
-        final boolean lifted_4 = bool_1;
-        final ds.manual.interpreter.VState lifted_5 = vheap_1;
-        final AValue lifted_out_1 = v;
-        final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_2;
-        final ds.manual.interpreter.SState lifted_out_3 = lifted_3;
-        final boolean lifted_out_4 = lifted_4;
-        final ds.manual.interpreter.VState lifted_out_5 = lifted_5;
-        final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-        return ma_Result0;
-      }
-      else
-      { 
-        final Int_1 tmpbuild171 = lifted_1.match(Int_1.class);
-        if(tmpbuild171 != null)
-        { 
-          final String stringI = tmpbuild171.get_1();
-          final org.spoofax.interpreter.terms.IStrategoTerm t = t_1;
-          final boolean tmpbuild176 = ds.manual.interpreter.Natives.isATermInt_1(t);
-          if(tmpbuild176 == true)
-          { 
-            final org.spoofax.interpreter.terms.IStrategoInt tmpbuild175 = ds.manual.interpreter.Natives.asATermInt_1(t);
-            final org.spoofax.interpreter.terms.IStrategoInt aint = tmpbuild175;
-            final int tmpbuild174 = aint.intValue();
-            final int i_ = tmpbuild174;
-            final int tmpbuild173 = ds.manual.interpreter.Natives.parseInt_1(stringI);
-            final int i = tmpbuild173;
-            if(i == i_)
-            { 
-              final S_1 tmpbuild172 = new S_1(t);
-              final AValue v = tmpbuild172;
-              final org.spoofax.interpreter.core.StackTracer lifted_2 = trace_1;
-              final ds.manual.interpreter.SState lifted_3 = sheap_1;
-              final boolean lifted_4 = bool_1;
-              final ds.manual.interpreter.VState lifted_5 = vheap_1;
-              final AValue lifted_out_1 = v;
-              final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_2;
-              final ds.manual.interpreter.SState lifted_out_3 = lifted_3;
-              final boolean lifted_out_4 = lifted_4;
-              final ds.manual.interpreter.VState lifted_out_5 = lifted_5;
-              final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-              return ma_Result0;
-            }
-          }
-        }
-        else
-        { 
-          final Real_1 tmpbuild177 = lifted_1.match(Real_1.class);
-          if(tmpbuild177 != null)
-          { 
-            final String stringR = tmpbuild177.get_1();
-            final org.spoofax.interpreter.terms.IStrategoTerm t = t_1;
-            final boolean tmpbuild182 = ds.manual.interpreter.Natives.isATermReal_1(t);
-            if(tmpbuild182 == true)
-            { 
-              final org.spoofax.interpreter.terms.IStrategoReal tmpbuild181 = ds.manual.interpreter.Natives.asATermReal_1(t);
-              final org.spoofax.interpreter.terms.IStrategoReal areal = tmpbuild181;
-              final double tmpbuild180 = areal.realValue();
-              final double r_ = tmpbuild180;
-              final double tmpbuild179 = ds.manual.interpreter.Natives.parseReal_1(stringR);
-              final double r = tmpbuild179;
-              if(r == r_)
-              { 
-                final S_1 tmpbuild178 = new S_1(t);
-                final AValue v = tmpbuild178;
-                final org.spoofax.interpreter.core.StackTracer lifted_2 = trace_1;
-                final ds.manual.interpreter.SState lifted_3 = sheap_1;
-                final boolean lifted_4 = bool_1;
-                final ds.manual.interpreter.VState lifted_5 = vheap_1;
-                final AValue lifted_out_1 = v;
-                final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_2;
-                final ds.manual.interpreter.SState lifted_out_3 = lifted_3;
-                final boolean lifted_out_4 = lifted_4;
-                final ds.manual.interpreter.VState lifted_out_5 = lifted_5;
-                final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                return ma_Result0;
-              }
-            }
-          }
-          else
-          { 
-            final Str_1 tmpbuild183 = lifted_1.match(Str_1.class);
-            if(tmpbuild183 != null)
-            { 
-              final String s = tmpbuild183.get_1();
-              final org.spoofax.interpreter.terms.IStrategoTerm t = t_1;
-              final boolean tmpbuild187 = ds.manual.interpreter.Natives.isATermString_1(t);
-              if(tmpbuild187 == true)
-              { 
-                final org.spoofax.interpreter.terms.IStrategoString tmpbuild186 = ds.manual.interpreter.Natives.asATermString_1(t);
-                final org.spoofax.interpreter.terms.IStrategoString astr = tmpbuild186;
-                final String tmpbuild185 = astr.stringValue();
-                final String s_ = tmpbuild185;
-                if(s != null && s.equals(s_))
-                { 
-                  final S_1 tmpbuild184 = new S_1(t);
-                  final AValue v = tmpbuild184;
-                  final org.spoofax.interpreter.core.StackTracer lifted_2 = trace_1;
-                  final ds.manual.interpreter.SState lifted_3 = sheap_1;
-                  final boolean lifted_4 = bool_1;
-                  final ds.manual.interpreter.VState lifted_5 = vheap_1;
-                  final AValue lifted_out_1 = v;
-                  final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_2;
-                  final ds.manual.interpreter.SState lifted_out_3 = lifted_3;
-                  final boolean lifted_out_4 = lifted_4;
-                  final ds.manual.interpreter.VState lifted_out_5 = lifted_5;
-                  final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                  return ma_Result0;
-                }
-              }
-            }
-            else
-            { 
-              final Var_1 tmpbuild188 = lifted_1.match(Var_1.class);
-              if(tmpbuild188 != null)
-              { 
-                final String x = tmpbuild188.get_1();
-                final com.github.krukow.clj_ds.PersistentMap<Object, Object> e = venv_1;
-                final org.spoofax.interpreter.terms.IStrategoTerm t = t_1;
-                final VLookup_2 tmpbuild195 = new VLookup_2(getSourceInfo(), e, x);
-                final I_VHeapOp lifted_7 = tmpbuild195;
-                final vlook_Result tmpresult40 = lifted_7.exec_vlook(vheap_1);
-                final I_VLookupResult lifted_6 = tmpresult40.value;
-                final ds.manual.interpreter.VState vheap_2 = tmpresult40.get_1();
-                final VLookupResult_2 tmpbuild194 = lifted_6.match(VLookupResult_2.class);
-                if(tmpbuild194 != null)
-                { 
-                  final com.github.krukow.clj_ds.PersistentMap<Object, Object> e_ = tmpbuild194.get_1();
-                  final AValue xv = tmpbuild194.get_2();
-                  final F_0 tmpbuild189 = xv.match(F_0.class);
-                  if(tmpbuild189 != null)
-                  { 
-                    final S_1 tmpbuild191 = new S_1(t);
-                    final AValue v = tmpbuild191;
-                    final VUpdate_3 tmpbuild190 = new VUpdate_3(getSourceInfo(), e_, x, v);
-                    final I_VHeapOp lifted_8 = tmpbuild190;
-                    final vupdate_Result tmpresult39 = lifted_8.exec_vupdate(vheap_2);
-                    final com.github.krukow.clj_ds.PersistentMap<Object, Object> e__ = tmpresult39.value;
-                    final ds.manual.interpreter.VState vheap_3 = tmpresult39.get_1();
-                    final org.spoofax.interpreter.core.StackTracer lifted_2 = trace_1;
-                    final ds.manual.interpreter.SState lifted_3 = sheap_1;
-                    final boolean lifted_4 = bool_1;
-                    final ds.manual.interpreter.VState lifted_5 = vheap_3;
-                    final AValue lifted_out_1 = v;
-                    final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_2;
-                    final ds.manual.interpreter.SState lifted_out_3 = lifted_3;
-                    final boolean lifted_out_4 = lifted_4;
-                    final ds.manual.interpreter.VState lifted_out_5 = lifted_5;
-                    final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                    return ma_Result0;
-                  }
-                  else
-                  { 
-                    final S_1 tmpbuild193 = xv.match(S_1.class);
-                    if(tmpbuild193 != null)
-                    { 
-                      final org.spoofax.interpreter.terms.IStrategoTerm t_ = tmpbuild193.get_1();
-                      if(t != null && t.equals(t_))
-                      { 
-                        final S_1 tmpbuild192 = new S_1(t);
-                        final AValue v = tmpbuild192;
-                        final org.spoofax.interpreter.core.StackTracer lifted_2 = trace_1;
-                        final ds.manual.interpreter.SState lifted_3 = sheap_1;
-                        final boolean lifted_4 = bool_1;
-                        final ds.manual.interpreter.VState lifted_5 = vheap_2;
-                        final AValue lifted_out_1 = v;
-                        final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_2;
-                        final ds.manual.interpreter.SState lifted_out_3 = lifted_3;
-                        final boolean lifted_out_4 = lifted_4;
-                        final ds.manual.interpreter.VState lifted_out_5 = lifted_5;
-                        final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                        return ma_Result0;
-                      }
-                    }
-                  }
-                }
-              }
-              else
-              { 
-                final As_2 tmpbuild196 = lifted_1.match(As_2.class);
-                if(tmpbuild196 != null)
-                { 
-                  final I_Var lifted_7 = tmpbuild196.get_1();
-                  final I_PreTerm lifted_8 = tmpbuild196.get_2();
-                  final Var_1 tmpbuild209 = lifted_7.match(Var_1.class);
-                  if(tmpbuild209 != null)
-                  { 
-                    final String x = tmpbuild209.get_1();
-                    final I_PreTerm p = lifted_8;
-                    final com.github.krukow.clj_ds.PersistentMap<Object, Object> e = venv_1;
-                    final org.spoofax.interpreter.terms.IStrategoTerm t = t_1;
-                    final VLookup_2 tmpbuild208 = new VLookup_2(getSourceInfo(), e, x);
-                    final I_VHeapOp lifted_10 = tmpbuild208;
-                    final vlook_Result tmpresult44 = lifted_10.exec_vlook(vheap_1);
-                    final I_VLookupResult lifted_9 = tmpresult44.value;
-                    final ds.manual.interpreter.VState vheap_2 = tmpresult44.get_1();
-                    final VLookupResult_2 tmpbuild207 = lifted_9.match(VLookupResult_2.class);
-                    if(tmpbuild207 != null)
-                    { 
-                      final com.github.krukow.clj_ds.PersistentMap<Object, Object> e_ = tmpbuild207.get_1();
-                      final AValue lv = tmpbuild207.get_2();
-                      final F_0 tmpbuild197 = lv.match(F_0.class);
-                      if(tmpbuild197 != null)
-                      { 
-                        final Match_1 tmpbuild202 = new Match_1(getSourceInfo(), p);
-                        final I_Strategy lifted_12 = tmpbuild202;
-                        final default_Result tmpresult42 = lifted_12.exec_default(senv_1, e, ic_1, tf_1, t, trace_1, sheap_1, bool_1, vheap_2);
-                        final AValue lifted_11 = tmpresult42.value;
-                        final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult42.get_1();
-                        final ds.manual.interpreter.SState sheap_2 = tmpresult42.get_2();
-                        final boolean bool_2 = tmpresult42.get_3();
-                        final ds.manual.interpreter.VState vheap_3 = tmpresult42.get_4();
-                        final S_1 tmpbuild201 = lifted_11.match(S_1.class);
-                        if(tmpbuild201 != null)
-                        { 
-                          final org.spoofax.interpreter.terms.IStrategoTerm t_ = tmpbuild201.get_1();
-                          final S_1 tmpbuild200 = new S_1(t);
-                          final VUpdate_3 tmpbuild199 = new VUpdate_3(getSourceInfo(), e_, x, tmpbuild200);
-                          final I_VHeapOp lifted_13 = tmpbuild199;
-                          final vupdate_Result tmpresult41 = lifted_13.exec_vupdate(vheap_3);
-                          final com.github.krukow.clj_ds.PersistentMap<Object, Object> e__ = tmpresult41.value;
-                          final ds.manual.interpreter.VState vheap_4 = tmpresult41.get_1();
-                          final S_1 tmpbuild198 = new S_1(t);
-                          final AValue lifted_2 = tmpbuild198;
-                          final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_2;
-                          final ds.manual.interpreter.SState lifted_4 = sheap_2;
-                          final boolean lifted_5 = bool_2;
-                          final ds.manual.interpreter.VState lifted_6 = vheap_4;
-                          final AValue lifted_out_1 = lifted_2;
-                          final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-                          final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-                          final boolean lifted_out_4 = lifted_5;
-                          final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-                          final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                          return ma_Result0;
-                        }
-                      }
-                      else
-                      { 
-                        final S_1 tmpbuild206 = lv.match(S_1.class);
-                        if(tmpbuild206 != null)
-                        { 
-                          final org.spoofax.interpreter.terms.IStrategoTerm xt = tmpbuild206.get_1();
-                          if(t != null && t.equals(xt))
-                          { 
-                            final Match_1 tmpbuild205 = new Match_1(getSourceInfo(), p);
-                            final I_Strategy lifted_12 = tmpbuild205;
-                            final default_Result tmpresult43 = lifted_12.exec_default(senv_1, e, ic_1, tf_1, t, trace_1, sheap_1, bool_1, vheap_2);
-                            final AValue lifted_11 = tmpresult43.value;
-                            final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult43.get_1();
-                            final ds.manual.interpreter.SState sheap_2 = tmpresult43.get_2();
-                            final boolean bool_2 = tmpresult43.get_3();
-                            final ds.manual.interpreter.VState vheap_3 = tmpresult43.get_4();
-                            final S_1 tmpbuild204 = lifted_11.match(S_1.class);
-                            if(tmpbuild204 != null)
-                            { 
-                              final org.spoofax.interpreter.terms.IStrategoTerm t__ = tmpbuild204.get_1();
-                              final S_1 tmpbuild203 = new S_1(t);
-                              final AValue lifted_2 = tmpbuild203;
-                              final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_2;
-                              final ds.manual.interpreter.SState lifted_4 = sheap_2;
-                              final boolean lifted_5 = bool_2;
-                              final ds.manual.interpreter.VState lifted_6 = vheap_3;
-                              final AValue lifted_out_1 = lifted_2;
-                              final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-                              final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-                              final boolean lifted_out_4 = lifted_5;
-                              final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-                              final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                              return ma_Result0;
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-                else
-                { 
-                  final Explode_2 tmpbuild210 = lifted_1.match(Explode_2.class);
-                  if(tmpbuild210 != null)
-                  { 
-                    final I_STerm ct = tmpbuild210.get_1();
-                    final I_STerm ts = tmpbuild210.get_2();
-                    final org.spoofax.interpreter.terms.IStrategoTerm t = t_1;
-                    final org.spoofax.interpreter.terms.ITermFactory tf = tf_1;
-                    final boolean tmpbuild211 = ds.manual.interpreter.Natives.isATermAppl_1(t);
-                    if(tmpbuild211 == true)
-                    { 
-                      final org.spoofax.interpreter.terms.IStrategoAppl tmpbuild222 = ds.manual.interpreter.Natives.asATermAppl_1(t);
-                      final org.spoofax.interpreter.terms.IStrategoAppl appl = tmpbuild222;
-                      final org.spoofax.interpreter.terms.IStrategoConstructor tmpbuild221 = appl.getConstructor();
-                      final String tmpbuild220 = tmpbuild221.getName();
-                      final org.spoofax.interpreter.terms.IStrategoString tmpbuild219 = tf.makeString(tmpbuild220);
-                      final org.spoofax.interpreter.terms.IStrategoString constr = tmpbuild219;
-                      final Match_1 tmpbuild218 = new Match_1(getSourceInfo(), ct);
-                      final I_Strategy lifted_8 = tmpbuild218;
-                      final default_Result tmpresult46 = lifted_8.exec_default(senv_1, venv_1, ic_1, tf_1, constr, trace_1, sheap_1, bool_1, vheap_1);
-                      final AValue lifted_7 = tmpresult46.value;
-                      final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult46.get_1();
-                      final ds.manual.interpreter.SState sheap_2 = tmpresult46.get_2();
-                      final boolean bool_2 = tmpresult46.get_3();
-                      final ds.manual.interpreter.VState vheap_2 = tmpresult46.get_4();
-                      final S_1 tmpbuild217 = lifted_7.match(S_1.class);
-                      if(tmpbuild217 != null)
-                      { 
-                        final org.spoofax.interpreter.terms.IStrategoTerm constr_ = tmpbuild217.get_1();
-                        final org.spoofax.interpreter.terms.IStrategoTerm[] tmpbuild216 = appl.getAllSubterms();
-                        final org.spoofax.interpreter.terms.IStrategoList tmpbuild215 = tf.makeList(tmpbuild216);
-                        final org.spoofax.interpreter.terms.IStrategoList kids = tmpbuild215;
-                        final Match_1 tmpbuild214 = new Match_1(getSourceInfo(), ts);
-                        final I_Strategy lifted_10 = tmpbuild214;
-                        final default_Result tmpresult45 = lifted_10.exec_default(senv_1, venv_1, ic_1, tf_1, kids, trace_2, sheap_2, bool_2, vheap_2);
-                        final AValue lifted_9 = tmpresult45.value;
-                        final org.spoofax.interpreter.core.StackTracer trace_3 = tmpresult45.get_1();
-                        final ds.manual.interpreter.SState sheap_3 = tmpresult45.get_2();
-                        final boolean bool_3 = tmpresult45.get_3();
-                        final ds.manual.interpreter.VState vheap_3 = tmpresult45.get_4();
-                        final S_1 tmpbuild213 = lifted_9.match(S_1.class);
-                        if(tmpbuild213 != null)
-                        { 
-                          final org.spoofax.interpreter.terms.IStrategoTerm kids_ = tmpbuild213.get_1();
-                          final S_1 tmpbuild212 = new S_1(t);
-                          final AValue lifted_2 = tmpbuild212;
-                          final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_3;
-                          final ds.manual.interpreter.SState lifted_4 = sheap_3;
-                          final boolean lifted_5 = bool_3;
-                          final ds.manual.interpreter.VState lifted_6 = vheap_3;
-                          final AValue lifted_out_1 = lifted_2;
-                          final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-                          final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-                          final boolean lifted_out_4 = lifted_5;
-                          final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-                          final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                          return ma_Result0;
-                        }
-                      }
-                    }
-                    else
-                    { 
-                      final boolean tmpbuild223 = ds.manual.interpreter.Natives.isATermInt_1(t);
-                      if(tmpbuild223 == true)
-                      { 
-                        final org.spoofax.interpreter.terms.IStrategoTerm constr = t;
-                        final Match_1 tmpbuild229 = new Match_1(getSourceInfo(), ct);
-                        final I_Strategy lifted_8 = tmpbuild229;
-                        final default_Result tmpresult48 = lifted_8.exec_default(senv_1, venv_1, ic_1, tf_1, constr, trace_1, sheap_1, bool_1, vheap_1);
-                        final AValue lifted_7 = tmpresult48.value;
-                        final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult48.get_1();
-                        final ds.manual.interpreter.SState sheap_2 = tmpresult48.get_2();
-                        final boolean bool_2 = tmpresult48.get_3();
-                        final ds.manual.interpreter.VState vheap_2 = tmpresult48.get_4();
-                        final S_1 tmpbuild228 = lifted_7.match(S_1.class);
-                        if(tmpbuild228 != null)
-                        { 
-                          final org.spoofax.interpreter.terms.IStrategoTerm constr_ = tmpbuild228.get_1();
-                          final org.spoofax.interpreter.terms.IStrategoList tmpbuild227 = ds.manual.interpreter.Natives.makeNil_1(tf);
-                          final org.spoofax.interpreter.terms.IStrategoList kids = tmpbuild227;
-                          final Match_1 tmpbuild226 = new Match_1(getSourceInfo(), ts);
-                          final I_Strategy lifted_10 = tmpbuild226;
-                          final default_Result tmpresult47 = lifted_10.exec_default(senv_1, venv_1, ic_1, tf_1, kids, trace_2, sheap_2, bool_2, vheap_2);
-                          final AValue lifted_9 = tmpresult47.value;
-                          final org.spoofax.interpreter.core.StackTracer trace_3 = tmpresult47.get_1();
-                          final ds.manual.interpreter.SState sheap_3 = tmpresult47.get_2();
-                          final boolean bool_3 = tmpresult47.get_3();
-                          final ds.manual.interpreter.VState vheap_3 = tmpresult47.get_4();
-                          final S_1 tmpbuild225 = lifted_9.match(S_1.class);
-                          if(tmpbuild225 != null)
-                          { 
-                            final org.spoofax.interpreter.terms.IStrategoTerm kids_ = tmpbuild225.get_1();
-                            final S_1 tmpbuild224 = new S_1(t);
-                            final AValue lifted_2 = tmpbuild224;
-                            final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_3;
-                            final ds.manual.interpreter.SState lifted_4 = sheap_3;
-                            final boolean lifted_5 = bool_3;
-                            final ds.manual.interpreter.VState lifted_6 = vheap_3;
-                            final AValue lifted_out_1 = lifted_2;
-                            final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-                            final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-                            final boolean lifted_out_4 = lifted_5;
-                            final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-                            final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                            return ma_Result0;
-                          }
-                        }
-                      }
-                      else
-                      { 
-                        final boolean tmpbuild230 = ds.manual.interpreter.Natives.isATermString_1(t);
-                        if(tmpbuild230 == true)
-                        { 
-                          final org.spoofax.interpreter.terms.IStrategoList tmpbuild240 = ds.manual.interpreter.Natives.makeNil_1(tf);
-                          final org.spoofax.interpreter.terms.IStrategoTerm tmpbuild239 = tf.annotateTerm(t, tmpbuild240);
-                          final org.spoofax.interpreter.terms.IStrategoTerm tnoanno = tmpbuild239;
-                          final String tmpbuild238 = tnoanno.toString();
-                          final org.spoofax.interpreter.terms.IStrategoString tmpbuild237 = tf.makeString(tmpbuild238);
-                          final org.spoofax.interpreter.terms.IStrategoString constr = tmpbuild237;
-                          final Match_1 tmpbuild236 = new Match_1(getSourceInfo(), ct);
-                          final I_Strategy lifted_8 = tmpbuild236;
-                          final default_Result tmpresult50 = lifted_8.exec_default(senv_1, venv_1, ic_1, tf_1, constr, trace_1, sheap_1, bool_1, vheap_1);
-                          final AValue lifted_7 = tmpresult50.value;
-                          final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult50.get_1();
-                          final ds.manual.interpreter.SState sheap_2 = tmpresult50.get_2();
-                          final boolean bool_2 = tmpresult50.get_3();
-                          final ds.manual.interpreter.VState vheap_2 = tmpresult50.get_4();
-                          final S_1 tmpbuild235 = lifted_7.match(S_1.class);
-                          if(tmpbuild235 != null)
-                          { 
-                            final org.spoofax.interpreter.terms.IStrategoTerm constr_ = tmpbuild235.get_1();
-                            final org.spoofax.interpreter.terms.IStrategoList tmpbuild234 = ds.manual.interpreter.Natives.makeNil_1(tf);
-                            final org.spoofax.interpreter.terms.IStrategoList kids = tmpbuild234;
-                            final Match_1 tmpbuild233 = new Match_1(getSourceInfo(), ts);
-                            final I_Strategy lifted_10 = tmpbuild233;
-                            final default_Result tmpresult49 = lifted_10.exec_default(senv_1, venv_1, ic_1, tf_1, kids, trace_2, sheap_2, bool_2, vheap_2);
-                            final AValue lifted_9 = tmpresult49.value;
-                            final org.spoofax.interpreter.core.StackTracer trace_3 = tmpresult49.get_1();
-                            final ds.manual.interpreter.SState sheap_3 = tmpresult49.get_2();
-                            final boolean bool_3 = tmpresult49.get_3();
-                            final ds.manual.interpreter.VState vheap_3 = tmpresult49.get_4();
-                            final S_1 tmpbuild232 = lifted_9.match(S_1.class);
-                            if(tmpbuild232 != null)
-                            { 
-                              final org.spoofax.interpreter.terms.IStrategoTerm kids_ = tmpbuild232.get_1();
-                              final S_1 tmpbuild231 = new S_1(t);
-                              final AValue lifted_2 = tmpbuild231;
-                              final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_3;
-                              final ds.manual.interpreter.SState lifted_4 = sheap_3;
-                              final boolean lifted_5 = bool_3;
-                              final ds.manual.interpreter.VState lifted_6 = vheap_3;
-                              final AValue lifted_out_1 = lifted_2;
-                              final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-                              final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-                              final boolean lifted_out_4 = lifted_5;
-                              final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-                              final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                              return ma_Result0;
-                            }
-                          }
-                        }
-                        else
-                        { 
-                          final boolean tmpbuild241 = ds.manual.interpreter.Natives.isATermList_1(t);
-                          if(tmpbuild241 == true)
-                          { 
-                            final org.spoofax.interpreter.terms.IStrategoList tmpbuild247 = ds.manual.interpreter.Natives.makeNil_1(tf);
-                            final org.spoofax.interpreter.terms.IStrategoList constr = tmpbuild247;
-                            final Match_1 tmpbuild246 = new Match_1(getSourceInfo(), ct);
-                            final I_Strategy lifted_8 = tmpbuild246;
-                            final default_Result tmpresult52 = lifted_8.exec_default(senv_1, venv_1, ic_1, tf_1, constr, trace_1, sheap_1, bool_1, vheap_1);
-                            final AValue lifted_7 = tmpresult52.value;
-                            final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult52.get_1();
-                            final ds.manual.interpreter.SState sheap_2 = tmpresult52.get_2();
-                            final boolean bool_2 = tmpresult52.get_3();
-                            final ds.manual.interpreter.VState vheap_2 = tmpresult52.get_4();
-                            final S_1 tmpbuild245 = lifted_7.match(S_1.class);
-                            if(tmpbuild245 != null)
-                            { 
-                              final org.spoofax.interpreter.terms.IStrategoTerm constr_ = tmpbuild245.get_1();
-                              final Match_1 tmpbuild244 = new Match_1(getSourceInfo(), ts);
-                              final I_Strategy lifted_10 = tmpbuild244;
-                              final default_Result tmpresult51 = lifted_10.exec_default(senv_1, venv_1, ic_1, tf_1, t, trace_2, sheap_2, bool_2, vheap_2);
-                              final AValue lifted_9 = tmpresult51.value;
-                              final org.spoofax.interpreter.core.StackTracer trace_3 = tmpresult51.get_1();
-                              final ds.manual.interpreter.SState sheap_3 = tmpresult51.get_2();
-                              final boolean bool_3 = tmpresult51.get_3();
-                              final ds.manual.interpreter.VState vheap_3 = tmpresult51.get_4();
-                              final S_1 tmpbuild243 = lifted_9.match(S_1.class);
-                              if(tmpbuild243 != null)
-                              { 
-                                final org.spoofax.interpreter.terms.IStrategoTerm kids_ = tmpbuild243.get_1();
-                                final S_1 tmpbuild242 = new S_1(t);
-                                final AValue lifted_2 = tmpbuild242;
-                                final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_3;
-                                final ds.manual.interpreter.SState lifted_4 = sheap_3;
-                                final boolean lifted_5 = bool_3;
-                                final ds.manual.interpreter.VState lifted_6 = vheap_3;
-                                final AValue lifted_out_1 = lifted_2;
-                                final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-                                final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-                                final boolean lifted_out_4 = lifted_5;
-                                final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-                                final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                                return ma_Result0;
-                              }
-                            }
-                          }
-                          else
-                          { 
-                            final boolean tmpbuild256 = ds.manual.interpreter.Natives.isATermTuple_1(t);
-                            if(tmpbuild256 == true)
-                            { 
-                              final org.spoofax.interpreter.terms.IStrategoString tmpbuild255 = tf.makeString("");
-                              final org.spoofax.interpreter.terms.IStrategoString constr = tmpbuild255;
-                              final Match_1 tmpbuild254 = new Match_1(getSourceInfo(), ct);
-                              final I_Strategy lifted_8 = tmpbuild254;
-                              final default_Result tmpresult54 = lifted_8.exec_default(senv_1, venv_1, ic_1, tf_1, constr, trace_1, sheap_1, bool_1, vheap_1);
-                              final AValue lifted_7 = tmpresult54.value;
-                              final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult54.get_1();
-                              final ds.manual.interpreter.SState sheap_2 = tmpresult54.get_2();
-                              final boolean bool_2 = tmpresult54.get_3();
-                              final ds.manual.interpreter.VState vheap_2 = tmpresult54.get_4();
-                              final S_1 tmpbuild253 = lifted_7.match(S_1.class);
-                              if(tmpbuild253 != null)
-                              { 
-                                final org.spoofax.interpreter.terms.IStrategoTerm constr_ = tmpbuild253.get_1();
-                                final org.spoofax.interpreter.terms.IStrategoTerm[] tmpbuild252 = t.getAllSubterms();
-                                final org.spoofax.interpreter.terms.IStrategoList tmpbuild251 = tf.makeList(tmpbuild252);
-                                final org.spoofax.interpreter.terms.IStrategoList kids = tmpbuild251;
-                                final Match_1 tmpbuild250 = new Match_1(getSourceInfo(), ts);
-                                final I_Strategy lifted_10 = tmpbuild250;
-                                final default_Result tmpresult53 = lifted_10.exec_default(senv_1, venv_1, ic_1, tf_1, kids, trace_2, sheap_2, bool_2, vheap_2);
-                                final AValue lifted_9 = tmpresult53.value;
-                                final org.spoofax.interpreter.core.StackTracer trace_3 = tmpresult53.get_1();
-                                final ds.manual.interpreter.SState sheap_3 = tmpresult53.get_2();
-                                final boolean bool_3 = tmpresult53.get_3();
-                                final ds.manual.interpreter.VState vheap_3 = tmpresult53.get_4();
-                                final S_1 tmpbuild249 = lifted_9.match(S_1.class);
-                                if(tmpbuild249 != null)
-                                { 
-                                  final org.spoofax.interpreter.terms.IStrategoTerm kids_ = tmpbuild249.get_1();
-                                  final S_1 tmpbuild248 = new S_1(t);
-                                  final AValue lifted_2 = tmpbuild248;
-                                  final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_3;
-                                  final ds.manual.interpreter.SState lifted_4 = sheap_3;
-                                  final boolean lifted_5 = bool_3;
-                                  final ds.manual.interpreter.VState lifted_6 = vheap_3;
-                                  final AValue lifted_out_1 = lifted_2;
-                                  final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-                                  final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-                                  final boolean lifted_out_4 = lifted_5;
-                                  final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-                                  final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                                  return ma_Result0;
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                  else
-                  { 
-                    final Op_2 tmpbuild280 = lifted_1.match(Op_2.class);
-                    if(tmpbuild280 != null)
-                    { 
-                      final String c = tmpbuild280.get_1();
-                      final INodeList<I_STerm> pts = tmpbuild280.get_2();
-                      final org.spoofax.interpreter.terms.IStrategoTerm t = t_1;
-                      final org.spoofax.interpreter.terms.ITermFactory tf = tf_1;
-                      if(c != null && c.equals("Nil"))
-                      { 
-                        final int tmpbuild257 = ds.manual.interpreter.Natives.length_1(pts);
-                        if(tmpbuild257 == 0)
-                        { 
-                          final Op_2 tmpbuild259 = new Op_2(getSourceInfo(), c, pts);
-                          final mList_1 tmpbuild258 = new mList_1(getSourceInfo(), tmpbuild259);
-                          final I_Matcher lifted_6 = tmpbuild258;
-                          final ma_Result tmpresult55 = lifted_6.exec_ma(senv_1, ic_1, tf, venv_1, t, trace_1, sheap_1, bool_1, vheap_1);
-                          final AValue mv = tmpresult55.value;
-                          final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult55.get_1();
-                          final ds.manual.interpreter.SState sheap_2 = tmpresult55.get_2();
-                          final boolean bool_2 = tmpresult55.get_3();
-                          final ds.manual.interpreter.VState vheap_2 = tmpresult55.get_4();
-                          final org.spoofax.interpreter.core.StackTracer lifted_2 = trace_2;
-                          final ds.manual.interpreter.SState lifted_3 = sheap_2;
-                          final boolean lifted_4 = bool_2;
-                          final ds.manual.interpreter.VState lifted_5 = vheap_2;
-                          final AValue lifted_out_1 = mv;
-                          final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_2;
-                          final ds.manual.interpreter.SState lifted_out_3 = lifted_3;
-                          final boolean lifted_out_4 = lifted_4;
-                          final ds.manual.interpreter.VState lifted_out_5 = lifted_5;
-                          final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                          return ma_Result0;
-                        }
-                        else
-                        { 
-                          final int tmpbuild262 = ds.manual.interpreter.Natives.length_1(pts);
-                          if(tmpbuild262 != 0)
-                          { 
-                            final Op_2 tmpbuild261 = new Op_2(getSourceInfo(), c, pts);
-                            final mAppl_1 tmpbuild260 = new mAppl_1(getSourceInfo(), tmpbuild261);
-                            final I_Matcher lifted_6 = tmpbuild260;
-                            final ma_Result tmpresult56 = lifted_6.exec_ma(senv_1, ic_1, tf, venv_1, t, trace_1, sheap_1, bool_1, vheap_1);
-                            final AValue mv = tmpresult56.value;
-                            final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult56.get_1();
-                            final ds.manual.interpreter.SState sheap_2 = tmpresult56.get_2();
-                            final boolean bool_2 = tmpresult56.get_3();
-                            final ds.manual.interpreter.VState vheap_2 = tmpresult56.get_4();
-                            final org.spoofax.interpreter.core.StackTracer lifted_2 = trace_2;
-                            final ds.manual.interpreter.SState lifted_3 = sheap_2;
-                            final boolean lifted_4 = bool_2;
-                            final ds.manual.interpreter.VState lifted_5 = vheap_2;
-                            final AValue lifted_out_1 = mv;
-                            final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_2;
-                            final ds.manual.interpreter.SState lifted_out_3 = lifted_3;
-                            final boolean lifted_out_4 = lifted_4;
-                            final ds.manual.interpreter.VState lifted_out_5 = lifted_5;
-                            final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                            return ma_Result0;
-                          }
-                        }
-                      }
-                      else
-                      { 
-                        if(c != null && c.equals("Cons"))
-                        { 
-                          final int tmpbuild263 = ds.manual.interpreter.Natives.length_1(pts);
-                          if(tmpbuild263 == 2)
-                          { 
-                            final Op_2 tmpbuild265 = new Op_2(getSourceInfo(), c, pts);
-                            final mList_1 tmpbuild264 = new mList_1(getSourceInfo(), tmpbuild265);
-                            final I_Matcher lifted_6 = tmpbuild264;
-                            final ma_Result tmpresult57 = lifted_6.exec_ma(senv_1, ic_1, tf, venv_1, t, trace_1, sheap_1, bool_1, vheap_1);
-                            final AValue mv = tmpresult57.value;
-                            final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult57.get_1();
-                            final ds.manual.interpreter.SState sheap_2 = tmpresult57.get_2();
-                            final boolean bool_2 = tmpresult57.get_3();
-                            final ds.manual.interpreter.VState vheap_2 = tmpresult57.get_4();
-                            final org.spoofax.interpreter.core.StackTracer lifted_2 = trace_2;
-                            final ds.manual.interpreter.SState lifted_3 = sheap_2;
-                            final boolean lifted_4 = bool_2;
-                            final ds.manual.interpreter.VState lifted_5 = vheap_2;
-                            final AValue lifted_out_1 = mv;
-                            final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_2;
-                            final ds.manual.interpreter.SState lifted_out_3 = lifted_3;
-                            final boolean lifted_out_4 = lifted_4;
-                            final ds.manual.interpreter.VState lifted_out_5 = lifted_5;
-                            final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                            return ma_Result0;
-                          }
-                          else
-                          { 
-                            final int tmpbuild268 = ds.manual.interpreter.Natives.length_1(pts);
-                            if(tmpbuild268 != 2)
-                            { 
-                              final Op_2 tmpbuild267 = new Op_2(getSourceInfo(), c, pts);
-                              final mAppl_1 tmpbuild266 = new mAppl_1(getSourceInfo(), tmpbuild267);
-                              final I_Matcher lifted_6 = tmpbuild266;
-                              final ma_Result tmpresult58 = lifted_6.exec_ma(senv_1, ic_1, tf, venv_1, t, trace_1, sheap_1, bool_1, vheap_1);
-                              final AValue mv = tmpresult58.value;
-                              final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult58.get_1();
-                              final ds.manual.interpreter.SState sheap_2 = tmpresult58.get_2();
-                              final boolean bool_2 = tmpresult58.get_3();
-                              final ds.manual.interpreter.VState vheap_2 = tmpresult58.get_4();
-                              final org.spoofax.interpreter.core.StackTracer lifted_2 = trace_2;
-                              final ds.manual.interpreter.SState lifted_3 = sheap_2;
-                              final boolean lifted_4 = bool_2;
-                              final ds.manual.interpreter.VState lifted_5 = vheap_2;
-                              final AValue lifted_out_1 = mv;
-                              final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_2;
-                              final ds.manual.interpreter.SState lifted_out_3 = lifted_3;
-                              final boolean lifted_out_4 = lifted_4;
-                              final ds.manual.interpreter.VState lifted_out_5 = lifted_5;
-                              final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                              return ma_Result0;
-                            }
-                          }
-                        }
-                        else
-                        { 
-                          if(c != null && c.equals(""))
-                          { 
-                            final boolean tmpbuild275 = ds.manual.interpreter.Natives.isATermTuple_1(t);
-                            if(tmpbuild275 == true)
-                            { 
-                              final org.spoofax.interpreter.terms.IStrategoTuple tmpbuild274 = ds.manual.interpreter.Natives.asATermTuple_1(t);
-                              final org.spoofax.interpreter.terms.IStrategoTuple tupl = tmpbuild274;
-                              final org.spoofax.interpreter.terms.IStrategoTerm[] tmpbuild273 = tupl.getAllSubterms();
-                              final org.spoofax.interpreter.terms.IStrategoTerm[] elems = tmpbuild273;
-                              final org.spoofax.interpreter.terms.IStrategoList tmpbuild272 = tf.makeList(elems);
-                              final org.spoofax.interpreter.terms.IStrategoList elems_ = tmpbuild272;
-                              final ml_1 tmpbuild271 = new ml_1(getSourceInfo(), pts);
-                              final I_Matcher lifted_8 = tmpbuild271;
-                              final ma_Result tmpresult59 = lifted_8.exec_ma(senv_1, ic_1, tf_1, venv_1, elems_, trace_1, sheap_1, bool_1, vheap_1);
-                              final AValue lifted_7 = tmpresult59.value;
-                              final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult59.get_1();
-                              final ds.manual.interpreter.SState sheap_2 = tmpresult59.get_2();
-                              final boolean bool_2 = tmpresult59.get_3();
-                              final ds.manual.interpreter.VState vheap_2 = tmpresult59.get_4();
-                              final S_1 tmpbuild270 = lifted_7.match(S_1.class);
-                              if(tmpbuild270 != null)
-                              { 
-                                final org.spoofax.interpreter.terms.IStrategoTerm tupl_ = tmpbuild270.get_1();
-                                final S_1 tmpbuild269 = new S_1(t);
-                                final AValue lifted_2 = tmpbuild269;
-                                final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_2;
-                                final ds.manual.interpreter.SState lifted_4 = sheap_2;
-                                final boolean lifted_5 = bool_2;
-                                final ds.manual.interpreter.VState lifted_6 = vheap_2;
-                                final AValue lifted_out_1 = lifted_2;
-                                final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-                                final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-                                final boolean lifted_out_4 = lifted_5;
-                                final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-                                final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                                return ma_Result0;
-                              }
-                            }
-                          }
-                          else
-                          { 
-                            if(c == null || !c.equals("Nil"))
-                            { 
-                              if(c == null || !c.equals("Cons"))
-                              { 
-                                if(c == null || !c.equals(""))
-                                { 
-                                  final Op_2 tmpbuild279 = new Op_2(getSourceInfo(), c, pts);
-                                  final mAppl_1 tmpbuild278 = new mAppl_1(getSourceInfo(), tmpbuild279);
-                                  final I_Matcher lifted_8 = tmpbuild278;
-                                  final ma_Result tmpresult60 = lifted_8.exec_ma(senv_1, ic_1, tf, venv_1, t, trace_1, sheap_1, bool_1, vheap_1);
-                                  final AValue lifted_7 = tmpresult60.value;
-                                  final org.spoofax.interpreter.core.StackTracer trace_2 = tmpresult60.get_1();
-                                  final ds.manual.interpreter.SState sheap_2 = tmpresult60.get_2();
-                                  final boolean bool_2 = tmpresult60.get_3();
-                                  final ds.manual.interpreter.VState vheap_2 = tmpresult60.get_4();
-                                  final S_1 tmpbuild277 = lifted_7.match(S_1.class);
-                                  if(tmpbuild277 != null)
-                                  { 
-                                    final org.spoofax.interpreter.terms.IStrategoTerm t_ = tmpbuild277.get_1();
-                                    final S_1 tmpbuild276 = new S_1(t);
-                                    final AValue lifted_2 = tmpbuild276;
-                                    final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_2;
-                                    final ds.manual.interpreter.SState lifted_4 = sheap_2;
-                                    final boolean lifted_5 = bool_2;
-                                    final ds.manual.interpreter.VState lifted_6 = vheap_2;
-                                    final AValue lifted_out_1 = lifted_2;
-                                    final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-                                    final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-                                    final boolean lifted_out_4 = lifted_5;
-                                    final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-                                    final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-                                    return ma_Result0;
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    { 
-      final com.github.krukow.clj_ds.PersistentMap<Object, Object> senv_1 = lifted_in_1;
-      final ds.manual.interpreter.AutoInterpInteropContext ic_1 = lifted_in_2;
-      final org.spoofax.interpreter.terms.ITermFactory tf_1 = lifted_in_3;
-      final com.github.krukow.clj_ds.PersistentMap<Object, Object> venv_1 = lifted_in_4;
-      final org.spoofax.interpreter.terms.IStrategoTerm t_1 = lifted_in_5;
-      final org.spoofax.interpreter.core.StackTracer trace_1 = lifted_in_6;
-      final ds.manual.interpreter.SState sheap_1 = lifted_in_7;
-      final boolean bool_1 = lifted_in_8;
-      final ds.manual.interpreter.VState vheap_1 = lifted_in_9;
-      final I_STerm dc = lifted_1;
-      final F_0 tmpbuild281 = new F_0();
-      final AValue lifted_2 = tmpbuild281;
-      final org.spoofax.interpreter.core.StackTracer lifted_3 = trace_1;
-      final ds.manual.interpreter.SState lifted_4 = sheap_1;
-      final boolean lifted_5 = bool_1;
-      final ds.manual.interpreter.VState lifted_6 = vheap_1;
-      final AValue lifted_out_1 = lifted_2;
-      final org.spoofax.interpreter.core.StackTracer lifted_out_2 = lifted_3;
-      final ds.manual.interpreter.SState lifted_out_3 = lifted_4;
-      final boolean lifted_out_4 = lifted_5;
-      final ds.manual.interpreter.VState lifted_out_5 = lifted_6;
-      final ma_Result ma_Result0 = new ma_Result(lifted_out_1, lifted_out_2, lifted_out_3, lifted_out_4, lifted_out_5);
-      return ma_Result0;
-    }
-  }
+	@Override
+	public void specializeChildren(int depth) {
+		if (!hasSpecialized) {
+			if (_1 instanceof IGenericNode) {
+				((IGenericNode) _1).specialize(depth);
+			}
+			hasSpecialized = true;
+		}
+	}
 
-  public I_STerm get_1()
-  { 
-    if(this._1 instanceof IGenericNode)
-    { 
-      ((IGenericNode)this._1).specialize(1);
-    }
-    return this._1;
-  }
+	public R_ma_Value exec_ma(
+			ds.manual.interpreter.AutoInterpInteropContext _1,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _2,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _3,
+			org.spoofax.interpreter.terms.ITermFactory _4,
+			org.spoofax.interpreter.terms.IStrategoTerm _5,
+			ds.manual.interpreter.SState _6, ds.manual.interpreter.VState _7,
+			boolean _8, org.spoofax.interpreter.core.StackTracer _9) {
+		this.specializeChildren(0);
+		final ds.manual.interpreter.AutoInterpInteropContext ic_in2716 = _1;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> senv_in3076 = _2;
+		final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> venv_in3166 = _3;
+		final org.spoofax.interpreter.terms.ITermFactory tf_in2716 = _4;
+		final org.spoofax.interpreter.terms.IStrategoTerm t_in2716 = _5;
+		final ds.manual.interpreter.SState sheap_in3616 = _6;
+		final ds.manual.interpreter.VState vheap_in3256 = _7;
+		final boolean bool_in2716 = _8;
+		final org.spoofax.interpreter.core.StackTracer trace_in2896 = _9;
+		final I_STerm op860 = this._1;
+		{
+			final Wld_0 $tmp2530 = op860.match(Wld_0.class);
+			if ($tmp2530 != null) {
+				final IValue lifted_32357 = new S_1(null, t_in2716);
+				final ds.manual.interpreter.SState sheap_out3616 = sheap_in3616;
+				final ds.manual.interpreter.VState vheap_out3256 = vheap_in3256;
+				final boolean bool_out2716 = bool_in2716;
+				final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_in2896;
+				final IValue result_out4516 = lifted_32357;
+				return new R_ma_Value(result_out4516, sheap_out3616,
+						vheap_out3256, bool_out2716, trace_out2896);
+			} else {
+				final Int_1 $tmp2531 = op860.match(Int_1.class);
+				if ($tmp2531 != null) {
+					final String stringI355 = $tmp2531.get_1();
+					if (t_in2716 instanceof org.spoofax.interpreter.terms.IStrategoInt) {
+						final org.spoofax.interpreter.terms.IStrategoInt t98077 = (org.spoofax.interpreter.terms.IStrategoInt) t_in2716;
+						final int i_20 = t98077.intValue();
+						final int i160 = ds.manual.interpreter.Natives
+								.parseInt_1(stringI355);
+						if (i160 == i_20) {
+							final IValue lifted_32377 = new S_1(null, t98077);
+							final ds.manual.interpreter.SState sheap_out3616 = sheap_in3616;
+							final ds.manual.interpreter.VState vheap_out3256 = vheap_in3256;
+							final boolean bool_out2716 = bool_in2716;
+							final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_in2896;
+							final IValue result_out4516 = lifted_32377;
+							return new R_ma_Value(result_out4516,
+									sheap_out3616, vheap_out3256, bool_out2716,
+									trace_out2896);
+						} else {
+						}
+					} else {
+					}
+				} else {
+					final Real_1 $tmp2532 = op860.match(Real_1.class);
+					if ($tmp2532 != null) {
+						final String stringR355 = $tmp2532.get_1();
+						if (t_in2716 instanceof org.spoofax.interpreter.terms.IStrategoReal) {
+							final org.spoofax.interpreter.terms.IStrategoReal t98087 = (org.spoofax.interpreter.terms.IStrategoReal) t_in2716;
+							final double r_20 = t98087.realValue();
+							final double r160 = ds.manual.interpreter.Natives
+									.parseReal_1(stringR355);
+							if (r160 == r_20) {
+								final IValue lifted_32397 = new S_1(null,
+										t98087);
+								final ds.manual.interpreter.SState sheap_out3616 = sheap_in3616;
+								final ds.manual.interpreter.VState vheap_out3256 = vheap_in3256;
+								final boolean bool_out2716 = bool_in2716;
+								final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_in2896;
+								final IValue result_out4516 = lifted_32397;
+								return new R_ma_Value(result_out4516,
+										sheap_out3616, vheap_out3256,
+										bool_out2716, trace_out2896);
+							} else {
+							}
+						} else {
+						}
+					} else {
+						final Str_1 $tmp2533 = op860.match(Str_1.class);
+						if ($tmp2533 != null) {
+							final String s11434 = $tmp2533.get_1();
+							if (t_in2716 instanceof org.spoofax.interpreter.terms.IStrategoString) {
+								final org.spoofax.interpreter.terms.IStrategoString t98097 = (org.spoofax.interpreter.terms.IStrategoString) t_in2716;
+								final String s_20 = t98097.stringValue();
+								if (s11434 != null && s11434.equals(s_20)) {
+									final IValue lifted_32417 = new S_1(null,
+											t98097);
+									final ds.manual.interpreter.SState sheap_out3616 = sheap_in3616;
+									final ds.manual.interpreter.VState vheap_out3256 = vheap_in3256;
+									final boolean bool_out2716 = bool_in2716;
+									final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_in2896;
+									final IValue result_out4516 = lifted_32417;
+									return new R_ma_Value(result_out4516,
+											sheap_out3616, vheap_out3256,
+											bool_out2716, trace_out2896);
+								} else {
+								}
+							} else {
+							}
+						} else {
+							final Var_1 $tmp2534 = op860.match(Var_1.class);
+							if ($tmp2534 != null) {
+								final String x3749 = $tmp2534.get_1();
+								final I_VHeapOp lifted_32497 = new VLookup_2(
+										null, venv_in3166, x3749);
+								final R_vlook_VLookupResult $tmp2535 = lifted_32497
+										.exec_vlook(vheap_in3256);
+								final I_VLookupResult lifted_32507 = $tmp2535.value;
+								final ds.manual.interpreter.VState vheap_28902 = $tmp2535
+										.get_1();
+								final VLookupResult_2 $tmp2536 = lifted_32507
+										.match(VLookupResult_2.class);
+								if ($tmp2536 != null) {
+									final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> lifted_30247 = $tmp2536
+											.get_1();
+									final IValue lifted_32517 = $tmp2536
+											.get_2();
+									final F_0 $tmp2537 = lifted_32517
+											.match(F_0.class);
+									if ($tmp2537 != null) {
+										final IValue v4124 = new S_1(null,
+												t_in2716);
+										final I_VHeapOp lifted_32457 = new VUpdate_3(
+												null, lifted_30247, x3749,
+												v4124);
+										final R_vupdate_VEnv $tmp2538 = lifted_32457
+												.exec_vupdate(vheap_28902);
+										final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> lifted_30237 = $tmp2538.value;
+										final ds.manual.interpreter.VState vheap_34237 = $tmp2538
+												.get_1();
+										final ds.manual.interpreter.SState sheap_out3616 = sheap_in3616;
+										final ds.manual.interpreter.VState vheap_out3256 = vheap_34237;
+										final boolean bool_out2716 = bool_in2716;
+										final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_in2896;
+										final IValue result_out4516 = v4124;
+										return new R_ma_Value(result_out4516,
+												sheap_out3616, vheap_out3256,
+												bool_out2716, trace_out2896);
+									} else {
+										final S_1 $tmp2539 = lifted_32517
+												.match(S_1.class);
+										if ($tmp2539 != null) {
+											final org.spoofax.interpreter.terms.IStrategoTerm t_107 = $tmp2539
+													.get_1();
+											if (t_in2716 != null
+													&& t_in2716.equals(t_107)) {
+												final IValue lifted_32487 = new S_1(
+														null, t_in2716);
+												final ds.manual.interpreter.SState sheap_out3616 = sheap_in3616;
+												final ds.manual.interpreter.VState vheap_out3256 = vheap_28902;
+												final boolean bool_out2716 = bool_in2716;
+												final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_in2896;
+												final IValue result_out4516 = lifted_32487;
+												return new R_ma_Value(
+														result_out4516,
+														sheap_out3616,
+														vheap_out3256,
+														bool_out2716,
+														trace_out2896);
+											} else {
+											}
+										} else {
+										}
+									}
+								} else {
+								}
+							} else {
+								final As_2 $tmp2540 = op860.match(As_2.class);
+								if ($tmp2540 != null) {
+									final I_Var lifted_32647 = $tmp2540.get_1();
+									final I_PreTerm p760 = $tmp2540.get_2();
+									final Var_1 $tmp2541 = lifted_32647
+											.match(Var_1.class);
+									if ($tmp2541 != null) {
+										final String x3750 = $tmp2541.get_1();
+										final I_VHeapOp lifted_32657 = new VLookup_2(
+												null, venv_in3166, x3750);
+										final R_vlook_VLookupResult $tmp2542 = lifted_32657
+												.exec_vlook(vheap_in3256);
+										final I_VLookupResult lifted_32667 = $tmp2542.value;
+										final ds.manual.interpreter.VState vheap_28903 = $tmp2542
+												.get_1();
+										final VLookupResult_2 $tmp2543 = lifted_32667
+												.match(VLookupResult_2.class);
+										if ($tmp2543 != null) {
+											final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> lifted_30277 = $tmp2543
+													.get_1();
+											final IValue lifted_32697 = $tmp2543
+													.get_2();
+											final F_0 $tmp2544 = lifted_32697
+													.match(F_0.class);
+											if ($tmp2544 != null) {
+												final I_Strategy lifted_32577 = new Match_1(
+														null, p760);
+												final R_default_Value $tmp2545 = lifted_32577
+														.exec_default(
+																ic_in2716,
+																senv_in3076,
+																venv_in3166,
+																t_in2716,
+																tf_in2716,
+																sheap_in3616,
+																vheap_28903,
+																bool_in2716,
+																trace_in2896);
+												final IValue lifted_32587 = $tmp2545.value;
+												final ds.manual.interpreter.SState sheap_29548 = $tmp2545
+														.get_1();
+												final ds.manual.interpreter.VState vheap_34238 = $tmp2545
+														.get_2();
+												final boolean bool_28463 = $tmp2545
+														.get_3();
+												final org.spoofax.interpreter.core.StackTracer trace_28526 = $tmp2545
+														.get_4();
+												final S_1 $tmp2546 = lifted_32587
+														.match(S_1.class);
+												if ($tmp2546 != null) {
+													final org.spoofax.interpreter.terms.IStrategoTerm lifted_30257 = $tmp2546
+															.get_1();
+													final IValue lifted_32617 = new S_1(
+															null, t_in2716);
+													final I_VHeapOp lifted_32597 = new VUpdate_3(
+															null, lifted_30277,
+															x3750, lifted_32617);
+													final R_vupdate_VEnv $tmp2547 = lifted_32597
+															.exec_vupdate(vheap_34238);
+													final com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> lifted_30267 = $tmp2547.value;
+													final ds.manual.interpreter.VState vheap_4418 = $tmp2547
+															.get_1();
+													final IValue lifted_32537 = new S_1(
+															null, t_in2716);
+													final ds.manual.interpreter.SState sheap_out3616 = sheap_29548;
+													final ds.manual.interpreter.VState vheap_out3256 = vheap_4418;
+													final boolean bool_out2716 = bool_28463;
+													final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_28526;
+													final IValue result_out4516 = lifted_32537;
+													return new R_ma_Value(
+															result_out4516,
+															sheap_out3616,
+															vheap_out3256,
+															bool_out2716,
+															trace_out2896);
+												} else {
+												}
+											} else {
+												final S_1 $tmp2548 = lifted_32697
+														.match(S_1.class);
+												if ($tmp2548 != null) {
+													final org.spoofax.interpreter.terms.IStrategoTerm xt160 = $tmp2548
+															.get_1();
+													if (t_in2716 != null
+															&& t_in2716
+																	.equals(xt160)) {
+														final I_Strategy lifted_32677 = new Match_1(
+																null, p760);
+														final R_default_Value $tmp2549 = lifted_32677
+																.exec_default(
+																		ic_in2716,
+																		senv_in3076,
+																		venv_in3166,
+																		t_in2716,
+																		tf_in2716,
+																		sheap_in3616,
+																		vheap_28903,
+																		bool_in2716,
+																		trace_in2896);
+														final IValue lifted_32687 = $tmp2549.value;
+														final ds.manual.interpreter.SState sheap_29549 = $tmp2549
+																.get_1();
+														final ds.manual.interpreter.VState vheap_34239 = $tmp2549
+																.get_2();
+														final boolean bool_28464 = $tmp2549
+																.get_3();
+														final org.spoofax.interpreter.core.StackTracer trace_28527 = $tmp2549
+																.get_4();
+														final S_1 $tmp2550 = lifted_32687
+																.match(S_1.class);
+														if ($tmp2550 != null) {
+															final org.spoofax.interpreter.terms.IStrategoTerm lifted_30287 = $tmp2550
+																	.get_1();
+															final IValue lifted_32637 = new S_1(
+																	null,
+																	t_in2716);
+															final ds.manual.interpreter.SState sheap_out3616 = sheap_29549;
+															final ds.manual.interpreter.VState vheap_out3256 = vheap_34239;
+															final boolean bool_out2716 = bool_28464;
+															final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_28527;
+															final IValue result_out4516 = lifted_32637;
+															return new R_ma_Value(
+																	result_out4516,
+																	sheap_out3616,
+																	vheap_out3256,
+																	bool_out2716,
+																	trace_out2896);
+														} else {
+														}
+													} else {
+													}
+												} else {
+												}
+											}
+										} else {
+										}
+									} else {
+									}
+								} else {
+									final Explode_2 $tmp2551 = op860
+											.match(Explode_2.class);
+									if ($tmp2551 != null) {
+										final I_STerm ct440 = $tmp2551.get_1();
+										final I_STerm ts5865 = $tmp2551.get_2();
+										if (t_in2716 instanceof org.spoofax.interpreter.terms.IStrategoAppl) {
+											final org.spoofax.interpreter.terms.IStrategoAppl t98107 = (org.spoofax.interpreter.terms.IStrategoAppl) t_in2716;
+											final org.spoofax.interpreter.terms.IStrategoConstructor lifted_32787 = t98107
+													.getConstructor();
+											final String lifted_32727 = lifted_32787
+													.getName();
+											final org.spoofax.interpreter.terms.IStrategoString constr870 = tf_in2716
+													.makeString(lifted_32727);
+											final I_Strategy lifted_32737 = new Match_1(
+													null, ct440);
+											final R_default_Value $tmp2552 = lifted_32737
+													.exec_default(ic_in2716,
+															senv_in3076,
+															venv_in3166,
+															constr870,
+															tf_in2716,
+															sheap_in3616,
+															vheap_in3256,
+															bool_in2716,
+															trace_in2896);
+											final IValue lifted_32747 = $tmp2552.value;
+											final ds.manual.interpreter.SState sheap_29550 = $tmp2552
+													.get_1();
+											final ds.manual.interpreter.VState vheap_28904 = $tmp2552
+													.get_2();
+											final boolean bool_28465 = $tmp2552
+													.get_3();
+											final org.spoofax.interpreter.core.StackTracer trace_28528 = $tmp2552
+													.get_4();
+											final S_1 $tmp2553 = lifted_32747
+													.match(S_1.class);
+											if ($tmp2553 != null) {
+												final org.spoofax.interpreter.terms.IStrategoTerm lifted_30297 = $tmp2553
+														.get_1();
+												final org.spoofax.interpreter.terms.IStrategoTerm[] lifted_32757 = t98107
+														.getAllSubterms();
+												final org.spoofax.interpreter.terms.IStrategoList kids515 = tf_in2716
+														.makeList(lifted_32757);
+												final I_Strategy lifted_32767 = new Match_1(
+														null, ts5865);
+												final R_default_Value $tmp2554 = lifted_32767
+														.exec_default(
+																ic_in2716,
+																senv_in3076,
+																venv_in3166,
+																kids515,
+																tf_in2716,
+																sheap_29550,
+																vheap_28904,
+																bool_28465,
+																trace_28528);
+												final IValue lifted_32777 = $tmp2554.value;
+												final ds.manual.interpreter.SState sheap_34703 = $tmp2554
+														.get_1();
+												final ds.manual.interpreter.VState vheap_34240 = $tmp2554
+														.get_2();
+												final boolean bool_33361 = $tmp2554
+														.get_3();
+												final org.spoofax.interpreter.core.StackTracer trace_33680 = $tmp2554
+														.get_4();
+												final S_1 $tmp2555 = lifted_32777
+														.match(S_1.class);
+												if ($tmp2555 != null) {
+													final org.spoofax.interpreter.terms.IStrategoTerm lifted_30307 = $tmp2555
+															.get_1();
+													final IValue lifted_32717 = new S_1(
+															null, t98107);
+													final ds.manual.interpreter.SState sheap_out3616 = sheap_34703;
+													final ds.manual.interpreter.VState vheap_out3256 = vheap_34240;
+													final boolean bool_out2716 = bool_33361;
+													final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_33680;
+													final IValue result_out4516 = lifted_32717;
+													return new R_ma_Value(
+															result_out4516,
+															sheap_out3616,
+															vheap_out3256,
+															bool_out2716,
+															trace_out2896);
+												} else {
+												}
+											} else {
+											}
+										} else {
+											if (t_in2716 instanceof org.spoofax.interpreter.terms.IStrategoInt) {
+												final org.spoofax.interpreter.terms.IStrategoInt t98117 = (org.spoofax.interpreter.terms.IStrategoInt) t_in2716;
+												final I_Strategy lifted_32817 = new Match_1(
+														null, ct440);
+												final R_default_Value $tmp2556 = lifted_32817
+														.exec_default(
+																ic_in2716,
+																senv_in3076,
+																venv_in3166,
+																t98117,
+																tf_in2716,
+																sheap_in3616,
+																vheap_in3256,
+																bool_in2716,
+																trace_in2896);
+												final IValue lifted_32827 = $tmp2556.value;
+												final ds.manual.interpreter.SState sheap_29551 = $tmp2556
+														.get_1();
+												final ds.manual.interpreter.VState vheap_28905 = $tmp2556
+														.get_2();
+												final boolean bool_28466 = $tmp2556
+														.get_3();
+												final org.spoofax.interpreter.core.StackTracer trace_28529 = $tmp2556
+														.get_4();
+												final S_1 $tmp2557 = lifted_32827
+														.match(S_1.class);
+												if ($tmp2557 != null) {
+													final org.spoofax.interpreter.terms.IStrategoTerm lifted_30317 = $tmp2557
+															.get_1();
+													final org.spoofax.interpreter.terms.IStrategoList lifted_32837 = ds.manual.interpreter.Natives
+															.makeNil_1(tf_in2716);
+													final I_Strategy lifted_32847 = new Match_1(
+															null, ts5865);
+													final R_default_Value $tmp2558 = lifted_32847
+															.exec_default(
+																	ic_in2716,
+																	senv_in3076,
+																	venv_in3166,
+																	lifted_32837,
+																	tf_in2716,
+																	sheap_29551,
+																	vheap_28905,
+																	bool_28466,
+																	trace_28529);
+													final IValue lifted_32857 = $tmp2558.value;
+													final ds.manual.interpreter.SState sheap_34704 = $tmp2558
+															.get_1();
+													final ds.manual.interpreter.VState vheap_34241 = $tmp2558
+															.get_2();
+													final boolean bool_33362 = $tmp2558
+															.get_3();
+													final org.spoofax.interpreter.core.StackTracer trace_33681 = $tmp2558
+															.get_4();
+													final S_1 $tmp2559 = lifted_32857
+															.match(S_1.class);
+													if ($tmp2559 != null) {
+														final org.spoofax.interpreter.terms.IStrategoTerm lifted_30327 = $tmp2559
+																.get_1();
+														final IValue lifted_32807 = new S_1(
+																null, t98117);
+														final ds.manual.interpreter.SState sheap_out3616 = sheap_34704;
+														final ds.manual.interpreter.VState vheap_out3256 = vheap_34241;
+														final boolean bool_out2716 = bool_33362;
+														final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_33681;
+														final IValue result_out4516 = lifted_32807;
+														return new R_ma_Value(
+																result_out4516,
+																sheap_out3616,
+																vheap_out3256,
+																bool_out2716,
+																trace_out2896);
+													} else {
+													}
+												} else {
+												}
+											} else {
+												if (t_in2716 instanceof org.spoofax.interpreter.terms.IStrategoString) {
+													final org.spoofax.interpreter.terms.IStrategoString t98127 = (org.spoofax.interpreter.terms.IStrategoString) t_in2716;
+													final org.spoofax.interpreter.terms.IStrategoList lifted_32887 = ds.manual.interpreter.Natives
+															.makeNil_1(tf_in2716);
+													final org.spoofax.interpreter.terms.IStrategoTerm tnoanno160 = tf_in2716
+															.annotateTerm(
+																	t98127,
+																	lifted_32887);
+													final String lifted_32897 = tnoanno160
+															.toString();
+													final org.spoofax.interpreter.terms.IStrategoString constr871 = tf_in2716
+															.makeString(lifted_32897);
+													final I_Strategy lifted_32907 = new Match_1(
+															null, ct440);
+													final R_default_Value $tmp2560 = lifted_32907
+															.exec_default(
+																	ic_in2716,
+																	senv_in3076,
+																	venv_in3166,
+																	constr871,
+																	tf_in2716,
+																	sheap_in3616,
+																	vheap_in3256,
+																	bool_in2716,
+																	trace_in2896);
+													final IValue lifted_32917 = $tmp2560.value;
+													final ds.manual.interpreter.SState sheap_29552 = $tmp2560
+															.get_1();
+													final ds.manual.interpreter.VState vheap_28906 = $tmp2560
+															.get_2();
+													final boolean bool_28467 = $tmp2560
+															.get_3();
+													final org.spoofax.interpreter.core.StackTracer trace_28530 = $tmp2560
+															.get_4();
+													final S_1 $tmp2561 = lifted_32917
+															.match(S_1.class);
+													if ($tmp2561 != null) {
+														final org.spoofax.interpreter.terms.IStrategoTerm lifted_30337 = $tmp2561
+																.get_1();
+														final org.spoofax.interpreter.terms.IStrategoList lifted_32927 = ds.manual.interpreter.Natives
+																.makeNil_1(tf_in2716);
+														final I_Strategy lifted_32937 = new Match_1(
+																null, ts5865);
+														final R_default_Value $tmp2562 = lifted_32937
+																.exec_default(
+																		ic_in2716,
+																		senv_in3076,
+																		venv_in3166,
+																		lifted_32927,
+																		tf_in2716,
+																		sheap_29552,
+																		vheap_28906,
+																		bool_28467,
+																		trace_28530);
+														final IValue lifted_32947 = $tmp2562.value;
+														final ds.manual.interpreter.SState sheap_34705 = $tmp2562
+																.get_1();
+														final ds.manual.interpreter.VState vheap_34242 = $tmp2562
+																.get_2();
+														final boolean bool_33363 = $tmp2562
+																.get_3();
+														final org.spoofax.interpreter.core.StackTracer trace_33682 = $tmp2562
+																.get_4();
+														final S_1 $tmp2563 = lifted_32947
+																.match(S_1.class);
+														if ($tmp2563 != null) {
+															final org.spoofax.interpreter.terms.IStrategoTerm lifted_30347 = $tmp2563
+																	.get_1();
+															final IValue lifted_32877 = new S_1(
+																	null,
+																	t98127);
+															final ds.manual.interpreter.SState sheap_out3616 = sheap_34705;
+															final ds.manual.interpreter.VState vheap_out3256 = vheap_34242;
+															final boolean bool_out2716 = bool_33363;
+															final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_33682;
+															final IValue result_out4516 = lifted_32877;
+															return new R_ma_Value(
+																	result_out4516,
+																	sheap_out3616,
+																	vheap_out3256,
+																	bool_out2716,
+																	trace_out2896);
+														} else {
+														}
+													} else {
+													}
+												} else {
+													if (t_in2716 instanceof org.spoofax.interpreter.terms.IStrategoList) {
+														final org.spoofax.interpreter.terms.IStrategoList t98137 = (org.spoofax.interpreter.terms.IStrategoList) t_in2716;
+														final org.spoofax.interpreter.terms.IStrategoList lifted_32977 = ds.manual.interpreter.Natives
+																.makeNil_1(tf_in2716);
+														final I_Strategy lifted_32987 = new Match_1(
+																null, ct440);
+														final R_default_Value $tmp2564 = lifted_32987
+																.exec_default(
+																		ic_in2716,
+																		senv_in3076,
+																		venv_in3166,
+																		lifted_32977,
+																		tf_in2716,
+																		sheap_in3616,
+																		vheap_in3256,
+																		bool_in2716,
+																		trace_in2896);
+														final IValue lifted_32997 = $tmp2564.value;
+														final ds.manual.interpreter.SState sheap_29553 = $tmp2564
+																.get_1();
+														final ds.manual.interpreter.VState vheap_28907 = $tmp2564
+																.get_2();
+														final boolean bool_28468 = $tmp2564
+																.get_3();
+														final org.spoofax.interpreter.core.StackTracer trace_28531 = $tmp2564
+																.get_4();
+														final S_1 $tmp2565 = lifted_32997
+																.match(S_1.class);
+														if ($tmp2565 != null) {
+															final org.spoofax.interpreter.terms.IStrategoTerm lifted_30357 = $tmp2565
+																	.get_1();
+															final I_Strategy lifted_33007 = new Match_1(
+																	null,
+																	ts5865);
+															final R_default_Value $tmp2566 = lifted_33007
+																	.exec_default(
+																			ic_in2716,
+																			senv_in3076,
+																			venv_in3166,
+																			t98137,
+																			tf_in2716,
+																			sheap_29553,
+																			vheap_28907,
+																			bool_28468,
+																			trace_28531);
+															final IValue lifted_33017 = $tmp2566.value;
+															final ds.manual.interpreter.SState sheap_34706 = $tmp2566
+																	.get_1();
+															final ds.manual.interpreter.VState vheap_34243 = $tmp2566
+																	.get_2();
+															final boolean bool_33364 = $tmp2566
+																	.get_3();
+															final org.spoofax.interpreter.core.StackTracer trace_33683 = $tmp2566
+																	.get_4();
+															final S_1 $tmp2567 = lifted_33017
+																	.match(S_1.class);
+															if ($tmp2567 != null) {
+																final org.spoofax.interpreter.terms.IStrategoTerm lifted_30367 = $tmp2567
+																		.get_1();
+																final IValue lifted_32967 = new S_1(
+																		null,
+																		t98137);
+																final ds.manual.interpreter.SState sheap_out3616 = sheap_34706;
+																final ds.manual.interpreter.VState vheap_out3256 = vheap_34243;
+																final boolean bool_out2716 = bool_33364;
+																final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_33683;
+																final IValue result_out4516 = lifted_32967;
+																return new R_ma_Value(
+																		result_out4516,
+																		sheap_out3616,
+																		vheap_out3256,
+																		bool_out2716,
+																		trace_out2896);
+															} else {
+															}
+														} else {
+														}
+													} else {
+														if (t_in2716 instanceof org.spoofax.interpreter.terms.IStrategoTuple) {
+															final org.spoofax.interpreter.terms.IStrategoTuple t98147 = (org.spoofax.interpreter.terms.IStrategoTuple) t_in2716;
+															final org.spoofax.interpreter.terms.IStrategoString constr872 = tf_in2716
+																	.makeString("");
+															final I_Strategy lifted_33057 = new Match_1(
+																	null, ct440);
+															final R_default_Value $tmp2568 = lifted_33057
+																	.exec_default(
+																			ic_in2716,
+																			senv_in3076,
+																			venv_in3166,
+																			constr872,
+																			tf_in2716,
+																			sheap_in3616,
+																			vheap_in3256,
+																			bool_in2716,
+																			trace_in2896);
+															final IValue lifted_33067 = $tmp2568.value;
+															final ds.manual.interpreter.SState sheap_29554 = $tmp2568
+																	.get_1();
+															final ds.manual.interpreter.VState vheap_28908 = $tmp2568
+																	.get_2();
+															final boolean bool_28469 = $tmp2568
+																	.get_3();
+															final org.spoofax.interpreter.core.StackTracer trace_28532 = $tmp2568
+																	.get_4();
+															final S_1 $tmp2569 = lifted_33067
+																	.match(S_1.class);
+															if ($tmp2569 != null) {
+																final org.spoofax.interpreter.terms.IStrategoTerm lifted_30377 = $tmp2569
+																		.get_1();
+																final org.spoofax.interpreter.terms.IStrategoTerm[] lifted_33077 = t98147
+																		.getAllSubterms();
+																final org.spoofax.interpreter.terms.IStrategoList kids516 = tf_in2716
+																		.makeList(lifted_33077);
+																final I_Strategy lifted_33087 = new Match_1(
+																		null,
+																		ts5865);
+																final R_default_Value $tmp2570 = lifted_33087
+																		.exec_default(
+																				ic_in2716,
+																				senv_in3076,
+																				venv_in3166,
+																				kids516,
+																				tf_in2716,
+																				sheap_29554,
+																				vheap_28908,
+																				bool_28469,
+																				trace_28532);
+																final IValue lifted_33097 = $tmp2570.value;
+																final ds.manual.interpreter.SState sheap_34707 = $tmp2570
+																		.get_1();
+																final ds.manual.interpreter.VState vheap_34244 = $tmp2570
+																		.get_2();
+																final boolean bool_33365 = $tmp2570
+																		.get_3();
+																final org.spoofax.interpreter.core.StackTracer trace_33684 = $tmp2570
+																		.get_4();
+																final S_1 $tmp2571 = lifted_33097
+																		.match(S_1.class);
+																if ($tmp2571 != null) {
+																	final org.spoofax.interpreter.terms.IStrategoTerm lifted_30387 = $tmp2571
+																			.get_1();
+																	final IValue lifted_33037 = new S_1(
+																			null,
+																			t98147);
+																	final ds.manual.interpreter.SState sheap_out3616 = sheap_34707;
+																	final ds.manual.interpreter.VState vheap_out3256 = vheap_34244;
+																	final boolean bool_out2716 = bool_33365;
+																	final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_33684;
+																	final IValue result_out4516 = lifted_33037;
+																	return new R_ma_Value(
+																			result_out4516,
+																			sheap_out3616,
+																			vheap_out3256,
+																			bool_out2716,
+																			trace_out2896);
+																} else {
+																}
+															} else {
+															}
+														} else {
+														}
+													}
+												}
+											}
+										}
+									} else {
+										final Op_2 $tmp2572 = op860
+												.match(Op_2.class);
+										if ($tmp2572 != null) {
+											final String c1355 = $tmp2572
+													.get_1();
+											final INodeList<I_STerm> lifted_30447 = $tmp2572
+													.get_2();
+											if (c1355 != null
+													&& c1355.equals("Nil")) {
+												if (lifted_30447 != null
+														&& lifted_30447
+																.equals(NodeList
+																		.NIL(Object.class))) {
+													final I_Matcher lifted_33127 = new mList_1(
+															null, op860);
+													final R_ma_Value $tmp2573 = lifted_33127
+															.exec_ma(
+																	ic_in2716,
+																	senv_in3076,
+																	venv_in3166,
+																	tf_in2716,
+																	t_in2716,
+																	sheap_in3616,
+																	vheap_in3256,
+																	bool_in2716,
+																	trace_in2896);
+													final IValue mv640 = $tmp2573.value;
+													final ds.manual.interpreter.SState sheap_29555 = $tmp2573
+															.get_1();
+													final ds.manual.interpreter.VState vheap_28909 = $tmp2573
+															.get_2();
+													final boolean bool_28470 = $tmp2573
+															.get_3();
+													final org.spoofax.interpreter.core.StackTracer trace_28533 = $tmp2573
+															.get_4();
+													final ds.manual.interpreter.SState sheap_out3616 = sheap_29555;
+													final ds.manual.interpreter.VState vheap_out3256 = vheap_28909;
+													final boolean bool_out2716 = bool_28470;
+													final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_28533;
+													final IValue result_out4516 = mv640;
+													return new R_ma_Value(
+															result_out4516,
+															sheap_out3616,
+															vheap_out3256,
+															bool_out2716,
+															trace_out2896);
+												} else {
+													if (lifted_30447 != null
+															&& !lifted_30447
+																	.isEmpty()) {
+														final I_STerm lifted_30407 = lifted_30447
+																.head();
+														final INodeList<I_STerm> lifted_30417 = lifted_30447
+																.tail();
+														final I_Matcher lifted_33167 = new mAppl_1(
+																null, op860);
+														final R_ma_Value $tmp2574 = lifted_33167
+																.exec_ma(
+																		ic_in2716,
+																		senv_in3076,
+																		venv_in3166,
+																		tf_in2716,
+																		t_in2716,
+																		sheap_in3616,
+																		vheap_in3256,
+																		bool_in2716,
+																		trace_in2896);
+														final IValue mv641 = $tmp2574.value;
+														final ds.manual.interpreter.SState sheap_29556 = $tmp2574
+																.get_1();
+														final ds.manual.interpreter.VState vheap_28910 = $tmp2574
+																.get_2();
+														final boolean bool_28471 = $tmp2574
+																.get_3();
+														final org.spoofax.interpreter.core.StackTracer trace_28534 = $tmp2574
+																.get_4();
+														final ds.manual.interpreter.SState sheap_out3616 = sheap_29556;
+														final ds.manual.interpreter.VState vheap_out3256 = vheap_28910;
+														final boolean bool_out2716 = bool_28471;
+														final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_28534;
+														final IValue result_out4516 = mv641;
+														return new R_ma_Value(
+																result_out4516,
+																sheap_out3616,
+																vheap_out3256,
+																bool_out2716,
+																trace_out2896);
+													} else {
+													}
+												}
+											} else {
+												if (c1355 != null
+														&& c1355.equals("Cons")) {
+													if (ds.manual.interpreter.Natives
+															.length_1(lifted_30447) == 2) {
+														final I_Matcher lifted_33207 = new mList_1(
+																null, op860);
+														final R_ma_Value $tmp2575 = lifted_33207
+																.exec_ma(
+																		ic_in2716,
+																		senv_in3076,
+																		venv_in3166,
+																		tf_in2716,
+																		t_in2716,
+																		sheap_in3616,
+																		vheap_in3256,
+																		bool_in2716,
+																		trace_in2896);
+														final IValue mv642 = $tmp2575.value;
+														final ds.manual.interpreter.SState sheap_29557 = $tmp2575
+																.get_1();
+														final ds.manual.interpreter.VState vheap_28911 = $tmp2575
+																.get_2();
+														final boolean bool_28472 = $tmp2575
+																.get_3();
+														final org.spoofax.interpreter.core.StackTracer trace_28535 = $tmp2575
+																.get_4();
+														final ds.manual.interpreter.SState sheap_out3616 = sheap_29557;
+														final ds.manual.interpreter.VState vheap_out3256 = vheap_28911;
+														final boolean bool_out2716 = bool_28472;
+														final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_28535;
+														final IValue result_out4516 = mv642;
+														return new R_ma_Value(
+																result_out4516,
+																sheap_out3616,
+																vheap_out3256,
+																bool_out2716,
+																trace_out2896);
+													} else {
+														if (ds.manual.interpreter.Natives
+																.length_1(lifted_30447) == 2) {
+														} else {
+															final I_Matcher lifted_33237 = new mAppl_1(
+																	null, op860);
+															final R_ma_Value $tmp2576 = lifted_33237
+																	.exec_ma(
+																			ic_in2716,
+																			senv_in3076,
+																			venv_in3166,
+																			tf_in2716,
+																			t_in2716,
+																			sheap_in3616,
+																			vheap_in3256,
+																			bool_in2716,
+																			trace_in2896);
+															final IValue mv643 = $tmp2576.value;
+															final ds.manual.interpreter.SState sheap_29558 = $tmp2576
+																	.get_1();
+															final ds.manual.interpreter.VState vheap_28912 = $tmp2576
+																	.get_2();
+															final boolean bool_28473 = $tmp2576
+																	.get_3();
+															final org.spoofax.interpreter.core.StackTracer trace_28536 = $tmp2576
+																	.get_4();
+															final ds.manual.interpreter.SState sheap_out3616 = sheap_29558;
+															final ds.manual.interpreter.VState vheap_out3256 = vheap_28912;
+															final boolean bool_out2716 = bool_28473;
+															final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_28536;
+															final IValue result_out4516 = mv643;
+															return new R_ma_Value(
+																	result_out4516,
+																	sheap_out3616,
+																	vheap_out3256,
+																	bool_out2716,
+																	trace_out2896);
+														}
+													}
+												} else {
+													if (c1355 != null
+															&& c1355.equals("")) {
+														if (t_in2716 instanceof org.spoofax.interpreter.terms.IStrategoTuple) {
+															final org.spoofax.interpreter.terms.IStrategoTuple t98157 = (org.spoofax.interpreter.terms.IStrategoTuple) t_in2716;
+															final org.spoofax.interpreter.terms.IStrategoTerm[] elems160 = t98157
+																	.getAllSubterms();
+															final org.spoofax.interpreter.terms.IStrategoList lifted_33287 = tf_in2716
+																	.makeList(elems160);
+															final I_Matcher lifted_33297 = new ml_1(
+																	null,
+																	lifted_30447);
+															final R_ma_Value $tmp2577 = lifted_33297
+																	.exec_ma(
+																			ic_in2716,
+																			senv_in3076,
+																			venv_in3166,
+																			tf_in2716,
+																			lifted_33287,
+																			sheap_in3616,
+																			vheap_in3256,
+																			bool_in2716,
+																			trace_in2896);
+															final IValue lifted_33307 = $tmp2577.value;
+															final ds.manual.interpreter.SState sheap_29559 = $tmp2577
+																	.get_1();
+															final ds.manual.interpreter.VState vheap_28913 = $tmp2577
+																	.get_2();
+															final boolean bool_28474 = $tmp2577
+																	.get_3();
+															final org.spoofax.interpreter.core.StackTracer trace_28537 = $tmp2577
+																	.get_4();
+															final S_1 $tmp2578 = lifted_33307
+																	.match(S_1.class);
+															if ($tmp2578 != null) {
+																final org.spoofax.interpreter.terms.IStrategoTerm lifted_30427 = $tmp2578
+																		.get_1();
+																final IValue lifted_33267 = new S_1(
+																		null,
+																		t98157);
+																final ds.manual.interpreter.SState sheap_out3616 = sheap_29559;
+																final ds.manual.interpreter.VState vheap_out3256 = vheap_28913;
+																final boolean bool_out2716 = bool_28474;
+																final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_28537;
+																final IValue result_out4516 = lifted_33267;
+																return new R_ma_Value(
+																		result_out4516,
+																		sheap_out3616,
+																		vheap_out3256,
+																		bool_out2716,
+																		trace_out2896);
+															} else {
+															}
+														} else {
+														}
+													} else {
+														if (c1355 != null
+																&& c1355.equals("Nil")) {
+														} else {
+															if (c1355 != null
+																	&& c1355.equals("Cons")) {
+															} else {
+																if (c1355 != null
+																		&& c1355.equals("")) {
+																} else {
+																	final I_Matcher lifted_33337 = new mAppl_1(
+																			null,
+																			op860);
+																	final R_ma_Value $tmp2579 = lifted_33337
+																			.exec_ma(
+																					ic_in2716,
+																					senv_in3076,
+																					venv_in3166,
+																					tf_in2716,
+																					t_in2716,
+																					sheap_in3616,
+																					vheap_in3256,
+																					bool_in2716,
+																					trace_in2896);
+																	final IValue lifted_33347 = $tmp2579.value;
+																	final ds.manual.interpreter.SState sheap_29560 = $tmp2579
+																			.get_1();
+																	final ds.manual.interpreter.VState vheap_28914 = $tmp2579
+																			.get_2();
+																	final boolean bool_28475 = $tmp2579
+																			.get_3();
+																	final org.spoofax.interpreter.core.StackTracer trace_28538 = $tmp2579
+																			.get_4();
+																	final S_1 $tmp2580 = lifted_33347
+																			.match(S_1.class);
+																	if ($tmp2580 != null) {
+																		final org.spoofax.interpreter.terms.IStrategoTerm lifted_30437 = $tmp2580
+																				.get_1();
+																		final IValue lifted_33327 = new S_1(
+																				null,
+																				t_in2716);
+																		final ds.manual.interpreter.SState sheap_out3616 = sheap_29560;
+																		final ds.manual.interpreter.VState vheap_out3256 = vheap_28914;
+																		final boolean bool_out2716 = bool_28475;
+																		final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_28538;
+																		final IValue result_out4516 = lifted_33327;
+																		return new R_ma_Value(
+																				result_out4516,
+																				sheap_out3616,
+																				vheap_out3256,
+																				bool_out2716,
+																				trace_out2896);
+																	} else {
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										} else {
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		{
+			final IValue lifted_33107 = new F_0(null);
+			final ds.manual.interpreter.SState sheap_out3616 = sheap_in3616;
+			final ds.manual.interpreter.VState vheap_out3256 = vheap_in3256;
+			final boolean bool_out2716 = bool_in2716;
+			final org.spoofax.interpreter.core.StackTracer trace_out2896 = trace_in2896;
+			final IValue result_out4516 = lifted_33107;
+			return new R_ma_Value(result_out4516, sheap_out3616, vheap_out3256,
+					bool_out2716, trace_out2896);
+		}
+	}
 
-  @Override public boolean equals(Object obj)
-  { 
-    if(this == obj)
-    { 
-      return true;
-    }
-    if(obj == null)
-    { 
-      return false;
-    }
-    if(getClass() != obj.getClass())
-    { 
-      return false;
-    }
-    final m_1 other = (m_1)obj;
-    if(_1 == null)
-    { 
-      if(other._1 != null)
-      { 
-        return false;
-      }
-    }
-    else
-      if(!_1.equals(other._1))
-      { 
-        return false;
-      }
-    return true;
-  }
+	public I_STerm get_1() {
+		return this._1;
+	}
 }
