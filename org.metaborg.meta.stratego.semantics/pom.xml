@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.metaborg.meta.stratego.semantics</groupId>
+	<groupId>org.metaborg</groupId>
 	<artifactId>org.metaborg.meta.stratego.semantics</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<build>
@@ -51,4 +51,21 @@
 			<version>1.3.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	
+	  <developers>
+    <developer>
+      <name>Vlad Vergu</name>
+      <email>v.a.vergu@tudelft.nl</email>
+      <organization>Delft University of Technology</organization>
+      <organizationUrl>http://www.ewi.tudelft.nl/en</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git@github.com:metaborg/mb-exec.git</connection>
+    <developerConnection>scm:git:git@github.com:metaborg/mb-exec.git</developerConnection>
+    <url>https://github.com/metaborg/mb-exec</url>
+  </scm>
+  <url>https://github.com/metaborg/mb-exec</url>
+  <description>Stratego dynamic semantics in DynSem.</description>
 </project>
