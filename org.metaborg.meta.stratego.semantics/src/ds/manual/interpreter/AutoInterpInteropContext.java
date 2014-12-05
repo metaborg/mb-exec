@@ -14,6 +14,7 @@ import org.spoofax.interpreter.core.StrategoSignature;
 import org.spoofax.interpreter.core.VarScope;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.IOperatorRegistry;
+import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.stratego.Match.Results;
 import org.spoofax.interpreter.stratego.OpDecl;
 import org.spoofax.interpreter.stratego.SDefT;
@@ -33,6 +34,7 @@ public class AutoInterpInteropContext implements IContext {
 	public AutoInterpInteropContext() {
 		registries = new HashMap<>();
 		stacktracer = new StackTracer();
+		addOperatorRegistry(new SSLLibrary());
 	}
 
 	@Override
