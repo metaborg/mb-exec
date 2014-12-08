@@ -1,6 +1,6 @@
 package org.metaborg.meta.stratego.semantics.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +16,6 @@ import org.metaborg.meta.interpreter.framework.InterpreterExitException;
 import org.metaborg.meta.stratego.interpreter.StrategoCoreInterpreter;
 import org.metaborg.meta.stratego.interpreter.StrategoInterpreter;
 import org.spoofax.terms.TermFactory;
-import org.strategoxt.lang.StrategoErrorExit;
 
 @RunWith(Parameterized.class)
 public class TestTests1 {
