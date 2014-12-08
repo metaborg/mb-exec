@@ -11,6 +11,7 @@ import org.metaborg.meta.interpreter.framework.INodeSource;
 import org.metaborg.meta.interpreter.framework.IValue;
 import org.metaborg.meta.interpreter.framework.ImploderNodeSource;
 import org.metaborg.meta.interpreter.framework.InterpreterException;
+import org.metaborg.meta.interpreter.framework.NodeList;
 import org.spoofax.interpreter.core.StackTracer;
 import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.terms.IStrategoAppl;
@@ -24,14 +25,17 @@ import org.spoofax.terms.io.binary.TermReader;
 import com.github.krukow.clj_ds.PersistentMap;
 import com.github.krukow.clj_lang.PersistentTreeMap;
 
+import ds.generated.interpreter.CallT_3;
 import ds.generated.interpreter.F_0;
 import ds.generated.interpreter.Generic_I_Module;
 import ds.generated.interpreter.Generic_I_StrategyDef;
 import ds.generated.interpreter.I_Module;
+import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.I_Strategy;
 import ds.generated.interpreter.R_allocmodule_SEnv;
 import ds.generated.interpreter.R_default_Value;
 import ds.generated.interpreter.SDefT_4;
+import ds.generated.interpreter.SVar_1;
 import ds.generated.interpreter.S_1;
 import ds.generated.interpreter.Thunk_6;
 import ds.generated.interpreter.allocModule_1;
@@ -125,13 +129,9 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 
 	@Override
 	public boolean invoke(String sname) {
-		SBox thunkBox = strategyEnv.get(sname);
-		if (thunkBox != null) {
-			return evaluate(((Thunk_6) thunkBox.thunk).get_4());
-		} else {
-			throw new InterpreterException("Strategy " + sname
-					+ " is not defined");
-		}
+		CallT_3 call = new CallT_3(null, new SVar_1(null, sname),
+				NodeList.NIL(I_Strategy.class), NodeList.NIL(I_STerm.class));
+		return evaluate(call);
 	}
 
 	@Override
