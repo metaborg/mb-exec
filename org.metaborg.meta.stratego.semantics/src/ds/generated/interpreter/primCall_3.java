@@ -74,10 +74,9 @@ public class primCall_3 extends AbstractNode implements I_Strategy {
 						stacktracer);
 			}
 		} catch (InterpreterExit e) {
-			throw new InterpreterExitException("Exit ... ");
+			throw new InterpreterExitException(e, e.getValue());
 		} catch (org.spoofax.interpreter.core.InterpreterException e) {
-			throw new org.metaborg.meta.interpreter.framework.InterpreterException(
-					"Primitive application failed", e);
+			throw new InterpreterException(e);
 		}
 	}
 

@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.metaborg.meta.interpreter.framework.InterpreterException;
+import org.metaborg.meta.interpreter.framework.InterpreterExitException;
 import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
@@ -54,13 +55,18 @@ public class StrategoCoreInterpreterCLI {
 			pa[i] = interp.getTermFactory().makeString(programArgs.get(i));
 
 		interp.setCurrentTerm(interp.getTermFactory().makeList(pa));
-
-		boolean r = interp.invoke(mainStrategyName);
-		if (r) {
-			System.out.println(interp.getCurrentTerm());
-		} else {
-			System.out.println("rewriting failed");
-			System.exit(-1);
+		try {
+			boolean r = interp.invoke(mainStrategyName);
+			if (r) {
+				System.out.println(interp.getCurrentTerm());
+			} else {
+				System.out.println("rewriting failed");
+				System.exit(-1);
+			}
+		} catch (InterpreterExitException iex) {
+			System.out.println("Exit with status: " + iex.getValue());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

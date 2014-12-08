@@ -11,7 +11,7 @@ import org.metaborg.meta.interpreter.framework.INodeSource;
 import org.metaborg.meta.interpreter.framework.IValue;
 import org.metaborg.meta.interpreter.framework.ImploderNodeSource;
 import org.metaborg.meta.interpreter.framework.InterpreterException;
-import org.metaborg.meta.interpreter.framework.NodeList;
+import org.spoofax.interpreter.core.StackTracer;
 import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
@@ -24,17 +24,14 @@ import org.spoofax.terms.io.binary.TermReader;
 import com.github.krukow.clj_ds.PersistentMap;
 import com.github.krukow.clj_lang.PersistentTreeMap;
 
-import ds.generated.interpreter.CallT_3;
 import ds.generated.interpreter.F_0;
 import ds.generated.interpreter.Generic_I_Module;
 import ds.generated.interpreter.Generic_I_StrategyDef;
 import ds.generated.interpreter.I_Module;
-import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.I_Strategy;
 import ds.generated.interpreter.R_allocmodule_SEnv;
 import ds.generated.interpreter.R_default_Value;
 import ds.generated.interpreter.SDefT_4;
-import ds.generated.interpreter.SVar_1;
 import ds.generated.interpreter.S_1;
 import ds.generated.interpreter.Thunk_6;
 import ds.generated.interpreter.allocModule_1;
@@ -156,20 +153,25 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 	}
 
 	private boolean evaluate(I_Strategy sexpr) {
-		R_default_Value result = sexpr.exec_default(interopContext,
-				strategyEnv, PersistentTreeMap.EMPTY, getCurrentTerm(),
-				getTermFactory(), strategyHeap, new VState(), false,
-				interopContext.getStackTracer());
-
-		strategyHeap = result._1;
-		IValue value = result.value;
-
-		if (value.match(F_0.class) != null) {
-			return false;
-		} else {
-			setCurrentTerm(value.match(S_1.class).get_1());
-			return true;
+		try {
+			R_default_Value result = sexpr.exec_default(interopContext,
+					strategyEnv, PersistentTreeMap.EMPTY, getCurrentTerm(),
+					getTermFactory(), strategyHeap, new VState(), false,
+					interopContext.getStackTracer());
+			strategyHeap = result._1;
+			IValue value = result.value;
+			StackTracer stacktracer = interopContext.getStackTracer();
+			if (value.match(F_0.class) != null) {
+				stacktracer.popOnFailure();
+				return false;
+			} else {
+				stacktracer.popOnSuccess();
+				setCurrentTerm(value.match(S_1.class).get_1());
+				return true;
+			}
+		} catch (RuntimeException ex) {
+			interopContext.getStackTracer().popOnExit(false);
+			throw ex;
 		}
-
 	}
 }

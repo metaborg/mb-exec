@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.metaborg.meta.interpreter.framework.InterpreterExitException;
 import org.metaborg.meta.stratego.interpreter.StrategoCoreInterpreter;
 import org.metaborg.meta.stratego.interpreter.StrategoInterpreter;
 import org.spoofax.terms.TermFactory;
@@ -91,8 +92,8 @@ public class TestTests1 {
 
 		try {
 			interpreter.invoke(strategyName);
-		} catch (StrategoErrorExit errexit) {
-			fail("Application failed");
+		} catch (InterpreterExitException iex) {
+			assertEquals("Application failed", 0, iex.getValue());
 		}
 	}
 
