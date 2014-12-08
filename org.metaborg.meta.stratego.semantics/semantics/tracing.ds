@@ -23,6 +23,7 @@ signature
     TraceOp -trace-> Bool
   
   native-operators
+    pushTraceElem: String * Trace -> Bool
     popOnFailure : Trace -> Bool
     popOnSuccess : Trace -> Bool
 
@@ -34,15 +35,15 @@ rules
     s --> v,
     popTrace(v) -trace-> _
   
-  (pushTrace(_), Trace t) -trace-> (true, Trace t)
-  
-  (popTrace(v), Trace t) -trace-> (true, Trace t)
+  (pushTrace(sname), Trace t) -trace-> (true, Trace t)
   where
-    v => F(),
+    pushTraceElem(sname, t) => _
+  
+  (popTrace(F()), Trace t) -trace-> (true, Trace t)
+  where
     popOnFailure(t) => _
   
-  (popTrace(v), Trace t) -trace-> (true, Trace t)
+  (popTrace(S(_)), Trace t) -trace-> (true, Trace t)
   where
-    v => S(_),
     popOnSuccess(t) => _
 
