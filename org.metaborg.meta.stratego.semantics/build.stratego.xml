@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="org.metaborg.meta.stratego.semantics" default="all">
+
+	<!-- Importing Ant Macros -->
+	<!-- 
+	<taskdef resource="org/strategoxt/antcontrib/strategoxt-antlib.xml" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+-->
+
+	<target name="all" depends="">
+		<echo msg="Hello world!" />
+		<fail />
+	</target>
+
+</project>
