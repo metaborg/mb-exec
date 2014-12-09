@@ -8,8 +8,6 @@
 -->
 
 	<target name="all" depends="">
-		<echo msg="Hello world!" />
-		<fail />
 	</target>
 
 </project>
