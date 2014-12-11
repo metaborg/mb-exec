@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project name="org.metaborg.meta.stratego.semantics" default="all">
+<project name="org.metaborg.meta.stratego.semantics" default="jar">
+
+	<!-- overridden from Maven context -->
+	<property name="strategojar" value="" />
+	<property name="compileclasspath" value="" />
+	<property name="nativeprefix" value="" />
+	<property name="strategodistrib" value="" />
+
+	<property name="syn" value="src/main/sdf" />
+	<property name="str" value="src/main/stratego/spoofax/interpreter" />
+	<property name="src-gen" value="src-gen" />
 
 	<!-- Importing Ant Macros -->
-	<!-- 
-	<taskdef resource="org/strategoxt/antcontrib/strategoxt-antlib.xml" />
-	<taskdef resource="net/sf/antcontrib/antlib.xml" />
--->
+	<property name="nativepath" value="${nativeprefix}" />
 
-	<target name="all" depends="">
+	<taskdef classpath="${strategojar}" resource="org/strategoxt/antcontrib/strategoxt-antlib.xml" />
+	<taskdef classpath="${strategojar}" resource="net/sf/antcontrib/antlib.xml" />
+
+
+	<target name="jar" depends="" />
+
+	<target name="generate-sources" depends="generate-def">
+		<echo message="${compileclasspath}" />
+		<echo message="${strategojar}" />
+		<echo message="${nativeprefix}" />
+		<echo message="${strategodistrib}" />
+	</target>
+
+	<target name="generate-def">
+		<pack-sdf input="${syn}/Stratego-Shell.sdf" output="${src-gen}/Stratego-Shell.def">
+			<args>
+				<arg value="-I" />
+				<arg value="${strategodistrib}/share/strategoxt/stratego-front/sdf" />
+			</args>
+			<sdf-deps>
+				<srcfiles dir="${syn}" includes="**/*.sdf" />
+			</sdf-deps>
+		</pack-sdf>
+
 	</target>
 
 </project>
