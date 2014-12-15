@@ -47,7 +47,7 @@ public class SPX_interpreter_introspect_strategies_fast extends AbstractPrimitiv
             v = v.getParent();
 
         // FIXME: ugh
-        if (env instanceof Context) {
+        if (env instanceof IContext) {
             final StrategoSignature sign = ((Context) env).getStrategoSignature();
             final HashSet<String> names = new HashSet<String>();
 
