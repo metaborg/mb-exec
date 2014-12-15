@@ -2,7 +2,9 @@ package org.metaborg.meta.stratego.semantics.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -76,13 +78,13 @@ public class TestTests1 {
 	}
 
 	@Test
-	public void test() throws IOException {
+	public void test() throws IOException, URISyntaxException {
 		StrategoInterpreter interpreter = new StrategoCoreInterpreter();
 
 		// load ctrees
 		for (String ctreePath : ctreePaths) {
-			interpreter.load(this.getClass().getClassLoader()
-					.getResourceAsStream(ctreePath));
+			interpreter.load(new File(new File(this.getClass().getClassLoader()
+					.getResource(".").toURI()), ctreePath).toPath());
 		}
 
 		TermFactory tf = new TermFactory();

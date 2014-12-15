@@ -2,7 +2,9 @@ package org.metaborg.meta.stratego.semantics.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,15 +19,16 @@ public class Test000 {
 	}
 
 	@Test
-	public void test() throws IOException {
+	public void test() throws IOException, URISyntaxException {
 		StrategoInterpreter interpreter = new StrategoCoreInterpreter();
 
+		File dirFile = new File(this.getClass().getClassLoader()
+				.getResource(".").toURI());
+
 		// load libstratego-lib
-		interpreter.load(this.getClass().getClassLoader()
-				.getResourceAsStream("libstratego-lib.ctree"));
+		interpreter.load(new File(dirFile, "libstratego-lib.ctree").toPath());
 		// load program
-		interpreter.load(this.getClass().getClassLoader()
-				.getResourceAsStream("test000.ctree"));
+		interpreter.load(new File(dirFile, "test000.ctree").toPath());
 
 		interpreter.setCurrentTerm(new TermFactory().makeInt(42));
 
