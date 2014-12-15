@@ -1,7 +1,6 @@
 package org.metaborg.meta.stratego.interpreter;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 
 import org.spoofax.interpreter.library.IOperatorRegistry;
@@ -13,11 +12,9 @@ public interface StrategoInterpreter {
 
 	public void reset();
 
-	public void load(InputStream is) throws IOException;
-
 	public void load(Path p) throws IOException;
 
-	public void load(IStrategoTerm t) throws IOException;
+	public void load(IStrategoAppl t) throws IOException;
 
 	public void addOperatorRegistry(IOperatorRegistry registry);
 

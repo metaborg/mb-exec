@@ -3,8 +3,8 @@
  */
 package org.metaborg.meta.stratego.interpreter;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 
 import org.metaborg.meta.interpreter.framework.INodeSource;
@@ -75,22 +75,13 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 	}
 
 	@Override
-	public void load(InputStream is) throws IOException {
-		if (is == null)
-			throw new IOException(
-					"Could not load Stratego core input from null stream");
-
-		load(new TermReader(termFactory).parseFromStream(is));
-	}
-
-	@Override
 	public void load(Path p) throws IOException {
-		load(new TermReader(termFactory).parseFromFile(p.toAbsolutePath()
-				.toString()));
+		load((IStrategoAppl) new TermReader(termFactory)
+				.parseFromStream(new FileInputStream(p.toFile())));
 	}
 
 	@Override
-	public void load(IStrategoTerm ctree) throws IOException {
+	public void load(IStrategoAppl ctree) throws IOException {
 		INodeSource ctreeSource = ctree.getAttachment(ImploderAttachment.TYPE) != null ? new ImploderNodeSource(
 				ctree.getAttachment(ImploderAttachment.TYPE)) : null;
 
@@ -138,6 +129,7 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 		final IStrategoConstructor sdefT = factory.makeConstructor("SDefT", 4);
 		final IStrategoConstructor exprConstr = sExpr.getConstructor();
 
+		// wrap in SDefT if not already an SDefT 
 		if (!exprConstr.getName().equals(sdefT.getName())
 				|| exprConstr.getArity() != sdefT.getArity()) {
 			sExpr = factory.makeAppl(sdefT, factory.makeString("dummy_0_0"),
