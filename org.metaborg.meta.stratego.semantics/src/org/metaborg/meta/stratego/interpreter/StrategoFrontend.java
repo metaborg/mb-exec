@@ -46,24 +46,34 @@ public class StrategoFrontend {
 
 		// load libraries
 		try {
+			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstratego-lib/libstratego-lib.ctree",
 					libraryLocation));
+			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstrc/libstrc.ctree", libraryLocation));
+			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstratego-aterm/libstratego-aterm.ctree",
 					libraryLocation));
+			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstratego-gpp/libstratego-gpp.ctree",
 					libraryLocation));
+			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstratego-rtg/libstratego-rtg.ctree",
 					libraryLocation));
+			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstratego-sdf/libstratego-sdf.ctree",
 					libraryLocation));
+			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstratego-sglr/libstratego-sglr.ctree",
 					libraryLocation));
+			System.out.println("Frontend loading library...");
 			interp.load(makePath(
 					"libstratego-tool-doc/libstratego-tool-doc.ctree",
 					libraryLocation));
+			System.out.println("Frontend loading library...");
 
 			interp.load(makePath("frontend.ctree", frontendLocation));
+			System.out.println("Frontend loading library...");
 
 			ParseTableManager tblMgr = new ParseTableManager();
 			ParseTable table = tblMgr.loadFromFile(makePath(
@@ -91,7 +101,7 @@ public class StrategoFrontend {
 			InterruptedException, IOException {
 		return compile((IStrategoTerm) parser.parse(
 				new String(Files.readAllBytes(p)), p.toAbsolutePath()
-						.toString(), "TopLevel"));
+						.toString(), "Toplevel"));
 
 	}
 
@@ -103,7 +113,6 @@ public class StrategoFrontend {
 	}
 
 	public IStrategoAppl compile(IStrategoTerm term) {
-		interp.reset();
 		interp.setCurrentTerm(term);
 		if (!interp.invoke("spx_shell_frontend_0_0")) {
 			return null;

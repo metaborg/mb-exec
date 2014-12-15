@@ -34,6 +34,7 @@ public class StrategoSugarInterpreter extends StrategoCoreInterpreter {
 
 	@Override
 	public void load(Path p) throws IOException {
+		System.out.println("loading");
 		if (p.toString().toLowerCase().endsWith(".str")) {
 			try {
 				super.load(frontend.parseAndCompile(p));
