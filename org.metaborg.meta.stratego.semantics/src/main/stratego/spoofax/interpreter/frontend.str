@@ -16,8 +16,6 @@ signature
 
 strategies
 
-    fake-main = spx-shell-frontend
-
     spx-shell-frontend =
         where(<set-config> ("program", "interpreter"))
       ; (

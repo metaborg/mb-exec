@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.spoofax.interpreter.library.spx.SPXInterpreterLibrary;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
@@ -43,6 +44,7 @@ public class StrategoFrontend {
 	public StrategoFrontend(Path libraryLocation, Path frontendLocation) {
 		// create an Interpreter
 		interp = new StrategoCoreInterpreter();
+		interp.addOperatorRegistry(new SPXInterpreterLibrary());
 
 		// load libraries
 		try {
