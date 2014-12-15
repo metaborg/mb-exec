@@ -32,6 +32,7 @@
 	<target name="generate-from-sdf">
 		<local name="sdf-str-sourcegen-rel" />
 		<property name="sdf-str-sourcegen-rel" value="${sdf-str-sourcegen}" relative="yes" />
+		<mkdir dir="${sdf-str-sourcegen}" />
 		<sdf2generated base="${syn}/Stratego-Shell" main="Stratego-Shell" output="${sdf-str-sourcegen-rel}">
 			<includeargs>
 				<args>
