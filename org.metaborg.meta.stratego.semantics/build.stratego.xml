@@ -6,10 +6,11 @@
 	<property name="compileclasspath" value="" />
 	<property name="nativeprefix" value="" />
 	<property name="strategodistrib" value="" />
+	<property name="sdf-str-sourcegen" value="" />
 
-	<property name="syn" value="src/main/sdf" />
-	<property name="str" value="src/main/stratego/spoofax/interpreter" />
-	<property name="src-gen" value="src-gen" />
+	<property name="syn-str" value="src/main" />
+	<property name="syn" value="${syn-str}/sdf" />
+	<property name="str" value="${syn-str}/stratego/spoofax/interpreter" />
 
 	<!-- Importing Ant Macros -->
 	<property name="nativepath" value="${nativeprefix}" />
@@ -20,24 +21,39 @@
 
 	<target name="jar" depends="" />
 
-	<target name="generate-sources" depends="generate-def">
+	<target name="generate-sources" depends="generate-from-sdf, generate-ctree">
 		<echo message="${compileclasspath}" />
 		<echo message="${strategojar}" />
 		<echo message="${nativeprefix}" />
 		<echo message="${strategodistrib}" />
+		<echo message="${sdf-str-sourcegen}" />
 	</target>
 
-	<target name="generate-def">
-		<pack-sdf input="${syn}/Stratego-Shell.sdf" output="${src-gen}/Stratego-Shell.def">
-			<args>
-				<arg value="-I" />
-				<arg value="${strategodistrib}/share/strategoxt/stratego-front/sdf" />
-			</args>
-			<sdf-deps>
-				<srcfiles dir="${syn}" includes="**/*.sdf" />
-			</sdf-deps>
-		</pack-sdf>
+	<target name="generate-from-sdf">
+		<local name="sdf-str-sourcegen-rel" />
+		<property name="sdf-str-sourcegen-rel" value="${sdf-str-sourcegen}" relative="yes" />
+		<sdf2generated base="${syn}/Stratego-Shell" main="Stratego-Shell" output="${sdf-str-sourcegen-rel}">
+			<includeargs>
+				<args>
+					<arg value="-I" />
+					<arg value="${strategodistrib}/share/strategoxt/stratego-front/sdf" />
+				</args>
+			</includeargs>
+		</sdf2generated>
+	</target>
 
+	<target name="generate-ctree">
+		<strj input="${str}/frontend.str" output="${sdf-str-sourcegen}/frontend.ctree" package="">
+			<strjargs>
+				<arg value="-I" />
+				<arg value="${syn-str}/stratego" />
+				<arg value="-I" />
+				<arg value="${sdf-str-sourcegen}" />
+				<arg value="--library" />
+				<arg value="-F" />
+				<arg value="--clean" />
+			</strjargs>
+		</strj>
 	</target>
 
 </project>

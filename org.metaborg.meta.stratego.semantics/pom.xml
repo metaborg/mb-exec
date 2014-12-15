@@ -38,6 +38,7 @@
 		<strategoxt-jar-location>${maven.dependency.org.metaborg.strategoxt-jar.jar.path}</strategoxt-jar-location>
 		<builddeps-location>${basedir}/builddeps/</builddeps-location>
 		<nativebundle-os-location>${builddeps-location}/share/strategoxt/macosx/</nativebundle-os-location>
+		<sdf-str-sourcegen>${basedir}/src-gen/sdf-str/</sdf-str-sourcegen>
 	</properties>
 
 
@@ -137,6 +138,7 @@
 								<property name="strategojar" value="${strategoxt-jar-location}" />
 								<property name="nativeprefix" value="${nativebundle-os-location}" />
 								<property name="strategodistrib" value="${builddeps-location}" />
+								<property name="sdf-str-sourcegen" value="${sdf-str-sourcegen}" />
 								<ant antfile="build.stratego.xml" inheritRefs="true">
 									<target name="generate-sources" />
 								</ant>
@@ -169,6 +171,7 @@
 							<filesets>
 								<fileset>
 									<directory>${builddeps-location}</directory>
+									<directory>${sdf-str-sourcegen}</directory>
 								</fileset>
 							</filesets>
 						</configuration>
