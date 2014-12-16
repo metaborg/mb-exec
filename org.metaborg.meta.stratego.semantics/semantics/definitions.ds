@@ -64,10 +64,10 @@ rules // strategy definitions
   where
     allocDefs([sdef' | sdefs], senv) -allocsdefs-> ad
   
-  allocDefs([sdef | sdefs], senv) -allocsdefs-> ad
+  allocDefs([ExtSDef(sname, _, _) | sdefs], senv) -allocsdefs-> ad
   where
-    sdef => ExtSDef(_, _, _),
-    allocDefs(sdefs, senv) -allocsdefs-> ad
+    SSoftAlloc(senv, sname) -salloc-> senv',
+    allocDefs(sdefs, senv') -allocsdefs-> ad
   
   allocDefs([sdef@SDefT(sname, _, _, _) | sdefs], senv) -allocsdefs-> allocdDefs([sdef | sdefs'], senv'')
   where

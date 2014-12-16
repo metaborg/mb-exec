@@ -74,6 +74,7 @@ signature
     "ds.manual.interpreter.SState" as SHeap {
       lookup : SEnv * String -> Thunk
       alloc  : SEnv * String -> SEnv
+      softalloc: SEnv * String -> SEnv
       allocupdate : SEnv * String * Thunk -> SEnv
       update : SEnv * String * Thunk -> SEnv
     }
@@ -98,6 +99,7 @@ signature
   
   internal-constructors
     SAlloc: SEnv * String -> SHeapOp
+    SSoftAlloc: SEnv * String -> SHeapOp
     SParAlloc : SEnv * List(String) -> SHeapOp
     SUpdate : SEnv * String * Thunk -> SHeapOp
     SPush: SEnv * String * Thunk -> SHeapOp
@@ -123,6 +125,11 @@ rules
   (SAlloc(senv, name), SHeap s) -salloc-> (senv', SHeap s)
   where
     alloc[s](senv, name) => senv'
+  
+  // Allocate a new location at the top of the SHeap and bind it to a placeholder if no allocation for this name already exists
+  (SSoftAlloc(senv, name), SHeap s) -salloc-> (senv', SHeap s)
+  where
+    softalloc[s](senv, name) => senv'
   
   (SUpdate(senv, name, thunk), SHeap s) -salloc-> (senv', SHeap s)
   where

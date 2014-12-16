@@ -6,6 +6,14 @@ import ds.generated.interpreter.I_Thunk;
 
 public class SState {
 
+	public PersistentMap<String, SBox> softalloc(
+			PersistentMap<String, SBox> senv, String name) {
+		if (senv.containsKey(name)) {
+			return senv;
+		}
+		return senv.plus(name, new SBox());
+	}
+
 	public PersistentMap<String, SBox> alloc(PersistentMap<String, SBox> senv,
 			String name) {
 		return senv.plus(name, new SBox());

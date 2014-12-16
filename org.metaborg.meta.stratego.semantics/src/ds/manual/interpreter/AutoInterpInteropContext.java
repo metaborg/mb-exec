@@ -31,6 +31,8 @@ public class AutoInterpInteropContext implements IContext {
 	private StackTracer stacktracer;
 	private IStrategoTerm ct;
 
+	private StrategoSignature strategoSignature;
+
 	public AutoInterpInteropContext() {
 		registries = new HashMap<>();
 		stacktracer = new StackTracer();
@@ -84,7 +86,10 @@ public class AutoInterpInteropContext implements IContext {
 
 	@Override
 	public StrategoSignature getStrategoSignature() {
-		throw new UnsupportedOperationException();
+		if (strategoSignature == null) {
+			strategoSignature = new StrategoSignature(termFactory);
+		}
+		return strategoSignature;
 	}
 
 	@Override
