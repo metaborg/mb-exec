@@ -8,12 +8,11 @@ public class SState {
 
 	public PersistentMap<String, SBox> softalloc(
 			PersistentMap<String, SBox> senv, String name) {
-		if (senv.containsKey(name)) {
-			return senv;
-		}
-		return senv.plus(name, new SBox());
-	}
 
+		return senv.containsKey(name) ? senv : alloc(senv, name);
+
+	}
+	
 	public PersistentMap<String, SBox> alloc(PersistentMap<String, SBox> senv,
 			String name) {
 		return senv.plus(name, new SBox());

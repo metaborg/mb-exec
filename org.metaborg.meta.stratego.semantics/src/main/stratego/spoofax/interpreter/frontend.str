@@ -58,7 +58,7 @@ strategies
 
     spx-shell-frontend-for-spec =
         spx-module-to-spec
-      ; spx-inject-current-context
+      // ; spx-inject-current-context
       ; spx-pack-stratego-ast(spx-shell-frontend-for-str | ["."])
 
     spx-shell-frontend-for-str =

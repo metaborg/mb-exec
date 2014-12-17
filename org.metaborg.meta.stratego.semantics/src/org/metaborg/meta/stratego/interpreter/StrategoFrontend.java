@@ -48,35 +48,29 @@ public class StrategoFrontend {
 
 		// load libraries
 		try {
-			System.out.println("Frontend loading library...");
+			System.out.print("Loading libraries ... ");
 			interp.load(makePath("libstratego-lib/libstratego-lib.ctree",
 					libraryLocation));
-			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstrc/libstrc.ctree", libraryLocation));
-			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstratego-aterm/libstratego-aterm.ctree",
 					libraryLocation));
-			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstratego-gpp/libstratego-gpp.ctree",
 					libraryLocation));
-			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstratego-rtg/libstratego-rtg.ctree",
 					libraryLocation));
-			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstratego-sdf/libstratego-sdf.ctree",
 					libraryLocation));
-			System.out.println("Frontend loading library...");
 			interp.load(makePath("libstratego-sglr/libstratego-sglr.ctree",
 					libraryLocation));
-			System.out.println("Frontend loading library...");
 			interp.load(makePath(
 					"libstratego-tool-doc/libstratego-tool-doc.ctree",
 					libraryLocation));
-			System.out.println("Frontend loading library...");
-
+			System.out.println("done");
+			
 			interp.load(makePath("frontend.ctree", frontendLocation));
+			
 			System.out.println("Frontend loading library...");
-
+			
 			ParseTableManager tblMgr = new ParseTableManager();
 			ParseTable table = tblMgr.loadFromFile(makePath(
 					"Stratego-Shell.tbl", frontendLocation).toFile()
