@@ -130,7 +130,7 @@ rules
 
   SEnv d |- mkThunk(CallT(SVar(tgt), _, _)) -thunk-> thunk
   where
-    SEnv d |- SLookup(tgt) -slook-> thunk@Thunk(_, _, _, _, _, _)
+    SEnv d |- SLookup(tgt) -slook-> thunk
   
   VEnv e, SEnv d |- mkThunk(s) -thunk-> Thunk(x, [], [], s, e, d)
   where

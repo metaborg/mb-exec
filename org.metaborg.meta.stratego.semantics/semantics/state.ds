@@ -92,7 +92,6 @@ signature
   
   internal-constructors
     Thunk  : String * List(String) * List(String) * Strategy * VEnv * SEnv -> Thunk
-    ThunkPlaceholder: -> Thunk
 
   internal-sorts
     SHeapOp

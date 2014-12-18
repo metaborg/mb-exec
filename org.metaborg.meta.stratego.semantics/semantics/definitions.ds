@@ -17,22 +17,21 @@ signature
 
 rules // let - in - end
 
-  SEnv d |- Let(sdefs, s) --> v
+  Let(sdefs, s) --> v
   where
     sdefNames(sdefs) -exid-> snames,
-    (SParAlloc(snames), SEnv d) -salloc-> (_, SEnv d'),
-    SEnv d' |- letEval(sdefs, s) -leteval-> v
+    SParAlloc(snames) -salloc-> _,
+    letEval(sdefs, s) -leteval-> v
   
   letEval([], in_s) -leteval-> v
   where
     in_s --> v
   
-  VEnv e, SEnv d |- letEval([SDefT(sname, ss, ts, s) | sdefs], in_s) -leteval-> v
+  letEval([sdef@SDefT(sname, _, _, _) | sdefs], in_s) -leteval-> v
   where
-    typedIds(ss) -exid-> ss',
-    typedIds(ts) -exid-> ts',
-    (SUpdate(sname, Thunk(sname, ss', ts', s, e, d)), SEnv d) -salloc-> (_, SEnv d'),
-    VEnv e, SEnv d' |- letEval(sdefs, in_s) -leteval-> v
+    sdef -mkthunk-> thunk,
+    SUpdate(sname, thunk) -salloc-> _,
+    letEval(sdefs, in_s) -leteval-> v
     
 signature
   internal-sorts
@@ -48,7 +47,8 @@ signature
     Module -allocmodule-> Unit
     Allocator -allocsdefs-> AllocatorResult
     Allocator -storesdefs-> Unit
-
+    Def -mkthunk-> Thunk
+    
 rules // strategy definitions
   
   Specification([_, Strategies(ss)]) -allocmodule-> U()
@@ -74,12 +74,16 @@ rules // strategy definitions
   
   storeDefs([]) -storesdefs-> U()
   
-  VEnv e |- (storeDefs([SDefT(sname, ss, ts, s) | sdefs]),  SEnv d) -storesdefs-> (U(),  SEnv d'')
+  storeDefs([sdef@SDefT(sname, _, _, _) | sdefs]) -storesdefs-> U()
+  where
+    sdef -mkthunk-> thunk,
+    SUpdate(sname, thunk) -salloc-> _,
+    storeDefs(sdefs) -storesdefs-> _
+  
+  VEnv e, SEnv d |- SDefT(sname, ss, ts, s) -mkthunk-> Thunk(sname, ss', ts', s, e, d)
   where
     typedIds(ss) -exid-> ss',
-    typedIds(ts) -exid-> ts',
-    (SUpdate(sname, Thunk(sname, ss', ts', s, e, d)), SEnv d) -salloc-> (_, SEnv d'),
-    VEnv e |- (storeDefs(sdefs), SEnv d') -storesdefs-> (_, SEnv d'')
+    typedIds(ts) -exid-> ts'
   
 signature
   internal-sorts
@@ -107,9 +111,5 @@ rules // SDefT name extractor
   sdefNames([SDefT(sname, _, _, _) | sdefs]) -exid-> [sname | snames]
   where
     sdefNames(sdefs) -exid-> snames
-
-rules // TODO store constructor declarations
-
-
 
 
