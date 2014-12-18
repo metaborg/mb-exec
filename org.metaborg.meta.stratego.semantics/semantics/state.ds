@@ -103,43 +103,43 @@ signature
     SParAlloc : SEnv * List(String) -> SHeapOp
     SUpdate : SEnv * String * Thunk -> SHeapOp
     SPush: SEnv * String * Thunk -> SHeapOp
-    SLookup: SEnv * String -> SHeapOp
+    SLookup: String -> SHeapOp
     
   arrows
-    SHeapOp -slook-> SLookupResult
     SHeapOp -salloc-> SEnv
   
+    SHeapOp -slook-> Thunk
 rules
 
   // Lookup a thunk by name at the starting SHeap address
-  (SLookup(senv, name), SHeap s) -slook-> (SLookupResult(senv, thunk), SHeap s)
+  SHeap s, SEnv senv |- SLookup(name) -slook-> thunk
   where
     lookup[s](senv, name) => thunk
-  
+
   // Push a new Thunk advancing the address of the top of the stack
-  (SPush(senv, name, thunk), SHeap s) -salloc-> (senv', SHeap s)
+  SHeap s |- SPush(senv, name, thunk) -salloc-> senv'
   where
     allocupdate[s](senv, name, thunk) => senv'
   
   // Allocate a new location at the top of the SHeap and bind it to a placeholder
-  (SAlloc(senv, name), SHeap s) -salloc-> (senv', SHeap s)
+  SHeap s |- SAlloc(senv, name) -salloc-> senv'
   where
     alloc[s](senv, name) => senv'
   
   // Allocate a new location at the top of the SHeap and bind it to a placeholder if no allocation for this name already exists
-  (SSoftAlloc(senv, name), SHeap s) -salloc-> (senv', SHeap s)
+  SHeap s |- SSoftAlloc(senv, name) -salloc-> senv'
   where
     softalloc[s](senv, name) => senv'
   
-  (SUpdate(senv, name, thunk), SHeap s) -salloc-> (senv', SHeap s)
+  SHeap s |- SUpdate(senv, name, thunk) -salloc-> senv'
   where
     update[s](senv, name, thunk) => senv'
 
-  (SParAlloc(senv, []), SHeap s) -salloc-> (senv, SHeap s)
+  SParAlloc(senv, []) -salloc-> senv
   
-  (SParAlloc(senv, [name | names]), SHeap s) -salloc-> (senv'', SHeap s'')
+  SParAlloc(senv, [name | names]) -salloc-> senv''
   where
-    (SAlloc(senv, name), SHeap s) -salloc-> (senv', SHeap s'),
-    (SParAlloc(senv', names), SHeap s') -salloc-> (senv'', SHeap s'')
+    SAlloc(senv, name) -salloc-> senv',
+    SParAlloc(senv', names) -salloc-> senv''
   
     

@@ -87,13 +87,10 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 
 		I_Module ctreeNode = (I_Module) new Generic_I_Module(ctreeSource, ctree)
 				.specialize(1);
-
 		R_allocmodule_SEnv sdefs_result = new allocModule_1(ctreeSource,
 				ctreeNode).exec_allocmodule(PersistentTreeMap.EMPTY,
-				strategyEnv, strategyHeap);
-		strategyHeap = sdefs_result._1;
+				strategyHeap, strategyEnv);
 		strategyEnv = sdefs_result.value;
-
 	}
 
 	@Override
@@ -147,10 +144,9 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 
 			R_default_Value result = sexpr.exec_default(
 					PersistentTreeMap.EMPTY, getTermFactory(),
-					getCurrentTerm(), strategyEnv, interopContext,
-					new VState(), interopContext.getStackTracer(),
-					strategyHeap, false);
-			strategyHeap = result._3;
+					getCurrentTerm(), strategyHeap, strategyEnv,
+					interopContext, new VState(),
+					interopContext.getStackTracer(), false);
 			IValue value = result.value;
 			StackTracer stacktracer = interopContext.getStackTracer();
 			if (value.match(F_0.class) != null) {
