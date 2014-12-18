@@ -42,9 +42,9 @@ rules // build
 
 rules // actual term building
 
-  VEnv e |- b(Var(x)) -bld-> BS(t)
+  b(Var(x)) -bld-> BS(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(_, S(t))
+    VLookup(x) -vlook-> S(t)
       
   TF tf |- b(Int(stringI)) -bld-> BS(aint)
   where

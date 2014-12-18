@@ -70,29 +70,29 @@ rules // actual matching
   // match against unbound variable
   VEnv e, T t |- m(Var(x)) -ma-> v
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', F()),
+    VLookup(x) -vlook-> F(),
     S(t) => v,
-    VUpdate(e', x, v) -vupdate-> _
+    VUpdate(e, x, v) -vupdate-> _
 
   // match against bound variable
-  VEnv e, T t |- m(Var(x)) -ma-> S(t)
+  T t |- m(Var(x)) -ma-> S(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(_, S(t')),
+    VLookup(x) -vlook-> S(t'),
     t == t'
 
   // compound As with unbound variable. The variable is only bound if the match succeeds.
   VEnv e, T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(e', F()),
-    VEnv e, T t  |- Match(p) --> S(_),
-    VUpdate(e', x, S(t)) -vupdate-> _
+    VLookup(x) -vlook-> F(),
+    Match(p) --> S(_),
+    VUpdate(e, x, S(t)) -vupdate-> _
   
   // compound As with bound variable
-  VEnv e, T t |- m(As(Var(x), p)) -ma-> S(t)
+  T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    VLookup(e, x) -vlook-> VLookupResult(_, S(xt)),
+    VLookup(x) -vlook-> S(xt),
     t == xt,
-    VEnv e, T t |- Match(p) --> S(_)
+    T t |- Match(p) --> S(_)
 
   // Explode Appl
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)

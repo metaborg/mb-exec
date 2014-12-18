@@ -31,20 +31,20 @@ signature
     VHeapOp
 
   internal-constructors
-    VLookup : VEnv * String -> VHeapOp
+    VLookup : String -> VHeapOp
     VUpdate : VEnv * String * Value -> VHeapOp
     VPush : VEnv * String -> VHeapOp
     VPushBatch : VEnv * List(String) -> VHeapOp
     VPushUpdate : VEnv * String * Value -> VHeapOp
 
   arrows
-    VHeapOp -vlook-> VLookupResult
+    VHeapOp -vlook-> Value
     VHeapOp -vupdate-> VEnv 
     VHeapOp -vinit-> VEnv
     
 rules 
   
-  (VLookup(venv, x), VHeap s) -vlook-> (VLookupResult(venv, v), VHeap s)
+  VEnv venv, VHeap s |- VLookup(x) -vlook-> v
   where
     lookup[s](venv, x) => v
   

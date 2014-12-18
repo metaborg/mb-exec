@@ -21,19 +21,6 @@ rules // identity and failure
   
   Fail() --> F()
 
-/*
-rules // scope (one at a time)
-  
-  VEnv e |- Scope([], s) --> t'
-  where
-    VEnv e |- s --> t'
-
-  VEnv e |- Scope([x | xs], s) --> v
-  where
-    VPush(e, x) -vinit-> e',
-    VEnv e' |- Scope(xs, s) --> v
-*/
-
 rules // scope (all at once)
 
   VEnv e |- Scope(vs, s) --> v
