@@ -48,19 +48,19 @@ rules
   where
     lookup[s](venv, x) => v
   
-  (VUpdate(venv, x, v), VHeap s) -vupdate-> (venv, VHeap s)
+  VHeap s |- VUpdate(venv, x, v) -vupdate-> venv
   where
     update[s](venv, x, v) => _
 
-  (VPush(venv, x), VHeap s) -vinit-> (venv', VHeap s)
+  VHeap s |- VPush(venv, x) -vinit-> venv'
   where
     alloc[s](venv, x) => venv'
   
-  (VPushBatch(venv, xs), VHeap s) -vinit-> (venv', VHeap s)
+  VHeap s |- VPushBatch(venv, xs) -vinit-> venv'
   where
     allocs[s](venv, xs) => venv'
   
-  (VPushUpdate(venv, x, v), VHeap s) -vinit-> (venv', VHeap s)
+  VHeap s |- VPushUpdate(venv, x, v) -vinit-> venv'
   where
     allocupdate[s](venv, x, v) => venv'
 

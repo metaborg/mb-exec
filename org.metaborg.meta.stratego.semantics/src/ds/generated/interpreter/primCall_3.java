@@ -49,10 +49,10 @@ public class primCall_3 extends AbstractNode implements I_Strategy {
 	}
 
 	@Override
-	public R_default_Value exec_default(PersistentMap<String, VBox> _3,
-			ITermFactory _5, IStrategoTerm ct, SState sheap,
-			PersistentMap<String, SBox> _2, AutoInterpInteropContext ctx,
-			VState vheap, StackTracer stacktracer, boolean succ) {
+	public R_default_Value exec_default(VState vheap,
+			PersistentMap<String, VBox> _3, ITermFactory _5, IStrategoTerm ct,
+			SState sheap, PersistentMap<String, SBox> _2,
+			AutoInterpInteropContext ctx, StackTracer stacktracer, boolean succ) {
 
 		AbstractPrimitive prim = ctx.lookupOperator(name);
 		ctx.setCurrent(ct);
@@ -68,11 +68,10 @@ public class primCall_3 extends AbstractNode implements I_Strategy {
 			boolean result = prim
 					.call(ctx, sargs, Natives.List2TARRAY_1(targs));
 			if (result) {
-				return new R_default_Value(new S_1(null, ctx.current()), vheap,
+				return new R_default_Value(new S_1(null, ctx.current()),
 						stacktracer, succ);
 			} else {
-				return new R_default_Value(new F_0(null), vheap, stacktracer,
-						succ);
+				return new R_default_Value(new F_0(null), stacktracer, succ);
 			}
 		} catch (InterpreterExit e) {
 			throw new InterpreterExitException(e, e.getValue());
