@@ -40,19 +40,18 @@ signature
     AllocatorResult
     
   internal-constructors
-    allocModule : Module -> Allocator
     allocDefs : List(Def) * SEnv -> Allocator
     allocdDefs : List(Def) * SEnv -> AllocatorResult 
     storeDefs : List(Def) -> Allocator
 
   arrows
-    Allocator -allocmodule-> SEnv
+    Module -allocmodule-> SEnv
     Allocator -allocsdefs-> AllocatorResult
     Allocator -storesdefs-> Bool
 
 rules // strategy definitions
   
-  SEnv d |- allocModule(Specification([_, Strategies(ss)])) -allocmodule-> d'
+  SEnv d |- Specification([_, Strategies(ss)]) -allocmodule-> d'
   where
     allocDefs(ss, d) -allocsdefs-> allocdDefs(ss', d'),
     SEnv d' |- storeDefs(ss') -storesdefs-> _

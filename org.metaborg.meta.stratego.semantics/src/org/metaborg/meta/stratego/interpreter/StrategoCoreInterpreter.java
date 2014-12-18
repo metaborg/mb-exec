@@ -36,7 +36,6 @@ import ds.generated.interpreter.R_default_Value;
 import ds.generated.interpreter.SDefT_4;
 import ds.generated.interpreter.SVar_1;
 import ds.generated.interpreter.S_1;
-import ds.generated.interpreter.allocModule_1;
 import ds.manual.interpreter.AutoInterpInteropContext;
 import ds.manual.interpreter.SBox;
 import ds.manual.interpreter.SState;
@@ -87,9 +86,8 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 
 		I_Module ctreeNode = (I_Module) new Generic_I_Module(ctreeSource, ctree)
 				.specialize(1);
-		R_allocmodule_SEnv sdefs_result = new allocModule_1(ctreeSource,
-				ctreeNode).exec_allocmodule(PersistentTreeMap.EMPTY,
-				strategyHeap, strategyEnv);
+		R_allocmodule_SEnv sdefs_result = ctreeNode.exec_allocmodule(
+				PersistentTreeMap.EMPTY, strategyHeap, strategyEnv);
 		strategyEnv = sdefs_result.value;
 	}
 
