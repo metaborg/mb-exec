@@ -5,6 +5,7 @@ import org.metaborg.meta.interpreter.framework.Child;
 import org.metaborg.meta.interpreter.framework.Children;
 import org.metaborg.meta.interpreter.framework.INodeList;
 import org.metaborg.meta.interpreter.framework.INodeSource;
+import org.metaborg.meta.interpreter.framework.IValue;
 import org.metaborg.meta.interpreter.framework.InterpreterException;
 import org.metaborg.meta.interpreter.framework.InterpreterExitException;
 import org.spoofax.interpreter.core.InterpreterExit;
@@ -49,10 +50,10 @@ public class primCall_3 extends AbstractNode implements I_Strategy {
 	}
 
 	@Override
-	public R_default_Value exec_default(AutoInterpInteropContext ctx,
-			PersistentMap<String, SBox> _2, PersistentMap<String, VBox> _3,
-			IStrategoTerm ct, ITermFactory _5, SState sheap, VState vheap,
-			boolean succ, StackTracer stacktracer) {
+	public R_default_Value exec_default(PersistentMap<String, VBox> _3,
+			ITermFactory _5, IStrategoTerm ct, PersistentMap<String, SBox> _2,
+			AutoInterpInteropContext ctx, VState vheap,
+			StackTracer stacktracer, SState sheap, boolean succ) {
 		AbstractPrimitive prim = ctx.lookupOperator(name);
 		ctx.setCurrent(ct);
 		Strategy[] sargs = new Strategy[thunks.size()];
@@ -67,11 +68,11 @@ public class primCall_3 extends AbstractNode implements I_Strategy {
 			boolean result = prim
 					.call(ctx, sargs, Natives.List2TARRAY_1(targs));
 			if (result) {
-				return new R_default_Value(new S_1(null, ctx.current()), sheap,
-						vheap, succ, stacktracer);
+				return new R_default_Value(new S_1(null, ctx.current()), vheap,
+						stacktracer, sheap, succ);
 			} else {
-				return new R_default_Value(new F_0(null), sheap, vheap, succ,
-						stacktracer);
+				return new R_default_Value(new F_0(null), vheap, stacktracer,
+						sheap, succ);
 			}
 		} catch (InterpreterExit e) {
 			throw new InterpreterExitException(e, e.getValue());

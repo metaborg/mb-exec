@@ -129,7 +129,7 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 		final IStrategoConstructor sdefT = factory.makeConstructor("SDefT", 4);
 		final IStrategoConstructor exprConstr = sExpr.getConstructor();
 
-		// wrap in SDefT if not already an SDefT 
+		// wrap in SDefT if not already an SDefT
 		if (!exprConstr.getName().equals(sdefT.getName())
 				|| exprConstr.getArity() != sdefT.getArity()) {
 			sExpr = factory.makeAppl(sdefT, factory.makeString("dummy_0_0"),
@@ -144,11 +144,13 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 
 	private boolean evaluate(I_Strategy sexpr) {
 		try {
-			R_default_Value result = sexpr.exec_default(interopContext,
-					strategyEnv, PersistentTreeMap.EMPTY, getCurrentTerm(),
-					getTermFactory(), strategyHeap, new VState(), false,
-					interopContext.getStackTracer());
-			strategyHeap = result._1;
+
+			R_default_Value result = sexpr.exec_default(
+					PersistentTreeMap.EMPTY, getTermFactory(),
+					getCurrentTerm(), strategyEnv, interopContext,
+					new VState(), interopContext.getStackTracer(),
+					strategyHeap, false);
+			strategyHeap = result._3;
 			IValue value = result.value;
 			StackTracer stacktracer = interopContext.getStackTracer();
 			if (value.match(F_0.class) != null) {

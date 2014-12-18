@@ -36,9 +36,9 @@ public class InteropStrategy extends Strategy {
 		PersistentMap<String, VBox> venv = thunk._5;
 		PersistentMap<String, SBox> senv = thunk._6;
 
-		R_default_Value result = s.exec_default((AutoInterpInteropContext) e,
-				senv, venv, e.current(), e.getFactory(), sheap, vheap, false,
-				stacktracer);
+		R_default_Value result = s.exec_default(venv, e.getFactory(),
+				e.current(), senv, (AutoInterpInteropContext) e, vheap,
+				stacktracer, sheap, false);
 
 		if (result.value instanceof F_0) {
 			return getHook().pop().onFailure(e);
