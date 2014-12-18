@@ -40,46 +40,46 @@ signature
     AllocatorResult
     
   internal-constructors
-    allocDefs : List(Def) * SEnv -> Allocator
-    allocdDefs : List(Def) * SEnv -> AllocatorResult 
+    allocDefs : List(Def) -> Allocator
+    allocdDefs : List(Def) -> AllocatorResult 
     storeDefs : List(Def) -> Allocator
 
   arrows
-    Module -allocmodule-> SEnv
+    Module -allocmodule-> Unit
     Allocator -allocsdefs-> AllocatorResult
-    Allocator -storesdefs-> Bool
+    Allocator -storesdefs-> Unit
 
 rules // strategy definitions
   
-  SEnv d |- Specification([_, Strategies(ss)]) -allocmodule-> d'
+  Specification([_, Strategies(ss)]) -allocmodule-> U()
   where
-    allocDefs(ss, d) -allocsdefs-> allocdDefs(ss', d'),
-    SEnv d' |- storeDefs(ss') -storesdefs-> _
+    allocDefs(ss) -allocsdefs-> allocdDefs(ss'),
+    storeDefs(ss') -storesdefs-> _
   
-  allocDefs([], senv) -allocsdefs-> allocdDefs([], senv)
+  allocDefs([]) -allocsdefs-> allocdDefs([])
   
-  allocDefs([AnnoDef(_, sdef') | sdefs], senv) -allocsdefs-> ad
+  allocDefs([AnnoDef(_, sdef') | sdefs]) -allocsdefs-> ad
   where
-    allocDefs([sdef' | sdefs], senv) -allocsdefs-> ad
+    allocDefs([sdef' | sdefs]) -allocsdefs-> ad
   
-  allocDefs([ExtSDef(sname, _, _) | sdefs], senv) -allocsdefs-> ad
+  allocDefs([ExtSDef(sname, _, _) | sdefs]) -allocsdefs-> ad
   where
-    (SSoftAlloc(sname), SEnv senv) -salloc-> (_, SEnv senv'),
-    allocDefs(sdefs, senv') -allocsdefs-> ad
+    SSoftAlloc(sname) -salloc-> _,
+    allocDefs(sdefs) -allocsdefs-> ad
   
-  allocDefs([sdef@SDefT(sname, _, _, _) | sdefs], senv) -allocsdefs-> allocdDefs([sdef | sdefs'], senv'')
+  allocDefs([sdef@SDefT(sname, _, _, _) | sdefs]) -allocsdefs-> allocdDefs([sdef | sdefs'])
   where
-    (SAlloc(sname), SEnv senv) -salloc-> (_, SEnv senv'),
-    allocDefs(sdefs, senv') -allocsdefs-> allocdDefs(sdefs', senv'')
+    SAlloc(sname) -salloc-> _,
+    allocDefs(sdefs) -allocsdefs-> allocdDefs(sdefs')
   
-  storeDefs([]) -storesdefs-> true
+  storeDefs([]) -storesdefs-> U()
   
-  VEnv e, SEnv d |- storeDefs([SDefT(sname, ss, ts, s) | sdefs]) -storesdefs-> b
+  VEnv e |- (storeDefs([SDefT(sname, ss, ts, s) | sdefs]),  SEnv d) -storesdefs-> (U(),  SEnv d'')
   where
     typedIds(ss) -exid-> ss',
     typedIds(ts) -exid-> ts',
     (SUpdate(sname, Thunk(sname, ss', ts', s, e, d)), SEnv d) -salloc-> (_, SEnv d'),
-    VEnv e, SEnv d' |- storeDefs(sdefs) -storesdefs-> b
+    VEnv e |- (storeDefs(sdefs), SEnv d') -storesdefs-> (_, SEnv d'')
   
 signature
   internal-sorts
