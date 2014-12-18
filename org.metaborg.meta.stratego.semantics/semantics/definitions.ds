@@ -20,20 +20,19 @@ rules // let - in - end
   SEnv d |- Let(sdefs, s) --> v
   where
     sdefNames(sdefs) -exid-> snames,
-    SParAlloc(d, snames) -salloc-> d',
+    (SParAlloc(snames), SEnv d) -salloc-> (_, SEnv d'),
     SEnv d' |- letEval(sdefs, s) -leteval-> v
   
-  VEnv e, SEnv d |- letEval([], in_s) -leteval-> v
+  letEval([], in_s) -leteval-> v
   where
-    VEnv e, SEnv d |- in_s --> v
+    in_s --> v
   
-  VEnv e, SEnv d |- letEval([sdef | sdefs], in_s) -leteval-> v
+  VEnv e, SEnv d |- letEval([SDefT(sname, ss, ts, s) | sdefs], in_s) -leteval-> v
   where
-    sdef => SDefT(sname, ss, ts, s),
     typedIds(ss) -exid-> ss',
     typedIds(ts) -exid-> ts',
-    SUpdate(d, sname, Thunk(sname, ss', ts', s, e, d)) -salloc-> _,
-    VEnv e, SEnv d |- letEval(sdefs, in_s) -leteval-> v
+    (SUpdate(sname, Thunk(sname, ss', ts', s, e, d)), SEnv d) -salloc-> (_, SEnv d'),
+    VEnv e, SEnv d' |- letEval(sdefs, in_s) -leteval-> v
     
 signature
   internal-sorts
@@ -66,12 +65,12 @@ rules // strategy definitions
   
   allocDefs([ExtSDef(sname, _, _) | sdefs], senv) -allocsdefs-> ad
   where
-    SSoftAlloc(senv, sname) -salloc-> senv',
+    (SSoftAlloc(sname), SEnv senv) -salloc-> (_, SEnv senv'),
     allocDefs(sdefs, senv') -allocsdefs-> ad
   
   allocDefs([sdef@SDefT(sname, _, _, _) | sdefs], senv) -allocsdefs-> allocdDefs([sdef | sdefs'], senv'')
   where
-    SAlloc(senv, sname) -salloc-> senv',
+    (SAlloc(sname), SEnv senv) -salloc-> (_, SEnv senv'),
     allocDefs(sdefs, senv') -allocsdefs-> allocdDefs(sdefs', senv'')
   
   storeDefs([]) -storesdefs-> true
@@ -80,8 +79,8 @@ rules // strategy definitions
   where
     typedIds(ss) -exid-> ss',
     typedIds(ts) -exid-> ts',
-    SUpdate(d, sname, Thunk(sname, ss', ts', s, e, d)) -salloc-> _,
-    VEnv e, SEnv d |- storeDefs(sdefs) -storesdefs-> b
+    (SUpdate(sname, Thunk(sname, ss', ts', s, e, d)), SEnv d) -salloc-> (_, SEnv d'),
+    VEnv e, SEnv d' |- storeDefs(sdefs) -storesdefs-> b
   
 signature
   internal-sorts

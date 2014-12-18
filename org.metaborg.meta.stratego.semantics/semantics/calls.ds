@@ -69,7 +69,7 @@ rules
   where
     boolAnd(isEmptyStrategies(ass), isEmpty(ats)) == true,
     SEnv d |- SLookup(tgt) -slook-> Thunk(_, fss, fts, sactual, e_tgt, d_tgt),
-    SPush(d_into, x, Thunk(x, fss, fts, sactual, e_tgt, d_tgt)) -salloc-> d_into',
+    (SPush(x, Thunk(x, fss, fts, sactual, e_tgt, d_tgt)), SEnv d_into) -salloc-> (_, SEnv d_into'),
     VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
   
   // 2. CallT with arguments
@@ -80,14 +80,14 @@ rules
     VEnv e, SEnv d |- bl(ats) -blds-> BSS(ats'),
     VEnv e_tgt |- bindtvars(fts, ats') -bindtvars-> e_tgt',
     VEnv e, SEnv d |- bindsvars(fss, ass, d_tgt) -bindsvars-> d_tgt',
-    SPush(d_into, x, Thunk(x, [], [], sactual, e_tgt', d_tgt')) -salloc-> d_into',
+    (SPush(x, Thunk(x, [], [], sactual, e_tgt', d_tgt')), SEnv d_into) -salloc-> (_, SEnv d_into'),
     VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
 
   // 3. A strategy literal body (not a call)
   VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
   where
     s =!=> CallT(SVar(_), _, _),
-    SPush(d_into, x, Thunk(x, [], [], s, e, d)) -salloc-> d_into',
+    (SPush(x, Thunk(x, [], [], s, e, d)), SEnv d_into) -salloc-> (U(), SEnv d_into'),
     VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
     
 signature

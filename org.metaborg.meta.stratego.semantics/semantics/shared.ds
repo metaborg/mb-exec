@@ -5,7 +5,12 @@ imports
   stratego-signatures
   
 signature
+  sorts
+    Unit
   
+  constructors
+    U: -> Unit
+
   arrows
     Strategy -default-> Value
     

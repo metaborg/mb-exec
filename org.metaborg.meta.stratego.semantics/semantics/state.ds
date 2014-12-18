@@ -98,15 +98,15 @@ signature
     SHeapOp
   
   internal-constructors
-    SAlloc: SEnv * String -> SHeapOp
-    SSoftAlloc: SEnv * String -> SHeapOp
-    SParAlloc : SEnv * List(String) -> SHeapOp
-    SUpdate : SEnv * String * Thunk -> SHeapOp
-    SPush: SEnv * String * Thunk -> SHeapOp
+    SAlloc: String -> SHeapOp
+    SSoftAlloc: String -> SHeapOp
+    SParAlloc : List(String) -> SHeapOp
+    SUpdate : String * Thunk -> SHeapOp
+    SPush: String * Thunk -> SHeapOp
     SLookup: String -> SHeapOp
     
   arrows
-    SHeapOp -salloc-> SEnv
+    SHeapOp -salloc-> Unit
   
     SHeapOp -slook-> Thunk
 rules
@@ -117,29 +117,29 @@ rules
     lookup[s](senv, name) => thunk
 
   // Push a new Thunk advancing the address of the top of the stack
-  SHeap s |- SPush(senv, name, thunk) -salloc-> senv'
+  SHeap s |- (SPush(name, thunk), SEnv senv) -salloc-> (U(), SEnv senv')
   where
     allocupdate[s](senv, name, thunk) => senv'
   
   // Allocate a new location at the top of the SHeap and bind it to a placeholder
-  SHeap s |- SAlloc(senv, name) -salloc-> senv'
+  SHeap s |- (SAlloc(name), SEnv senv) -salloc-> (U(), SEnv senv')
   where
     alloc[s](senv, name) => senv'
   
   // Allocate a new location at the top of the SHeap and bind it to a placeholder if no allocation for this name already exists
-  SHeap s |- SSoftAlloc(senv, name) -salloc-> senv'
+  SHeap s |- (SSoftAlloc(name), SEnv senv) -salloc->(U(), SEnv senv')
   where
     softalloc[s](senv, name) => senv'
   
-  SHeap s |- SUpdate(senv, name, thunk) -salloc-> senv'
+  SHeap s |- (SUpdate(name, thunk), SEnv senv) -salloc-> (U(), SEnv senv')
   where
     update[s](senv, name, thunk) => senv'
 
-  SParAlloc(senv, []) -salloc-> senv
+  SParAlloc([]) -salloc-> U()
   
-  SParAlloc(senv, [name | names]) -salloc-> senv''
+  SParAlloc([name | names]) -salloc-> U()
   where
-    SAlloc(senv, name) -salloc-> senv',
-    SParAlloc(senv', names) -salloc-> senv''
+    SAlloc(name) -salloc-> _,
+    SParAlloc(names) -salloc-> _
   
     
