@@ -32,14 +32,14 @@ signature
 
   internal-constructors
     VLookup : String -> VHeapOp
-    VUpdate : VEnv * String * Value -> VHeapOp
+    VUpdate : String * Value -> VHeapOp
     VPush : VEnv * String -> VHeapOp
     VPushBatch : VEnv * List(String) -> VHeapOp
     VPushUpdate : VEnv * String * Value -> VHeapOp
 
   arrows
     VHeapOp -vlook-> Value
-    VHeapOp -vupdate-> VEnv 
+    VHeapOp -vupdate-> Unit 
     VHeapOp -vinit-> VEnv
     
 rules 
@@ -48,9 +48,9 @@ rules
   where
     lookup[s](venv, x) => v
   
-  VHeap s |- VUpdate(venv, x, v) -vupdate-> venv
+  VHeap s |- (VUpdate(x, v), VEnv venv) -vupdate-> (U(), VEnv venv')
   where
-    update[s](venv, x, v) => _
+    update[s](venv, x, v) => venv'
 
   VHeap s |- VPush(venv, x) -vinit-> venv'
   where

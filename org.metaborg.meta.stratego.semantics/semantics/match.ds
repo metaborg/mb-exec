@@ -68,11 +68,11 @@ rules // actual matching
     s == s'
 
   // match against unbound variable
-  VEnv e, T t |- m(Var(x)) -ma-> v
+  T t |- m(Var(x)) -ma-> v
   where
     VLookup(x) -vlook-> F(),
     S(t) => v,
-    VUpdate(e, x, v) -vupdate-> _
+    VUpdate(x, v) -vupdate-> _
 
   // match against bound variable
   T t |- m(Var(x)) -ma-> S(t)
@@ -81,11 +81,11 @@ rules // actual matching
     t == t'
 
   // compound As with unbound variable. The variable is only bound if the match succeeds.
-  VEnv e, T t |- m(As(Var(x), p)) -ma-> S(t)
+  T t |- m(As(Var(x), p)) -ma-> S(t)
   where
     VLookup(x) -vlook-> F(),
     Match(p) --> S(_),
-    VUpdate(e, x, S(t)) -vupdate-> _
+    VUpdate(x, S(t)) -vupdate-> _
   
   // compound As with bound variable
   T t |- m(As(Var(x), p)) -ma-> S(t)
