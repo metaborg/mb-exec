@@ -14,7 +14,7 @@ rules // calls
   where
     SEnv d |- SLookup(sname) -slook-> Thunk(_, fss, fts, s, e_def, d_def),
     VEnv e |- bl(ats) -blds-> BSS(ats'), // build term arguments     
-    VEnv e_def |- bindtvars(fts, ats') -bindtvars-> e_call, // bind term arguments
+    (bindtvars(fts, ats'), VEnv e_def) -bindtvars-> (_, VEnv e_call), // bind term arguments
     VEnv e, SEnv d |- bindsvars(fss, ass, d_def) -bindsvars-> d_call, // bind strategy arguments
     VEnv e_call, SEnv d_call |- tracing(sname, s) --> v // do the call while tracing
       
@@ -30,16 +30,16 @@ signature
     bindtvars: List(String) * List(T) -> Binder
     
   arrows
-    Binder -bindtvars-> VEnv
+    Binder -bindtvars-> Unit
     
 rules
 
-  VEnv e |- bindtvars([], []) -bindtvars-> e
+  bindtvars([], []) -bindtvars-> U()
   
-  VEnv e |- bindtvars([x | xxs], [t | txs]) -bindtvars-> e''
+  bindtvars([x | xxs], [t | txs]) -bindtvars-> U()
   where
-    (VPushUpdate(x, S(t)), VEnv e) -vinit-> (_, VEnv e'),
-    VEnv e' |- bindtvars(xxs, txs) -bindtvars-> e''
+    VPushUpdate(x, S(t)) -vinit-> _,
+    bindtvars(xxs, txs) -bindtvars-> _
 
 signature
   internal-constructors
@@ -78,7 +78,7 @@ rules
     boolAnd(isEmptyStrategies(ass), isEmpty(ats)) == false,
     SEnv d |- SLookup(tgt) -slook-> Thunk(_, fss, fts, sactual, e_tgt, d_tgt),
     VEnv e, SEnv d |- bl(ats) -blds-> BSS(ats'),
-    VEnv e_tgt |- bindtvars(fts, ats') -bindtvars-> e_tgt',
+    (bindtvars(fts, ats'), VEnv e_tgt) -bindtvars-> (_, VEnv e_tgt'),
     VEnv e, SEnv d |- bindsvars(fss, ass, d_tgt) -bindsvars-> d_tgt',
     (SPush(x, Thunk(x, [], [], sactual, e_tgt', d_tgt')), SEnv d_into) -salloc-> (_, SEnv d_into'),
     VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''
