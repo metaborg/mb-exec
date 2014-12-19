@@ -15,16 +15,16 @@ import com.google.common.collect.Table.Cell;
  * Multitable that can hold duplicate row-value, column-value and row/column-value pairs. Uses
  * {@link HashBasedTable} as backing table.
  */
-public class LinkedListMultiTable<R, C, V> implements MultiTable<R, C, V> {
+public class HashMultiTable<R, C, V> implements MultiTable<R, C, V> {
     private final Table<R, C, Collection<V>> table;
 
 
     public static <R, C, V> MultiTable<R, C, V> create() {
-        return new LinkedListMultiTable<R, C, V>();
+        return new HashMultiTable<R, C, V>();
     }
 
 
-    public LinkedListMultiTable() {
+    public HashMultiTable() {
         table = HashBasedTable.create();
     }
 
@@ -73,8 +73,16 @@ public class LinkedListMultiTable<R, C, V> implements MultiTable<R, C, V> {
         return table.row(rowKey);
     }
 
+    @Override public Iterable<V> rowValues(R rowKey) {
+        return Iterables2.from(row(rowKey).values());
+    }
+
     @Override public Map<R, Collection<V>> column(C columnKey) {
         return table.column(columnKey);
+    }
+
+    @Override public Iterable<V> columnValues(C columnKey) {
+        return Iterables2.from(column(columnKey).values());
     }
 
     @Override public Set<Cell<R, C, Collection<V>>> cellSet() {

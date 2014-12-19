@@ -30,8 +30,12 @@ public interface MultiTable<R, C, V> {
 
 
     Map<C, Collection<V>> row(R rowKey);
+    
+    Iterable<V> rowValues(R rowKey);
 
     Map<R, Collection<V>> column(C columnKey);
+    
+    Iterable<V> columnValues(C columnKey);
 
     Set<Cell<R, C, Collection<V>>> cellSet();
 
