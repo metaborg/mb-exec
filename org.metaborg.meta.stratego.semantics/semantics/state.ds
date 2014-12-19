@@ -34,13 +34,12 @@ signature
     VLookup : String -> VHeapOp
     VUpdate : String * Value -> VHeapOp
     VPushBatch : List(String) -> VHeapOp
-    VPushUpdate : VEnv * String * Value -> VHeapOp
+    VPushUpdate : String * Value -> VHeapOp
 
   arrows
     VHeapOp -vlook-> Value
     VHeapOp -vupdate-> Unit 
-    VHeapOp -vinit_-> Unit
-    VHeapOp -vinit-> VEnv
+    VHeapOp -vinit-> Unit
     
 rules 
   
@@ -52,11 +51,11 @@ rules
   where
     update[s](venv, x, v) => venv'
 
-  VHeap s |- (VPushBatch(xs), VEnv venv) -vinit_-> (U(), VEnv venv')
+  VHeap s |- (VPushBatch(xs), VEnv venv) -vinit-> (U(), VEnv venv')
   where
     allocs[s](venv, xs) => venv'
   
-  VHeap s |- VPushUpdate(venv, x, v) -vinit-> venv'
+  VHeap s |- (VPushUpdate(x, v), VEnv venv) -vinit-> (U(), VEnv venv')
   where
     allocupdate[s](venv, x, v) => venv'
 

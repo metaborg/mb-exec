@@ -25,7 +25,7 @@ rules // scope (all at once)
 
   Scope(vs, s) --> v
   where
-    VPushBatch(vs) -vinit_-> _,
+    VPushBatch(vs) -vinit-> _,
     s --> v
 
 signature

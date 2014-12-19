@@ -38,7 +38,7 @@ rules
   
   VEnv e |- bindtvars([x | xxs], [t | txs]) -bindtvars-> e''
   where
-    VPushUpdate(e, x, S(t)) -vinit-> e',
+    (VPushUpdate(x, S(t)), VEnv e) -vinit-> (_, VEnv e'),
     VEnv e' |- bindtvars(xxs, txs) -bindtvars-> e''
 
 signature
