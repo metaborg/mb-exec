@@ -23,10 +23,10 @@ rules // identity and failure
 
 rules // scope (all at once)
 
-  VEnv e |- Scope(vs, s) --> v
+  Scope(vs, s) --> v
   where
-    VPushBatch(e, vs) -vinit-> e',
-    VEnv e' |- s --> v
+    VPushBatch(vs) -vinit_-> _,
+    s --> v
 
 signature
   internal-sorts
