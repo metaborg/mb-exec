@@ -11,6 +11,7 @@ import org.spoofax.interpreter.core.InterpreterExit;
 import org.spoofax.interpreter.core.StackTracer;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
@@ -78,5 +79,12 @@ public class primCall_3 extends AbstractNode implements I_Strategy {
 		} catch (org.spoofax.interpreter.core.InterpreterException e) {
 			throw new InterpreterException(e);
 		}
+	}
+
+	@Override
+	public IStrategoTerm toStrategoTerm(ITermFactory factory) {
+		IStrategoConstructor constr = factory.makeConstructor("primCall", 3);
+		return factory.makeAppl(constr, factory.makeString(name),
+				thunks.toStrategoTerm(factory), targs.toStrategoTerm(factory));
 	}
 }

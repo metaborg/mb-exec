@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.metaborg.meta.interpreter.framework.INodeSource;
-import org.metaborg.meta.interpreter.framework.IValue;
 import org.metaborg.meta.interpreter.framework.ImploderNodeSource;
 import org.metaborg.meta.interpreter.framework.NodeList;
 import org.spoofax.interpreter.core.StackTracer;
@@ -31,6 +30,7 @@ import ds.generated.interpreter.Generic_I_StrategyDef;
 import ds.generated.interpreter.I_Module;
 import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.I_Strategy;
+import ds.generated.interpreter.I_Value;
 import ds.generated.interpreter.R_allocmodule_Unit;
 import ds.generated.interpreter.R_default_Value;
 import ds.generated.interpreter.SDefT_4;
@@ -143,7 +143,7 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 					PersistentTreeMap.EMPTY, getTermFactory(),
 					getCurrentTerm(), strategyHeap, strategyEnv,
 					interopContext, interopContext.getStackTracer(), false);
-			IValue value = result.value;
+			I_Value value = result.value;
 			StackTracer stacktracer = interopContext.getStackTracer();
 			if (value.match(F_0.class) != null) {
 				stacktracer.popOnFailure();

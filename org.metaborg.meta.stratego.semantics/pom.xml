@@ -68,7 +68,7 @@
 						<configuration>
 							<sources>
 								<source>src</source>
-								<source>src-gen</source>
+								<source>editor/java</source>
 							</sources>
 						</configuration>
 					</execution>

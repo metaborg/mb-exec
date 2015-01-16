@@ -11,14 +11,17 @@ signature
   constructors
     U: -> Unit
 
+  internal-sorts
+    Value
+    
+  // success and failure values
+  internal-constructors
+    S : T -> Value
+    F : -> Value
+
   arrows
     Strategy -default-> Value
     
-  // success and failure values
-  values
-    S : T
-    F :
-
   native-operators
     concatStrings : String * String -> String
     parseInt : String -> Int
