@@ -43,37 +43,27 @@ import org.spoofax.interpreter.library.ssl.RandomAccessOutputStream;
  * @author Karl Trygve Kalleberg <karltk near strategoxt dot org>
  */
 public class IOAgent {
-
     public final static int CONST_STDIN = 0;
-
     public final static int CONST_STDOUT = 1;
-
     public final static int CONST_STDERR = 2;
 
-    private final static String FILE_ENCODING = "UTF-8";
-
-    private final static Charset FILE_CHARSET = Charset.forName(FILE_ENCODING);
+    protected final static String FILE_ENCODING = "UTF-8";
+    protected final static Charset FILE_CHARSET = Charset.forName(FILE_ENCODING);
 
     private final Map<Integer, FileHandle> openFiles = new HashMap<Integer, FileHandle>();
 
-    private final Writer stdoutWriter = new PrintStreamWriter(System.out);
-
-    private final Writer stderrWriter = new PrintStreamWriter(System.err);
-
-    private final Reader stdinReader = new InputStreamReader(System.in, FILE_CHARSET);
-
-    private final OutputStream stdout = System.out;
-
-    private final OutputStream stderr = System.err;
-
-    private final InputStream stdin = System.in;
+    protected final Writer stdoutWriter = new PrintStreamWriter(System.out);
+    protected final Writer stderrWriter = new PrintStreamWriter(System.err);
+    protected final Reader stdinReader = new InputStreamReader(System.in, FILE_CHARSET);
+    protected final OutputStream stdout = System.out;
+    protected final OutputStream stderr = System.err;
+    protected final InputStream stdin = System.in;
 
     private String workingDir;
-
     private String definitionDir;
+    protected int fileCounter = 3;
 
-    private int fileCounter = 3;
-
+    
     public IOAgent() {
         try {
             String dir = System.getProperty("user.dir");
@@ -85,6 +75,7 @@ public class IOAgent {
         }
     }
 
+    
     // DIRECTORIES AND PATHS
 
     public String getWorkingDir() {
@@ -115,21 +106,6 @@ public class IOAgent {
         this.definitionDir = definitionDirFile.getAbsolutePath();
     }
 
-    @Deprecated // use getAbsolutePath instead
-    protected String adaptFilePath(String fn) {
-        return getAbsolutePath(getWorkingDir(), fn);
-    }
-
-    /**
-     * Converts a path relative to a given directory
-     * to an absolute path.
-     */
-    protected String getAbsolutePath(String dir, String fn) {
-        File f = new File(fn);
-        return f.isAbsolute()
-            ? f.getAbsolutePath()
-            : new File(dir, fn).getAbsolutePath();
-    }
 
     // OPENING, MANIPULATING FILES
 
@@ -356,6 +332,25 @@ public class IOAgent {
 		}
     }
 
+    
+
+    @Deprecated // use getAbsolutePath instead
+    protected String adaptFilePath(String fn) {
+        return getAbsolutePath(getWorkingDir(), fn);
+    }
+
+    /**
+     * Converts a path relative to a given directory
+     * to an absolute path.
+     */
+    protected String getAbsolutePath(String dir, String fn) {
+        File f = new File(fn);
+        return f.isAbsolute()
+            ? f.getAbsolutePath()
+            : new File(dir, fn).getAbsolutePath();
+    }
+    
+    
 	// http://stackoverflow.com/a/8685959/499240
 	private void removeRecursive(Path path) throws IOException {
 		Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
