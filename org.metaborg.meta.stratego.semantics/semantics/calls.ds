@@ -142,6 +142,6 @@ rules // dynamic call
   CallDynamic(target, ass, ats) --> v
   where
     Build(target) --> S(sname_aterm),
-    sname_aterm : TSTR,
+    sname_aterm <: TSTR,
     stringValue[sname_aterm]() => sname,
     CallT(SVar(sname), ass, ats) --> v

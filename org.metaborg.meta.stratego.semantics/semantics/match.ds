@@ -49,21 +49,21 @@ rules // actual matching
 
   T t |- m(Int(stringI)) -ma-> S(t)
   where
-    t : TINT,
+    t <: TINT,
     intValue[t]() => i',
     parseInt(stringI) => i,
     i == i'
   
   T t |- m(Real(stringR)) -ma-> S(t)
   where
-    t : TREAL,
+    t <: TREAL,
     realValue[t]() => r',
     parseReal(stringR) => r,
     r == r'
   
   T t |- m(Str(s)) -ma-> S(t)
   where
-    t : TSTR,
+    t <: TSTR,
     stringValue[t]() => s',
     s == s'
 
@@ -97,7 +97,7 @@ rules // actual matching
   // Explode Appl
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    t : TAPPL,
+    t <: TAPPL,
     makeString[tf](getName[getConstructor[t]()]()) => constr,
     T constr |- Match(ct) --> S(_),
     makeList[tf](getAllSubterms[t]()) => kids,
@@ -106,7 +106,7 @@ rules // actual matching
   // Explode Int
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    t : TINT,
+    t <: TINT,
     T t |- Match(ct) --> S(_),
     T makeNil(tf) |- Match(ts) --> S(_)
   
@@ -115,7 +115,7 @@ rules // actual matching
   // Explode String
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    t : TSTR,
+    t <: TSTR,
     annotateTerm[tf](t, makeNil(tf)) => tnoanno,
     makeString[tf](toString[tnoanno]()) => constr,
     T constr |- Match(ct) --> S(_),
@@ -124,14 +124,14 @@ rules // actual matching
   // Explode List
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    t : TLIST,
+    t <: TLIST,
     T makeNil(tf) |- Match(ct) --> S(_),
     T t |- Match(ts) --> S(_)
   
   // Explode Tuple
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    t : TTUP,
+    t <: TTUP,
     makeString[tf]("") => constr,
     T constr |- Match(ct) --> S(_),
     makeList[tf](getAllSubterms[t]()) => kids,
@@ -145,13 +145,13 @@ rules // actual matching
   // match an empty list
   T t |- ml([]) -ma-> S(t)
   where
-    t : TLIST,
+    t <: TLIST,
     isEmpty[t]() == true
   
   // match a non-empty list
   T t |- ml([p | ps]) -ma-> S(t)
   where
-    t : TLIST,
+    t <: TLIST,
     isEmpty[t]() == false,
     T head[t]() |- Match(p) --> S(_),
     T tail[t]() |- ml(ps) -ma-> S(_)
@@ -187,12 +187,12 @@ rules
   
   T t |- mList(Op(_, [])) -ma-> S(t)
   where
-    t : TLIST,
+    t <: TLIST,
     isEmpty[t]() == true
   
   T t |- mList(Op(_, [p1, p2])) -ma-> S(t)
   where
-    t : TLIST,
+    t <: TLIST,
     isEmpty[t]() == false,
     T head[t]() |- Match(p1) --> S(_),
     T tail[t]() |- Match(p2) --> S(_)
@@ -202,7 +202,7 @@ rules
   
   T t, TF tf |- m(Op("", pts)) -ma-> S(t)
   where
-    t : TTUP,
+    t <: TTUP,
     getAllSubterms[t]() => elems,
     T makeList[tf](elems) |- ml(pts) -ma-> S(_)
   
@@ -216,7 +216,7 @@ rules
   // match application
   T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t)
   where
-    t : TAPPL,
+    t <: TAPPL,
     getConstructor[t]() => aconstr,
     getName[aconstr]() => c',
     c == c',

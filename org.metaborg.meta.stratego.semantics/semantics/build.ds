@@ -29,7 +29,7 @@ rules // build
   where
     b(t) -bld-> BS(at),
     b(annos) -bld-> BS(annos_aterm),
-    annos_aterm : TLIST,
+    annos_aterm <: TLIST,
     annotateTerm[tf](at, annos_aterm) => aterm
   
   Build(Var(x)) --> S(t)
@@ -65,8 +65,8 @@ rules // actual term building
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts), // just to make sure we cause the right side-effects
-    ts : TLIST,
-    c : TINT
+    ts <: TLIST,
+    c <: TINT
   
   // TODO Implode Real
   
@@ -75,16 +75,16 @@ rules // actual term building
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    ts : TLIST,
-    c : TLIST
+    ts <: TLIST,
+    c <: TLIST
   
   // Implode Tuple
   TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(tupl)
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    ts : TLIST,
-    c : TSTR,
+    ts <: TLIST,
+    c <: TSTR,
     stringValue[c]() => cname,
     cname == "",
     makeTuple[tf](getAllSubterms[ts]()) => tupl
@@ -94,8 +94,8 @@ rules // actual term building
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    ts : TLIST,
-    c : TSTR,
+    ts <: TLIST,
+    c <: TSTR,
     stringValue[c]() => cname,
     isQuotedString(cname) == true,
     unquoteString(cname) => svalue,
@@ -106,8 +106,8 @@ rules // actual term building
   where
     Build(cname_expr) --> S(c),
     Build(ts_expr) --> S(ts),
-    ts : TLIST,
-    c : TSTR,
+    ts <: TLIST,
+    c <: TSTR,
     stringValue[c]() => cname,
     isQuotedString(cname) == false,
     makeConstructor[tf](cname, size[ts]()) => constr,
@@ -160,7 +160,7 @@ rules
   where
     TF tf |- Build(t1) --> S(head),
     TF tf |- Build(t2) --> S(tail),
-    tail : TLIST
+    tail <: TLIST
 
   // Appl dispatch
   b(op@Op("Cons", ts)) -bld-> bv
