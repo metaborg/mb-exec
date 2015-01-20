@@ -49,6 +49,8 @@ public class Context implements IContext {
     private VarScope varScope;
 
     private transient volatile boolean asyncCancelled;
+    
+    private Object contextObject;
 
     public Context(ITermFactory factory, ITermFactory programFactory) {
         this(factory, programFactory, false);
@@ -224,5 +226,13 @@ public class Context implements IContext {
         asyncCancelled = false;
         getIOAgent().closeAllFiles();
         throw new CancellationException("Stratego interpreter cancelled");
+    }
+    
+    @Override public Object contextObject() {
+        return contextObject;
+    }
+
+    @Override public void setContextObject(Object context) {
+        this.contextObject = context;
     }
 }
