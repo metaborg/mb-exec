@@ -14,13 +14,19 @@ public class Timer {
 	private final boolean canLogCPUTime;
 
 	/** Last starting time since start was called. **/
-	private long startTime;
+	private long startTime = 0;
 
-
+	
 	public Timer() {
+	    this(false);
+	}
+	
+	public Timer(boolean start) {
 		canLogCPUTime = mxBean.isThreadCpuTimeSupported();
 		if(canLogCPUTime)
 			mxBean.setThreadCpuTimeEnabled(true);
+		if(start)
+		    start();
 	}
 
 
