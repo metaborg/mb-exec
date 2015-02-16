@@ -95,7 +95,7 @@ rules // actual matching
     T t |- Match(p) --> S(_)
 
   // Explode Appl
-  T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
+  T t TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
     t <: TAPPL,
     makeString[tf](getName[getConstructor[t]()]()) => constr,
@@ -104,7 +104,7 @@ rules // actual matching
     T kids |- Match(ts) --> S(_)
   
   // Explode Int
-  T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
+  T t TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
     t <: TINT,
     T t |- Match(ct) --> S(_),
@@ -113,7 +113,7 @@ rules // actual matching
   // TODO Explode Real
 
   // Explode String
-  T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
+  T t TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
     t <: TSTR,
     annotateTerm[tf](t, makeNil(tf)) => tnoanno,
@@ -122,14 +122,14 @@ rules // actual matching
     T makeNil(tf) |- Match(ts) --> S(_)
   
   // Explode List
-  T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
+  T t TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
     t <: TLIST,
     T makeNil(tf) |- Match(ct) --> S(_),
     T t |- Match(ts) --> S(_)
   
   // Explode Tuple
-  T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
+  T t TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
     t <: TTUP,
     makeString[tf]("") => constr,
@@ -200,7 +200,7 @@ rules
   mList(_) -ma-> F()
   where all-fail
   
-  T t, TF tf |- m(Op("", pts)) -ma-> S(t)
+  T t TF tf |- m(Op("", pts)) -ma-> S(t)
   where
     t <: TTUP,
     getAllSubterms[t]() => elems,
@@ -214,7 +214,7 @@ rules
     mAppl(op) -ma-> S(_)
      
   // match application
-  T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t)
+  T t TF tf |- mAppl(Op(c, pts)) -ma-> S(t)
   where
     t <: TAPPL,
     getConstructor[t]() => aconstr,
