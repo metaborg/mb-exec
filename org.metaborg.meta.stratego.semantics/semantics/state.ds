@@ -47,15 +47,15 @@ rules
   where
     lookup[s](venv, x) => v
   
-  VHeap s |- VUpdate(x, v) :: VEnv venv -vupdate-> U() :: VEnv venv'
+  VHeap s |- VUpdate(x, v) :: VEnv venv -vupdate-> U() :: VEnv venv'.
   where
     update[s](venv, x, v) => venv'
 
-  VHeap s |- VPushBatch(xs) :: VEnv venv -vinit-> U() :: VEnv venv'
+  VHeap s |- VPushBatch(xs) :: VEnv venv -vinit-> U() :: VEnv venv'.
   where
     allocs[s](venv, xs) => venv'
   
-  VHeap s |- VPushUpdate(x, v) :: VEnv venv -vinit-> U() :: VEnv venv'
+  VHeap s |- VPushUpdate(x, v) :: VEnv venv -vinit-> U() :: VEnv venv'.
   where
     allocupdate[s](venv, x, v) => venv'
 
@@ -111,21 +111,21 @@ rules
     lookup[s](senv, name) => thunk
 
   // Push a new Thunk advancing the address of the top of the stack
-  SHeap s |- SPush(name, thunk) :: SEnv senv -salloc-> U() :: SEnv senv'
+  SHeap s |- SPush(name, thunk) :: SEnv senv -salloc-> U() :: SEnv senv'.
   where
     allocupdate[s](senv, name, thunk) => senv'
   
   // Allocate a new location at the top of the SHeap and bind it to a placeholder
-  SHeap s |- SAlloc(name) :: SEnv senv -salloc-> U() :: SEnv senv'
+  SHeap s |- SAlloc(name) :: SEnv senv -salloc-> U() :: SEnv senv'.
   where
     alloc[s](senv, name) => senv'
   
   // Allocate a new location at the top of the SHeap and bind it to a placeholder if no allocation for this name already exists
-  SHeap s |- SSoftAlloc(name) :: SEnv senv -salloc-> U() :: SEnv senv'
+  SHeap s |- SSoftAlloc(name) :: SEnv senv -salloc-> U() :: SEnv senv'.
   where
     softalloc[s](senv, name) => senv'
   
-  SHeap s |- SUpdate(name, thunk) :: SEnv senv -salloc-> U() :: SEnv senv'
+  SHeap s |- SUpdate(name, thunk) :: SEnv senv -salloc-> U() :: SEnv senv'.
   where
     update[s](senv, name, thunk) => senv'
 

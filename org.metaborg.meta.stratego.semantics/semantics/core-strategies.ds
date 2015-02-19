@@ -195,7 +195,7 @@ rules // term traversal: some
   where
     t <: TTUP,
     getAllSubterms[t]() => ts,
-    T makeList[tf](ts) |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true,
+    T makeList[tf](ts) |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true.,
     makeTuple[tf](getAllSubterms[ats']()) => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t''
   
@@ -205,7 +205,7 @@ rules // term traversal: some
     t <: TLIST,
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
-    T ats |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true,
+    T ats |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true.,
     annotateTerm[tf](ats', getAnnotations[t]()) => ats''
 
   // <some> TNAME(t1, t2, )
@@ -215,7 +215,7 @@ rules // term traversal: some
     getConstructor[t]() => ac,
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
-    T ats |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true,
+    T ats |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true.,
     getAllSubterms[ats']() => ts',
     makeAppl[tf](ac, ts') => t',
     annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
@@ -236,27 +236,27 @@ signature
 rules
 
   // case t == []: return untouched list
-  T t |- oneOrMore(_) :: Bool _ -some-> t :: Bool false
+  T t |- oneOrMore(_) :: Bool _ -some-> t :: Bool false.
   where
     t <: TLIST,
     isEmpty[t]() == true
   
   // case t == [t1 | ts] and <not(s)> t1
-  T t TF tf |- oneOrMore(s) :: Bool f -some-> list' :: Bool boolOr(f, f')
+  T t TF tf |- oneOrMore(s) :: Bool f -some-> list' :: Bool boolOr(f, f').
   where
     t <: TLIST,
     isEmpty[t]() == false,
     head[t]() => head,
     T head |- s --> F(),
-    T tail[t]() |- oneOrMore(s) :: Bool f -some-> tail' :: Bool f',
+    T tail[t]() |- oneOrMore(s) :: Bool f -some-> tail' :: Bool f'.,
     makeListCons[tf](head, tail') => list'
   
   // case t == [t1 | t2] and <s> t1 
-  T t TF tf |- oneOrMore(s) :: Bool f -some-> list' :: Bool true
+  T t TF tf |- oneOrMore(s) :: Bool f -some-> list' :: Bool true.
   where
     t <: TLIST,
     isEmpty[t]() == false,
     T head[t]() |- s --> S(head'),
-    T tail[t]() |- oneOrMore(s) :: Bool true -some-> tail' :: Bool f',
+    T tail[t]() |- oneOrMore(s) :: Bool true -some-> tail' :: Bool f'.,
     makeListCons[tf](head', tail') => list'
     

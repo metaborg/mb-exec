@@ -35,15 +35,15 @@ rules
     s --> v,
     popTrace(v) -trace-> _
   
-  pushTrace(sname) :: Trace t -trace-> true :: Trace t
+  pushTrace(sname) :: Trace t -trace-> true :: Trace t.
   where
     pushTraceElem(sname, t) => _
   
-  popTrace(F()) :: Trace t -trace-> true :: Trace t
+  popTrace(F()) :: Trace t -trace-> true :: Trace t.
   where
     popOnFailure(t) => _
   
-  popTrace(S(_)) :: Trace t -trace-> true :: Trace t
+  popTrace(S(_)) :: Trace t -trace-> true :: Trace t.
   where
     popOnSuccess(t) => _
 
