@@ -202,6 +202,13 @@ public class Tools {
 		final IStrategoConstructor constructor = t.getConstructor();
 		return constructor.getName().equals(ctorName) && constructor.getArity() == arity;
 	}
+	
+	public static String constructorName(IStrategoTerm t) {
+	    if(t instanceof IStrategoAppl) {
+	        return ((IStrategoAppl)t).getConstructor().getName();
+	    }
+	    return null;
+	}
 
 	public static boolean isTermTuple(IStrategoTerm t) {
 		return t.getTermType() == IStrategoTerm.TUPLE;

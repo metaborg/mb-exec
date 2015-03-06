@@ -19,7 +19,6 @@ import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.util.IAsyncCancellable;
 
 public interface IContext extends IAsyncCancellable {
-
     public IStrategoTerm current();
     public void setCurrent(IStrategoTerm newCurrent);
 
@@ -45,4 +44,7 @@ public interface IContext extends IAsyncCancellable {
     public Collection<OpDecl> getOperatorDeclarations();
 
     public StackTracer getStackTracer();
+    
+    public Object contextObject();
+    public void setContextObject(Object context);
 }
