@@ -1,8 +1,8 @@
 module shared
 
 imports
-  aterm
-  stratego-signatures
+  semantics/aterm
+  semantics/stratego-signatures
   
 signature
   sorts

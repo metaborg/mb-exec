@@ -1,12 +1,12 @@
 module calls
 
 imports
-  stratego-signatures
-  shared
-  build
-  aterm
-  state
-  tracing
+  semantics/stratego-signatures
+  semantics/shared
+  semantics/build
+  semantics/aterm
+  semantics/state
+  semantics/tracing
   
 rules // calls
 

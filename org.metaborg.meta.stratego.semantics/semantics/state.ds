@@ -1,8 +1,8 @@
 module state
 
 imports
-  shared
-  stratego-signatures
+  semantics/shared
+  semantics/stratego-signatures
   
 /* === Rules for the Variables === */
 signature

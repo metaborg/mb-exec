@@ -10,10 +10,10 @@ module core-strategies
  *
 */
 imports
-  stratego-signatures
-  aterm
-  shared
-  state
+  semantics/stratego-signatures
+  semantics/aterm
+  semantics/shared
+  semantics/state
   
 rules // identity and failure
 

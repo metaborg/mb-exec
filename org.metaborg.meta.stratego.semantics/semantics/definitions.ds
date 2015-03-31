@@ -1,9 +1,9 @@
 module definitions
 
 imports
-  shared
-  stratego-signatures
-  state
+  semantics/shared
+  semantics/stratego-signatures
+  semantics/state
 
 signature
   internal-sorts

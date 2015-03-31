@@ -1,8 +1,8 @@
 module tracing
 
 imports
-  shared
-  stratego-signatures
+  semantics/shared
+  semantics/stratego-signatures
 
 signature
   native-datatypes

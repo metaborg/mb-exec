@@ -1,10 +1,10 @@
 module build
 
 imports
-  stratego-signatures
-  shared
-  aterm
-  state
+  semantics/stratego-signatures
+  semantics/shared
+  semantics/aterm
+  semantics/state
 
 signature
   internal-sorts

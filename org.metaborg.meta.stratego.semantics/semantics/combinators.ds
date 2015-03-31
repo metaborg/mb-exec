@@ -8,9 +8,9 @@ module combinators
  *
 */
 imports
-  stratego-signatures
-  shared
-  aterm
+  semantics/stratego-signatures
+  semantics/shared
+  semantics/aterm
 
 rules // sequential composition
   

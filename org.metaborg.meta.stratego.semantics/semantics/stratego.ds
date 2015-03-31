@@ -2,12 +2,12 @@ module
   stratego
 
 imports
-  match
-  build
-  core-strategies
-  combinators
-  calls
-  definitions
+  semantics/match
+  semantics/build
+  semantics/core-strategies
+  semantics/combinators
+  semantics/calls
+  semantics/definitions
 
 // rules // proceed
 // 
