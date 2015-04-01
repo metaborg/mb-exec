@@ -7,16 +7,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import org.metaborg.meta.interpreter.framework.INodeSource;
-import org.metaborg.meta.interpreter.framework.ImploderNodeSource;
-import org.metaborg.meta.interpreter.framework.NodeList;
+import org.metaborg.meta.interpreter.framework.NodeSource;
 import org.spoofax.interpreter.core.StackTracer;
 import org.spoofax.interpreter.library.IOperatorRegistry;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
-import org.spoofax.jsglr.client.imploder.ImploderAttachment;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.io.binary.TermReader;
 
@@ -28,9 +25,10 @@ import ds.generated.interpreter.F_0;
 import ds.generated.interpreter.Generic_I_Module;
 import ds.generated.interpreter.Generic_I_StrategyDef;
 import ds.generated.interpreter.I_Module;
-import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.I_Strategy;
 import ds.generated.interpreter.I_Value;
+import ds.generated.interpreter.L_I_STerm;
+import ds.generated.interpreter.L_I_Strategy;
 import ds.generated.interpreter.R_allocmodule_Unit;
 import ds.generated.interpreter.R_default_Value;
 import ds.generated.interpreter.SDefT_4;
@@ -81,11 +79,8 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 
 	@Override
 	public void load(IStrategoAppl ctree) throws IOException {
-		INodeSource ctreeSource = ctree.getAttachment(ImploderAttachment.TYPE) != null ? new ImploderNodeSource(
-				ctree.getAttachment(ImploderAttachment.TYPE)) : null;
-
-		I_Module ctreeNode = (I_Module) new Generic_I_Module(ctreeSource, ctree)
-				.specialize(1);
+		I_Module ctreeNode = (I_Module) new Generic_I_Module(
+				NodeSource.fromStrategoTerm(ctree), ctree).specialize(1);
 		R_allocmodule_Unit sdefs_result = ctreeNode.exec_allocmodule(
 				PersistentTreeMap.EMPTY, strategyHeap, strategyEnv);
 		strategyEnv = sdefs_result._1;
@@ -114,7 +109,7 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 	@Override
 	public boolean invoke(String sname) {
 		CallT_3 call = new CallT_3(null, new SVar_1(null, sname),
-				NodeList.NIL(I_Strategy.class), NodeList.NIL(I_STerm.class));
+				new L_I_Strategy(null), new L_I_STerm(null));
 		return evaluate(call);
 	}
 

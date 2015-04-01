@@ -31,13 +31,13 @@ public class primCall_3 extends AbstractNode implements I_Strategy {
 	public String name;
 
 	@Children
-	public INodeList<I_Thunk> thunks;
+	public L_I_Thunk thunks;
 
 	@Children
-	public INodeList<IStrategoTerm> targs;
+	public L_T targs;
 
-	public primCall_3(INodeSource sourceInfo, String sname,
-			INodeList<I_Thunk> thunks, INodeList<IStrategoTerm> ats_) {
+	public primCall_3(INodeSource sourceInfo, String sname, L_I_Thunk thunks,
+			L_T ats_) {
 		this.setSourceInfo(sourceInfo);
 		this.name = sname;
 		this.thunks = adoptChildren(thunks);
@@ -60,9 +60,11 @@ public class primCall_3 extends AbstractNode implements I_Strategy {
 		Strategy[] sargs = new Strategy[thunks.size()];
 
 		int i = 0;
-		for (I_Thunk thunk : thunks) {
-			sargs[i] = new InteropStrategy((Thunk_6) thunk, stacktracer, sheap,
-					vheap);
+		L_I_Thunk lthunks = thunks;
+		while (!lthunks.isEmpty()) {
+			sargs[i] = new InteropStrategy((Thunk_6) lthunks.head(),
+					stacktracer, sheap, vheap);
+			lthunks = lthunks.tail();
 			i++;
 		}
 		try {

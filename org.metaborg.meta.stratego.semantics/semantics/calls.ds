@@ -121,7 +121,7 @@ signature
 
 rules
 
-  mkThunks([]) -thunks-> []
+  mkThunks([]) -thunks-> [] : List(Thunk)
   
   mkThunks([as | ass]) -thunks-> [as' | ass']
   where

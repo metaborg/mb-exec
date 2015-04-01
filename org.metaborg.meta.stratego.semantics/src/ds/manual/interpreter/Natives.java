@@ -10,10 +10,11 @@ import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.terms.io.binary.TermReader;
 
 import ds.generated.interpreter.I_STerm;
+import ds.generated.interpreter.L_T;
 
 public class Natives {
 
-	public static int length_1(INodeList<I_STerm> ts) {
+	public static int length_1(INodeList ts) {
 		return ts.size();
 	}
 
@@ -29,10 +30,10 @@ public class Natives {
 		}
 	}
 
-	public static IStrategoTerm[] List2TARRAY_1(INodeList<IStrategoTerm> ts_) {
+	public static IStrategoTerm[] List2TARRAY_1(L_T ts_) {
 		int size = ts_.size();
 		IStrategoTerm[] clone = new IStrategoTerm[size];
-		INodeList<IStrategoTerm> list = ts_;
+		L_T list = ts_;
 		for (int i = 0; i < size; i++) {
 			clone[i] = list.head();
 			list = list.tail();
@@ -75,11 +76,11 @@ public class Natives {
 		return fresh_counter++;
 	}
 
-	public static boolean isEmptyStrategies_1(INodeList<?> sss) {
+	public static boolean isEmptyStrategies_1(INodeList sss) {
 		return sss.isEmpty();
 	}
 
-	public static boolean isEmpty_1(INodeList<?> ass) {
+	public static boolean isEmpty_1(INodeList ass) {
 		return ass.isEmpty();
 	}
 

@@ -151,4 +151,14 @@ public class AutoInterpInteropContext implements IContext {
 
 	}
 
+	@Override
+	public Object contextObject() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setContextObject(Object arg0) {
+		throw new UnsupportedOperationException();
+	}
+
 }

@@ -1,6 +1,6 @@
 package ds.manual.interpreter;
 
-import org.metaborg.meta.interpreter.framework.INodeList;
+import org.metaborg.meta.interpreter.framework.L_String;
 
 import com.github.krukow.clj_ds.PersistentMap;
 
@@ -21,10 +21,14 @@ public class VState {
 	}
 
 	public PersistentMap<String, VBox> allocs(PersistentMap<String, VBox> venv,
-			INodeList<String> xs) {
-		for (String x : xs) {
-			venv = venv.plus(x, new VBox(failCons));
+			L_String xs) {
+		L_String l = xs;
+
+		while (!l.isEmpty()) {
+			venv = venv.plus(l.head(), new VBox(failCons));
+			l = l.tail();
 		}
+
 		return venv;
 	}
 
