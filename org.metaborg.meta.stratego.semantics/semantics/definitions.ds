@@ -98,7 +98,7 @@ signature
     
 rules // typedid name extractor
 
-  typedIds([]) -exid-> []
+  typedIds([]) -exid-> [] : List(String)
  
   typedIds([VarDec(x, _) | xs]) -exid-> [ x | xs' ]
   where
@@ -106,7 +106,7 @@ rules // typedid name extractor
 
 rules // SDefT name extractor
 
-  sdefNames([]) -exid-> []
+  sdefNames([]) -exid-> [] : List(String)
   
   sdefNames([SDefT(sname, _, _, _) | sdefs]) -exid-> [sname | snames]
   where
