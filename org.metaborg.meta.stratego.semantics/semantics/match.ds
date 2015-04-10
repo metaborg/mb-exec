@@ -12,10 +12,11 @@ signature
     
   internal-constructors
     m : STerm -> Matcher
-    ml: List(STerm) -> Matcher
+    // ml: List(STerm) -> Matcher
 
   arrows
     Matcher -ma-> Value
+    List(STerm) -ma-> Value
 
 rules // match dispatch annotations
 
@@ -143,20 +144,20 @@ rules // actual matching
     all-fail
     
   // match an empty list
-  T t |- ml([]) -ma-> S(t)
+  T t |- [] : List(STerm) -ma-> S(t)
   where
     t <: TLIST,
     isEmpty[t]() == true
   
   // match a non-empty list
-  T t |- ml([p | ps]) -ma-> S(t)
+  T t |- [p | ps] : List(STerm) -ma-> S(t)
   where
     t <: TLIST,
     isEmpty[t]() == false,
     T head[t]() |- Match(p) --> S(_),
-    T tail[t]() |- ml(ps) -ma-> S(_)
+    T tail[t]() |- ps -ma-> S(_)
   
-  ml(_) -ma-> F()
+  _ : List(STerm) -ma-> F()
   where
     all-fail
 
@@ -204,7 +205,7 @@ rules
   where
     t <: TTUP,
     getAllSubterms[t]() => elems,
-    T makeList[tf](elems) |- ml(pts) -ma-> S(_)
+    T makeList[tf](elems) |- pts -ma-> S(_)
   
   T t |- m(op@Op(c, _)) -ma-> S(t)
   where
@@ -222,7 +223,7 @@ rules
     c == c',
     getAllSubterms[t]() => subterms,
     makeList[tf](subterms) => asubterms,
-    T asubterms |- ml(pts) -ma-> S(_)
+    T asubterms |- pts -ma-> S(_)
   
   mAppl(_) -ma-> F()
   where all-fail
