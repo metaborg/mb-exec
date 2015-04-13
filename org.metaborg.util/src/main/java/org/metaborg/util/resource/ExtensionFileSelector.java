@@ -12,6 +12,10 @@ public class ExtensionFileSelector implements FileSelector {
     private final Set<String> extensions;
 
 
+    public ExtensionFileSelector(String extension) {
+        this.extensions = Sets.newHashSet(extension);
+    }
+
     public ExtensionFileSelector(Iterable<String> extensions) {
         this.extensions = Sets.newHashSet(extensions);
     }
