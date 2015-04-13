@@ -41,8 +41,8 @@ signature
     Scope                    : List(String) * Strategy -> Strategy
     Build                    : STerm -> Strategy
     Match                    : STerm -> Strategy
-    Id                       : -> Strategy
-    Fail                     : -> Strategy
+    Id                       : Strategy
+    Fail                     : Strategy
     CallDynamic              : STerm * List(Strategy) * List(STerm) -> Strategy
     CallT                    : SVar * List(Strategy) * List(STerm) -> Strategy
     Let                      : List(Def) * Strategy -> Strategy
@@ -55,7 +55,7 @@ signature
     OpDeclQ                  : String * Type -> Opdecl
     OpDecl                   : String * Type -> Opdecl
     Constructors             : List(Opdecl) -> Sdecl
-    Wld                      : -> Wld
+    Wld                      : Wld
     As                       : Var * PreTerm -> PreTerm
     Explode                  : STerm * STerm -> PreTerm
     Op                       : String * List(STerm) -> PreTerm
@@ -70,9 +70,9 @@ signature
     SortVar                  : String -> Sort
     SortNoArgs               : String -> Sort
     AnnoDef                  : List(Anno) * StrategyDef -> Def
-    Internal                 : -> Anno
-    Override                 : -> Anno
-    Extend                   : -> Anno
+    Internal                 : Anno
+    Override                 : Anno
+    Extend                   : Anno
     
   // constructors
     // RuleNames                : Term -> RuleNames
