@@ -21,16 +21,16 @@ signature
     
     "ds.manual.interpreter.VBox" as VBox { }
 
-  internal-sorts
+  sorts
     VLookupResult
   
-  internal-constructors
+  constructors
     VLookupResult : VEnv * Value -> VLookupResult
 
-  internal-sorts
+  sorts
     VHeapOp
 
-  internal-constructors
+  constructors
     VLookup : String -> VHeapOp
     VUpdate : String * Value -> VHeapOp
     VPushBatch : List(String) -> VHeapOp
@@ -76,22 +76,22 @@ signature
     
     "ds.manual.interpreter.SBox" as SBox { }
 
-  internal-sorts
+  sorts
     SLookupResult
 
-  internal-constructors
+  constructors
     SLookupResult : SEnv * Thunk -> SLookupResult
 
-  internal-sorts
+  sorts
     Thunk
   
-  internal-constructors
+  constructors
     Thunk  : String * List(String) * List(String) * Strategy * VEnv * SEnv -> Thunk
 
-  internal-sorts
+  sorts
     SHeapOp
   
-  internal-constructors
+  constructors
     SAlloc: String -> SHeapOp
     SSoftAlloc: String -> SHeapOp
     SParAlloc : List(String) -> SHeapOp

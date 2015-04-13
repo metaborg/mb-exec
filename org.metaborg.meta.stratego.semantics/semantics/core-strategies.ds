@@ -29,10 +29,10 @@ rules // scope (all at once)
     s --> v
 
 signature
-  internal-sorts
+  sorts
     Mapper
     
-  internal-constructors
+  constructors
     map : Strategy -> Mapper
 
   arrows
@@ -112,10 +112,10 @@ rules // term traversal: all
     all-fail
 
 signature
-  internal-sorts
+  sorts
     Firster
     
-  internal-constructors
+  constructors
     first : Strategy -> Firster
   
   arrows
@@ -224,10 +224,10 @@ rules // term traversal: some
   where all-fail
 
 signature
-  internal-sorts
+  sorts
     Somer
     
-  internal-constructors
+  constructors
     oneOrMore : Strategy -> Somer
 
   arrows

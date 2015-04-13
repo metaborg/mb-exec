@@ -23,10 +23,10 @@ rules // calls
     all-fail
 
 signature
-  internal-sorts
+  sorts
     Binder
     
-  internal-constructors
+  constructors
     bindtvars: List(String) * List(T) -> Binder
     
   arrows
@@ -42,7 +42,7 @@ rules
     bindtvars(xxs, txs) -bindtvars-> _
 
 signature
-  internal-constructors
+  constructors
     bindsvars: List(String) * List(Strategy) * SEnv -> Binder
   
   native-operators
@@ -108,10 +108,10 @@ rules // primitives
     all-fail
 
 signature
-  internal-sorts
+  sorts
     Thunker
 
-  internal-constructors
+  constructors
     mkThunk  : Strategy -> Thunker
     mkThunks : List(Strategy) -> Thunker
 

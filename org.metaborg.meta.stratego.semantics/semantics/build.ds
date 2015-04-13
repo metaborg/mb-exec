@@ -7,11 +7,11 @@ imports
   semantics/state
 
 signature
-  internal-sorts
+  sorts
     Builder
     BuildRes
     
-  internal-constructors
+  constructors
     b   : PreTerm -> Builder
     bl  : List(STerm) -> Builder
 
@@ -130,7 +130,7 @@ rules // actual term building
     all-fail
 
 signature
-  internal-constructors
+  constructors
     bAppl : PreTerm -> Builder
     bList : PreTerm -> Builder
     

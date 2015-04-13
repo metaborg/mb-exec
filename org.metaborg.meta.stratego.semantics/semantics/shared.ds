@@ -11,11 +11,11 @@ signature
   constructors
     U: Unit
 
-  internal-sorts
+  sorts
     Value
 
   // success and failure values
-  internal-constructors
+  constructors
     S : T -> Value
     F : Value
 

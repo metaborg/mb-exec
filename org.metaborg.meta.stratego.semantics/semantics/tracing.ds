@@ -10,10 +10,10 @@ signature
       push : String -> Bool
     }
   
-  internal-sorts
+  sorts
     TraceOp
   
-  internal-constructors
+  constructors
     tracing : String * Strategy -> TraceOp
     pushTrace : String -> TraceOp
     popTrace : Value -> TraceOp

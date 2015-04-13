@@ -6,10 +6,10 @@ imports
   semantics/state
 
 signature
-  internal-sorts
+  sorts
     LetHelper
 
-  internal-constructors
+  constructors
     letEval : List(Def) * Strategy -> LetHelper
 
   arrows
@@ -34,11 +34,11 @@ rules // let - in - end
     letEval(sdefs, in_s) -leteval-> v
     
 signature
-  internal-sorts
+  sorts
     Allocator
     AllocatorResult
     
-  internal-constructors
+  constructors
     allocDefs : List(Def) -> Allocator
     allocdDefs : List(Def) -> AllocatorResult 
     storeDefs : List(Def) -> Allocator
@@ -86,13 +86,13 @@ rules // strategy definitions
     typedIds(ts) -exid-> ts'
   
 signature
-  internal-sorts
+  sorts
     NameExtractor
 
   arrows
     NameExtractor -exid-> List(String)
     
-  internal-constructors
+  constructors
     typedIds: List(Typedid) -> NameExtractor
     sdefNames: List(Def) -> NameExtractor
     
