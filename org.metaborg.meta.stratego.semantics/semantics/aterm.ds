@@ -2,7 +2,7 @@ module aterm
 
 signature
     
-  native-datatypes
+  native datatypes
   
    "org.spoofax.interpreter.terms.IStrategoTerm" as T {
       getSubtermCount : Int
@@ -67,7 +67,7 @@ signature
       
     }
   
-  native-operators
+  native operators
     // TARRAY2List: TARRAY -> List(T)
     List2TARRAY: List(T) -> TARRAY
     makeNil : TF -> TLIST

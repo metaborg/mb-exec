@@ -7,10 +7,10 @@ imports
 /* === Rules for the Variables === */
 signature
 
-  semantic-components
+  semantic components
     VEnv  -> Map<String, VBox>
 
-  native-datatypes
+  native datatypes
     "ds.manual.interpreter.VState" as VHeap {
       lookup : VEnv * String -> Value
       alloc  : VEnv * String -> VEnv
@@ -62,10 +62,10 @@ rules
 /* === Rules for the Strategies === */
 
 signature
-  semantic-components
+  semantic components
     SEnv  -> Map<String, SBox>
 
-  native-datatypes
+  native datatypes
     "ds.manual.interpreter.SState" as SHeap {
       lookup : SEnv * String -> Thunk
       alloc  : SEnv * String -> SEnv

@@ -5,7 +5,7 @@ imports
   semantics/stratego-signatures
 
 signature
-  native-datatypes
+  native datatypes
     "org.spoofax.interpreter.core.StackTracer" as Trace {
       push : String -> Bool
     }
@@ -22,7 +22,7 @@ signature
     TraceOp --> Value
     TraceOp -trace-> Bool
   
-  native-operators
+  native operators
     pushTraceElem: String * Trace -> Bool
     popOnFailure : Trace -> Bool
     popOnSuccess : Trace -> Bool

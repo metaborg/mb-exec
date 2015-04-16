@@ -45,13 +45,13 @@ signature
   constructors
     bindsvars: List(String) * List(Strategy) * SEnv -> Binder
   
-  native-operators
+  native operators
     isEmptyStrategies: List(Strategy) -> Bool
 
   arrows
     Binder -bindsvars-> SEnv
 
-  native-operators
+  native operators
     createAnonymousName : String -> String
 
 rules
@@ -92,7 +92,7 @@ rules
     
 signature
 
-  native-constructors
+  native constructors
     primCall : String * List(Thunk) * List(T) -> Strategy
 
 rules // primitives

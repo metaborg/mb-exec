@@ -22,7 +22,7 @@ signature
   arrows
     Strategy -default-> Value
     
-  native-operators
+  native operators
     concatStrings : String * String -> String
     parseInt : String -> Int
     parseReal : String -> Real

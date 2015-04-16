@@ -194,7 +194,7 @@ rules
   where all-fail
   
 signature
-  native-operators
+  native operators
     importTerm : IC * String -> T
 
 rules // import term
