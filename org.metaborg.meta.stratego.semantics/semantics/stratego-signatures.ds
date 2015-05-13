@@ -5,22 +5,30 @@ signature
   sorts
     Strategy
     STerm
-    PreTerm -> STerm
-    Var -> PreTerm
-    Wld -> PreTerm
     Def
-    StrategyDef -> Def
     SVar
     Typedid
     Type
-    ConstType -> Type
-    FunType -> Type
     Decl
     Module
     Opdecl
     Sdecl
     Sort
     Anno
+    PreTerm
+    Var
+    Wld
+    StrategyDef
+    ConstType
+    FunType
+  
+  constructors
+    __PreTerm2Term__   : PreTerm -> STerm {implicit}
+    __Var2PreTerm__    : Var -> PreTerm {implicit}
+    __Wld2PreTerm__    : Wld -> PreTerm {implicit}
+    __StrategyDef2Def__: StrategyDef -> Def {implicit}
+    __ConstType2Type__ : ConstType -> Type  {implicit}
+    __FunType2Type__: FunType -> Type {implicit}
   
   constructors
     Signature                : List(Sdecl) -> Decl

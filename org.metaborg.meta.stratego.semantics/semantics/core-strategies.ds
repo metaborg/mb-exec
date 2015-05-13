@@ -17,16 +17,16 @@ imports
   
 rules // identity and failure
 
-  T t |- Id() --> S(t)
+  T t |- Id() --> S(t).
   
-  Fail() --> F()
+  Fail() --> F().
 
 rules // scope (all at once)
 
   Scope(vs, s) --> v
   where
     VPushBatch(vs) -vinit-> _,
-    s --> v
+    s --> v.
 
 signature
   sorts
@@ -43,20 +43,20 @@ rules // term traversal: all
   // <all> 42
   T t |- All(_) --> S(t)
   where
-    t <: TINT
+    t <: TINT.
 
   // <all> "4.5"
   T t |- All(_) --> S(t)
   where
-    t <: TREAL
+    t <: TREAL.
   
   // <all> "string"
   T t |- All(_) --> S(t)
   where
-    t <: TSTR
+    t <: TSTR.
   
   // <all> (tup1, tup2, ...)
-  T t TF tf |- All(s) --> S(t'')
+  T t, TF tf |- All(s) --> S(t'')
   where
     t <: TTUP,
     getAllSubterms[t]() => ts,
@@ -65,17 +65,17 @@ rules // term traversal: all
     ats' <: TLIST, 
     getAllSubterms[ats']() => ts',
     makeTuple[tf](ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t''
+    annotateTerm[tf](t', getAnnotations[t]()) => t''.
 
   // <all> [a, b, c, ...]
-  T t TF tf |- All(s) --> S(ats'')
+  T t, TF tf |- All(s) --> S(ats'')
   where
     t <: TLIST,
     T t |- map(s) -map-> S(ats'),
-    annotateTerm[tf](ats', getAnnotations[t]()) => ats''
+    annotateTerm[tf](ats', getAnnotations[t]()) => ats''.
 
   // <all> TNAME(t1, t2, ...)
-  T t TF tf |- All(s) --> S(t'')
+  T t, TF tf |- All(s) --> S(t'')
   where
     t <: TAPPL,
     getConstructor[t]() => ac,
@@ -85,18 +85,18 @@ rules // term traversal: all
     ats' <: TLIST,
     getAllSubterms[ats']() => ts', // FIXME: extremely inefficient
     makeAppl[tf](ac, ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over the old annotations
+    annotateTerm[tf](t', getAnnotations[t]()) => t''. // copy over the old annotations
 
   All(_) --> F()
   where
-    all-fail
+    all-fail.
 
   T t |- map(_) -map-> S(t)
   where
     t <: TLIST,
-    isEmpty[t]() == true
+    isEmpty[t]() == true.
   
-  T t TF tf |- map(s) -map-> S(ts'')
+  T t, TF tf |- map(s) -map-> S(ts'')
   where
     t <: TLIST,
     isEmpty[t]() == false,
@@ -105,11 +105,11 @@ rules // term traversal: all
     T th |- s --> S(th'),
     T ts |- map(s) -map-> S(ts'),
     ts' <: TLIST,
-    makeListCons[tf](th', ts') => ts''
+    makeListCons[tf](th', ts') => ts''.
 
   map(_) -map-> F()
   where
-    all-fail
+    all-fail.
 
 signature
   sorts
@@ -124,25 +124,25 @@ signature
 rules // term traversal: one
   
   // <one> (tup1, tup2, ...)
-  T t TF tf |- One(s) --> S(t'')
+  T t, TF tf |- One(s) --> S(t'')
   where
     t <: TTUP,
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
     T ats |- first(s) -first-> S(t'),
-    annotateTerm[tf](t', getAnnotations[t]()) => t''
+    annotateTerm[tf](t', getAnnotations[t]()) => t''.
   
   // <one> [a, b, c, ...]
-  T t TF tf |- One(s) --> S(ats'')
+  T t, TF tf |- One(s) --> S(ats'')
   where
     t <: TLIST,
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
     T ats |- first(s) -first-> S(ats'),
-    annotateTerm[tf](ats', getAnnotations[t]()) => ats''
+    annotateTerm[tf](ats', getAnnotations[t]()) => ats''.
   
   // <one> TNAME(t1, t2, t3, ...)
-  T t TF tf |- One(s) --> S(t'')
+  T t, TF tf |- One(s) --> S(t'')
   where
     t <: TAPPL,
     getConstructor[t]() => ac,
@@ -152,29 +152,29 @@ rules // term traversal: one
     ats' <: TLIST,
     getAllSubterms[ats']() => ts',
     makeAppl[tf](ac, ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
+    annotateTerm[tf](t', getAnnotations[t]()) => t''. // copy over annotations
   
   One(_) --> F()
-  where all-fail
+  where all-fail.
   
   // empty candidate list
   T t |- first(_) -first-> F()
   where
     t <: TLIST,
-    isEmpty[t]() == true
+    isEmpty[t]() == true.
   
   // non-empty head success
-  T t TF tf |- first(s) -first-> S(t')
+  T t, TF tf |- first(s) -first-> S(t')
   where
     t <: TLIST,
     isEmpty[t]() == false,
     head[t]() => th,
     tail[t]() => tl,
     T th |- s --> S(th'),
-    makeListCons[tf](th', tl) => t'
+    makeListCons[tf](th', tl) => t'.
   
   // non-empty head failure
-  T t TF tf |- first(s) -first-> S(t')
+  T t, TF tf |- first(s) -first-> S(t')
   where
     t <: TLIST,
     isEmpty[t]() == false,
@@ -183,45 +183,45 @@ rules // term traversal: one
     T th |- s --> F(),
     T tl |- first(s) -first-> S(tl'),
     tl' <: TLIST,
-    makeListCons[tf](th, tl') => t'
+    makeListCons[tf](th, tl') => t'.
   
   first(_) -first-> F()
-  where all-fail
+  where all-fail.
 
 rules // term traversal: some
 
   // <some> (t1, t2, ...)
-  T t TF tf |- Some(s) --> S(t'')
+  T t, TF tf |- Some(s) --> S(t'')
   where
     t <: TTUP,
     getAllSubterms[t]() => ts,
-    T makeList[tf](ts) |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true.,
+    T makeList[tf](ts) |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true,
     makeTuple[tf](getAllSubterms[ats']()) => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t''
+    annotateTerm[tf](t', getAnnotations[t]()) => t''.
   
   // <some> [t1, t2, ...]
-  T t TF tf |- Some(s) --> S(ats'')
+  T t, TF tf |- Some(s) --> S(ats'')
   where
     t <: TLIST,
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
-    T ats |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true.,
-    annotateTerm[tf](ats', getAnnotations[t]()) => ats''
+    T ats |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true,
+    annotateTerm[tf](ats', getAnnotations[t]()) => ats''.
 
   // <some> TNAME(t1, t2, )
-  T t TF tf |- Some(s) --> S(t'')
+  T t, TF tf |- Some(s) --> S(t'')
   where
     t <: TAPPL,
     getConstructor[t]() => ac,
     getAllSubterms[t]() => ts,
     makeList[tf](ts) => ats,
-    T ats |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true.,
+    T ats |- oneOrMore(s) :: Bool false -some-> ats' :: Bool true,
     getAllSubterms[ats']() => ts',
     makeAppl[tf](ac, ts') => t',
-    annotateTerm[tf](t', getAnnotations[t]()) => t'' // copy over annotations
+    annotateTerm[tf](t', getAnnotations[t]()) => t''. // copy over annotations
 
   Some(_) --> F()
-  where all-fail
+  where all-fail.
 
 signature
   sorts
@@ -236,27 +236,27 @@ signature
 rules
 
   // case t == []: return untouched list
-  T t |- oneOrMore(_) :: Bool _ -some-> t :: Bool false.
+  T t |- oneOrMore(_) :: Bool _ -some-> t :: Bool false
   where
     t <: TLIST,
-    isEmpty[t]() == true
+    isEmpty[t]() == true.
   
   // case t == [t1 | ts] and <not(s)> t1
-  T t TF tf |- oneOrMore(s) :: Bool f -some-> list' :: Bool boolOr(f, f').
+  T t, TF tf |- oneOrMore(s) :: Bool f -some-> list' :: Bool boolOr(f, f')
   where
     t <: TLIST,
     isEmpty[t]() == false,
     head[t]() => head,
     T head |- s --> F(),
-    T tail[t]() |- oneOrMore(s) :: Bool f -some-> tail' :: Bool f'.,
-    makeListCons[tf](head, tail') => list'
+    T tail[t]() |- oneOrMore(s) :: Bool f -some-> tail' :: Bool f',
+    makeListCons[tf](head, tail') => list'.
   
   // case t == [t1 | t2] and <s> t1 
-  T t TF tf |- oneOrMore(s) :: Bool f -some-> list' :: Bool true.
+  T t, TF tf |- oneOrMore(s) :: Bool f -some-> list' :: Bool true
   where
     t <: TLIST,
     isEmpty[t]() == false,
     T head[t]() |- s --> S(head'),
-    T tail[t]() |- oneOrMore(s) :: Bool true -some-> tail' :: Bool f'.,
-    makeListCons[tf](head', tail') => list'
+    T tail[t]() |- oneOrMore(s) :: Bool true -some-> tail' :: Bool f',
+    makeListCons[tf](head', tail') => list'.
     

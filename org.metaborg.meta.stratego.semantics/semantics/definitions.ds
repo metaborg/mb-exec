@@ -21,17 +21,17 @@ rules // let - in - end
   where
     sdefNames(sdefs) -exid-> snames,
     SParAlloc(snames) -salloc-> _,
-    letEval(sdefs, s) -leteval-> v
+    letEval(sdefs, s) -leteval-> v.
   
   letEval([], in_s) -leteval-> v
   where
-    in_s --> v
+    in_s --> v.
   
   letEval([sdef@SDefT(sname, _, _, _) | sdefs], in_s) -leteval-> v
   where
     sdef -mkthunk-> thunk,
     SUpdate(sname, thunk) -salloc-> _,
-    letEval(sdefs, in_s) -leteval-> v
+    letEval(sdefs, in_s) -leteval-> v.
     
 signature
   sorts
@@ -54,36 +54,36 @@ rules // strategy definitions
   Specification([_, Strategies(ss)]) -allocmodule-> U()
   where
     allocDefs(ss) -allocsdefs-> allocdDefs(ss'),
-    storeDefs(ss') -storesdefs-> _
+    storeDefs(ss') -storesdefs-> _.
   
-  allocDefs([]) -allocsdefs-> allocdDefs([])
+  allocDefs([]) -allocsdefs-> allocdDefs([]).
   
   allocDefs([AnnoDef(_, sdef') | sdefs]) -allocsdefs-> ad
   where
-    allocDefs([sdef' | sdefs]) -allocsdefs-> ad
+    allocDefs([sdef' | sdefs]) -allocsdefs-> ad.
   
   allocDefs([ExtSDef(sname, _, _) | sdefs]) -allocsdefs-> ad
   where
     SSoftAlloc(sname) -salloc-> _,
-    allocDefs(sdefs) -allocsdefs-> ad
+    allocDefs(sdefs) -allocsdefs-> ad.
   
   allocDefs([sdef@SDefT(sname, _, _, _) | sdefs]) -allocsdefs-> allocdDefs([sdef | sdefs'])
   where
     SAlloc(sname) -salloc-> _,
-    allocDefs(sdefs) -allocsdefs-> allocdDefs(sdefs')
+    allocDefs(sdefs) -allocsdefs-> allocdDefs(sdefs').
   
-  storeDefs([]) -storesdefs-> U()
+  storeDefs([]) -storesdefs-> U().
   
   storeDefs([sdef@SDefT(sname, _, _, _) | sdefs]) -storesdefs-> U()
   where
     sdef -mkthunk-> thunk,
     SUpdate(sname, thunk) -salloc-> _,
-    storeDefs(sdefs) -storesdefs-> _
+    storeDefs(sdefs) -storesdefs-> _.
   
-  VEnv e SEnv d |- SDefT(sname, ss, ts, s) -mkthunk-> Thunk(sname, ss', ts', s, e, d)
+  VEnv e, SEnv d |- SDefT(sname, ss, ts, s) -mkthunk-> Thunk(sname, ss', ts', s, e, d)
   where
     typedIds(ss) -exid-> ss',
-    typedIds(ts) -exid-> ts'
+    typedIds(ts) -exid-> ts'.
   
 signature
   sorts
@@ -98,18 +98,18 @@ signature
     
 rules // typedid name extractor
 
-  typedIds([]) -exid-> [] : List(String)
+  typedIds([]) -exid-> [] : List(String).
  
   typedIds([VarDec(x, _) | xs]) -exid-> [ x | xs' ]
   where
-    typedIds(xs) -exid-> xs'
+    typedIds(xs) -exid-> xs'.
 
 rules // SDefT name extractor
 
-  sdefNames([]) -exid-> [] : List(String)
+  sdefNames([]) -exid-> [] : List(String).
   
   sdefNames([SDefT(sname, _, _, _) | sdefs]) -exid-> [sname | snames]
   where
-    sdefNames(sdefs) -exid-> snames
+    sdefNames(sdefs) -exid-> snames.
 
 
