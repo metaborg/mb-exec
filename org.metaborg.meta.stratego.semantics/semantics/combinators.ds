@@ -16,7 +16,7 @@ rules // sequential composition
   
   Seq(s1, s2) --> v2
   where
-    s1 --> S(t'),
+    s1 --> S(t');
     T t' |- s2 --> v2.
         
   Seq(s1, _) --> v1
@@ -27,12 +27,12 @@ rules // guarded choice
         
   GuardedLChoice(s1, s2, _) --> v2
   where
-    s1 --> S(t),
+    s1 --> S(t);
     T t |- s2 --> v2.
                 
   GuardedLChoice(s1, _, s3) --> v3
   where
-    s1 --> F(),
+    s1 --> F();
     s3 --> v3.
 
 rules // left choice
@@ -43,5 +43,5 @@ rules // left choice
   
   LChoice(s1, s2) --> v2
   where
-    s1 --> F(),
+    s1 --> F();
     s2 --> v2.

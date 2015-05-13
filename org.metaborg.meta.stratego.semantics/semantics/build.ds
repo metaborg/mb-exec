@@ -27,9 +27,9 @@ rules // build
 
   TF tf |- Build(Anno(t, annos)) --> S(aterm)
   where
-    b(t) -bld-> BS(at),
-    b(annos) -bld-> BS(annos_aterm),
-    annos_aterm <: TLIST,
+    b(t) -bld-> BS(at);
+    b(annos) -bld-> BS(annos_aterm);
+    annos_aterm <: TLIST;
     annotateTerm[tf](at, annos_aterm) => aterm.
   
   Build(Var(x)) --> S(t)
@@ -48,12 +48,12 @@ rules // actual term building
       
   TF tf |- b(Int(stringI)) -bld-> BS(aint)
   where
-    parseInt(stringI) => i',
+    parseInt(stringI) => i';
     makeInt[tf](i') => aint.
   
   TF tf |- b(Real(stringR)) -bld-> BS(areal)
   where
-    parseReal(stringR) => r',
+    parseReal(stringR) => r';
     makeReal[tf](r') => areal.
   
   TF tf |- b(Str(s)) -bld-> BS(astr)
@@ -63,9 +63,9 @@ rules // actual term building
   // Implode Int
   b(Explode(cname_expr, ts_expr)) -bld-> BS(c)
   where
-    Build(cname_expr) --> S(c),
-    Build(ts_expr) --> S(ts), // just to make sure we cause the right side-effects
-    ts <: TLIST,
+    Build(cname_expr) --> S(c);
+    Build(ts_expr) --> S(ts); // just to make sure we cause the right side-effects
+    ts <: TLIST;
     c <: TINT.
   
   // TODO Implode Real
@@ -73,45 +73,45 @@ rules // actual term building
   // Implode List
   b(Explode(cname_expr, ts_expr)) -bld-> BS(ts)
   where
-    Build(cname_expr) --> S(c),
-    Build(ts_expr) --> S(ts),
-    ts <: TLIST,
+    Build(cname_expr) --> S(c);
+    Build(ts_expr) --> S(ts);
+    ts <: TLIST;
     c <: TLIST.
   
   // Implode Tuple
   TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(tupl)
   where
-    Build(cname_expr) --> S(c),
-    Build(ts_expr) --> S(ts),
-    ts <: TLIST,
-    c <: TSTR,
-    stringValue[c]() => cname,
-    cname == "",
+    Build(cname_expr) --> S(c);
+    Build(ts_expr) --> S(ts);
+    ts <: TLIST;
+    c <: TSTR;
+    stringValue[c]() => cname;
+    cname == "";
     makeTuple[tf](getAllSubterms[ts]()) => tupl.
 
   // Implode String
   TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(s)
   where
-    Build(cname_expr) --> S(c),
-    Build(ts_expr) --> S(ts),
-    ts <: TLIST,
-    c <: TSTR,
-    stringValue[c]() => cname,
-    isQuotedString(cname) == true,
-    unquoteString(cname) => svalue,
+    Build(cname_expr) --> S(c);
+    Build(ts_expr) --> S(ts);
+    ts <: TLIST;
+    c <: TSTR;
+    stringValue[c]() => cname;
+    isQuotedString(cname) == true;
+    unquoteString(cname) => svalue;
     makeString[tf](svalue) => s.
   
   // Implode Appl
   TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(appl)
   where
-    Build(cname_expr) --> S(c),
-    Build(ts_expr) --> S(ts),
-    ts <: TLIST,
-    c <: TSTR,
-    stringValue[c]() => cname,
-    isQuotedString(cname) == false,
-    makeConstructor[tf](cname, size[ts]()) => constr,
-    getAllSubterms[ts]() => kids,
+    Build(cname_expr) --> S(c);
+    Build(ts_expr) --> S(ts);
+    ts <: TLIST;
+    c <: TSTR;
+    stringValue[c]() => cname;
+    isQuotedString(cname) == false;
+    makeConstructor[tf](cname, size[ts]()) => constr;
+    getAllSubterms[ts]() => kids;
     makeAppl[tf](constr, kids) => appl.
 
   b(_) -bld-> BF()
@@ -122,7 +122,7 @@ rules // actual term building
 
   bl([texpr | texprs]) -blds-> BSS([tx | txs])
   where
-    Build(texpr) --> S(tx), // tx may be an ATerm list (if it's a varexpr)
+    Build(texpr) --> S(tx); // tx may be an ATerm list (if it's a varexpr)
     bl(texprs) -blds-> BSS(txs).
   
   bl(_) -blds-> BF()
@@ -138,18 +138,18 @@ rules
 
   b(op@Op("Nil", ts)) -bld-> bv
   where
-    length(ts) == 0,
+    length(ts) == 0;
     bList(op) -bld-> bv.
   
   // Appl dispatch
   b(op@Op("Nil", ts)) -bld-> bv
   where
-    length(ts) != 0,
+    length(ts) != 0;
     bAppl(op) -bld-> bv.
 
   b(op@Op("Cons", ts)) -bld-> bv
   where
-    length(ts) == 2,
+    length(ts) == 2;
     bList(op) -bld-> bv.
   
   TF tf |- bList(Op(_, [])) -bld-> BS(nil)
@@ -158,36 +158,36 @@ rules
 
   TF tf |- bList(Op(_, [t1, t2])) -bld-> BS(makeListCons[tf](head, tail))
   where
-    TF tf |- Build(t1) --> S(head),
-    TF tf |- Build(t2) --> S(tail),
+    TF tf |- Build(t1) --> S(head);
+    TF tf |- Build(t2) --> S(tail);
     tail <: TLIST.
 
   // Appl dispatch
   b(op@Op("Cons", ts)) -bld-> bv
   where
-    length(ts) != 2,
+    length(ts) != 2;
     bAppl(op) -bld-> bv.
   
   TF tf |- b(Op("", ts)) -bld-> BS(makeTuple[tf](ts''))
   where
-    TF tf |- bl(ts) -blds-> BSS(ts'),
+    TF tf |- bl(ts) -blds-> BSS(ts');
     List2TARRAY(ts') => ts''.
 
   // Appl dispatch
   b(Op(c, ts)) -bld-> bv
   where
-    c != "Cons",
-    c != "Nil",
-    c != "",
+    c != "Cons";
+    c != "Nil";
+    c != "";
     bAppl(Op(c, ts)) -bld-> bv.
   
   // NB: specialization possible on constant length(ts)
   TF tf |- bAppl(Op(c, ts)) -bld-> BS(appl)
   where
-    length(ts) => numts,
-    makeConstructor[tf](c, numts) => constr,
-    bl(ts) -blds-> BSS(ts'),
-    List2TARRAY(ts') => ts'',
+    length(ts) => numts;
+    makeConstructor[tf](c, numts) => constr;
+    bl(ts) -blds-> BSS(ts');
+    List2TARRAY(ts') => ts'';
     makeAppl[tf](constr, ts'') => appl.
   
   bAppl(_) -bld-> BF()

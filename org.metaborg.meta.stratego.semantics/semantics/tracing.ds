@@ -31,8 +31,8 @@ rules
   
   tracing(name, s) --> v
   where
-    pushTrace(name) -trace-> _,
-    s --> v,
+    pushTrace(name) -trace-> _;
+    s --> v;
     popTrace(v) -trace-> _.
   
   pushTrace(sname) :: Trace t -trace-> true :: Trace t

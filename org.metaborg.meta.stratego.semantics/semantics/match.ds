@@ -27,8 +27,8 @@ rules // match dispatch annotations
 
   T t |- Match(Anno(mp, ma)) --> S(t)
   where
-    T t  |- m(mp) -ma-> S(_),
-    getAnnotations[t]() => aa,
+    T t  |- m(mp) -ma-> S(_);
+    getAnnotations[t]() => aa;
     T aa |- m(ma) -ma-> S(_).
 
   T t |- Match(Var(x)) --> S(t)
@@ -49,65 +49,65 @@ rules // actual matching
 
   T t |- m(Int(stringI)) -ma-> S(t)
   where
-    t <: TINT,
-    intValue[t]() => i',
-    parseInt(stringI) => i,
+    t <: TINT;
+    intValue[t]() => i';
+    parseInt(stringI) => i;
     i == i'.
   
   T t |- m(Real(stringR)) -ma-> S(t)
   where
-    t <: TREAL,
-    realValue[t]() => r',
-    parseReal(stringR) => r,
+    t <: TREAL;
+    realValue[t]() => r';
+    parseReal(stringR) => r;
     r == r'.
   
   T t |- m(Str(s)) -ma-> S(t)
   where
-    t <: TSTR,
-    stringValue[t]() => s',
+    t <: TSTR;
+    stringValue[t]() => s';
     s == s'.
 
   // match against unbound variable
   T t |- m(Var(x)) -ma-> v
   where
-    VLookup(x) -vlook-> F(),
-    S(t) => v,
+    VLookup(x) -vlook-> F();
+    S(t) => v;
     VUpdate(x, v) -vupdate-> _.
 
   // match against bound variable
   T t |- m(Var(x)) -ma-> S(t)
   where
-    VLookup(x) -vlook-> S(t'),
+    VLookup(x) -vlook-> S(t');
     t == t'.
 
   // compound As with unbound variable. The variable is only bound if the match succeeds.
   T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    VLookup(x) -vlook-> F(),
-    Match(p) --> S(_),
+    VLookup(x) -vlook-> F();
+    Match(p) --> S(_);
     VUpdate(x, S(t)) -vupdate-> _.
   
   // compound As with bound variable
   T t |- m(As(Var(x), p)) -ma-> S(t)
   where
-    VLookup(x) -vlook-> S(xt),
-    t == xt,
+    VLookup(x) -vlook-> S(xt);
+    t == xt;
     T t |- Match(p) --> S(_).
 
   // Explode Appl
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    t <: TAPPL,
-    makeString[tf](getName[getConstructor[t]()]()) => constr,
-    T constr |- Match(ct) --> S(_),
-    makeList[tf](getAllSubterms[t]()) => kids,
+    t <: TAPPL;
+    makeString[tf](getName[getConstructor[t]()]()) => constr;
+    T constr |- Match(ct) --> S(_);
+    makeList[tf](getAllSubterms[t]()) => kids;
     T kids |- Match(ts) --> S(_).
   
   // Explode Int
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    t <: TINT,
-    T t |- Match(ct) --> S(_),
+    t <: TINT;
+    T t |- Match(ct) --> S(_);
     T makeNil(tf) |- Match(ts) --> S(_).
   
   // TODO Explode Real
@@ -115,26 +115,26 @@ rules // actual matching
   // Explode String
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    t <: TSTR,
-    annotateTerm[tf](t, makeNil(tf)) => tnoanno,
-    makeString[tf](toString[tnoanno]()) => constr,
-    T constr |- Match(ct) --> S(_),
+    t <: TSTR;
+    annotateTerm[tf](t, makeNil(tf)) => tnoanno;
+    makeString[tf](toString[tnoanno]()) => constr;
+    T constr |- Match(ct) --> S(_);
     T makeNil(tf) |- Match(ts) --> S(_).
   
   // Explode List
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    t <: TLIST,
-    T makeNil(tf) |- Match(ct) --> S(_),
+    t <: TLIST;
+    T makeNil(tf) |- Match(ct) --> S(_);
     T t |- Match(ts) --> S(_).
   
   // Explode Tuple
   T t, TF tf |- m(Explode(ct, ts)) -ma-> S(t)
   where
-    t <: TTUP,
-    makeString[tf]("") => constr,
-    T constr |- Match(ct) --> S(_),
-    makeList[tf](getAllSubterms[t]()) => kids,
+    t <: TTUP;
+    makeString[tf]("") => constr;
+    T constr |- Match(ct) --> S(_);
+    makeList[tf](getAllSubterms[t]()) => kids;
     T kids |- Match(ts) --> S(_).
     
   // match failure
@@ -145,15 +145,15 @@ rules // actual matching
   // match an empty list
   T t |- [] : List(STerm) -ma-> S(t)
   where
-    t <: TLIST,
+    t <: TLIST;
     isEmpty[t]() == true.
   
   // match a non-empty list
   T t |- [p | ps] : List(STerm) -ma-> S(t)
   where
-    t <: TLIST,
-    isEmpty[t]() == false,
-    T head[t]() |- Match(p) --> S(_),
+    t <: TLIST;
+    isEmpty[t]() == false;
+    T head[t]() |- Match(p) --> S(_);
     T tail[t]() |- ps -ma-> S(_).
   
   _ : List(STerm) -ma-> F()
@@ -177,24 +177,24 @@ rules
   
   m(op@Op("Cons", pts)) -ma-> mv
   where
-    length(pts) == 2,
+    length(pts) == 2;
     mList(op) -ma-> mv.
   
   m(op@Op("Cons", pts)) -ma-> mv
   where
-    length(pts) != 2,
+    length(pts) != 2;
     mAppl(op) -ma-> mv.
   
   T t |- mList(Op(_, [])) -ma-> S(t)
   where
-    t <: TLIST,
+    t <: TLIST;
     isEmpty[t]() == true.
   
   T t |- mList(Op(_, [p1, p2])) -ma-> S(t)
   where
-    t <: TLIST,
-    isEmpty[t]() == false,
-    T head[t]() |- Match(p1) --> S(_),
+    t <: TLIST;
+    isEmpty[t]() == false;
+    T head[t]() |- Match(p1) --> S(_);
     T tail[t]() |- Match(p2) --> S(_).
   
   mList(_) -ma-> F()
@@ -202,26 +202,26 @@ rules
   
   T t, TF tf |- m(Op("", pts)) -ma-> S(t)
   where
-    t <: TTUP,
-    getAllSubterms[t]() => elems,
+    t <: TTUP;
+    getAllSubterms[t]() => elems;
     T makeList[tf](elems) |- pts -ma-> S(_).
   
   T t |- m(op@Op(c, _)) -ma-> S(t)
   where
-    c != "Nil",
-    c != "Cons",
-    c != "",
+    c != "Nil";
+    c != "Cons";
+    c != "";
     mAppl(op) -ma-> S(_).
      
   // match application
   T t, TF tf |- mAppl(Op(c, pts)) -ma-> S(t)
   where
-    t <: TAPPL,
-    getConstructor[t]() => aconstr,
-    getName[aconstr]() => c',
-    c == c',
-    getAllSubterms[t]() => subterms,
-    makeList[tf](subterms) => asubterms,
+    t <: TAPPL;
+    getConstructor[t]() => aconstr;
+    getName[aconstr]() => c';
+    c == c';
+    getAllSubterms[t]() => subterms;
+    makeList[tf](subterms) => asubterms;
     T asubterms |- pts -ma-> S(_).
   
   mAppl(_) -ma-> F()

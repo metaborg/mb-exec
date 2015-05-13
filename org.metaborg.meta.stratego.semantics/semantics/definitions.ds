@@ -19,8 +19,8 @@ rules // let - in - end
 
   Let(sdefs, s) --> v
   where
-    sdefNames(sdefs) -exid-> snames,
-    SParAlloc(snames) -salloc-> _,
+    sdefNames(sdefs) -exid-> snames;
+    SParAlloc(snames) -salloc-> _;
     letEval(sdefs, s) -leteval-> v.
   
   letEval([], in_s) -leteval-> v
@@ -29,8 +29,8 @@ rules // let - in - end
   
   letEval([sdef@SDefT(sname, _, _, _) | sdefs], in_s) -leteval-> v
   where
-    sdef -mkthunk-> thunk,
-    SUpdate(sname, thunk) -salloc-> _,
+    sdef -mkthunk-> thunk;
+    SUpdate(sname, thunk) -salloc-> _;
     letEval(sdefs, in_s) -leteval-> v.
     
 signature
@@ -53,7 +53,7 @@ rules // strategy definitions
   
   Specification([_, Strategies(ss)]) -allocmodule-> U()
   where
-    allocDefs(ss) -allocsdefs-> allocdDefs(ss'),
+    allocDefs(ss) -allocsdefs-> allocdDefs(ss');
     storeDefs(ss') -storesdefs-> _.
   
   allocDefs([]) -allocsdefs-> allocdDefs([]).
@@ -64,25 +64,25 @@ rules // strategy definitions
   
   allocDefs([ExtSDef(sname, _, _) | sdefs]) -allocsdefs-> ad
   where
-    SSoftAlloc(sname) -salloc-> _,
+    SSoftAlloc(sname) -salloc-> _;
     allocDefs(sdefs) -allocsdefs-> ad.
   
   allocDefs([sdef@SDefT(sname, _, _, _) | sdefs]) -allocsdefs-> allocdDefs([sdef | sdefs'])
   where
-    SAlloc(sname) -salloc-> _,
+    SAlloc(sname) -salloc-> _;
     allocDefs(sdefs) -allocsdefs-> allocdDefs(sdefs').
   
   storeDefs([]) -storesdefs-> U().
   
   storeDefs([sdef@SDefT(sname, _, _, _) | sdefs]) -storesdefs-> U()
   where
-    sdef -mkthunk-> thunk,
-    SUpdate(sname, thunk) -salloc-> _,
+    sdef -mkthunk-> thunk;
+    SUpdate(sname, thunk) -salloc-> _;
     storeDefs(sdefs) -storesdefs-> _.
   
   VEnv e, SEnv d |- SDefT(sname, ss, ts, s) -mkthunk-> Thunk(sname, ss', ts', s, e, d)
   where
-    typedIds(ss) -exid-> ss',
+    typedIds(ss) -exid-> ss';
     typedIds(ts) -exid-> ts'.
   
 signature

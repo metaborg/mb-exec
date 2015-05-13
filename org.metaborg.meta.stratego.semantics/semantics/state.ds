@@ -133,7 +133,7 @@ rules
   
   SParAlloc([name | names]) -salloc-> U()
   where
-    SAlloc(name) -salloc-> _,
+    SAlloc(name) -salloc-> _;
     SParAlloc(names) -salloc-> _.
   
     
