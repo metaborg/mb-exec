@@ -10,7 +10,7 @@ import org.spoofax.interpreter.stratego.StupidFormatter;
 import com.github.krukow.clj_ds.PersistentMap;
 
 import ds.generated.interpreter.F_0;
-import ds.generated.interpreter.I_Strategy;
+import ds.generated.interpreter.A_Strategy;
 import ds.generated.interpreter.R_default_Value;
 import ds.generated.interpreter.S_1;
 import ds.generated.interpreter.Thunk_6;
@@ -32,7 +32,7 @@ public class InteropStrategy extends Strategy {
 
 	@Override
 	public IConstruct eval(IContext e) throws InterpreterException {
-		I_Strategy s = thunk._4;
+		A_Strategy s = thunk._4;
 		PersistentMap<String, VBox> venv = thunk._5;
 		PersistentMap<String, SBox> senv = thunk._6;
 

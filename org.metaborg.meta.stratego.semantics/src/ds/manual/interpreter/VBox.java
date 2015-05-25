@@ -3,7 +3,7 @@
  */
 package ds.manual.interpreter;
 
-import ds.generated.interpreter.I_Value;
+import ds.generated.interpreter.A_Value;
 
 /**
  * @author vladvergu
@@ -11,9 +11,9 @@ import ds.generated.interpreter.I_Value;
  */
 public class VBox {
 
-	public I_Value value;
+	public A_Value value;
 
-	public VBox(I_Value value) {
+	public VBox(A_Value value) {
 		this.value = value;
 	}
 }

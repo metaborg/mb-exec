@@ -20,15 +20,15 @@ import org.spoofax.terms.io.binary.TermReader;
 import com.github.krukow.clj_ds.PersistentMap;
 import com.github.krukow.clj_lang.PersistentTreeMap;
 
+import ds.generated.interpreter.A_Module;
+import ds.generated.interpreter.A_Strategy;
+import ds.generated.interpreter.A_Value;
 import ds.generated.interpreter.CallT_3;
 import ds.generated.interpreter.F_0;
-import ds.generated.interpreter.Generic_I_Module;
-import ds.generated.interpreter.Generic_I_StrategyDef;
-import ds.generated.interpreter.I_Module;
-import ds.generated.interpreter.I_Strategy;
-import ds.generated.interpreter.I_Value;
-import ds.generated.interpreter.L_I_STerm;
-import ds.generated.interpreter.L_I_Strategy;
+import ds.generated.interpreter.Generic_A_Module;
+import ds.generated.interpreter.Generic_A_StrategyDef;
+import ds.generated.interpreter.L_A_STerm;
+import ds.generated.interpreter.L_A_Strategy;
 import ds.generated.interpreter.R_allocmodule_Unit;
 import ds.generated.interpreter.R_default_Value;
 import ds.generated.interpreter.SDefT_4;
@@ -79,7 +79,7 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 
 	@Override
 	public void load(IStrategoAppl ctree) throws IOException {
-		I_Module ctreeNode = (I_Module) new Generic_I_Module(
+		A_Module ctreeNode = (A_Module) new Generic_A_Module(
 				NodeSource.fromStrategoTerm(ctree), ctree).specialize(1);
 		R_allocmodule_Unit sdefs_result = ctreeNode.exec_allocmodule(
 				PersistentTreeMap.EMPTY, strategyHeap, strategyEnv);
@@ -109,7 +109,7 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 	@Override
 	public boolean invoke(String sname) {
 		CallT_3 call = new CallT_3(null, new SVar_1(null, sname),
-				new L_I_Strategy(null), new L_I_STerm(null));
+				new L_A_Strategy(null), new L_A_STerm(null));
 		return evaluate(call);
 	}
 
@@ -126,19 +126,19 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 					factory.makeList(), factory.makeList(), sExpr);
 		}
 
-		SDefT_4 sdef = (SDefT_4) new Generic_I_StrategyDef(null, sExpr)
+		SDefT_4 sdef = (SDefT_4) new Generic_A_StrategyDef(null, sExpr)
 				.specialize(2);
 
 		return evaluate(sdef.get_4());
 	}
 
-	private boolean evaluate(I_Strategy sexpr) {
+	private boolean evaluate(A_Strategy sexpr) {
 		try {
 			R_default_Value result = sexpr.exec_default(new VState(),
 					PersistentTreeMap.EMPTY, getTermFactory(),
 					getCurrentTerm(), strategyHeap, strategyEnv,
 					interopContext, interopContext.getStackTracer(), false);
-			I_Value value = result.value;
+			A_Value value = result.value;
 			StackTracer stacktracer = interopContext.getStackTracer();
 			if (value.match(F_0.class) != null) {
 				stacktracer.popOnFailure();

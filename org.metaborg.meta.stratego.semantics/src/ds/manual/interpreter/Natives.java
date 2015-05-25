@@ -9,7 +9,6 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.terms.io.binary.TermReader;
 
-import ds.generated.interpreter.I_STerm;
 import ds.generated.interpreter.L_T;
 
 public class Natives {

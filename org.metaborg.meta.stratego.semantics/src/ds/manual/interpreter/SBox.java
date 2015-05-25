@@ -3,7 +3,7 @@
  */
 package ds.manual.interpreter;
 
-import ds.generated.interpreter.I_Thunk;
+import ds.generated.interpreter.A_Thunk;
 
 /**
  * @author vladvergu
@@ -11,12 +11,12 @@ import ds.generated.interpreter.I_Thunk;
  */
 public class SBox {
 
-	public I_Thunk thunk;
+	public A_Thunk thunk;
 
 	public SBox() {
 	}
 	
-	public SBox(I_Thunk thunk) {
+	public SBox(A_Thunk thunk) {
 		this.thunk = thunk;
 	}
 }

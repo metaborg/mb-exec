@@ -1,9 +1,7 @@
 package ds.generated.interpreter;
 
-import org.metaborg.meta.interpreter.framework.AbstractNode;
 import org.metaborg.meta.interpreter.framework.Child;
 import org.metaborg.meta.interpreter.framework.Children;
-import org.metaborg.meta.interpreter.framework.INodeList;
 import org.metaborg.meta.interpreter.framework.INodeSource;
 import org.metaborg.meta.interpreter.framework.InterpreterException;
 import org.metaborg.meta.interpreter.framework.InterpreterExitException;
@@ -25,18 +23,18 @@ import ds.manual.interpreter.SState;
 import ds.manual.interpreter.VBox;
 import ds.manual.interpreter.VState;
 
-public class primCall_3 extends AbstractNode implements I_Strategy {
+public class primCall_3 extends A_Strategy {
 
 	@Child
 	public String name;
 
 	@Children
-	public L_I_Thunk thunks;
+	public L_A_Thunk thunks;
 
 	@Children
 	public L_T targs;
 
-	public primCall_3(INodeSource sourceInfo, String sname, L_I_Thunk thunks,
+	public primCall_3(INodeSource sourceInfo, String sname, L_A_Thunk thunks,
 			L_T ats_) {
 		this.setSourceInfo(sourceInfo);
 		this.name = sname;
@@ -60,7 +58,7 @@ public class primCall_3 extends AbstractNode implements I_Strategy {
 		Strategy[] sargs = new Strategy[thunks.size()];
 
 		int i = 0;
-		L_I_Thunk lthunks = thunks;
+		L_A_Thunk lthunks = thunks;
 		while (!lthunks.isEmpty()) {
 			sargs[i] = new InteropStrategy((Thunk_6) lthunks.head(),
 					stacktracer, sheap, vheap);

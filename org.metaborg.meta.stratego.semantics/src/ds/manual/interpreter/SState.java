@@ -2,7 +2,7 @@ package ds.manual.interpreter;
 
 import com.github.krukow.clj_ds.PersistentMap;
 
-import ds.generated.interpreter.I_Thunk;
+import ds.generated.interpreter.A_Thunk;
 
 public class SState {
 
@@ -19,16 +19,16 @@ public class SState {
 	}
 
 	public PersistentMap<String, SBox> allocupdate(
-			PersistentMap<String, SBox> senv, String name, I_Thunk thunk) {
+			PersistentMap<String, SBox> senv, String name, A_Thunk thunk) {
 		return senv.plus(name, new SBox(thunk));
 	}
 
-	public I_Thunk lookup(PersistentMap<String, SBox> senv, String name) {
+	public A_Thunk lookup(PersistentMap<String, SBox> senv, String name) {
 		return ((SBox) senv.get(name)).thunk;
 	}
 
 	public PersistentMap<String, SBox> update(PersistentMap<String, SBox> senv,
-			String name, I_Thunk thunk) {
+			String name, A_Thunk thunk) {
 		SBox box = (SBox) senv.get(name);
 		box.thunk = thunk;
 		return senv;

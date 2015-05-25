@@ -4,14 +4,14 @@ import org.metaborg.meta.interpreter.framework.L_String;
 
 import com.github.krukow.clj_ds.PersistentMap;
 
+import ds.generated.interpreter.A_Value;
 import ds.generated.interpreter.F_0;
-import ds.generated.interpreter.I_Value;
 
 public class VState {
 
 	private static F_0 failCons = new F_0(null);
 
-	public I_Value lookup(PersistentMap<String, VBox> venv, String x) {
+	public A_Value lookup(PersistentMap<String, VBox> venv, String x) {
 		return ((VBox) venv.get(x)).value;
 	}
 
@@ -33,12 +33,12 @@ public class VState {
 	}
 
 	public PersistentMap<String, VBox> allocupdate(
-			PersistentMap<String, VBox> venv, String x, I_Value v) {
+			PersistentMap<String, VBox> venv, String x, A_Value v) {
 		return venv.plus(x, new VBox(v));
 	}
 
 	public PersistentMap<String, VBox> update(PersistentMap<String, VBox> venv,
-			String x, I_Value v) {
+			String x, A_Value v) {
 		VBox box = (VBox) venv.get(x);
 		box.value = v;
 		return venv;
