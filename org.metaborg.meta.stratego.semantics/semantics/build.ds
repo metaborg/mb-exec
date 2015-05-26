@@ -12,56 +12,51 @@ signature
     BuildRes
     
   constructors
-    b   : PreTerm -> Builder
-    bl  : List(STerm) -> Builder
-
     BS  : T -> BuildRes
     BSS : List(T) -> BuildRes
     BF  : BuildRes
     
   arrows
-    Builder -bld-> BuildRes
-    Builder -blds-> BuildRes
+    PreTerm -bld-> BuildRes
 
 rules // build
 
   TF tf |- Build(Anno(t, annos)) --> S(aterm)
   where
-    b(t) -bld-> BS(at);
-    b(annos) -bld-> BS(annos_aterm);
+    t -bld-> BS(at);
+    annos -bld-> BS(annos_aterm);
     annos_aterm <: TLIST;
     annotateTerm[tf](at, annos_aterm) => aterm.
   
   Build(Var(x)) --> S(t)
   where
-    b(Var(x)) -bld-> BS(t).
+    Var(x) -bld-> BS(t).
   
   Build(_) --> F()
-  where
-    all-fail.
+  where all-fail.
 
 rules // actual term building
 
-  b(Var(x)) -bld-> BS(t)
+  Var(x) -bld-> BS(t)
   where
     VLookup(x) -vlook-> S(t).
       
-  TF tf |- b(Int(stringI)) -bld-> BS(aint)
+  TF tf |- Int(stringI) -bld-> BS(aint)
   where
     parseInt(stringI) => i';
     makeInt[tf](i') => aint.
   
-  TF tf |- b(Real(stringR)) -bld-> BS(areal)
+  TF tf |- Real(stringR) -bld-> BS(areal)
   where
     parseReal(stringR) => r';
     makeReal[tf](r') => areal.
   
-  TF tf |- b(Str(s)) -bld-> BS(astr)
+  TF tf |- Str(s) -bld-> BS(astr)
   where
     makeString[tf](s) => astr.
   
   // Implode Int
-  b(Explode(cname_expr, ts_expr)) -bld-> BS(c)
+  Explode(cname_expr, ts_expr) -bld-> BS(c)
   where
     Build(cname_expr) --> S(c);
     Build(ts_expr) --> S(ts); // just to make sure we cause the right side-effects
@@ -71,7 +66,7 @@ rules // actual term building
   // TODO Implode Real
   
   // Implode List
-  b(Explode(cname_expr, ts_expr)) -bld-> BS(ts)
+  Explode(cname_expr, ts_expr) -bld-> BS(ts)
   where
     Build(cname_expr) --> S(c);
     Build(ts_expr) --> S(ts);
@@ -79,7 +74,7 @@ rules // actual term building
     c <: TLIST.
   
   // Implode Tuple
-  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(tupl)
+  TF tf |- Explode(cname_expr, ts_expr) -bld-> BS(tupl)
   where
     Build(cname_expr) --> S(c);
     Build(ts_expr) --> S(ts);
@@ -90,7 +85,7 @@ rules // actual term building
     makeTuple[tf](getAllSubterms[ts]()) => tupl.
 
   // Implode String
-  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(s)
+  TF tf |- Explode(cname_expr, ts_expr) -bld-> BS(s)
   where
     Build(cname_expr) --> S(c);
     Build(ts_expr) --> S(ts);
@@ -102,7 +97,7 @@ rules // actual term building
     makeString[tf](svalue) => s.
   
   // Implode Appl
-  TF tf |- b(Explode(cname_expr, ts_expr)) -bld-> BS(appl)
+  TF tf |- Explode(cname_expr, ts_expr) -bld-> BS(appl)
   where
     Build(cname_expr) --> S(c);
     Build(ts_expr) --> S(ts);
@@ -114,84 +109,86 @@ rules // actual term building
     getAllSubterms[ts]() => kids;
     makeAppl[tf](constr, kids) => appl.
 
-  b(_) -bld-> BF()
-  where
-    all-fail.
-
-  bl([]) -blds-> BSS([]).
-
-  bl([texpr | texprs]) -blds-> BSS([tx | txs])
-  where
-    Build(texpr) --> S(tx); // tx may be an ATerm list (if it's a varexpr)
-    bl(texprs) -blds-> BSS(txs).
-  
-  bl(_) -blds-> BF()
-  where
-    all-fail.
+  _ : PreTerm -bld-> BF().
 
 signature
-  constructors
-    bAppl : PreTerm -> Builder
-    bList : PreTerm -> Builder
-    
+  arrows
+    List(STerm) -blds-> BuildRes
+
 rules
 
-  b(op@Op("Nil", ts)) -bld-> bv
+  [] : List(STerm) -blds-> BSS([]). // FIX
+
+  [texpr | texprs] : List(STerm) -blds-> BSS([tx | txs]) // FIX
+  where
+    Build(texpr) --> S(tx); // tx may be an ATerm list (if it's a varexpr)
+    texprs -blds-> BSS(txs).
+  
+  _ : List(STerm) -blds-> BF()
+  where all-fail.
+
+signature
+  arrows
+    PreTerm -bldlst-> BuildRes
+    PreTerm -bldappl-> BuildRes
+
+rules
+
+  op@Op("Nil", ts) -bld-> bv
   where
     length(ts) == 0;
-    bList(op) -bld-> bv.
+    op -bldlst-> bv.
   
   // Appl dispatch
-  b(op@Op("Nil", ts)) -bld-> bv
+  op@Op("Nil", ts) -bld-> bv
   where
     length(ts) != 0;
-    bAppl(op) -bld-> bv.
+    op -bldappl-> bv.
 
-  b(op@Op("Cons", ts)) -bld-> bv
+  op@Op("Cons", ts) -bld-> bv
   where
     length(ts) == 2;
-    bList(op) -bld-> bv.
+    op -bldlst-> bv.
   
-  TF tf |- bList(Op(_, [])) -bld-> BS(nil)
+  TF tf |- Op(_, []) -bldlst-> BS(nil)
   where
     makeNil(tf) => nil.
 
-  TF tf |- bList(Op(_, [t1, t2])) -bld-> BS(makeListCons[tf](head, tail))
+  TF tf |- Op(_, [t1, t2]) -bldlst-> BS(makeListCons[tf](head, tail))
   where
     TF tf |- Build(t1) --> S(head);
     TF tf |- Build(t2) --> S(tail);
     tail <: TLIST.
 
   // Appl dispatch
-  b(op@Op("Cons", ts)) -bld-> bv
+  op@Op("Cons", ts) -bld-> bv
   where
     length(ts) != 2;
-    bAppl(op) -bld-> bv.
+    op -bldappl-> bv.
   
-  TF tf |- b(Op("", ts)) -bld-> BS(makeTuple[tf](ts''))
+  TF tf |- Op("", ts) -bld-> BS(makeTuple[tf](ts''))
   where
-    TF tf |- bl(ts) -blds-> BSS(ts');
+    TF tf |- ts -blds-> BSS(ts');
     List2TARRAY(ts') => ts''.
 
   // Appl dispatch
-  b(Op(c, ts)) -bld-> bv
+  Op(c, ts) -bld-> bv
   where
     c != "Cons";
     c != "Nil";
     c != "";
-    bAppl(Op(c, ts)) -bld-> bv.
+    Op(c, ts) -bldappl-> bv.
   
   // NB: specialization possible on constant length(ts)
-  TF tf |- bAppl(Op(c, ts)) -bld-> BS(appl)
+  TF tf |- Op(c, ts) -bldappl-> BS(appl)
   where
     length(ts) => numts;
     makeConstructor[tf](c, numts) => constr;
-    bl(ts) -blds-> BSS(ts');
+    ts -blds-> BSS(ts');
     List2TARRAY(ts') => ts'';
     makeAppl[tf](constr, ts'') => appl.
   
-  bAppl(_) -bld-> BF()
-  where all-fail.
+  _ : PreTerm -bldappl-> BF().
   
 signature
   native operators

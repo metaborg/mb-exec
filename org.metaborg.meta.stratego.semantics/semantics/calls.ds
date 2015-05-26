@@ -13,7 +13,7 @@ rules // calls
   VEnv e, SEnv d |- CallT(SVar(sname), ass, ats) --> v
   where
     SEnv d |- SLookup(sname) -slook-> Thunk(_, fss, fts, s, e_def, d_def);
-    VEnv e |- bl(ats) -blds-> BSS(ats'); // build term arguments    
+    VEnv e |- ats -blds-> BSS(ats'); // build term arguments    
     bindtvars(fts, ats') :: VEnv e_def -bindtvars-> _ :: VEnv e_call; // bind term arguments
     VEnv e, SEnv d |- bindsvars(fss, ass, d_def) -bindsvars-> d_call; // bind strategy arguments
     VEnv e_call, SEnv d_call |- tracing(sname, s) --> v. // do the call while tracing
@@ -77,7 +77,7 @@ rules
   where
     boolAnd(isEmptyStrategies(ass), isEmpty(ats)) == false;
     SEnv d |- SLookup(tgt) -slook-> Thunk(_, fss, fts, sactual, e_tgt, d_tgt);
-    VEnv e, SEnv d |- bl(ats) -blds-> BSS(ats');
+    VEnv e, SEnv d |- ats -blds-> BSS(ats');
     bindtvars(fts, ats') :: VEnv e_tgt -bindtvars-> _ :: VEnv e_tgt';
     VEnv e, SEnv d |- bindsvars(fss, ass, d_tgt) -bindsvars-> d_tgt';
     SPush(x, Thunk(x, [], [], sactual, e_tgt', d_tgt')) :: SEnv d_into -salloc-> _ :: SEnv d_into';
@@ -99,7 +99,7 @@ rules // primitives
 
   VEnv e |- PrimT(sname, ass, ats) --> v
   where
-    VEnv e |- bl(ats) -blds-> BSS(ats');
+    VEnv e |- ats -blds-> BSS(ats');
     mkThunks(ass) -thunks-> thunks;
     primCall(sname, thunks, ats') --> v.
 
