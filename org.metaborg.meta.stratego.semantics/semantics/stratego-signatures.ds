@@ -23,7 +23,7 @@ signature
     FunType
   
   constructors
-    __PreTerm2STerm__  : PreTerm -> STerm {implicit}
+    __PreTerm2Term__   : PreTerm -> STerm {implicit}
     __Var2PreTerm__    : Var -> PreTerm {implicit}
     __Wld2PreTerm__    : Wld -> PreTerm {implicit}
     __StrategyDef2Def__: StrategyDef -> Def {implicit}
