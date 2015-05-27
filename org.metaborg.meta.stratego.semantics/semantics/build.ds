@@ -151,16 +151,6 @@ rules
   where
     length(ts) == 2;
     bList(op) -bld-> bv.
-  
-  TF tf |- bList(Op(_, [])) -bld-> BS(nil)
-  where
-    makeNil(tf) => nil.
-
-  TF tf |- bList(Op(_, [t1, t2])) -bld-> BS(makeListCons[tf](head, tail))
-  where
-    TF tf |- Build(t1) --> S(head);
-    TF tf |- Build(t2) --> S(tail);
-    tail <: TLIST.
 
   // Appl dispatch
   b(op@Op("Cons", ts)) -bld-> bv
@@ -180,6 +170,17 @@ rules
     c != "Nil";
     c != "";
     bAppl(Op(c, ts)) -bld-> bv.
+  
+  TF tf |- bList(Op(_, [])) -bld-> BS(nil)
+  where
+    makeNil(tf) => nil.
+
+  TF tf |- bList(Op(_, [t1, t2])) -bld-> BS(makeListCons[tf](head, tail))
+  where
+    TF tf |- Build(t1) --> S(head);
+    TF tf |- Build(t2) --> S(tail);
+    tail <: TLIST.
+
   
   // NB: specialization possible on constant length(ts)
   TF tf |- bAppl(Op(c, ts)) -bld-> BS(appl)
