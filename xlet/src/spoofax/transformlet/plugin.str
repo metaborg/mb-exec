@@ -1,7 +1,0 @@
-module spoofax/transformlet/plugin
-imports
-  spoofax/transformlet/Transformlet
-  
-strategies
-
-  spoofax-register-action = ?(name, point) ; prim("SPX_register_action", name, point)
