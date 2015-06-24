@@ -1,6 +1,6 @@
 package org.metaborg.util.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.metaborg.util.iterators.Iterables2;
 
@@ -37,7 +37,7 @@ public class Assert2 {
     }
 
     public static <T> void assertContains(T expected, T[] actual, String message) {
-        assertContains(expected, Iterables2.from(actual));
+        assertContains(expected, Iterables2.from(actual), message);
     }
 
     public static <T> void assertContains(T expected, T[] actual) {
@@ -55,7 +55,7 @@ public class Assert2 {
     }
 
     public static <T> void assertNotContains(T expected, T[] actual, String message) {
-        assertNotContains(expected, Iterables2.from(actual));
+        assertNotContains(expected, Iterables2.from(actual), message);
     }
 
     public static <T> void assertNotContains(T expected, T[] actual) {
