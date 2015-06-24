@@ -1,5 +1,7 @@
 package org.metaborg.util.iterators;
 
+import java.util.Iterator;
+
 /**
  * Utility class for iterables with missing functionality from Guava's Iterables.
  */
@@ -37,5 +39,13 @@ public final class Iterables2 {
      */
     @SafeVarargs public static <T> Iterable<T> from(Iterable<T>... iterablesArray) {
         return from(Iterables2.<Iterable<T>>from(iterablesArray));
+    }
+
+    /**
+     * Generates an iterable that contains elements from given iterator once. After a full iteration, the iterable will
+     * be empty.
+     */
+    public static <T> Iterable<T> once(Iterator<T> iterator) {
+        return new IteratorIterable<T>(iterator);
     }
 }
