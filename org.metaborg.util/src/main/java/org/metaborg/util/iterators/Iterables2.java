@@ -28,7 +28,7 @@ public final class Iterables2 {
     }
 
     /**
-     * Generates an iterable that contains all elements inside given iterables, pass through an iterable.
+     * Generates an iterable that contains all elements inside given iterables, passed through an iterable.
      */
     public static <T> Iterable<T> from(Iterable<? extends Iterable<T>> iterables) {
         return new CompoundIterable<T>(iterables);
