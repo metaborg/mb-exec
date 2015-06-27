@@ -2,6 +2,8 @@ package org.metaborg.util.iterators;
 
 import java.util.Iterator;
 
+import rx.functions.Func0;
+
 /**
  * Utility class for iterables with missing functionality from Guava's Iterables.
  */
@@ -42,10 +44,17 @@ public final class Iterables2 {
     }
 
     /**
+     * Generates an iterable that contains elements from given iterator generator.
+     */
+    public static <T> Iterable<T> from(Func0<Iterator<T>> iteratorGenerator) {
+        return new IteratorIterable<T>(iteratorGenerator);
+    }
+
+    /**
      * Generates an iterable that contains elements from given iterator once. After a full iteration, the iterable will
      * be empty.
      */
-    public static <T> Iterable<T> once(Iterator<T> iterator) {
-        return new IteratorIterable<T>(iterator);
+    public static <T> Iterable<T> fromOnce(Iterator<T> iterator) {
+        return new IteratorIterableOnce<T>(iterator);
     }
 }
