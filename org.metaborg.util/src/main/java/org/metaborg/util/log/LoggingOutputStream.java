@@ -10,7 +10,6 @@ public class LoggingOutputStream extends OutputStream {
 
     private final Logger logger;
     private final boolean logAsError;
-    private boolean flush = false;
     private boolean closed = false;
     private byte[] buffer;
     private int count;
@@ -39,11 +38,11 @@ public class LoggingOutputStream extends OutputStream {
             // Do not log nulls.
             return;
         } else if(b == SystemRedirectLogger.lastLineSeparator) {
-            // Enable flushing if writing last line separator.
-            flush = true;
+            // Flush if writing last line separator.
+            flush();
             return;
         } else if(b == SystemRedirectLogger.firstLineSeparator) {
-            // Ignore first line separator. Flushing already enabled if lastLineSeparator == firstLineSeparator.
+            // Ignore first line separator, flushing at lastLineSeparator.
             return;
         }
 
@@ -60,7 +59,7 @@ public class LoggingOutputStream extends OutputStream {
     }
 
     @Override public void flush() {
-        if(count == 0 || !flush) {
+        if(count == 0) {
             return;
         }
 
@@ -74,6 +73,5 @@ public class LoggingOutputStream extends OutputStream {
 
         // Not resetting the buffer; assuming that if it grew that it will likely grow similarly again.
         count = 0;
-        flush = false;
     }
 }
