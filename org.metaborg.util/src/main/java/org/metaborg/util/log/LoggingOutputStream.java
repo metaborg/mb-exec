@@ -11,6 +11,7 @@ public class LoggingOutputStream extends OutputStream {
     private final Logger logger;
     private final boolean logAsError;
     private boolean closed = false;
+    private boolean forceFlush = false;
     private byte[] buffer;
     private int count;
 
@@ -34,16 +35,15 @@ public class LoggingOutputStream extends OutputStream {
             throw new IOException("The stream has been closed.");
         }
 
-        if(b == 0) {
-            // Do not log nulls.
-            return;
-        } else if(b == SystemRedirectLogger.lastLineSeparator) {
-            // Flush if writing last line separator.
-            flush();
-            return;
-        } else if(b == SystemRedirectLogger.firstLineSeparator) {
-            // Ignore first line separator, flushing at lastLineSeparator.
-            return;
+        switch(b) {
+            case '\n':
+                // Flush if writing last line separator.
+                forceFlush = true;
+                flush();
+                return;
+            case 0:
+                // Do not log nulls.
+                return;
         }
 
         // Grow buffer if it is full.
@@ -59,7 +59,7 @@ public class LoggingOutputStream extends OutputStream {
     }
 
     @Override public void flush() {
-        if(count == 0) {
+        if(!forceFlush && count == 0) {
             return;
         }
 
@@ -73,5 +73,6 @@ public class LoggingOutputStream extends OutputStream {
 
         // Not resetting the buffer; assuming that if it grew that it will likely grow similarly again.
         count = 0;
+        forceFlush = false;
     }
 }
