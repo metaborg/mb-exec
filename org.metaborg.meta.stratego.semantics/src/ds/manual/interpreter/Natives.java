@@ -25,7 +25,7 @@ public class Natives {
 							.getResourceAsStream(p));
 		} catch (IOException e) {
 			throw new org.metaborg.meta.interpreter.framework.InterpreterException(
-					"Import term failed", e);
+					"Import term failed: " + p, null, null, e);
 		}
 	}
 

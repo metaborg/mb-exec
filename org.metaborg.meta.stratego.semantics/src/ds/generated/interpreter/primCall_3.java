@@ -75,9 +75,10 @@ public class primCall_3 extends A_Strategy {
 				return new R_default_Value(new F_0(null), stacktracer, succ);
 			}
 		} catch (InterpreterExit e) {
-			throw new InterpreterExitException(e, e.getValue());
+			throw new InterpreterExitException(this, e, e.getValue());
 		} catch (org.spoofax.interpreter.core.InterpreterException e) {
-			throw new InterpreterException(e);
+			throw new InterpreterException("Interpreter exception", "default",
+					this, e);
 		}
 	}
 

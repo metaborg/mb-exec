@@ -85,7 +85,7 @@ public class StrategoSugarInterpreterCLI {
 					.getConstructor(ITermFactory.class);
 			return (IOperatorRegistry) m.newInstance(factory);
 		} catch (ReflectiveOperationException e) {
-			throw new InterpreterException("Operator registry load failed", e);
+			throw new InterpreterException("Operator registry load failed: " + s, null, null, e);
 		}
 	}
 }
