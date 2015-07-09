@@ -7,16 +7,13 @@ imports
 /* === Rules for the Variables === */
 signature
 
-  semantic components
-    VEnv  -> Map<String, VBox>
-
   native datatypes
     "ds.manual.interpreter.VState" as VHeap {
-      lookup : VEnv * String -> Value
-      alloc  : VEnv * String -> VEnv
-      allocs : VEnv * List(String) -> VEnv
-      update : VEnv * String * Value -> VEnv
-      allocupdate : VEnv * String * Value -> VEnv
+      lookup : Map<String, VBox> * String -> Value
+      alloc  : Map<String, VBox> * String -> Map<String, VBox>
+      allocs : Map<String, VBox> * List(String) -> Map<String, VBox>
+      update : Map<String, VBox> * String * Value -> Map<String, VBox>
+      allocupdate : Map<String, VBox> * String * Value -> Map<String, VBox>
     }
     
     "ds.manual.interpreter.VBox" as VBox { }
@@ -25,7 +22,7 @@ signature
     VLookupResult
   
   constructors
-    VLookupResult : VEnv * Value -> VLookupResult
+    VLookupResult : Map<String, VBox> * Value -> VLookupResult
 
   sorts
     VHeapOp
@@ -40,38 +37,39 @@ signature
     VHeapOp -vlook-> Value
     VHeapOp -vupdate-> Unit 
     VHeapOp -vinit-> Unit
-    
+
+  variables
+    venv : Map<String, VBox>
+
 rules 
   
-  VEnv venv, VHeap s |- VLookup(x) -vlook-> v
+  venv, VHeap s |- VLookup(x) -vlook-> v
   where
     lookup[s](venv, x) => v.
   
-  VHeap s |- VUpdate(x, v) :: VEnv venv -vupdate-> U() :: VEnv venv'
+  VHeap s |- VUpdate(x, v) :: venv -vupdate-> U() :: venv'
   where
     update[s](venv, x, v) => venv'.
 
-  VHeap s |- VPushBatch(xs) :: VEnv venv -vinit-> U() :: VEnv venv'
+  VHeap s |- VPushBatch(xs) :: venv -vinit-> U() :: venv'
   where
     allocs[s](venv, xs) => venv'.
   
-  VHeap s |- VPushUpdate(x, v) :: VEnv venv -vinit-> U() :: VEnv venv'
+  VHeap s |- VPushUpdate(x, v) :: venv -vinit-> U() :: venv'
   where
     allocupdate[s](venv, x, v) => venv'.
 
 /* === Rules for the Strategies === */
 
 signature
-  semantic components
-    SEnv  -> Map<String, SBox>
 
   native datatypes
     "ds.manual.interpreter.SState" as SHeap {
-      lookup : SEnv * String -> Thunk
-      alloc  : SEnv * String -> SEnv
-      softalloc: SEnv * String -> SEnv
-      allocupdate : SEnv * String * Thunk -> SEnv
-      update : SEnv * String * Thunk -> SEnv
+      lookup : Map<String, SBox> * String -> Thunk
+      alloc  : Map<String, SBox> * String -> Map<String, SBox>
+      softalloc: Map<String, SBox> * String -> Map<String, SBox>
+      allocupdate : Map<String, SBox> * String * Thunk -> Map<String, SBox>
+      update : Map<String, SBox> * String * Thunk -> Map<String, SBox>
     }
     
     "ds.manual.interpreter.SBox" as SBox { }
@@ -80,13 +78,13 @@ signature
     SLookupResult
 
   constructors
-    SLookupResult : SEnv * Thunk -> SLookupResult
+    SLookupResult : Map<String, SBox> * Thunk -> SLookupResult
 
   sorts
     Thunk
   
   constructors
-    Thunk  : String * List(String) * List(String) * Strategy * VEnv * SEnv -> Thunk
+    Thunk  : String * List(String) * List(String) * Strategy * Map<String, VBox> * Map<String, SBox> -> Thunk
 
   sorts
     SHeapOp
@@ -101,31 +99,34 @@ signature
     
   arrows
     SHeapOp -salloc-> Unit
-  
     SHeapOp -slook-> Thunk
+  
+  variables
+    senv : Map<String, SBox>
+
 rules
 
   // Lookup a thunk by name at the starting SHeap address
-  SHeap s, SEnv senv |- SLookup(name) -slook-> thunk
+  SHeap s, senv |- SLookup(name) -slook-> thunk
   where
     lookup[s](senv, name) => thunk.
 
   // Push a new Thunk advancing the address of the top of the stack
-  SHeap s |- SPush(name, thunk) :: SEnv senv -salloc-> U() :: SEnv senv'
+  SHeap s |- SPush(name, thunk) :: senv -salloc-> U() :: senv'
   where
     allocupdate[s](senv, name, thunk) => senv'.
   
   // Allocate a new location at the top of the SHeap and bind it to a placeholder
-  SHeap s |- SAlloc(name) :: SEnv senv -salloc-> U() :: SEnv senv'
+  SHeap s |- SAlloc(name) :: senv -salloc-> U() :: senv'
   where
     alloc[s](senv, name) => senv'.
   
   // Allocate a new location at the top of the SHeap and bind it to a placeholder if no allocation for this name already exists
-  SHeap s |- SSoftAlloc(name) :: SEnv senv -salloc-> U() :: SEnv senv'
+  SHeap s |- SSoftAlloc(name) :: senv -salloc-> U() :: senv'
   where
     softalloc[s](senv, name) => senv'.
   
-  SHeap s |- SUpdate(name, thunk) :: SEnv senv -salloc-> U() :: SEnv senv'
+  SHeap s |- SUpdate(name, thunk) :: senv -salloc-> U() :: senv'
   where
     update[s](senv, name, thunk) => senv'.
 

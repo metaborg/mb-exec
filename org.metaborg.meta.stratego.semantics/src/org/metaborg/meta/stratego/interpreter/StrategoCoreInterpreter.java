@@ -135,9 +135,10 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 	private boolean evaluate(A_Strategy sexpr) {
 		try {
 			R_default_Value result = sexpr.exec_default(new VState(),
-					PersistentTreeMap.EMPTY, getTermFactory(),
-					getCurrentTerm(), strategyHeap, strategyEnv,
-					interopContext, interopContext.getStackTracer(), false);
+					getTermFactory(), getCurrentTerm(), strategyHeap,
+					strategyEnv, interopContext, PersistentTreeMap.EMPTY,
+
+					interopContext.getStackTracer(), false);
 			A_Value value = result.value;
 			StackTracer stacktracer = interopContext.getStackTracer();
 			if (value.match(F_0.class) != null) {

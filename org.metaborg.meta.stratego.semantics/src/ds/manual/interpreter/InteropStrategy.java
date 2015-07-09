@@ -35,9 +35,9 @@ public class InteropStrategy extends Strategy {
 		A_Strategy s = thunk._4;
 		PersistentMap<String, VBox> venv = thunk._5;
 		PersistentMap<String, SBox> senv = thunk._6;
+		R_default_Value result = s.exec_default(vheap, e.getFactory(),
+				e.current(), sheap, senv, (AutoInterpInteropContext) e, venv,
 
-		R_default_Value result = s.exec_default(vheap, venv, e.getFactory(),
-				e.current(), sheap, senv, (AutoInterpInteropContext) e,
 				stacktracer, false);
 
 		if (result.value instanceof F_0) {

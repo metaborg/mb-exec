@@ -10,13 +10,13 @@ imports
   
 rules // calls
 
-  VEnv e, SEnv d |- CallT(SVar(sname), ass, ats) --> v
+  venv, senv |- CallT(SVar(sname), ass, ats) --> v
   where
-    SEnv d |- SLookup(sname) -slook-> Thunk(_, fss, fts, s, e_def, d_def);
-    VEnv e |- bl(ats) -blds-> BSS(ats'); // build term arguments    
-    bindtvars(fts, ats') :: VEnv e_def -bindtvars-> _ :: VEnv e_call; // bind term arguments
-    VEnv e, SEnv d |- bindsvars(fss, ass, d_def) -bindsvars-> d_call; // bind strategy arguments
-    VEnv e_call, SEnv d_call |- tracing(sname, s) --> v. // do the call while tracing
+    senv |- SLookup(sname) -slook-> Thunk(_, fss, fts, s, venv_def, senv_def);
+    venv |- bl(ats) -blds-> BSS(ats'); // build term arguments    
+    bindtvars(fts, ats') :: venv_def -bindtvars-> _ :: venv_call; // bind term arguments
+    venv, senv |- bindsvars(fss, ass, senv_def) -bindsvars-> senv_call; // bind strategy arguments
+    venv_call, senv_call |- tracing(sname, s) --> v. // do the call while tracing
       
   CallT(_, _, _) --> F()
   where
@@ -43,13 +43,13 @@ rules
 
 signature
   constructors
-    bindsvars: List(String) * List(Strategy) * SEnv -> Binder
+    bindsvars: List(String) * List(Strategy) * Map<String, SBox> -> Binder
   
   native operators
     isEmptyStrategies: List(Strategy) -> Bool
 
   arrows
-    Binder -bindsvars-> SEnv
+    Binder -bindsvars-> Map<String, SBox>
 
   native operators
     createAnonymousName : String -> String
@@ -65,30 +65,30 @@ rules
   bindsvars([], [], d_into) -bindsvars-> d_into.
  
   // 1. CallT without arguments
-  SEnv d |- bindsvars([x | xs], [CallT(SVar(tgt), ass, ats) | ss], d_into) -bindsvars-> d_into''
+  senv |- bindsvars([x | xs], [CallT(SVar(tgt), ass, ats) | ss], senv_in) -bindsvars-> senv_in''
   where
     boolAnd(isEmptyStrategies(ass), isEmpty(ats)) == true;
-    SEnv d |- SLookup(tgt) -slook-> Thunk(_, fss, fts, sactual, e_tgt, d_tgt);
-    SPush(x, Thunk(x, fss, fts, sactual, e_tgt, d_tgt)) :: SEnv d_into -salloc-> _ :: SEnv d_into';
-    SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''.
+    senv |- SLookup(tgt) -slook-> Thunk(_, fss, fts, sactual, e_tgt, d_tgt);
+    SPush(x, Thunk(x, fss, fts, sactual, e_tgt, d_tgt)) :: senv_in -salloc-> _ :: senv_in';
+    senv |- bindsvars(xs, ss, senv_in') -bindsvars-> senv_in''.
   
   // 2. CallT with arguments
-  VEnv e, SEnv d |- bindsvars([x | xs], [CallT(SVar(tgt), ass, ats) | ss], d_into) -bindsvars-> d_into''
+  venv, senv |- bindsvars([x | xs], [CallT(SVar(tgt), ass, ats) | ss], senv_into) -bindsvars-> d_into''
   where
     boolAnd(isEmptyStrategies(ass), isEmpty(ats)) == false;
-    SEnv d |- SLookup(tgt) -slook-> Thunk(_, fss, fts, sactual, e_tgt, d_tgt);
-    VEnv e, SEnv d |- bl(ats) -blds-> BSS(ats');
-    bindtvars(fts, ats') :: VEnv e_tgt -bindtvars-> _ :: VEnv e_tgt';
-    VEnv e, SEnv d |- bindsvars(fss, ass, d_tgt) -bindsvars-> d_tgt';
-    SPush(x, Thunk(x, [], [], sactual, e_tgt', d_tgt')) :: SEnv d_into -salloc-> _ :: SEnv d_into';
-    VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''.
+    senv |- SLookup(tgt) -slook-> Thunk(_, fss, fts, sactual, venv_tgt, senv_tgt);
+    venv, senv |- bl(ats) -blds-> BSS(ats');
+    bindtvars(fts, ats') :: venv_tgt -bindtvars-> _ :: venv_tgt';
+    venv, senv |- bindsvars(fss, ass, senv_tgt) -bindsvars-> senv_tgt';
+    SPush(x, Thunk(x, [], [], sactual, venv_tgt', senv_tgt')) :: senv_into -salloc-> _ :: senv_into';
+    venv, senv |- bindsvars(xs, ss, senv_into') -bindsvars-> d_into''.
 
   // 3. A strategy literal body (not a call)
-  VEnv e, SEnv d |- bindsvars([x | xs], [s | ss], d_into) -bindsvars-> d_into''
+  venv, senv |- bindsvars([x | xs], [s | ss], senv_into) -bindsvars-> senv_into''
   where
     s =!=> CallT(SVar(_), _, _);
-    SPush(x, Thunk(x, [], [], s, e, d)) :: SEnv d_into -salloc-> U() :: SEnv d_into';
-    VEnv e, SEnv d |- bindsvars(xs, ss, d_into') -bindsvars-> d_into''.
+    SPush(x, Thunk(x, [], [], s, venv, senv)) :: senv_into -salloc-> U() :: senv_into';
+    venv, senv |- bindsvars(xs, ss, senv_into') -bindsvars-> senv_into''.
     
 signature
 
@@ -97,9 +97,9 @@ signature
 
 rules // primitives
 
-  VEnv e |- PrimT(sname, ass, ats) --> v
+  venv |- PrimT(sname, ass, ats) --> v
   where
-    VEnv e |- bl(ats) -blds-> BSS(ats');
+    venv |- bl(ats) -blds-> BSS(ats');
     mkThunks(ass) -thunks-> thunks;
     primCall(sname, thunks, ats') --> v.
 
@@ -128,11 +128,11 @@ rules
     mkThunk(as) -thunk-> as';
     mkThunks(ass) -thunks-> ass'.
 
-  SEnv d |- mkThunk(CallT(SVar(tgt), _, _)) -thunk-> thunk
+  senv |- mkThunk(CallT(SVar(tgt), _, _)) -thunk-> thunk
   where
-    SEnv d |- SLookup(tgt) -slook-> thunk.
+    senv |- SLookup(tgt) -slook-> thunk.
   
-  VEnv e, SEnv d |- mkThunk(s) -thunk-> Thunk(x, [], [], s, e, d)
+  venv, senv |- mkThunk(s) -thunk-> Thunk(x, [], [], s, venv, senv)
   where
     s =!=> CallT(_, _, _);
     createAnonymousName("lifted") => x.

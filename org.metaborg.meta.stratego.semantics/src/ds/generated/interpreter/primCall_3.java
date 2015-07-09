@@ -47,11 +47,24 @@ public class primCall_3 extends A_Strategy {
 		throw new InterpreterException("Operation not supported");
 	}
 
+	public R_default_Value execucu(
+			ds.manual.interpreter.VState _1,
+			org.spoofax.interpreter.terms.ITermFactory _2,
+			org.spoofax.interpreter.terms.IStrategoTerm _3,
+			ds.manual.interpreter.SState _4,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.SBox> _5,
+			ds.manual.interpreter.AutoInterpInteropContext _6,
+			com.github.krukow.clj_ds.PersistentMap<String, ds.manual.interpreter.VBox> _7,
+			org.spoofax.interpreter.core.StackTracer _8, boolean _9) {
+		this.specializeChildren(0);
+		throw new InterpreterException("Rule failure", "default", this);
+	}
+
 	@Override
-	public R_default_Value exec_default(VState vheap,
-			PersistentMap<String, VBox> _3, ITermFactory _5, IStrategoTerm ct,
-			SState sheap, PersistentMap<String, SBox> _2,
-			AutoInterpInteropContext ctx, StackTracer stacktracer, boolean succ) {
+	public R_default_Value exec_default(VState vheap, ITermFactory tf,
+			IStrategoTerm ct, SState sheap, PersistentMap<String, SBox> senv,
+			AutoInterpInteropContext ctx, PersistentMap<String, VBox> venv,
+			StackTracer stacktracer, boolean succ) {
 
 		AbstractPrimitive prim = ctx.lookupOperator(name);
 		ctx.setCurrent(ct);

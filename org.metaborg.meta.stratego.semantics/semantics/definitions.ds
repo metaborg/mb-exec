@@ -80,7 +80,7 @@ rules // strategy definitions
     SUpdate(sname, thunk) -salloc-> _;
     storeDefs(sdefs) -storesdefs-> _.
   
-  VEnv e, SEnv d |- SDefT(sname, ss, ts, s) -mkthunk-> Thunk(sname, ss', ts', s, e, d)
+  venv, senv |- SDefT(sname, ss, ts, s) -mkthunk-> Thunk(sname, ss', ts', s, venv, senv)
   where
     typedIds(ss) -exid-> ss';
     typedIds(ts) -exid-> ts'.
