@@ -81,9 +81,13 @@ public class StrategoCoreInterpreter implements StrategoInterpreter {
 	public void load(IStrategoAppl ctree) throws IOException {
 		A_Module ctreeNode = (A_Module) new Generic_A_Module(
 				NodeSource.fromStrategoTerm(ctree), ctree).specialize(1);
-		R_allocmodule_Unit sdefs_result = ctreeNode.exec_allocmodule(
-				PersistentTreeMap.EMPTY, strategyHeap, strategyEnv);
-		strategyEnv = sdefs_result._1;
+		R_allocmodule_Unit sdefs_result = ctreeNode
+				.exec_allocmodule(new VState(), getTermFactory(),
+						getCurrentTerm(), new SState(), interopContext,
+						PersistentTreeMap.EMPTY,
+						interopContext.getStackTracer(), false,
+						strategyEnv);
+		strategyEnv = sdefs_result._3;
 	}
 
 	@Override

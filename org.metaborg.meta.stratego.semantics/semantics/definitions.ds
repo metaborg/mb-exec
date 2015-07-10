@@ -19,7 +19,7 @@ rules // let - in - end
 
   Let(sdefs, s) --> v
   where
-    sdefNames(sdefs) -exid-> snames;
+    sdefNames(sdefs) --> snames;
     SParAlloc(snames) -salloc-> _;
     letEval(sdefs, s) -leteval-> v.
   
@@ -80,36 +80,23 @@ rules // strategy definitions
     SUpdate(sname, thunk) -salloc-> _;
     storeDefs(sdefs) -storesdefs-> _.
   
-  venv, senv |- SDefT(sname, ss, ts, s) -mkthunk-> Thunk(sname, ss', ts', s, venv, senv)
-  where
-    typedIds(ss) -exid-> ss';
-    typedIds(ts) -exid-> ts'.
+  venv, senv |- SDefT(sname, ss, ts, s) -mkthunk-> Thunk(sname, typedIds(ss), typedIds(ts), s, venv, senv).
   
 signature
-  sorts
-    NameExtractor
-
-  arrows
-    NameExtractor -exid-> List(String)
-    
   constructors
-    typedIds: List(Typedid) -> NameExtractor
-    sdefNames: List(Def) -> NameExtractor
+    typedIds: List(Typedid) --> List(String)
+    sdefNames: List(Def) --> List(String)
     
 rules // typedid name extractor
 
-  typedIds([]) -exid-> [] : List(String).
+  typedIds([]) --> [].
  
-  typedIds([VarDec(x, _) | xs]) -exid-> [ x | xs' ]
-  where
-    typedIds(xs) -exid-> xs'.
+  typedIds([VarDec(x, _) | xs]) --> [ x | typedIds(xs) ].
 
 rules // SDefT name extractor
 
-  sdefNames([]) -exid-> [] : List(String).
+  sdefNames([]) --> [].
   
-  sdefNames([SDefT(sname, _, _, _) | sdefs]) -exid-> [sname | snames]
-  where
-    sdefNames(sdefs) -exid-> snames.
+  sdefNames([SDefT(sname, _, _, _) | sdefs]) --> [sname | sdefNames(sdefs)].
 
 
