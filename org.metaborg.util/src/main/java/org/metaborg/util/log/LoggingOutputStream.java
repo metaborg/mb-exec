@@ -63,12 +63,11 @@ public class LoggingOutputStream extends OutputStream {
             return;
         }
 
-        final byte[] bytes = new byte[count];
-        System.arraycopy(buffer, 0, bytes, 0, count);
+        final String message = new String(buffer, 0, count);
         if(logAsError) {
-            logger.error(new String(bytes));
+            logger.error(message);
         } else {
-            logger.info(new String(bytes));
+            logger.info(message);
         }
 
         // Not resetting the buffer; assuming that if it grew that it will likely grow similarly again.

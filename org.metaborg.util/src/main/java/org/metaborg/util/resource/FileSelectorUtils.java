@@ -76,7 +76,7 @@ public class FileSelectorUtils {
             }
 
             do {
-                switch(resource.getType()) {
+                switch(current.getType()) {
                     case FILE:
                         if(!selector.includeFile(info)) {
                             return false;
