@@ -43,13 +43,13 @@ rules
 
 signature
   constructors
-    bindsvars: List(String) * List(Strategy) * Map<String, SBox> -> Binder
+    bindsvars: List(String) * List(Strategy) * SEnv -> Binder
   
   native operators
     isEmptyStrategies: List(Strategy) -> Bool
 
   arrows
-    Binder -bindsvars-> Map<String, SBox>
+    Binder -bindsvars-> SEnv
 
   native operators
     createAnonymousName : String -> String

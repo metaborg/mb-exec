@@ -9,20 +9,23 @@ signature
 
   native datatypes
     "ds.manual.interpreter.VState" as VHeap {
-      lookup : Map<String, VBox> * String -> Value
-      alloc  : Map<String, VBox> * String -> Map<String, VBox>
-      allocs : Map<String, VBox> * List(String) -> Map<String, VBox>
-      update : Map<String, VBox> * String * Value -> Map<String, VBox>
-      allocupdate : Map<String, VBox> * String * Value -> Map<String, VBox>
+      lookup : VEnv * String -> Value
+      alloc  : VEnv * String -> VEnv
+      allocs : VEnv * List(String) -> VEnv
+      update : VEnv * String * Value -> VEnv
+      allocupdate : VEnv * String * Value -> VEnv
     }
     
     "ds.manual.interpreter.VBox" as VBox { }
 
   sorts
     VLookupResult
+    
+  aliases
+    VEnv : Map<String, VBox>
   
   constructors
-    VLookupResult : Map<String, VBox> * Value -> VLookupResult
+    VLookupResult : VEnv * Value -> VLookupResult
 
   sorts
     VHeapOp
@@ -39,7 +42,7 @@ signature
     VHeapOp -vinit-> Unit
 
   variables
-    venv : Map<String, VBox>
+    venv : VEnv
 
 rules 
   
@@ -65,11 +68,11 @@ signature
 
   native datatypes
     "ds.manual.interpreter.SState" as SHeap {
-      lookup : Map<String, SBox> * String -> Thunk
-      alloc  : Map<String, SBox> * String -> Map<String, SBox>
-      softalloc: Map<String, SBox> * String -> Map<String, SBox>
-      allocupdate : Map<String, SBox> * String * Thunk -> Map<String, SBox>
-      update : Map<String, SBox> * String * Thunk -> Map<String, SBox>
+      lookup : SEnv * String -> Thunk
+      alloc  : SEnv * String -> SEnv
+      softalloc: SEnv * String -> SEnv
+      allocupdate : SEnv * String * Thunk -> SEnv
+      update : SEnv * String * Thunk -> SEnv
     }
     
     "ds.manual.interpreter.SBox" as SBox { }
@@ -77,14 +80,17 @@ signature
   sorts
     SLookupResult
 
+  aliases
+    SEnv : Map<String, SBox>
+
   constructors
-    SLookupResult : Map<String, SBox> * Thunk -> SLookupResult
+    SLookupResult : SEnv * Thunk -> SLookupResult
 
   sorts
     Thunk
   
   constructors
-    Thunk  : String * List(String) * List(String) * Strategy * Map<String, VBox> * Map<String, SBox> -> Thunk
+    Thunk  : String * List(String) * List(String) * Strategy * VEnv * SEnv -> Thunk
 
   sorts
     SHeapOp
@@ -102,7 +108,7 @@ signature
     SHeapOp -slook-> Thunk
   
   variables
-    senv : Map<String, SBox>
+    senv : SEnv
 
 rules
 
