@@ -95,13 +95,13 @@ public class Assert2 {
     }
 
 
-    public static <T> void assertContains(T expected, Iterable<T> actual, String message) {
+    public static <T> void assertContains(T expected, Iterable<? extends T> actual, String message) {
         if(!Iterables.contains(actual, expected)) {
             fail(formatContains(message, expected, actual));
         }
     }
 
-    public static <T> void assertContains(T expected, Iterable<T> actual) {
+    public static <T> void assertContains(T expected, Iterable<? extends T> actual) {
         assertContains(expected, actual, null);
     }
 
@@ -113,7 +113,7 @@ public class Assert2 {
         assertContains(expected, actual, null);
     }
 
-    private static <T> String formatContains(String message, T expected, Iterable<T> actual) {
+    private static <T> String formatContains(String message, T expected, Iterable<? extends T> actual) {
         final String formatted = preformat(message);
         final String expectedString = String.valueOf(expected);
         final String actualString = String.valueOf(actual);
@@ -122,13 +122,13 @@ public class Assert2 {
     }
 
 
-    public static <T> void assertNotContains(T expected, Iterable<T> actual, String message) {
+    public static <T> void assertNotContains(T expected, Iterable<? extends T> actual, String message) {
         if(Iterables.contains(actual, expected)) {
             fail(formatNotContains(message, expected, actual));
         }
     }
 
-    public static <T> void assertNotContains(T expected, Iterable<T> actual) {
+    public static <T> void assertNotContains(T expected, Iterable<? extends T> actual) {
         assertNotContains(expected, actual, null);
     }
 
@@ -140,7 +140,7 @@ public class Assert2 {
         assertNotContains(expected, actual, null);
     }
 
-    private static <T> String formatNotContains(String message, T expected, Iterable<T> actual) {
+    private static <T> String formatNotContains(String message, T expected, Iterable<? extends T> actual) {
         final String formatted = preformat(message);
         final String expectedString = String.valueOf(expected);
         final String actualString = String.valueOf(actual);
