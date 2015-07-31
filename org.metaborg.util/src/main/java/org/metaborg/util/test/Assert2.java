@@ -8,6 +8,7 @@ import org.metaborg.util.observable.TimestampedNotification;
 
 import rx.Notification;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 
 public class Assert2 {
@@ -149,6 +150,27 @@ public class Assert2 {
     }
 
 
+    public static <T> void assertOnNext(Iterable<T> expecteds, ITestableObserver<T> observer, String message) {
+        final TimestampedNotification<T> timestampedNotificaiton = observer.poll();
+        final Notification<T> notification = timestampedNotificaiton.notification;
+
+        if(!notification.isOnNext()) {
+            fail(formatOnNext(message, notification));
+        }
+        final T value = notification.getValue();
+        boolean matches = false;
+        for(T expected : expecteds) {
+            matches |= value.equals(expected);
+        }
+        if(!matches) {
+            fail(formatOnNext(message, expecteds, value));
+        }
+    }
+
+    public static <T> void assertOnNext(Iterable<T> expecteds, ITestableObserver<T> observer) {
+        assertOnNext(expecteds, observer, null);
+    }
+    
     public static <T> void assertOnNext(T expected, ITestableObserver<T> observer, String message) {
         final TimestampedNotification<T> timestampedNotificaiton = observer.poll();
         final Notification<T> notification = timestampedNotificaiton.notification;
@@ -169,6 +191,13 @@ public class Assert2 {
     private static <T> String formatOnNext(String message, Notification<T> actual) {
         final String formatted = preformat(message);
         return formatted + "expected OnNext, was: " + actual.getKind();
+    }
+
+    private static <T> String formatOnNext(String message, Iterable<T> expected, T actual) {
+        final String formatted = preformat(message);
+        final String actualString = String.valueOf(actual);
+        return formatted + "expected OnNext with a value of: " + Joiner.on(", ").join(expected) + " but was: "
+            + formatClassAndValue(actual, actualString);
     }
 
     private static <T> String formatOnNext(String message, T expected, T actual) {
