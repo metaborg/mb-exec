@@ -1,6 +1,7 @@
 package org.metaborg.util.resource;
 
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelectInfo;
@@ -48,6 +49,19 @@ public class FileSelectorUtils {
 
     public static FileSelector extension(String extension) {
         return new ExtensionFileSelector(extension);
+    }
+
+
+    public static FileSelector regex(String regex) {
+        return new PatternFileSelector(regex);
+    }
+
+    public static FileSelector regex(String regex, int flags) {
+        return new PatternFileSelector(regex, flags);
+    }
+
+    public static FileSelector regex(Pattern pattern) {
+        return new PatternFileSelector(pattern);
     }
 
 
