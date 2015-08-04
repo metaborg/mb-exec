@@ -3,21 +3,19 @@ package org.metaborg.util.log;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.slf4j.Logger;
-
 public class LoggingOutputStream extends OutputStream {
     private static final int initialBufferLength = 2048;
 
-    private final Logger logger;
-    private final boolean logAsError;
+    private final ILogger logger;
+    private final Level level;
     private boolean closed = false;
     private boolean forceFlush = false;
     private byte[] buffer;
     private int count;
 
 
-    public LoggingOutputStream(Logger logger, boolean logAsError) throws IllegalArgumentException {
-        this.logAsError = logAsError;
+    public LoggingOutputStream(ILogger logger, Level level) throws IllegalArgumentException {
+        this.level = level;
         this.logger = logger;
 
         buffer = new byte[initialBufferLength];
@@ -64,11 +62,7 @@ public class LoggingOutputStream extends OutputStream {
         }
 
         final String message = new String(buffer, 0, count);
-        if(logAsError) {
-            logger.error(message);
-        } else {
-            logger.info(message);
-        }
+        logger.log(level, message);
 
         // Not resetting the buffer; assuming that if it grew that it will likely grow similarly again.
         count = 0;

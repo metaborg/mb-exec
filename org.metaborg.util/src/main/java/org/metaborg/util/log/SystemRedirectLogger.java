@@ -16,8 +16,8 @@ public class SystemRedirectLogger {
 
 
     public static void redirect() {
-        System.setOut(new PrintStream(new LoggingOutputStream(stdoutLogger, false), true));
-        System.setErr(new PrintStream(new LoggingOutputStream(stderrLogger, true), true));
+        System.setOut(new PrintStream(LoggerUtils.stream(stdoutLogger, Level.Info), true));
+        System.setErr(new PrintStream(LoggerUtils.stream(stderrLogger, Level.Error), true));
     }
 
     public static void unredirect() {
