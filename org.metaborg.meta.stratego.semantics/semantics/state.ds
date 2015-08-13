@@ -21,8 +21,8 @@ signature
   sorts
     VLookupResult
     
-  aliases
-    VEnv : Map<String, VBox>
+  sort aliases
+    VEnv = Map<String, VBox>
   
   constructors
     VLookupResult : VEnv * Value -> VLookupResult
@@ -80,8 +80,8 @@ signature
   sorts
     SLookupResult
 
-  aliases
-    SEnv : Map<String, SBox>
+  sort aliases
+    SEnv = Map<String, SBox>
 
   constructors
     SLookupResult : SEnv * Thunk -> SLookupResult
