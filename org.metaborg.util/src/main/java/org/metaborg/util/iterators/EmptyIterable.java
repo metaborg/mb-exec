@@ -2,10 +2,10 @@ package org.metaborg.util.iterators;
 
 import java.util.Iterator;
 
-import com.google.common.collect.Iterators;
+import com.google.common.collect.ImmutableSet;
 
 public class EmptyIterable<T> implements Iterable<T> {
     public Iterator<T> iterator() {
-        return Iterators.emptyIterator();
+        return ImmutableSet.<T>of().iterator();
     }
 }
