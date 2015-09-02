@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse Bindings for Stratego/J
 Bundle-SymbolicName: org.spoofax.interpreter.library.eclipse
-Bundle-Version: 1.4.0
+Bundle-Version: 1.4.1
 Bundle-Vendor: Spoofax.org
 Require-Bundle: org.eclipse.ui,
  org.spoofax.interpreter.core,
