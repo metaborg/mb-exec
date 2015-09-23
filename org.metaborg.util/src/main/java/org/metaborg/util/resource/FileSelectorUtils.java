@@ -85,14 +85,14 @@ public class FileSelectorUtils {
         FileSelectInfo info = info(current, base, depth);
 
         try {
-            // Check only once if resource equals the base
-            if(depth == 0) {
-                return includeOne(selector, resource, info);
-            }
-
             // If file is excluded beforehand, stop immediately
             if(!selector.includeFile(info)) {
                 return false;
+            }
+            
+            // Check only once if resource equals the base
+            if(depth == 0) {
+                return includeOne(selector, resource, info);
             }
 
             // Go over the file and its ancestors to check if it should be excluded
