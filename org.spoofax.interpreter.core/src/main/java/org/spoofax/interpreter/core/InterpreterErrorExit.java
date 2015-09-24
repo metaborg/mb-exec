@@ -30,8 +30,7 @@ public class InterpreterErrorExit extends InterpreterExit {
     }
 
     @Override
-    public String getLocalizedMessage() { // used for toString() and stacktraces
-        return getMessage() + (getTerm() == null ? "" : "\n\t" + getTerm());
+    public String getMessage() {
+        return super.getMessage() + (getTerm() == null ? "" : "\n\t" + getTerm());
     }
-
 }
