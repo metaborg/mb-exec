@@ -39,6 +39,10 @@ public class FileSelectorUtils {
         return new ContainsFileSelector(contains);
     }
 
+    public static FileSelector endsWith(String endsWith) {
+        return new EndsWithFileSelector(endsWith);
+    }
+    
     public static FileSelector extensions(Iterable<String> extensions) {
         return new ExtensionFileSelector(extensions);
     }
