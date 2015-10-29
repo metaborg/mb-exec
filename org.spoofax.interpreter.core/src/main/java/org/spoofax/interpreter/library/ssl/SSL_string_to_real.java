@@ -16,18 +16,37 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SSL_string_to_real extends AbstractPrimitive {
 
-    protected SSL_string_to_real() {
-        super("SSL_string_to_real", 0, 1);
-    }
-    
-    @Override
-    public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
+	protected SSL_string_to_real() {
+		super("SSL_string_to_real", 0, 1);
+	}
 
-        if(!Tools.isTermString(targs[0]))
-            return false;
+	@Override
+	public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
+			throws InterpreterException {
 
-        Double d = new Double(Tools.javaString(targs[0]));
-        env.setCurrent(env.getFactory().makeReal(d.doubleValue()));
-        return true;
-    }
+		if (!Tools.isTermString(targs[0]))
+			return false;
+
+		String s = Tools.javaString(targs[0]);
+
+		String s0 = s;
+		try {
+			env.setCurrent(env.getFactory().makeReal(Double.parseDouble(s0)));
+			return true;
+		} catch (NumberFormatException e) {
+			// do nothing
+		}
+
+		try {
+			s0 = s.trim();
+			if (s0.length() > 0 && s0.charAt(0) == '+')
+				s0 = s0.substring(1);
+			env.setCurrent(env.getFactory().makeReal(Double.parseDouble(s0)));
+			return true;
+		} catch (NumberFormatException e) {
+			; // do nothing
+		}
+
+		return false;
+	}
 }
