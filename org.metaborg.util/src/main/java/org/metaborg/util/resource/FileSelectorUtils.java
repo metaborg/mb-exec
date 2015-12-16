@@ -39,6 +39,10 @@ public class FileSelectorUtils {
         return new ContainsFileSelector(contains);
     }
 
+    public static FileSelector endsWith(String endsWith) {
+        return new EndsWithFileSelector(endsWith);
+    }
+    
     public static FileSelector extensions(Iterable<String> extensions) {
         return new ExtensionFileSelector(extensions);
     }
@@ -85,41 +89,56 @@ public class FileSelectorUtils {
         FileSelectInfo info = info(current, base, depth);
 
         try {
+            // If file is excluded beforehand, stop immediately
             if(!selector.includeFile(info)) {
                 return false;
             }
+            
+            // Check only once if resource equals the base
+            if(depth == 0) {
+                return includeOne(selector, resource, info);
+            }
 
-            do {
-                switch(current.getType()) {
-                    case FILE:
-                        if(!selector.includeFile(info)) {
-                            return false;
-                        }
-                        break;
-                    case FOLDER:
-                        if(!selector.traverseDescendents(info)) {
-                            return false;
-                        }
-                        break;
-                    case FILE_OR_FOLDER:
-                    case IMAGINARY:
-                        if(!selector.includeFile(info) || !selector.traverseDescendents(info)) {
-                            return false;
-                        }
-                        break;
+            // Go over the file and its ancestors to check if it should be excluded
+            while(depth >= 0) {
+                if(!includeOne(selector, current, info)) {
+                    return false;
                 }
 
-                --depth;
                 current = current.getParent();
                 if(current == null) {
                     throw new FileSystemException("vfs.provider/find-files.error", resource);
                 }
+                --depth;
                 info = info(current, base, depth);
-            } while(!current.getName().equals(base.getName()));
+            }
         } catch(Exception e) {
             throw new FileSystemException("vfs.provider/find-files.error", resource, e);
         }
 
+        return true;
+    }
+
+    public static boolean includeOne(FileSelector selector, FileObject resource, FileSelectInfo info)
+        throws FileSystemException, Exception {
+        switch(resource.getType()) {
+            case FILE:
+                if(!selector.includeFile(info)) {
+                    return false;
+                }
+                break;
+            case FOLDER:
+                if(!selector.traverseDescendents(info)) {
+                    return false;
+                }
+                break;
+            case FILE_OR_FOLDER:
+            case IMAGINARY:
+                if(!selector.includeFile(info) || !selector.traverseDescendents(info)) {
+                    return false;
+                }
+                break;
+        }
         return true;
     }
 

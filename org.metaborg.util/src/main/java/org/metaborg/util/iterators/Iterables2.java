@@ -4,6 +4,8 @@ import java.util.Iterator;
 
 import rx.functions.Func0;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * Utility class for iterables with missing functionality from Guava's Iterables.
  */
@@ -12,14 +14,14 @@ public final class Iterables2 {
      * Generates an iterable that is empty; the iterator it returns will always return false for hasNext.
      */
     public static <T> Iterable<T> empty() {
-        return new EmptyIterable<T>();
+        return ImmutableList.<T>of();
     }
 
     /**
      * Generates an iterable that contains given single element.
      */
     public static <T> Iterable<T> singleton(T t) {
-        return new SingletonIterable<T>(t);
+        return ImmutableList.<T>of(t);
     }
 
     /**
