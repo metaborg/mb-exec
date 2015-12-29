@@ -19,35 +19,35 @@ public class LoggerUtils {
     }
 
 
-    public static OutputStream stream(ILogger logger, Level level) {
-        return new LoggingOutputStream(logger, level);
+    public static OutputStream stream(ILogger logger, Level level, String... excludePatterns) {
+        return new LoggingOutputStream(logger, level, excludePatterns);
     }
 
-    public static OutputStream stream(ILogger logger) {
-        return new LoggingOutputStream(logger, Level.Info);
+    public static OutputStream stream(ILogger logger, String... excludePatterns) {
+        return new LoggingOutputStream(logger, Level.Info, excludePatterns);
     }
 
-    public static OutputStream stream(Logger slf4jlogger, Level level) {
-        return new LoggingOutputStream(logger(slf4jlogger), level);
+    public static OutputStream stream(Logger slf4jlogger, Level level, String... excludePatterns) {
+        return new LoggingOutputStream(logger(slf4jlogger), level, excludePatterns);
     }
 
-    public static OutputStream stream(Logger slf4jlogger) {
-        return new LoggingOutputStream(logger(slf4jlogger), Level.Info);
+    public static OutputStream stream(Logger slf4jlogger, String... excludePatterns) {
+        return new LoggingOutputStream(logger(slf4jlogger), Level.Info, excludePatterns);
     }
 
-    public static OutputStream stream(Class<?> clazz, Level level) {
-        return new LoggingOutputStream(logger(clazz), level);
+    public static OutputStream stream(Class<?> clazz, Level level, String... excludePatterns) {
+        return new LoggingOutputStream(logger(clazz), level, excludePatterns);
     }
 
-    public static OutputStream stream(Class<?> clazz) {
-        return new LoggingOutputStream(logger(clazz), Level.Info);
+    public static OutputStream stream(Class<?> clazz, String... excludePatterns) {
+        return new LoggingOutputStream(logger(clazz), Level.Info, excludePatterns);
     }
 
-    public static OutputStream stream(String name, Level level) {
-        return new LoggingOutputStream(logger(name), level);
+    public static OutputStream stream(String name, Level level, String... excludePatterns) {
+        return new LoggingOutputStream(logger(name), level, excludePatterns);
     }
 
-    public static OutputStream stream(String name) {
-        return new LoggingOutputStream(logger(name), Level.Info);
+    public static OutputStream stream(String name, String... excludePatterns) {
+        return new LoggingOutputStream(logger(name), Level.Info, excludePatterns);
     }
 }
