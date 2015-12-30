@@ -2,21 +2,27 @@ package org.metaborg.util.log;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.regex.Pattern;
 
 public class LoggingOutputStream extends OutputStream {
     private static final int initialBufferLength = 2048;
 
     private final ILogger logger;
     private final Level level;
+    private final Pattern[] excludePatterns;
+
     private boolean closed = false;
-    private boolean forceFlush = false;
     private byte[] buffer;
     private int count;
 
 
-    public LoggingOutputStream(ILogger logger, Level level) throws IllegalArgumentException {
+    public LoggingOutputStream(ILogger logger, Level level, String... excludePatterns) throws IllegalArgumentException {
         this.level = level;
         this.logger = logger;
+        this.excludePatterns = new Pattern[excludePatterns.length];
+        for(int i = 0; i < excludePatterns.length; ++i) {
+            this.excludePatterns[i] = Pattern.compile(excludePatterns[i], Pattern.DOTALL);
+        }
 
         buffer = new byte[initialBufferLength];
         count = 0;
@@ -30,14 +36,13 @@ public class LoggingOutputStream extends OutputStream {
 
     @Override public void write(final int b) throws IOException {
         if(closed) {
-            throw new IOException("The stream has been closed.");
+            throw new IOException("The stream has been closed");
         }
 
         switch(b) {
             case '\n':
                 // Flush if writing last line separator.
-                forceFlush = true;
-                flush();
+                doFlush();
                 return;
             case 0:
                 // Do not log nulls.
@@ -57,15 +62,25 @@ public class LoggingOutputStream extends OutputStream {
     }
 
     @Override public void flush() {
-        if(!forceFlush && count == 0) {
+        if(count == 0) {
             return;
         }
 
-        final String message = new String(buffer, 0, count);
-        logger.log(level, message);
-
-        // Not resetting the buffer; assuming that if it grew that it will likely grow similarly again.
-        count = 0;
-        forceFlush = false;
+        doFlush();
+    }
+    
+    private void doFlush() {
+        try {
+            final String message = new String(buffer, 0, count);
+            for(Pattern pattern : excludePatterns) {
+                if(pattern.matcher(message).matches()) {
+                    return;
+                }
+            }
+            logger.log(level, message);
+        } finally {
+            // Not resetting the buffer; assuming that if it grew that it will likely grow similarly again.
+            count = 0;
+        }
     }
 }
