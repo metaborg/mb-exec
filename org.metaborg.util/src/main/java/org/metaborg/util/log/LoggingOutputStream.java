@@ -44,8 +44,9 @@ public class LoggingOutputStream extends OutputStream {
                 // Flush if writing last line separator.
                 doFlush();
                 return;
+            case '\r':
             case 0:
-                // Do not log nulls.
+                // Do not log carriage return and nulls.
                 return;
         }
 
@@ -62,13 +63,9 @@ public class LoggingOutputStream extends OutputStream {
     }
 
     @Override public void flush() {
-        if(count == 0) {
-            return;
-        }
-
-        doFlush();
+        // Never manually flush, always require a \n to be written.
     }
-    
+
     private void doFlush() {
         try {
             final String message = new String(buffer, 0, count);
