@@ -12,7 +12,7 @@ public class Arguments implements Iterable<String>, Serializable {
     private static final long serialVersionUID = -5031843820289891138L;
     private static final Pattern spaces = Pattern.compile("[\\s]");
 
-    private Collection<String> arguments;
+    private final Collection<String> arguments;
 
 
     public Arguments() {
