@@ -36,8 +36,9 @@ public final class URIEncode {
         dontNeedEncoding.set(95); // _
         dontNeedEncoding.set(126); // ~
         
-        // HACK: don't encode / and : to be able to encode a full URI
+        // HACK: don't encode / \ : to be able to encode a full URI
         dontNeedEncoding.set(47); // /
+        dontNeedEncoding.set(92); // \
         dontNeedEncoding.set(58); // :
     }
 
