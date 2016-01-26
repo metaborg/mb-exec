@@ -1,19 +1,29 @@
 package org.metaborg.util.cmd;
 
 import java.io.File;
+import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import com.google.common.collect.Lists;
 
-public class Arguments implements Iterable<String>, Serializable {
+import javax.annotation.Nullable;
+
+public class Arguments implements Iterable<Object>, Serializable {
     private static final long serialVersionUID = -5031843820289891138L;
     private static final Pattern spaces = Pattern.compile("[\\s]");
 
-    private final Collection<String> arguments;
+    private final Collection<Object> arguments;
 
+    public int size() {
+        return this.arguments.size();
+    }
 
     public Arguments() {
         this.arguments = Lists.newLinkedList();
@@ -23,22 +33,33 @@ public class Arguments implements Iterable<String>, Serializable {
         this.arguments = Lists.newLinkedList(other.arguments);
     }
 
-
-    public Arguments add(String arg) {
-        if(arg == null || arg.isEmpty()) {
+    public Arguments add(Object arg) {
+        if (arg == null || (arg instanceof String && ((String)arg).isEmpty()))
             return this;
-        }
         arguments.add(arg);
         return this;
     }
 
+    public Arguments add(Object arg0, Object arg1) {
+        add(arg0);
+        add(arg1);
+        return this;
+    }
+
+    public Arguments add(Object... args) {
+        for (Object arg : args) {
+            add(arg);
+        }
+        return this;
+    }
+
     public Arguments addLine(String line) {
-        addAll(spaces.split(line));
+        add(spaces.split(line));
         return this;
     }
 
     public Arguments addFile(File file) {
-        add(StringUtils.fixFileSeparatorChar(file.toString()));
+        add(file);
         return this;
     }
 
@@ -55,35 +76,14 @@ public class Arguments implements Iterable<String>, Serializable {
         return this;
     }
 
-    public Arguments addAll(String... args) {
-        for(String arg : args) {
-            add(arg);
-        }
-        return this;
-    }
-
-    public Arguments addAll(Object... args) {
-        for(Object obj : args) {
-            add(obj.toString());
-        }
-        return this;
-    }
-
     public Arguments addAll(Arguments args) {
         addAll(args.arguments);
         return this;
     }
 
-    public Arguments addAll(Iterable<String> args) {
-        for(String arg : args) {
-            add(arg);
-        }
-        return this;
-    }
-
-    public Arguments addAllObjs(Iterable<Object> args) {
+    public Arguments addAll(Iterable<Object> args) {
         for(Object obj : args) {
-            add(obj.toString());
+            add(obj);
         }
         return this;
     }
@@ -94,24 +94,46 @@ public class Arguments implements Iterable<String>, Serializable {
         return this;
     }
 
-
-    public String[] toArray() {
-        return arguments.toArray(new String[0]);
+    /**
+     * Returns the arguments as an iterable of strings.
+     *
+     * @param workingDirectory The working directory relative to which the paths have to be;
+     *                         or <code>null</code> to keep paths absolute.
+     * @return An iterable of strings.
+     */
+    public List<String> asStrings(@Nullable Path workingDirectory) {
+        List<String> result = new ArrayList<>(this.size());
+        for (Object arg : this) {
+            result.add(asString(arg, workingDirectory));
+        }
+        return result;
     }
 
-    @Override public Iterator<String> iterator() {
+    private String asString(Object arg, @Nullable Path workingDirectory) {
+        if (arg instanceof File) {
+            Path path = ((File)arg).toPath();
+            if (workingDirectory != null) {
+                path = workingDirectory.relativize(path);
+            }
+            return StringUtils.fixFileSeparatorChar(path.toString());
+        } else {
+            return arg.toString();
+        }
+    }
+
+    @Override public Iterator<Object> iterator() {
         return arguments.iterator();
     }
 
     @Override public String toString() {
         boolean first = true;
         final StringBuilder sb = new StringBuilder();
-        for(String arg : arguments) {
+        for(String arg : asStrings(null)) {
             if(!first) {
                 sb.append(' ');
             }
             sb.append(StringUtils.quoteArgument(arg));
-            first = true;
+            first = false;
         }
         return sb.toString();
     }
