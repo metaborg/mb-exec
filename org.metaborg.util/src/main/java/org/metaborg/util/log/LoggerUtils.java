@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LoggerUtils {
-    public static ILogger logger(Logger slf4jlogger) {
+    private static ILogger logger(Logger slf4jlogger) {
         return new MetaborgLogger(slf4jlogger);
     }
 

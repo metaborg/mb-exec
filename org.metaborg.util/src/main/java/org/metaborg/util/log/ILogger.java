@@ -1,9 +1,11 @@
 package org.metaborg.util.log;
 
+import javax.annotation.Nullable;
+
 public interface ILogger {
     public void trace(String msg);
 
-    public void trace(String msg, Throwable t);
+    public void trace(String msg, @Nullable Throwable t);
 
     public void trace(String fmt, Object... args);
 
@@ -14,7 +16,7 @@ public interface ILogger {
 
     public void debug(String msg);
 
-    public void debug(String msg, Throwable t);
+    public void debug(String msg, @Nullable Throwable t);
 
     public void debug(String fmt, Object... args);
 
@@ -25,7 +27,7 @@ public interface ILogger {
 
     public void info(String msg);
 
-    public void info(String msg, Throwable t);
+    public void info(String msg, @Nullable Throwable t);
 
     public void info(String fmt, Object... args);
 
@@ -36,7 +38,7 @@ public interface ILogger {
 
     public void warn(String msg);
 
-    public void warn(String msg, Throwable t);
+    public void warn(String msg, @Nullable Throwable t);
 
     public void warn(String fmt, Object... args);
 
@@ -47,7 +49,7 @@ public interface ILogger {
 
     public void error(String msg);
 
-    public void error(String msg, Throwable t);
+    public void error(String msg, @Nullable Throwable t);
 
     public void error(String fmt, Object... args);
 
@@ -58,7 +60,7 @@ public interface ILogger {
 
     public void log(Level level, String msg);
 
-    public void log(Level level, String msg, Throwable t);
+    public void log(Level level, String msg, @Nullable Throwable t);
 
     public void log(Level level, String fmt, Object... args);
 
