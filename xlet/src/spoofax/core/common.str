@@ -1,7 +1,0 @@
-module spoofax/core/common
-
-strategies
-
-  unimpl = where(<debug> "Not implemented!") ; fail
-  
-  tc(s) = s

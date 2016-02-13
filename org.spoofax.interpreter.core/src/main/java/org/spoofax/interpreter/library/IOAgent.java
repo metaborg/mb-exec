@@ -14,12 +14,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -52,11 +50,11 @@ public class IOAgent {
 
     private final Map<Integer, FileHandle> openFiles = new HashMap<Integer, FileHandle>();
 
-    protected final Writer stdoutWriter = new PrintStreamWriter(System.out);
-    protected final Writer stderrWriter = new PrintStreamWriter(System.err);
+    private final Writer stdoutWriter = new PrintStreamWriter(System.out);
+    private final Writer stderrWriter = new PrintStreamWriter(System.err);
     protected final Reader stdinReader = new InputStreamReader(System.in, FILE_CHARSET);
-    protected final OutputStream stdout = System.out;
-    protected final OutputStream stderr = System.err;
+    private final OutputStream stdout = System.out;
+    private final OutputStream stderr = System.err;
     protected final InputStream stdin = System.in;
 
     private String workingDir;
@@ -397,43 +395,5 @@ public class IOAgent {
         FileHandle(RandomAccessFile file) {
             this.file = file;
         }
-    }
-
-    /**
-     * A class for writing to a PrintStream.
-     *
-     * @author Lennart Kats <lennart add lclnet.nl>
-     */
-    private static class PrintStreamWriter extends Writer {
-
-        private final PrintStream stream;
-
-        PrintStreamWriter(PrintStream stream) {
-            this.stream = stream;
-        }
-
-        @Override
-        public void close() throws IOException {
-            stream.close();
-        }
-
-        @Override
-        public void flush() throws IOException {
-            stream.flush();
-        }
-
-        @Override
-        public void write(char[] cbuf, int off, int len) throws IOException {
-            if (off == 0 && len == cbuf.length)
-                stream.print(cbuf);
-            else
-                stream.append(CharBuffer.wrap(cbuf, off, len));
-        }
-
-        @Override
-        public void write(String str, int off, int len) throws IOException {
-            stream.append(str, off, len);
-        }
-
     }
 }

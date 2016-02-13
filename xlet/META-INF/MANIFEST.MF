@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Xlet
-Bundle-SymbolicName: org.spoofax.xlet
-Bundle-Version: 0.1.0
-Bundle-Localization: plugin
