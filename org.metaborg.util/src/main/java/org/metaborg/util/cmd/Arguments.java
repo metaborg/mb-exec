@@ -1,19 +1,17 @@
 package org.metaborg.util.cmd;
 
 import java.io.File;
-import java.net.URI;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.google.common.collect.Lists;
-
 import javax.annotation.Nullable;
+
+import com.google.common.collect.Lists;
 
 public class Arguments implements Iterable<Object>, Serializable {
     private static final long serialVersionUID = -5031843820289891138L;
@@ -21,9 +19,6 @@ public class Arguments implements Iterable<Object>, Serializable {
 
     private final Collection<Object> arguments;
 
-    public int size() {
-        return this.arguments.size();
-    }
 
     public Arguments() {
         this.arguments = Lists.newLinkedList();
@@ -33,8 +28,9 @@ public class Arguments implements Iterable<Object>, Serializable {
         this.arguments = Lists.newLinkedList(other.arguments);
     }
 
+
     public Arguments add(Object arg) {
-        if (arg == null || (arg instanceof String && ((String)arg).isEmpty()))
+        if(arg == null || (arg instanceof String && ((String) arg).isEmpty()))
             return this;
         arguments.add(arg);
         return this;
@@ -47,14 +43,14 @@ public class Arguments implements Iterable<Object>, Serializable {
     }
 
     public Arguments add(Object... args) {
-        for (Object arg : args) {
+        for(Object arg : args) {
             add(arg);
         }
         return this;
     }
 
     public Arguments addLine(String line) {
-        add(spaces.split(line));
+        add((Object[]) spaces.split(line));
         return this;
     }
 
@@ -97,22 +93,23 @@ public class Arguments implements Iterable<Object>, Serializable {
     /**
      * Returns the arguments as an iterable of strings.
      *
-     * @param workingDirectory The working directory relative to which the paths have to be;
-     *                         or <code>null</code> to keep paths absolute.
+     * @param workingDirectory
+     *            The working directory relative to which the paths have to be; or <code>null</code> to keep paths
+     *            absolute.
      * @return An iterable of strings.
      */
     public List<String> asStrings(@Nullable Path workingDirectory) {
         List<String> result = new ArrayList<>(this.size());
-        for (Object arg : this) {
+        for(Object arg : this) {
             result.add(asString(arg, workingDirectory));
         }
         return result;
     }
 
     private String asString(Object arg, @Nullable Path workingDirectory) {
-        if (arg instanceof File) {
-            Path path = ((File)arg).toPath();
-            if (workingDirectory != null) {
+        if(arg instanceof File) {
+            Path path = ((File) arg).toPath();
+            if(workingDirectory != null) {
                 path = workingDirectory.relativize(path);
             }
             return StringUtils.fixFileSeparatorChar(path.toString());
@@ -121,9 +118,15 @@ public class Arguments implements Iterable<Object>, Serializable {
         }
     }
 
+
+    public int size() {
+        return this.arguments.size();
+    }
+
     @Override public Iterator<Object> iterator() {
         return arguments.iterator();
     }
+
 
     @Override public String toString() {
         boolean first = true;
