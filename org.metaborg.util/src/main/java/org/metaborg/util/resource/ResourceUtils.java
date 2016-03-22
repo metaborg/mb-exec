@@ -46,7 +46,7 @@ public class ResourceUtils {
      */
     public static Collection<FileObject> expand(Iterable<FileObject> locations) {
         final Set<FileName> names = Sets.newHashSet();
-        final Collection<FileObject> resources = Lists.newLinkedList();
+        final Collection<FileObject> resources = Lists.newArrayList();
         for(FileObject location : locations) {
             final Iterable<FileObject> files = expand(location);
             for(FileObject file : files) {
