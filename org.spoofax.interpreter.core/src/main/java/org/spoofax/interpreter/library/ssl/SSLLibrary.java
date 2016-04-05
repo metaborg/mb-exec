@@ -192,6 +192,4 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
     public static SSLLibrary instance(IContext env) {
         return (SSLLibrary)env.getOperatorRegistry(REGISTRY_NAME);
     }
-
-
 }

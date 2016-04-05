@@ -1,5 +1,6 @@
 package org.metaborg.util.observable;
 
+import java.util.Iterator;
 import java.util.Queue;
 
 import rx.Notification;
@@ -38,5 +39,10 @@ public class TestableObserver<T> implements ITestableObserver<T> {
 
     @Override public void clear() {
         notifications.clear();
+    }
+
+    
+    @Override public Iterator<TimestampedNotification<T>> iterator() {
+        return notifications.iterator();
     }
 }

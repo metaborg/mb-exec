@@ -1,5 +1,0 @@
-module spoofax/ui/windows
-
-strategies
-
-  spoofax-ui-popup = ?(title, content) ; prim("SPX_ui_popup", title, content)
