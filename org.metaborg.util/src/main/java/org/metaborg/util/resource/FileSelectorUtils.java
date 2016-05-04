@@ -7,6 +7,7 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileType;
 import org.metaborg.util.iterators.Iterables2;
 
 import com.google.common.collect.Lists;
@@ -66,6 +67,23 @@ public class FileSelectorUtils {
 
     public static FileSelector regex(Pattern pattern) {
         return new PatternFileSelector(pattern);
+    }
+
+ 
+    public static FileSelector ant(String pattern) {
+        return new AntPatternFileSelector(pattern);
+    }
+    
+    public static FileSelector ant(String pattern, FileType fileType) {
+        return new AntPatternFileSelector(pattern, fileType);
+    }
+
+    public static FileSelector ant(Iterable<String> patterns) {
+        return new AntPatternFileSelector(patterns);
+    }
+    
+    public static FileSelector ant(Iterable<String> patterns, FileType fileType) {
+        return new AntPatternFileSelector(patterns, fileType);
     }
 
 

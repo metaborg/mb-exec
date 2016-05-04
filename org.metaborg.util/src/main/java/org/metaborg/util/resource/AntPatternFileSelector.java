@@ -13,18 +13,30 @@ import com.google.common.collect.Sets;
  * AntPatternFileSelector is a VFS2 file selector that is configured using Ant
  * patterns. Examples of patterns are:
  * <ul>
- * <li>
+ * <li> <i>somedir&#47;**</i> recursively selects all files under directory
+ *      <i>somedir</i>; same as <i>somedir/</i>
+ * <li> <i>somedir&#47;*</i> selects all files directly in directory
+ *      <i>somedir</i>
+ * <li> <i>**&#47;somedir&#47;*</i> selects all files in directories named
+ *      <i>somedir</i>
+ * <li> <i>file?</i> selects all files name <i>file</i> followed by one more
+ *      character
  * </ul>
  * <p>
- * NB. To keep the exact same behavior as Ant, by default only files, but not
+ * To keep the exact same behavior as Ant, by default only files, but not
  * folders are selected. * This behavior can be changed by passing a FileType
  * argument to the constructor.
+ * <p>
+ * The file selector is inclusive. To create an exclusive selector, or to build
+ * more complicated selectors, see the combinators in the
+ * {@link org.metaborg.util.resource.FileSelectorUtils} class.
  */
 public class AntPatternFileSelector implements FileSelector {
     private static final FileType DEFAULT_FILETYPE = FileType.FILE;
 
     private final Set<AntPattern> patterns = Sets.newHashSet();
     private final FileType fileType;
+
 
     /**
      * Create a file selector that selects files that match the pattern.
@@ -69,6 +81,7 @@ public class AntPatternFileSelector implements FileSelector {
         this.fileType = fileType;
     }
 
+
     @Override
     public boolean includeFile(FileSelectInfo fileInfo) throws Exception {
         if ( fileInfo.getFile().getType().equals(fileType) ) {
@@ -81,7 +94,6 @@ public class AntPatternFileSelector implements FileSelector {
         }
         return false;
     }
-
 
     @Override
     public boolean traverseDescendents(FileSelectInfo fileInfo) throws Exception {
