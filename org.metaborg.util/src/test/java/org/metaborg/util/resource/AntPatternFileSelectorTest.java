@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.Selectors;
 import org.apache.commons.vfs2.VFS;
 import org.junit.AfterClass;
@@ -84,4 +85,19 @@ public class AntPatternFileSelectorTest {
         final FileObject[] files = baseFolder.findFiles(selector);
         assertEquals(6, files.length);
     }
+
+    @Test
+    public void testTypeFileAndFolders() throws FileSystemException {
+        final FileSelector selector = new AntPatternFileSelector("dir1/", FileType.FILE_OR_FOLDER);
+        final FileObject[] files = baseFolder.findFiles(selector);
+        assertEquals(6, files.length);
+    }
+
+    @Test
+    public void testTypeFolders() throws FileSystemException {
+        final FileSelector selector = new AntPatternFileSelector("dir1/", FileType.FOLDER);
+        final FileObject[] files = baseFolder.findFiles(selector);
+        assertEquals(2, files.length);
+    }
+
 }

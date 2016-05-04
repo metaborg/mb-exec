@@ -8,6 +8,7 @@ import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileType;
+import static org.apache.commons.vfs2.FileType.*;
 import org.metaborg.util.iterators.Iterables2;
 
 import com.google.common.collect.Lists;
@@ -187,4 +188,11 @@ public class FileSelectorUtils {
         }
         return depth;
     }
+
+
+    public static boolean typeMatches(FileType type, FileType expectedType) {
+        return type == expectedType ||
+                ( expectedType == FILE_OR_FOLDER && ( type == FILE || type == FOLDER ) );
+    }
+
 }

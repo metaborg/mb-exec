@@ -84,7 +84,7 @@ public class AntPatternFileSelector implements FileSelector {
 
     @Override
     public boolean includeFile(FileSelectInfo fileInfo) throws Exception {
-        if ( fileInfo.getFile().getType().equals(fileType) ) {
+        if ( FileSelectorUtils.typeMatches(fileInfo.getFile().getType(), this.fileType) ) {
             String relativePath = fileInfo.getBaseFolder().getName().getRelativeName(fileInfo.getFile().getName());
             for ( AntPattern pattern : patterns ) {
                 if ( pattern.match(relativePath) ) {
