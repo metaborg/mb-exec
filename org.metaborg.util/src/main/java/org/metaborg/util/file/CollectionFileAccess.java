@@ -6,9 +6,9 @@ import org.apache.commons.vfs2.FileObject;
 
 import com.google.common.collect.Lists;
 
-public class FileAccess {
-    private final Collection<FileObject> reads = Lists.newLinkedList();
-    private final Collection<FileObject> writes = Lists.newLinkedList();
+public class CollectionFileAccess implements IFileAccess {
+    private final Collection<FileObject> reads = Lists.newArrayList();
+    private final Collection<FileObject> writes = Lists.newArrayList();
 
 
     public Iterable<FileObject> reads() {
@@ -20,11 +20,11 @@ public class FileAccess {
     }
 
 
-    public void addRead(FileObject file) {
+    @Override public void read(FileObject file) {
         reads.add(file);
     }
 
-    public void addWrite(FileObject file) {
+    @Override public void write(FileObject file) {
         writes.add(file);
     }
 }
