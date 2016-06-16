@@ -329,6 +329,18 @@ public class IOAgent {
 			return false;
 		}
     }
+    
+    public boolean exists(String fn) {
+        return openFile(fn).exists();
+    }
+    
+    public boolean readable(String fn) {
+        return openFile(fn).canRead();
+    }
+    
+    public boolean writable(String fn) {
+        return openFile(fn).canWrite();
+    }
 
     
 
