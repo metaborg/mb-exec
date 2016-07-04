@@ -74,7 +74,7 @@ public class HashMultiTable<R, C, V> implements MultiTable<R, C, V> {
     }
 
     @Override public Iterable<V> rowValues(R rowKey) {
-        return Iterables2.from(row(rowKey).values());
+        return Iterables2.fromConcat(row(rowKey).values());
     }
 
     @Override public Map<R, Collection<V>> column(C columnKey) {
@@ -82,7 +82,7 @@ public class HashMultiTable<R, C, V> implements MultiTable<R, C, V> {
     }
 
     @Override public Iterable<V> columnValues(C columnKey) {
-        return Iterables2.from(column(columnKey).values());
+        return Iterables2.fromConcat(column(columnKey).values());
     }
 
     @Override public Set<Cell<R, C, Collection<V>>> cellSet() {
@@ -98,7 +98,7 @@ public class HashMultiTable<R, C, V> implements MultiTable<R, C, V> {
     }
 
     @Override public Iterable<V> values() {
-        return Iterables2.from(table.values());
+        return Iterables2.fromConcat(table.values());
     }
 
     @Override public Map<R, Map<C, Collection<V>>> rowMap() {

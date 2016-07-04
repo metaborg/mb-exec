@@ -82,7 +82,7 @@ public class FileSelectorUtils {
 
 
     public static FileSelector and(Iterable<FileSelector> selectors) {
-        return new AndFileSelector(Iterables2.from(selectors));
+        return new AndFileSelector(selectors);
     }
 
     public static FileSelector and(FileSelector... selectors) {

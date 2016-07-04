@@ -23,14 +23,14 @@ public final class Iterators2 {
     /**
      * Generates an iterator that iterates over all elements inside given iterators, pass through an iterable.
      */
-    public static <T> Iterator<T> from(Iterable<? extends Iterator<T>> iterators) {
+    public static <T> Iterator<T> fromConcat(Iterable<? extends Iterator<T>> iterators) {
         return new CompoundIterator<T>(iterators);
     }
 
     /**
      * Generates an iterator that iterates over all elements inside given iterators, passed through varargs.
      */
-    @SafeVarargs public static <T> Iterator<T> from(Iterator<T>... iterators) {
-        return from(Iterables2.from(iterators));
+    @SafeVarargs public static <T> Iterator<T> fromConcat(Iterator<T>... iterators) {
+        return fromConcat(Iterables2.from(iterators));
     }
 }

@@ -9,11 +9,15 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.FileTypeSelector;
 import org.metaborg.util.iterators.Iterables2;
+import org.metaborg.util.log.ILogger;
+import org.metaborg.util.log.LoggerUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 public class ResourceUtils {
+    private static final ILogger logger = LoggerUtils.logger(ResourceUtils.class);
+    
     /**
      * Returns all files in given location, recursively.
      * 
@@ -23,16 +27,17 @@ public class ResourceUtils {
      * @throws RuntimeException
      *             When finding files fails.
      */
-    public static Iterable<FileObject> expand(FileObject location) {
+    public static FileObject[] expand(FileObject location) {
         try {
             if(location.exists()) {
-                return Iterables2.from(location.findFiles(new FileTypeSelector(FileType.FILE)));
+                final FileObject[] files = location.findFiles(new FileTypeSelector(FileType.FILE));
+                return files;
             }
         } catch(FileSystemException e) {
-            final String message = String.format("Failed to get all files at location %s", location);
+            final String message = logger.format("Failed to get all files at location {}", location);
             throw new RuntimeException(message, e);
         }
-        return Iterables2.empty();
+        return new FileObject[0];
     }
 
     /**
@@ -48,7 +53,7 @@ public class ResourceUtils {
         final Set<FileName> names = Sets.newHashSet();
         final Collection<FileObject> resources = Lists.newArrayList();
         for(FileObject location : locations) {
-            final Iterable<FileObject> files = expand(location);
+            final FileObject[] files = expand(location);
             for(FileObject file : files) {
                 final FileName name = file.getName();
                 if(!names.contains(name)) {
