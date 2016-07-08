@@ -2,9 +2,9 @@ package org.metaborg.util.iterators;
 
 import java.util.Iterator;
 
-import rx.functions.Func0;
-
 import com.google.common.collect.ImmutableList;
+
+import rx.functions.Func0;
 
 /**
  * Utility class for iterables with missing functionality from Guava's Iterables.
@@ -32,20 +32,6 @@ public final class Iterables2 {
     }
 
     /**
-     * Generates an iterable that contains all elements inside given iterables, passed through an iterable.
-     */
-    public static <T> Iterable<T> from(Iterable<? extends Iterable<T>> iterables) {
-        return new CompoundIterable<T>(iterables);
-    }
-
-    /**
-     * Generates an iterable that contains all elements inside given iterables, passed through varargs.
-     */
-    @SafeVarargs public static <T> Iterable<T> from(Iterable<T>... iterablesArray) {
-        return from(Iterables2.<Iterable<T>>from(iterablesArray));
-    }
-
-    /**
      * Generates an iterable that contains elements from given iterator generator.
      */
     public static <T> Iterable<T> from(Func0<Iterator<T>> iteratorGenerator) {
@@ -59,4 +45,19 @@ public final class Iterables2 {
     public static <T> Iterable<T> fromOnce(Iterator<T> iterator) {
         return new IteratorIterableOnce<T>(iterator);
     }
+
+    /**
+     * Generates an iterable that contains all elements inside given iterables, passed through an iterable.
+     */
+    public static <T> Iterable<T> fromConcat(Iterable<? extends Iterable<T>> iterables) {
+        return new CompoundIterable<T>(iterables);
+    }
+
+    /**
+     * Generates an iterable that contains all elements inside given iterables, passed through varargs.
+     */
+    @SafeVarargs public static <T> Iterable<T> fromConcat(Iterable<T>... iterablesArray) {
+        return fromConcat(Iterables2.<Iterable<T>>from(iterablesArray));
+    }
+
 }

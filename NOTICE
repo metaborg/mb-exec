@@ -4,3 +4,7 @@ Copyright 2016 Delft University of Technology
 This project includes software developed at the Programming
 Languages Group at Delft University of Technology
 (http://www.tudelft.nl).
+
+The AntPattern class is based on code from Apache Ant, copyright
+1999-2016 The Apache Software Foundation, which is distributed under
+the Apache License 2.0.

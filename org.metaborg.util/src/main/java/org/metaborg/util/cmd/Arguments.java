@@ -30,8 +30,9 @@ public class Arguments implements Iterable<Object>, Serializable {
 
 
     public Arguments add(Object arg) {
-        if (arg == null || (arg instanceof String && ((String)arg).isEmpty()))
+        if(arg == null || (arg instanceof String && ((String) arg).isEmpty())) {
             return this;
+        }
         arguments.add(arg);
         return this;
     }
@@ -43,7 +44,7 @@ public class Arguments implements Iterable<Object>, Serializable {
     }
 
     public Arguments add(Object... args) {
-        for (Object arg : args) {
+        for(Object arg : args) {
             add(arg);
         }
         return this;
@@ -100,16 +101,16 @@ public class Arguments implements Iterable<Object>, Serializable {
      */
     public List<String> asStrings(@Nullable Path workingDirectory) {
         List<String> result = new ArrayList<>(this.size());
-        for (Object arg : this) {
+        for(Object arg : this) {
             result.add(asString(arg, workingDirectory));
         }
         return result;
     }
 
     private String asString(Object arg, @Nullable Path workingDirectory) {
-        if (arg instanceof File) {
-            Path path = ((File)arg).toPath();
-            if (workingDirectory != null) {
+        if(arg instanceof File) {
+            Path path = ((File) arg).toPath();
+            if(workingDirectory != null) {
                 path = workingDirectory.relativize(path);
             }
             return StringUtils.fixFileSeparatorChar(path.toString());

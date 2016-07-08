@@ -1,37 +1,27 @@
 package org.metaborg.util.resource;
 
+import static org.apache.commons.vfs2.FileType.*;
+
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+import org.apache.commons.vfs2.AllFileSelector;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileType;
 import org.metaborg.util.iterators.Iterables2;
 
 import com.google.common.collect.Lists;
 
 public class FileSelectorUtils {
-    public static FileSelector and(Iterable<FileSelector> selectors) {
-        return new AndFileSelector(Iterables2.from(selectors));
+    public static FileSelector all() {
+        return new AllFileSelector();
     }
 
-    public static FileSelector and(FileSelector... selectors) {
-        return and(Iterables2.from(selectors));
-    }
-
-
-    public static FileSelector or(Iterable<FileSelector> selectors) {
-        return new OrFileSelector(selectors);
-    }
-
-    public static FileSelector or(FileSelector... selectors) {
-        return or(Iterables2.from(selectors));
-    }
-
-
-    public static FileSelector not(FileSelector selector) {
-        return new NotFileSelector(selector);
+    public static FileSelector none() {
+        return new NoneFileSelector();
     }
 
 
@@ -39,10 +29,11 @@ public class FileSelectorUtils {
         return new ContainsFileSelector(contains);
     }
 
+
     public static FileSelector endsWith(String endsWith) {
         return new EndsWithFileSelector(endsWith);
     }
-    
+
     public static FileSelector extensions(Iterable<String> extensions) {
         return new ExtensionFileSelector(extensions);
     }
@@ -66,6 +57,59 @@ public class FileSelectorUtils {
 
     public static FileSelector regex(Pattern pattern) {
         return new PatternFileSelector(pattern);
+    }
+
+
+    public static FileSelector ant(String pattern) {
+        return new AntPatternFileSelector(pattern);
+    }
+
+    public static FileSelector ant(String pattern, FileType fileType) {
+        return new AntPatternFileSelector(pattern, fileType);
+    }
+
+    public static FileSelector ant(Iterable<String> patterns) {
+        return new AntPatternFileSelector(patterns);
+    }
+
+    public static FileSelector ant(String... patterns) {
+        return new AntPatternFileSelector(Iterables2.from(patterns));
+    }
+
+    public static FileSelector ant(Iterable<String> patterns, FileType fileType) {
+        return new AntPatternFileSelector(patterns, fileType);
+    }
+
+
+    public static FileSelector and(Iterable<FileSelector> selectors) {
+        return new AndFileSelector(selectors);
+    }
+
+    public static FileSelector and(FileSelector... selectors) {
+        return and(Iterables2.from(selectors));
+    }
+
+
+    public static FileSelector or(Iterable<FileSelector> selectors) {
+        return new OrFileSelector(selectors);
+    }
+
+    public static FileSelector or(FileSelector... selectors) {
+        return or(Iterables2.from(selectors));
+    }
+
+
+    public static FileSelector not(FileSelector selector) {
+        return new NotFileSelector(selector);
+    }
+
+
+    public static FileSelector includeExclude(FileSelector include, FileSelector exclude) {
+        return new IncludeExcludeFileSelector(include, exclude);
+    }
+
+    public static FileSelector includesExcludes(Iterable<FileSelector> includes, Iterable<FileSelector> excludes) {
+        return new IncludesExcludesFileSelector(includes, excludes);
     }
 
 
@@ -93,7 +137,7 @@ public class FileSelectorUtils {
             if(!selector.includeFile(info)) {
                 return false;
             }
-            
+
             // Check only once if resource equals the base
             if(depth == 0) {
                 return includeOne(selector, resource, info);
@@ -168,5 +212,10 @@ public class FileSelectorUtils {
             }
         }
         return depth;
+    }
+
+
+    public static boolean typeMatches(FileType type, FileType expectedType) {
+        return type == expectedType || (expectedType == FILE_OR_FOLDER && (type == FILE || type == FOLDER));
     }
 }
