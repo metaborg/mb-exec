@@ -101,9 +101,9 @@ public class StackTracer {
         
         for (int i = 0; i < depth; i++) {
             if(!onlyCurrent && i == currentDepth - 1) {
-                results[results.length - i - 1] = frames[i] + " (*)";
+                results[results.length - i - 1] = " => " + frames[i];
             } else {
-                results[results.length - i - 1] = frames[i];
+                results[results.length - i - 1] = "    " + frames[i];
             }
         }
         
@@ -121,7 +121,7 @@ public class StackTracer {
             currentDepth = failureDepth = 0;
             frames = new String[10]; 
         } else {
-            currentDepth = min(trace.length, currentDepth);
+            currentDepth = min(trace.length, currentDepth - 1);
             failureDepth = trace.length;
             frames = trace;
         }
@@ -164,16 +164,15 @@ public class StackTracer {
             int depth = onlyCurrent ? currentDepth : failureDepth;
             String[] frames = this.frames.clone(); // avoid _most_ race conditions (for UncaughtExceptionHandler)
             
-            // TODO: reverse the order of this trace: latest frames should be at the end...
             for (int i = 0; i < depth; i++) {
                 if (i == MAX_REPORTED_FRAMES - MAX_REPORTED_FRAMES_TAIL) {
                     writer.write("...truncated..." + "\n");
                     i = Math.max(i + 1, depth - MAX_REPORTED_FRAMES_TAIL);
                 }
                 if(!onlyCurrent && i == currentDepth - 1) {
-                    writer.write("\t" + frames[i] + " (*)\n");
+                    writer.write(" => " + frames[i] + "\n");
                 } else {
-                    writer.write("\t" + frames[i] + "\n");
+                    writer.write("    " + frames[i] + "\n");
                 }
             }
             writer.flush();
