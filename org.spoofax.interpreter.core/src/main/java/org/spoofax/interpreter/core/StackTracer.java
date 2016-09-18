@@ -99,8 +99,13 @@ public class StackTracer {
         String[] frames = this.frames; // avoid _some_ race conditions        
         String[] results = new String[depth];
         
-        for (int i = 0; i < depth; i++)
-            results[results.length - i - 1] = frames[i];
+        for (int i = 0; i < depth; i++) {
+            if(!onlyCurrent && i == currentDepth - 1) {
+                results[results.length - i - 1] = frames[i] + " (*)";
+            } else {
+                results[results.length - i - 1] = frames[i];
+            }
+        }
         
         return results;
     }
@@ -165,7 +170,11 @@ public class StackTracer {
                     writer.write("...truncated..." + "\n");
                     i = Math.max(i + 1, depth - MAX_REPORTED_FRAMES_TAIL);
                 }
-                writer.write("\t" + frames[i] + "\n");
+                if(!onlyCurrent && i == currentDepth - 1) {
+                    writer.write("\t" + frames[i] + " (*)\n");
+                } else {
+                    writer.write("\t" + frames[i] + "\n");
+                }
             }
             writer.flush();
         } catch (IOException e) {
