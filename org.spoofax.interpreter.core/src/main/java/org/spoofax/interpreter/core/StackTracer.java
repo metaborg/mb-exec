@@ -96,7 +96,7 @@ public class StackTracer {
      */
     public String[] getTrace(boolean onlyCurrent) {
         int depth = onlyCurrent ? currentDepth : failureDepth;
-        String[] frames = this.frames; // avoid _some_ race conditions        
+        String[] frames = this.frames.clone(); // avoid _some_ race conditions        
         String[] results = new String[depth];
         
         for (int i = 0; i < depth; i++) {
