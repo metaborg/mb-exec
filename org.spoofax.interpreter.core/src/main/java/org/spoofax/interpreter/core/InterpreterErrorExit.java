@@ -45,7 +45,7 @@ public class InterpreterErrorExit extends InterpreterExit {
     }
 
     @Override
-    public String getMessage() {
+    public String getLocalizedMessage() {
 		StringBuilder sb = new StringBuilder(super.getMessage());
 		IStrategoTerm term = getTerm();
 		if (term != null) {
