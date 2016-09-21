@@ -114,10 +114,10 @@ public class Interpreter {
             return success;
         } catch (InterpreterException e) {
             stackTracer.popOnExit(false);
-            throw new InterpreterException("Exception during evaluation", e);
+            throw new InterpreterException("Exception during evaluation: "+e.getMessage(), e);
         } catch (RuntimeException e) {
             stackTracer.popOnExit(false);
-            throw new InterpreterException("Exception during evaluation", e);
+            throw new InterpreterException("Exception during evaluation: "+e.getMessage(), e);
         }
     }
 
