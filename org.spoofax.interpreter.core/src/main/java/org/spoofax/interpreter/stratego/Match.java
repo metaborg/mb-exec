@@ -114,8 +114,6 @@ public class Match extends Strategy {
             return null; //matchApplCons(env, t, p);
         } else if(c.equals("Nil")) {
             return null; //matchApplNil(env, t);
-        } else if(c.equals("")) {
-            return matchApplTuple(env, t, p);
         } 
 
         IStrategoList ctorArgs = Tools.listAt(p, 1);
@@ -152,36 +150,6 @@ public class Match extends Strategy {
 //    private Results matchApplNil(IContext env, IStrategoAppl t) {
 //        throw new NotImplementedException();
 //    }
-
-    private Results matchApplTuple(IContext env, IStrategoAppl t, IStrategoAppl p) throws InterpreterException {
-        String c = Tools.javaStringAt(p, 0);
-
-        // Check that the pattern p is really against a tuple 
-        if(!c.equals(""))
-            return null;
-
-        IStrategoList ctorArgs = Tools.listAt(p, 1);
-        
-        IStrategoTerm[] args = t.getAllSubterms();
-        
-        // Check that arity of pattern equals arity of tuple
-        if(ctorArgs.size() != args.length)
-            return null;
-        
-        // Match subterms of tuple against subpatterns of pattern 
-        Results r = emptyList();
-        for (int i = 0; i < ctorArgs.size(); i++) {
-            Results m = match(env, args[i],
-                              (IStrategoAppl) ctorArgs
-                              .getSubterm(i));
-            if (m != null)
-                r.addAll(m);
-            else
-                return null;
-        }
-
-        return r;
-    }
 
     private Results emptyList() {
         return new Results();
