@@ -6,27 +6,21 @@ import java.util.Set;
 
 import org.metaborg.util.iterators.Iterables2;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
 
-/**
- * Multitable that can hold duplicate row-value, column-value and row/column-value pairs. Uses
- * {@link HashBasedTable} as backing table.
- */
-public class HashMultiTable<R, C, V> implements MultiTable<R, C, V> {
+public abstract class AMultiTable<R, C, V> implements MultiTable<R, C, V> {
     private final Table<R, C, Collection<V>> table;
 
 
-    public static <R, C, V> MultiTable<R, C, V> create() {
-        return new HashMultiTable<R, C, V>();
+    public AMultiTable(Table<R, C, Collection<V>> table) {
+        this.table = table;
     }
 
 
-    public HashMultiTable() {
-        table = HashBasedTable.create();
-    }
+    protected abstract Collection<V> createCollection();
+
+    protected abstract Collection<V> createCollection(Collection<V> values);
 
 
     @Override public boolean contains(R rowKey, C columnKey) {
@@ -107,14 +101,5 @@ public class HashMultiTable<R, C, V> implements MultiTable<R, C, V> {
 
     @Override public Map<C, Map<R, Collection<V>>> columnMap() {
         return table.columnMap();
-    }
-
-
-    private Collection<V> createCollection() {
-        return Lists.newLinkedList();
-    }
-
-    private Collection<V> createCollection(Collection<V> values) {
-        return Lists.newLinkedList(values);
     }
 }

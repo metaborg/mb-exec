@@ -13,6 +13,10 @@ public final class Iterators2 {
         return new SingletonIterator<T>(t);
     }
 
+    public static <T> Iterator<T> cons(T head, Iterator<T> tail) {
+        return new ConsIterator<T>(head, tail);
+    }
+    
     /**
      * Generates an iterator that iterates over elements from given vararg elements.
      */

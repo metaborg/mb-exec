@@ -148,6 +148,53 @@ public class Assert2 {
         return formatted + "expected: " + formatClassAndValue(expected, expectedString) + " not contained in: "
             + formatClassAndValue(actual, actualString);
     }
+    
+    
+    public static <T extends Comparable<T>> void assertCompareLarger(T left, T right, String message) {
+        final int result = left.compareTo(right);
+        if(result < 1) {
+            final String formatted = preformat(message);
+            fail(formatted + "expected that: " + left + " > " + right + " but was: " + compareIntToChar(result));
+        }
+    }
+    
+    public static <T extends Comparable<T>> void assertCompareLarger(T left, T right) {
+        assertCompareLarger(left, right, null);
+    }
+    
+    public static <T extends Comparable<T>> void assertCompareSmaller(T left, T right, String message) {
+        final int result = left.compareTo(right);
+        if(result > -1) {
+            final String formatted = preformat(message);
+            fail(formatted + "expected that: " + left + " < " + right + " but was: " + compareIntToChar(result));
+        }
+    }
+    
+    public static <T extends Comparable<T>> void assertCompareSmaller(T left, T right) {
+        assertCompareSmaller(left, right, null);
+    }
+    
+    public static <T extends Comparable<T>> void assertCompareEquals(T left, T right, String message) {
+        final int result = left.compareTo(right);
+        if(result != 0) {
+            final String formatted = preformat(message);
+            fail(formatted + "expected that: " + left + " = " + right + " but was: " + compareIntToChar(result));
+        }
+    }
+    
+    public static <T extends Comparable<T>> void assertCompareEquals(T left, T right) {
+        assertCompareEquals(left, right, null);
+    }
+
+    private static char compareIntToChar(int compareInt) {
+        if(compareInt > 0) {
+            return '>';
+        } else if(compareInt < 0) {
+            return '<';
+        } else {
+            return '=';
+        }
+    }
 
 
     public static <T> void assertOnNext(Iterable<T> expecteds, ITestableObserver<T> observer, String message) {
