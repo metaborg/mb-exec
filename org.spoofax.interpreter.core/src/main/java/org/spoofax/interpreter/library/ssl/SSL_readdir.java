@@ -34,11 +34,7 @@ public class SSL_readdir extends AbstractPrimitive {
         
         String dir = Tools.javaString(tvars[0]);
         
-        File f = or.getIOAgent().openFile(dir);
-        if(f == null)
-            return false;
-        
-        String[] entries = f.list();
+        String[] entries = or.getIOAgent().readdir(dir);
         if(entries == null)
             return false;
         

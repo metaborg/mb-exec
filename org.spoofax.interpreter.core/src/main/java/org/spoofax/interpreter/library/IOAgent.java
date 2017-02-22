@@ -280,6 +280,15 @@ public class IOAgent {
     public final InputStream openInputStream(String fn) throws FileNotFoundException {
         return openInputStream(fn, false);
     }
+    
+    public String[] readdir(String fn) {
+        final File f = openFile(fn);
+        if(f == null) {
+            return null;
+        }
+        final String[] entries = f.list();
+        return entries;
+    }
 
     public void printError(String error) {
         try {
@@ -342,6 +351,9 @@ public class IOAgent {
         return openFile(fn).canWrite();
     }
 
+    public boolean isDirectory(String fn) {
+        return openFile(fn).isDirectory();
+    }
     
 
     @Deprecated // use getAbsolutePath instead

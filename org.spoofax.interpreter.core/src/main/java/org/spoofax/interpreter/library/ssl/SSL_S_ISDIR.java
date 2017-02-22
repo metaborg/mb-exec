@@ -26,7 +26,7 @@ public class SSL_S_ISDIR extends AbstractPrimitive {
         
         SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         
-        return op.getIOAgent().openFile(asJavaString(tvars[0])).isDirectory();
+        return op.getIOAgent().isDirectory(asJavaString(tvars[0]));
     }
 
 }
