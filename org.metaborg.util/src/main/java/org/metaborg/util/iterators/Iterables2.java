@@ -49,15 +49,15 @@ public final class Iterables2 {
     /**
      * Generates an iterable that contains all elements inside given iterables, passed through an iterable.
      */
-    public static <T> Iterable<T> fromConcat(Iterable<? extends Iterable<T>> iterables) {
+    public static <T> Iterable<T> fromConcat(Iterable<? extends Iterable<? extends T>> iterables) {
         return new CompoundIterable<T>(iterables);
     }
 
     /**
      * Generates an iterable that contains all elements inside given iterables, passed through varargs.
      */
-    @SafeVarargs public static <T> Iterable<T> fromConcat(Iterable<T>... iterablesArray) {
-        return fromConcat(Iterables2.<Iterable<T>>from(iterablesArray));
+    @SafeVarargs public static <T> Iterable<T> fromConcat(Iterable<? extends T>... iterablesArray) {
+        return fromConcat(Iterables2.from(iterablesArray));
     }
 
 }

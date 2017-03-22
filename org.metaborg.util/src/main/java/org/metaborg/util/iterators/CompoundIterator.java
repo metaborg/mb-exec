@@ -6,11 +6,11 @@ import java.util.NoSuchElementException;
 import com.google.common.collect.Iterators;
 
 public class CompoundIterator<T> implements Iterator<T> {
-    private final Iterator<? extends Iterator<T>> iterators;
-    private Iterator<T> iterator = Iterators.emptyIterator();
+    private final Iterator<? extends Iterator<? extends T>> iterators;
+    private Iterator<? extends T> iterator = Iterators.emptyIterator();
 
 
-    public CompoundIterator(Iterable<? extends Iterator<T>> iterators) {
+    public CompoundIterator(Iterable<? extends Iterator<? extends T>> iterators) {
         this.iterators = iterators.iterator();
     }
 
