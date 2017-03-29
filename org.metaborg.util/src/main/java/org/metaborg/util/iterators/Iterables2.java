@@ -1,10 +1,13 @@
 package org.metaborg.util.iterators;
 
 import java.util.Iterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import com.google.common.collect.ImmutableList;
 
 import rx.functions.Func0;
+import rx.functions.Func2;
 
 /**
  * Utility class for iterables with missing functionality from Guava's Iterables.
@@ -58,6 +61,21 @@ public final class Iterables2 {
      */
     @SafeVarargs public static <T> Iterable<T> fromConcat(Iterable<? extends T>... iterablesArray) {
         return fromConcat(Iterables2.from(iterablesArray));
+    }
+
+    /**
+     * Create a stream from an iterable.
+     * 
+     * @param iterable
+     * @return stream
+     */
+    public static <T> Stream<T> stream(Iterable<T> iterable) {
+        return StreamSupport.stream(iterable.spliterator(), false);
+    }
+
+    public static <T1, T2, R> Iterable<R> zip(Iterable<T1> iterable1, Iterable<T2> iterable2,
+            Func2<? super T1, ? super T2, R> combine) {
+        return new Zip2Iterable<>(iterable1, iterable2, combine);
     }
 
 }
