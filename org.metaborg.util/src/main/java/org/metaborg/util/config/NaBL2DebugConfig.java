@@ -16,7 +16,7 @@ public class NaBL2DebugConfig implements Serializable {
 
     public enum Flag {
 
-        ALL, ANALYSIS, FILES, COLLECTION, RESOLUTION, TIMING;
+        ALL, ANALYSIS, FILES, COLLECTION, RESOLUTION, CUSTOM, TIMING;
 
         public static EnumSet<Flag> valuesOf(Collection<String> names) {
             Set<Flag> flags = names.stream().map(String::toUpperCase).map(Flag::valueOf).collect(Collectors.toSet());
@@ -53,6 +53,10 @@ public class NaBL2DebugConfig implements Serializable {
 
     public boolean analysis() {
         return flags.contains(Flag.ALL) || flags.contains(Flag.ANALYSIS);
+    }
+
+    public boolean custom() {
+        return flags.contains(Flag.ALL) || flags.contains(Flag.CUSTOM);
     }
 
     public static NaBL2DebugConfig of(Collection<Flag> flags) {
