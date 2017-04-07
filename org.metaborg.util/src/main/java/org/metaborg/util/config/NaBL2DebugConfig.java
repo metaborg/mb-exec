@@ -1,6 +1,7 @@
 package org.metaborg.util.config;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
@@ -30,6 +31,10 @@ public class NaBL2DebugConfig implements Serializable {
     }
 
     private final EnumSet<Flag> flags;
+
+    public NaBL2DebugConfig(Flag... flags) {
+        this(Arrays.asList(flags));
+    }
 
     public NaBL2DebugConfig(Collection<Flag> flags) {
         this.flags = Sets.newEnumSet(flags, Flag.class);
