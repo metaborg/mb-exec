@@ -18,6 +18,7 @@ import java.util.concurrent.CancellationException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.library.IOperatorRegistry;
+import org.spoofax.interpreter.library.PrimitiveCache;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.stratego.Match.Binding;
 import org.spoofax.interpreter.stratego.Match.Results;
@@ -38,6 +39,8 @@ public class Context implements IContext {
 
     private final Map<String, IOperatorRegistry> operatorRegistries;
 
+    private final PrimitiveCache operatorCache;
+    
     private final Map<String, OpDecl> opdecls;
 
     private final StrategoSignature strategoSignature;
@@ -64,6 +67,7 @@ public class Context implements IContext {
         varScope = new VarScope(null);
         strategoSignature = new StrategoSignature(programFactory);
         operatorRegistries = new LinkedHashMap<String, IOperatorRegistry>();
+        operatorCache = new PrimitiveCache(2, 16);
 
         if (!skipStandardLibraries) {
            addOperatorRegistry(new SSLLibrary());
@@ -187,12 +191,17 @@ public class Context implements IContext {
 
     public AbstractPrimitive lookupOperator(String name) {
         if (asyncCancelled) cancel();
-        for(IOperatorRegistry or : operatorRegistries.values()) {
-            AbstractPrimitive t = or.get(name);
-            if(t != null)
-                return t;
+        AbstractPrimitive p = null;
+        if((p = operatorCache.get(name)) != null) {
+            return p;
         }
-        return null;
+        for(IOperatorRegistry or : operatorRegistries.values()) {
+            if((p = or.get(name)) != null) {
+                break;
+            }
+        }
+        operatorCache.put(name, p);
+        return p;
     }
 
     final void internalAddOperatorRegistry(IOperatorRegistry or) {

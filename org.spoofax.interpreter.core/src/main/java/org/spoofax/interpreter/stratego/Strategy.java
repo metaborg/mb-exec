@@ -35,6 +35,8 @@ abstract public class Strategy implements IConstruct {
         Context.debug(s);
     }
 
+    private transient String traceName;
+
     public SDefT.ArgType getType() {
         return type;
     }
@@ -46,7 +48,10 @@ abstract public class Strategy implements IConstruct {
 //    }
 
     protected String getTraceName() {
-        return this.getClass().getSimpleName();
+        if(traceName == null) {
+            traceName = this.getClass().getSimpleName();
+        }
+        return traceName;
     }
 
     @Override
@@ -58,31 +63,31 @@ abstract public class Strategy implements IConstruct {
 
     public Stack<Hook> getHook()
     {
-    	return hook;
+        return hook;
     }
 
     public boolean evaluate(IContext env) throws InterpreterException {
-    	ResultHook resultHook = new ResultHook();
-    	getHook().push(resultHook);
-    	Stack<Strategy> debugStack = null;
-    	if (DebugUtil.isDebugging()) {
-    		 debugStack = new Stack<Strategy>();
-    	}
-    	IConstruct c = this;
-    	boolean debug = DebugUtil.isDebugging();
-		while (c != null) {
-			if (debug)
-				debugStack.push((Strategy)c);
-			c = c.eval(env);
-		}
-    	if (DebugUtil.isDebugging()) {
-    		for (Strategy strat : debugStack) {
-    			if (strat.getHook().size() != 0)
-    				throw new InterpreterException("There was a leak on: " + debugStack);
-    		}
-    	}
+        ResultHook resultHook = new ResultHook();
+        getHook().push(resultHook);
+        Stack<Strategy> debugStack = null;
+        if (DebugUtil.isDebugging()) {
+             debugStack = new Stack<Strategy>();
+        }
+        IConstruct c = this;
+        boolean debug = DebugUtil.isDebugging();
+        while (c != null) {
+            if (debug)
+                debugStack.push((Strategy)c);
+            c = c.eval(env);
+        }
+        if (DebugUtil.isDebugging()) {
+            for (Strategy strat : debugStack) {
+                if (strat.getHook().size() != 0)
+                    throw new InterpreterException("There was a leak on: " + debugStack);
+            }
+        }
 
-		return resultHook.result;
+        return resultHook.result;
     }
 
     static class ResultHook extends Hook {

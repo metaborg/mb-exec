@@ -40,6 +40,10 @@ public class StackTracer {
         failureDepth = currentDepth;
     }
     
+    public final TryState pushTry() {
+        return new TryState();
+    }
+    
     public final void popOnFailure() {
         currentDepth--;
         // failureDepth stays the same and keeps track of this failure
@@ -180,4 +184,21 @@ public class StackTracer {
             // Swallow it like we're PrintStream
         }
     }
+    
+    public class TryState {
+        
+        private final int tryDepth;
+        
+        public TryState() {
+            tryDepth = currentDepth;
+        }
+        
+        public void caught() {
+            currentDepth = tryDepth;
+        }
+        
+    }
+    
+    
+    
 }

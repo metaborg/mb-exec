@@ -2,39 +2,38 @@ package org.metaborg.util.iterators;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Queue;
 
-import com.google.common.collect.Queues;
+import com.google.common.collect.Iterators;
 
 public class CompoundIterator<T> implements Iterator<T> {
-    private final Queue<? extends Iterator<T>> iterators;
+    private final Iterator<? extends Iterator<? extends T>> iterators;
+    private Iterator<? extends T> iterator = Iterators.emptyIterator();
 
 
-    public CompoundIterator(Iterable<? extends Iterator<T>> iterators) {
-        this.iterators = Queues.newArrayDeque(iterators);
+    public CompoundIterator(Iterable<? extends Iterator<? extends T>> iterators) {
+        this.iterators = iterators.iterator();
     }
 
 
     @Override public boolean hasNext() {
-        final Iterator<T> iterator = iterators.peek();
-        if(iterator == null) {
+        if(iterator.hasNext()) {
+            return true;
+        }
+        try {
+            iterator = iterators.next();
+        } catch(NoSuchElementException ex) {
             return false;
         }
-        return iterator.hasNext();
+        return hasNext();
     }
 
     @Override public T next() {
-        final Iterator<T> iterator = iterators.peek();
-        if(iterator == null) {
-            throw new NoSuchElementException();
-        }
-
-        if(iterator.hasNext()) {
+        try {
             return iterator.next();
-        } else {
-            iterators.poll();
-            return next();
+        } catch(NoSuchElementException ex) {
+            iterator = iterators.next();
         }
+        return next();
     }
 
     @Override public void remove() {
