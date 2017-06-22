@@ -35,6 +35,13 @@ public final class Iterables2 {
     }
 
     /**
+     * Generates an iterable with the given element first, followed by the elements of the tail iterable.
+     */
+    public static <T> Iterable<T> cons(T head, Iterable<T> tail) {
+        return new ConsIterable<>(head, tail);
+    }
+    
+    /**
      * Generates an iterable that contains elements from given iterator generator.
      */
     public static <T> Iterable<T> from(Func0<Iterator<T>> iteratorGenerator) {
