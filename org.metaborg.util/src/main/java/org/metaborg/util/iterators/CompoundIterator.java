@@ -1,13 +1,12 @@
 package org.metaborg.util.iterators;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.google.common.collect.Iterators;
-
 public class CompoundIterator<T> implements Iterator<T> {
     private final Iterator<? extends Iterator<? extends T>> iterators;
-    private Iterator<? extends T> iterator = Iterators.emptyIterator();
+    private Iterator<? extends T> iterator = Collections.emptyIterator();
 
 
     public CompoundIterator(Iterable<? extends Iterator<? extends T>> iterators) {
