@@ -1,9 +1,13 @@
 package org.metaborg.util;
 
+import java.io.Serializable;
+
 /**
  * Pointer pointer in Java.
  */
-public class Ref<T> {
+public class Ref<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private T value;
 
 
