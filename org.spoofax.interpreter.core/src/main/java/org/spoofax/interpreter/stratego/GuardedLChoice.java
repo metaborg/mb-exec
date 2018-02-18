@@ -58,10 +58,8 @@ public class GuardedLChoice extends Strategy {
         		@Override
                 public IConstruct onFailure(IContext env) throws InterpreterException {
     	        	env.setCurrent(oldCurrent);
-    	        	env.getVarScope().restoreUnboundVars(bi);    				
-    				IConstruct result = eval(env, n+1);
-    				env.getVarScope().setBoundVarsAfterBacktracking(bi);
-                    return result;
+    	        	env.getVarScope().restoreUnboundVars(bi);
+                    return eval(env, n+1);
     			}
         	});
         	return first;
