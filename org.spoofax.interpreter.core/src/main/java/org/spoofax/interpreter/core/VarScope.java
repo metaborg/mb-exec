@@ -148,7 +148,7 @@ public class VarScope {
         return dump(prefix, false);
     }
 
-    private void debug(Object... s) {
+    private static void debug(Object... s) {
         DebugUtil.debug(s);
     }
 
@@ -174,14 +174,29 @@ public class VarScope {
         return results;
     }
 
-    public void restoreUnboundVars(List<BindingInfo> bindings) {
+    public static void backtrackUnboundVars(List<BindingInfo> bindings) {
         for (BindingInfo binding : bindings) {
+            if (DebugUtil.isDebugging()) {
+                debug("backtracking variable: " + binding.name);
+            }
             binding.scope.backtrackVar(binding.name);
+        }
+    }
+
+    public static void restoreUnboundVars(List<BindingInfo> bindings) {
+        for (BindingInfo binding : bindings) {
+            if (DebugUtil.isDebugging()) {
+                debug("restoring backtracked variable: " + binding.name);
+            }
+            binding.scope.restoreVar(binding.name);
         }
     }
 
     private void backtrackVar(String name) {
         semiBound.add(name);
+    }
+    private void restoreVar(String name) {
+        semiBound.remove(name);
     }
 
     public Collection<SDefT> getStrategyDefinitions() {
