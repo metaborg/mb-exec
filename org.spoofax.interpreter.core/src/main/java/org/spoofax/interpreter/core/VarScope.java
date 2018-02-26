@@ -7,13 +7,7 @@
  */
 package org.spoofax.interpreter.core;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -27,11 +21,15 @@ public class VarScope {
 
     private Map<String, SDefT> svars;
 
+    // Term variables whose bindings were backtracked
+    private Set<String> semiBound;
+
     public VarScope(VarScope parent) {
         this.parent = parent;
 
         vars = new HashMap<String, IStrategoTerm>(0); //todo: create these on demand
         svars = new HashMap<String, SDefT>(0);
+        semiBound = new HashSet<>();
     }
 
     public IStrategoTerm lookup(String name) {
@@ -74,11 +72,13 @@ public class VarScope {
 
     public void add(String var, IStrategoTerm t) {
         vars.put(var, t);
+        semiBound.remove(var);
     }
 
     public void addVars(List<String> vars) {
         for (String var : vars) {
             this.vars.put(var, null);
+            semiBound.remove(var);
         }
     }
 
@@ -104,7 +104,7 @@ public class VarScope {
     }
 
     public boolean hasVarInLocalScope(String name) {
-        return vars.containsKey(name) && vars.get(name) != null;
+        return vars.containsKey(name) && vars.get(name) != null && !semiBound.contains(name);
     }
 
     public VarScope getParent() {
@@ -148,12 +148,13 @@ public class VarScope {
         return dump(prefix, false);
     }
 
-    private void debug(Object... s) {
+    private static void debug(Object... s) {
         DebugUtil.debug(s);
     }
 
     public void clear() {
         vars.clear();
+        semiBound.clear();
         svars.clear();
     }
 
@@ -173,24 +174,29 @@ public class VarScope {
         return results;
     }
 
-    public void restoreUnboundVars(List<BindingInfo> bindings) {
+    public static void backtrackUnboundVars(List<BindingInfo> bindings) {
         for (BindingInfo binding : bindings) {
-            binding.value = binding.scope.overrideVar(binding.name, null);
-        }
-    }
-
-    public void setBoundVarsAfterBacktracking(List<BindingInfo> bindings) {
-        for (BindingInfo binding : bindings) {
-            String name = binding.name;
-            IStrategoTerm value = binding.value;
-            if (value != null && vars.get(name) == null) {
-                overrideVar(name, value);
+            if (DebugUtil.isDebugging()) {
+                debug("backtracking variable: " + binding.name);
             }
+            binding.scope.backtrackVar(binding.name);
         }
     }
 
-    private IStrategoTerm overrideVar(String name, IStrategoTerm value) {
-        return vars.put(name, value);
+    public static void restoreUnboundVars(List<BindingInfo> bindings) {
+        for (BindingInfo binding : bindings) {
+            if (DebugUtil.isDebugging()) {
+                debug("restoring backtracked variable: " + binding.name);
+            }
+            binding.scope.restoreVar(binding.name);
+        }
+    }
+
+    private void backtrackVar(String name) {
+        semiBound.add(name);
+    }
+    private void restoreVar(String name) {
+        semiBound.remove(name);
     }
 
     public Collection<SDefT> getStrategyDefinitions() {
@@ -198,6 +204,7 @@ public class VarScope {
     }
 
     public boolean removeVar(String varName) {
+        semiBound.remove(varName);
         return vars.remove(varName) != null;
     }
 
@@ -207,5 +214,6 @@ public class VarScope {
 
     public void removeAllVars() {
         vars.clear();
+        semiBound.clear();
     }
 }

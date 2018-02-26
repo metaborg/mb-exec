@@ -9,11 +9,7 @@ package org.spoofax.interpreter.stratego;
 
 import java.util.List;
 
-import org.spoofax.interpreter.core.BindingInfo;
-import org.spoofax.interpreter.core.IConstruct;
-import org.spoofax.interpreter.core.IContext;
-import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Pair;
+import org.spoofax.interpreter.core.*;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
 
@@ -33,7 +29,7 @@ public class GuardedLChoice extends Strategy {
         return eval(env, 0);
     }
 
-    protected IConstruct eval(IContext env, final int n) throws InterpreterException {
+    protected Strategy eval(IContext env, final int n) throws InterpreterException {
     	if (n == (children.length - 1)) {
     		Strategy s = children[n].first;
     		s.getHook().push(getHook().pop());
@@ -58,10 +54,21 @@ public class GuardedLChoice extends Strategy {
         		@Override
                 public IConstruct onFailure(IContext env) throws InterpreterException {
     	        	env.setCurrent(oldCurrent);
-    	        	env.getVarScope().restoreUnboundVars(bi);    				
-    				IConstruct result = eval(env, n+1);
-    				env.getVarScope().setBoundVarsAfterBacktracking(bi);
-                    return result;
+    	        	VarScope.backtrackUnboundVars(bi);
+                    final Hook h = getHook().pop();
+                    getHook().push(new Hook() {
+                        @Override
+                        public IConstruct onSuccess(IContext env) throws InterpreterException {
+                            VarScope.restoreUnboundVars(bi);
+                            return h.onSuccess(env);
+                        }
+
+                        @Override
+                        public IConstruct onFailure(IContext env) throws InterpreterException {
+                            return h.onFailure(env);
+                        }
+                    });
+                    return eval(env, n + 1);
     			}
         	});
         	return first;
