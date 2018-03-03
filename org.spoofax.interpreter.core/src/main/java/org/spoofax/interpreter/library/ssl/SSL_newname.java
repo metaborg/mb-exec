@@ -64,7 +64,7 @@ public class SSL_newname extends AbstractPrimitive {
                 result = prefix + counterValue;
             } while((resultTerm = factory.tryMakeUniqueString(result)) == null);
 
-            env.setCurrent(resultTerm);
+            env.setCurrent(factory.replaceTerm(resultTerm, prefixTerm));
             return true;
         }
     }
