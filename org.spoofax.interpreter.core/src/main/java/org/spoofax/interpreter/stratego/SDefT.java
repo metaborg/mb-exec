@@ -236,7 +236,7 @@ public class SDefT implements IConstruct {
 
     // FIXME: next 3 methods copied from org.spoofax.interpreter.cli.StrategyCompletor
 
-    private static String unescape(String name) {
+    public static String unescape(String name) {
         return name.replace("_p_", "'").replace("__", "+")
                 .replace('_', '-').replace("+", "_");
     }
