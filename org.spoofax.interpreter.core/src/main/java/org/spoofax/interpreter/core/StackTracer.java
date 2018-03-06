@@ -24,12 +24,22 @@ public class StackTracer {
     private IOAgent ioAgent; 
     
     private String[] frames = new String[50];
+
+    private String callingContext = null;
     
     private int currentDepth;
     
     private int failureDepth;
+
+    public void setCallingContext(String callingContext) {
+        this.callingContext = callingContext;
+    }
     
     public final void push(String name) {
+        if (callingContext != null) {
+            name = name + "(" + callingContext + ")";
+            callingContext = null;
+        }
         int depth = currentDepth++;
         if (frames.length == depth) {
             String[] oldframes = frames;
