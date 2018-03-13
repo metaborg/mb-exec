@@ -45,6 +45,9 @@ public class Build extends Strategy {
         if (t == null) {
         	return getHook().pop().onFailure(env);
         }
+        if (!(Tools.isVar(term, env) || Tools.isAnno(term, env) && Tools.isVar(applAt(term, 0), env))) {
+            t = env.getFactory().replaceTerm(t, env.current());
+        }
         env.setCurrent(t);
 
         return getHook().pop().onSuccess(env);
