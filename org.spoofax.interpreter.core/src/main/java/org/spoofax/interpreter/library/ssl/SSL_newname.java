@@ -60,7 +60,7 @@ public class SSL_newname extends AbstractPrimitive {
             String result;
             IStrategoTerm resultTerm;
             do {
-                int counterValue = getNextValue(counter);
+                int counterValue = getNextValue(env, counter);
                 result = prefix + counterValue;
             } while((resultTerm = factory.tryMakeUniqueString(result)) == null);
 
@@ -69,13 +69,16 @@ public class SSL_newname extends AbstractPrimitive {
         }
     }
 
-    private int getNextValue(AtomicInteger counter) {
+    private int getNextValue(IContext env, AtomicInteger counter) {
         int result;
         for(;;) {
             result = counter.getAndIncrement();
             if(result >= 0) {
                 break;
             } else if(counter.compareAndSet(result, 0)) {
+                ((SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME))
+                    .getIOAgent()
+                    .printError("SSL_newname: counter wrapped around");
                 return 0;
             }
         }
