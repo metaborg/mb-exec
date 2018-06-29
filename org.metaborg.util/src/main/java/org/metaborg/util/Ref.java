@@ -1,6 +1,7 @@
 package org.metaborg.util;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Pointer pointer in Java.
@@ -27,4 +28,9 @@ public class Ref<T> implements Serializable {
     public void set(T value) {
         this.value = value;
     }
+
+    @Override public String toString() {
+        return "&" + Objects.toString(value);
+    }
+
 }
