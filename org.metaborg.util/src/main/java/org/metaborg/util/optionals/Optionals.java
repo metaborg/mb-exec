@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.metaborg.util.functions.CheckedFunction0;
 import org.metaborg.util.functions.Function0;
 import org.metaborg.util.functions.Function1;
 import org.metaborg.util.functions.Function2;
@@ -73,6 +74,14 @@ public class Optionals {
 
     public static <T> Stream<T> stream(Optional<T> opt) {
         return opt.isPresent() ? Stream.of(opt.get()) : Stream.empty();
+    }
+
+    public static <T, E extends Throwable> Optional<T> ofThrowing(CheckedFunction0<T, E> object) {
+        try {
+            return Optional.ofNullable(object.apply());
+        } catch(Throwable e) {
+            return Optional.empty();
+        }
     }
 
 }
