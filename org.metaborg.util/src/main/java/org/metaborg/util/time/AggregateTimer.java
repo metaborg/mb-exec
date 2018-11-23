@@ -65,8 +65,8 @@ public class AggregateTimer {
      * Resets the timer, forgetting the time noted when {@link #start()} was called.
      */
     public void reset() {
-        startTime = 0;
-        totalTime = -1;
+        startTime = -1;
+        totalTime = 0;
     }
 
 
