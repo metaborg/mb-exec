@@ -25,6 +25,12 @@
 			<artifactId>org.spoofax.interpreter.core</artifactId>
 			<version>${metaborg-version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.metaborg</groupId>
+			<artifactId>org.spoofax.interpreter.core</artifactId>
+			<version>${metaborg-version}</version>
+			<type>test-jar</type>
+		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
