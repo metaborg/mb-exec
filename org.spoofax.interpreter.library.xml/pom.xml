@@ -30,6 +30,7 @@
 			<artifactId>org.spoofax.interpreter.core</artifactId>
 			<version>${metaborg-version}</version>
 			<type>test-jar</type>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
