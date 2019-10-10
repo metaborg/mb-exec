@@ -11,6 +11,7 @@ import org.metaborg.util.functions.Function2;
 import org.metaborg.util.functions.Function3;
 import org.metaborg.util.functions.Function4;
 import org.metaborg.util.functions.Function5;
+import org.metaborg.util.functions.Function6;
 import org.metaborg.util.unit.Unit;
 
 import com.google.common.collect.Lists;
@@ -39,6 +40,14 @@ public class Optionals {
             Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, R> f) {
         return (o1.isPresent() && o2.isPresent() && o3.isPresent() && o4.isPresent() && o5.isPresent())
                 ? Optional.of(f.apply(o1.get(), o2.get(), o3.get(), o4.get(), o5.get())) : Optional.empty();
+    }
+
+    public static <T1, T2, T3, T4, T5, T6, R> Optional<R> lift(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3,
+            Optional<T4> o4, Optional<T5> o5, Optional<T6> o6,
+            Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, R> f) {
+        return (o1.isPresent() && o2.isPresent() && o3.isPresent() && o4.isPresent() && o5.isPresent()
+                && o6.isPresent()) ? Optional.of(f.apply(o1.get(), o2.get(), o3.get(), o4.get(), o5.get(), o6.get()))
+                        : Optional.empty();
     }
 
     public static <T> Optional<List<T>> sequence(Iterable<Optional<T>> os) {
