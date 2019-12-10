@@ -79,9 +79,9 @@ public class ResourceUtils {
      * @return Relative name if possible, otherwise absolute URI
      */
     public static String relativeName(FileName resource, FileName base, boolean strict) {
-        final boolean isUnderBase = resource.isAncestor(base);
+        final boolean isEqualOrAncestor = resource.equals(base) || resource.isAncestor(base);
         final boolean isInSameFilesystem = resource.getRoot().equals(base.getRoot());
-        if(isUnderBase || (!strict && isInSameFilesystem)) {
+        if(isEqualOrAncestor || (!strict && isInSameFilesystem)) {
             try {
                 return base.getRelativeName(resource);
             } catch(FileSystemException ex) {
