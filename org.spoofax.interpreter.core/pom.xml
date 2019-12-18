@@ -36,6 +36,11 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>io.usethesource</groupId>
+			<artifactId>capsule</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
