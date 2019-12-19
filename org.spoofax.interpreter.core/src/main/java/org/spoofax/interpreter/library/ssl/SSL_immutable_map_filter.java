@@ -12,7 +12,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class SSL_immutable_map_filter extends AbstractPrimitive {
 
     protected SSL_immutable_map_filter() {
-        super("SSL_immutable_map_filter", 1, 0);
+        super("SSL_immutable_map_filter", 2, 0);
     }
 
     @Override
@@ -21,19 +21,30 @@ public class SSL_immutable_map_filter extends AbstractPrimitive {
         if(!(env.current() instanceof StrategoImmutableMap)) {
             return false;
         }
+        final Strategy mapping = sargs[0];
+        final Strategy merge = sargs[1];
 
         final Map.Immutable<IStrategoTerm, IStrategoTerm> map = ((StrategoImmutableMap) env.current()).backingMap;
         final Map.Transient<IStrategoTerm, IStrategoTerm> resultMap = Map.Transient.of();
         for(java.util.Map.Entry<IStrategoTerm, IStrategoTerm> e : map.entrySet()) {
             env.setCurrent(env.getFactory().makeTuple(e.getKey(), e.getValue()));
-            if(!sargs[0].evaluate(env)) {
+            if(!mapping.evaluate(env)) {
                 continue;
             }
             final IStrategoTerm current = env.current();
             if(!(Tools.isTermTuple(current)) && current.getSubtermCount() == 2) {
                 return false;
             }
-            resultMap.__put(current.getSubterm(0), current.getSubterm(1));
+            final IStrategoTerm newKey = current.getSubterm(0);
+            final IStrategoTerm newValue = current.getSubterm(1);
+            final IStrategoTerm oldValue = resultMap.__put(newKey, newValue);
+            if(oldValue != null) {
+                env.setCurrent(env.getFactory().makeTuple(oldValue, newValue));
+                if(!merge.evaluate(env)) {
+                    continue;
+                }
+                resultMap.__put(newKey, env.current());
+            }
         }
 
         env.setCurrent(new StrategoImmutableMap(resultMap.freeze()));

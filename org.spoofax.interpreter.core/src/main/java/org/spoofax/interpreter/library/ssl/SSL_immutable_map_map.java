@@ -21,12 +21,14 @@ public class SSL_immutable_map_map extends AbstractPrimitive {
         if(!(env.current() instanceof StrategoImmutableMap)) {
             return false;
         }
+        final Strategy mapping = sargs[0];
+        final Strategy merge = sargs[1];
 
         final Map.Immutable<IStrategoTerm, IStrategoTerm> map = ((StrategoImmutableMap) env.current()).backingMap;
         final Map.Transient<IStrategoTerm, IStrategoTerm> resultMap = Map.Transient.of();
         for(java.util.Map.Entry<IStrategoTerm, IStrategoTerm> e : map.entrySet()) {
             env.setCurrent(env.getFactory().makeTuple(e.getKey(), e.getValue()));
-            if(!sargs[0].evaluate(env)) {
+            if(!mapping.evaluate(env)) {
                 return false;
             }
             final IStrategoTerm current = env.current();
@@ -38,7 +40,7 @@ public class SSL_immutable_map_map extends AbstractPrimitive {
             final IStrategoTerm oldValue = resultMap.__put(newKey, newValue);
             if(oldValue != null) {
                 env.setCurrent(env.getFactory().makeTuple(oldValue, newValue));
-                if(!sargs[1].evaluate(env)) {
+                if(!merge.evaluate(env)) {
                     return false;
                 }
                 resultMap.__put(newKey, env.current());
