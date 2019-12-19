@@ -12,7 +12,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class SSL_immutable_map_map extends AbstractPrimitive {
 
     protected SSL_immutable_map_map() {
-        super("SSL_immutable_map_map", 1, 0);
+        super("SSL_immutable_map_map", 2, 0);
     }
 
     @Override
@@ -33,7 +33,16 @@ public class SSL_immutable_map_map extends AbstractPrimitive {
             if(!(Tools.isTermTuple(current)) && current.getSubtermCount() == 2) {
                 return false;
             }
-            resultMap.__put(current.getSubterm(0), current.getSubterm(1));
+            final IStrategoTerm newKey = current.getSubterm(0);
+            final IStrategoTerm newValue = current.getSubterm(1);
+            final IStrategoTerm oldValue = resultMap.__put(newKey, newValue);
+            if(oldValue != null) {
+                env.setCurrent(env.getFactory().makeTuple(oldValue, newValue));
+                if(!sargs[1].evaluate(env)) {
+                    return false;
+                }
+                resultMap.__put(newKey, env.current());
+            }
         }
 
         env.setCurrent(new StrategoImmutableMap(resultMap.freeze()));
