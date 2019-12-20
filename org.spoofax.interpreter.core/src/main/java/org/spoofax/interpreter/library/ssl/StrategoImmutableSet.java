@@ -7,10 +7,16 @@ import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.StrategoTerm;
 import org.spoofax.terms.TermFactory;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 
 public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm {
     public final Set.Immutable<IStrategoTerm> backingSet;
+
+    public StrategoImmutableSet(IStrategoTerm... terms) {
+        this(Set.Immutable.<IStrategoTerm>of().__insertAll(new HashSet<>(Arrays.asList(terms))));
+    }
 
     public StrategoImmutableSet(Set.Immutable<IStrategoTerm> backingSet) {
         super(TermFactory.EMPTY_LIST, IStrategoTerm.SHARABLE);

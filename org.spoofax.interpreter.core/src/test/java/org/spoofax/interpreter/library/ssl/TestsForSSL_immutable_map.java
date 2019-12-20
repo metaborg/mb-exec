@@ -12,23 +12,22 @@ import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.stratego.StupidFormatter;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.TermFactory;
 
 import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
+public class TestsForSSL_immutable_map extends ImmutableSetMapTestSetup {
     private final SSL_immutable_map SSL_immutable_map = new SSL_immutable_map();
     private final SSL_immutable_map_filter SSL_immutable_map_filter = new SSL_immutable_map_filter();
     private final SSL_immutable_map_from_list SSL_immutable_map_from_list = new SSL_immutable_map_from_list();
     private final SSL_immutable_map_get SSL_immutable_map_get = new SSL_immutable_map_get();
+    private final SSL_immutable_map_get_eq SSL_immutable_map_get_eq = new SSL_immutable_map_get_eq();
     private final SSL_immutable_map_intersect SSL_immutable_map_intersect = new SSL_immutable_map_intersect();
-    private final SSL_immutable_map_intersect_set SSL_immutable_map_intersect_set = new SSL_immutable_map_intersect_set();
+    private final SSL_immutable_map_intersect_set SSL_immutable_map_intersect_set =
+        new SSL_immutable_map_intersect_set();
     private final SSL_immutable_map_keys SSL_immutable_map_keys = new SSL_immutable_map_keys();
     private final SSL_immutable_map_keys_to_set SSL_immutable_map_keys_to_set = new SSL_immutable_map_keys_to_set();
     private final SSL_immutable_map_map SSL_immutable_map_map = new SSL_immutable_map_map();
@@ -69,20 +68,19 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapFilterKeysUnique() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_filter.call(context, new Strategy[] {
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // filter on key == one
-                    if(env.current().getSubterm(0).equals(one)) {
-                        return getHook().pop().onSuccess(env);
-                    } else {
-                        return getHook().pop().onFailure(env);
-                    }
+        boolean result = SSL_immutable_map_filter.call(context, new Strategy[] { new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // filter on key == one
+                if(env.current().getSubterm(0).equals(one)) {
+                    return getHook().pop().onSuccess(env);
+                } else {
+                    return getHook().pop().onFailure(env);
                 }
+            }
 
-                @Override public void prettyPrint(StupidFormatter fmt) {}
-            },
-            null // never used, no overlapping keys
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        }, null // never used, no overlapping keys
         }, new IStrategoTerm[0]);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
@@ -93,26 +91,25 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapFilterKeysNonUnique() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_filter.call(context, new Strategy[] {
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // map key in pair to one
-                    env.setCurrent(f.makeTuple(one, env.current().getSubterm(1)));
-                    return getHook().pop().onSuccess(env);
-                }
-
-                @Override public void prettyPrint(StupidFormatter fmt) {}
-            },
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // merge by picking the newer value
-                    env.setCurrent(env.current().getSubterm(1).getSubterm(1));
-                    return getHook().pop().onSuccess(env);
-                }
-
-                @Override public void prettyPrint(StupidFormatter fmt) {}
+        boolean result = SSL_immutable_map_filter.call(context, new Strategy[] { new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // map key in pair to one
+                env.setCurrent(f.makeTuple(one, env.current().getSubterm(1)));
+                return getHook().pop().onSuccess(env);
             }
-        }, new IStrategoTerm[0]);
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        }, new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // merge by picking the newer value
+                env.setCurrent(env.current().getSubterm(1).getSubterm(1));
+                return getHook().pop().onSuccess(env);
+            }
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        } }, new IStrategoTerm[0]);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -122,48 +119,66 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapFilterKeysFailMerge() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_filter.call(context, new Strategy[] {
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // map key in pair to one
-                    env.setCurrent(f.makeTuple(one, env.current().getSubterm(1)));
-                    return getHook().pop().onSuccess(env);
-                }
-
-                @Override public void prettyPrint(StupidFormatter fmt) {}
-            },
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // fail to merge
-                    return getHook().pop().onFailure(env);
-                }
-
-                @Override public void prettyPrint(StupidFormatter fmt) {}
+        boolean result = SSL_immutable_map_filter.call(context, new Strategy[] { new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // map key in pair to one
+                env.setCurrent(f.makeTuple(one, env.current().getSubterm(1)));
+                return getHook().pop().onSuccess(env);
             }
-        }, new IStrategoTerm[0]);
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        }, new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // fail to merge
+                return getHook().pop().onFailure(env);
+            }
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        } }, new IStrategoTerm[0]);
         assertFalse(result);
     }
 
     @Test public void mapGetExisting() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_get.call(context, new Strategy[0], new IStrategoTerm[] {one});
+        boolean result = SSL_immutable_map_get.call(context, new Strategy[0], new IStrategoTerm[] { one });
         assertTrue(result);
         assertEquals(context.current(), a);
     }
 
     @Test public void mapGetNonExisting() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_get.call(context, new Strategy[0], new IStrategoTerm[] {three});
+        boolean result = SSL_immutable_map_get.call(context, new Strategy[0], new IStrategoTerm[] { three });
         assertFalse(result);
+    }
+
+    @Test public void mapGetExistingCustomEq() throws InterpreterException {
+        context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
+        IStrategoTerm oneWithAnno = f.annotateTerm(one, f.makeList(one));
+        assertNotEquals(one, oneWithAnno);
+        boolean result = SSL_immutable_map_get_eq.call(context, new Strategy[] { new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                IStrategoTerm left = env.current().getSubterm(0);
+                IStrategoTerm right = env.current().getSubterm(1);
+                if(f.annotateTerm(left, TermFactory.EMPTY_LIST).equals(f.annotateTerm(right, TermFactory.EMPTY_LIST))) {
+                    return getHook().pop().onSuccess(env);
+                } else {
+                    return getHook().pop().onFailure(env);
+                }
+            }
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        } }, new IStrategoTerm[] { oneWithAnno });
+        assertTrue(result);
+        assertEquals(context.current(), a);
     }
 
     @Test public void mapIntersectEmpty() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_intersect.call(context, new Strategy[] {
-            null
-        }, new IStrategoTerm[] {
-            new StrategoImmutableMap()
-        });
+        boolean result = SSL_immutable_map_intersect
+            .call(context, new Strategy[] { null }, new IStrategoTerm[] { new StrategoImmutableMap() });
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -172,19 +187,16 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapIntersectMerge() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_intersect.call(context, new Strategy[] {
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // map pair to first
-                    env.setCurrent(env.current().getSubterm(0));
-                    return getHook().pop().onSuccess(env);
-                }
-
-                @Override public void prettyPrint(StupidFormatter fmt) {}
+        boolean result = SSL_immutable_map_intersect.call(context, new Strategy[] { new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // map pair to first
+                env.setCurrent(env.current().getSubterm(0));
+                return getHook().pop().onSuccess(env);
             }
-        }, new IStrategoTerm[] {
-            new StrategoImmutableMap(Map.Immutable.of(one, b))
-        });
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        } }, new IStrategoTerm[] { new StrategoImmutableMap(Map.Immutable.of(one, b)) });
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -194,25 +206,21 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapIntersectMergeFail() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_intersect.call(context, new Strategy[] {
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    return getHook().pop().onFailure(env);
-                }
-
-                @Override public void prettyPrint(StupidFormatter fmt) {}
+        boolean result = SSL_immutable_map_intersect.call(context, new Strategy[] { new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                return getHook().pop().onFailure(env);
             }
-        }, new IStrategoTerm[] {
-            new StrategoImmutableMap(Map.Immutable.of(one, b))
-        });
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        } }, new IStrategoTerm[] { new StrategoImmutableMap(Map.Immutable.of(one, b)) });
         assertFalse(result);
     }
 
     @Test public void mapIntersectSet() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_intersect_set.call(context, new Strategy[0], new IStrategoTerm[] {
-            new StrategoImmutableSet(Set.Immutable.of(one, b))
-        });
+        boolean result = SSL_immutable_map_intersect_set
+            .call(context, new Strategy[0], new IStrategoTerm[] { new StrategoImmutableSet(Set.Immutable.of(one, b)) });
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -246,46 +254,44 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapMapFail() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_map.call(context, new Strategy[] {
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // filter on key == one
-                    if(env.current().getSubterm(0).equals(one)) {
-                        return getHook().pop().onSuccess(env);
-                    } else {
-                        return getHook().pop().onFailure(env);
-                    }
+        boolean result = SSL_immutable_map_map.call(context, new Strategy[] { new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // filter on key == one
+                if(env.current().getSubterm(0).equals(one)) {
+                    return getHook().pop().onSuccess(env);
+                } else {
+                    return getHook().pop().onFailure(env);
                 }
+            }
 
-                @Override public void prettyPrint(StupidFormatter fmt) {}
-            },
-            null // never used, no overlapping keys
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        }, null // never used, no overlapping keys
         }, new IStrategoTerm[0]);
         assertFalse(result);
     }
 
     @Test public void mapMapKeysNonUnique() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_map.call(context, new Strategy[] {
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // map key in pair to one
-                    env.setCurrent(f.makeTuple(one, env.current().getSubterm(1)));
-                    return getHook().pop().onSuccess(env);
-                }
-
-                @Override public void prettyPrint(StupidFormatter fmt) {}
-            },
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // merge by picking the newer value
-                    env.setCurrent(env.current().getSubterm(1).getSubterm(1));
-                    return getHook().pop().onSuccess(env);
-                }
-
-                @Override public void prettyPrint(StupidFormatter fmt) {}
+        boolean result = SSL_immutable_map_map.call(context, new Strategy[] { new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // map key in pair to one
+                env.setCurrent(f.makeTuple(one, env.current().getSubterm(1)));
+                return getHook().pop().onSuccess(env);
             }
-        }, new IStrategoTerm[0]);
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        }, new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // merge by picking the newer value
+                env.setCurrent(env.current().getSubterm(1).getSubterm(1));
+                return getHook().pop().onSuccess(env);
+            }
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        } }, new IStrategoTerm[0]);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -295,31 +301,30 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapMapKeysFailMerge() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_map.call(context, new Strategy[] {
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // map key in pair to one
-                    env.setCurrent(f.makeTuple(one, env.current().getSubterm(1)));
-                    return getHook().pop().onSuccess(env);
-                }
-
-                @Override public void prettyPrint(StupidFormatter fmt) {}
-            },
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // fail to merge
-                    return getHook().pop().onFailure(env);
-                }
-
-                @Override public void prettyPrint(StupidFormatter fmt) {}
+        boolean result = SSL_immutable_map_map.call(context, new Strategy[] { new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // map key in pair to one
+                env.setCurrent(f.makeTuple(one, env.current().getSubterm(1)));
+                return getHook().pop().onSuccess(env);
             }
-        }, new IStrategoTerm[0]);
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        }, new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // fail to merge
+                return getHook().pop().onFailure(env);
+            }
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        } }, new IStrategoTerm[0]);
         assertFalse(result);
     }
 
     @Test public void mapPutNonExisting() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_put.call(context, new Strategy[0], new IStrategoTerm[] {three, c});
+        boolean result = SSL_immutable_map_put.call(context, new Strategy[0], new IStrategoTerm[] { three, c });
         assertTrue(result);
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
         assertEquals(current.backingMap.get(one), a);
@@ -329,7 +334,7 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapPutExisting() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_put.call(context, new Strategy[0], new IStrategoTerm[] {one, b});
+        boolean result = SSL_immutable_map_put.call(context, new Strategy[0], new IStrategoTerm[] { one, b });
         assertTrue(result);
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
         assertEquals(current.backingMap.get(one), b);
@@ -338,7 +343,7 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapRemoveExisting() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_remove.call(context, new Strategy[0], new IStrategoTerm[] {two});
+        boolean result = SSL_immutable_map_remove.call(context, new Strategy[0], new IStrategoTerm[] { two });
         assertTrue(result);
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
         assertEquals(current.backingMap.get(one), a);
@@ -347,7 +352,7 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapRemoveNonExisting() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_remove.call(context, new Strategy[0], new IStrategoTerm[] {three});
+        boolean result = SSL_immutable_map_remove.call(context, new Strategy[0], new IStrategoTerm[] { three });
         assertTrue(result);
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
         assertEquals(current.backingMap.get(one), a);
@@ -357,11 +362,8 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
     @Test public void mapSubtractEmpty() throws InterpreterException {
         StrategoImmutableMap before = new StrategoImmutableMap(Map.Immutable.of(one, a, two, b));
         context.setCurrent(before);
-        boolean result = SSL_immutable_map_subtract.call(context, new Strategy[] {
-            null
-        }, new IStrategoTerm[] {
-            new StrategoImmutableMap()
-        });
+        boolean result = SSL_immutable_map_subtract
+            .call(context, new Strategy[] { null }, new IStrategoTerm[] { new StrategoImmutableMap() });
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -370,9 +372,8 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapSubtractOverlappingKeys() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_subtract.call(context, new Strategy[0], new IStrategoTerm[] {
-            new StrategoImmutableMap(Map.Immutable.of(one, b))
-        });
+        boolean result = SSL_immutable_map_subtract
+            .call(context, new Strategy[0], new IStrategoTerm[] { new StrategoImmutableMap(Map.Immutable.of(one, b)) });
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -382,9 +383,8 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapSubtractNonOverlappingKeys() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_subtract.call(context, new Strategy[0], new IStrategoTerm[] {
-            new StrategoImmutableMap(Map.Immutable.of(three, b))
-        });
+        boolean result = SSL_immutable_map_subtract.call(context, new Strategy[0],
+            new IStrategoTerm[] { new StrategoImmutableMap(Map.Immutable.of(three, b)) });
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -394,9 +394,8 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapSubtractSet() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_subtract_set.call(context, new Strategy[0], new IStrategoTerm[] {
-            new StrategoImmutableSet(Set.Immutable.of(one, b))
-        });
+        boolean result = SSL_immutable_map_subtract_set
+            .call(context, new Strategy[0], new IStrategoTerm[] { new StrategoImmutableSet(Set.Immutable.of(one, b)) });
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -428,11 +427,8 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
     @Test public void mapUnionEmpty() throws InterpreterException {
         StrategoImmutableMap before = new StrategoImmutableMap(Map.Immutable.of(one, a, two, b));
         context.setCurrent(before);
-        boolean result = SSL_immutable_map_union.call(context, new Strategy[] {
-            null // no merge necessary
-        }, new IStrategoTerm[] {
-            new StrategoImmutableMap()
-        });
+        boolean result = SSL_immutable_map_union.call(context, new Strategy[] { null // no merge necessary
+        }, new IStrategoTerm[] { new StrategoImmutableMap() });
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -441,19 +437,16 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapUnionOverlappingKeys() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_union.call(context, new Strategy[] {
-            new Strategy() {
-                @Override public IConstruct eval(IContext env) throws InterpreterException {
-                    // map pair to first
-                    env.setCurrent(env.current().getSubterm(0));
-                    return getHook().pop().onSuccess(env);
-                }
-
-                @Override public void prettyPrint(StupidFormatter fmt) {}
+        boolean result = SSL_immutable_map_union.call(context, new Strategy[] { new Strategy() {
+            @Override public IConstruct eval(IContext env) throws InterpreterException {
+                // map pair to first
+                env.setCurrent(env.current().getSubterm(0));
+                return getHook().pop().onSuccess(env);
             }
-        }, new IStrategoTerm[] {
-            new StrategoImmutableMap(Map.Immutable.of(one, b))
-        });
+
+            @Override public void prettyPrint(StupidFormatter fmt) {
+            }
+        } }, new IStrategoTerm[] { new StrategoImmutableMap(Map.Immutable.of(one, b)) });
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -463,11 +456,8 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
 
     @Test public void mapUnionNonOverlappingKeys() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_union.call(context, new Strategy[] {
-            null
-        }, new IStrategoTerm[] {
-            new StrategoImmutableMap(Map.Immutable.of(three, b))
-        });
+        boolean result = SSL_immutable_map_union.call(context, new Strategy[] { null },
+            new IStrategoTerm[] { new StrategoImmutableMap(Map.Immutable.of(three, b)) });
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();

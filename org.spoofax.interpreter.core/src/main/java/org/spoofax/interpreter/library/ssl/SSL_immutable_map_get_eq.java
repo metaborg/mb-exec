@@ -19,7 +19,7 @@ public class SSL_immutable_map_get_eq extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        return get(env, targs, new StrategyEqualityComparator(env, sargs[1]));
+        return get(env, targs, new StrategyEqualityComparator(env, sargs[0]));
     }
 
     protected boolean get(IContext env, IStrategoTerm[] targs, EqualityComparator<Object> cmp) {

@@ -25,11 +25,15 @@ class StrategyEqualityComparator implements EqualityComparator<Object> {
         }
         IStrategoTerm left = (IStrategoTerm) o1;
         IStrategoTerm right = (IStrategoTerm) o2;
+
+        IStrategoTerm original = env.current();
         env.setCurrent(f.makeTuple(left, right));
         try {
             return comp.evaluate(env);
         } catch(InterpreterException e) {
             throw new RuntimeException(e);
+        } finally {
+            env.setCurrent(original);
         }
     }
 }
