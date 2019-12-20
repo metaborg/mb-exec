@@ -14,9 +14,7 @@ public class SSL_immutable_set_map extends AbstractPrimitive {
         super("SSL_immutable_set_map", 1, 0);
     }
 
-    @Override
-    public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
-            throws InterpreterException {
+    @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         if(!(env.current() instanceof StrategoImmutableSet)) {
             return false;
         }

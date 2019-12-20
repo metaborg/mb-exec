@@ -1,15 +1,17 @@
 package org.spoofax.interpreter.library.ssl;
 
+import io.usethesource.capsule.Set;
+
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_immutable_set_subtract extends AbstractPrimitive {
+public class SSL_immutable_set_intersect_eq extends AbstractPrimitive {
 
-    protected SSL_immutable_set_subtract() {
-        super("SSL_immutable_set_subtract", 0, 1);
+    protected SSL_immutable_set_intersect_eq() {
+        super("SSL_immutable_set_intersect", 1, 1);
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
@@ -19,11 +21,13 @@ public class SSL_immutable_set_subtract extends AbstractPrimitive {
         if(!(targs[0] instanceof StrategoImmutableSet)) {
             return false;
         }
+        final Strategy comp = sargs[0];
 
-        final StrategoImmutableSet one = (StrategoImmutableSet) env.current();
-        final StrategoImmutableSet other = (StrategoImmutableSet) targs[0];
+        final Set.Immutable<IStrategoTerm> one = ((StrategoImmutableSet) env.current()).backingSet;
+        final Set.Transient<IStrategoTerm> other = ((StrategoImmutableSet) targs[0]).backingSet.asTransient();
 
-        env.setCurrent(new StrategoImmutableSet(one.backingSet.subtract(other.backingSet)));
+        env.setCurrent(
+            new StrategoImmutableSet(one.__retainAllEquivalent(other, new StrategyEqualityComparator(env, comp))));
         return true;
     }
 }

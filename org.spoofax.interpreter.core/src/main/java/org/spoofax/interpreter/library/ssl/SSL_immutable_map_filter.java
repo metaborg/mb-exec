@@ -8,6 +8,7 @@ import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
 
 public class SSL_immutable_map_filter extends AbstractPrimitive {
 
@@ -15,19 +16,18 @@ public class SSL_immutable_map_filter extends AbstractPrimitive {
         super("SSL_immutable_map_filter", 2, 0);
     }
 
-    @Override
-    public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
-            throws InterpreterException {
+    @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         if(!(env.current() instanceof StrategoImmutableMap)) {
             return false;
         }
         final Strategy mapping = sargs[0];
         final Strategy merge = sargs[1];
+        final ITermFactory f = env.getFactory();
 
         final Map.Immutable<IStrategoTerm, IStrategoTerm> map = ((StrategoImmutableMap) env.current()).backingMap;
         final Map.Transient<IStrategoTerm, IStrategoTerm> resultMap = Map.Transient.of();
         for(java.util.Map.Entry<IStrategoTerm, IStrategoTerm> e : map.entrySet()) {
-            env.setCurrent(env.getFactory().makeTuple(e.getKey(), e.getValue()));
+            env.setCurrent(f.makeTuple(e.getKey(), e.getValue()));
             if(!mapping.evaluate(env)) {
                 continue;
             }
@@ -39,7 +39,7 @@ public class SSL_immutable_map_filter extends AbstractPrimitive {
             final IStrategoTerm newValue = current.getSubterm(1);
             if(resultMap.containsKey(newKey)) {
                 final IStrategoTerm oldValue = resultMap.get(newKey);
-                env.setCurrent(env.getFactory().makeTuple(oldValue, newValue));
+                env.setCurrent(f.makeTuple(newKey, f.makeTuple(oldValue, newValue)));
                 if(!merge.evaluate(env)) {
                     return false;
                 }

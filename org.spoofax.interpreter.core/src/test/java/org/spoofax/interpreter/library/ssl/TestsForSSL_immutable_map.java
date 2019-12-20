@@ -106,7 +106,7 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
             new Strategy() {
                 @Override public IConstruct eval(IContext env) throws InterpreterException {
                     // merge by picking the newer value
-                    env.setCurrent(env.current().getSubterm(1));
+                    env.setCurrent(env.current().getSubterm(1).getSubterm(1));
                     return getHook().pop().onSuccess(env);
                 }
 
@@ -279,7 +279,7 @@ public class TestsForSSL_immutable_map extends TestsForSSL_immutable {
             new Strategy() {
                 @Override public IConstruct eval(IContext env) throws InterpreterException {
                     // merge by picking the newer value
-                    env.setCurrent(env.current().getSubterm(1));
+                    env.setCurrent(env.current().getSubterm(1).getSubterm(1));
                     return getHook().pop().onSuccess(env);
                 }
 

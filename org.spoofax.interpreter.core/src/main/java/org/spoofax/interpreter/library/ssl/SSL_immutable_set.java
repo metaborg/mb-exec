@@ -12,9 +12,7 @@ public class SSL_immutable_set extends AbstractPrimitive {
         super("SSL_immutable_set", 0, 0);
     }
 
-    @Override
-    public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs)
-            throws InterpreterException {
+    @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         env.setCurrent(new StrategoImmutableSet());
         return true;
     }

@@ -5,7 +5,6 @@ import org.spoofax.interpreter.core.Context;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.terms.TermFactory;
-import org.spoofax.terms.attachments.OriginAttachment;
 
 public class TestsForSSL_immutable {
     protected Context context;
