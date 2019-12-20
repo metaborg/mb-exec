@@ -28,7 +28,9 @@ public class SSL_immutable_set_from_list extends AbstractPrimitive {
         final IStrategoList list = (IStrategoList) env.current();
         final Set.Transient<IStrategoTerm> map = Set.Transient.of();
         for(IStrategoTerm t : list) {
-            map.__insert(t);
+            if(!map.contains(t)) {
+                map.__insert(t);
+            }
         }
 
         env.setCurrent(new StrategoImmutableSet(map.freeze()));

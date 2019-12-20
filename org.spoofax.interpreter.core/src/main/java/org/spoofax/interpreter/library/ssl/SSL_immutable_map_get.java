@@ -22,7 +22,11 @@ public class SSL_immutable_map_get extends AbstractPrimitive {
         final StrategoImmutableMap map = (StrategoImmutableMap) env.current();
         final IStrategoTerm key = targs[0];
 
-        env.setCurrent(map.backingMap.get(key));
+        final IStrategoTerm newCurrent = map.backingMap.get(key);
+        if(newCurrent == null) {
+            return false;
+        }
+        env.setCurrent(newCurrent);
         return true;
     }
 }

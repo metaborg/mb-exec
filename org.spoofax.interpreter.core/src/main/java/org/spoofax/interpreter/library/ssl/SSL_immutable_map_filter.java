@@ -37,13 +37,15 @@ public class SSL_immutable_map_filter extends AbstractPrimitive {
             }
             final IStrategoTerm newKey = current.getSubterm(0);
             final IStrategoTerm newValue = current.getSubterm(1);
-            final IStrategoTerm oldValue = resultMap.__put(newKey, newValue);
-            if(oldValue != null) {
+            if(resultMap.containsKey(newKey)) {
+                final IStrategoTerm oldValue = resultMap.get(newKey);
                 env.setCurrent(env.getFactory().makeTuple(oldValue, newValue));
                 if(!merge.evaluate(env)) {
-                    continue;
+                    return false;
                 }
                 resultMap.__put(newKey, env.current());
+            } else {
+                resultMap.__put(newKey, newValue);
             }
         }
 

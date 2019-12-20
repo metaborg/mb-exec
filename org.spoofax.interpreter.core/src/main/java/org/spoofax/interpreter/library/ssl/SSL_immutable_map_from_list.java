@@ -31,7 +31,10 @@ public class SSL_immutable_map_from_list extends AbstractPrimitive {
             if(!(Tools.isTermTuple(t) && t.getSubtermCount() == 2)) {
                 return false;
             }
-            map.__put(t.getSubterm(0), t.getSubterm(1));
+            final IStrategoTerm key = t.getSubterm(0);
+            if(!map.containsKey(key)) {
+                map.__put(key, t.getSubterm(1));
+            }
         }
 
         env.setCurrent(new StrategoImmutableMap(map.freeze()));
