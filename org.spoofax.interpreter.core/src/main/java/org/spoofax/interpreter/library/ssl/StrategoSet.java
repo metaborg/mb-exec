@@ -113,10 +113,6 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         return TermFactory.EMPTY_LIST;
     }
 
-    public int getStorageType() {
-        return MUTABLE;
-    }
-
     public IStrategoTerm getSubterm(int index) {
         throw new UnsupportedOperationException();
     }

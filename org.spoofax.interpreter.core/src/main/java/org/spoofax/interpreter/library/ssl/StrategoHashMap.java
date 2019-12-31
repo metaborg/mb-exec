@@ -49,10 +49,6 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         return TermFactory.EMPTY_LIST;
     }
 
-    public int getStorageType() {
-        return MUTABLE;
-    }
-
     public IStrategoTerm getSubterm(int index) {
         throw new UnsupportedOperationException();
     }

@@ -19,9 +19,7 @@ public class GenericWrappedTerm extends StrategoAppl {
 	public GenericWrappedTerm(String name, Object object) {
 		super(new StrategoConstructor("FileChannel", 1),
 				new IStrategoTerm[] { new StrategoInt(
-						System.identityHashCode(object),
-						IStrategoTerm.IMMUTABLE) }, null,
-				IStrategoTerm.IMMUTABLE);
+						System.identityHashCode(object)) }, null);
 		this.wrappee = object;
 	}
 
@@ -30,7 +28,7 @@ public class GenericWrappedTerm extends StrategoAppl {
 	}
 
 	@Override
-	protected boolean doSlowMatch(IStrategoTerm second, int commonStorageType) {
+	protected boolean doSlowMatch(IStrategoTerm second) {
 		if (second == null)
 			return false;
 		if (!(second instanceof GenericWrappedTerm))
