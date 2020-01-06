@@ -14,7 +14,7 @@ import java.util.Arrays;
 import static org.junit.Assert.assertFalse;
 
 @RunWith(Parameterized.class)
-public class ImmutableSetPrimitiveFails extends ImmutableSetMapTestSetup {
+public class TestImmutableSetPrimitiveFails extends ImmutableSetMapTestSetup {
     private static final SSL_immutable_set_contains SSL_immutable_set_contains = new SSL_immutable_set_contains();
     private static final SSL_immutable_set_map SSL_immutable_set_map = new SSL_immutable_set_map();
 
@@ -25,13 +25,8 @@ public class ImmutableSetPrimitiveFails extends ImmutableSetMapTestSetup {
             {"setContainsNonExisting", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_set_contains.call(context, new Strategy[0], new IStrategoTerm[] { three }) },
             {"setMapFail", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_map.call(context, new Strategy[] { TestStrategy.of((env, hooks) -> {
-                    // filter on key == one
-                    if(env.current().equals(one)) {
-                        return hooks.pop().onSuccess(env);
-                    } else {
-                        return hooks.pop().onFailure(env);
-                    }
+                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.test(current -> {
+                    return current.equals(one); // filter on key == one
                 }) }, new IStrategoTerm[0])},
         });
         //@formatter:on
@@ -39,7 +34,7 @@ public class ImmutableSetPrimitiveFails extends ImmutableSetMapTestSetup {
 
     private final CheckedFunction0<Boolean, InterpreterException> primitiveCall;
 
-    public ImmutableSetPrimitiveFails(String name, CheckedFunction0<Boolean, InterpreterException> primitiveCall) {
+    public TestImmutableSetPrimitiveFails(String name, CheckedFunction0<Boolean, InterpreterException> primitiveCall) {
         this.primitiveCall = primitiveCall;
     }
 

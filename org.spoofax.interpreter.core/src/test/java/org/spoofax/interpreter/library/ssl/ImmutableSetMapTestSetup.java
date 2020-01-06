@@ -1,6 +1,5 @@
 package org.spoofax.interpreter.library.ssl;
 
-import org.junit.BeforeClass;
 import org.spoofax.interpreter.core.Context;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;

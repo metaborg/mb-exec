@@ -18,7 +18,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
-public class ImmutableSetPrimitiveReturnsSet extends ImmutableSetMapTestSetup {
+public class TestImmutableSetPrimitiveReturnsSet extends ImmutableSetMapTestSetup {
     private static final SSL_immutable_set_contains SSL_immutable_set_contains = new SSL_immutable_set_contains();
     private static final SSL_immutable_set_contains_eq SSL_immutable_set_contains_eq =
         new SSL_immutable_set_contains_eq();
@@ -40,39 +40,25 @@ public class ImmutableSetPrimitiveReturnsSet extends ImmutableSetMapTestSetup {
                 new StrategoImmutableSet(one, two),
             },
             {"containsExistingCustomEq", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_contains_eq.call(context, new Strategy[] { TestStrategy.of((env, hooks) -> {
-                    IStrategoTerm left = env.current().getSubterm(0);
-                    IStrategoTerm right = env.current().getSubterm(1);
-                    if(f.annotateTerm(left, TermFactory.EMPTY_LIST).equals(f.annotateTerm(right, TermFactory.EMPTY_LIST))) {
-                        return hooks.pop().onSuccess(env);
-                    } else {
-                        return hooks.pop().onFailure(env);
-                    }
+                SSL_immutable_set_contains_eq.call(context, new Strategy[] { InterpreterStrategy.test(current -> {
+                    final IStrategoTerm leftNoAnnos = f.annotateTerm(current.getSubterm(0), TermFactory.EMPTY_LIST);
+                    final IStrategoTerm rightNoAnnos = f.annotateTerm(current.getSubterm(1), TermFactory.EMPTY_LIST);
+                    return leftNoAnnos.equals(rightNoAnnos);
                 })
                 }, new IStrategoTerm[] { oneWithAnno }),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one, two),
             },
             {"filterUnique", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_filter.call(context, new Strategy[] { TestStrategy.of((env, hooks) -> {
-                    // filter on key == one
-                    if(env.current().equals(one)) {
-                        return hooks.pop().onSuccess(env);
-                    } else {
-                        return hooks.pop().onFailure(env);
-                    }
+                SSL_immutable_set_filter.call(context, new Strategy[] { InterpreterStrategy.test(current -> {
+                    return current.equals(one); // filter on key == one
                 })
                 }, new IStrategoTerm[0]),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one),
             },
             {"filterNonUnique", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_filter.call(context, new Strategy[] { TestStrategy.of((env, hooks) -> {
-                        // key to one
-                        env.setCurrent(one);
-                        return hooks.pop().onSuccess(env);
-                    })
-                }, new IStrategoTerm[0]),
+                SSL_immutable_set_filter.call(context, new Strategy[] { InterpreterStrategy.constant(one) }, new IStrategoTerm[0]),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one),
             },
@@ -99,21 +85,12 @@ public class ImmutableSetPrimitiveReturnsSet extends ImmutableSetMapTestSetup {
                 new StrategoImmutableSet(one),
             },
             {"mapNonUnique", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_map.call(context, new Strategy[] { TestStrategy.of((env, hooks) -> {
-                        // key to one
-                        env.setCurrent(one);
-                        return hooks.pop().onSuccess(env);
-                    })
-                }, new IStrategoTerm[0]),
+                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.constant(one) }, new IStrategoTerm[0]),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one),
             },
             {"mapUnique", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_map.call(context, new Strategy[] { TestStrategy.of((env, hooks) -> {
-                        // identity function
-                        return hooks.pop().onSuccess(env);
-                    })
-                }, new IStrategoTerm[0]),
+                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.id }, new IStrategoTerm[0]),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one, two),
             },
@@ -152,10 +129,8 @@ public class ImmutableSetPrimitiveReturnsSet extends ImmutableSetMapTestSetup {
                 new StrategoImmutableSet(one, two),
             },
             {"unionOverlapping", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_union.call(context, new Strategy[] { TestStrategy.of((env, hooks) -> {
-                    // set pair to first
-                    env.setCurrent(env.current().getSubterm(0));
-                    return hooks.pop().onSuccess(env);
+                SSL_immutable_set_union.call(context, new Strategy[] { InterpreterStrategy.of(current -> {
+                    return current.getSubterm(0); // set pair to first
                 }) }, new IStrategoTerm[] { new StrategoImmutableSet(Set.Immutable.of(one, three)) }),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one, two, three),
@@ -174,7 +149,7 @@ public class ImmutableSetPrimitiveReturnsSet extends ImmutableSetMapTestSetup {
     private final StrategoImmutableSet input;
     private final StrategoImmutableSet expected;
 
-    public ImmutableSetPrimitiveReturnsSet(@SuppressWarnings("unused") String name,
+    public TestImmutableSetPrimitiveReturnsSet(@SuppressWarnings("unused") String name,
         CheckedFunction0<Boolean, InterpreterException> primitiveCall, StrategoImmutableSet input,
         StrategoImmutableSet expected) {
         this.primitiveCall = primitiveCall;

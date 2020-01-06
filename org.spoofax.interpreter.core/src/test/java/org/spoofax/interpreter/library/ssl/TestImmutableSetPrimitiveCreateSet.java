@@ -12,21 +12,16 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
-public class ImmutableSetPrimitiveCreateSet extends ImmutableSetMapTestSetup {
+public class TestImmutableSetPrimitiveCreateSet extends ImmutableSetMapTestSetup {
     private final SSL_immutable_set SSL_immutable_set = new SSL_immutable_set();
-    private final SSL_immutable_set_contains SSL_immutable_set_contains = new SSL_immutable_set_contains();
-    private final SSL_immutable_set_contains_eq SSL_immutable_set_contains_eq = new SSL_immutable_set_contains_eq();
     private final SSL_immutable_set_elements SSL_immutable_set_elements = new SSL_immutable_set_elements();
-    private final SSL_immutable_set_filter SSL_immutable_set_filter = new SSL_immutable_set_filter();
     private final SSL_immutable_set_from_list SSL_immutable_set_from_list = new SSL_immutable_set_from_list();
-    private final SSL_immutable_set_insert SSL_immutable_set_insert = new SSL_immutable_set_insert();
-    private final SSL_immutable_set_intersect SSL_immutable_set_intersect = new SSL_immutable_set_intersect();
-    private final SSL_immutable_set_map SSL_immutable_set_map = new SSL_immutable_set_map();
-    private final SSL_immutable_set_remove SSL_immutable_set_remove = new SSL_immutable_set_remove();
-    private final SSL_immutable_set_subtract SSL_immutable_set_subtract = new SSL_immutable_set_subtract();
-    private final SSL_immutable_set_union SSL_immutable_set_union = new SSL_immutable_set_union();
 
     @Test
     public void setIsEmpty() throws InterpreterException {
