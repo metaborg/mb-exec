@@ -38,7 +38,7 @@ public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm 
             if(e == null) {
                 return null;
             }
-            return new StrategoTuple(new IStrategoTerm[] {e.getKey(), e.getValue()}, TermFactory.EMPTY_LIST, IStrategoTerm.SHARABLE);
+            return new StrategoTuple(new IStrategoTerm[] {e.getKey(), e.getValue()}, TermFactory.EMPTY_LIST);
         }
     }
 
