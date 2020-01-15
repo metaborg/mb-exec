@@ -19,7 +19,7 @@ public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm 
     }
 
     public StrategoImmutableSet(Set.Immutable<IStrategoTerm> backingSet) {
-        super(TermFactory.EMPTY_LIST, IStrategoTerm.SHARABLE);
+        super(TermFactory.EMPTY_LIST);
         this.backingSet = backingSet;
     }
 
@@ -51,7 +51,7 @@ public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm 
         pp.print(toString());
     }
 
-    @Override protected boolean doSlowMatch(IStrategoTerm second, int commonStorageType) {
+    @Override protected boolean doSlowMatch(IStrategoTerm second) {
         if(!(second instanceof StrategoImmutableSet)) {
             return false;
         }

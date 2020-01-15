@@ -14,7 +14,7 @@ public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm 
     public final Map.Immutable<IStrategoTerm, IStrategoTerm> backingMap;
 
     public StrategoImmutableMap(Map.Immutable<IStrategoTerm, IStrategoTerm> backingMap) {
-        super(TermFactory.EMPTY_LIST, IStrategoTerm.SHARABLE);
+        super(TermFactory.EMPTY_LIST);
         this.backingMap = backingMap;
     }
 
@@ -66,7 +66,7 @@ public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm 
         pp.print(toString());
     }
 
-    @Override protected boolean doSlowMatch(IStrategoTerm second, int commonStorageType) {
+    @Override protected boolean doSlowMatch(IStrategoTerm second) {
         if(!(second instanceof StrategoImmutableMap)) {
             return false;
         }
