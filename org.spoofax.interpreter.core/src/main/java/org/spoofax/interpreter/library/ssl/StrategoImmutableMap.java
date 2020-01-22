@@ -3,6 +3,7 @@ package org.spoofax.interpreter.library.ssl;
 import io.usethesource.capsule.Map;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.StrategoTerm;
 import org.spoofax.terms.StrategoTuple;
@@ -85,5 +86,9 @@ public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm 
 
     @Override public void writeAsString(Appendable output, int maxDepth) throws IOException {
         output.append(toString());
+    }
+
+    public IStrategoTerm withWrapper(ITermFactory factory) {
+        return factory.makeAppl("ImmutableMap", this);
     }
 }

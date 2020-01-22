@@ -3,6 +3,7 @@ package org.spoofax.interpreter.library.ssl;
 import io.usethesource.capsule.Set;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.StrategoTerm;
 import org.spoofax.terms.TermFactory;
@@ -70,5 +71,9 @@ public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm 
 
     @Override public void writeAsString(Appendable output, int maxDepth) throws IOException {
         output.append(toString());
+    }
+
+    public IStrategoTerm withWrapper(ITermFactory factory) {
+        return factory.makeAppl("ImmutableSet", this);
     }
 }
