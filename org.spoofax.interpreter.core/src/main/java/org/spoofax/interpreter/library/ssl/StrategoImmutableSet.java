@@ -76,4 +76,8 @@ public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm 
     public IStrategoTerm withWrapper(ITermFactory factory) {
         return factory.makeAppl("ImmutableSet", this);
     }
+
+    public static IStrategoTerm fromSet(Set.Immutable<IStrategoTerm> set, ITermFactory factory) {
+        return new StrategoImmutableSet(set).withWrapper(factory);
+    }
 }

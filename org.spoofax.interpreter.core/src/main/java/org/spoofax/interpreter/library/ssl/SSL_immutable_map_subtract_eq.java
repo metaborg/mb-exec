@@ -12,7 +12,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class SSL_immutable_map_subtract_eq extends AbstractPrimitive {
 
     protected SSL_immutable_map_subtract_eq() {
-        this("SSL_immutable_map_subtract", 1, 1);
+        this("SSL_immutable_map_subtract_eq", 1, 1);
     }
 
     public SSL_immutable_map_subtract_eq(String name, int tvars, int svars) {

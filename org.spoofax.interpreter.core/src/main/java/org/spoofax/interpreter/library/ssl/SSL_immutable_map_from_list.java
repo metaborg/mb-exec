@@ -14,14 +14,15 @@ import org.spoofax.interpreter.terms.ITermFactory;
 public class SSL_immutable_map_from_list extends AbstractPrimitive {
 
     protected SSL_immutable_map_from_list() {
-        super("SSL_immutable_map_from_list", 0, 0);
+        super("SSL_immutable_map_from_list", 1, 0);
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         if(!Tools.isTermList(env.current())) {
             return false;
         }
-        final ITermFactory factory = env.getFactory();
+        final Strategy merge = sargs[0];
+        final ITermFactory f = env.getFactory();
 
         final IStrategoList list = (IStrategoList) env.current();
         final Map.Transient<IStrategoTerm, IStrategoTerm> map = Map.Transient.of();
@@ -30,7 +31,14 @@ public class SSL_immutable_map_from_list extends AbstractPrimitive {
                 return false;
             }
             final IStrategoTerm key = t.getSubterm(0);
-            if(!map.containsKey(key)) {
+            if(map.containsKey(key)) {
+                final IStrategoTerm oldValue = map.get(key);
+                env.setCurrent(f.makeTuple(oldValue, t.getSubterm(0)));
+                if(!merge.evaluate(env)) {
+                    return false;
+                }
+                map.__put(key, env.current());
+            } else {
                 map.__put(key, t.getSubterm(1));
             }
         }

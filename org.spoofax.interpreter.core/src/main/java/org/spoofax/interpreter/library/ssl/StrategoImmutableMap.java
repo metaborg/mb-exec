@@ -91,4 +91,8 @@ public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm 
     public IStrategoTerm withWrapper(ITermFactory factory) {
         return factory.makeAppl("ImmutableMap", this);
     }
+
+    public static IStrategoTerm fromMap(Map.Immutable<IStrategoTerm, IStrategoTerm> map, ITermFactory factory) {
+        return new StrategoImmutableMap(map).withWrapper(factory);
+    }
 }

@@ -11,7 +11,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class SSL_immutable_set_union_eq extends AbstractPrimitive {
 
     protected SSL_immutable_set_union_eq() {
-        super("SSL_immutable_set_union", 1, 1);
+        super("SSL_immutable_set_union_eq", 1, 1);
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {

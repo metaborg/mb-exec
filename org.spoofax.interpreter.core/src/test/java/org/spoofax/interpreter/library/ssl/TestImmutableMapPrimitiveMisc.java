@@ -41,7 +41,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     @Test
     public void mapFromListUnique() throws InterpreterException {
         context.setCurrent(f.makeList(f.makeTuple(one, a), f.makeTuple(two, b)));
-        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[] {InterpreterStrategy.of(t -> t.getSubterm(0))}, new IStrategoTerm[0]);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -52,7 +52,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     @Test
     public void mapFromListKeepFirst() throws InterpreterException {
         context.setCurrent(f.makeList(f.makeTuple(one, a), f.makeTuple(one, b)));
-        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[] {InterpreterStrategy.of(t -> t.getSubterm(0))}, new IStrategoTerm[0]);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -82,11 +82,8 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
 
     @Test
     public void mapToListEmpty() throws InterpreterException {
-        context.setCurrent(f.makeList());
-        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[0], new IStrategoTerm[0]);
-        assertTrue(result);
-        assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
-        result = SSL_immutable_map_to_list.call(context, new Strategy[0], new IStrategoTerm[0]);
+        context.setCurrent(new StrategoImmutableMap(Map.Immutable.of()));
+        boolean result = SSL_immutable_map_to_list.call(context, new Strategy[0], new IStrategoTerm[0]);
         assertTrue(result);
         assertTrue(Tools.isTermList(context.current()));
         IStrategoList current = (IStrategoList) context.current();
