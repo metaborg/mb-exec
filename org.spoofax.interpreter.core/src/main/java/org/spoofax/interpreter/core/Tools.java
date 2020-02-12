@@ -37,10 +37,10 @@ public final class Tools {
      * @throws IndexOutOfBoundsException the index is out of bounds
      */
     @Nullable
-	public static IStrategoString stringAt(IStrategoTerm t, int i) {
+    public static IStrategoString stringAt(IStrategoTerm t, int i) {
         IStrategoTerm subterm = t.getSubterm(i);
         return subterm instanceof IStrategoString ? (IStrategoString)subterm : null;
-	}
+    }
 
     /**
      * Gets the constructor application subterm at the given index in the given term.
@@ -51,10 +51,10 @@ public final class Tools {
      * @throws IndexOutOfBoundsException the index is out of bounds
      */
     @Nullable
-	public static IStrategoAppl applAt(IStrategoTerm t, int i) {
+    public static IStrategoAppl applAt(IStrategoTerm t, int i) {
         IStrategoTerm subterm = t.getSubterm(i);
         return subterm instanceof IStrategoAppl ? (IStrategoAppl)subterm : null;
-	}
+    }
 
     /**
      * Gets the int subterm at the given index in the given term.
@@ -65,10 +65,10 @@ public final class Tools {
      * @throws IndexOutOfBoundsException the index is out of bounds
      */
     @Nullable
-	public static IStrategoInt intAt(IStrategoTerm t, int i) {
+    public static IStrategoInt intAt(IStrategoTerm t, int i) {
         IStrategoTerm subterm = t.getSubterm(i);
         return subterm instanceof IStrategoInt ? (IStrategoInt)subterm : null;
-	}
+    }
 
     /**
      * Gets the list subterm at the given index in the given term.
@@ -79,10 +79,10 @@ public final class Tools {
      * @throws IndexOutOfBoundsException the index is out of bounds
      */
     @Nullable
-	public static IStrategoList listAt(IStrategoTerm t, int i) {
+    public static IStrategoList listAt(IStrategoTerm t, int i) {
         IStrategoTerm subterm = t.getSubterm(i);
         return subterm instanceof IStrategoList ? (IStrategoList)subterm : null;
-	}
+    }
 
     /**
      * Gets the real subterm at the given index in the given term.
@@ -100,7 +100,7 @@ public final class Tools {
 
     /**
      * Gets the subterm at the given index in the given term.
-     *
+     * <p>
      * Note that this function will not throw an exception when the term is cast to the wrong type.
      * Instead, you will get a {@link ClassCastException} somewhere else.
      *
@@ -110,197 +110,197 @@ public final class Tools {
      * @throws IndexOutOfBoundsException the index is out of bounds
      */
     @SuppressWarnings("unchecked") // casting is inherently unsafe, but doesn't warrant a warning here
-    public static<T extends IStrategoTerm> T termAt(IStrategoTerm t, int i) {
-		return (T) t.getSubterm(i);
-	}
+    public static <T extends IStrategoTerm> T termAt(IStrategoTerm t, int i) {
+        return (T)t.getSubterm(i);
+    }
 
 
-	// Constructors
+    // Constructors
 
     /**
      * Determines whether the given term is a {@code Cons(_, _)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isCons(IStrategoAppl t, IContext env) {
-		return env.getStrategoSignature().getCons().equals(t.getConstructor());
-	}
+    public static boolean isCons(IStrategoAppl t, IContext env) {
+        return env.getStrategoSignature().getCons().equals(t.getConstructor());
+    }
 
     /**
      * Determines whether the given constructor application term is a {@code Nil()} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isNil(IStrategoAppl t, IContext env) {
+    public static boolean isNil(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getNil().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is a {@code SDefT(_, _, _, _)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isSDefT(IStrategoAppl t, IContext env) {
+    public static boolean isSDefT(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getSDefT().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is an {@code ExtSDef(_, _, _)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isExtSDef(IStrategoAppl t, IContext env) {
+    public static boolean isExtSDef(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getExtSDef().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is an {@code Anno(_, _)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isAnno(IStrategoAppl t, IContext env) {
+    public static boolean isAnno(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getAnno().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is an {@code Op(_, _)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isOp(IStrategoAppl t, IContext env) {
+    public static boolean isOp(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getOp().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is a {@code Str(_)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isStr(IStrategoAppl t, IContext env) {
+    public static boolean isStr(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getStr().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is a {@code Var(_)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isVar(IStrategoAppl t, IContext env) {
+    public static boolean isVar(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getVar().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is an {@code Explode(_, _)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isExplode(IStrategoAppl t, IContext env) {
+    public static boolean isExplode(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getExplode().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is a {@code Wld()} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isWld(IStrategoAppl t, IContext env) {
+    public static boolean isWld(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getWld().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is an {@code As(_, _)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isAs(IStrategoAppl t, IContext env) {
+    public static boolean isAs(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getAs().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is a {@code Real(_)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isReal(IStrategoAppl t, IContext env) {
+    public static boolean isReal(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getReal().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is an {@code Int(_)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isInt(IStrategoAppl t, IContext env) {
+    public static boolean isInt(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getInt().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is a {@code FunType(_, _)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isFunType(IStrategoAppl t, IContext env) {
+    public static boolean isFunType(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getFunType().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term is a {@code ConstType(_)} term.
      *
-     * @param t the constructor application term to check
+     * @param t   the constructor application term to check
      * @param env the term context in which to check
      * @return {@code true} when the term has the expected constructor in the given context;
      * otherwise, {@code false}
      */
-	public static boolean isConstType(IStrategoAppl t, IContext env) {
+    public static boolean isConstType(IStrategoAppl t, IContext env) {
         return env.getStrategoSignature().getConstType().equals(t.getConstructor());
-	}
+    }
 
     /**
      * Determines whether the given constructor application term has a constructor with the specified name.
      *
-     * @param t the constructor application term to check
+     * @param t        the constructor application term to check
      * @param ctorName the expected constructor name
      * @return {@code true} when the term has the expected constructor name;
      * otherwise, {@code false}
@@ -313,9 +313,9 @@ public final class Tools {
      * Determines whether the given constructor application term has a constructor with the specified name.
      * and arity
      *
-     * @param t the constructor application term to check
+     * @param t        the constructor application term to check
      * @param ctorName the expected constructor name
-     * @param arity the expected constructor arity
+     * @param arity    the expected constructor arity
      * @return {@code true} when the term has the expected constructor name and arity;
      * otherwise, {@code false}
      */
@@ -336,8 +336,7 @@ public final class Tools {
     }
 
 
-
-	// Term Types
+    // Term Types
 
     /**
      * Determines whether the given term is a String term.
@@ -400,7 +399,6 @@ public final class Tools {
     }
 
 
-
     // Java Types
 
     /**
@@ -410,14 +408,14 @@ public final class Tools {
      * @return the Java string
      * @throws ClassCastException the term is not an Int term
      */
-	public static int asJavaInt(IStrategoTerm term) {
-		return ((IStrategoInt) term).intValue();
-	}
+    public static int asJavaInt(IStrategoTerm term) {
+        return ((IStrategoInt)term).intValue();
+    }
 
     /** @deprecated Use {@link #asJavaInt} instead. */
     @Deprecated
     public static int javaInt(IStrategoTerm term) {
-        return ((IStrategoInt) term).intValue();
+        return ((IStrategoInt)term).intValue();
     }
 
     /**
@@ -426,7 +424,7 @@ public final class Tools {
      * @param t the term
      * @param i the index within the term's subterms
      * @return the Java integer
-     * @throws ClassCastException the term is not an Int term
+     * @throws ClassCastException        the term is not an Int term
      * @throws IndexOutOfBoundsException the index is out of bounds
      */
     public static int javaIntAt(IStrategoTerm t, int i) {
@@ -441,9 +439,9 @@ public final class Tools {
      * @return the Java double
      * @throws ClassCastException the term is not a Real term
      */
-	public static double asJavaDouble(IStrategoTerm term) {
-		return ((IStrategoReal) term).realValue();
-	}
+    public static double asJavaDouble(IStrategoTerm term) {
+        return ((IStrategoReal)term).realValue();
+    }
 
     /**
      * Gets the Java double at the given index in the given term.
@@ -451,7 +449,7 @@ public final class Tools {
      * @param t the term
      * @param i the index within the term's subterms
      * @return the Java integer
-     * @throws ClassCastException the term is not a Real term
+     * @throws ClassCastException        the term is not a Real term
      * @throws IndexOutOfBoundsException the index is out of bounds
      */
     public static double javaDoubleAt(IStrategoTerm t, int i) {
@@ -466,14 +464,14 @@ public final class Tools {
      * @return the Java string
      * @throws ClassCastException the term is not a String term
      */
-	public static String asJavaString(IStrategoTerm term) {
-		return ((IStrategoString) term).stringValue();
-	}
+    public static String asJavaString(IStrategoTerm term) {
+        return ((IStrategoString)term).stringValue();
+    }
 
     /** @deprecated Use {@link #asJavaString} instead. */
     @Deprecated
     public static String javaString(IStrategoTerm t) {
-        return ((IStrategoString) t).stringValue();
+        return ((IStrategoString)t).stringValue();
     }
 
     /**
