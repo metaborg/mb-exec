@@ -16,6 +16,9 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -479,12 +482,39 @@ public final class Tools {
      * @param t the term
      * @param i the index within the term's subterms
      * @return the Java string
-     * @throws ClassCastException the term is not a String term
+     * @throws ClassCastException        the term is not a String term
      * @throws IndexOutOfBoundsException the index is out of bounds
      */
     public static String javaStringAt(IStrategoTerm t, int i) {
         IStrategoString result = termAt(t, i);
-        return result.stringValue();
+        return asJavaString(result);
+    }
+
+    /**
+     * Returns the given term as a Java list.
+     *
+     * @param term the term
+     * @return the Java unmodifiable list
+     * @throws ClassCastException the term is not a List term
+     */
+    public static List<IStrategoTerm> asJavaList(IStrategoTerm term) {
+        IStrategoList listTerm = (IStrategoList)term;   // To ensure a ClassCastException
+        // TODO: Get the term's immutable subterm list instead
+        return Collections.unmodifiableList(Arrays.asList(listTerm.getAllSubterms()));
+    }
+
+    /**
+     * Gets the Java list at the given index in the given term.
+     *
+     * @param term  the term
+     * @param index the index within the term's subterms
+     * @return the Java unmodifiable list
+     * @throws ClassCastException        the term is not a List term
+     * @throws IndexOutOfBoundsException the index is out of bounds
+     */
+    public static List<IStrategoTerm> javaListAt(IStrategoTerm term, int index) {
+        IStrategoList result = termAt(term, index);
+        return asJavaList(result);
     }
 
 }
