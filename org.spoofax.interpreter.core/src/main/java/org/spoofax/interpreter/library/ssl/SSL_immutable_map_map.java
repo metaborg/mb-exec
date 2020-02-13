@@ -45,7 +45,7 @@ public class SSL_immutable_map_map extends AbstractPrimitive {
                 }
                 resultMap.__put(newKey, env.current());
             } else {
-                resultMap.__put(newKey, env.current());
+                resultMap.__put(newKey, newValue);
             }
         }
 
