@@ -22,16 +22,23 @@ public class SSL_immutable_relation_union extends AbstractPrimitive {
             return false;
         }
 
-        final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> one =
-            ((StrategoImmutableRelation) env.current()).backingRelation.asTransient();
+        final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> one =
+            ((StrategoImmutableRelation) env.current()).backingRelation;
         final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> other =
             ((StrategoImmutableRelation) targs[0]).backingRelation;
-        for(java.util.Map.Entry<IStrategoTerm, IStrategoTerm> e : other.entrySet()) {
-            one.__put(e.getKey(), e.getValue());
-        }
 
-        env.setCurrent(new StrategoImmutableRelation(one.freeze()));
+        env.setCurrent(new StrategoImmutableRelation(union(one, other)));
         return true;
+    }
+
+    public static BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> union(
+        BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> one,
+        BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> other) {
+        final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = one.asTransient();
+        for(java.util.Map.Entry<IStrategoTerm, IStrategoTerm> e : other.entrySet()) {
+            result.__put(e.getKey(), e.getValue());
+        }
+        return result.freeze();
     }
 
 }

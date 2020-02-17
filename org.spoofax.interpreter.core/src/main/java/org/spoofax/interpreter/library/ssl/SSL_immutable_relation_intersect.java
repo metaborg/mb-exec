@@ -28,14 +28,19 @@ public class SSL_immutable_relation_intersect extends AbstractPrimitive {
         final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> other =
             ((StrategoImmutableRelation) targs[0]).backingRelation;
 
+        env.setCurrent(new StrategoImmutableRelation(intersect(one, other)));
+        return true;
+    }
+
+    public static BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> intersect(
+        BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> one,
+        BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> other) {
         final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = BinaryRelation.Transient.of();
         for(Map.Entry<IStrategoTerm, IStrategoTerm> e : one.entrySet()) {
             if(other.containsEntry(e.getKey(), e.getValue())) {
                 result.__insert(e.getKey(), e.getValue());
             }
         }
-
-        env.setCurrent(new StrategoImmutableRelation(result.freeze()));
-        return true;
+        return result.freeze();
     }
 }
