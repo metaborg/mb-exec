@@ -61,6 +61,16 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     }
 
     @Test
+    public void mapFromListKeepSecond() throws InterpreterException {
+        context.setCurrent(f.makeList(f.makeTuple(one, a), f.makeTuple(one, b)));
+        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[] {InterpreterStrategy.of(t -> t.getSubterm(1))}, new IStrategoTerm[0]);
+        assertTrue(result);
+        assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
+        StrategoImmutableMap current = (StrategoImmutableMap) context.current();
+        assertEquals(current.backingMap.get(one), b);
+    }
+
+    @Test
     public void mapKeys() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
         boolean result = SSL_immutable_map_keys.call(context, new Strategy[0], new IStrategoTerm[0]);

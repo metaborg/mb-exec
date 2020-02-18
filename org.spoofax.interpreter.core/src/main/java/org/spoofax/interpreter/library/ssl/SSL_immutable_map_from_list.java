@@ -31,15 +31,16 @@ public class SSL_immutable_map_from_list extends AbstractPrimitive {
                 return false;
             }
             final IStrategoTerm key = t.getSubterm(0);
+            final IStrategoTerm value = t.getSubterm(1);
             if(map.containsKey(key)) {
                 final IStrategoTerm oldValue = map.get(key);
-                env.setCurrent(f.makeTuple(oldValue, t.getSubterm(0)));
+                env.setCurrent(f.makeTuple(oldValue, value));
                 if(!merge.evaluate(env)) {
                     return false;
                 }
                 map.__put(key, env.current());
             } else {
-                map.__put(key, t.getSubterm(1));
+                map.__put(key, value);
             }
         }
 

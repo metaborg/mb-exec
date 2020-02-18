@@ -3,7 +3,6 @@ package org.spoofax.interpreter.library.ssl;
 import io.usethesource.capsule.util.EqualityComparator;
 
 import org.spoofax.interpreter.core.IContext;
-import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -18,8 +17,7 @@ public class SSL_immutable_map_remove_eq extends AbstractPrimitive {
         super(name, svars, tvars);
     }
 
-    @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        EqualityComparator<Object> cmp;
+    @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
         return remove(env, targs, new StrategyEqualityComparator(env, sargs[0]));
     }
 

@@ -15,6 +15,7 @@ public class SSL_immutable_map_intersect_eq extends AbstractPrimitive {
         this("SSL_immutable_map_intersect_eq", 2, 1);
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected SSL_immutable_map_intersect_eq(String name, int svars, int tvars) {
         super(name, svars, tvars);
     }

@@ -1,16 +1,13 @@
 package org.spoofax.interpreter.library.ssl;
 
 import io.usethesource.capsule.BinaryRelation;
-import io.usethesource.capsule.Set;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import java.util.AbstractMap;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Map.Entry;
 
 public class SSL_immutable_relation_transitive_closure extends AbstractPrimitive {
