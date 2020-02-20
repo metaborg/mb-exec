@@ -5,7 +5,6 @@ import io.usethesource.capsule.Map;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -20,7 +19,7 @@ public class SSL_immutable_relation_to_map extends AbstractPrimitive {
 
     @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        if(!Tools.isTermList(env.current())) {
+        if(!(env.current() instanceof StrategoImmutableRelation)) {
             return false;
         }
         final Strategy merge = sargs[0];
