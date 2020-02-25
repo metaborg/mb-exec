@@ -1,28 +1,16 @@
-/*
- * Created on 24.jun.2005
- * 
- * Copyright (c) 2005-2011, Karl Trygve Kalleberg <karltk near strategoxt dot org>
- * 
- * Licensed under the GNU Lesser Lesser General Public License, v2.1.1
- */
 package org.spoofax.interpreter.core;
 
-import org.spoofax.interpreter.terms.IStrategoAppl;
-import org.spoofax.interpreter.terms.IStrategoConstructor;
-import org.spoofax.interpreter.terms.IStrategoInt;
-import org.spoofax.interpreter.terms.IStrategoList;
-import org.spoofax.interpreter.terms.IStrategoReal;
-import org.spoofax.interpreter.terms.IStrategoString;
-import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.*;
+import org.spoofax.terms.util.TermUtils;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 
 /**
  * Functions for working with terms.
+ *
+ * @see TermUtils
  */
 public final class Tools {
 
@@ -35,11 +23,12 @@ public final class Tools {
      * @param i the index within the term's subterms
      * @return the string subterm; or {@code null} when the subterm is not a string term
      * @throws IndexOutOfBoundsException the index is out of bounds
+     * @deprecated Use {@link TermUtils#asStringAt}.
      */
+    @Deprecated
     @Nullable
     public static IStrategoString stringAt(IStrategoTerm t, int i) {
-        IStrategoTerm subterm = t.getSubterm(i);
-        return subterm instanceof IStrategoString ? (IStrategoString)subterm : null;
+        return TermUtils.asString(t.getSubterm(i)).orElse(null);
     }
 
     /**
@@ -49,11 +38,12 @@ public final class Tools {
      * @param i the index within the term's subterms
      * @return the constructor application subterm; or {@code null} when the subterm is not a constructor application term
      * @throws IndexOutOfBoundsException the index is out of bounds
+     * @deprecated Use {@link TermUtils#asApplAt}.
      */
+    @Deprecated
     @Nullable
     public static IStrategoAppl applAt(IStrategoTerm t, int i) {
-        IStrategoTerm subterm = t.getSubterm(i);
-        return subterm instanceof IStrategoAppl ? (IStrategoAppl)subterm : null;
+        return TermUtils.asAppl(t.getSubterm(i)).orElse(null);
     }
 
     /**
@@ -63,11 +53,12 @@ public final class Tools {
      * @param i the index within the term's subterms
      * @return the int subterm; or {@code null} when the subterm is not an int term
      * @throws IndexOutOfBoundsException the index is out of bounds
+     * @deprecated Use {@link TermUtils#asIntAt}.
      */
+    @Deprecated
     @Nullable
     public static IStrategoInt intAt(IStrategoTerm t, int i) {
-        IStrategoTerm subterm = t.getSubterm(i);
-        return subterm instanceof IStrategoInt ? (IStrategoInt)subterm : null;
+        return TermUtils.asInt(t.getSubterm(i)).orElse(null);
     }
 
     /**
@@ -77,11 +68,12 @@ public final class Tools {
      * @param i the index within the term's subterms
      * @return the list subterm; or {@code null} when the subterm is not a list term
      * @throws IndexOutOfBoundsException the index is out of bounds
+     * @deprecated Use {@link TermUtils#asListAt}.
      */
+    @Deprecated
     @Nullable
     public static IStrategoList listAt(IStrategoTerm t, int i) {
-        IStrategoTerm subterm = t.getSubterm(i);
-        return subterm instanceof IStrategoList ? (IStrategoList)subterm : null;
+        return TermUtils.asList(t.getSubterm(i)).orElse(null);
     }
 
     /**
@@ -91,11 +83,12 @@ public final class Tools {
      * @param i the index within the term's subterms
      * @return the real subterm; or {@code null} when the subterm is not a real term
      * @throws IndexOutOfBoundsException the index is out of bounds
+     * @deprecated Use {@link TermUtils#asRealAt}.
      */
+    @Deprecated
     @Nullable
     public static IStrategoReal realAt(IStrategoTerm t, int i) {
-        IStrategoTerm subterm = t.getSubterm(i);
-        return subterm instanceof IStrategoReal ? (IStrategoReal)subterm : null;
+        return TermUtils.asReal(t.getSubterm(i)).orElse(null);
     }
 
     /**
@@ -126,7 +119,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isCons(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getCons().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getCons());
     }
 
     /**
@@ -138,7 +131,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isNil(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getNil().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getNil());
     }
 
     /**
@@ -150,7 +143,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isSDefT(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getSDefT().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getSDefT());
     }
 
     /**
@@ -162,7 +155,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isExtSDef(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getExtSDef().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getExtSDef());
     }
 
     /**
@@ -174,7 +167,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isAnno(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getAnno().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getAnno());
     }
 
     /**
@@ -186,7 +179,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isOp(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getOp().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getOp());
     }
 
     /**
@@ -198,7 +191,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isStr(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getStr().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getStr());
     }
 
     /**
@@ -210,7 +203,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isVar(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getVar().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getVar());
     }
 
     /**
@@ -222,7 +215,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isExplode(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getExplode().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getExplode());
     }
 
     /**
@@ -234,7 +227,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isWld(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getWld().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getWld());
     }
 
     /**
@@ -246,7 +239,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isAs(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getAs().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getAs());
     }
 
     /**
@@ -258,7 +251,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isReal(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getReal().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getReal());
     }
 
     /**
@@ -270,7 +263,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isInt(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getInt().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getInt());
     }
 
     /**
@@ -282,7 +275,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isFunType(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getFunType().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getFunType());
     }
 
     /**
@@ -294,7 +287,7 @@ public final class Tools {
      * otherwise, {@code false}
      */
     public static boolean isConstType(IStrategoAppl t, IContext env) {
-        return env.getStrategoSignature().getConstType().equals(t.getConstructor());
+        return TermUtils.isAppl(t, env.getStrategoSignature().getConstType());
     }
 
     /**
@@ -318,10 +311,11 @@ public final class Tools {
      * @param arity    the expected constructor arity
      * @return {@code true} when the term has the expected constructor name and arity;
      * otherwise, {@code false}
+     * @deprecated Use {@link TermUtils#isAppl}.
      */
+    @Deprecated
     public static boolean hasConstructor(IStrategoAppl t, String ctorName, int arity) {
-        final IStrategoConstructor constructor = t.getConstructor();
-        return constructor.getName().equals(ctorName) && constructor.getArity() == arity;
+        return TermUtils.isAppl(t, ctorName, arity);
     }
 
     /**
@@ -329,10 +323,12 @@ public final class Tools {
      *
      * @param t the term whose constructor name to extract
      * @return the constructor name; or {@code null} when the term has no constructor
+     * @deprecated Use {@link TermUtils#asAppl} and map to {@link IStrategoAppl#getConstructor()}.
      */
     @Nullable
+    @Deprecated
     public static String constructorName(IStrategoTerm t) {
-        return t instanceof IStrategoAppl ? ((IStrategoAppl)t).getConstructor().getName() : null;
+        return TermUtils.asAppl(t).map(a -> a.getConstructor().getName()).orElse(null);
     }
 
 
@@ -343,9 +339,11 @@ public final class Tools {
      *
      * @param t the term to check
      * @return {@code true} when the term is a String term; otherwise, {@code false}
+     * @deprecated Use {@link TermUtils#isString}.
      */
+    @Deprecated
     public static boolean isTermString(IStrategoTerm t) {
-        return t.getTermType() == IStrategoTerm.STRING;
+        return TermUtils.isString(t);
     }
 
     /**
@@ -353,9 +351,11 @@ public final class Tools {
      *
      * @param t the term to check
      * @return {@code true} when the term is a List term; otherwise, {@code false}
+     * @deprecated Use {@link TermUtils#isList}.
      */
+    @Deprecated
     public static boolean isTermList(IStrategoTerm t) {
-        return t.getTermType() == IStrategoTerm.LIST;
+        return TermUtils.isList(t);
     }
 
     /**
@@ -363,9 +363,11 @@ public final class Tools {
      *
      * @param t the term to check
      * @return {@code true} when the term is an Int term; otherwise, {@code false}
+     * @deprecated Use {@link TermUtils#isInt}.
      */
+    @Deprecated
     public static boolean isTermInt(IStrategoTerm t) {
-        return t.getTermType() == IStrategoTerm.INT;
+        return TermUtils.isInt(t);
     }
 
     /**
@@ -373,9 +375,11 @@ public final class Tools {
      *
      * @param t the term to check
      * @return {@code true} when the term is a Real term; otherwise, {@code false}
+     * @deprecated Use {@link TermUtils#isReal}.
      */
+    @Deprecated
     public static boolean isTermReal(IStrategoTerm t) {
-        return t.getTermType() == IStrategoTerm.REAL;
+        return TermUtils.isReal(t);
     }
 
     /**
@@ -383,9 +387,11 @@ public final class Tools {
      *
      * @param t the term to check
      * @return {@code true} when the term is a constructor application term; otherwise, {@code false}
+     * @deprecated Use {@link TermUtils#isAppl}.
      */
+    @Deprecated
     public static boolean isTermAppl(IStrategoTerm t) {
-        return t.getTermType() == IStrategoTerm.APPL;
+        return TermUtils.isAppl(t);
     }
 
     /**
@@ -407,15 +413,17 @@ public final class Tools {
      * @param term the term
      * @return the Java string
      * @throws ClassCastException the term is not an Int term
+     * @deprecated Use {@link TermUtils#toJavaInt}.
      */
+    @Deprecated
     public static int asJavaInt(IStrategoTerm term) {
-        return ((IStrategoInt)term).intValue();
+        return TermUtils.toJavaInt(term);
     }
 
-    /** @deprecated Use {@link #asJavaInt} instead. */
+    /** @deprecated Use {@link TermUtils#toJavaInt} instead. */
     @Deprecated
     public static int javaInt(IStrategoTerm term) {
-        return ((IStrategoInt)term).intValue();
+        return TermUtils.toJavaInt(term);
     }
 
     /**
@@ -426,10 +434,11 @@ public final class Tools {
      * @return the Java integer
      * @throws ClassCastException        the term is not an Int term
      * @throws IndexOutOfBoundsException the index is out of bounds
+     * @deprecated Use {@link TermUtils#toJavaIntAt}.
      */
+    @Deprecated
     public static int javaIntAt(IStrategoTerm t, int i) {
-        IStrategoInt result = termAt(t, i);
-        return result.intValue();
+        return TermUtils.toJavaIntAt(t, i);
     }
 
     /**
@@ -438,9 +447,11 @@ public final class Tools {
      * @param term the term
      * @return the Java double
      * @throws ClassCastException the term is not a Real term
+     * @deprecated Use {@link TermUtils#toJavaReal}.
      */
+    @Deprecated
     public static double asJavaDouble(IStrategoTerm term) {
-        return ((IStrategoReal)term).realValue();
+        return TermUtils.toJavaReal(term);
     }
 
     /**
@@ -451,10 +462,11 @@ public final class Tools {
      * @return the Java integer
      * @throws ClassCastException        the term is not a Real term
      * @throws IndexOutOfBoundsException the index is out of bounds
+     * @deprecated Use {@link TermUtils#toJavaRealAt}.
      */
+    @Deprecated
     public static double javaDoubleAt(IStrategoTerm t, int i) {
-        IStrategoReal result = termAt(t, i);
-        return result.realValue();
+        return TermUtils.toJavaRealAt(t, i);
     }
 
     /**
@@ -463,15 +475,17 @@ public final class Tools {
      * @param term the term
      * @return the Java string
      * @throws ClassCastException the term is not a String term
+     * @deprecated Use {@link TermUtils#toJavaString}.
      */
+    @Deprecated
     public static String asJavaString(IStrategoTerm term) {
-        return ((IStrategoString)term).stringValue();
+        return TermUtils.toJavaString(term);
     }
 
-    /** @deprecated Use {@link #asJavaString} instead. */
+    /** @deprecated Use {@link TermUtils#toJavaString}. */
     @Deprecated
     public static String javaString(IStrategoTerm t) {
-        return ((IStrategoString)t).stringValue();
+        return TermUtils.toJavaString(t);
     }
 
     /**
@@ -482,10 +496,11 @@ public final class Tools {
      * @return the Java string
      * @throws ClassCastException        the term is not a String term
      * @throws IndexOutOfBoundsException the index is out of bounds
+     * @deprecated Use {@link TermUtils#toJavaStringAt}.
      */
+    @Deprecated
     public static String javaStringAt(IStrategoTerm t, int i) {
-        IStrategoString result = termAt(t, i);
-        return asJavaString(result);
+        return TermUtils.toJavaStringAt(t, i);
     }
 
     /**
@@ -494,11 +509,11 @@ public final class Tools {
      * @param term the term
      * @return the Java unmodifiable list
      * @throws ClassCastException the term is not a List term
+     * @deprecated Use {@link TermUtils#toJavaList}.
      */
+    @Deprecated
     public static List<IStrategoTerm> asJavaList(IStrategoTerm term) {
-        IStrategoList listTerm = (IStrategoList)term;   // To ensure a ClassCastException
-        // TODO: Get the term's immutable subterm list instead
-        return Collections.unmodifiableList(Arrays.asList(listTerm.getAllSubterms()));
+        return TermUtils.toJavaList(term);
     }
 
     /**
@@ -509,10 +524,11 @@ public final class Tools {
      * @return the Java unmodifiable list
      * @throws ClassCastException        the term is not a List term
      * @throws IndexOutOfBoundsException the index is out of bounds
+     * @deprecated Use {@link TermUtils#toJavaListAt}.
      */
+    @Deprecated
     public static List<IStrategoTerm> javaListAt(IStrategoTerm term, int index) {
-        IStrategoList result = termAt(term, index);
-        return asJavaList(result);
+        return TermUtils.toJavaListAt(term, index);
     }
 
 }
