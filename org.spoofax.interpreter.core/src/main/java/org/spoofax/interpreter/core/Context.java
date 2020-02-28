@@ -223,6 +223,7 @@ public class Context implements IContext {
         setVarScope(varScope.getParent());
     }
 
+    @Deprecated
     public void restoreVarScope(VarScope anotherVarScope) {
         varScope = anotherVarScope;
     }
@@ -247,8 +248,8 @@ public class Context implements IContext {
         return programFactory;
     }
 
-    public IOperatorRegistry getOperatorRegistry(String domain) {
-        return operatorRegistries.get(domain);
+    public @Nullable IOperatorRegistry getOperatorRegistry(String name) {
+        return operatorRegistries.get(name);
     }
 
     public AbstractPrimitive lookupOperator(String name) {
@@ -270,8 +271,8 @@ public class Context implements IContext {
         operatorRegistries.put(or.getOperatorRegistryName(), or);
     }
 
-    public void addOperatorRegistry(IOperatorRegistry or) {
-        internalAddOperatorRegistry(or);
+    public void addOperatorRegistry(IOperatorRegistry registry) {
+        internalAddOperatorRegistry(registry);
     }
 
     public Collection<String> getStrategyNames() {

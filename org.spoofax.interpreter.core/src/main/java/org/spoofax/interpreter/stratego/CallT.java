@@ -194,7 +194,7 @@ public class CallT extends Strategy {
             
         	@Override
             public IConstruct onSuccess(IContext env) throws InterpreterException {
-                env.restoreVarScope(oldVarScope);
+                env.setVarScope(oldVarScope);
                 if (!isCompiledStrategy)
                     env.getStackTracer().popOnSuccess();
         		return CallT.this.getHook().pop().onSuccess(env);
@@ -202,7 +202,7 @@ public class CallT extends Strategy {
         	
         	@Override
             public IConstruct onFailure(IContext env) throws InterpreterException {
-        		env.restoreVarScope(oldVarScope);
+        		env.setVarScope(oldVarScope);
                 if (!isCompiledStrategy)
                     env.getStackTracer().popOnFailure();
         		return CallT.this.getHook().pop().onFailure(env);
