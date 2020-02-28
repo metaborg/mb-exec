@@ -27,6 +27,9 @@ import org.spoofax.terms.util.NotImplementedException;
 
 import static org.spoofax.interpreter.core.Tools.*;
 
+
+import static org.spoofax.interpreter.core.Context.debug;
+
 public class Match extends Strategy {
 
     // FIXME pre-process to avoid String.equals() for Op cases
@@ -38,9 +41,7 @@ public class Match extends Strategy {
 
     public IConstruct eval(IContext env) throws InterpreterException {
         
-        if (DebugUtil.isDebugging()) {
-            debug("Match.eval() - ", " !", env.current(), " ; ?", pattern);
-        }
+        debug("Match.eval() - ", " !", env.current(), " ; ?", pattern);
 
         IStrategoTerm current = env.current();
 
@@ -159,9 +160,7 @@ public class Match extends Strategy {
     protected Results matchInt(IContext env, IStrategoInt t,
             IStrategoAppl p) throws InterpreterException {
 
-        if (DebugUtil.isDebugging()) {
-            debug("term is Int");
-        }
+        debug("term is Int");
 
         if (Tools.isAnno(p, env)) {
             return matchAnyAnno(env, t, p);
@@ -196,9 +195,7 @@ public class Match extends Strategy {
     protected Results matchReal(IContext env, IStrategoReal t,
             IStrategoAppl p) throws InterpreterException {
 
-        if (DebugUtil.isDebugging()) {
-            debug("term is Real");
-        }
+        debug("term is Real");
 
         if (Tools.isAnno(p, env)) {
             return matchAnyAnno(env, t, p);
@@ -291,9 +288,7 @@ public class Match extends Strategy {
     private Results matchAnyExplode(IContext env, IStrategoTerm t,
             IStrategoAppl p) throws InterpreterException {
 
-        if(DebugUtil.isDebugging()) {
-            DebugUtil.debug("  pattern is Explode");
-        }
+        DebugUtil.debug("  pattern is Explode");
         IStrategoAppl opPattern = Tools.applAt(p, 0);
         IStrategoAppl argsPattern = Tools.applAt(p, 1);
 
@@ -389,9 +384,7 @@ public class Match extends Strategy {
     }
 
     private Results matchBlob(IContext env, IStrategoTerm t, IStrategoAppl p) throws InterpreterException {
-        if (DebugUtil.isDebugging()) {
-            debug("term is Blob");
-        }
+        debug("term is Blob");
         if (Tools.isAnno(p, env)) {
             return matchAnyAnno(env, t, p);
         }
@@ -428,9 +421,7 @@ public class Match extends Strategy {
     }
 
     private Results matchTuple(IContext env, IStrategoTuple t, IStrategoAppl p) throws InterpreterException {
-        if (DebugUtil.isDebugging()) {
-            debug("term is Tuple");
-        }
+        debug("term is Tuple");
         if (Tools.isAnno(p, env)) {
             return matchAnyAnno(env, t, p);
         }
@@ -494,9 +485,7 @@ public class Match extends Strategy {
     protected Results matchList(IContext env, IStrategoList t,
             IStrategoAppl p) throws InterpreterException {
 
-        if (DebugUtil.isDebugging()) {
-            debug("term is List");
-        }
+        debug("term is List");
 
         if (Tools.isAnno(p, env)) {
             return matchAnyAnno(env, t, p);
@@ -536,9 +525,7 @@ public class Match extends Strategy {
         if (r == null)
             return null;
 
-        if (DebugUtil.isDebugging()) {
-            debug("matching CompoundAs", p);
-        }
+        debug("matching CompoundAs", p);
 
         String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
         r.add(new Binding(varName, t));
@@ -586,10 +573,8 @@ public class Match extends Strategy {
     }
 
     private Results matchString(IContext env, IStrategoString t, IStrategoAppl p) throws InterpreterException {
-        if (DebugUtil.isDebugging()) {
-            debug("term is String");
-        }
-        
+        debug("term is String");
+
         if (Tools.isAnno(p, env)) {
             return matchAnyAnno(env, t, p);
         }
@@ -622,9 +607,7 @@ public class Match extends Strategy {
     }
 
     private Results matchStrStr(IContext env, IStrategoString t, IStrategoAppl p) {
-        if(DebugUtil.isDebugging()) {
-            DebugUtil.debug("  pattern is Str");
-        }
+        DebugUtil.debug("  pattern is Str");
         IStrategoString s = Tools.stringAt(p, 0);
         if(s.stringValue().equals(t.stringValue())) {
             return emptyList();

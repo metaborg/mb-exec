@@ -176,18 +176,14 @@ public class VarScope {
 
     public static void backtrackUnboundVars(List<BindingInfo> bindings) {
         for (BindingInfo binding : bindings) {
-            if (DebugUtil.isDebugging()) {
-                debug("backtracking variable: " + binding.name);
-            }
+            debug("backtracking variable: ", binding.name);
             binding.scope.backtrackVar(binding.name);
         }
     }
 
     public static void restoreUnboundVars(List<BindingInfo> bindings) {
         for (BindingInfo binding : bindings) {
-            if (DebugUtil.isDebugging()) {
-                debug("restoring backtracked variable: " + binding.name);
-            }
+            debug("restoring backtracked variable: ", binding.name);
             binding.scope.restoreVar(binding.name);
         }
     }

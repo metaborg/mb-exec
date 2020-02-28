@@ -16,6 +16,8 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
 
+import static org.spoofax.interpreter.core.Context.debug;
+
 public class PrimT extends Strategy {
 
     protected String name;
@@ -32,10 +34,8 @@ public class PrimT extends Strategy {
 
     public IConstruct eval(IContext env) throws InterpreterException {
 
-        if (DebugUtil.isDebugging()) {
-            debug("PrimT.eval() - ", env.current());
-        }
-        
+        debug("PrimT.eval() - ", env.current());
+
         AbstractPrimitive prim = env.lookupOperator(name);
 
         if (prim == null)

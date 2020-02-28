@@ -1,20 +1,6 @@
-/*
- * Evaluation of the StrategoCore Build term
- * 
- * Created on 07.aug.2005
- *
- * Copyright (c) 2005, Karl Trygve Kalleberg <karltk near strategoxt.org>
- * 
- * Licensed under the GNU Lesser General Public License, v2.1
- * 
- * Part of Spoofax
- */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.core.IConstruct;
-import org.spoofax.interpreter.core.IContext;
-import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
+import org.spoofax.interpreter.core.*;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;

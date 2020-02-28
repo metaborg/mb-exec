@@ -1,12 +1,11 @@
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.core.IConstruct;
-import org.spoofax.interpreter.core.IContext;
-import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
+import org.spoofax.interpreter.core.*;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
+
+import static org.spoofax.interpreter.core.Context.debug;
 
 /**
  * Performs a dynamic call to a strategy. Evaluation is done by computing the
@@ -32,9 +31,7 @@ public class CallDynamic extends Strategy {
 	@Override
 	public IConstruct eval(final IContext env) throws InterpreterException {
 
-		if (DebugUtil.isDebugging()) {
-			debug("CallDynamic.eval() - ", env.current());
-		}
+		debug("CallDynamic.eval() - ", env.current());
 
 		if (Tools.isTermAppl(sref) && Tools.isVar((IStrategoAppl) sref, env)) {
 			IStrategoTerm actualSRef = env.lookupVar(Tools.javaStringAt(

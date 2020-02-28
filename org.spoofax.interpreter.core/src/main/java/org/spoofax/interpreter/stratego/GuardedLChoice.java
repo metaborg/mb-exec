@@ -13,6 +13,9 @@ import org.spoofax.interpreter.core.*;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
 
+
+import static org.spoofax.interpreter.core.Context.debug;
+
 public class GuardedLChoice extends Strategy {
 
 	private Pair<Strategy,Strategy>[] children;
@@ -22,9 +25,7 @@ public class GuardedLChoice extends Strategy {
     }
 
     public IConstruct eval(IContext env) throws InterpreterException {
-        if (DebugUtil.isDebugging()) {
-            debug("GuardedLChoice.eval() - ", env.current());
-        }
+        debug("GuardedLChoice.eval() - ", env.current());
 
         return eval(env, 0);
     }

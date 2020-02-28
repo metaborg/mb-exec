@@ -12,13 +12,14 @@ import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.util.DebugUtil;
 
+
+import static org.spoofax.interpreter.core.Context.debug;
+
 public class Id extends Strategy {
 
     public IConstruct eval(IContext e) throws InterpreterException {
 
-        if (DebugUtil.isDebugging()) {
-            debug("Id.eval() - ", e.current());
-        }
+        debug("Id.eval() - ", e.current());
 
         return getHook().pop().onSuccess(e);
     }

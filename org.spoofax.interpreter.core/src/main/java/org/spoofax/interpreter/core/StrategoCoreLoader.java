@@ -58,9 +58,7 @@ public class StrategoCoreLoader {
         IStrategoList svars = Tools.listAt(t, 1);
         IStrategoList tvars = Tools.listAt(t, 2);
 
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug("name  : ", name);
-        }
+        DebugUtil.debug("name  : ", name);
 
         SVar[] realsvars = makeSVars(svars);
         String[] realtvars = makeVars(tvars);
@@ -156,34 +154,20 @@ public class StrategoCoreLoader {
     }
 
     public SDefT parseSDefT(IStrategoAppl t) throws InterpreterException {
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug("parseSDefT()");
-        }
+        DebugUtil.debug("parseSDefT()");
 
         String name = Tools.javaStringAt(t, 0);
         IStrategoList svars = Tools.listAt(t, 1);
         IStrategoList tvars = Tools.listAt(t, 2);
 
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(" name  : ", name);
-        }
-
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(" svars : ", svars);
-        }
+        DebugUtil.debug(" name  : ", name);
+        DebugUtil.debug(" svars : ", svars);
         SVar[] realsvars = makeSVars(svars);
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(" svars : ", realsvars);
-        }
-
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(" tvars : ", tvars);
-        }
+        DebugUtil.debug(" svars : ", realsvars);
+        DebugUtil.debug(" tvars : ", tvars);
 
         String[] realtvars = makeVars(tvars);
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(" tvars : ", realtvars);
-        }
+        DebugUtil.debug(" tvars : ", realtvars);
 
         VarScope newScope = new VarScope(context.getVarScope());
 
@@ -192,9 +176,7 @@ public class StrategoCoreLoader {
 
         context.popVarScope();
 
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(" +name: ", name);
-        }
+        DebugUtil.debug(" +name: ", name);
 
         return new SDefT(name, realsvars, realtvars, body, newScope);
     }
@@ -204,9 +186,7 @@ public class StrategoCoreLoader {
         IStrategoTerm[] sv = svars.getAllSubterms();
         String[] realsvars = new String[sv.length];
 
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(" vars  : ", svars);
-        }
+        DebugUtil.debug(" vars  : ", svars);
 
         for (int j = 0; j < svars.size(); j++) {
             realsvars[j]  = Tools.javaStringAt(sv[j], 0);
@@ -216,16 +196,12 @@ public class StrategoCoreLoader {
     }
 
     private SVar[] makeSVars(IStrategoList svars) {
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug("makeSVars()");
-        }
+        DebugUtil.debug("makeSVars()");
 
         IStrategoTerm[] sv = svars.getAllSubterms();
         SVar[] realsvars = new SVar[sv.length];
 
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(" vars  : ", svars);
-        }
+        DebugUtil.debug(" vars  : ", svars);
 
         for (int j = 0; j < sv.length; j++) {
             IStrategoAppl t = (IStrategoAppl) sv[j];
@@ -234,9 +210,7 @@ public class StrategoCoreLoader {
             realsvars[j] = new SVar(name, type);
         }
 
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug("       : ", realsvars);
-        }
+        DebugUtil.debug("       : ", realsvars);
         return realsvars;
     }
 
@@ -265,51 +239,35 @@ public class StrategoCoreLoader {
 
     private Strategy parseCallT(IStrategoAppl t) throws InterpreterException {
 
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug("parseCallT()");
-        }
+        DebugUtil.debug("parseCallT()");
         String name = Tools.javaStringAt(Tools.applAt(t, 0), 0);
 
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(" name  : ", name);
-        }
+        DebugUtil.debug(" name  : ", name);
 
         IStrategoList svars = Tools.listAt(t, 1);
         Strategy[] realsvars = parseStrategyList(svars);
 
         IStrategoTerm[] realtvars = parseTermList(Tools.listAt(t, 2));
 
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(" -svars : ", realsvars);
-        }
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(" -tvars : ", realtvars);
-        }
+        DebugUtil.debug(" -svars : ", realsvars);
+        DebugUtil.debug(" -tvars : ", realtvars);
         return new CallT(name, realsvars, realtvars);
     }
 
     private Strategy parseCallDynamic(IStrategoAppl t) throws InterpreterException {
     	
-    	if (DebugUtil.isDebugging()) {
-    		DebugUtil.debug("parseDynamicCall()");
-    	}
+        DebugUtil.debug("parseDynamicCall()");
     	IStrategoTerm sref = Tools.termAt(t, 0);
     	
-    	if (DebugUtil.isDebugging()) {
-    		DebugUtil.debug(" name  : ", sref);
-    	}
-    	
+        DebugUtil.debug(" name  : ", sref);
+
     	IStrategoList svars = Tools.listAt(t, 1);
     	Strategy[] realsvars = parseStrategyList(svars);
     	
     	IStrategoTerm[] realtvars = parseTermList(Tools.listAt(t, 2));
     	
-    	if (DebugUtil.isDebugging()) {
-    		DebugUtil.debug(" -svars : ", realsvars);
-    	}
-    	if (DebugUtil.isDebugging()) {
-    		DebugUtil.debug(" -tvars : ", realtvars);
-    	}
+        DebugUtil.debug(" -svars : ", realsvars);
+        DebugUtil.debug(" -tvars : ", realtvars);
     	return new CallDynamic(sref, realsvars, realtvars);
     }
 
@@ -403,13 +361,7 @@ public class StrategoCoreLoader {
 
     private void doLoad(IStrategoTerm prg) throws InterpreterException {
 
-//        PrettyPrinter pp = new PrettyPrinter();
-//        prg.prettyPrint(pp);
-//        System.out.println(pp.getString());
-
-        if (DebugUtil.isDebugging()) {
-            DebugUtil.debug(prg);
-        }
+        DebugUtil.debug(prg);
 
         IStrategoList list = Tools.listAt(prg, 0);
 

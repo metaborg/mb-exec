@@ -18,6 +18,8 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
 
+import static org.spoofax.interpreter.core.Context.debug;
+
 public class CallT extends Strategy {
 
     private final String name;
@@ -36,9 +38,7 @@ public class CallT extends Strategy {
     
     public IConstruct eval(final IContext env) throws InterpreterException {
 
-        if (DebugUtil.isDebugging()) {
-            debug("CallT.eval() - ", env.current());
-        }
+        debug("CallT.eval() - ", env.current());
 
     	SDefT sdef = env.lookupSVar(name);
     	
@@ -123,11 +123,7 @@ public class CallT extends Strategy {
 
     public Strategy evalWithArgs(IContext env, Strategy[] sv, IStrategoTerm[] actualTVars) throws InterpreterException {
 
-        // System.err.println(actualTVars.length);
-        
-        if (DebugUtil.isDebugging()) {
-            debug("CallT.eval() - ", env.current());
-        }
+        debug("CallT.eval() - ", env.current());
 
         SDefT sdef = env.lookupSVar(name); //getsdef(env);
 
@@ -138,14 +134,6 @@ public class CallT extends Strategy {
         if (!isCompiledStrategy)
             env.getStackTracer().push(name);
 
-        /* UNDONE: getParametrizedBody is trouble
-        if (sv.length == 0) {
-            Strategy result = sdef.getParametrizedBody(sv, actualTVars);
-            if (result != null)
-                return addHook(result, env.getVarScope());
-        }
-        */
-    
         String[] formalTermArgs = sdef.getTermParams();
         SVar[] formalStrategyArgs = sdef.getStrategyParams();
 

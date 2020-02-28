@@ -13,6 +13,9 @@ import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.VarScope;
 import org.spoofax.interpreter.util.DebugUtil;
 
+
+import static org.spoofax.interpreter.core.Context.debug;
+
 public class Let extends Strategy {
 
     protected SDefT[] defs;
@@ -26,9 +29,7 @@ public class Let extends Strategy {
 
     public IConstruct eval(final IContext env) throws InterpreterException {
 
-        if (DebugUtil.isDebugging()) {
-            debug("Let.eval() - ", env.current());
-        }
+        debug("Let.eval() - ", env.current());
 
         VarScope newScope = new VarScope(env.getVarScope());
 

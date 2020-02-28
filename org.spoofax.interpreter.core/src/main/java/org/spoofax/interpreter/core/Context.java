@@ -98,12 +98,68 @@ public class Context implements IContext {
         op.setIOAgent(ioAgent);
     }
 
-    public static void debug(Object... s) {
 
+    // These debug() overloads are for optimizations.
+    // Prevents allocating an array for the arguments
+    // in the most common cases.
+
+    /**
+     * Prints the string representation of the given object on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s0 the object to print
+     */
+    public static void debug(Object s0) {
         // A bit of a hack but saves 17% of time (according to JProfiler)...
-        if(DebugUtil.isDebugging()) {
-            DebugUtil.debug(DebugUtil.buildIndent(indentation), s);
-        }
+        if(!DebugUtil.isDebugging()) return;
+        DebugUtil.debug(DebugUtil.buildIndent(indentation), s0);
+    }
+
+    /**
+     * Prints the string representation of the given objects on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s0 the first object to print
+     * @param s1 the second object to print
+     */
+    public static void debug(Object s0, Object s1) {
+        // A bit of a hack but saves 17% of time (according to JProfiler)...
+        if(!DebugUtil.isDebugging()) return;
+        DebugUtil.debug(DebugUtil.buildIndent(indentation), s0, s1);
+    }
+
+    /**
+     * Prints the string representation of the given objects on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s0 the first object to print
+     * @param s1 the second object to print
+     * @param s2 the third object to print
+     */
+    public static void debug(Object s0, Object s1, Object s2) {
+        // A bit of a hack but saves 17% of time (according to JProfiler)...
+        if(!DebugUtil.isDebugging()) return;
+        DebugUtil.debug(DebugUtil.buildIndent(indentation), s0, s1, s2);
+    }
+
+    /**
+     * Prints the string representation of the given objects on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s the objects to print
+     */
+    public static void debug(Object... s) {
+        // A bit of a hack but saves 17% of time (according to JProfiler)...
+        if(!DebugUtil.isDebugging()) return;
+        DebugUtil.debug(DebugUtil.buildIndent(indentation), s);
     }
 
     public IStrategoTerm lookupVar(String n) throws InterpreterException {
@@ -135,9 +191,7 @@ public class Context implements IContext {
             } else if (s.hasVarInLocalScope(x.first)) {
                 IStrategoTerm t = s.lookup(x.first);
                 if (!t.equals(x.second)) {
-                    if (DebugUtil.isDebugging()) {
-                        debug(" no bind : ", x.first, " already bound to ", t, ", new: ", x.second);
-                    }
+                    debug(" no bind : ", x.first, " already bound to ", t, ", new: ", x.second);
                     return false;
                 }
             } else {
