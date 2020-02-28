@@ -28,6 +28,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.util.DebugUtil;
 
+import javax.annotation.Nullable;
+
 
 public class Context implements IContext {
 
@@ -162,11 +164,17 @@ public class Context implements IContext {
         DebugUtil.debug(DebugUtil.buildIndent(indentation), s);
     }
 
-    public IStrategoTerm lookupVar(String n) throws InterpreterException {
-        return varScope.lookup(n);
+    /**
+     * Looks up the value of a variable with the given name.
+     *
+     * @param name the name of the variable
+     * @return the term value of the variable; or {@code null} if not found
+     */
+    public @Nullable IStrategoTerm lookupVar(String name) throws InterpreterException {
+        return varScope.lookup(name);
     }
 
-    public SDefT lookupSVar(String n) throws InterpreterException {
+    public @Nullable SDefT lookupSVar(String n) throws InterpreterException {
         return varScope.lookupSVar(n);
     }
 

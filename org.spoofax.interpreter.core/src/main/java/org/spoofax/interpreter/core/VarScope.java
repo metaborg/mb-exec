@@ -13,6 +13,8 @@ import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
 
+import javax.annotation.Nullable;
+
 public class VarScope {
 
     private VarScope parent;
@@ -32,8 +34,13 @@ public class VarScope {
         semiBound = new HashSet<>();
     }
 
-    public IStrategoTerm lookup(String name) {
-
+    /**
+     * Looks up the value of a variable with the given name.
+     *
+     * @param name the name of the variable
+     * @return the term value of the variable; or {@code null} if not found
+     */
+    public @Nullable IStrategoTerm lookup(String name) {
         IStrategoTerm t = vars.get(name);
 
         if (t == null && parent != null)
@@ -51,7 +58,7 @@ public class VarScope {
         return t;
     }
 
-    public SDefT lookupSVar(String name) {
+    public @Nullable SDefT lookupSVar(String name) {
 
         SDefT t = svars.get(name);
 

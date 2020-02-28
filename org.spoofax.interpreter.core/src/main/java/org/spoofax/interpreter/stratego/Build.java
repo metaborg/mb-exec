@@ -10,252 +10,348 @@ import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
-import org.spoofax.interpreter.util.DebugUtil;
+import org.spoofax.terms.util.TermUtils;
+
+import javax.annotation.Nullable;
 
 import static org.spoofax.interpreter.core.Tools.*;
 
+/**
+ * Build strategy, for building terms.
+ */
 public class Build extends Strategy {
 
-    private IStrategoAppl term;
+    private IStrategoAppl pattern;
 
-    public Build(IStrategoAppl t) {
-        term = t;
+    /**
+     * Initializes a new instance of the {@link Build} strategy
+     *
+     * @param pattern the pattern of the term to be built
+     */
+    public Build(IStrategoAppl pattern) {
+        this.pattern = pattern;
     }
 
+    @Override
     public IConstruct eval(IContext env) throws InterpreterException {
-        if (DebugUtil.isDebugging()) {
-            debug("Build.eval() - ", env.current(), " -> !", term);
-        }
+        debug("Build.eval() - ", env.current(), " -> !", pattern);
 
-        IStrategoTerm t = buildTerm(env, term);
-        if (t == null) {
+        @Nullable IStrategoTerm newTerm = buildTerm(this.pattern, env);
+        if (newTerm == null) {
+            // Building the term failed
         	return getHook().pop().onFailure(env);
         }
-        env.setCurrent(t);
+        env.setCurrent(newTerm);
 
         return getHook().pop().onSuccess(env);
     }
 
-    public IStrategoTerm buildTerm(IContext env, IStrategoAppl t) throws InterpreterException {
-
-        ITermFactory factory = env.getFactory();
-
-        if (Tools.isAnno(t, env)) {
-            return buildAnno(env, t);
+    /**
+     * Builds the term.
+     *
+     * @param env the strategy context
+     * @param pattern the pattern of the term to build
+     * @return the built term; or {@code null} when it failed
+     */
+    public @Nullable IStrategoTerm buildTerm(IStrategoAppl pattern, IContext env) {
+        if (Tools.isAnno(pattern, env)) {
+            // Anno(_, _)
+            return buildAnno(pattern, env);
+        } else if (Tools.isOp(pattern, env)) {
+            // Op(_, _)
+            return buildOp(pattern, env);
+        } else if (Tools.isInt(pattern, env)) {
+            // Int(_)
+            return buildInt(pattern, env);
+        } else if (Tools.isReal(pattern, env)) {
+            // Real(_)
+            return buildReal(pattern, env);
+        } else if (Tools.isStr(pattern, env)) {
+            // Str(_)
+            return buildStr(pattern, env);
+        } else if (Tools.isVar(pattern, env)) {
+            // Var(_)
+            return buildVar(pattern, env);
+        } else if (Tools.isExplode(pattern, env)) {
+            // Explode(_, _)
+            return buildExplode(pattern, env);
+        } else {
+            // ?
+            throw new IllegalStateException("Unknown build constituent '" + pattern.getConstructor() + "'");
         }
-        else if (Tools.isOp(t, env)) {
-            return buildOp(env, t, factory);
-        }
-        else if (Tools.isInt(t, env)) {
-            return buildInt(t, factory);
-        }
-        else if (Tools.isReal(t, env)) {
-            return buildReal(t, factory);
-        }
-        else if (Tools.isStr(t, env)) {
-            return buildStr(t);
-        }
-        else if (Tools.isVar(t, env)) {
-            return buildVar(env, t);
-        }
-        else if (Tools.isExplode(t, env)) {
-            return buildExplode(env, t);
-        }
-
-        throw new InterpreterException("Unknown build constituent '" + t.getConstructor() + "'");
     }
 
-    private IStrategoTerm buildExplode(IContext env, IStrategoAppl t) throws InterpreterException {
-        if (DebugUtil.isDebugging()) {
-            debug("buildExplode() : ", t);
-        }
+    /**
+     * Builds a term from the specified constructor name and list of arguments.
+     *
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term; or {@code null} when it failed
+     */
+    private @Nullable IStrategoTerm buildExplode(IStrategoAppl pattern, IContext env) {
+        debug("buildExplode() : ", pattern);
 
-        ITermFactory factory = env.getFactory();
+        IStrategoAppl ctorPattern = TermUtils.toApplAt(pattern, 0);
+        IStrategoAppl argsPattern = TermUtils.toApplAt(pattern, 1);
 
-        IStrategoAppl ctor = Tools.applAt(t, 0);
-        IStrategoAppl args = Tools.applAt(t, 1);
+        debug(" ctor : ", ctorPattern);
+        debug(" args : ", argsPattern);
 
-        if (DebugUtil.isDebugging()) {
-            debug(" ctor : ", ctor);
-        }
-        if (DebugUtil.isDebugging()) {
-            debug(" args : ", args);
-        }
+        @Nullable IStrategoTerm constructorName = buildTerm(ctorPattern, env);
+        @Nullable IStrategoTerm argumentList = buildTerm(argsPattern, env);
 
-        IStrategoTerm actualCtor = buildTerm(env, ctor);
-        IStrategoTerm actualArgs = buildTerm(env, args);
-
-        if(actualCtor == null || actualArgs == null)
+        if (constructorName == null || argumentList == null)
             return null;
-        
-        if (DebugUtil.isDebugging()) {
-            debug(" actualCtor : ", actualCtor);
-        }
-        if (DebugUtil.isDebugging()) {
-            debug(" actualArgs : ", actualArgs);
-        }
 
-        if (Tools.isTermInt(actualCtor) || Tools.isTermReal(actualCtor)) {
-            return actualCtor;
-        }
-        else if (Tools.isTermString(actualCtor)) {
-            return doBuildExplode(factory, actualCtor, actualArgs);
-        }
-        else if (Tools.isTermList(actualCtor)) {
-            return actualArgs;
-        }
+        debug(" actualCtor : ", constructorName);
+        debug(" actualArgs : ", argumentList);
 
-        // According to STR-626 non-string constructor term implosion should fail not crash
-        return null;
+        if (TermUtils.isInt(constructorName) || TermUtils.isReal(constructorName)) {
+            return constructorName;
+        } else if (TermUtils.isString(constructorName)) {
+            return doBuildExplode(constructorName, argumentList, env);
+        } else if (TermUtils.isList(constructorName)) {
+            return argumentList;
+        } else {
+            // According to STR-626 non-string constructor term implosion should fail not crash
+            return null;
+        }
     }
 
-    private IStrategoTerm doBuildExplode(ITermFactory factory, IStrategoTerm actualCtor, IStrategoTerm actualArgs) throws InterpreterException {
-        if (!(Tools.isTermList(actualArgs))) {
-            throw new InterpreterException("Not a list: " + actualArgs);
-        }
+    /**
+     * Builds a term from the specified constructor name and list of arguments.
+     *
+     * @param constructorName the constructor name
+     * @param argumentList the list of arguments
+     * @param env the term context
+     * @return the resulting term
+     */
+    private IStrategoTerm doBuildExplode(IStrategoTerm constructorName, IStrategoTerm argumentList, IContext env) {
+        ITermFactory factory = env.getFactory();
+        String name = TermUtils.toJavaString(constructorName);
+        IStrategoTerm[] realArgs = TermUtils.toList(argumentList).getAllSubterms();
 
-        String n = ((IStrategoString)actualCtor).stringValue();
-        IStrategoTerm[] realArgs = ((IStrategoList)actualArgs).getAllSubterms();
-        
-        if (n.equals(""))
+        if (name.isEmpty()) {
+            // Tuples have a constructor that has an empty name.
             return factory.makeTuple(realArgs);
-        
-        boolean quoted = false;
-        if (n.length() > 1 && n.charAt(0) == '"') {
-            n = n.substring(1, n.length() - 1);
-            quoted = true;
         }
 
-        if(quoted && realArgs.length == 0) {
-            return factory.makeString(n);
+        if (name.length() >= 2 && name.charAt(0) == '"' && name.charAt(name.length() - 1) == '"') {
+            // Remove the quotes around the name.
+            name = name.substring(1, name.length() - 1);
+
+            if(realArgs.length == 0) {
+                // It was quoted and has no arguments, so it must be a string.
+                return factory.makeString(name);
+            }
         }
         
-        IStrategoConstructor afun = factory.makeConstructor(n, realArgs.length);
+        IStrategoConstructor afun = factory.makeConstructor(name, realArgs.length);
         return factory.makeAppl(afun, realArgs);
     }
 
-    private IStrategoTerm buildVar(IContext env, IStrategoAppl t) throws InterpreterException {
-
-        String n = Tools.javaStringAt(t, 0);
-        return env.lookupVar(n);
-    }
-
-    private IStrategoString buildStr(IStrategoAppl t) {
-        IStrategoString x = Tools.stringAt(t, 0);
-
-        return x;
-    }
-
-    private IStrategoReal buildReal(IStrategoAppl t, ITermFactory factory) {
-        String x = Tools.javaStringAt(t, 0);
-
-        return factory.makeReal(new Double(x));
-    }
-
-    private IStrategoInt buildInt(IStrategoAppl t, ITermFactory factory) {
-        String x = Tools.javaStringAt(t, 0);
-
-        return factory.makeInt(new Integer(x).intValue());
-    }
-
-    private IStrategoTerm buildOp(IContext env, IStrategoAppl t, ITermFactory factory)
-            throws InterpreterException {
-        // FIXME memoize constructors
-        
-        String ctr = Tools.javaStringAt(t, 0);
-        IStrategoList children = (IStrategoList) t.getSubterm(1);
-        
-        if(ctr.length() == 0) {
-            return buildTuple(env, t);
-        } else if(children.getSubtermCount() == 0 && ctr.equals("Nil")) {
-            return buildNil(env);
-        } else if(children.getSubtermCount() == 2 && ctr.equals("Cons")) {
-            return buildCons(env, t, factory);
-        } else {
-            return buildOp(ctr, env, t, factory);
+    /**
+     * Gets the term assigned to the variable represented by a Var(name) term.
+     *
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term; or {@code null} when no value was assigned
+     */
+    private @Nullable IStrategoTerm buildVar(IStrategoAppl pattern, IContext env) {
+        String name = TermUtils.toJavaStringAt(pattern, 0);
+        try {
+            return env.lookupVar(name);
+        } catch (InterpreterException e) {
+            // This should not be able to happen
+            throw new RuntimeException(e);
         }
     }
-    
-    private IStrategoList buildNil(IContext env) {
-        return env.getFactory().makeList();
+
+    /**
+     * Builds a String term from a Str(x) pattern.
+     *
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term
+     */
+    private IStrategoString buildStr(IStrategoAppl pattern, IContext env) {
+        return TermUtils.toStringAt(pattern, 0);
     }
 
-    private IStrategoTerm buildOp(String ctr, IContext env, IStrategoAppl t, ITermFactory factory) 
-    throws  InterpreterException {
-        
-        IStrategoList children = (IStrategoList) t.getSubterm(1);
+    /**
+     * Builds a Real term from a Real(x) pattern.
+     *
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term
+     */
+    private IStrategoReal buildReal(IStrategoAppl pattern, IContext env) {
+        String x = TermUtils.toJavaStringAt(pattern, 0);
+        return env.getFactory().makeReal(new Double(x));
+    }
 
-        IStrategoConstructor ctor = factory.makeConstructor(ctr, children.size());
+    /**
+     * Builds an Int term from an Int(x) pattern.
+     *
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term
+     */
+    private IStrategoInt buildInt(IStrategoAppl pattern, IContext env) {
+        String x = TermUtils.toJavaStringAt(pattern, 0);
+        return env.getFactory().makeInt(new Integer(x));
+    }
+
+    /**
+     * Builds a constructor application term from an Op(ctor, args) pattern.
+     *
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term; or {@code null} when it failed
+     */
+    private @Nullable IStrategoTerm buildOp(IStrategoAppl pattern, IContext env) {
+        // FIXME memoize constructors
+        
+        String ctr = TermUtils.toJavaStringAt(pattern, 0);
+        IStrategoList children = TermUtils.toListAt(pattern, 1);
+        
+        if(ctr.length() == 0) {
+            return buildTuple(pattern, env);
+        } else if(matchesConstructor(ctr, children.getSubtermCount(), env.getStrategoSignature().CTOR_Nil)) {
+            return buildNil(pattern, env);
+        } else if(matchesConstructor(ctr, children.getSubtermCount(), env.getStrategoSignature().CTOR_Cons)) {
+            return buildCons(pattern, env);
+        } else {
+            return doBuildOp(ctr, pattern, env);
+        }
+    }
+
+    /**
+     * Builds a constructor application term from an Op(ctor, args) pattern.
+     *
+     * @param ctr the constructor name
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term; or {@code null} when it failed
+     */
+    private @Nullable IStrategoTerm doBuildOp(String ctr, IStrategoAppl pattern, IContext env) {
+        IStrategoList children = TermUtils.toListAt(pattern, 1);
+
+        IStrategoConstructor ctor = env.getFactory().makeConstructor(ctr, children.size());
         IStrategoTerm[] kids = new IStrategoTerm[children.size()];
 
-        for (int i = children.size() -1 ; i >= 0; i--) {
-            IStrategoTerm kid = buildTerm(env, (IStrategoAppl) children.getSubterm(i));
+        for (int i = children.size() - 1; i >= 0; i--) {
+            @Nullable IStrategoTerm kid = buildTerm(TermUtils.toApplAt (children, i), env);
             if (kid == null) {
+                // Building the kid failed
                 return null;
             }
             kids[i] = kid;
         }
 
-        return factory.makeAppl(ctor, kids);
+        return env.getFactory().makeAppl(ctor, kids);
     }
 
-    private IStrategoList buildCons(IContext env, IStrategoAppl t, ITermFactory factory) throws InterpreterException {
+    /**
+     * Checks whether the specified name and arity match that of the specified constructor.
+     *
+     * @param name the constructor name to check
+     * @param arity the constructor arity to check
+     * @param constructor the constructor to check against
+     * @return {@code true} when name and arity match; otherwise, {@code false}
+     */
+    private boolean matchesConstructor(String name, int arity, IStrategoConstructor constructor) {
+        return constructor.getName().equals(name) && constructor.getArity() == arity;
+    }
 
-        IStrategoList children = (IStrategoList) t.getSubterm(1);
+    /**
+     * Builds a Nil() term from an Nil() pattern.
+     *
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term
+     */
+    private IStrategoList buildNil(IStrategoAppl pattern, IContext env) {
+        return env.getFactory().makeList();
+    }
+
+    /**
+     * Builds a Cons(head, tail) term from a Cons(head, tail) pattern.
+     *
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term
+     */
+    private @Nullable IStrategoList buildCons(IStrategoAppl pattern, IContext env) {
+        IStrategoList children = TermUtils.toListAt(pattern, 1);
         
-        IStrategoAppl headPattern = (IStrategoAppl) children.getSubterm(0);
-        IStrategoAppl tailPattern = (IStrategoAppl) children.getSubterm(1);
+        IStrategoAppl headPattern = TermUtils.toApplAt(children, 0);
+        IStrategoAppl tailPattern = TermUtils.toApplAt(children, 1);
+
+        @Nullable IStrategoTerm head = buildTerm(headPattern, env);
+        @Nullable IStrategoList tail = buildList(tailPattern, env);
         
-        IStrategoList tail = buildList(env, tailPattern, factory); 
-        IStrategoTerm head = buildTerm(env, headPattern);
-        
-        if(tail == null || head == null)
+        if(head == null || tail == null) {
+            // Building the head or tail failed.
             return null;
-        
-        return factory.makeListCons(head, tail);
-    }
-
-    private IStrategoList buildList(IContext env, IStrategoAppl t, ITermFactory factory) throws InterpreterException {
-    	
-        // FIXME improve! this is an Anno!
-        if(Tools.isAnno(t, env)) {
-            t = Tools.applAt(t, 0);
-        
-            String c = Tools.javaStringAt(t, 0);
-            
-            if(c.equals("Nil")) {
-                return buildNil(env);
-            } else if(c.equals("Cons")) {
-                return buildCons(env, t, factory);
-            }
         }
         
-        if(Tools.isVar(t, env)) {
-            IStrategoTerm r = buildVar(env, t);
+        return env.getFactory().makeListCons(head, tail);
+    }
+
+    /**
+     * Builds a list from a list pattern.
+     *
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term
+     */
+    private @Nullable IStrategoList buildList(IStrategoAppl pattern, IContext env) {
+
+        // FIXME improve! this is an Anno!
+        if (Tools.isAnno(pattern, env)) {
+            pattern = TermUtils.toApplAt(pattern, 0);
+
+            String constructorName = TermUtils.toJavaStringAt(pattern, 0);
+
+            if (env.getStrategoSignature().CTOR_Nil.getName().equals(constructorName)) {
+                return buildNil(pattern, env);
+            } else if (env.getStrategoSignature().CTOR_Cons.getName().equals(constructorName)) {
+                return buildCons(pattern, env);
+            }
+        }
+
+        if (Tools.isVar(pattern, env)) {
+            @Nullable IStrategoTerm r = buildVar(pattern, env);
             if (r == null) return null;
-            if (r.getTermType() == IStrategoTerm.LIST) {
-                return (IStrategoList) r;
+            if (TermUtils.isList(r)) {
+                return TermUtils.toList(r);
             } else {
-            	SSLLibrary.instance(env).getIOAgent().printError("Warning: trying to build list with illegal tail: " + t.toString());
+                SSLLibrary.instance(env).getIOAgent().printError("Warning: trying to build list with illegal tail: " + pattern.toString());
                 return null;
             }
         }
-        
-        // throw new InterpreterException("List tail must always be a list!");
-        IStrategoTerm r = buildTerm(env, t);
-        SSLLibrary.instance(env).getIOAgent().printError("Warning: trying to build list with illegal tail: " + r.toString());
+
+        @Nullable IStrategoTerm r = buildTerm(pattern, env);
+        SSLLibrary.instance(env).getIOAgent().printError("Warning: trying to build list with illegal tail: " + r);
         return null;
     }
 
-
-    private IStrategoTerm buildTuple(IContext env, IStrategoAppl t) throws InterpreterException {
-        
-        IStrategoList children = (IStrategoList) t.getSubterm(1);
+    /**
+     * Builds a tuple term from an Op("", args) pattern.
+     *
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term; or {@code null} when it failed
+     */
+    private @Nullable IStrategoTerm buildTuple(IStrategoAppl pattern, IContext env) {
+        IStrategoList children = TermUtils.toListAt(pattern, 1);
         IStrategoTerm[] kids = new IStrategoTerm[children.size()];
 
         for (int i = 0; i < children.size(); i++) {
-            IStrategoTerm kid = kids[i] = buildTerm(env, (IStrategoAppl) children.getSubterm(i));
+            IStrategoTerm kid = kids[i] = buildTerm(TermUtils.toApplAt(children, i), env);
             if (kid == null) {
+                // Building failed.
                 return null;
             }
         }
@@ -263,20 +359,29 @@ public class Build extends Strategy {
         return env.getFactory().makeTuple(kids);
     }
 
-    private IStrategoTerm buildAnno(IContext env, IStrategoAppl t) throws InterpreterException {
-        IStrategoTerm term = buildTerm(env, applAt(t, 0));
+    /**
+     * Builds an annotated term from an Anno(term, annotations) pattern.
+     *
+     * @param pattern the pattern
+     * @param env the term context
+     * @return the resulting term; or {@code null} when it failed
+     */
+    private @Nullable IStrategoTerm buildAnno(IStrategoAppl pattern, IContext env) {
+        IStrategoTerm term = buildTerm(TermUtils.toApplAt(pattern, 0), env);
         if (term == null) return null;
         
-        IStrategoAppl annos = applAt(t, 1);
-        if (term.getAnnotations().size() == 0
-                && "Op".equals(annos.getConstructor().getName())
-                && "Nil".equals(javaStringAt(annos, 0))) {
+        IStrategoAppl annos = TermUtils.toApplAt(pattern, 1);
+        if (term.getAnnotations().size() == 0 &&
+                env.getStrategoSignature().CTOR_Op.getName().equals(annos.getConstructor().getName()) &&
+                env.getStrategoSignature().CTOR_Nil.getName().equals(TermUtils.toJavaStringAt(annos, 0))) {
             return term;
         } else {
-            IStrategoTerm annoList = buildTerm(env, annos);
+            IStrategoTerm annoList = buildTerm(annos, env);
             if (annoList == null) return null;
-            if (annoList.getTermType() != IStrategoTerm.LIST)
+            if (!TermUtils.isList(annoList)) {
+                // Make a singleton list
                 annoList = env.getFactory().makeList(annoList);
+            }
             
             if (annoList.equals(term.getAnnotations())) {
                 return term;
@@ -286,17 +391,18 @@ public class Build extends Strategy {
         }
     }
 
+    @Override
     public void prettyPrint(StupidFormatter sf) {
-        sf.first("Build(" + term.toString() + ")");
+        sf.first(toString());
     }
 
     @Override
     public String toString() {
-    	return "Build(" + term.toString() + ")";
+    	return "Build(" + pattern + ")";
     }
     
     @Override
     protected String getTraceName() {
-        return super.getTraceName() + "(" + term + ")";
+        return super.getTraceName() + "(" + pattern + ")";
     }
 }

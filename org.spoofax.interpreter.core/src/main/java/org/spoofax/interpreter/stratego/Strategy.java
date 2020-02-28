@@ -20,8 +20,10 @@ import org.spoofax.interpreter.stratego.SDefT.ConstType;
 import org.spoofax.interpreter.stratego.SDefT.FunType;
 import org.spoofax.interpreter.util.DebugUtil;
 
-
-abstract public class Strategy implements IConstruct {
+/**
+ * Base class for all strategies.
+ */
+public abstract class Strategy implements IConstruct {
 
     private final static ArgType type;
 
