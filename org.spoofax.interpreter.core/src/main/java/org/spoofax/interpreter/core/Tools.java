@@ -297,14 +297,10 @@ public final class Tools {
         return TermUtils.isAppl(t);
     }
 
-    /**
-     * Determines whether the given term is a Tuple term.
-     *
-     * @param t the term to check
-     * @return {@code true} when the term is a tuple term; otherwise, {@code false}
-     */
+    /** @deprecated Use {@link TermUtils#isTuple}. */
+    @Deprecated
     public static boolean isTermTuple(IStrategoTerm t) {
-        return t.getTermType() == IStrategoTerm.TUPLE;
+        return TermUtils.isTuple(t);
     }
 
 

@@ -4,7 +4,6 @@ import io.usethesource.capsule.Map;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
@@ -28,7 +27,7 @@ public class SSL_immutable_map_from_list extends AbstractPrimitive {
         final IStrategoList list = (IStrategoList) env.current();
         final Map.Transient<IStrategoTerm, IStrategoTerm> map = Map.Transient.of();
         for(IStrategoTerm t : list) {
-            if(!(Tools.isTermTuple(t) && t.getSubtermCount() == 2)) {
+            if(!TermUtils.isTuple(t, 2)) {
                 return false;
             }
             final IStrategoTerm key = t.getSubterm(0);

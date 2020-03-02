@@ -346,7 +346,7 @@ public class Match extends Strategy {
                 return env.getFactory().makeString(((IStrategoAppl)t).getConstructor().getName());
         } else if (TermUtils.isList(t)) {
             return env.getFactory().makeList();
-        } else if (Tools.isTermTuple(t)) {
+        } else if (TermUtils.isTuple(t)) {
             return env.getFactory().makeString("");
         }
 
