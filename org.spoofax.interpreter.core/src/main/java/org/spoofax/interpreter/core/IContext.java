@@ -151,8 +151,18 @@ public interface IContext extends IAsyncCancellable {
      */
     StackTracer getStackTracer();
 
-    @Deprecated
+    // FIXME: Should be named getContextObject() for Kotlin compatibility
+    /**
+     * Gets the platform-specific context object associated with this context.
+     *
+     * @return the context object; or {@code null} when none was set
+     */
     @Nullable Object contextObject();
-    @Deprecated
+
+    /**
+     * Sets the platform-specific context object associated with this context.
+     *
+     * @param context the new context object; or {@code null} to set none
+     */
     void setContextObject(@Nullable Object context);
 }
