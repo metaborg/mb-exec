@@ -132,9 +132,7 @@ public class Match extends Strategy {
         // Recursively match all arguments to term
         Results r = emptyList();
         for (int i = 0; i < ctorArgs.size(); i++) {
-            Results m = match(env, t.getSubterm(i),
-                              (IStrategoAppl) ctorArgs
-                              .getSubterm(i));
+            Results m = match(env, t.getSubterm(i), TermUtils.toApplAt(ctorArgs, i));
             if (m != null)
                 r.addAll(m);
             else
@@ -469,9 +467,7 @@ public class Match extends Strategy {
         // Match subterms of tuple against subpatterns of pattern 
         Results r = emptyList();
         for (int i = 0; i < ctorArgs.size(); i++) {
-            Results m = match(env, t.get(i),
-                              (IStrategoAppl) ctorArgs
-                              .getSubterm(i));
+            Results m = match(env, t.get(i), TermUtils.toApplAt(ctorArgs, i));
             if (m != null)
                 r.addAll(m);
             else
@@ -551,11 +547,11 @@ public class Match extends Strategy {
             
             IStrategoList pattern = TermUtils.toListAt(p, 1);
             
-            Results r = match(env, head, (IStrategoAppl)pattern.getSubterm(0));
+            Results r = match(env, head, TermUtils.toApplAt(pattern, 0));
             if(r == null)
                 return null;
             
-            Results r2 = match(env, tail, (IStrategoAppl)pattern.getSubterm(1));
+            Results r2 = match(env, tail, TermUtils.toApplAt(pattern, 1));
             if(r2 == null)
                 return null;
             

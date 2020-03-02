@@ -32,17 +32,7 @@ public class SSL_printnl extends AbstractPrimitive {
 
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < l.size(); i++) {
-            IStrategoTerm t = l.getSubterm(i);
-//            if (TermUtils.isAppl(t)) {
-//                IStrategoAppl a = (IStrategoAppl)t;
-//                if (Tools.isCons(a, env))
-//                    break;
-//                    //sb.append(Tools.consToListDeep(env, a));
-//                else if (TermUtils.isString(t))
-//                    sb.append(TermUtils.toJavaString(t));
-//                continue;
-//            }
-            sb.append(t);
+            sb.append(l.getSubterm(i));
         }
         sb.append("\n");
 
