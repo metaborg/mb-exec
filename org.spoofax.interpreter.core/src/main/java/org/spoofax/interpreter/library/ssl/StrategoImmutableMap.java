@@ -9,7 +9,9 @@ import org.spoofax.interpreter.util.EntryAsPairIterator;
 import org.spoofax.terms.StrategoTerm;
 import org.spoofax.terms.TermFactory;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm {
     public final Map.Immutable<IStrategoTerm, IStrategoTerm> backingMap;
@@ -42,6 +44,11 @@ public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm 
     @Override
     public IStrategoTerm[] getAllSubterms() {
         return new IStrategoTerm[0];
+    }
+
+    @Override
+    public List<IStrategoTerm> getSubterms() {
+        return Collections.emptyList();
     }
 
     @Override

@@ -109,6 +109,11 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         return AbstractTermFactory.EMPTY;
     }
 
+    @Override
+    public List<IStrategoTerm> getSubterms() {
+        return Collections.emptyList();
+    }
+
     public IStrategoList getAnnotations() {
         return TermFactory.EMPTY_LIST;
     }

@@ -8,9 +8,7 @@ import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.terms.StrategoTerm;
 import org.spoofax.terms.TermFactory;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 
 public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm {
     public final Set.Immutable<IStrategoTerm> backingSet;
@@ -42,6 +40,11 @@ public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm 
 
     @Override public IStrategoTerm[] getAllSubterms() {
         return new IStrategoTerm[0];
+    }
+
+    @Override
+    public List<IStrategoTerm> getSubterms() {
+        return Collections.emptyList();
     }
 
     @Override public int getTermType() {
