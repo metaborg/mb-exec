@@ -9,13 +9,13 @@ package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_explode_string extends AbstractPrimitive {
 
@@ -27,7 +27,7 @@ public class SSL_explode_string extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException {
         IStrategoTerm t = tvars[0];
         
-        if (!Tools.isTermString(t))
+        if (!TermUtils.isString(t))
             return false;
         
         String s = ((IStrategoString) t).stringValue();

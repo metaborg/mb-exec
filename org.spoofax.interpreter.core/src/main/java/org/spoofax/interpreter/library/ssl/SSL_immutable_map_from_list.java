@@ -10,6 +10,7 @@ import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_immutable_map_from_list extends AbstractPrimitive {
 
@@ -18,7 +19,7 @@ public class SSL_immutable_map_from_list extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        if(!Tools.isTermList(env.current())) {
+        if(!TermUtils.isList(env.current())) {
             return false;
         }
         final Strategy merge = sargs[0];

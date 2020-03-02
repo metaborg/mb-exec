@@ -17,6 +17,7 @@ import org.spoofax.interpreter.stratego.SDefT.SVar;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
+import org.spoofax.terms.util.TermUtils;
 
 import static org.spoofax.interpreter.core.Context.debug;
 
@@ -111,7 +112,7 @@ public class CallT extends Strategy {
             IStrategoTerm actual = tvars[i];
             // FIXME: This should not be here
             if (Tools.isVar(((IStrategoAppl)actual), env))
-                actual = env.lookupVar(Tools.javaStringAt((IStrategoAppl)actual, 0));
+                actual = env.lookupVar(TermUtils.toJavaStringAt((IStrategoAppl)actual, 0));
             newScope.add(formal, actual);
         }
 

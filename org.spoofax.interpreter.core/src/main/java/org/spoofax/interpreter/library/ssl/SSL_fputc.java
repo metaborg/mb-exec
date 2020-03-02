@@ -7,17 +7,15 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import static org.spoofax.interpreter.core.Tools.asJavaInt;
-
 import java.io.IOException;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_fputc extends AbstractPrimitive {
 
@@ -28,9 +26,9 @@ public class SSL_fputc extends AbstractPrimitive {
     @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
 
-        if(!(Tools.isTermInt(targs[0])))
+        if(!(TermUtils.isInt(targs[0])))
             return false;
-        if(!(Tools.isTermInt(targs[1])))
+        if(!(TermUtils.isInt(targs[1])))
             return false;
 
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
@@ -38,7 +36,7 @@ public class SSL_fputc extends AbstractPrimitive {
         IOAgent agent = or.getIOAgent();
         
         try {
-            agent.writeChar(asJavaInt(targs[1]), asJavaInt(targs[0]));
+            agent.writeChar(TermUtils.toJavaInt(targs[1]), TermUtils.toJavaInt(targs[0]));
         } catch(IOException e) {
             throw new InterpreterException(e);
         }

@@ -4,10 +4,10 @@ import io.usethesource.capsule.Set;
 
 import org.junit.Test;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -60,7 +60,7 @@ public class TestImmutableSetPrimitiveCreateSet extends ImmutableSetMapTestSetup
         context.setCurrent(new StrategoImmutableSet(Set.Immutable.of(one, two)));
         boolean result = SSL_immutable_set_elements.call(context, new Strategy[0], new IStrategoTerm[0]);
         assertTrue(result);
-        assertTrue(Tools.isTermList(context.current()));
+        assertTrue(TermUtils.isList(context.current()));
         IStrategoList current = (IStrategoList) context.current();
         assertEquals(current.size(), 2);
         assertThat(current.head(), anyOf(equalTo(one), equalTo(two)));

@@ -9,11 +9,11 @@ package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_gtr extends AbstractPrimitive {
 
@@ -24,9 +24,9 @@ public class SSL_gtr extends AbstractPrimitive {
     @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         
-        if(!Tools.isTermReal(targs[0]))
+        if(!TermUtils.isReal(targs[0]))
             return false;
-        if(!Tools.isTermReal(targs[1]))
+        if(!TermUtils.isReal(targs[1]))
             return false;
 
         IStrategoReal a = (IStrategoReal) targs[0];

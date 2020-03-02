@@ -5,11 +5,12 @@ import io.usethesource.capsule.Set;
 
 import org.junit.Test;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.TermFactory;
+import org.spoofax.terms.util.TermUtils;
+
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -64,7 +65,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
         boolean result = SSL_immutable_map_keys.call(context, new Strategy[0], new IStrategoTerm[0]);
         assertTrue(result);
-        assertTrue(Tools.isTermList(context.current()));
+        assertTrue(TermUtils.isList(context.current()));
         IStrategoList current = (IStrategoList) context.current();
         assertEquals(current.size(), 2);
         assertEquals(new HashSet<>(Arrays.asList(current.getAllSubterms())), new HashSet<>(Arrays.asList(one, two)));
@@ -85,7 +86,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of()));
         boolean result = SSL_immutable_map_to_list.call(context, new Strategy[0], new IStrategoTerm[0]);
         assertTrue(result);
-        assertTrue(Tools.isTermList(context.current()));
+        assertTrue(TermUtils.isList(context.current()));
         IStrategoList current = (IStrategoList) context.current();
         assertEquals(current, f.makeList());
     }
@@ -95,7 +96,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
         boolean result = SSL_immutable_map_to_list.call(context, new Strategy[0], new IStrategoTerm[0]);
         assertTrue(result);
-        assertTrue(Tools.isTermList(context.current()));
+        assertTrue(TermUtils.isList(context.current()));
         IStrategoList current = (IStrategoList) context.current();
         assertEquals(new HashSet<>(Arrays.asList(current.getAllSubterms())),
             new HashSet<>(Arrays.asList(f.makeTuple(one, a), f.makeTuple(two, b))));
@@ -106,7 +107,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
         boolean result = SSL_immutable_map_values.call(context, new Strategy[0], new IStrategoTerm[0]);
         assertTrue(result);
-        assertTrue(Tools.isTermList(context.current()));
+        assertTrue(TermUtils.isList(context.current()));
         IStrategoList current = (IStrategoList) context.current();
         assertEquals(current.size(), 2);
         assertEquals(new HashSet<>(Arrays.asList(current.getAllSubterms())), new HashSet<>(Arrays.asList(a, b)));

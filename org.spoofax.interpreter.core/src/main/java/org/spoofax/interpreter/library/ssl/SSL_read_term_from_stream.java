@@ -12,12 +12,12 @@ import java.io.InputStream;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.ParseError;
 import org.spoofax.terms.io.binary.TermReader;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_read_term_from_stream extends AbstractPrimitive {
 
@@ -29,7 +29,7 @@ public class SSL_read_term_from_stream extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-        if(!Tools.isTermInt(tvars[0]))
+        if(!TermUtils.isInt(tvars[0]))
             return false;
         
         // TODO: optimize - use memory-mapped I/O for reading terms?
@@ -38,11 +38,11 @@ public class SSL_read_term_from_stream extends AbstractPrimitive {
         //
         // UNDONE: tricky: detecting if it's a BAF term in TermFactory...
         //
-        // FileChannel channel = or.getIOAgent().getInputChannel(Tools.asJavaInt(tvars[0]));
+        // FileChannel channel = or.getIOAgent().getInputChannel(TermUtils.toJavaInt(tvars[0]));
         // ChannelPushbackInputStream reader = new ChannelPushbackInputStream(channel);
         // TODO: in other places we're using getReader(); seems risky to use internalGetInputStream() here
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        InputStream is = or.getIOAgent().internalGetInputStream(Tools.asJavaInt(tvars[0]));
+        InputStream is = or.getIOAgent().internalGetInputStream(TermUtils.toJavaInt(tvars[0]));
         if(is == null)
             return false;
 

@@ -9,6 +9,7 @@ import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 /**
  * @author Lennart Kats <lennart add lclnet.nl>
@@ -24,14 +25,14 @@ public class SSL_chdir extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
 
-        if(!Tools.isTermString(tvars[0]))
+        if(!TermUtils.isString(tvars[0]))
             return false;
         
         SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         
         try {
             IOAgent io = op.getIOAgent();
-            io.setWorkingDir(Tools.asJavaString(tvars[0]));
+            io.setWorkingDir(TermUtils.toJavaString(tvars[0]));
         
             env.setCurrent(env.getFactory().makeInt(0));
         } catch (IOException e) {

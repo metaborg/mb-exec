@@ -14,8 +14,6 @@ import org.spoofax.terms.util.TermUtils;
 
 import javax.annotation.Nullable;
 
-import static org.spoofax.interpreter.core.Tools.*;
-
 /**
  * Build strategy, for building terms.
  */

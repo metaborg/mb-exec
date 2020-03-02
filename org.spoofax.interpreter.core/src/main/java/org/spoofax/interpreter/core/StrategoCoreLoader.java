@@ -43,6 +43,7 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
 import org.spoofax.terms.io.binary.TermReader;
+import org.spoofax.terms.util.TermUtils;
 
 public class StrategoCoreLoader {
 
@@ -54,9 +55,9 @@ public class StrategoCoreLoader {
 
     private ExtSDef parseExtSDef(IStrategoAppl t) {
 
-        String name = Tools.javaStringAt(t, 0);
-        IStrategoList svars = Tools.listAt(t, 1);
-        IStrategoList tvars = Tools.listAt(t, 2);
+        String name = TermUtils.toJavaStringAt(t, 0);
+        IStrategoList svars = TermUtils.toListAt(t, 1);
+        IStrategoList tvars = TermUtils.toListAt(t, 2);
 
         DebugUtil.debug("name  : ", name);
 
@@ -112,7 +113,7 @@ public class StrategoCoreLoader {
     }
 
     private Strategy makeImportTerm(IStrategoAppl appl) {
-    	IStrategoString str = Tools.stringAt(appl, 0);
+    	IStrategoString str = TermUtils.toStringAt(appl, 0);
     	return new ImportTerm(str.stringValue());
 	}
 
@@ -121,17 +122,17 @@ public class StrategoCoreLoader {
     }
 
     private Some makeSome(IStrategoAppl t) throws InterpreterException {
-        Strategy body = parseStrategy(Tools.applAt(t, 0));
+        Strategy body = parseStrategy(TermUtils.toApplAt(t, 0));
         return new Some(body);
     }
 
     private One makeOne(IStrategoAppl t) throws InterpreterException {
-        Strategy body = parseStrategy(Tools.applAt(t, 0));
+        Strategy body = parseStrategy(TermUtils.toApplAt(t, 0));
         return new One(body);
     }
 
     private All makeAll(IStrategoAppl t) throws InterpreterException {
-        Strategy body = parseStrategy(Tools.applAt(t, 0));
+        Strategy body = parseStrategy(TermUtils.toApplAt(t, 0));
         return new All(body);
     }
 
@@ -141,14 +142,14 @@ public class StrategoCoreLoader {
 
     private Let parseLet(IStrategoAppl t) throws InterpreterException {
 
-        IStrategoTerm[] l = Tools.listAt(t, 0).getAllSubterms();
+        IStrategoTerm[] l = TermUtils.toListAt(t, 0).getAllSubterms();
         SDefT[] defs = new SDefT[l.length];
 
         for (int i = 0; i < l.length; i++) {
-            defs[i] = parseSDefT((IStrategoAppl)l[i]);
+            defs[i] = parseSDefT(TermUtils.toAppl(l[i]));
         }
 
-        Strategy body = parseStrategy(Tools.applAt(t, 1));
+        Strategy body = parseStrategy(TermUtils.toApplAt(t, 1));
 
         return new Let(defs, body);
     }
@@ -156,9 +157,9 @@ public class StrategoCoreLoader {
     public SDefT parseSDefT(IStrategoAppl t) throws InterpreterException {
         DebugUtil.debug("parseSDefT()");
 
-        String name = Tools.javaStringAt(t, 0);
-        IStrategoList svars = Tools.listAt(t, 1);
-        IStrategoList tvars = Tools.listAt(t, 2);
+        String name = TermUtils.toJavaStringAt(t, 0);
+        IStrategoList svars = TermUtils.toListAt(t, 1);
+        IStrategoList tvars = TermUtils.toListAt(t, 2);
 
         DebugUtil.debug(" name  : ", name);
         DebugUtil.debug(" svars : ", svars);
@@ -172,7 +173,7 @@ public class StrategoCoreLoader {
         VarScope newScope = new VarScope(context.getVarScope());
 
         context.setVarScope(newScope);
-        Strategy body = parseStrategy(Tools.applAt(t, 3));
+        Strategy body = parseStrategy(TermUtils.toApplAt(t, 3));
 
         context.popVarScope();
 
@@ -189,7 +190,7 @@ public class StrategoCoreLoader {
         DebugUtil.debug(" vars  : ", svars);
 
         for (int j = 0; j < svars.size(); j++) {
-            realsvars[j]  = Tools.javaStringAt(sv[j], 0);
+            realsvars[j]  = TermUtils.toJavaStringAt(sv[j], 0);
         }
 
         return realsvars;
@@ -205,8 +206,8 @@ public class StrategoCoreLoader {
 
         for (int j = 0; j < sv.length; j++) {
             IStrategoAppl t = (IStrategoAppl) sv[j];
-            ArgType type = parseArgType(Tools.applAt(t, 1));
-            String name = Tools.javaStringAt(t, 0);
+            ArgType type = parseArgType(TermUtils.toApplAt(t, 1));
+            String name = TermUtils.toJavaStringAt(t, 0);
             realsvars[j] = new SVar(name, type);
         }
 
@@ -216,10 +217,10 @@ public class StrategoCoreLoader {
 
     private ArgType parseArgType(IStrategoAppl t) {
         if(Tools.isFunType(t, context)) {
-            IStrategoList l = Tools.listAt(t, 0);
+            IStrategoList l = TermUtils.toListAt(t, 0);
             List<ArgType> ch = new ArrayList<ArgType>();
             for (int i = 0; i < l.size(); i++) {
-                ch.add(parseArgType(Tools.applAt(l, i)));
+                ch.add(parseArgType(TermUtils.toApplAt(l, i)));
             }
             return new FunType(ch);
         } else if (Tools.isConstType(t, context)) {
@@ -229,10 +230,9 @@ public class StrategoCoreLoader {
     }
 
     private PrimT parsePrimT(IStrategoAppl t) throws InterpreterException {
-
-        String name = Tools.javaStringAt(t, 0);
-        Strategy[] svars = parseStrategyList(Tools.listAt(t, 1));
-        IStrategoTerm[] tvars = parseTermList(Tools.listAt(t, 2));
+        String name = TermUtils.toJavaStringAt(t, 0);
+        Strategy[] svars = parseStrategyList(TermUtils.toListAt(t, 1));
+        IStrategoTerm[] tvars = parseTermList(TermUtils.toListAt(t, 2));
 
         return new PrimT(name, svars, tvars);
     }
@@ -240,14 +240,14 @@ public class StrategoCoreLoader {
     private Strategy parseCallT(IStrategoAppl t) throws InterpreterException {
 
         DebugUtil.debug("parseCallT()");
-        String name = Tools.javaStringAt(Tools.applAt(t, 0), 0);
+        String name = TermUtils.toJavaStringAt(TermUtils.toApplAt(t, 0), 0);
 
         DebugUtil.debug(" name  : ", name);
 
-        IStrategoList svars = Tools.listAt(t, 1);
+        IStrategoList svars = TermUtils.toListAt(t, 1);
         Strategy[] realsvars = parseStrategyList(svars);
 
-        IStrategoTerm[] realtvars = parseTermList(Tools.listAt(t, 2));
+        IStrategoTerm[] realtvars = parseTermList(TermUtils.toListAt(t, 2));
 
         DebugUtil.debug(" -svars : ", realsvars);
         DebugUtil.debug(" -tvars : ", realtvars);
@@ -257,14 +257,14 @@ public class StrategoCoreLoader {
     private Strategy parseCallDynamic(IStrategoAppl t) throws InterpreterException {
     	
         DebugUtil.debug("parseDynamicCall()");
-    	IStrategoTerm sref = Tools.termAt(t, 0);
+    	IStrategoTerm sref = t.getSubterm(0);
     	
         DebugUtil.debug(" name  : ", sref);
 
-    	IStrategoList svars = Tools.listAt(t, 1);
+    	IStrategoList svars = TermUtils.toListAt(t, 1);
     	Strategy[] realsvars = parseStrategyList(svars);
     	
-    	IStrategoTerm[] realtvars = parseTermList(Tools.listAt(t, 2));
+    	IStrategoTerm[] realtvars = parseTermList(TermUtils.toListAt(t, 2));
     	
         DebugUtil.debug(" -svars : ", realsvars);
         DebugUtil.debug(" -tvars : ", realtvars);
@@ -297,19 +297,18 @@ public class StrategoCoreLoader {
     }
 
     private Match parseMatch(IStrategoAppl t) {
-        IStrategoAppl u = Tools.applAt(t, 0);
+        IStrategoAppl u = TermUtils.toApplAt(t, 0);
         return new Match(u);
     }
 
     @SuppressWarnings("unchecked")
     private GuardedLChoice parseGuardedLChoice(IStrategoAppl t) throws InterpreterException {
-
     	LinkedList<Pair<Strategy,Strategy>> s = new LinkedList<Pair<Strategy,Strategy>>();
         IStrategoConstructor ctor = context.getStrategoSignature().getGuardedLChoice();
 
     	while (t.getConstructor().equals(ctor)) {
-          s.add(new Pair<Strategy,Strategy>(parseStrategy(Tools.applAt(t, 0)), parseStrategy(Tools.applAt(t, 1))));
-          t = Tools.applAt(t, 2);
+          s.add(new Pair<Strategy,Strategy>(parseStrategy(TermUtils.toApplAt(t, 0)), parseStrategy(TermUtils.toApplAt(t, 1))));
+          t = TermUtils.toApplAt(t, 2);
     	}
 
     	s.add(new Pair<Strategy,Strategy>(parseStrategy(t), null));
@@ -322,8 +321,8 @@ public class StrategoCoreLoader {
         StrategoSignature sign = context.getStrategoSignature();
 
     	while (t.getConstructor().equals(sign.getSeq())) {
-          s.add(parseStrategy(Tools.applAt(t, 0)));
-          t = Tools.applAt(t, 1);
+          s.add(parseStrategy(TermUtils.toApplAt(t, 0)));
+          t = TermUtils.toApplAt(t, 1);
     	}
 
     	s.add(parseStrategy(t));
@@ -333,20 +332,20 @@ public class StrategoCoreLoader {
 
     private Scope parseScope(IStrategoAppl t) throws InterpreterException {
 
-        IStrategoList vars = Tools.listAt(t, 0);
+        IStrategoList vars = TermUtils.toListAt(t, 0);
         List<String> realvars = new ArrayList<String>(vars.size());
 
         for (int i = 0; i < vars.size(); i++) {
-            realvars.add(Tools.javaStringAt(vars, i));
+            realvars.add(TermUtils.toJavaStringAt(vars, i));
         }
 
-        Strategy body = parseStrategy(Tools.applAt(t, 1));
+        Strategy body = parseStrategy(TermUtils.toApplAt(t, 1));
 
         return new Scope(realvars, body);
     }
 
     private Build parseBuild(IStrategoAppl t) {
-        IStrategoAppl u = Tools.applAt(t, 0);
+        IStrategoAppl u = TermUtils.toApplAt(t, 0);
         return new Build(u);
     }
 
@@ -363,14 +362,14 @@ public class StrategoCoreLoader {
 
         DebugUtil.debug(prg);
 
-        IStrategoList list = Tools.listAt(prg, 0);
+        IStrategoList list = TermUtils.toListAt(prg, 0);
 
         if (!list.isEmpty()) {
-            IStrategoAppl sign = Tools.applAt(list, 0);
-            IStrategoAppl strats = Tools.applAt(list, 1);
+            IStrategoAppl sign = TermUtils.toApplAt(list, 0);
+            IStrategoAppl strats = TermUtils.toApplAt(list, 1);
 
-            loadConstructors(Tools.listAt(Tools.applAt(Tools.listAt(sign, 0), 0), 0));
-            loadStrategies(Tools.listAt(strats, 0));
+            loadConstructors(TermUtils.toListAt(TermUtils.toApplAt(TermUtils.toListAt(sign, 0), 0), 0));
+            loadStrategies(TermUtils.toListAt(strats, 0));
         }
     }
 
@@ -382,8 +381,8 @@ public class StrategoCoreLoader {
             IStrategoAppl opDecl = (IStrategoAppl) list.head();
         	if (!opDecl.getConstructor().getName().equals("OpDeclInj") &&
         	    !opDecl.getConstructor().getName().equals("ExtOpDeclInj")  ) {
-        		String name = Tools.javaStringAt(opDecl, 0);
-        		ArgType argType = parseArgType(Tools.applAt(opDecl, 1));
+        		String name = TermUtils.toJavaStringAt(opDecl, 0);
+        		ArgType argType = parseArgType(TermUtils.toApplAt(opDecl, 1));
         		context.addOpDecl(name, new OpDecl(name, argType));
         	}
         }

@@ -4,6 +4,7 @@ import org.spoofax.interpreter.core.*;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
+import org.spoofax.terms.util.TermUtils;
 
 import static org.spoofax.interpreter.core.Context.debug;
 
@@ -33,11 +34,11 @@ public class CallDynamic extends Strategy {
 
 		debug("CallDynamic.eval() - ", env.current());
 
-		if (Tools.isTermAppl(sref) && Tools.isVar((IStrategoAppl) sref, env)) {
-			IStrategoTerm actualSRef = env.lookupVar(Tools.javaStringAt(
+		if (TermUtils.isAppl(sref) && Tools.isVar((IStrategoAppl) sref, env)) {
+			IStrategoTerm actualSRef = env.lookupVar(TermUtils.toJavaStringAt(
 					(IStrategoAppl) sref, 0));
-			if (Tools.isTermString(actualSRef)) {
-				String sname = Tools.asJavaString(actualSRef);
+			if (TermUtils.isString(actualSRef)) {
+				String sname = TermUtils.toJavaString(actualSRef);
 				Strategy callt = new CallT(sname, svars, tvars);
 				callt.getHook().push(this.getHook().pop());
 				return callt.eval(env);

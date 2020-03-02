@@ -1,7 +1,5 @@
 package org.spoofax.interpreter.library.ssl;
 
-import static org.spoofax.interpreter.core.Tools.*;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -12,6 +10,7 @@ import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.util.TermUtils;
 
 /**
  * @author Lennart Kats <lennart add lclnet.nl>
@@ -35,7 +34,7 @@ public class SSL_mkdtemp extends AbstractPrimitive {
             return false;
         
         // HACK: We ignore the template directory, and just use it as a filename prefix
-        String prefix = new File(javaString(tvars[0])).getName();
+        String prefix = new File(TermUtils.toJavaString(tvars[0])).getName();
         if (prefix.endsWith("XXXXXX"))
             prefix = prefix.substring(0, prefix.length() - 6);
         

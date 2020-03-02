@@ -4,11 +4,11 @@ import io.usethesource.capsule.Set;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_immutable_set_from_list extends AbstractPrimitive {
 
@@ -17,7 +17,7 @@ public class SSL_immutable_set_from_list extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        if(!Tools.isTermList(env.current())) {
+        if(!TermUtils.isList(env.current())) {
             return false;
         }
 

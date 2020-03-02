@@ -24,11 +24,11 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.util.DebugUtil;
 import org.spoofax.terms.util.NotImplementedException;
-
-import static org.spoofax.interpreter.core.Tools.*;
+import org.spoofax.terms.util.TermUtils;
 
 
 import static org.spoofax.interpreter.core.Context.debug;
+import static org.spoofax.terms.util.TermUtils.toApplAt;
 
 public class Match extends Strategy {
 
@@ -92,8 +92,8 @@ public class Match extends Strategy {
 
     protected Results matchApplInt(IContext env, IStrategoTerm t,
             IStrategoAppl p) throws InterpreterException {
-        if (Tools.isTermInt(t))
-            return match(env, Tools.intAt(t, 0), Tools.applAt(p, 0));
+        if (TermUtils.isInt(t))
+            return match(env, TermUtils.toIntAt(t, 0), toApplAt(p, 0));
         return null;
     }
 
@@ -110,14 +110,14 @@ public class Match extends Strategy {
             IStrategoAppl p) throws InterpreterException {
 
 
-        String c = Tools.javaStringAt(p, 0);
+        String c = TermUtils.toJavaStringAt(p, 0);
         if(c.equals("Cons")) {
             return null; //matchApplCons(env, t, p);
         } else if(c.equals("Nil")) {
             return null; //matchApplNil(env, t);
         } 
 
-        IStrategoList ctorArgs = Tools.listAt(p, 1);
+        IStrategoList ctorArgs = TermUtils.toListAt(p, 1);
 
         // Check if arity of the pattern matches that
         // of the term
@@ -229,7 +229,7 @@ public class Match extends Strategy {
 
     private Results matchRealReal(IStrategoReal t, IStrategoAppl p) {
 
-        Double realVal = new Double(Tools.javaStringAt(p, 0));
+        Double realVal = new Double(TermUtils.toJavaStringAt(p, 0));
 
         if (realVal == t.realValue())
             return emptyList();
@@ -244,10 +244,10 @@ public class Match extends Strategy {
     protected Results matchAnyAnno(IContext env, IStrategoTerm t,
             IStrategoAppl p) throws InterpreterException {
         
-        Results r1 = matchList(env, t.getAnnotations(), applAt(p, 1));
+        Results r1 = matchList(env, t.getAnnotations(), toApplAt(p, 1));
         if (r1 == null) return null;
         
-        Results r2 = match(env, t, applAt(p, 0));
+        Results r2 = match(env, t, toApplAt(p, 0));
         if (r2 == null) return null;
         
         r2.addAll(r1);
@@ -255,7 +255,7 @@ public class Match extends Strategy {
     }
 
     protected Results matchIntInt(IStrategoInt t, IStrategoAppl p) {
-        Integer intVal = new Integer(Tools.javaStringAt(p, 0));
+        Integer intVal = new Integer(TermUtils.toJavaStringAt(p, 0));
         if (intVal == t.intValue())
             return emptyList();
 
@@ -264,7 +264,7 @@ public class Match extends Strategy {
 
     /*
     protected Results matchAnyAs(IStrategoTerm t, IStrategoAppl p) {
-        String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
+        String varName = TermUtils.toJavaStringAt(TermUtils.toApplAt(p, 0), 0);
         return newResult(new Binding(varName, t));
     }*/
 
@@ -289,8 +289,8 @@ public class Match extends Strategy {
             IStrategoAppl p) throws InterpreterException {
 
         DebugUtil.debug("  pattern is Explode");
-        IStrategoAppl opPattern = Tools.applAt(p, 0);
-        IStrategoAppl argsPattern = Tools.applAt(p, 1);
+        IStrategoAppl opPattern = toApplAt(p, 0);
+        IStrategoAppl argsPattern = toApplAt(p, 1);
 
         IStrategoTerm op = getTermConstructor(env, t);
         IStrategoTerm args = getTermArguments(env, t);
@@ -334,18 +334,17 @@ public class Match extends Strategy {
     }
 
     private IStrategoTerm getTermConstructor(IContext env, IStrategoTerm t) throws InterpreterException {
-
-        if (Tools.isTermInt(t) || Tools.isTermReal(t)) {
+        if (TermUtils.isInt(t) || TermUtils.isReal(t)) {
             return t;
-        } else if (Tools.isTermString(t)) {
+        } else if (TermUtils.isString(t)) {
             return env.getFactory().makeString("\"" + ((IStrategoString)t).stringValue() + "\"");
-        } else if (Tools.isTermAppl(t)) {
+        } else if (TermUtils.isAppl(t)) {
             IStrategoAppl a = (IStrategoAppl)t;
             if (Tools.isCons(a, env) || Tools.isNil(a, env))
                 return env.getFactory().makeAppl(env.getStrategoSignature().getNil());
             else
                 return env.getFactory().makeString(((IStrategoAppl)t).getConstructor().getName());
-        } else if (Tools.isTermList(t)) {
+        } else if (TermUtils.isList(t)) {
             return env.getFactory().makeList();
         } else if (Tools.isTermTuple(t)) {
             return env.getFactory().makeString("");
@@ -455,13 +454,13 @@ public class Match extends Strategy {
 
     private Results matchTupleOp(IContext env, IStrategoTuple t, IStrategoAppl p) throws InterpreterException {
         
-        String c = Tools.javaStringAt(p, 0);
+        String c = TermUtils.toJavaStringAt(p, 0);
 
         // Check that the pattern p is really against a tuple 
         if(!c.equals(""))
             return null;
 
-        IStrategoList ctorArgs = Tools.listAt(p, 1);
+        IStrategoList ctorArgs = TermUtils.toListAt(p, 1);
         
         // Check that arity of pattern equals arity of tuple
         if(ctorArgs.size() != t.size())
@@ -520,14 +519,14 @@ public class Match extends Strategy {
 
     private Results matchCompoundAs(IContext env, IStrategoTerm t, IStrategoAppl p) throws InterpreterException {
         
-        Results r = match(env, t, Tools.applAt(p, 1));
+        Results r = match(env, t, toApplAt(p, 1));
 
         if (r == null)
             return null;
 
         debug("matching CompoundAs", p);
 
-        String varName = Tools.javaStringAt(Tools.applAt(p, 0), 0);
+        String varName = TermUtils.toJavaStringAt(toApplAt(p, 0), 0);
         r.add(new Binding(varName, t));
 
         return r;
@@ -535,7 +534,7 @@ public class Match extends Strategy {
 
     private Results matchListOp(IContext env, IStrategoList t, IStrategoAppl p) throws InterpreterException {
         
-        String c = Tools.javaStringAt(p, 0);
+        String c = TermUtils.toJavaStringAt(p, 0);
 
         if(c.equals("Nil")) {
             if(t.isEmpty())
@@ -550,7 +549,7 @@ public class Match extends Strategy {
             IStrategoTerm head = t.head();
             IStrategoList tail = t.tail();
             
-            IStrategoList pattern = Tools.listAt(p, 1);
+            IStrategoList pattern = TermUtils.toListAt(p, 1);
             
             Results r = match(env, head, (IStrategoAppl)pattern.getSubterm(0));
             if(r == null)
@@ -568,7 +567,7 @@ public class Match extends Strategy {
     }
 
     private Results matchAnyVar(IStrategoTerm t, IStrategoAppl p) {
-        String varName = Tools.javaStringAt(p, 0);
+        String varName = TermUtils.toJavaStringAt(p, 0);
         return newResult(new Binding(varName, t));
     }
 
@@ -608,11 +607,9 @@ public class Match extends Strategy {
 
     private Results matchStrStr(IContext env, IStrategoString t, IStrategoAppl p) {
         DebugUtil.debug("  pattern is Str");
-        IStrategoString s = Tools.stringAt(p, 0);
-        if(s.stringValue().equals(t.stringValue())) {
-            return emptyList();
-        }
-        return null;
+        if (!TermUtils.isStringAt(p, 0, t.stringValue()))
+            return null;
+        return emptyList();
     }
 
     public void prettyPrint(StupidFormatter sf) {
