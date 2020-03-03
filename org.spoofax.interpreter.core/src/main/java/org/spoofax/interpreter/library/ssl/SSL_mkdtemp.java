@@ -30,7 +30,7 @@ public class SSL_mkdtemp extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-        if (tvars[0].getTermType() != IStrategoTerm.STRING)
+        if (!TermUtils.isString(tvars[0]))
             return false;
         
         // HACK: We ignore the template directory, and just use it as a filename prefix

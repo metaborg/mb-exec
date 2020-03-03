@@ -12,6 +12,7 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_newname extends AbstractPrimitive {
     private static final WeakHashMap<IContext, WeakHashMap<String, AtomicInteger>> countersPerContext =
@@ -28,10 +29,10 @@ public class SSL_newname extends AbstractPrimitive {
     @Override public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException {
         final IStrategoTerm prefixTerm = tvars[0];
         String prefix;
-        if(prefixTerm instanceof IStrategoString) {
+        if(TermUtils.isString(prefixTerm)) {
             final IStrategoString str = (IStrategoString) prefixTerm;
             prefix = str.stringValue();
-        } else if(prefixTerm instanceof IStrategoAppl) {
+        } else if(TermUtils.isAppl(prefixTerm)) {
             final IStrategoAppl appl = (IStrategoAppl) prefixTerm;
             prefix = appl.getConstructor().getName();
         } else {

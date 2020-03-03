@@ -15,6 +15,7 @@ import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 /**
  * @author Lennart Kats <lennart add lclnet.nl>
@@ -38,7 +39,7 @@ public class SSL_mkterm extends AbstractPrimitive {
                 env.setCurrent(tvars[0]);
                 return true;
             case IStrategoTerm.LIST:
-                if (tvars[1].getTermType() != IStrategoTerm.LIST)
+                if (!TermUtils.isList(tvars[1]))
                     return false;
                 env.setCurrent(tvars[1]);
                 return true;
@@ -58,7 +59,7 @@ public class SSL_mkterm extends AbstractPrimitive {
     }
 
     private boolean makeAppl(IContext env, IStrategoString nameTerm, IStrategoTerm argsTerm) {
-        if (argsTerm.getTermType() != IStrategoTerm.LIST)
+        if (!TermUtils.isList(argsTerm))
             return false;
         
         String name = nameTerm.stringValue();

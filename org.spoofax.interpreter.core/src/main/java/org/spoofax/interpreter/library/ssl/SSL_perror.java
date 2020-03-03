@@ -24,7 +24,7 @@ public class SSL_perror extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-        String message = tvars[0].getTermType() == IStrategoTerm.STRING
+        String message = TermUtils.isString(tvars[0])
             ? TermUtils.toJavaString(tvars[0])
             : "(no details on this error; perror not supported)";
         

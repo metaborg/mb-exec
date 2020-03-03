@@ -53,7 +53,7 @@ public class SPX_interpreter_introspect_strategies_fast extends AbstractPrimitiv
 
             final TermVisitor collectSVars = new TermVisitor() {
                 public void preVisit(IStrategoTerm term) {
-                    if (term.getTermType() == IStrategoTerm.APPL
+                    if (TermUtils.isAppl(term)
                             && ((IStrategoAppl) term).getConstructor() == sign.CTOR_SVar) {
                         names.add(TermUtils.toJavaStringAt(term, 0));
                     }

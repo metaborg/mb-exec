@@ -57,7 +57,7 @@ public class InterpreterErrorExit extends InterpreterExit {
             for(int i = 0; i < depth; i++) {
                 final IStrategoTerm t = trace.getSubterm(depth - i - 1);
                 sb.append("\n\t");
-                sb.append(t.getTermType() == IStrategoTerm.STRING ? TermUtils.toJavaString(t) : t);
+                sb.append(TermUtils.isString(t) ? TermUtils.toJavaString(t) : t);
             }
         }
         return sb.toString();

@@ -43,10 +43,6 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         super(initialSize, 1.0f * maxLoad / 100);
     }
 
-    public IStrategoTerm[] getAllSubterms() {
-        return AbstractTermFactory.EMPTY;
-    }
-
     @Override
     public List<IStrategoTerm> getSubterms() {
         return Collections.emptyList();
@@ -111,7 +107,4 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         return false;
     }
 
-    public Iterator<IStrategoTerm> iterator() {
-        return this.values().iterator();
-    }
 }

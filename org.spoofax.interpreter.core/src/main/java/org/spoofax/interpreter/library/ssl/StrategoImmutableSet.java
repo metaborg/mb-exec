@@ -26,20 +26,12 @@ public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm 
         this(Set.Immutable.of());
     }
 
-    @SuppressWarnings("NullableProblems") @Override public Iterator<IStrategoTerm> iterator() {
-        return backingSet.iterator();
-    }
-
     @Override public int getSubtermCount() {
         return 0;
     }
 
     @Override public IStrategoTerm getSubterm(int index) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override public IStrategoTerm[] getAllSubterms() {
-        return new IStrategoTerm[0];
     }
 
     @Override

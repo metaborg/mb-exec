@@ -25,12 +25,6 @@ public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm 
         this(Map.Immutable.of());
     }
 
-    @SuppressWarnings("NullableProblems")
-    @Override
-    public Iterator<IStrategoTerm> iterator() {
-        return new EntryAsPairIterator(backingMap.entryIterator());
-    }
-
     @Override
     public int getSubtermCount() {
         return 0;
@@ -39,11 +33,6 @@ public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm 
     @Override
     public IStrategoTerm getSubterm(int index) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public IStrategoTerm[] getAllSubterms() {
-        return new IStrategoTerm[0];
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 /**
  * Primitive to determine the size of a file.
@@ -30,7 +31,7 @@ public class SSL_filesize extends AbstractPrimitive {
     @Override
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) {
 
-       if (tvars[0].getTermType() != IStrategoTerm.STRING)
+       if (!TermUtils.isString(tvars[0]))
            return false;
 
        IStrategoString filename = (IStrategoString) tvars[0];

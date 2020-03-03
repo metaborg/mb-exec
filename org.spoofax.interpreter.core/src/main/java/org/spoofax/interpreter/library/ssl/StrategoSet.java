@@ -105,10 +105,6 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         return map.entrySet();
     }
 
-    public IStrategoTerm[] getAllSubterms() {
-        return AbstractTermFactory.EMPTY;
-    }
-
     @Override
     public List<IStrategoTerm> getSubterms() {
         return Collections.emptyList();
@@ -161,7 +157,4 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         return false;
     }
 
-    public Iterator<IStrategoTerm> iterator() {
-        return map.keySet().iterator();
-    }
 }
