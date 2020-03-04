@@ -26,7 +26,7 @@ public class SSL_immutable_map_from_list extends AbstractPrimitive {
 
         final IStrategoList list = (IStrategoList) env.current();
         final Map.Transient<IStrategoTerm, IStrategoTerm> map = Map.Transient.of();
-        for(IStrategoTerm t : list.getSubterms()) {
+        for(IStrategoTerm t : list) {
             if(!TermUtils.isTuple(t, 2)) {
                 return false;
             }

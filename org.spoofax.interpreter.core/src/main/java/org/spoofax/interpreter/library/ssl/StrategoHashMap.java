@@ -56,6 +56,11 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public IStrategoTerm[] getAllSubterms() {
+        return new IStrategoTerm[0];
+    }
+
     public int getSubtermCount() {
         return 0;
     }

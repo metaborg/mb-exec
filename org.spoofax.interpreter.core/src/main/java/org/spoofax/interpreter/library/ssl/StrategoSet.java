@@ -118,6 +118,11 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public IStrategoTerm[] getAllSubterms() {
+        return new IStrategoTerm[0];
+    }
+
     public int getSubtermCount() {
         return 0;
     }
