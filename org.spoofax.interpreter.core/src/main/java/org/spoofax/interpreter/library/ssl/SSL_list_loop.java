@@ -14,6 +14,7 @@ import org.spoofax.interpreter.stratego.CallT;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.util.TermUtils;
 
 public class SSL_list_loop extends AbstractPrimitive {
@@ -31,7 +32,7 @@ public class SSL_list_loop extends AbstractPrimitive {
         
         CallT s = (CallT) svars[0];
         Strategy[] sv = new Strategy[0];
-        IStrategoTerm[] tv = new IStrategoTerm[0];
+        IStrategoTerm[] tv = TermFactory.EMPTY_TERM_ARRAY;
         
         IStrategoTerm saved = env.current();
         
