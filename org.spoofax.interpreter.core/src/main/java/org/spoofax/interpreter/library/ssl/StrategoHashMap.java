@@ -112,4 +112,8 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         return false;
     }
 
+    public Iterator<IStrategoTerm> iterator() {
+        return this.values().iterator();
+    }
+
 }

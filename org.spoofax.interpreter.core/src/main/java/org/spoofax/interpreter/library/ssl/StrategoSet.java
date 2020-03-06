@@ -162,4 +162,8 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         return false;
     }
 
+    public Iterator<IStrategoTerm> iterator() {
+        return map.keySet().iterator();
+    }
+
 }
