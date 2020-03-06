@@ -12,6 +12,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertFalse;
+import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 
 @RunWith(Parameterized.class)
 public class TestImmutableMapPrimitiveFails extends ImmutableSetMapTestSetup {
@@ -27,7 +28,7 @@ public class TestImmutableMapPrimitiveFails extends ImmutableSetMapTestSetup {
             {"mapFilterKeysFailMerge", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_map_filter.call(context, new Strategy[] { InterpreterStrategy.of(current -> {
                     return f.makeTuple(one, current.getSubterm(1)); // map key in pair to one
-                }), InterpreterStrategy.fail }, new IStrategoTerm[0])},
+                }), InterpreterStrategy.fail }, EMPTY_TERM_ARRAY)},
             {"mapGetNonExisting", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_map_get.call(context, new Strategy[0], new IStrategoTerm[] { three })},
             {"mapIntersectMergeFail", (CheckedFunction0<Boolean, InterpreterException>) () ->
@@ -37,11 +38,11 @@ public class TestImmutableMapPrimitiveFails extends ImmutableSetMapTestSetup {
                 SSL_immutable_map_map.call(context, new Strategy[] { InterpreterStrategy.test(current -> {
                     return current.getSubterm(0).equals(one); // filter on key == one
                 }), null // never used, no overlapping keys
-                }, new IStrategoTerm[0])},
+                }, EMPTY_TERM_ARRAY)},
             {"mapMapKeysFailMerge", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_map_map.call(context, new Strategy[] { InterpreterStrategy.of(current -> {
                     return f.makeTuple(one, current.getSubterm(1)); // map key in pair to one
-                }), InterpreterStrategy.fail }, new IStrategoTerm[0])},
+                }), InterpreterStrategy.fail }, EMPTY_TERM_ARRAY)},
         });
         //@formatter:on
     }

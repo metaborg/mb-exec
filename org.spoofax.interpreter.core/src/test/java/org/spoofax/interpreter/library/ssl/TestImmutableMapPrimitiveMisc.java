@@ -10,7 +10,6 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.util.TermUtils;
-
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -19,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 
 public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     private final SSL_immutable_map SSL_immutable_map = new SSL_immutable_map();
@@ -32,7 +32,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
 
     @Test
     public void mapIsEmpty() throws InterpreterException {
-        boolean result = SSL_immutable_map.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_map.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -42,7 +42,8 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     @Test
     public void mapFromListUnique() throws InterpreterException {
         context.setCurrent(f.makeList(f.makeTuple(one, a), f.makeTuple(two, b)));
-        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[] {InterpreterStrategy.of(t -> t.getSubterm(0))}, new IStrategoTerm[0]);
+        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[] {InterpreterStrategy.of(t -> t.getSubterm(0))},
+            EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -53,7 +54,8 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     @Test
     public void mapFromListKeepFirst() throws InterpreterException {
         context.setCurrent(f.makeList(f.makeTuple(one, a), f.makeTuple(one, b)));
-        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[] {InterpreterStrategy.of(t -> t.getSubterm(0))}, new IStrategoTerm[0]);
+        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[] {InterpreterStrategy.of(t -> t.getSubterm(0))},
+            EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -63,7 +65,8 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     @Test
     public void mapFromListKeepSecond() throws InterpreterException {
         context.setCurrent(f.makeList(f.makeTuple(one, a), f.makeTuple(one, b)));
-        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[] {InterpreterStrategy.of(t -> t.getSubterm(1))}, new IStrategoTerm[0]);
+        boolean result = SSL_immutable_map_from_list.call(context, new Strategy[] {InterpreterStrategy.of(t -> t.getSubterm(1))},
+            EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
         StrategoImmutableMap current = (StrategoImmutableMap) context.current();
@@ -73,7 +76,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     @Test
     public void mapKeys() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_keys.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_map_keys.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertTrue(TermUtils.isList(context.current()));
         IStrategoList current = (IStrategoList) context.current();
@@ -84,7 +87,8 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     @Test
     public void mapKeysToSet() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_keys_to_set.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_map_keys_to_set.call(context, new Strategy[0],
+            EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
@@ -94,7 +98,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     @Test
     public void mapToListEmpty() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of()));
-        boolean result = SSL_immutable_map_to_list.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_map_to_list.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertTrue(TermUtils.isList(context.current()));
         IStrategoList current = (IStrategoList) context.current();
@@ -104,7 +108,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     @Test
     public void mapToList() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_to_list.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_map_to_list.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertTrue(TermUtils.isList(context.current()));
         IStrategoList current = (IStrategoList) context.current();
@@ -115,7 +119,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     @Test
     public void mapValues() throws InterpreterException {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
-        boolean result = SSL_immutable_map_values.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_map_values.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertTrue(TermUtils.isList(context.current()));
         IStrategoList current = (IStrategoList) context.current();

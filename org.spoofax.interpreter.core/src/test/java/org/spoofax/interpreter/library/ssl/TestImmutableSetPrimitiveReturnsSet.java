@@ -9,13 +9,14 @@ import org.metaborg.util.functions.CheckedFunction0;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.terms.TermFactory;
 import java.util.Arrays;
 
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.spoofax.terms.AbstractTermFactory.EMPTY_LIST;
+import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 
 @RunWith(Parameterized.class)
 public class TestImmutableSetPrimitiveReturnsSet extends ImmutableSetMapTestSetup {
@@ -41,8 +42,8 @@ public class TestImmutableSetPrimitiveReturnsSet extends ImmutableSetMapTestSetu
             },
             {"containsExistingCustomEq", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_set_contains_eq.call(context, new Strategy[] { InterpreterStrategy.test(current -> {
-                    final IStrategoTerm leftNoAnnos = f.annotateTerm(current.getSubterm(0), TermFactory.EMPTY_LIST);
-                    final IStrategoTerm rightNoAnnos = f.annotateTerm(current.getSubterm(1), TermFactory.EMPTY_LIST);
+                    final IStrategoTerm leftNoAnnos = f.annotateTerm(current.getSubterm(0), EMPTY_LIST);
+                    final IStrategoTerm rightNoAnnos = f.annotateTerm(current.getSubterm(1), EMPTY_LIST);
                     return leftNoAnnos.equals(rightNoAnnos);
                 })
                 }, new IStrategoTerm[] { oneWithAnno }),
@@ -53,12 +54,12 @@ public class TestImmutableSetPrimitiveReturnsSet extends ImmutableSetMapTestSetu
                 SSL_immutable_set_filter.call(context, new Strategy[] { InterpreterStrategy.test(current -> {
                     return current.equals(one); // filter on key == one
                 })
-                }, new IStrategoTerm[0]),
+                }, EMPTY_TERM_ARRAY),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one),
             },
             {"filterNonUnique", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_filter.call(context, new Strategy[] { InterpreterStrategy.constant(one) }, new IStrategoTerm[0]),
+                SSL_immutable_set_filter.call(context, new Strategy[] { InterpreterStrategy.constant(one) }, EMPTY_TERM_ARRAY),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one),
             },
@@ -85,12 +86,12 @@ public class TestImmutableSetPrimitiveReturnsSet extends ImmutableSetMapTestSetu
                 new StrategoImmutableSet(one),
             },
             {"mapNonUnique", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.constant(one) }, new IStrategoTerm[0]),
+                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.constant(one) }, EMPTY_TERM_ARRAY),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one),
             },
             {"mapUnique", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.id }, new IStrategoTerm[0]),
+                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.id }, EMPTY_TERM_ARRAY),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one, two),
             },

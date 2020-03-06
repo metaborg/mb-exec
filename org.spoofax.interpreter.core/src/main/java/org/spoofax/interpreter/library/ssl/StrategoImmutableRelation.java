@@ -11,6 +11,8 @@ import org.spoofax.terms.TermFactory;
 import java.io.IOException;
 import java.util.Iterator;
 
+import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
+
 public class StrategoImmutableRelation extends StrategoTerm implements IStrategoTerm {
     public final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> backingRelation;
 
@@ -41,7 +43,7 @@ public class StrategoImmutableRelation extends StrategoTerm implements IStratego
 
     @Override
     public IStrategoTerm[] getAllSubterms() {
-        return new IStrategoTerm[0];
+        return EMPTY_TERM_ARRAY;
     }
 
     @Override

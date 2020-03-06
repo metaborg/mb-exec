@@ -12,6 +12,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertFalse;
+import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 
 @RunWith(Parameterized.class)
 public class TestImmutableSetPrimitiveFails extends ImmutableSetMapTestSetup {
@@ -27,7 +28,7 @@ public class TestImmutableSetPrimitiveFails extends ImmutableSetMapTestSetup {
             {"setMapFail", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.test(current -> {
                     return current.equals(one); // filter on key == one
-                }) }, new IStrategoTerm[0])},
+                }) }, EMPTY_TERM_ARRAY)},
         });
         //@formatter:on
     }

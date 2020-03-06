@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
-import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.util.TermUtils;
 
 import static org.hamcrest.core.AnyOf.anyOf;
@@ -17,6 +16,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 
 public class TestImmutableSetPrimitiveCreateSet extends ImmutableSetMapTestSetup {
     private final SSL_immutable_set SSL_immutable_set = new SSL_immutable_set();
@@ -25,7 +25,7 @@ public class TestImmutableSetPrimitiveCreateSet extends ImmutableSetMapTestSetup
 
     @Test
     public void setIsEmpty() throws InterpreterException {
-        boolean result = SSL_immutable_set.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_set.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
@@ -35,7 +35,8 @@ public class TestImmutableSetPrimitiveCreateSet extends ImmutableSetMapTestSetup
     @Test
     public void setFromListUnique() throws InterpreterException {
         context.setCurrent(f.makeList(one, two));
-        boolean result = SSL_immutable_set_from_list.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_set_from_list.call(context, new Strategy[0],
+            EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
@@ -47,7 +48,8 @@ public class TestImmutableSetPrimitiveCreateSet extends ImmutableSetMapTestSetup
         assertEquals(one, oneIsh);
         assertNotSame(one, oneIsh);
         context.setCurrent(f.makeList(one, oneIsh));
-        boolean result = SSL_immutable_set_from_list.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_set_from_list.call(context, new Strategy[0],
+            EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
@@ -58,7 +60,7 @@ public class TestImmutableSetPrimitiveCreateSet extends ImmutableSetMapTestSetup
     @Test
     public void setElements() throws InterpreterException {
         context.setCurrent(new StrategoImmutableSet(Set.Immutable.of(one, two)));
-        boolean result = SSL_immutable_set_elements.call(context, new Strategy[0], new IStrategoTerm[0]);
+        boolean result = SSL_immutable_set_elements.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertTrue(TermUtils.isList(context.current()));
         IStrategoList current = (IStrategoList) context.current();
