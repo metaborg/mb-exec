@@ -2,6 +2,7 @@ package org.spoofax.interpreter.library.ssl;
 
 import io.usethesource.capsule.Map;
 
+import java.util.Arrays;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -9,13 +10,12 @@ import org.metaborg.util.functions.CheckedFunction0;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import java.util.Arrays;
 
 import static org.junit.Assert.assertFalse;
 import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 
 @RunWith(Parameterized.class)
-public class TestImmutableMapPrimitiveFails extends ImmutableSetMapTestSetup {
+public class TestImmutableMapPrimitiveFails extends ImmutableCollectionTestSetup {
     private static final SSL_immutable_map_filter SSL_immutable_map_filter = new SSL_immutable_map_filter();
     private static final SSL_immutable_map_get SSL_immutable_map_get = new SSL_immutable_map_get();
     private static final SSL_immutable_map_intersect SSL_immutable_map_intersect = new SSL_immutable_map_intersect();

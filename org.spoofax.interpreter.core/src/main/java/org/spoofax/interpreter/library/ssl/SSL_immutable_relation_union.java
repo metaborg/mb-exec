@@ -36,7 +36,7 @@ public class SSL_immutable_relation_union extends AbstractPrimitive {
         BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> other) {
         final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = one.asTransient();
         for(java.util.Map.Entry<IStrategoTerm, IStrategoTerm> e : other.entrySet()) {
-            result.__put(e.getKey(), e.getValue());
+            result.__insert(e.getKey(), e.getValue());
         }
         return result.freeze();
     }

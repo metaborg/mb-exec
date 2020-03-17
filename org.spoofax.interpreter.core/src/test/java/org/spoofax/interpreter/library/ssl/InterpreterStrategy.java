@@ -1,5 +1,8 @@
 package org.spoofax.interpreter.library.ssl;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+import javax.annotation.Nullable;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -7,9 +10,6 @@ import org.spoofax.interpreter.stratego.Hook;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.stratego.StupidFormatter;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import javax.annotation.Nullable;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 interface InterpreterStrategy {
     static Strategy of(Function<IStrategoTerm, IStrategoTerm> f) {

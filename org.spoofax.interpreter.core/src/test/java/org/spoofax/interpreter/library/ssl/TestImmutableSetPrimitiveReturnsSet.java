@@ -2,6 +2,7 @@ package org.spoofax.interpreter.library.ssl;
 
 import io.usethesource.capsule.Set;
 
+import java.util.Arrays;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -9,17 +10,16 @@ import org.metaborg.util.functions.CheckedFunction0;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import java.util.Arrays;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.spoofax.terms.AbstractTermFactory.EMPTY_LIST;
 import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 
 @RunWith(Parameterized.class)
-public class TestImmutableSetPrimitiveReturnsSet extends ImmutableSetMapTestSetup {
+public class TestImmutableSetPrimitiveReturnsSet extends ImmutableCollectionTestSetup {
     private static final SSL_immutable_set_contains SSL_immutable_set_contains = new SSL_immutable_set_contains();
     private static final SSL_immutable_set_contains_eq SSL_immutable_set_contains_eq =
         new SSL_immutable_set_contains_eq();

@@ -3,6 +3,8 @@ package org.spoofax.interpreter.library.ssl;
 import io.usethesource.capsule.Map;
 import io.usethesource.capsule.Set;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import org.junit.Test;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -10,17 +12,15 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.util.TermUtils;
-import java.util.Arrays;
-import java.util.HashSet;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 
-public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
+public class TestImmutableMapPrimitiveMisc extends ImmutableCollectionTestSetup {
     private final SSL_immutable_map SSL_immutable_map = new SSL_immutable_map();
     private final SSL_immutable_map_get SSL_immutable_map_get = new SSL_immutable_map_get();
     private final SSL_immutable_map_get_eq SSL_immutable_map_get_eq = new SSL_immutable_map_get_eq();
@@ -31,7 +31,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     private final SSL_immutable_map_values SSL_immutable_map_values = new SSL_immutable_map_values();
 
     @Test
-    public void mapIsEmpty() throws InterpreterException {
+    public void mapIsEmpty() {
         boolean result = SSL_immutable_map.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableMap.class));
@@ -74,7 +74,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     }
 
     @Test
-    public void mapKeys() throws InterpreterException {
+    public void mapKeys() {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
         boolean result = SSL_immutable_map_keys.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
@@ -85,7 +85,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     }
 
     @Test
-    public void mapKeysToSet() throws InterpreterException {
+    public void mapKeysToSet() {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
         boolean result = SSL_immutable_map_keys_to_set.call(context, new Strategy[0],
             EMPTY_TERM_ARRAY);
@@ -96,7 +96,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     }
 
     @Test
-    public void mapToListEmpty() throws InterpreterException {
+    public void mapToListEmpty() {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of()));
         boolean result = SSL_immutable_map_to_list.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
@@ -106,7 +106,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     }
 
     @Test
-    public void mapToList() throws InterpreterException {
+    public void mapToList() {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
         boolean result = SSL_immutable_map_to_list.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
@@ -117,7 +117,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     }
 
     @Test
-    public void mapValues() throws InterpreterException {
+    public void mapValues() {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
         boolean result = SSL_immutable_map_values.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
@@ -128,7 +128,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     }
 
     @Test
-    public void mapGetExisting() throws InterpreterException {
+    public void mapGetExisting() {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
         boolean result = SSL_immutable_map_get.call(context, new Strategy[0], new IStrategoTerm[] { one });
         assertTrue(result);
@@ -136,7 +136,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableSetMapTestSetup {
     }
 
     @Test
-    public void mapGetExistingCustomEq() throws InterpreterException {
+    public void mapGetExistingCustomEq() {
         context.setCurrent(new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)));
         IStrategoTerm oneWithAnno = f.annotateTerm(one, f.makeList(one));
         assertNotEquals(one, oneWithAnno);

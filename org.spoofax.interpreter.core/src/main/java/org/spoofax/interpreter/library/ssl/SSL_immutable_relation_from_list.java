@@ -3,11 +3,11 @@ package org.spoofax.interpreter.library.ssl;
 import io.usethesource.capsule.BinaryRelation;
 
 import org.spoofax.interpreter.core.IContext;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_immutable_relation_from_list extends AbstractPrimitive {
 
@@ -17,17 +17,17 @@ public class SSL_immutable_relation_from_list extends AbstractPrimitive {
 
     @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
-        if(!Tools.isTermList(env.current())) {
+        if(!TermUtils.isList(env.current())) {
             return false;
         }
 
         final IStrategoList list = (IStrategoList) env.current();
         final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> relation = BinaryRelation.Transient.of();
         for(IStrategoTerm t : list) {
-            if(!(Tools.isTermTuple(t) && t.getSubtermCount() == 2)) {
+            if(!(TermUtils.isTuple(t) && t.getSubtermCount() == 2)) {
                 return false;
             }
-            relation.__put(t.getSubterm(0), t.getSubterm(1));
+            relation.__insert(t.getSubterm(0), t.getSubterm(1));
         }
 
         env.setCurrent(new StrategoImmutableRelation(relation.freeze()));

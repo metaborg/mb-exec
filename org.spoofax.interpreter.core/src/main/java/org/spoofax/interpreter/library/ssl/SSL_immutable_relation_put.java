@@ -24,7 +24,7 @@ public class SSL_immutable_relation_put extends AbstractPrimitive {
         final IStrategoTerm value = targs[1];
 
         env.setCurrent(new StrategoImmutableRelation(
-            (BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm>) map.backingRelation.__put(key, value)));
+            (BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm>) map.backingRelation.__insert(key, value)));
         return true;
     }
 

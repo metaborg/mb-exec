@@ -4,11 +4,11 @@ import io.usethesource.capsule.BinaryRelation;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_immutable_relation_map extends AbstractPrimitive {
 
@@ -33,12 +33,12 @@ public class SSL_immutable_relation_map extends AbstractPrimitive {
                 return false;
             }
             final IStrategoTerm current = env.current();
-            if(!(Tools.isTermTuple(current)) && current.getSubtermCount() == 2) {
+            if(!(TermUtils.isTuple(current)) && current.getSubtermCount() == 2) {
                 return false;
             }
             final IStrategoTerm newKey = current.getSubterm(0);
             final IStrategoTerm newValue = current.getSubterm(1);
-            resultRelation.__put(newKey, newValue);
+            resultRelation.__insert(newKey, newValue);
         }
 
         env.setCurrent(new StrategoImmutableRelation(resultRelation.freeze()));
