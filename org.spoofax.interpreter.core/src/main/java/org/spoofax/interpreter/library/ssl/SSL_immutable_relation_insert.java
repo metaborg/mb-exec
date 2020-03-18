@@ -7,9 +7,9 @@ import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SSL_immutable_relation_put extends AbstractPrimitive {
+public class SSL_immutable_relation_insert extends AbstractPrimitive {
 
-    protected SSL_immutable_relation_put() {
+    protected SSL_immutable_relation_insert() {
         super("SSL_immutable_relation_put", 0, 2);
     }
 

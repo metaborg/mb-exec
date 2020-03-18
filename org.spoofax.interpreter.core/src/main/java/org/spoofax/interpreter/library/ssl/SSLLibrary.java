@@ -105,7 +105,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_immutable_relation_keys());
         add(new SSL_immutable_relation_keys_set());
         add(new SSL_immutable_relation_map());
-        add(new SSL_immutable_relation_put());
+        add(new SSL_immutable_relation_insert());
         add(new SSL_immutable_relation_reflexive_transitive_closure());
         add(new SSL_immutable_relation_remove());
         add(new SSL_immutable_relation_subtract());
