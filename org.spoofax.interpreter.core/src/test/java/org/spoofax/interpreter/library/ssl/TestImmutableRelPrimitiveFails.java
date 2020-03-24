@@ -17,7 +17,6 @@ import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 
 @RunWith(Parameterized.class)
 public class TestImmutableRelPrimitiveFails extends ImmutableCollectionTestSetup {
-    private static final SSL_immutable_relation_get SSL_immutable_relation_get = new SSL_immutable_relation_get();
     private static final SSL_immutable_relation_intersect SSL_immutable_relation_intersect = new SSL_immutable_relation_intersect();
     private static final SSL_immutable_relation_map SSL_immutable_relation_map = new SSL_immutable_relation_map();
 
@@ -25,8 +24,6 @@ public class TestImmutableRelPrimitiveFails extends ImmutableCollectionTestSetup
     public static Iterable<Object[]> data() {
         //@formatter:off
         return Arrays.asList(new Object[][] {
-            {"relGetNonExisting", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_relation_get.call(context, new Strategy[0], new IStrategoTerm[] { three })},
             {"relIntersectMergeFail", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_relation_intersect.call(context, new Strategy[] { InterpreterStrategy.fail },
                     new IStrategoTerm[] { new StrategoImmutableMap(Map.Immutable.of(one, b)) })},

@@ -1,19 +1,5 @@
 package org.spoofax.interpreter.library.ssl;
 
-import io.usethesource.capsule.BinaryRelation;
-import io.usethesource.capsule.Map;
-import io.usethesource.capsule.Set;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import org.junit.Test;
-import org.spoofax.interpreter.core.Interpreter;
-import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.stratego.Strategy;
-import org.spoofax.interpreter.terms.IStrategoList;
-import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.terms.util.TermUtils;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertEquals;
@@ -21,6 +7,20 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
+
+import java.util.Arrays;
+import java.util.HashSet;
+
+import org.junit.Test;
+import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.stratego.Strategy;
+import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
+
+import io.usethesource.capsule.BinaryRelation;
+import io.usethesource.capsule.Map;
+import io.usethesource.capsule.Set;
 
 public class TestImmutableRelPrimitiveMisc extends ImmutableCollectionTestSetup {
     private final SSL_immutable_relation SSL_immutable_relation = new SSL_immutable_relation();
@@ -153,5 +153,15 @@ public class TestImmutableRelPrimitiveMisc extends ImmutableCollectionTestSetup 
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
         assertEquals(Set.Immutable.of(a), current.backingSet);
+    }
+
+    @Test
+    public void relGetNonExisting() {
+        context.setCurrent(new StrategoImmutableRelation(BinaryRelation.Immutable.of(one, a, two, b)));
+        boolean result = SSL_immutable_relation_get.call(context, new Strategy[0], new IStrategoTerm[] { three });
+        assertTrue(result);
+        assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
+        StrategoImmutableSet current = (StrategoImmutableSet) context.current();
+        assertEquals(Set.Immutable.of(), current.backingSet);
     }
 }

@@ -23,9 +23,6 @@ public class SSL_immutable_relation_get extends AbstractPrimitive {
         final IStrategoTerm key = targs[0];
 
         final Set.Immutable<IStrategoTerm> newCurrent = relation.backingRelation.get(key);
-        if(newCurrent.isEmpty()) {
-            return false;
-        }
         env.setCurrent(new StrategoImmutableSet(newCurrent));
         return true;
     }
