@@ -1,14 +1,11 @@
 package org.spoofax.interpreter.library.ssl;
 
-import io.usethesource.capsule.BinaryRelation;
-import io.usethesource.capsule.Set;
-
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.util.EntryAsPairIterator;
-import java.util.Iterator;
+
+import io.usethesource.capsule.Set;
 
 public class SSL_immutable_relation_to_set extends AbstractPrimitive {
 
@@ -22,11 +19,10 @@ public class SSL_immutable_relation_to_set extends AbstractPrimitive {
             return false;
         }
 
-        final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> relation =
-            ((StrategoImmutableRelation) env.current()).backingRelation;
+        final StrategoImmutableRelation relation = (StrategoImmutableRelation) env.current();
         final Set.Transient<IStrategoTerm> result = Set.Transient.of();
-        for(Iterator<IStrategoTerm> iterator = new EntryAsPairIterator(relation.entryIterator()); iterator.hasNext(); ) {
-            result.__insert(iterator.next());
+        for(IStrategoTerm pair : relation) {
+            result.__insert(pair);
         }
 
         env.setCurrent(new StrategoImmutableSet(result.freeze()));
