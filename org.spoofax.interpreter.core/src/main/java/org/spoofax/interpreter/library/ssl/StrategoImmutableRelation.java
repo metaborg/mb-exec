@@ -2,8 +2,9 @@ package org.spoofax.interpreter.library.ssl;
 
 import java.io.IOException;
 import java.util.AbstractMap;
-import java.util.HashSet;
+import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -146,25 +147,17 @@ public class StrategoImmutableRelation extends StrategoTerm implements IStratego
     }
 
     public static StrategoImmutableRelation transitiveClosure(StrategoImmutableRelation map) {
-        HashSet<Map.Entry<IStrategoTerm, IStrategoTerm>> frontier1 = new HashSet<>(map.backingRelation.entrySet());
-        HashSet<Map.Entry<IStrategoTerm, IStrategoTerm>> frontier2 = new HashSet<>();
+        final Deque<Map.Entry<IStrategoTerm, IStrategoTerm>> worklist =
+            new LinkedList<>(map.backingRelation.entrySet());
         final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = map.backingRelation.asTransient();
-        boolean done = false;
-        while(!done) {
-            done = true;
-            for(Map.Entry<IStrategoTerm, IStrategoTerm> e : frontier1) {
-                for(IStrategoTerm value : map.backingRelation.get(e.getValue())) {
-                    if(!result.containsEntry(e.getKey(), value)) {
-                        frontier2.add(new AbstractMap.SimpleImmutableEntry<>(e.getKey(), value));
-                        result.__insert(e.getKey(), value);
-                        done = false;
-                    }
+        while(!worklist.isEmpty()) {
+            final Map.Entry<IStrategoTerm, IStrategoTerm> e = worklist.pop();
+            for(IStrategoTerm post : map.backingRelation.get(e.getValue())) {
+                if(!result.containsEntry(e.getKey(), post)) {
+                    result.__insert(e.getKey(), post);
+                    worklist.add(new AbstractMap.SimpleImmutableEntry<>(e.getKey(), post));
                 }
             }
-            HashSet<Map.Entry<IStrategoTerm, IStrategoTerm>> tmp = frontier1; // swap & clear for better memory perf
-            frontier1 = frontier2;
-            frontier2 = tmp;
-            frontier2.clear();
         }
         return new StrategoImmutableRelation(result.freeze());
     }
