@@ -38,7 +38,7 @@ public class StrategoImmutableRelation extends StrategoTerm implements IStratego
 
     @Override
     public IStrategoTerm getSubterm(int index) {
-        throw new UnsupportedOperationException();
+        throw new IndexOutOfBoundsException();
     }
 
     @Override

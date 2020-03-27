@@ -31,7 +31,7 @@ public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm 
     }
 
     @Override public IStrategoTerm getSubterm(int index) {
-        throw new UnsupportedOperationException();
+        throw new IndexOutOfBoundsException();
     }
 
     @Override
