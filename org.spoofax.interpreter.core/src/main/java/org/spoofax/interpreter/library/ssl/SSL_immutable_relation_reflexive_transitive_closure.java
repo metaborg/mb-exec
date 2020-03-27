@@ -8,8 +8,8 @@ import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import java.util.Map.Entry;
 
-import static org.spoofax.interpreter.library.ssl.SSL_immutable_relation_transitive_closure.transitiveClosure;
-import static org.spoofax.interpreter.library.ssl.SSL_immutable_relation_union.union;
+import static org.spoofax.interpreter.library.ssl.StrategoImmutableRelation.transitiveClosure;
+import static org.spoofax.interpreter.library.ssl.StrategoImmutableRelation.union;
 
 public class SSL_immutable_relation_reflexive_transitive_closure extends AbstractPrimitive {
 

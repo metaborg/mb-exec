@@ -1,11 +1,11 @@
 package org.spoofax.interpreter.library.ssl;
 
-import io.usethesource.capsule.BinaryRelation;
-
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+
+import static org.spoofax.interpreter.library.ssl.StrategoImmutableRelation.union;
 
 public class SSL_immutable_relation_union extends AbstractPrimitive {
 
@@ -22,23 +22,11 @@ public class SSL_immutable_relation_union extends AbstractPrimitive {
             return false;
         }
 
-        final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> one =
-            ((StrategoImmutableRelation) env.current()).backingRelation;
-        final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> other =
-            ((StrategoImmutableRelation) targs[0]).backingRelation;
+        final StrategoImmutableRelation one = (StrategoImmutableRelation) env.current();
+        final StrategoImmutableRelation other = (StrategoImmutableRelation) targs[0];
 
-        env.setCurrent(new StrategoImmutableRelation(union(one, other)));
+        env.setCurrent(union(one, other));
         return true;
-    }
-
-    public static BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> union(
-        BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> one,
-        BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> other) {
-        final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = one.asTransient();
-        for(java.util.Map.Entry<IStrategoTerm, IStrategoTerm> e : other.entrySet()) {
-            result.__insert(e.getKey(), e.getValue());
-        }
-        return result.freeze();
     }
 
 }

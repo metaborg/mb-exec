@@ -1,12 +1,11 @@
 package org.spoofax.interpreter.library.ssl;
 
-import io.usethesource.capsule.BinaryRelation;
-
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import java.util.Map;
+
+import static org.spoofax.interpreter.library.ssl.StrategoImmutableRelation.subtract;
 
 public class SSL_immutable_relation_subtract extends AbstractPrimitive {
 
@@ -23,24 +22,11 @@ public class SSL_immutable_relation_subtract extends AbstractPrimitive {
             return false;
         }
 
-        final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> left =
-            ((StrategoImmutableRelation) env.current()).backingRelation;
-        final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> right =
-            ((StrategoImmutableRelation) targs[0]).backingRelation;
+        final StrategoImmutableRelation left = (StrategoImmutableRelation) env.current();
+        final StrategoImmutableRelation right = (StrategoImmutableRelation) targs[0];
 
-        env.setCurrent(new StrategoImmutableRelation(subtract(left, right)));
+        env.setCurrent(subtract(left, right));
         return true;
-    }
-
-    public static BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> subtract(
-        BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> left,
-        BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> right) {
-        final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = left.asTransient();
-        for(Map.Entry<IStrategoTerm, IStrategoTerm> e : right.entrySet()) {
-            result.__remove(e.getKey(), e.getValue());
-        }
-
-        return result.freeze();
     }
 
 }

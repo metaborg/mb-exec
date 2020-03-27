@@ -17,8 +17,8 @@ public class SSL_immutable_relation_inverse extends AbstractPrimitive {
             return false;
         }
 
-        env.setCurrent(
-            new StrategoImmutableRelation(((StrategoImmutableRelation) env.current()).backingRelation.inverse()));
+        final StrategoImmutableRelation relationTerm = (StrategoImmutableRelation) env.current();
+        env.setCurrent(new StrategoImmutableRelation(relationTerm.backingRelation.inverse()));
 
         return true;
     }
