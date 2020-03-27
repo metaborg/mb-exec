@@ -33,7 +33,7 @@ public class SSL_immutable_relation_filter extends AbstractPrimitive {
                 continue;
             }
             final IStrategoTerm current = env.current();
-            if(!(TermUtils.isTuple(current)) && current.getSubtermCount() == 2) {
+            if(!(TermUtils.isTuple(current) && current.getSubtermCount() == 2)) {
                 return false;
             }
             final IStrategoTerm newKey = current.getSubterm(0);
