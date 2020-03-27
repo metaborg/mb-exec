@@ -133,6 +133,18 @@ public class StrategoImmutableRelation extends StrategoTerm implements IStratego
         return new StrategoImmutableRelation(result.freeze());
     }
 
+    public static StrategoImmutableRelation reflexiveClosure(StrategoImmutableRelation map) {
+        final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = map.backingRelation.asTransient();
+
+        for(Map.Entry<IStrategoTerm, IStrategoTerm> e : map.backingRelation.entrySet()) {
+            final IStrategoTerm key = e.getKey();
+            final IStrategoTerm value = e.getValue();
+            result.__insert(key, key);
+            result.__insert(value, value);
+        }
+        return new StrategoImmutableRelation(result.freeze());
+    }
+
     public static StrategoImmutableRelation transitiveClosure(StrategoImmutableRelation map) {
         HashSet<Map.Entry<IStrategoTerm, IStrategoTerm>> frontier1 = new HashSet<>(map.backingRelation.entrySet());
         HashSet<Map.Entry<IStrategoTerm, IStrategoTerm>> frontier2 = new HashSet<>();

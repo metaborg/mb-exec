@@ -1,12 +1,9 @@
 package org.spoofax.interpreter.library.ssl;
 
-import io.usethesource.capsule.BinaryRelation;
-
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import java.util.Map.Entry;
 
 import static org.spoofax.interpreter.library.ssl.StrategoImmutableRelation.transitiveClosure;
 import static org.spoofax.interpreter.library.ssl.StrategoImmutableRelation.union;
@@ -23,23 +20,10 @@ public class SSL_immutable_relation_reflexive_transitive_closure extends Abstrac
             return false;
         }
 
-        final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> map =
-            ((StrategoImmutableRelation) env.current()).backingRelation;
+        final StrategoImmutableRelation map = (StrategoImmutableRelation) env.current();
 
-        env.setCurrent(new StrategoImmutableRelation(union(transitiveClosure(map), reflexiveClosure(map))));
+        env.setCurrent(union(transitiveClosure(map), StrategoImmutableRelation.reflexiveClosure(map)));
         return true;
     }
 
-    public static BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> reflexiveClosure(
-        BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> map) {
-        final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = map.asTransient();
-
-        for(Entry<IStrategoTerm, IStrategoTerm> e : map.entrySet()) {
-            final IStrategoTerm key = e.getKey();
-            final IStrategoTerm value = e.getValue();
-            result.__insert(key, key);
-            result.__insert(value, value);
-        }
-        return result.freeze();
-    }
 }
