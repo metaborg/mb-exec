@@ -5,7 +5,6 @@ import io.usethesource.capsule.Set;
 import io.usethesource.capsule.util.EqualityComparator;
 
 import org.spoofax.interpreter.core.IContext;
-import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -21,7 +20,7 @@ public class SSL_immutable_map_intersect_set_eq extends AbstractPrimitive {
         super(name, svars, tvars);
     }
 
-    @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
+    @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
         return intersect_set(env, targs, new StrategyEqualityComparator(env, sargs[0]));
     }
 

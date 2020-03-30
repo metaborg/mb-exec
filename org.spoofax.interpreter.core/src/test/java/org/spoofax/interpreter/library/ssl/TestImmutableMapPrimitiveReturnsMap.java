@@ -3,6 +3,7 @@ package org.spoofax.interpreter.library.ssl;
 import io.usethesource.capsule.Map;
 import io.usethesource.capsule.Set;
 
+import java.util.Arrays;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -10,15 +11,15 @@ import org.metaborg.util.functions.CheckedFunction0;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import java.util.Arrays;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 
 @RunWith(Parameterized.class)
-public class TestImmutableMapPrimitiveReturnsMap extends ImmutableSetMapTestSetup {
+public class TestImmutableMapPrimitiveReturnsMap extends ImmutableCollectionTestSetup {
     private static final SSL_immutable_map_filter SSL_immutable_map_filter = new SSL_immutable_map_filter();
     private static final SSL_immutable_map_intersect SSL_immutable_map_intersect = new SSL_immutable_map_intersect();
     private static final SSL_immutable_map_intersect_set SSL_immutable_map_intersect_set =
@@ -39,7 +40,7 @@ public class TestImmutableMapPrimitiveReturnsMap extends ImmutableSetMapTestSetu
                 SSL_immutable_map_filter.call(context, new Strategy[] { InterpreterStrategy.test(current -> {
                     return current.getSubterm(0).equals(one); // filter on key == one
                 }), null // never used, no overlapping keys
-                }, new IStrategoTerm[0]),
+                }, EMPTY_TERM_ARRAY),
                 new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)),
                 new StrategoImmutableMap(Map.Immutable.of(one, a)),
             },
@@ -48,7 +49,7 @@ public class TestImmutableMapPrimitiveReturnsMap extends ImmutableSetMapTestSetu
                     return f.makeTuple(one, current.getSubterm(1)); // map key in pair to one
                 }), InterpreterStrategy.of(current -> {
                     return current.getSubterm(1).getSubterm(1); // merge by picking the newer value
-                }) }, new IStrategoTerm[0]),
+                }) }, EMPTY_TERM_ARRAY),
                 new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)),
                 new StrategoImmutableMap(Map.Immutable.of(one, b)),
             },
@@ -78,7 +79,7 @@ public class TestImmutableMapPrimitiveReturnsMap extends ImmutableSetMapTestSetu
                 }), InterpreterStrategy.of(current -> {
                     // merge by picking the newer value
                     return current.getSubterm(1).getSubterm(1);
-                }) }, new IStrategoTerm[0]),
+                }) }, EMPTY_TERM_ARRAY),
                 new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)),
                 new StrategoImmutableMap(Map.Immutable.of(one, b)),
             },

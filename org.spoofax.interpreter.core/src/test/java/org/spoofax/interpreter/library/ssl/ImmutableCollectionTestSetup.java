@@ -5,21 +5,21 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.terms.TermFactory;
 
-public class ImmutableSetMapTestSetup {
-    protected static Context context;
-    protected static ITermFactory f;
-    protected static IStrategoTerm one;
-    protected static IStrategoTerm two;
-    protected static IStrategoTerm three;
-    protected static IStrategoTerm four;
-    protected static IStrategoTerm five;
-    protected static IStrategoTerm a;
-    protected static IStrategoTerm b;
-    protected static IStrategoTerm c;
-    protected static IStrategoTerm d;
-    protected static IStrategoTerm e;
-    protected static IStrategoTerm oneIsh;
-    protected static IStrategoTerm oneWithAnno;
+public class ImmutableCollectionTestSetup {
+    protected static final Context context;
+    protected static final ITermFactory f;
+    protected static final IStrategoTerm one;
+    protected static final IStrategoTerm two;
+    protected static final IStrategoTerm three;
+    protected static final IStrategoTerm four;
+    protected static final IStrategoTerm five;
+    protected static final IStrategoTerm a;
+    protected static final IStrategoTerm b;
+    protected static final IStrategoTerm c;
+    protected static final IStrategoTerm d;
+    protected static final IStrategoTerm e;
+    protected static final IStrategoTerm oneIsh;
+    protected static final IStrategoTerm oneWithAnno;
 
     // @BeforeClass is not run before @Parameterized.Parameters
     static {
