@@ -1,6 +1,9 @@
 package org.spoofax.interpreter.library.ssl;
 
-import io.usethesource.capsule.Map;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
@@ -8,17 +11,16 @@ import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.interpreter.util.EntryAsPairIterator;
 import org.spoofax.terms.StrategoTerm;
 import org.spoofax.terms.TermFactory;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+
+import io.usethesource.capsule.Map;
 
 public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm {
     public final Map.Immutable<IStrategoTerm, IStrategoTerm> backingMap;
 
-    public StrategoImmutableMap(Map.Immutable<IStrategoTerm, IStrategoTerm> backingMap) {
+    public StrategoImmutableMap(Map.Immutable<? extends IStrategoTerm, ? extends IStrategoTerm> backingMap) {
         super(TermFactory.EMPTY_LIST);
-        this.backingMap = backingMap;
+        //noinspection unchecked
+        this.backingMap = (Map.Immutable<IStrategoTerm, IStrategoTerm>) backingMap;
     }
 
     public StrategoImmutableMap() {
@@ -84,8 +86,14 @@ public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm 
         return factory.makeAppl("ImmutableMap", this);
     }
 
-    public static IStrategoTerm fromMap(Map.Immutable<IStrategoTerm, IStrategoTerm> map, ITermFactory factory) {
-        return new StrategoImmutableMap(map).withWrapper(factory);
+    public static StrategoImmutableMap fromMap(Map.Immutable<? extends IStrategoTerm, ? extends IStrategoTerm> map) {
+        return new StrategoImmutableMap(map);
+    }
+
+    public static StrategoImmutableMap fromMap(java.util.Map<? extends IStrategoTerm, ? extends IStrategoTerm> map) {
+        final Map.Transient<IStrategoTerm, IStrategoTerm> mapT = Map.Transient.of();
+        mapT.__putAll(map);
+        return new StrategoImmutableMap(mapT.freeze());
     }
 
     @SuppressWarnings("NullableProblems")

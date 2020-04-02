@@ -21,9 +21,11 @@ import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 public class StrategoImmutableRelation extends StrategoTerm implements IStrategoTerm {
     public final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> backingRelation;
 
-    public StrategoImmutableRelation(BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> backingRelation) {
+    public StrategoImmutableRelation(
+        BinaryRelation.Immutable<? extends IStrategoTerm, ? extends IStrategoTerm> backingRelation) {
         super(TermFactory.EMPTY_LIST);
-        this.backingRelation = backingRelation;
+        //noinspection unchecked
+        this.backingRelation = (BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm>) backingRelation;
     }
 
     public StrategoImmutableRelation() {
@@ -89,11 +91,6 @@ public class StrategoImmutableRelation extends StrategoTerm implements IStratego
 
     public IStrategoTerm withWrapper(ITermFactory factory) {
         return factory.makeAppl("ImmutableRelation", this);
-    }
-
-    public static IStrategoTerm fromRelation(BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> relation,
-        ITermFactory factory) {
-        return new StrategoImmutableRelation(relation).withWrapper(factory);
     }
 
     public static StrategoImmutableRelation union(StrategoImmutableRelation one, StrategoImmutableRelation other) {

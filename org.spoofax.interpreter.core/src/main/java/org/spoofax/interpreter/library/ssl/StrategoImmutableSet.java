@@ -77,10 +77,6 @@ public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm 
         return factory.makeAppl("ImmutableSet", this);
     }
 
-    public static IStrategoTerm fromSet(Set.Immutable<IStrategoTerm> set, ITermFactory factory) {
-        return new StrategoImmutableSet(set).withWrapper(factory);
-    }
-
     @SuppressWarnings("NullableProblems") @Override public Iterator<IStrategoTerm> iterator() {
         return backingSet.iterator();
     }
