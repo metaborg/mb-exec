@@ -234,15 +234,17 @@ public class SDefT implements IConstruct {
         return f.makeAppl(sig.CTOR_ExtSDef, f.makeString(getUncifiedName()), f.makeList(sArgs), f.makeList(tArgs));
     }
 
-    // FIXME: next 3 methods copied from org.spoofax.interpreter.cli.StrategyCompletor
-
-    private static String unescape(String name) {
+    public static String unescape(String name) {
         return name.replace("_p_", "'").replace("__", "+")
                 .replace('_', '-').replace("+", "_");
     }
 
     public static String uncify(String name) {
-        return unescape(name.substring(0, indexOfArity(name)));
+        return unescape(removeArity(name));
+    }
+
+    public static String removeArity(String name) {
+        return name.substring(0, indexOfArity(name));
     }
 
     private static int indexOfArity(String name) {
