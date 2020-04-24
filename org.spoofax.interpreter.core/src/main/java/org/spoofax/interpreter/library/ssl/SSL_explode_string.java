@@ -33,14 +33,13 @@ public class SSL_explode_string extends AbstractPrimitive {
         String s = ((IStrategoString) t).stringValue();
         
         ITermFactory factory = env.getFactory();
-        IStrategoList result = factory.makeList();
+        IStrategoList.Builder result = factory.arrayListBuilder(s.length());
         
-        for (int i = s.length(), c; i > 0; i -= Character.charCount(c)) {
-            c = s.codePointBefore(i);
-            result = factory.makeListCons(factory.makeInt(c), result);
-        }
+        s.codePoints().forEach(c -> {
+            result.add(factory.makeInt(c));
+        });
         
-        env.setCurrent(result);
+        env.setCurrent(factory.makeList(result));
         return true;
     }
 }
