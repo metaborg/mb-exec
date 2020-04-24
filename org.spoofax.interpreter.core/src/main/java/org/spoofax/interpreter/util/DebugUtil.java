@@ -33,34 +33,119 @@ public class DebugUtil {
             boolean doIndent = strategy instanceof CallT || strategy instanceof Let || strategy instanceof Scope;
             String s = doIndent ? buildIndent(INDENT_STEP).toString() : "";
             if(!result) {
-                Strategy.debug(s, "=> failed: ", current, "\n");
+                Context.debug(s, "=> failed: ", current, "\n");
             } else {
-                Strategy.debug(s, "=> succeeded: ", current, "\n");
+                Context.debug(s, "=> succeeded: ", current, "\n");
             }
         }
         return result;
     }
 
-    public static void debug(Object... strings) {
 
-        String toPrint = "";
-        if (strings.length > 1) {
-            for (Object s : strings) {
-                if(s.getClass().isArray()) {
-                    Object ss[] = (Object[])s;
-                    for (Object o : ss) {
-                        toPrint += o;
-                    }
-                } else {
-                    toPrint += s; //pay the price
-                }
+    // These debug() overloads are for optimizations.
+    // Prevents allocating an array for the arguments
+    // in the most common cases.
+
+    /**
+     * Prints the string representation of the given object on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s0 the object to print
+     */
+    public static void debug(Object s0) {
+        if (!DebugUtil.isDebugging()) return;
+        printIfWithinLimit(s0.toString());
+    }
+
+    /**
+     * Prints the string representation of the given objects on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s0 the first object to print
+     * @param s1 the second object to print
+     */
+    public static void debug(Object s0, Object s1) {
+        if (!DebugUtil.isDebugging()) return;
+        StringBuilder toPrint = new StringBuilder();
+        writeObject(s0, toPrint);
+        writeObject(s1, toPrint);
+        printIfWithinLimit(toPrint.toString());
+    }
+
+    /**
+     * Prints the string representation of the given objects on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s0 the first object to print
+     * @param s1 the second object to print
+     * @param s2 the third object to print
+     */
+    public static void debug(Object s0, Object s1, Object s2) {
+        if (!DebugUtil.isDebugging()) return;
+        StringBuilder toPrint = new StringBuilder();
+        writeObject(s0, toPrint);
+        writeObject(s1, toPrint);
+        writeObject(s2, toPrint);
+        printIfWithinLimit(toPrint.toString());
+    }
+
+    /**
+     * Prints the string representation of the given objects on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s0 the first object to print
+     * @param s1 the second object to print
+     * @param s2 the third object to print
+     * @param s3 the fourth object to print
+     */
+    public static void debug(Object s0, Object s1, Object s2, Object s3) {
+        if (!DebugUtil.isDebugging()) return;
+        StringBuilder toPrint = new StringBuilder();
+        writeObject(s0, toPrint);
+        writeObject(s1, toPrint);
+        writeObject(s2, toPrint);
+        writeObject(s3, toPrint);
+        printIfWithinLimit(toPrint.toString());
+    }
+
+    /**
+     * Prints the string representation of the given objects on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param strings the objects to print
+     */
+    public static void debug(Object... strings) {
+        if (!DebugUtil.isDebugging()) return;
+        StringBuilder toPrint = new StringBuilder();
+        for (Object s : strings) {
+            writeObject(s, toPrint);
+        }
+        printIfWithinLimit(toPrint.toString());
+    }
+
+    private static void printIfWithinLimit(String s) {
+        if (s.length() >= 20000) return;
+        System.out.println(s);
+    }
+
+    private static void writeObject(Object obj, StringBuilder sb) {
+        if(obj.getClass().isArray()) {
+            Object[] ss = (Object[])obj;
+            for (Object o : ss) {
+                sb.append(o);
             }
-        }
-        else {
-            toPrint = (strings[0]).toString();
-        }
-        if (toPrint.length() < 20000) {
-            System.out.println(toPrint);
+        } else {
+            sb.append(obj); //pay the price
         }
     }
 

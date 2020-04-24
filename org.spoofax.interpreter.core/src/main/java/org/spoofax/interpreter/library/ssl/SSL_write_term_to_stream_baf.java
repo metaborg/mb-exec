@@ -12,11 +12,11 @@ import java.io.Writer;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.io.binary.TermReader;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_write_term_to_stream_baf extends AbstractPrimitive {
 
@@ -30,11 +30,11 @@ public class SSL_write_term_to_stream_baf extends AbstractPrimitive {
         
         // FIXME should we even bother with BAF? Now it's just text
         
-        if(!Tools.isTermInt(targs[0]))
+        if(!TermUtils.isInt(targs[0]))
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        Writer out = or.getIOAgent().getWriter(Tools.asJavaInt(targs[0]));
+        Writer out = or.getIOAgent().getWriter(TermUtils.toJavaInt(targs[0]));
         if(out == null)
             return false;
         

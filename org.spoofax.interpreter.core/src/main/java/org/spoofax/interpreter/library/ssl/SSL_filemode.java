@@ -8,6 +8,7 @@ import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 /**
  * Non-POSIX compliant filemode implementation.
@@ -24,7 +25,7 @@ public class SSL_filemode extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-       if (tvars[0].getTermType() != IStrategoTerm.STRING)
+       if (!TermUtils.isString(tvars[0]))
            return false;
 
        SSLLibrary library = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);

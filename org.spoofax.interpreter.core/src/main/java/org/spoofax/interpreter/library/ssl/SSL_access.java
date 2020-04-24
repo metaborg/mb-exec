@@ -9,13 +9,13 @@ package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_access extends AbstractPrimitive {
     private static final int R_OK = 4;
@@ -30,17 +30,17 @@ public class SSL_access extends AbstractPrimitive {
 
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        if(!Tools.isTermString(targs[0])) {
+        if(!TermUtils.isString(targs[0])) {
             return false;
         }
-        if(!(Tools.isTermList(targs[1]))) {
+        if(!(TermUtils.isList(targs[1]))) {
             return false;
         }
 
         final SSLLibrary op = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
         final IOAgent agent = op.getIOAgent();
 
-        final String path = Tools.javaString(targs[0]);
+        final String path = TermUtils.toJavaString(targs[0]);
         final int permissions = permissions_from_term((IStrategoList) targs[1]);
 
         if((permissions & R_OK) != 0) {
@@ -67,17 +67,17 @@ public class SSL_access extends AbstractPrimitive {
     private int permissions_from_term(IStrategoList perms) {
         int res = 0;
         for(int i = 0; i < perms.size(); i++) {
-            IStrategoAppl t = Tools.applAt(perms, i);
+            IStrategoAppl t = TermUtils.toApplAt(perms, i);
 
             // FIXME -- put in StrategoSignature (LibrarySignature)
 
-            if(Tools.hasConstructor(t, "W_OK"))
+            if(TermUtils.isAppl(t, "W_OK"))
                 res |= W_OK;
-            else if(Tools.hasConstructor(t, "R_OK"))
+            else if(TermUtils.isAppl(t, "R_OK"))
                 res |= R_OK;
-            else if(Tools.hasConstructor(t, "X_OK"))
+            else if(TermUtils.isAppl(t, "X_OK"))
                 res |= X_OK;
-            else if(Tools.hasConstructor(t, "F_OK"))
+            else if(TermUtils.isAppl(t, "F_OK"))
                 res |= F_OK;
             else
                 System.err.println("*** ERROR: not an access mode: " + t);

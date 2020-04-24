@@ -12,10 +12,10 @@ import java.io.Reader;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_fgetc extends AbstractPrimitive {
 
@@ -26,11 +26,11 @@ public class SSL_fgetc extends AbstractPrimitive {
     @Override
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-        if(!Tools.isTermInt(tvars[0]))
+        if(!TermUtils.isInt(tvars[0]))
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        Reader in = or.getIOAgent().getReader(Tools.asJavaInt(tvars[0]));
+        Reader in = or.getIOAgent().getReader(TermUtils.toJavaInt(tvars[0]));
 
         int r = -1;
         

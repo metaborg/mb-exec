@@ -26,8 +26,6 @@ import org.spoofax.terms.io.binary.TermReader;
 /**
  * A Stratego interpreter.
  *
- * @see org.strategoxt.HybridInterpreter   For an efficient hybrid compiler/interpreter.
- *
  * @author Karl Trygve Kalleberg <karltk near strategoxt dot org>
  * @author Lennart Kats <lennart add lclnet.nl>
  */
@@ -85,8 +83,6 @@ public class Interpreter {
     /**
      * Evaluates a stratego expression. Must be fully desugared,
      * using C names in SDefTs and SCallTs.
-     *
-     * @see org.strategoxt.HybridInterpreter#evaluate  A variant of evaluate() with desugaring support.
      */
     public boolean evaluate(IStrategoAppl s)
             throws InterpreterErrorExit, InterpreterExit, UndefinedStrategyException, InterpreterException {
@@ -112,10 +108,7 @@ public class Interpreter {
             else stackTracer.popOnFailure();
 
             return success;
-        } catch (InterpreterException e) {
-            stackTracer.popOnExit(false);
-            throw new InterpreterException("Exception during evaluation: "+e.getMessage(), e);
-        } catch (RuntimeException e) {
+        } catch (InterpreterException | RuntimeException e) {
             stackTracer.popOnExit(false);
             throw new InterpreterException("Exception during evaluation: "+e.getMessage(), e);
         }
@@ -130,7 +123,8 @@ public class Interpreter {
             }
             return def;
         } catch (InterpreterException e) {
-            return null;
+            // This should not be able to happen
+            throw new RuntimeException(e);
         }
     }
 
@@ -189,9 +183,15 @@ public class Interpreter {
         op.init();
     }
 
-    public String prettyPrint() throws InterpreterException {
+    public String prettyPrint() {
         StupidFormatter sf = new StupidFormatter();
-        SDefT s = context.lookupSVar("main_0_0");
+        SDefT s = null;
+        try {
+            s = context.lookupSVar("main_0_0");
+        } catch (InterpreterException e) {
+            // This should not be able to happen
+            throw new RuntimeException(e);
+        }
         s.prettyPrint(sf);
         return sf.toString();
     }

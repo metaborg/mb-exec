@@ -9,11 +9,11 @@ package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_concat_strings extends AbstractPrimitive {
 
@@ -23,9 +23,7 @@ public class SSL_concat_strings extends AbstractPrimitive {
 
     @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-
-        
-        if(!Tools.isTermList(targs[0]))
+        if(!TermUtils.isList(targs[0]))
             return false;
         String result = call((IStrategoList) targs[0]);
         if (result == null)
@@ -39,9 +37,9 @@ public class SSL_concat_strings extends AbstractPrimitive {
         
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < kids.length; i++) {
-            if(!Tools.isTermString(kids[i]))
+            if(!TermUtils.isString(kids[i]))
                 return null;
-            sb.append(Tools.asJavaString(kids[i]));
+            sb.append(TermUtils.toJavaString(kids[i]));
         }
         return sb.toString();
     }

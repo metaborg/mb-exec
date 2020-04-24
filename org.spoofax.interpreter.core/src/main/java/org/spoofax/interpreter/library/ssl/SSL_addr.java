@@ -9,12 +9,12 @@ package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_addr extends AbstractPrimitive {
 
@@ -26,17 +26,17 @@ public class SSL_addr extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException {
         double a, b;
         
-        if(Tools.isTermReal(tvars[0])) {
+        if(TermUtils.isReal(tvars[0])) {
             a = ((IStrategoReal) tvars[0]).realValue();     
-        } else if (Tools.isTermInt(tvars[0])) {
+        } else if (TermUtils.isInt(tvars[0])) {
             a = ((IStrategoInt) tvars[0]).intValue();
         } else {
             return false;
         }
         
-        if(Tools.isTermReal(tvars[1])) {
+        if(TermUtils.isReal(tvars[1])) {
             b = ((IStrategoReal) tvars[1]).realValue();
-        } else if (Tools.isTermInt(tvars[1])) {
+        } else if (TermUtils.isInt(tvars[1])) {
             b = ((IStrategoInt) tvars[1]).intValue();
         } else {
             return false;

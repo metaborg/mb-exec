@@ -9,11 +9,11 @@ package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_get_list_length extends AbstractPrimitive {
 
@@ -24,7 +24,7 @@ public class SSL_get_list_length extends AbstractPrimitive {
     @Override
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-        if(!Tools.isTermList(tvars[0]))
+        if(!TermUtils.isList(tvars[0]))
             return false;
         IStrategoList l = (IStrategoList)tvars[0];
         

@@ -11,6 +11,7 @@ import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 
+@Deprecated
 public class LGChoice implements IConstruct {
 
     public IConstruct eval(IContext e) throws InterpreterException {

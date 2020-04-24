@@ -7,6 +7,7 @@
  */
 package org.spoofax.interpreter.stratego;
 
+import org.spoofax.interpreter.core.Context;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -15,6 +16,10 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.util.DebugUtil;
+
+import javax.annotation.Nullable;
+
+import static org.spoofax.interpreter.core.Context.debug;
 
 public class All extends Strategy {
 
@@ -28,9 +33,7 @@ public class All extends Strategy {
     //       (especially for lists!)
 
     public IConstruct eval(IContext env) throws InterpreterException {
-        if (DebugUtil.isDebugging()) {
-            debug("All.eval() - ", env.current());
-        }
+        debug("All.eval() - ", env.current());
 
         IStrategoTerm t = env.current();
 
@@ -59,7 +62,7 @@ public class All extends Strategy {
     static boolean isCopy(IStrategoTerm parent, IStrategoTerm[] kids) {
         if (kids.length > 0) {
             kids[0] = null;
-            IStrategoTerm subterm = parent.getSubterm(0);
+            @Nullable IStrategoTerm subterm = parent.getSubtermCount() > 0 ? parent.getSubterm(0) : null;
             if (subterm == null) return false;
             kids[0] = subterm;
         }

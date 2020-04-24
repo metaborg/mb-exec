@@ -12,13 +12,14 @@ import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.util.DebugUtil;
 
+
+import static org.spoofax.interpreter.core.Context.debug;
+
 public class Fail extends Strategy {
 
     public IConstruct eval(IContext e) throws InterpreterException {
 
-        if (DebugUtil.isDebugging()) {
-            debug("Fail.eval() - ", e.current());
-        }
+        debug("Fail.eval() - ", e.current());
 
         return getHook().pop().onFailure(e);
     }

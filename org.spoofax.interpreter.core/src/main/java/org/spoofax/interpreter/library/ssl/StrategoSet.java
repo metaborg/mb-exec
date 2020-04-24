@@ -105,20 +105,22 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         return map.entrySet();
     }
 
-    public IStrategoTerm[] getAllSubterms() {
-        return AbstractTermFactory.EMPTY;
+    @Override
+    public List<IStrategoTerm> getSubterms() {
+        return Collections.emptyList();
     }
 
     public IStrategoList getAnnotations() {
         return TermFactory.EMPTY_LIST;
     }
 
-    public int getStorageType() {
-        return MUTABLE;
-    }
-
     public IStrategoTerm getSubterm(int index) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public IStrategoTerm[] getAllSubterms() {
+        return TermFactory.EMPTY_TERM_ARRAY;
     }
 
     public int getSubtermCount() {
@@ -163,4 +165,5 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
     public Iterator<IStrategoTerm> iterator() {
         return map.keySet().iterator();
     }
+
 }

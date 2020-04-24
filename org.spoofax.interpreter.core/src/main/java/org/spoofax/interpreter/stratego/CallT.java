@@ -17,6 +17,9 @@ import org.spoofax.interpreter.stratego.SDefT.SVar;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
+import org.spoofax.terms.util.TermUtils;
+
+import static org.spoofax.interpreter.core.Context.debug;
 
 public class CallT extends Strategy {
 
@@ -36,9 +39,7 @@ public class CallT extends Strategy {
     
     public IConstruct eval(final IContext env) throws InterpreterException {
 
-        if (DebugUtil.isDebugging()) {
-            debug("CallT.eval() - ", env.current());
-        }
+        debug("CallT.eval() - ", env.current());
 
     	SDefT sdef = env.lookupSVar(name);
     	
@@ -111,7 +112,7 @@ public class CallT extends Strategy {
             IStrategoTerm actual = tvars[i];
             // FIXME: This should not be here
             if (Tools.isVar(((IStrategoAppl)actual), env))
-                actual = env.lookupVar(Tools.javaStringAt((IStrategoAppl)actual, 0));
+                actual = env.lookupVar(TermUtils.toJavaStringAt((IStrategoAppl)actual, 0));
             newScope.add(formal, actual);
         }
 
@@ -123,11 +124,7 @@ public class CallT extends Strategy {
 
     public Strategy evalWithArgs(IContext env, Strategy[] sv, IStrategoTerm[] actualTVars) throws InterpreterException {
 
-        // System.err.println(actualTVars.length);
-        
-        if (DebugUtil.isDebugging()) {
-            debug("CallT.eval() - ", env.current());
-        }
+        debug("CallT.eval() - ", env.current());
 
         SDefT sdef = env.lookupSVar(name); //getsdef(env);
 
@@ -138,14 +135,6 @@ public class CallT extends Strategy {
         if (!isCompiledStrategy)
             env.getStackTracer().push(name);
 
-        /* UNDONE: getParametrizedBody is trouble
-        if (sv.length == 0) {
-            Strategy result = sdef.getParametrizedBody(sv, actualTVars);
-            if (result != null)
-                return addHook(result, env.getVarScope());
-        }
-        */
-    
         String[] formalTermArgs = sdef.getTermParams();
         SVar[] formalStrategyArgs = sdef.getStrategyParams();
 
@@ -206,7 +195,7 @@ public class CallT extends Strategy {
             
         	@Override
             public IConstruct onSuccess(IContext env) throws InterpreterException {
-                env.restoreVarScope(oldVarScope);
+                env.setVarScope(oldVarScope);
                 if (!isCompiledStrategy)
                     env.getStackTracer().popOnSuccess();
         		return CallT.this.getHook().pop().onSuccess(env);
@@ -214,7 +203,7 @@ public class CallT extends Strategy {
         	
         	@Override
             public IConstruct onFailure(IContext env) throws InterpreterException {
-        		env.restoreVarScope(oldVarScope);
+        		env.setVarScope(oldVarScope);
                 if (!isCompiledStrategy)
                     env.getStackTracer().popOnFailure();
         		return CallT.this.getHook().pop().onFailure(env);

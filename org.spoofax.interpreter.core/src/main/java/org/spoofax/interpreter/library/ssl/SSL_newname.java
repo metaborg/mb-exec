@@ -12,6 +12,7 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_newname extends AbstractPrimitive {
     private static final WeakHashMap<IContext, WeakHashMap<String, AtomicInteger>> countersPerContext =
@@ -27,17 +28,21 @@ public class SSL_newname extends AbstractPrimitive {
 
     @Override public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars) throws InterpreterException {
         final IStrategoTerm prefixTerm = tvars[0];
-        final String prefix;
-        if(prefixTerm instanceof IStrategoString) {
+        String prefix;
+        if(TermUtils.isString(prefixTerm)) {
             final IStrategoString str = (IStrategoString) prefixTerm;
             prefix = str.stringValue();
-        } else if(prefixTerm instanceof IStrategoAppl) {
+        } else if(TermUtils.isAppl(prefixTerm)) {
             final IStrategoAppl appl = (IStrategoAppl) prefixTerm;
             prefix = appl.getConstructor().getName();
         } else {
             final SSLLibrary library = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
             return library.get("SSL_new").call(env, svars, tvars);
         }
+        
+        // Intern to ensure that we get the same hard-reference to the prefix string, which will be used as a key in
+        // the countersPerContext weak hashmap.
+        prefix = prefix.intern();
 
         final ITermFactory factory = env.getFactory();
 
@@ -62,7 +67,8 @@ public class SSL_newname extends AbstractPrimitive {
             do {
                 int counterValue = getNextValue(env, counter);
                 result = prefix + counterValue;
-            } while((resultTerm = factory.tryMakeUniqueString(result)) == null);
+                resultTerm = factory.tryMakeUniqueString(result);
+            } while(resultTerm == null);
 
             env.setCurrent(factory.replaceTerm(resultTerm, prefixTerm));
             return true;
@@ -71,7 +77,7 @@ public class SSL_newname extends AbstractPrimitive {
 
     private int getNextValue(IContext env, AtomicInteger counter) {
         int result;
-        for(;;) {
+        while(true) {
             result = counter.getAndIncrement();
             if(result >= 0) {
                 break;

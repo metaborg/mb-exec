@@ -10,11 +10,13 @@ package org.spoofax.interpreter.stratego;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
+import org.spoofax.terms.util.TermUtils;
+
+import static org.spoofax.interpreter.core.Context.debug;
 
 public class PrimT extends Strategy {
 
@@ -32,10 +34,8 @@ public class PrimT extends Strategy {
 
     public IConstruct eval(IContext env) throws InterpreterException {
 
-        if (DebugUtil.isDebugging()) {
-            debug("PrimT.eval() - ", env.current());
-        }
-        
+        debug("PrimT.eval() - ", env.current());
+
         AbstractPrimitive prim = env.lookupOperator(name);
 
         if (prim == null)
@@ -45,7 +45,7 @@ public class PrimT extends Strategy {
         for(int i = 0; i < tvars.length; i++) {
             // FIXME this cast should be moved out
             IStrategoAppl t = (IStrategoAppl)tvars[i];
-            vals[i] = env.lookupVar(Tools.javaStringAt(t, 0));
+            vals[i] = env.lookupVar(TermUtils.toJavaStringAt(t, 0));
             if (vals[i] == null) return getHook().pop().onFailure(env);
         }
 

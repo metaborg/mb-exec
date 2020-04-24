@@ -9,11 +9,11 @@ package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.ParseError;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_read_term_from_string extends AbstractPrimitive {
     
@@ -27,11 +27,11 @@ public class SSL_read_term_from_string extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
 
-        if(!Tools.isTermString(tvars[0]))
+        if(!TermUtils.isString(tvars[0]))
             return false;
         
         try {
-            IStrategoTerm t = env.getFactory().parseFromString(Tools.javaString(tvars[0]));
+            IStrategoTerm t = env.getFactory().parseFromString(TermUtils.toJavaString(tvars[0]));
             env.setCurrent(t);
         } catch (ParseError e) {
             SSLLibrary.instance(env).getIOAgent().printError(NAME + ": " + e.getMessage());

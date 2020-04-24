@@ -7,14 +7,12 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import static org.spoofax.interpreter.core.Tools.isTermTuple;
-
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_get_appl_arguments_map extends AbstractPrimitive {
 
@@ -28,7 +26,7 @@ public class SSL_get_appl_arguments_map extends AbstractPrimitive {
         
         IStrategoTerm input = tvars[0];
         
-        if(!Tools.isTermAppl(input) && !isTermTuple(input))
+        if(!TermUtils.isAppl(input) && !TermUtils.isTuple(input))
             return false;
         
         Strategy c = svars[0];

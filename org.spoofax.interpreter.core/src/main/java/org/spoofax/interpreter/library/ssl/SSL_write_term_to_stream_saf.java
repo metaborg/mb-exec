@@ -13,11 +13,11 @@ import java.io.OutputStream;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.io.binary.SAFWriter;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_write_term_to_stream_saf extends AbstractPrimitive {
 
@@ -29,11 +29,11 @@ public class SSL_write_term_to_stream_saf extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] targs)
             throws InterpreterException {
         
-        if(!Tools.isTermInt(targs[0]))
+        if(!TermUtils.isInt(targs[0]))
             return false;
         
         SSLLibrary or = (SSLLibrary) env.getOperatorRegistry(SSLLibrary.REGISTRY_NAME);
-        OutputStream out = or.getIOAgent().internalGetOutputStream(Tools.asJavaInt(targs[0]));
+        OutputStream out = or.getIOAgent().internalGetOutputStream(TermUtils.toJavaInt(targs[0]));
         BufferedOutputStream bout = new BufferedOutputStream(out);
         if(out == null)
             return false;

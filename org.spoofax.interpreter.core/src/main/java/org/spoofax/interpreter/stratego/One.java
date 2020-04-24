@@ -18,6 +18,8 @@ import org.spoofax.interpreter.util.DebugUtil;
 
 import static org.spoofax.interpreter.stratego.All.*;
 
+import static org.spoofax.interpreter.core.Context.debug;
+
 public class One extends Strategy {
 
     protected Strategy body;
@@ -27,9 +29,7 @@ public class One extends Strategy {
     }
 
     public IConstruct eval(IContext env) throws InterpreterException {
-        if (DebugUtil.isDebugging()) {
-            debug("One.eval() - ", env.current());
-        }
+		debug("One.eval() - ", env.current());
 
         IStrategoTerm t = env.current();
 

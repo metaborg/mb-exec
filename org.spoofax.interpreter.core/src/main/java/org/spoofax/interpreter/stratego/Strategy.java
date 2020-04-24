@@ -20,8 +20,10 @@ import org.spoofax.interpreter.stratego.SDefT.ConstType;
 import org.spoofax.interpreter.stratego.SDefT.FunType;
 import org.spoofax.interpreter.util.DebugUtil;
 
-
-abstract public class Strategy implements IConstruct {
+/**
+ * Base class for all strategies.
+ */
+public abstract class Strategy implements IConstruct {
 
     private final static ArgType type;
 
@@ -31,7 +33,10 @@ abstract public class Strategy implements IConstruct {
         type = new FunType(l);
     }
 
+    /** @deprecated Call {@link Context#debug} directly. */
+    @Deprecated
     public static void debug(Object... s) {
+        if (!DebugUtil.isDebugging()) return;
         Context.debug(s);
     }
 
@@ -70,17 +75,17 @@ abstract public class Strategy implements IConstruct {
         ResultHook resultHook = new ResultHook();
         getHook().push(resultHook);
         Stack<Strategy> debugStack = null;
-        if (DebugUtil.isDebugging()) {
+        boolean debug = DebugUtil.isDebugging();
+        if (debug) {
              debugStack = new Stack<Strategy>();
         }
         IConstruct c = this;
-        boolean debug = DebugUtil.isDebugging();
         while (c != null) {
             if (debug)
                 debugStack.push((Strategy)c);
             c = c.eval(env);
         }
-        if (DebugUtil.isDebugging()) {
+        if (debug) {
             for (Strategy strat : debugStack) {
                 if (strat.getHook().size() != 0)
                     throw new InterpreterException("There was a leak on: " + debugStack);

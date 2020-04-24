@@ -28,6 +28,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.util.DebugUtil;
 
+import javax.annotation.Nullable;
+
 
 public class Context implements IContext {
 
@@ -98,19 +100,81 @@ public class Context implements IContext {
         op.setIOAgent(ioAgent);
     }
 
-    public static void debug(Object... s) {
 
+    // These debug() overloads are for optimizations.
+    // Prevents allocating an array for the arguments
+    // in the most common cases.
+
+    /**
+     * Prints the string representation of the given object on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s0 the object to print
+     */
+    public static void debug(Object s0) {
         // A bit of a hack but saves 17% of time (according to JProfiler)...
-        if(DebugUtil.isDebugging()) {
-            DebugUtil.debug(DebugUtil.buildIndent(indentation), s);
-        }
+        if(!DebugUtil.isDebugging()) return;
+        DebugUtil.debug(DebugUtil.buildIndent(indentation), s0);
     }
 
-    public IStrategoTerm lookupVar(String n) throws InterpreterException {
-        return varScope.lookup(n);
+    /**
+     * Prints the string representation of the given objects on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s0 the first object to print
+     * @param s1 the second object to print
+     */
+    public static void debug(Object s0, Object s1) {
+        // A bit of a hack but saves 17% of time (according to JProfiler)...
+        if(!DebugUtil.isDebugging()) return;
+        DebugUtil.debug(DebugUtil.buildIndent(indentation), s0, s1);
     }
 
-    public SDefT lookupSVar(String n) throws InterpreterException {
+    /**
+     * Prints the string representation of the given objects on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s0 the first object to print
+     * @param s1 the second object to print
+     * @param s2 the third object to print
+     */
+    public static void debug(Object s0, Object s1, Object s2) {
+        // A bit of a hack but saves 17% of time (according to JProfiler)...
+        if(!DebugUtil.isDebugging()) return;
+        DebugUtil.debug(DebugUtil.buildIndent(indentation), s0, s1, s2);
+    }
+
+    /**
+     * Prints the string representation of the given objects on the standard OUT
+     * if debugging is enabled.
+     *
+     * Note: it is not needed to check {@link DebugUtil#isDebugging()} before calling this method.
+     *
+     * @param s the objects to print
+     */
+    public static void debug(Object... s) {
+        // A bit of a hack but saves 17% of time (according to JProfiler)...
+        if(!DebugUtil.isDebugging()) return;
+        DebugUtil.debug(DebugUtil.buildIndent(indentation), s);
+    }
+
+    /**
+     * Looks up the value of a variable with the given name.
+     *
+     * @param name the name of the variable
+     * @return the term value of the variable; or {@code null} if not found
+     */
+    public @Nullable IStrategoTerm lookupVar(String name) throws InterpreterException {
+        return varScope.lookup(name);
+    }
+
+    public @Nullable SDefT lookupSVar(String n) throws InterpreterException {
         return varScope.lookupSVar(n);
     }
 
@@ -135,9 +199,7 @@ public class Context implements IContext {
             } else if (s.hasVarInLocalScope(x.first)) {
                 IStrategoTerm t = s.lookup(x.first);
                 if (!t.equals(x.second)) {
-                    if (DebugUtil.isDebugging()) {
-                        debug(" no bind : ", x.first, " already bound to ", t, ", new: ", x.second);
-                    }
+                    debug(" no bind : ", x.first, " already bound to ", t, ", new: ", x.second);
                     return false;
                 }
             } else {
@@ -161,6 +223,7 @@ public class Context implements IContext {
         setVarScope(varScope.getParent());
     }
 
+    @Deprecated
     public void restoreVarScope(VarScope anotherVarScope) {
         varScope = anotherVarScope;
     }
@@ -185,8 +248,8 @@ public class Context implements IContext {
         return programFactory;
     }
 
-    public IOperatorRegistry getOperatorRegistry(String domain) {
-        return operatorRegistries.get(domain);
+    public @Nullable IOperatorRegistry getOperatorRegistry(String name) {
+        return operatorRegistries.get(name);
     }
 
     public AbstractPrimitive lookupOperator(String name) {
@@ -208,8 +271,8 @@ public class Context implements IContext {
         operatorRegistries.put(or.getOperatorRegistryName(), or);
     }
 
-    public void addOperatorRegistry(IOperatorRegistry or) {
-        internalAddOperatorRegistry(or);
+    public void addOperatorRegistry(IOperatorRegistry registry) {
+        internalAddOperatorRegistry(registry);
     }
 
     public Collection<String> getStrategyNames() {

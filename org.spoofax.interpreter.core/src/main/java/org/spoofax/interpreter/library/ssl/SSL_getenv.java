@@ -9,10 +9,10 @@ package org.spoofax.interpreter.library.ssl;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 public class SSL_getenv extends AbstractPrimitive {
 
@@ -23,10 +23,10 @@ public class SSL_getenv extends AbstractPrimitive {
     @Override
     public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
         
-        if(!Tools.isTermString(targs[0]))
+        if(!TermUtils.isString(targs[0]))
             return false;
         
-        String s = System.getenv(Tools.javaString(targs[0]));
+        String s = System.getenv(TermUtils.toJavaString(targs[0]));
 
         if(s == null)
             return false;

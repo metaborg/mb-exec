@@ -7,6 +7,7 @@ import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoInt;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.terms.util.TermUtils;
 
 /**
  * @author Lennart Kats <lennart add lclnet.nl>
@@ -26,7 +27,7 @@ public class SSL_TicksToSeconds extends AbstractPrimitive {
         
         if (time.getTermType() == IStrategoTerm.REAL)
             timeValue = (int) ((IStrategoReal) time).realValue();
-        else if (time.getTermType() == IStrategoTerm.INT)
+        else if (TermUtils.isInt(time))
             timeValue = ((IStrategoInt) time).intValue();
         else
             return false;

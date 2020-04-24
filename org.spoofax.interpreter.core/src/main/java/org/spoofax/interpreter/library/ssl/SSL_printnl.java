@@ -12,7 +12,6 @@ import java.io.Writer;
 
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
-import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.IOAgent;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -33,17 +32,7 @@ public class SSL_printnl extends AbstractPrimitive {
 
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < l.size(); i++) {
-            IStrategoTerm t = Tools.termAt(l, i);
-//            if (Tools.isTermAppl(t)) {
-//                IStrategoAppl a = (IStrategoAppl)t;
-//                if (Tools.isCons(a, env))
-//                    break;
-//                    //sb.append(Tools.consToListDeep(env, a));
-//                else if (Tools.isTermString(t))
-//                    sb.append(Tools.javaString(t));
-//                continue;
-//            }
-            sb.append(t);
+            sb.append(l.getSubterm(i));
         }
         sb.append("\n");
 

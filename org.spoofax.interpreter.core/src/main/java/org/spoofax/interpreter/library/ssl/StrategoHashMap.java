@@ -1,8 +1,10 @@
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.spoofax.interpreter.terms.ISimpleTerm;
 import org.spoofax.interpreter.terms.IStrategoList;
@@ -41,20 +43,22 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         super(initialSize, 1.0f * maxLoad / 100);
     }
 
-    public IStrategoTerm[] getAllSubterms() {
-        return AbstractTermFactory.EMPTY;
+    @Override
+    public List<IStrategoTerm> getSubterms() {
+        return Collections.emptyList();
     }
 
     public IStrategoList getAnnotations() {
         return TermFactory.EMPTY_LIST;
     }
 
-    public int getStorageType() {
-        return MUTABLE;
-    }
-
     public IStrategoTerm getSubterm(int index) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public IStrategoTerm[] getAllSubterms() {
+        return TermFactory.EMPTY_TERM_ARRAY;
     }
 
     public int getSubtermCount() {
@@ -111,4 +115,5 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
     public Iterator<IStrategoTerm> iterator() {
         return this.values().iterator();
     }
+
 }
