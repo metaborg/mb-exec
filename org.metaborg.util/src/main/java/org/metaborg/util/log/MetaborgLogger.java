@@ -14,7 +14,11 @@ public class MetaborgLogger extends AbstractLogger {
     }
 
     @Override public void trace(String msg, @Nullable Throwable t) {
-        logger.trace(msg, t);
+        if (t != null) {
+            logger.trace(msg, t);
+        } else {
+            logger.trace(msg);
+        }
     }
 
     @Override public boolean traceEnabled() {
@@ -22,7 +26,11 @@ public class MetaborgLogger extends AbstractLogger {
     }
 
     @Override public void debug(String msg, @Nullable Throwable t) {
-        logger.debug(msg, t);
+        if (t != null) {
+            logger.debug(msg, t);
+        } else {
+            logger.debug(msg);
+        }
     }
 
     @Override public boolean debugEnabled() {
@@ -30,7 +38,11 @@ public class MetaborgLogger extends AbstractLogger {
     }
 
     @Override public void info(String msg, @Nullable Throwable t) {
-        logger.info(msg, t);
+        if (t != null) {
+            logger.info(msg, t);
+        } else {
+            logger.info(msg);
+        }
     }
 
     @Override public boolean infoEnabled() {
@@ -38,7 +50,11 @@ public class MetaborgLogger extends AbstractLogger {
     }
 
     @Override public void warn(String msg, @Nullable Throwable t) {
-        logger.warn(msg, t);
+        if (t != null) {
+            logger.warn(msg, t);
+        } else {
+            logger.warn(msg);
+        }
     }
 
     @Override public boolean warnEnabled() {
@@ -46,7 +62,11 @@ public class MetaborgLogger extends AbstractLogger {
     }
 
     @Override public void error(String msg, @Nullable Throwable t) {
-        logger.error(msg, t);
+        if (t != null) {
+            logger.error(msg, t);
+        } else {
+            logger.error(msg);
+        }
     }
 
     @Override public boolean errorEnabled() {
