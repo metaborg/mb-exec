@@ -1,6 +1,6 @@
 package org.metaborg.util.observable;
 
-import rx.Observer;
+import io.reactivex.rxjava3.core.Observer;
 
 public interface ITestableObserver<T> extends Observer<T>, Iterable<TimestampedNotification<T>> {
     public TimestampedNotification<T> peek();
