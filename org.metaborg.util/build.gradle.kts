@@ -8,7 +8,7 @@ dependencies {
 
   api("org.apache.commons:commons-vfs2")
   api("commons-io:commons-io")
-  api("com.netflix.rxjava:rxjava-core")
+  api("io.reactivex.rxjava3:rxjava")
   api("com.google.guava:guava")
   api("com.google.inject:guice")
   api("org.slf4j:slf4j-api")

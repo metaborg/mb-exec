@@ -2,18 +2,17 @@ package org.metaborg.util.stream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import rx.functions.Action1;
+import java.util.function.Consumer;
 
 public class OnCloseByteArrayOutputStream extends ByteArrayOutputStream {
-    final Action1<ByteArrayOutputStream> action;
+    final Consumer<ByteArrayOutputStream> action;
 
-    public OnCloseByteArrayOutputStream(Action1<ByteArrayOutputStream> action) {
+    public OnCloseByteArrayOutputStream(Consumer<ByteArrayOutputStream> action) {
         this.action = action;
     }
 
     @Override public void close() throws IOException {
-        action.call(this);
+        action.accept(this);
         super.close();
     }
 }

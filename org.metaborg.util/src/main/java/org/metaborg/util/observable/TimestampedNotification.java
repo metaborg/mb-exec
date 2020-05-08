@@ -1,6 +1,6 @@
 package org.metaborg.util.observable;
 
-import rx.Notification;
+import io.reactivex.rxjava3.core.Notification;
 
 public class TimestampedNotification<T> {
     public final Notification<T> notification;
