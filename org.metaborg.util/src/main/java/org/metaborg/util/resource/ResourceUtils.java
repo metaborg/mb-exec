@@ -92,17 +92,17 @@ public class ResourceUtils {
 
     /**
      * Robust version of FileOject::resolveFile(String), which accepts more complicated resource URLs than that method.
-     * For example, a URL of the form zip:file:///...!/... fails using FileObject::resolveFile(String), but works using this
-     * method.
+     * For example, a URL of the form zip:file:///...!/... fails using FileObject::resolveFile(String), but works using
+     * this method.
      * 
      * @param base
      *            The base resource, relative to which resource is resolved if resource is not an absolute path.
      * @param resource
      *            The resource to resolve, either absolute or relative.
      * @return Resolved file object.
-     * @throws FileSystemException 
+     * @throws FileSystemException
      */
     public static FileObject resolveFileRobust(FileObject base, String resource) throws FileSystemException {
-        return base.getFileSystem().getFileSystemManager().resolveFile(resource);
+        return base.getFileSystem().getFileSystemManager().resolveFile(base, resource);
     }
 }
