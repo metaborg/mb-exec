@@ -33,22 +33,22 @@ public class One extends Strategy {
 
         IStrategoTerm t = env.current();
 
-        switch (t.getTermType()) {
-            case IStrategoTerm.INT:
-            case IStrategoTerm.REAL:
-            case IStrategoTerm.STRING:
+        switch (t.getType()) {
+            case INT:
+            case REAL:
+            case STRING:
                 return getHook().pop().onFailure(env);
-            case IStrategoTerm.APPL:
+            case APPL:
                 return eval(env, 0, t.getAllSubterms().clone());
-            case IStrategoTerm.LIST:
-            case IStrategoTerm.TUPLE:
+            case LIST:
+            case TUPLE:
                 IStrategoTerm[] subterms = t.getAllSubterms();
                 assert isCopy(t, subterms);
                 return eval(env, 0, subterms);
-            case IStrategoTerm.BLOB:
+            case BLOB:
                 return getHook().pop().onFailure(env);
             default:
-                throw new InterpreterException("Unknown ATerm type " + t.getTermType());
+                throw new InterpreterException("Unknown ATerm type " + t.getType());
         }
     }
 
@@ -69,23 +69,23 @@ public class One extends Strategy {
 			@Override
 			public IConstruct onSuccess(IContext env) throws InterpreterException {
 				list[n] = env.current();
-				switch (old.getTermType()) {
-				case IStrategoTerm.LIST: {
-					env.setCurrent(env.getFactory().replaceList(list, (IStrategoList)old));
-					break ;
-				}
-				case IStrategoTerm.APPL: {
-					IStrategoAppl appl = (IStrategoAppl)old;
-					env.setCurrent(env.getFactory().replaceAppl(appl.getConstructor(), list, (IStrategoAppl)old));
-					break ;
-				}
-				case IStrategoTerm.TUPLE: {
-					env.setCurrent(env.getFactory().replaceTuple(list, (IStrategoTuple) old));
-					break ;
-				}
-				default: {
-					throw new InterpreterException("Children of neither a list nor an appl.");
-				}
+				switch (old.getType()) {
+					case LIST: {
+						env.setCurrent(env.getFactory().replaceList(list, (IStrategoList)old));
+						break ;
+					}
+					case APPL: {
+						IStrategoAppl appl = (IStrategoAppl)old;
+						env.setCurrent(env.getFactory().replaceAppl(appl.getConstructor(), list, (IStrategoAppl)old));
+						break ;
+					}
+					case TUPLE: {
+						env.setCurrent(env.getFactory().replaceTuple(list, (IStrategoTuple) old));
+						break ;
+					}
+					default: {
+						throw new InterpreterException("Children of neither a list nor an appl.");
+					}
 				}
 				return th.getHook().pop().onSuccess(env);
 			}
