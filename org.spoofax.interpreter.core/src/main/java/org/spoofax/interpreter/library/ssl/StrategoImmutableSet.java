@@ -5,6 +5,7 @@ import io.usethesource.capsule.Set;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.interpreter.terms.TermType;
 import org.spoofax.terms.StrategoTerm;
 import org.spoofax.terms.TermFactory;
 import java.io.IOException;
@@ -34,18 +35,21 @@ public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm 
         throw new IndexOutOfBoundsException();
     }
 
-    @Override
-    public IStrategoTerm[] getAllSubterms() {
+    @Override public IStrategoTerm[] getAllSubterms() {
         return TermFactory.EMPTY_TERM_ARRAY;
     }
 
-    @Override
-    public List<IStrategoTerm> getSubterms() {
+    @Override public List<IStrategoTerm> getSubterms() {
         return Collections.emptyList();
     }
 
+    @Deprecated
     @Override public int getTermType() {
-        return IStrategoTerm.BLOB;
+        return getType().getValue();
+    }
+
+    @Override public TermType getType() {
+        return TermType.BLOB;
     }
 
     @Override public void prettyPrint(ITermPrinter pp) {
