@@ -27,7 +27,6 @@ import org.spoofax.terms.util.NotImplementedException;
 import org.spoofax.terms.util.TermUtils;
 
 
-import static org.spoofax.interpreter.core.Context.debug;
 import static org.spoofax.terms.util.TermUtils.toApplAt;
 
 public class Match extends Strategy {
@@ -306,21 +305,21 @@ public class Match extends Strategy {
 
     private IStrategoTerm getTermArguments(IContext env, IStrategoTerm t) throws InterpreterException {
 
-        switch(t.getTermType()) {
-        case IStrategoTerm.INT:
-        case IStrategoTerm.REAL:
+        switch(t.getType()) {
+        case INT:
+        case REAL:
             return env.getFactory().makeList();
-        case IStrategoTerm.APPL:
+        case APPL:
             IStrategoAppl a = (IStrategoAppl)t;
             if (Tools.isNil(a, env) || Tools.isCons(a, env))
                 return t;
             else
                 return env.getFactory().makeList(a.getAllSubterms());
-        case IStrategoTerm.LIST: 
+        case LIST:
             return t;
-        case IStrategoTerm.STRING:
+        case STRING:
             return env.getFactory().makeList();
-        case IStrategoTerm.TUPLE:
+        case TUPLE:
             IStrategoTuple tup = (IStrategoTuple) t;
             IStrategoTerm[] args = new IStrategoTerm[tup.getSubtermCount()];
             for(int i = 0; i < args.length; i++) 
@@ -357,26 +356,26 @@ public class Match extends Strategy {
     	if (t == null) {
     	    throw new InterpreterException("Null term while matching: term library or one of the primitives is defective");
     	}
-        switch (t.getTermType()) {
-        case IStrategoTerm.APPL:
-            return matchAppl(env, (IStrategoAppl) t, p);
-        case IStrategoTerm.INT:
-            return matchInt(env, (IStrategoInt) t, p);
-        case IStrategoTerm.REAL:
-            return matchReal(env, (IStrategoReal) t, p);
-        case IStrategoTerm.STRING:
-            return matchString(env, (IStrategoString) t, p);
-        case IStrategoTerm.LIST:
-            return matchList(env, (IStrategoList) t, p);
-        case IStrategoTerm.TUPLE:
-            return matchTuple(env, (IStrategoTuple) t, p);
-        case IStrategoTerm.REF:
-            return matchRef(env, (IStrategoRef)t, p);
-        case IStrategoTerm.BLOB:
-            return matchBlob(env, t, p);
-        default:
-            throw new InterpreterException("Unsupported term type : "
-                                           + t.getClass().toString() + " [" + t.getTermType() + "]");
+        switch (t.getType()) {
+            case APPL:
+                return matchAppl(env, (IStrategoAppl) t, p);
+            case INT:
+                return matchInt(env, (IStrategoInt) t, p);
+            case REAL:
+                return matchReal(env, (IStrategoReal) t, p);
+            case STRING:
+                return matchString(env, (IStrategoString) t, p);
+            case LIST:
+                return matchList(env, (IStrategoList) t, p);
+            case TUPLE:
+                return matchTuple(env, (IStrategoTuple) t, p);
+            case REF:
+                return matchRef(env, (IStrategoRef)t, p);
+            case BLOB:
+                return matchBlob(env, t, p);
+            default:
+                throw new InterpreterException("Unsupported term type : "
+                                               + t.getClass().toString() + " [" + t.getType() + "]");
         }
     }
 

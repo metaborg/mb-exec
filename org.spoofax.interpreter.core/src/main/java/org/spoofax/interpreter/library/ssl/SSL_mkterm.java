@@ -30,15 +30,15 @@ public class SSL_mkterm extends AbstractPrimitive {
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
         
-        switch (tvars[0].getTermType()) {
-            case IStrategoTerm.STRING:
+        switch (tvars[0].getType()) {
+            case STRING:
                 IStrategoString string = (IStrategoString) tvars[0];
                 return makeString(env, string) || makeAppl(env, string, tvars[1]);
-            case IStrategoTerm.INT:
-            case IStrategoTerm.REAL:
+            case INT:
+            case REAL:
                 env.setCurrent(tvars[0]);
                 return true;
-            case IStrategoTerm.LIST:
+            case LIST:
                 if (!TermUtils.isList(tvars[1]))
                     return false;
                 env.setCurrent(tvars[1]);

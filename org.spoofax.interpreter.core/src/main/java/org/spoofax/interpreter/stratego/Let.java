@@ -11,10 +11,6 @@ import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.core.VarScope;
-import org.spoofax.interpreter.util.DebugUtil;
-
-
-import static org.spoofax.interpreter.core.Context.debug;
 
 public class Let extends Strategy {
 

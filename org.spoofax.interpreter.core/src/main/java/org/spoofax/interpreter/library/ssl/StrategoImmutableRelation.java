@@ -10,6 +10,7 @@ import java.util.Map;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.interpreter.terms.TermType;
 import org.spoofax.interpreter.util.EntryAsPairIterator;
 import org.spoofax.terms.StrategoTerm;
 import org.spoofax.terms.TermFactory;
@@ -33,38 +34,36 @@ public class StrategoImmutableRelation extends StrategoTerm implements IStratego
     }
 
     @SuppressWarnings("NullableProblems")
-    @Override
-    public Iterator<IStrategoTerm> iterator() {
+    @Override public Iterator<IStrategoTerm> iterator() {
         return new EntryAsPairIterator(backingRelation.entryIterator());
     }
 
-    @Override
-    public int getSubtermCount() {
+    @Override public int getSubtermCount() {
         return 0;
     }
 
-    @Override
-    public IStrategoTerm getSubterm(int index) {
+    @Override public IStrategoTerm getSubterm(int index) {
         throw new IndexOutOfBoundsException();
     }
 
-    @Override
-    public IStrategoTerm[] getAllSubterms() {
+    @Override public IStrategoTerm[] getAllSubterms() {
         return EMPTY_TERM_ARRAY;
     }
 
-    @Override
-    public int getTermType() {
-        return IStrategoTerm.BLOB;
+    @Deprecated
+    @Override public int getTermType() {
+        return getType().getValue();
     }
 
-    @Override
-    public void prettyPrint(ITermPrinter pp) {
+    @Override public TermType getType() {
+        return TermType.BLOB;
+    }
+
+    @Override public void prettyPrint(ITermPrinter pp) {
         pp.print(toString());
     }
 
-    @Override
-    protected boolean doSlowMatch(IStrategoTerm second) {
+    @Override protected boolean doSlowMatch(IStrategoTerm second) {
         if(!(second instanceof StrategoImmutableRelation)) {
             return false;
         }
@@ -74,18 +73,15 @@ public class StrategoImmutableRelation extends StrategoTerm implements IStratego
         return backingRelation.equals(secondRelation);
     }
 
-    @Override
-    protected int hashFunction() {
+    @Override protected int hashFunction() {
         return backingRelation.hashCode();
     }
 
-    @Override
-    public String toString(int maxDepth) {
+    @Override public String toString(int maxDepth) {
         return backingRelation.toString();
     }
 
-    @Override
-    public void writeAsString(Appendable output, int maxDepth) throws IOException {
+    @Override public void writeAsString(Appendable output, int maxDepth) throws IOException {
         output.append(toString());
     }
 
