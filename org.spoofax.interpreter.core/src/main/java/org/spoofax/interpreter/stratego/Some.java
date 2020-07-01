@@ -16,9 +16,6 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
-import org.spoofax.interpreter.util.DebugUtil;
-
-import static org.spoofax.interpreter.core.Context.debug;
 
 public class Some extends Strategy {
 

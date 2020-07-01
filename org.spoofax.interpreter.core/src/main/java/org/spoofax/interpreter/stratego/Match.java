@@ -27,7 +27,6 @@ import org.spoofax.terms.util.NotImplementedException;
 import org.spoofax.terms.util.TermUtils;
 
 
-import static org.spoofax.interpreter.core.Context.debug;
 import static org.spoofax.terms.util.TermUtils.toApplAt;
 
 public class Match extends Strategy {

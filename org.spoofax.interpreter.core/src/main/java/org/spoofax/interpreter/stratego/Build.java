@@ -1,6 +1,9 @@
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.core.*;
+import org.spoofax.interpreter.core.IConstruct;
+import org.spoofax.interpreter.core.IContext;
+import org.spoofax.interpreter.core.InterpreterException;
+import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.library.ssl.SSLLibrary;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;

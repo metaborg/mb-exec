@@ -19,8 +19,6 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
 import org.spoofax.terms.util.TermUtils;
 
-import static org.spoofax.interpreter.core.Context.debug;
-
 public class CallT extends Strategy {
 
     private final String name;

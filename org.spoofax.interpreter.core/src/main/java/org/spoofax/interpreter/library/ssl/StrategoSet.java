@@ -24,7 +24,6 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
 import org.spoofax.interpreter.terms.TermType;
 import org.spoofax.terms.AbstractSimpleTerm;
-import org.spoofax.terms.AbstractTermFactory;
 import org.spoofax.terms.TermFactory;
 
 public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Serializable {

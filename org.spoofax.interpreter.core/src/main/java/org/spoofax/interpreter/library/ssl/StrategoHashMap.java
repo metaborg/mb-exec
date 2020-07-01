@@ -6,9 +6,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.spoofax.interpreter.terms.*;
+import org.spoofax.interpreter.terms.ISimpleTerm;
+import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.interpreter.terms.TermType;
 import org.spoofax.terms.AbstractSimpleTerm;
-import org.spoofax.terms.AbstractTermFactory;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.attachments.ITermAttachment;
 import org.spoofax.terms.attachments.TermAttachmentType;
