@@ -7,8 +7,6 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
-import java.io.File;
-
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;

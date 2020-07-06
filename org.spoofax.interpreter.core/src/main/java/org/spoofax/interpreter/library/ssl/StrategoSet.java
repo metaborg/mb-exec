@@ -22,8 +22,8 @@ import java.util.Set;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.interpreter.terms.TermType;
 import org.spoofax.terms.AbstractSimpleTerm;
-import org.spoofax.terms.AbstractTermFactory;
 import org.spoofax.terms.TermFactory;
 
 public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Serializable {
@@ -74,7 +74,7 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
                 this.t = t;
                 this.i = i;
             }
-            public int compareTo(X o) {
+            @Override public int compareTo(X o) {
                 return i.compareTo(o.i);
             }
         }
@@ -105,64 +105,65 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         return map.entrySet();
     }
 
-    @Override
-    public List<IStrategoTerm> getSubterms() {
+    @Override public List<IStrategoTerm> getSubterms() {
         return Collections.emptyList();
     }
 
-    public IStrategoList getAnnotations() {
+    @Override public IStrategoList getAnnotations() {
         return TermFactory.EMPTY_LIST;
     }
 
-    public IStrategoTerm getSubterm(int index) {
+    @Override public IStrategoTerm getSubterm(int index) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public IStrategoTerm[] getAllSubterms() {
+    @Override public IStrategoTerm[] getAllSubterms() {
         return TermFactory.EMPTY_TERM_ARRAY;
     }
 
-    public int getSubtermCount() {
+    @Override public int getSubtermCount() {
         return 0;
     }
 
-    public int getTermType() {
-        return BLOB;
+    @Deprecated
+    @Override public int getTermType() {
+        return getType().getValue();
     }
 
-    public boolean match(IStrategoTerm second) {
+    @Override public TermType getType() {
+        return TermType.BLOB;
+    }
+
+    @Override public boolean match(IStrategoTerm second) {
         return second == this;
     }
     
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return System.identityHashCode(this);
     }
 
-    public void prettyPrint(ITermPrinter pp) {
+    @Override public void prettyPrint(ITermPrinter pp) {
         pp.print(toString());
     }
     
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return String.valueOf(hashCode());
     }
-    
-    public String toString(int maxDepth) {
+
+    @Override public String toString(int maxDepth) {
         return toString();
     }
-    
-    public void writeAsString(Appendable output, int maxDepth)
+
+    @Override public void writeAsString(Appendable output, int maxDepth)
             throws IOException {
         output.append(toString());
     }
-    
-    public boolean isList() {
+
+    @Override public boolean isList() {
         return false;
     }
 
-    public Iterator<IStrategoTerm> iterator() {
+    @Override public Iterator<IStrategoTerm> iterator() {
         return map.keySet().iterator();
     }
 

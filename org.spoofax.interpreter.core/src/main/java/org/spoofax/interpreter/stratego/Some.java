@@ -16,9 +16,6 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
-import org.spoofax.interpreter.util.DebugUtil;
-
-import static org.spoofax.interpreter.core.Context.debug;
 
 public class Some extends Strategy {
 
@@ -33,22 +30,22 @@ public class Some extends Strategy {
 
         IStrategoTerm t = env.current();
 
-        switch (t.getTermType()) {
-            case IStrategoTerm.INT:
-            case IStrategoTerm.REAL:
-            case IStrategoTerm.STRING:
+        switch (t.getType()) {
+            case INT:
+            case REAL:
+            case STRING:
             	return getHook().pop().onFailure(env);
-            case IStrategoTerm.APPL:
+            case APPL:
                 return eval(env, 0, false, t.getAllSubterms().clone());
-            case IStrategoTerm.LIST:
-            case IStrategoTerm.TUPLE:
+            case LIST:
+            case TUPLE:
                 IStrategoTerm[] subterms = t.getAllSubterms();
                 assert isCopy(t, subterms);
                 return eval(env, 0, false, subterms);
-            case IStrategoTerm.BLOB:
+            case BLOB:
                 return getHook().pop().onFailure(env);
             default:
-                throw new InterpreterException("Unknown ATerm type " + t.getTermType());
+                throw new InterpreterException("Unknown ATerm type " + t.getType());
         }
     }
 
@@ -57,15 +54,15 @@ public class Some extends Strategy {
     	final IStrategoTerm old = env.current();
     	if (n >= old.getSubtermCount()) {
     		if (hadsome) {
-    			switch (old.getTermType()) {
-   	    		case IStrategoTerm.APPL:
-   	    			env.setCurrent(env.getFactory().replaceAppl(((IStrategoAppl)old).getConstructor(), list, (IStrategoAppl)old));
-   	    			break ;
-   	    		case IStrategoTerm.LIST:
-   	    			env.setCurrent(env.getFactory().replaceList(list, (IStrategoList)old));
-   	    			break ;
-   	    		case IStrategoTerm.TUPLE:
-   	    			env.setCurrent(env.getFactory().replaceTuple(list, (IStrategoTuple)old));        			
+    			switch (old.getType()) {
+					case APPL:
+						env.setCurrent(env.getFactory().replaceAppl(((IStrategoAppl)old).getConstructor(), list, (IStrategoAppl)old));
+						break ;
+					case LIST:
+						env.setCurrent(env.getFactory().replaceList(list, (IStrategoList)old));
+						break ;
+					case TUPLE:
+						env.setCurrent(env.getFactory().replaceTuple(list, (IStrategoTuple)old));
    	    		}
     	    	return getHook().pop().onSuccess(env);
     		}

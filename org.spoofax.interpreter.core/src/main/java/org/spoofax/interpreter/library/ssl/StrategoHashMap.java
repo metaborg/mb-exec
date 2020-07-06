@@ -10,8 +10,8 @@ import org.spoofax.interpreter.terms.ISimpleTerm;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermPrinter;
+import org.spoofax.interpreter.terms.TermType;
 import org.spoofax.terms.AbstractSimpleTerm;
-import org.spoofax.terms.AbstractTermFactory;
 import org.spoofax.terms.TermFactory;
 import org.spoofax.terms.attachments.ITermAttachment;
 import org.spoofax.terms.attachments.TermAttachmentType;
@@ -22,15 +22,15 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
     
     // I already burned my base class here, so I use encapsulation for attachments
     private final AbstractSimpleTerm attachmentContainer = new AbstractSimpleTerm() {
-        public boolean isList() {
+        @Override public boolean isList() {
             return false;
         }
-        
-        public int getSubtermCount() {
+
+        @Override public int getSubtermCount() {
             return 0;
         }
-        
-        public ISimpleTerm getSubterm(int i) {
+
+        @Override public ISimpleTerm getSubterm(int i) {
             throw new IndexOutOfBoundsException("" + i);
         }
     };
@@ -43,76 +43,78 @@ public class StrategoHashMap extends LinkedHashMap<IStrategoTerm, IStrategoTerm>
         super(initialSize, 1.0f * maxLoad / 100);
     }
 
-    @Override
-    public List<IStrategoTerm> getSubterms() {
+    @Override public List<IStrategoTerm> getSubterms() {
         return Collections.emptyList();
     }
 
-    public IStrategoList getAnnotations() {
+    @Override public IStrategoList getAnnotations() {
         return TermFactory.EMPTY_LIST;
     }
 
-    public IStrategoTerm getSubterm(int index) {
+    @Override public IStrategoTerm getSubterm(int index) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public IStrategoTerm[] getAllSubterms() {
+    @Override public IStrategoTerm[] getAllSubterms() {
         return TermFactory.EMPTY_TERM_ARRAY;
     }
 
-    public int getSubtermCount() {
+    @Override public int getSubtermCount() {
         return 0;
     }
 
-    public int getTermType() {
-        return BLOB;
+    @Deprecated
+    @Override public int getTermType() {
+        return getType().getValue();
     }
 
-    public boolean match(IStrategoTerm second) {
+    @Override public TermType getType() {
+        return TermType.BLOB;
+    }
+
+    @Override public boolean match(IStrategoTerm second) {
         return second == this;
     }
     
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return System.identityHashCode(this);
     }
 
-    public void prettyPrint(ITermPrinter pp) {
+    @Override public void prettyPrint(ITermPrinter pp) {
         pp.print(toString());
     }
     
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return String.valueOf(hashCode());
     }
-    
-    public String toString(int maxDepth) {
+
+    @Override public String toString(int maxDepth) {
         return toString();
     }
-    
-    public void writeAsString(Appendable output, int maxDepth)
+
+    @Override public void writeAsString(Appendable output, int maxDepth)
             throws IOException {
         output.append(toString());
     }
-    
-    public<T extends ITermAttachment> T getAttachment(TermAttachmentType<T> type) {
+
+    @Override public<T extends ITermAttachment> T getAttachment(TermAttachmentType<T> type) {
         return attachmentContainer.getAttachment(type);
     }
-    
-    public void putAttachment(ITermAttachment attachment) {
+
+    @Override public void putAttachment(ITermAttachment attachment) {
         attachmentContainer.putAttachment(attachment);
     }
-    
-    public ITermAttachment removeAttachment(TermAttachmentType<?> type) {
+
+    @Override public ITermAttachment removeAttachment(TermAttachmentType<?> type) {
         return attachmentContainer.removeAttachment(type);
     }
-    
-    public boolean isList() {
+
+    @Override public boolean isList() {
         return false;
     }
 
-    public Iterator<IStrategoTerm> iterator() {
+    @SuppressWarnings("NullableProblems")
+    @Override public Iterator<IStrategoTerm> iterator() {
         return this.values().iterator();
     }
 

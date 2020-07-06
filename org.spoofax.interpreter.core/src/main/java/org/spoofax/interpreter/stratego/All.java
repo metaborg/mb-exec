@@ -7,7 +7,6 @@
  */
 package org.spoofax.interpreter.stratego;
 
-import org.spoofax.interpreter.core.Context;
 import org.spoofax.interpreter.core.IConstruct;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -15,11 +14,8 @@ import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
-import org.spoofax.interpreter.util.DebugUtil;
 
 import javax.annotation.Nullable;
-
-import static org.spoofax.interpreter.core.Context.debug;
 
 public class All extends Strategy {
 
@@ -37,24 +33,24 @@ public class All extends Strategy {
 
         IStrategoTerm t = env.current();
 
-        switch (t.getTermType()) {
-            case IStrategoTerm.INT:
-            case IStrategoTerm.REAL:
-            case IStrategoTerm.STRING:
+        switch (t.getType()) {
+            case INT:
+            case REAL:
+            case STRING:
                 return getHook().pop().onSuccess(env);
-            case IStrategoTerm.APPL:
+            case APPL:
                 return evalAll(env, true, false, 0, t.getAllSubterms().clone());
-            case IStrategoTerm.LIST:
-            case IStrategoTerm.TUPLE:
+            case LIST:
+            case TUPLE:
                 // TODO: Optimize - treat IStrategoList as linked list or use iterator?
                 //       (same for some, all)
                 IStrategoTerm[] subterms = t.getAllSubterms();
                 assert isCopy(t, subterms);
                 return evalAll(env, false, false, 0, subterms);
-            case IStrategoTerm.BLOB:
+            case BLOB:
                 return getHook().pop().onSuccess(env);
             default:
-                throw new InterpreterException("Unknown ATerm type " + t.getTermType());
+                throw new InterpreterException("Unknown ATerm type " + t.getType());
         }
 
     }
@@ -74,14 +70,14 @@ public class All extends Strategy {
     	final IStrategoTerm old = env.current();
     	if (i >= old.getSubtermCount()) {
     	    if (madeChanges) {
-        		switch (old.getTermType()) {
-        		case IStrategoTerm.APPL:
+        		switch (old.getType()) {
+        		case APPL:
         			env.setCurrent(env.getFactory().replaceAppl(((IStrategoAppl)old).getConstructor(), list, (IStrategoAppl)old));
         			break ;
-        		case IStrategoTerm.LIST:
+        		case LIST:
         			env.setCurrent(env.getFactory().replaceList(list, (IStrategoList)old));
         			break ;
-        		case IStrategoTerm.TUPLE:
+        		case TUPLE:
         			env.setCurrent(env.getFactory().replaceTuple(list, (IStrategoTuple)old));        			
         		}
     	    }

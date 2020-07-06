@@ -25,30 +25,30 @@ public class SSL_get_arguments extends AbstractPrimitive {
     @Override
     public boolean call(IContext env, Strategy[] svars, IStrategoTerm[] tvars)
             throws InterpreterException {
-        switch(tvars[0].getTermType()) {
-        case IStrategoTerm.APPL:
-            IStrategoAppl a = (IStrategoAppl) tvars[0];
-            env.setCurrent(env.getFactory().makeList(a.getAllSubterms()));
-            return true;
-        case IStrategoTerm.INT:
-        case IStrategoTerm.STRING:
-        case IStrategoTerm.REAL:
-        case IStrategoTerm.BLOB:
-            env.setCurrent(env.getFactory().makeList());
-            return true;
-        case IStrategoTerm.LIST:
-            env.setCurrent(tvars[0]);
-            return true;
-        case IStrategoTerm.TUPLE:
-            IStrategoTuple tuple = (IStrategoTuple) tvars[0];
-            env.setCurrent(env.getFactory().makeList(tuple.getAllSubterms()));
-            return true;
-        case IStrategoTerm.PLACEHOLDER:
-            IStrategoPlaceholder placeholder = (IStrategoPlaceholder) tvars[0];
-            env.setCurrent(env.getFactory().makeList(placeholder.getTemplate()));
-            return true;
-        default:
-            throw new IllegalStateException("SSL_get_arguments failed for " + tvars[0]);
+        switch(tvars[0].getType()) {
+            case APPL:
+                IStrategoAppl a = (IStrategoAppl) tvars[0];
+                env.setCurrent(env.getFactory().makeList(a.getAllSubterms()));
+                return true;
+            case INT:
+            case STRING:
+            case REAL:
+            case BLOB:
+                env.setCurrent(env.getFactory().makeList());
+                return true;
+            case LIST:
+                env.setCurrent(tvars[0]);
+                return true;
+            case TUPLE:
+                IStrategoTuple tuple = (IStrategoTuple) tvars[0];
+                env.setCurrent(env.getFactory().makeList(tuple.getAllSubterms()));
+                return true;
+            case PLACEHOLDER:
+                IStrategoPlaceholder placeholder = (IStrategoPlaceholder) tvars[0];
+                env.setCurrent(env.getFactory().makeList(placeholder.getTemplate()));
+                return true;
+            default:
+                throw new IllegalStateException("SSL_get_arguments failed for " + tvars[0]);
         }
     }
 

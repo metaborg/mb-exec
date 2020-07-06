@@ -6,8 +6,10 @@ import java.util.Set;
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.FileTypeSelector;
+import org.apache.commons.vfs2.NameScope;
 import org.metaborg.util.log.ILogger;
 import org.metaborg.util.log.LoggerUtils;
 
@@ -90,4 +92,18 @@ public class ResourceUtils {
         return resource.getURI();
     }
 
+    /**
+     * Finds a file, relative to this file. The path can be either relative, or absolute. Unlike
+     * {@code FileObject::resolveFile( path )}, this method also resolves absolute paths into different file systems
+     * than that of the baseFile.
+     *
+     * @param path
+     *            The path of the file to locate. Can either be a relative path or an absolute path.
+     * @return The file.
+     * @throws FileSystemException
+     *             On error parsing the path, or on error finding the file.
+     */
+    public static FileObject resolveFile(FileObject baseFile, String name) throws FileSystemException {
+        return baseFile.getFileSystem().getFileSystemManager().resolveFile(baseFile, name);
+    }
 }
