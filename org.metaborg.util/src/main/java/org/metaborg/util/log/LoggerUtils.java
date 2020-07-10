@@ -4,8 +4,13 @@ import java.io.OutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 public class LoggerUtils {
+
+    private static final String CONTEXT_ID = "contextid";
+
+
     private static ILogger logger(Logger slf4jlogger) {
         return new MetaborgLogger(slf4jlogger);
     }
@@ -16,6 +21,15 @@ public class LoggerUtils {
 
     public static ILogger logger(String name) {
         return logger(LoggerFactory.getLogger(name));
+    }
+
+
+    public static void setContextId(String contextId) {
+        MDC.put(CONTEXT_ID, contextId);
+    }
+
+    public static void clearContextId() {
+        MDC.remove(CONTEXT_ID);
     }
 
 
