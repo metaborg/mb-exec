@@ -1,5 +1,7 @@
 package org.spoofax.interpreter.library.ssl;
 
+import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
+
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Deque;
@@ -16,8 +18,6 @@ import org.spoofax.terms.StrategoTerm;
 import org.spoofax.terms.TermFactory;
 
 import io.usethesource.capsule.BinaryRelation;
-
-import static org.spoofax.terms.AbstractTermFactory.EMPTY_TERM_ARRAY;
 
 public class StrategoImmutableRelation extends StrategoTerm implements IStrategoTerm {
     public final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> backingRelation;
@@ -128,30 +128,58 @@ public class StrategoImmutableRelation extends StrategoTerm implements IStratego
     }
 
     public static StrategoImmutableRelation reflexiveClosure(StrategoImmutableRelation map) {
-        final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = map.backingRelation.asTransient();
-
-        for(Map.Entry<IStrategoTerm, IStrategoTerm> e : map.backingRelation.entrySet()) {
-            final IStrategoTerm key = e.getKey();
-            final IStrategoTerm value = e.getValue();
-            result.__insert(key, key);
-            result.__insert(value, value);
-        }
+        final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = reflClos(map.backingRelation);
         return new StrategoImmutableRelation(result.freeze());
     }
 
     public static StrategoImmutableRelation transitiveClosure(StrategoImmutableRelation map) {
-        final Deque<Map.Entry<IStrategoTerm, IStrategoTerm>> worklist =
-            new LinkedList<>(map.backingRelation.entrySet());
-        final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = map.backingRelation.asTransient();
+        final BinaryRelation.Transient<IStrategoTerm, IStrategoTerm> result = transClos(map.backingRelation);
+        return new StrategoImmutableRelation(result.freeze());
+    }
+
+    public static <T> BinaryRelation.Transient<T, T> reflClos(BinaryRelation.Immutable<T, T> backingRelation) {
+        final BinaryRelation.Transient<T, T> result = backingRelation.asTransient();
+        reflClos(backingRelation, result);
+        return result;
+    }
+
+    private static <T> void reflClos(BinaryRelation<T, T> backingRelation,
+        final BinaryRelation.Transient<T, T> result) {
+        for(Map.Entry<T, T> e : backingRelation.entrySet()) {
+            final T key = e.getKey();
+            final T value = e.getValue();
+            result.__insert(key, key);
+            result.__insert(value, value);
+        }
+    }
+
+    public static <T> BinaryRelation.Transient<T, T> transClos(BinaryRelation.Immutable<T, T> rel) {
+        final Deque<Map.Entry<T, T>> worklist =
+            new LinkedList<>(rel.entrySet());
+        final BinaryRelation.Transient<T, T> result = rel.asTransient();
+        transClos(rel, worklist, result);
+        return result;
+    }
+
+    private static <T> void transClos(BinaryRelation.Immutable<T, T> rel,
+        final Deque<Map.Entry<T, T>> worklist, final BinaryRelation.Transient<T, T> result) {
         while(!worklist.isEmpty()) {
-            final Map.Entry<IStrategoTerm, IStrategoTerm> e = worklist.pop();
-            for(IStrategoTerm post : map.backingRelation.get(e.getValue())) {
+            final Map.Entry<T, T> e = worklist.pop();
+            for(T post : rel.get(e.getValue())) {
                 if(!result.containsEntry(e.getKey(), post)) {
                     result.__insert(e.getKey(), post);
                     worklist.add(new AbstractMap.SimpleImmutableEntry<>(e.getKey(), post));
                 }
             }
         }
-        return new StrategoImmutableRelation(result.freeze());
+    }
+
+    public static <T> BinaryRelation.Transient<T, T> reflTransClos(BinaryRelation.Immutable<T, T> rel) {
+        final Deque<Map.Entry<T, T>> worklist =
+            new LinkedList<>(rel.entrySet());
+        final BinaryRelation.Transient<T, T> result = rel.asTransient();
+        transClos(rel, worklist, result);
+        reflClos(rel, result);
+        return null;
     }
 }
