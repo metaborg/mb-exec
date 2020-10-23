@@ -10,17 +10,27 @@ public class LoggerUtils {
 
     private static final String CONTEXT_ID = "contextid";
 
+    private static final Slf4jLoggerProvider loggerProvider = new Slf4jLoggerProvider();
+
+    /**
+     * Gets the default logger provider.
+     *
+     * @return the logger provider
+     */
+    public static ILoggerProvider getDefaultLoggerProvider() {
+        return loggerProvider;
+    }
 
     private static ILogger logger(Logger slf4jlogger) {
-        return new MetaborgLogger(slf4jlogger);
+        return loggerProvider.getLogger(slf4jlogger);
     }
 
     public static ILogger logger(Class<?> clazz) {
-        return logger(LoggerFactory.getLogger(clazz));
+        return loggerProvider.getLogger(clazz);
     }
 
     public static ILogger logger(String name) {
-        return logger(LoggerFactory.getLogger(name));
+        return loggerProvider.getLogger(name);
     }
 
 
