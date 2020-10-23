@@ -7,6 +7,8 @@
  */
 package org.spoofax.interpreter.library.ssl;
 
+import org.metaborg.util.log.LoggerUtils;
+import org.metaborg.util.log.ILoggerProvider;
 import org.spoofax.interpreter.core.Context;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -220,6 +222,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_rmdir());
         add(new SSL_preserve_annotations_attachments());
         add(new SSL_cputime());
+        add(new SSL_log(LoggerUtils.getDefaultLoggerProvider()));
     }
 
     public AbstractPrimitive lookup(String s) {
