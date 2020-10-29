@@ -107,10 +107,7 @@ public class CallT extends Strategy {
 
         for (int i = 0; i < tvars.length; i++) {
             String formal = formalTermArgs[i];
-            IStrategoTerm actual = tvars[i];
-            // FIXME: This should not be here
-            if (Tools.isVar(((IStrategoAppl)actual), env))
-                actual = env.lookupVar(TermUtils.toJavaStringAt((IStrategoAppl)actual, 0));
+            IStrategoTerm actual = lookupIfVar(tvars[i], env);
             newScope.add(formal, actual);
         }
 
@@ -118,6 +115,20 @@ public class CallT extends Strategy {
         env.setVarScope(newScope);
         
         return addHook(sdef.getBody(), isCompiledStrategy, oldVarScope);
+    }
+    
+    private IStrategoTerm lookupIfVar(IStrategoTerm term, IContext env) throws InterpreterException {
+        if(!(term instanceof IStrategoAppl)) {
+            return term;
+        }
+        IStrategoAppl appl = (IStrategoAppl) term;
+        if(Tools.isVar(appl, env)) {
+            IStrategoTerm varValue = env.lookupVar(TermUtils.toJavaStringAt(appl, 0));
+            if (varValue != null) {
+                return varValue;
+            }
+        }
+        return term;
     }
 
     public Strategy evalWithArgs(IContext env, Strategy[] sv, IStrategoTerm[] actualTVars) throws InterpreterException {
