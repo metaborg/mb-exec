@@ -10,7 +10,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class SSL_immutable_relation_insert extends AbstractPrimitive {
 
     protected SSL_immutable_relation_insert() {
-        super("SSL_immutable_relation_put", 0, 2);
+        super("SSL_immutable_relation_insert", 0, 2);
     }
 
     @Override
