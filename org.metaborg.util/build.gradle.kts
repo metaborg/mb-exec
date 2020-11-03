@@ -17,7 +17,7 @@ dependencies {
 
   testCompileOnly("junit:junit")
   testCompileOnly("com.google.code.findbugs:jsr305")
-  testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.1.0")
+  testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }
 
 // Copy test resources into classes directory, to make them accessible as classloader resources at runtime.
