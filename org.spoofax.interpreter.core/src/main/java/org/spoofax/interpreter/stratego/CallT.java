@@ -117,12 +117,18 @@ public class CallT extends Strategy {
         return addHook(sdef.getBody(), isCompiledStrategy, oldVarScope);
     }
     
+    /*
+     * This method is a workaround for the FIXME by the lookupVar call
+     * In case a "Var" constructor application, which originates from a languages syntax definition,
+     * is passed into this method, the lookup fails and led to an NPE
+     */
     private IStrategoTerm lookupIfVar(IStrategoTerm term, IContext env) throws InterpreterException {
         if(!(term instanceof IStrategoAppl)) {
             return term;
         }
         IStrategoAppl appl = (IStrategoAppl) term;
         if(Tools.isVar(appl, env)) {
+            // FIXME: This should not be here
             IStrategoTerm varValue = env.lookupVar(TermUtils.toJavaStringAt(appl, 0));
             if (varValue != null) {
                 return varValue;
