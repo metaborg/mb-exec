@@ -127,8 +127,9 @@ public class ZipArchiver {
                         zipEntry.setTime(modified);
                     }
                     zip.putNextEntry(zipEntry);
-                    final InputStream inputStream = resource.getContent().getInputStream();
-                    IOUtils.copy(inputStream, zip);
+                    try(final InputStream inputStream = resource.getContent().getInputStream()) {
+                        IOUtils.copy(inputStream, zip);
+                    }
                     zip.closeEntry();
                 } else if(resource.getType() == FileType.FOLDER) {
                     zip.putNextEntry(zipEntry);
