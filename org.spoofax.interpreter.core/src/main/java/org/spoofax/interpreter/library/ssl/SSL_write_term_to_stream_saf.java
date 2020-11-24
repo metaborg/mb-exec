@@ -40,10 +40,15 @@ public class SSL_write_term_to_stream_saf extends AbstractPrimitive {
         
         try {
             SAFWriter.writeTermToSAFStream(targs[1], bout);
-            bout.close();
             
         } catch(IOException e) {
             throw new InterpreterException(e);
+        } finally {
+            try {
+                bout.close();
+            } catch(IOException e) {
+                throw new InterpreterException(e);
+            }
         }
         
         env.setCurrent(targs[0]);
