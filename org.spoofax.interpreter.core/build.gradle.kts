@@ -3,22 +3,23 @@ plugins {
   id("org.metaborg.gradle.config.junit-testing")
 }
 
+fun compositeBuild(name: String) = "$group:$name:$version"
 val spoofax2Version: String by ext
 dependencies {
   api(platform("org.metaborg:parent:$spoofax2Version"))
 
-  api("org.apache.commons:commons-vfs2")
-  api("commons-io:commons-io")
-  api("io.reactivex.rxjava3:rxjava")
-  api("com.google.guava:guava")
-  api("com.google.inject:guice")
-  api("org.slf4j:slf4j-api")
+  api(compositeBuild("org.spoofax.terms"))
+  api(compositeBuild("org.spoofax.jsglr"))
+  implementation("commons-io:commons-io")
+  api("io.usethesource:capsule")
 
   compileOnly("com.google.code.findbugs:jsr305")
+  compileOnly("javax.annotation:javax.annotation-api")
 
+  testImplementation(compositeBuild("org.metaborg.util"))
   testCompileOnly("junit:junit")
   testCompileOnly("com.google.code.findbugs:jsr305")
-  testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.1.0")
+  testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }
 
 // Copy test resources into classes directory, to make them accessible as classloader resources at runtime.
