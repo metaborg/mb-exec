@@ -18,9 +18,9 @@ public class StrategoImmutableSet extends StrategoTerm implements IStrategoTerm 
         this(Set.Immutable.<IStrategoTerm>of().__insertAll(new HashSet<>(Arrays.asList(terms))));
     }
 
-    public StrategoImmutableSet(Set.Immutable<IStrategoTerm> backingSet) {
+    public StrategoImmutableSet(Set.Immutable<? extends IStrategoTerm> backingSet) {
         super(TermFactory.EMPTY_LIST);
-        this.backingSet = backingSet;
+        this.backingSet = (Set.Immutable<IStrategoTerm>) backingSet;
     }
 
     public StrategoImmutableSet() {
