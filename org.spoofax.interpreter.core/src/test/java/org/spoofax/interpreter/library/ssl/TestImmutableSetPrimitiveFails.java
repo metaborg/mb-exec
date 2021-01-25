@@ -26,9 +26,9 @@ public class TestImmutableSetPrimitiveFails extends ImmutableCollectionTestSetup
             {"setContainsNonExisting", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_set_contains.call(context, new Strategy[0], new IStrategoTerm[] { three }) },
             {"setMapFail", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.test(current -> {
-                    return current.equals(one); // filter on key == one
-                }) }, EMPTY_TERM_ARRAY)},
+                SSL_immutable_set_map.call(context, new Strategy[] {
+                    InterpreterStrategy.test(current -> current.equals(one)), // filter on key == one
+                    InterpreterStrategy.id }, EMPTY_TERM_ARRAY)},
         });
         //@formatter:on
     }
