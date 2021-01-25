@@ -11,7 +11,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class SSL_immutable_set_map extends AbstractPrimitive {
 
     protected SSL_immutable_set_map() {
-        super("SSL_immutable_set_map", 1, 0);
+        super("SSL_immutable_set_map", 2, 0);
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
@@ -25,6 +25,11 @@ public class SSL_immutable_set_map extends AbstractPrimitive {
             env.setCurrent(value);
             if(!sargs[0].evaluate(env)) {
                 return false;
+            }
+            if(resultSet.contains(env.current())) {
+                if(!sargs[1].evaluate(env)) {
+                    continue;
+                }
             }
             resultSet.__insert(env.current());
         }

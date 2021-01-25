@@ -86,12 +86,12 @@ public class TestImmutableSetPrimitiveReturnsSet extends ImmutableCollectionTest
                 new StrategoImmutableSet(one),
             },
             {"mapNonUnique", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.constant(one) }, EMPTY_TERM_ARRAY),
+                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.constant(one), InterpreterStrategy.id }, EMPTY_TERM_ARRAY),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one),
             },
             {"mapUnique", (CheckedFunction0<Boolean, InterpreterException>) () ->
-                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.id }, EMPTY_TERM_ARRAY),
+                SSL_immutable_set_map.call(context, new Strategy[] { InterpreterStrategy.id, InterpreterStrategy.id }, EMPTY_TERM_ARRAY),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one, two),
             },
