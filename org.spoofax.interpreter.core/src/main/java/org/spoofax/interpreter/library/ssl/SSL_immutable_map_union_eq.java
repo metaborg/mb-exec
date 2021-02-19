@@ -36,6 +36,10 @@ public class SSL_immutable_map_union_eq extends AbstractPrimitive {
         final Map.Transient<IStrategoTerm, IStrategoTerm> one =
             ((StrategoImmutableMap) env.current()).backingMap.asTransient();
         final Map.Immutable<IStrategoTerm, IStrategoTerm> other = ((StrategoImmutableMap) targs[0]).backingMap;
+        if(one.isEmpty()) {
+            env.setCurrent(targs[0]);
+            return true;
+        }
         for(java.util.Map.Entry<IStrategoTerm, IStrategoTerm> e : other.entrySet()) {
             if(one.containsKeyEquivalent(e.getKey(), cmp)) {
                 final IStrategoTerm left = one.get(e.getKey());
