@@ -16,6 +16,7 @@ import org.spoofax.interpreter.core.Pair;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoInt;
+import org.spoofax.interpreter.terms.IStrategoPlaceholder;
 import org.spoofax.interpreter.terms.IStrategoReal;
 import org.spoofax.interpreter.terms.IStrategoRef;
 import org.spoofax.interpreter.terms.IStrategoString;
@@ -369,6 +370,8 @@ public class Match extends Strategy {
                 return matchList(env, (IStrategoList) t, p);
             case TUPLE:
                 return matchTuple(env, (IStrategoTuple) t, p);
+            case PLACEHOLDER:
+                return matchPlaceholder(env, (IStrategoPlaceholder)t, p);
             case REF:
                 return matchRef(env, (IStrategoRef)t, p);
             case BLOB:
@@ -474,6 +477,40 @@ public class Match extends Strategy {
         }
 
         return r;
+    }
+
+    private Results matchPlaceholder(IContext env, IStrategoPlaceholder t, IStrategoAppl p) throws InterpreterException {
+        // No significant matching for placeholders
+        debug("term is Placeholder");
+        if (Tools.isAnno(p, env)) {
+            return matchAnyAnno(env, t, p);
+        }
+        else if (Tools.isInt(p, env)) {
+            return null;
+        }
+        else if (Tools.isReal(p, env)) {
+            return null;
+        }
+        else if (Tools.isVar(p, env)) {
+            return matchAnyVar(t, p);
+        }
+        else if (Tools.isOp(p, env)) {
+            return null;
+        }
+        else if (Tools.isWld(p, env)) {
+            return matchAnyWld(p);
+        }
+        else if (Tools.isAs(p, env)) {
+            return matchCompoundAs(env, t, p);
+        }
+        else if (Tools.isExplode(p, env)) {
+            return null;
+        }
+        else if (Tools.isStr(p, env)) {
+            return null;
+        }
+
+        throw new InterpreterException("Unknown Placeholder case '" + p + "'");
     }
 
     protected Results matchList(IContext env, IStrategoList t,
