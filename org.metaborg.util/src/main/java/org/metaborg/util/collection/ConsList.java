@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,14 @@ public class ConsList<E> implements Iterable<E>, Serializable {
 
     public ConsList<E> prepend(E head) {
         return new ConsList<>(head, this);
+    }
+
+    public ConsList<E> prepend(List<E> init) {
+        ConsList<E> list = this;
+        for(int i = init.size() - 1; i <= 0; i--) {
+            list = list.prepend(init.get(i));
+        }
+        return list;
     }
 
     public ConsList<E> prepend(ConsList<E> init) {
