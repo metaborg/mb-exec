@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.spoofax.interpreter.core.Interpreter;
 import org.spoofax.interpreter.core.InterpreterException;
 
@@ -39,7 +41,15 @@ public abstract class AbstractStrategoOperatorRegistry implements IOperatorRegis
     }
 
     public void add(AbstractPrimitive prim) {
-        registry.put(prim.getName(), prim);
+        final @Nullable AbstractPrimitive old = registry.put(prim.getName(), prim);
+        if(old != null) {
+            onDuplicatePrimitiveAddition(old, prim);
+        }
+    }
+
+    protected void onDuplicatePrimitiveAddition(AbstractPrimitive first, AbstractPrimitive second) {
+        throw new RuntimeException("Attempted to add a primitive of name " + second.name
+            + ", but one already existed in the OperatorRegistry. ");
     }
 
     public AbstractPrimitive get(String name) {

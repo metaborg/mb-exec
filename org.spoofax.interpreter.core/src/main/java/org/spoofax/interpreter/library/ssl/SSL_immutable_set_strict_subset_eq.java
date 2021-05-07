@@ -11,7 +11,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class SSL_immutable_set_strict_subset_eq extends AbstractPrimitive {
 
     protected SSL_immutable_set_strict_subset_eq() {
-        super("SSL_immutable_set_strict_subset", 1, 1);
+        super("SSL_immutable_set_strict_subset_eq", 1, 1);
     }
 
     public SSL_immutable_set_strict_subset_eq(String name, int svars, int tvars) {
