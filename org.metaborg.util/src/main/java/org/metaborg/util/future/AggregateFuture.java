@@ -1,5 +1,6 @@
 package org.metaborg.util.future;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.metaborg.util.functions.CheckedAction1;
 import org.metaborg.util.functions.CheckedAction2;
 import org.metaborg.util.functions.CheckedFunction1;
 import org.metaborg.util.functions.CheckedFunction2;
+import org.metaborg.util.functions.Function1;
 import org.metaborg.util.log.ILogger;
 import org.metaborg.util.log.LoggerUtils;
 import org.metaborg.util.tuple.Tuple2;
@@ -134,6 +136,12 @@ public class AggregateFuture<T> implements IFuture<List<T>> {
             IFuture<T2> f2, IFuture<T3> f3, IFuture<T4> f4) {
         return new AggregateFuture<>(f1, f2, f3, f4)
                 .thenApply(rs -> Tuple4.of((T1) rs.get(0), (T2) rs.get(1), (T3) rs.get(2), (T4) rs.get(3)));
+    }
+
+    public static <T, U> IFuture<List<U>> forAll(Iterable<T> items, Function1<T, IFuture<U>> toFuture) {
+        final ArrayList<IFuture<U>> futures = new ArrayList<>();
+        items.forEach(item -> futures.add(toFuture.apply(item)));
+        return new AggregateFuture<>(futures);
     }
 
 }
