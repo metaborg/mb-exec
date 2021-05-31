@@ -10,7 +10,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 public class SSL_immutable_relation_values_set extends AbstractPrimitive {
 
     protected SSL_immutable_relation_values_set() {
-        super("SSL_immutable_relation_values", 0, 0);
+        super("SSL_immutable_relation_values_set", 0, 0);
     }
 
     @Override
@@ -21,9 +21,7 @@ public class SSL_immutable_relation_values_set extends AbstractPrimitive {
 
         final StrategoImmutableRelation map = (StrategoImmutableRelation) env.current();
         final Set.Transient<IStrategoTerm> result = Set.Transient.of();
-        for(IStrategoTerm value : map.backingRelation.inverse().keySet()) {
-            result.__insert(value);
-        }
+        result.__insertAll(map.backingRelation.inverse().keySet());
 
         env.setCurrent(new StrategoImmutableSet(result.freeze()));
         return true;
