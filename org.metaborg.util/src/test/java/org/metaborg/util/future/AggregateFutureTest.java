@@ -131,8 +131,8 @@ public class AggregateFutureTest {
     @Test public void testResultOnShortCircuit() {
         final AtomicBoolean marker = new AtomicBoolean(false);
         final AtomicBoolean redMarker = new AtomicBoolean(false);
-        final CompletableFuture<SC<? extends Integer, ? extends Integer>> f1 = new CompletableFuture<>();
-        final CompletableFuture<SC<? extends Integer, ? extends Integer>> f2 = new CompletableFuture<>();
+        final CompletableFuture<SC<Integer, Integer>> f1 = new CompletableFuture<>();
+        final CompletableFuture<SC<Integer, Integer>> f2 = new CompletableFuture<>();
         final Function1<List<Integer>, Integer> sum = intList -> {
             redMarker.set(true);
             return intList.stream().mapToInt(Integer::intValue).sum();
@@ -149,8 +149,8 @@ public class AggregateFutureTest {
     @Test public void testResultNoShortCircuit() {
         final AtomicBoolean redMarker = new AtomicBoolean(false);
         final AtomicBoolean marker = new AtomicBoolean(false);
-        final CompletableFuture<SC<? extends Integer, ? extends Integer>> f1 = new CompletableFuture<>();
-        final CompletableFuture<SC<? extends Integer, ? extends Integer>> f2 = new CompletableFuture<>();
+        final CompletableFuture<SC<Integer, Integer>> f1 = new CompletableFuture<>();
+        final CompletableFuture<SC<Integer, Integer>> f2 = new CompletableFuture<>();
         final Function1<List<Integer>, Integer> sum = intList -> {
             redMarker.set(true);
             return intList.stream().mapToInt(Integer::intValue).sum();
@@ -171,8 +171,8 @@ public class AggregateFutureTest {
         final AtomicBoolean redMarker = new AtomicBoolean(false);
         final AtomicBoolean exMarker = new AtomicBoolean(false);
         final AtomicBoolean marker = new AtomicBoolean(false);
-        final CompletableFuture<SC<? extends Integer, ? extends Integer>> f1 = new CompletableFuture<>();
-        final CompletableFuture<SC<? extends Integer, ? extends Integer>> f2 = new CompletableFuture<>();
+        final CompletableFuture<SC<Integer, Integer>> f1 = new CompletableFuture<>();
+        final CompletableFuture<SC<Integer, Integer>> f2 = new CompletableFuture<>();
         final Function1<List<Integer>, Integer> sum = intList -> {
             redMarker.set(true);
             return intList.stream().mapToInt(Integer::intValue).sum();
@@ -195,8 +195,8 @@ public class AggregateFutureTest {
     @Test public void testNoReduceOnException_Last() {
         final AtomicBoolean redMarker = new AtomicBoolean(false);
         final AtomicBoolean marker = new AtomicBoolean(false);
-        final CompletableFuture<SC<? extends Integer, ? extends Integer>> f1 = new CompletableFuture<>();
-        final CompletableFuture<SC<? extends Integer, ? extends Integer>> f2 = new CompletableFuture<>();
+        final CompletableFuture<SC<Integer, Integer>> f1 = new CompletableFuture<>();
+        final CompletableFuture<SC<Integer, Integer>> f2 = new CompletableFuture<>();
         final Function1<List<Integer>, Integer> sum = intList -> {
             redMarker.set(true);
             return intList.stream().mapToInt(Integer::intValue).sum();

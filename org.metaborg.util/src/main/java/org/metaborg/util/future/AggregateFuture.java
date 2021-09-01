@@ -31,17 +31,17 @@ public class AggregateFuture<T, R> implements IFuture<R> {
     private final Function1<List<T>, R> reducer;
 
     @SafeVarargs private AggregateFuture(Function1<List<T>, R> reducer,
-            IFuture<SC<? extends T, ? extends R>>... futures) {
+            IFuture<SC<T, R>>... futures) {
         this(reducer, Arrays.asList(futures));
     }
 
     private AggregateFuture(Function1<List<T>, R> reducer,
-            Iterable<? extends IFuture<SC<? extends T, ? extends R>>> futures) {
+            Iterable<IFuture<SC<T, R>>> futures) {
         this(reducer, Lists.newArrayList(futures));
     }
 
     @SuppressWarnings("unchecked") private AggregateFuture(Function1<List<T>, R> reducer,
-            List<? extends IFuture<SC<? extends T, ? extends R>>> futures) {
+            List<IFuture<SC<T, R>>> futures) {
         final int count = futures.size();
         this.results = (T[]) new Object[count];
         this.result = new CompletableFuture<>();
@@ -143,18 +143,18 @@ public class AggregateFuture<T, R> implements IFuture<R> {
 
     @SuppressWarnings("unchecked") public static <T> IFuture<List<T>>
             of(Iterable<? extends IFuture<? extends T>> futures) {
-        final ArrayList<IFuture<SC<? extends T, ? extends List<T>>>> mappedFutures = new ArrayList<>();
+        final ArrayList<IFuture<SC<T, List<T>>>> mappedFutures = new ArrayList<>();
         futures.forEach(future -> mappedFutures.add(future.thenApply(SC::of)));
         return new AggregateFuture<>(ID_REDUCER, mappedFutures);
     }
 
     @SafeVarargs public static <T, R> IFuture<R> ofShortCircuitable(Function1<List<T>, R> reduce,
-            IFuture<SC<? extends T, ? extends R>>... futures) {
+            IFuture<SC<T, R>>... futures) {
         return ofShortCircuitable(reduce, Arrays.asList(futures));
     }
 
     public static <T, R> IFuture<R> ofShortCircuitable(Function1<List<T>, R> reduce,
-            Iterable<? extends IFuture<SC<? extends T, ? extends R>>> futures) {
+            Iterable<IFuture<SC<T, R>>> futures) {
         return new AggregateFuture<T, R>(reduce, futures);
     }
 
