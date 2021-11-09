@@ -210,6 +210,7 @@ public class SSLLibrary extends AbstractStrategoOperatorRegistry {
         add(new SSL_times());
         add(new SSL_TicksToSeconds());
         add(new SSL_address());
+        add(new SSL_address_lt());
         add(new SSL_checksum());
         add(new SSL_constructor_hash());
         add(new SSL_newname());
