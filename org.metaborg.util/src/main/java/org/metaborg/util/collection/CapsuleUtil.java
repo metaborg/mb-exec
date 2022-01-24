@@ -190,6 +190,14 @@ public final class CapsuleUtil {
         return EMPTY_SET.asTransient();
     }
 
+    /**
+     * Constructor for Set.Transient that reuses an instantiated object. Used not to hit the reflection used in the
+     * default construction methods.
+     */
+    @SuppressWarnings("unchecked") public static <K> Set.Transient<K> transientSet(K value1) {
+        return EMPTY_SET.__insert(value1).asTransient();
+    }
+
     @SuppressWarnings("rawtypes") private static final Map.Immutable EMPTY_MAP = Map.Immutable.of();
 
     /**
