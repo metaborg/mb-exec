@@ -39,7 +39,7 @@ public abstract class MultiSet<E> implements Iterable<E> {
 
     public boolean containsAll(Iterable<E> es) {
         for(E e : es) {
-            if(contains(e)) {
+            if(!contains(e)) {
                 return false;
             }
         }
@@ -245,7 +245,7 @@ public abstract class MultiSet<E> implements Iterable<E> {
 
         /**
          * Set an element to n.
-         * 
+         *
          * @param e
          *            Element to be set
          * @param n
@@ -267,7 +267,7 @@ public abstract class MultiSet<E> implements Iterable<E> {
 
         /**
          * Add an element once.
-         * 
+         *
          * @param e
          *            Element to be added
          * @return New count for the element.
@@ -278,7 +278,7 @@ public abstract class MultiSet<E> implements Iterable<E> {
 
         /**
          * Add an element n times.
-         * 
+         *
          * @param e
          *            Element to be added
          * @param n
@@ -307,7 +307,7 @@ public abstract class MultiSet<E> implements Iterable<E> {
 
         /**
          * Remove an element once.
-         * 
+         *
          * @param e
          *            Element to be removed
          * @return Old count for the element
@@ -324,7 +324,7 @@ public abstract class MultiSet<E> implements Iterable<E> {
 
         /**
          * Remove an element up to n times.
-         * 
+         *
          * @param e
          *            Element to be removed
          * @param n
@@ -347,7 +347,7 @@ public abstract class MultiSet<E> implements Iterable<E> {
 
         /**
          * Remove an element completely.
-         * 
+         *
          * @return Old count for the element
          */
         public int removeAll(E e) {
