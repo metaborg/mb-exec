@@ -113,7 +113,7 @@ public final class CapsuleUtil {
         if(values instanceof Set.Immutable) {
             return (Set.Immutable<V>) values;
         }
-        final Set.Transient<V> set = Set.Transient.of();
+        final Set.Transient<V> set = transientSet();
         for(V v : values) {
             set.__insert(v);
         }
@@ -121,7 +121,7 @@ public final class CapsuleUtil {
     }
 
     @SuppressWarnings("unchecked") public static <V> Set.Immutable<V> toSet(V... values) {
-        final Set.Transient<V> set = Set.Transient.of();
+        final Set.Transient<V> set = transientSet();
         for(V v : values) {
             set.__insert(v);
         }
