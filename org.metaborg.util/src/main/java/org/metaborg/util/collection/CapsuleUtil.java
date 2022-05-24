@@ -113,7 +113,7 @@ public final class CapsuleUtil {
         if(values instanceof Set.Immutable) {
             return (Set.Immutable<V>) values;
         }
-        final Set.Transient<V> set = Set.Transient.of();
+        final Set.Transient<V> set = transientSet();
         for(V v : values) {
             set.__insert(v);
         }
@@ -121,7 +121,7 @@ public final class CapsuleUtil {
     }
 
     @SuppressWarnings("unchecked") public static <V> Set.Immutable<V> toSet(V... values) {
-        final Set.Transient<V> set = Set.Transient.of();
+        final Set.Transient<V> set = transientSet();
         for(V v : values) {
             set.__insert(v);
         }
@@ -188,6 +188,14 @@ public final class CapsuleUtil {
      */
     @SuppressWarnings("unchecked") public static <K> Set.Transient<K> transientSet() {
         return EMPTY_SET.asTransient();
+    }
+
+    /**
+     * Constructor for Set.Transient that reuses an instantiated object. Used not to hit the reflection used in the
+     * default construction methods.
+     */
+    @SuppressWarnings("unchecked") public static <K> Set.Transient<K> transientSet(K value1) {
+        return EMPTY_SET.__insert(value1).asTransient();
     }
 
     @SuppressWarnings("rawtypes") private static final Map.Immutable EMPTY_MAP = Map.Immutable.of();
