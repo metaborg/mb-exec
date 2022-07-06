@@ -180,6 +180,6 @@ public class StrategoImmutableRelation extends StrategoTerm implements IStratego
         final BinaryRelation.Transient<T, T> result = rel.asTransient();
         transClos(rel, worklist, result);
         reflClos(rel, result);
-        return null;
+        return result;
     }
 }

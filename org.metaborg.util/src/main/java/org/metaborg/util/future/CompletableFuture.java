@@ -4,9 +4,13 @@ import org.metaborg.util.functions.CheckedAction1;
 import org.metaborg.util.functions.CheckedAction2;
 import org.metaborg.util.functions.CheckedFunction1;
 import org.metaborg.util.functions.CheckedFunction2;
+import org.metaborg.util.log.ILogger;
+import org.metaborg.util.log.LoggerUtils;
 
 @SuppressWarnings("unchecked")
 public class CompletableFuture<T> implements ICompletableFuture<T> {
+
+    private static final ILogger logger = LoggerUtils.logger(CompletableFuture.class);
 
     private static enum State {
         OPEN, VALUE, EXCEPTION
@@ -59,6 +63,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                             try {
                                 handler.apply(r, ex).whenComplete(future::complete);
                             } catch(Throwable ex2) {
+                                logger.trace("compose handler threw exception.", ex2);
                                 future.completeExceptionally(ex2);
                             }
                         }
@@ -80,6 +85,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                     throw new IllegalStateException();
             }
         } catch(Throwable ex) {
+            logger.trace("compose handler threw exception", ex);
             return new CompletedExceptionallyFuture<>(ex);
         }
     }
@@ -99,6 +105,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                                 try {
                                     future.complete(handler.apply(r));
                                 } catch(Throwable ex2) {
+                                    logger.trace("thenApply handler threw exception", ex2);
                                     future.completeExceptionally(ex2);
                                 }
                             }
@@ -116,6 +123,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                 try {
                     return new CompletedFuture<>(handler.apply((T) data));
                 } catch(Throwable ex) {
+                    logger.trace("thenApply handler threw exception", ex);
                     return new CompletedExceptionallyFuture<>(ex);
                 }
             case EXCEPTION:
@@ -141,6 +149,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                                     handler.apply(r);
                                     future.complete(null);
                                 } catch(Throwable ex2) {
+                                    logger.trace("thenAccept handler threw exception", ex2);
                                     future.completeExceptionally(ex2);
                                 }
                             }
@@ -159,6 +168,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                     handler.apply((T) data);
                     return new CompletedFuture<>(null);
                 } catch(Throwable ex) {
+                    logger.trace("thenAccept handler threw exception", ex);
                     return new CompletedExceptionallyFuture<>(ex);
                 }
             case EXCEPTION:
@@ -184,6 +194,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                                 try {
                                     handler.apply(r).whenComplete(future::complete);
                                 } catch(Throwable ex2) {
+                                    logger.trace("thenCompose handler threw exception", ex2);
                                     future.completeExceptionally(ex2);
                                 }
                             }
@@ -201,6 +212,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                 try {
                     return (IFuture<U>) handler.apply((T) data);
                 } catch(Throwable ex) {
+                    logger.trace("thenCompose handler threw exception", ex);
                     return new CompletedExceptionallyFuture<>(ex);
                 }
             case EXCEPTION:
@@ -223,6 +235,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                             try {
                                 future.complete(handler.apply(r, ex));
                             } catch(Throwable ex2) {
+                                logger.trace("handler threw exception", ex2);
                                 future.completeExceptionally(ex2);
                             }
                         };
@@ -244,6 +257,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                     throw new IllegalStateException();
             }
         } catch(Throwable ex) {
+            logger.trace("handler threw exception", ex);
             return new CompletedExceptionallyFuture<>(ex);
         }
     }
@@ -261,6 +275,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                                 handler.apply(r, ex);
                                 future.complete(r, ex);
                             } catch(Throwable ex2) {
+                                logger.trace("whenComplete handler threw exception", ex2);
                                 future.completeExceptionally(ex2);
                             }
                         };
@@ -284,6 +299,7 @@ public class CompletableFuture<T> implements ICompletableFuture<T> {
                     throw new IllegalStateException();
             }
         } catch(Throwable ex) {
+            logger.trace("whenComplete handler threw exception", ex);
             return new CompletedExceptionallyFuture<>(ex);
         }
     }
