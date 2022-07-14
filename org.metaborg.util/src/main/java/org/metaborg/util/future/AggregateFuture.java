@@ -2,6 +2,7 @@ package org.metaborg.util.future;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.metaborg.util.functions.Action1;
@@ -16,6 +17,7 @@ import org.metaborg.util.tuple.Tuple2;
 import org.metaborg.util.tuple.Tuple3;
 import org.metaborg.util.tuple.Tuple4;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 public class AggregateFuture<T, R> implements IFuture<R> {
@@ -175,8 +177,17 @@ public class AggregateFuture<T, R> implements IFuture<R> {
     }
 
     public static <T, U> IFuture<List<U>> forAll(Iterable<T> items, Function1<T, IFuture<U>> toFuture) {
+        if(Iterables.isEmpty(items)) {
+            return CompletableFuture.completedFuture(Collections.emptyList());
+        }
+
         final ArrayList<IFuture<U>> futures = new ArrayList<>();
         items.forEach(item -> futures.add(toFuture.apply(item)));
+
+        if(futures.size() == 1) {
+            return futures.get(0).thenApply(Collections::singletonList);
+        }
+
         return of(futures);
     }
 
