@@ -1,16 +1,15 @@
 package org.metaborg.util.observable;
 
+import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Queue;
-
-import com.google.common.collect.Queues;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Notification;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 public class TestableObserver<T> implements ITestableObserver<T> {
-    private Queue<TimestampedNotification<T>> notifications = Queues.newArrayDeque();
+    private Queue<TimestampedNotification<T>> notifications = new ArrayDeque<>();
 
 
     @Override public void onComplete() {

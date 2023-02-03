@@ -5,8 +5,6 @@ import java.util.Objects;
 
 import org.metaborg.util.functions.Function4;
 
-import com.google.common.base.Preconditions;
-
 public final class Tuple4<T1, T2, T3, T4> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -17,10 +15,10 @@ public final class Tuple4<T1, T2, T3, T4> implements Serializable {
     private final T4 _4;
 
     private Tuple4(T1 _1, T2 _2, T3 _3, T4 _4) {
-        Preconditions.checkNotNull(_1);
-        Preconditions.checkNotNull(_2);
-        Preconditions.checkNotNull(_3);
-        Preconditions.checkNotNull(_4);
+        Objects.requireNonNull(_1);
+        Objects.requireNonNull(_2);
+        Objects.requireNonNull(_3);
+        Objects.requireNonNull(_4);
         this._1 = _1;
         this._2 = _2;
         this._3 = _3;

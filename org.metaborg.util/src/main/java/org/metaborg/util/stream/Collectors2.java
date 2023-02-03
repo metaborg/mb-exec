@@ -5,17 +5,14 @@ import java.util.HashSet;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
 public class Collectors2 {
 
     public static <T> Collector<T, ?, HashSet<T>> toHashSet() {
-        return Collectors.toCollection(Sets::newHashSet);
+        return Collectors.toCollection(() -> new HashSet<>());
     }
 
     public static <T> Collector<T, ?, ArrayList<T>> toArrayList() {
-        return Collectors.toCollection(Lists::newArrayList);
+        return Collectors.toCollection(() -> new ArrayList<>());
     }
 
 }

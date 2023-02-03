@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.collect.Sets;
-
 import io.usethesource.capsule.Set;
 import io.usethesource.capsule.SetMultimap;
 

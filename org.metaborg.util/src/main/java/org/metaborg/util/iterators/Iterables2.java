@@ -1,7 +1,6 @@
 package org.metaborg.util.iterators;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -16,14 +15,14 @@ public final class Iterables2 {
      * Generates an iterable that is empty; the iterator it returns will always return false for hasNext.
      */
     public static <T> Iterable<T> empty() {
-        return ImmutableList.<T>of();
+        return Collections.emptyList();
     }
 
     /**
      * Generates an iterable that contains given single element.
      */
     public static <T> Iterable<T> singleton(T t) {
-        return ImmutableList.<T>of(t);
+        return Collections.singletonList(t);
     }
 
     /**

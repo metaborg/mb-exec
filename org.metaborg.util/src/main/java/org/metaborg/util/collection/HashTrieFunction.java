@@ -5,8 +5,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
-
 import io.usethesource.capsule.Map;
 import io.usethesource.capsule.SetMultimap;
 

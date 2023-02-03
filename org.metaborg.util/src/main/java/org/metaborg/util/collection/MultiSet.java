@@ -7,8 +7,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Sets;
-
 import io.usethesource.capsule.Map;
 
 public abstract class MultiSet<E> implements Iterable<E> {

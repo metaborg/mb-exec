@@ -6,12 +6,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
-
-import com.google.common.collect.Lists;
 
 public class Arguments implements Iterable<Object>, Serializable {
     private static final long serialVersionUID = -5031843820289891138L;
@@ -21,11 +20,11 @@ public class Arguments implements Iterable<Object>, Serializable {
 
 
     public Arguments() {
-        this.arguments = Lists.newLinkedList();
+        this.arguments = new LinkedList<>();
     }
 
     public Arguments(Arguments other) {
-        this.arguments = Lists.newLinkedList(other.arguments);
+        this.arguments = new LinkedList<>(other.arguments);
     }
 
 

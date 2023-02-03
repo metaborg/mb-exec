@@ -1,20 +1,17 @@
 package org.metaborg.util.resource;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.FileTypeSelector;
-import org.apache.commons.vfs2.NameScope;
 import org.metaborg.util.log.ILogger;
 import org.metaborg.util.log.LoggerUtils;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 public class ResourceUtils {
     private static final ILogger logger = LoggerUtils.logger(ResourceUtils.class);
@@ -51,8 +48,8 @@ public class ResourceUtils {
      *             When finding files fails.
      */
     public static Collection<FileObject> expand(Iterable<FileObject> locations) {
-        final Set<FileName> names = Sets.newHashSet();
-        final Collection<FileObject> resources = Lists.newArrayList();
+        final Set<FileName> names = new HashSet<FileName>();
+        final Collection<FileObject> resources = new ArrayList<>();
         for(FileObject location : locations) {
             final FileObject[] files = expand(location);
             for(FileObject file : files) {
