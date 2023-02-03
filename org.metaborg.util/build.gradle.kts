@@ -11,9 +11,6 @@ dependencies {
   api("commons-io:commons-io")
   api("io.reactivex.rxjava3:rxjava")
   api("io.usethesource:capsule")
-  api("com.google.guava:guava")
-  // Required for Guava >= 27.0:
-  api("com.google.guava:failureaccess")
   api("com.google.inject:guice")
   api("org.slf4j:slf4j-api")
 
