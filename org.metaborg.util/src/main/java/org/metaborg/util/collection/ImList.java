@@ -121,9 +121,6 @@ public abstract class ImList<E> implements List<E> {
             this.size = size;
         }
 
-        @SuppressWarnings("unchecked") public static <E> ImList.Immutable<E> of() {
-            return new Immutable<>((E[]) new Object[] {}, 0);
-        }
         @SafeVarargs public static <E> ImList.Immutable<E> of(E... elems) {
             return new Immutable<>(Arrays.copyOf(elems, elems.length), elems.length);
         }
@@ -186,11 +183,12 @@ public abstract class ImList<E> implements List<E> {
             }
         }
 
-        @Override public <T> T[] toArray(T[] a) {
+        @SuppressWarnings("unchecked") @Override public <T> T[] toArray(T[] a) {
             int size = size();
             if (a.length < size) {
                 return Arrays.copyOf(this.array, size, (Class<? extends T[]>) a.getClass());
             }
+            //noinspection SuspiciousSystemArraycopy
             System.arraycopy(this.array, 0, a, 0, size);
             if (a.length > size) {
                 a[size] = null;
@@ -225,6 +223,9 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public ListIterator<E> listIterator(int index) {
+            if(index < 0 || index > size) {
+                throw new IndexOutOfBoundsException();
+            }
             return new ListIter(index);
         }
 
@@ -242,8 +243,7 @@ public abstract class ImList<E> implements List<E> {
                     throw new NoSuchElementException();
                 }
                 cursor -= 1;
-                final E e = array[cursor];
-                return e;
+                return array[cursor];
             }
 
             public int nextIndex() {
@@ -269,7 +269,7 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public List<E> subList(int fromIndex, int toIndex) {
-            if(fromIndex < 0 || toIndex >= size || fromIndex > toIndex) {
+            if(fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
                 throw new IndexOutOfBoundsException();
             }
             return new ImList.Immutable<>(Arrays.copyOfRange(this.array, fromIndex, toIndex), toIndex - fromIndex);
@@ -289,7 +289,7 @@ public abstract class ImList<E> implements List<E> {
                 return false;
 
             for(int i = 0; i < size; i++) {
-                if(!Objects.equals(((Object[]) array)[i++], other.array[i++])) {
+                if(!Objects.equals(((Object[]) array)[i], other.array[i])) {
                     return false;
                 }
             }
@@ -348,13 +348,37 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public Iterator<E> iterator() {
-            return Arrays.stream(array, 0, size).iterator();
+            return new Iter();
+        }
+
+        private class Iter implements Iterator<E>  {
+            int cursor = 0;
+
+            @Override
+            public boolean hasNext() {
+                return cursor < size;
+            }
+
+            @Override
+            public E next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                final E e = array[cursor];
+                cursor += 1;
+                return e;
+            }
+
+            @Override public void remove() {
+                Transient.this.remove(cursor);
+            }
         }
 
         @SuppressWarnings("unchecked") @Override public <T> T[] toArray(T[] a) {
             if(a.length < size) {
                 return (T[]) Arrays.copyOf(array, size, a.getClass());
             }
+            //noinspection SuspiciousSystemArraycopy
             System.arraycopy(array, 0, a, 0, size);
             if (a.length > size)
                 a[size] = null;
@@ -366,19 +390,23 @@ public abstract class ImList<E> implements List<E> {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             if(size == array.length) {
-                array = Arrays.copyOf(array, array.length * 2);
+                realloc();
             }
             array[size] = e;
             size += 1;
             return true;
         }
 
-        @Override public boolean remove(Object o) {
-            if(frozen) {
-                throw new IllegalStateException("Transient frozen into Immutable already");
+        private void realloc() {
+            realloc(array.length * 2);
+        }
+
+        private void realloc(int newLength) {
+            int remainder = newLength % 2;
+            if(remainder != 0) {
+                newLength = newLength + 2 - remainder;
             }
-            // TODO if necessary
-            throw new UnsupportedOperationException();
+            array = Arrays.copyOf(array, Math.max(4, newLength));
         }
 
         @Override public boolean containsAll(Collection<?> c) {
@@ -390,15 +418,8 @@ public abstract class ImList<E> implements List<E> {
             if(frozen) {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
+            //noinspection ConstantValue
             return c.stream().map(this::add).reduce(false, (a, b) -> a || b);
-        }
-
-        @Override public boolean addAll(int index, Collection<? extends E> c) {
-            if(frozen) {
-                throw new IllegalStateException("Transient frozen into Immutable already");
-            }
-            // TODO if necessary
-            throw new UnsupportedOperationException();
         }
 
         @Override public boolean removeAll(Collection<?> c) {
@@ -406,14 +427,6 @@ public abstract class ImList<E> implements List<E> {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             return c.stream().map(this::remove).reduce(false, (a, b) -> a || b);
-        }
-
-        @Override public boolean retainAll(Collection<?> c) {
-            if(frozen) {
-                throw new IllegalStateException("Transient frozen into Immutable already");
-            }
-            // TODO if necessary
-            throw new UnsupportedOperationException();
         }
 
         @Override public void clear() {
@@ -445,50 +458,21 @@ public abstract class ImList<E> implements List<E> {
             return prev;
         }
 
-        @Override public void add(int index, E element) {
-            if(frozen) {
-                throw new IllegalStateException("Transient frozen into Immutable already");
-            }
-            // TODO if necessary
-            throw new UnsupportedOperationException();
-        }
-
-        @Override public E remove(int index) {
-            if(frozen) {
-                throw new IllegalStateException("Transient frozen into Immutable already");
-            }
-            // TODO if necessary
-            throw new UnsupportedOperationException();
-        }
-
         @Override public int indexOf(Object o) {
-            if(frozen) {
-                throw new IllegalStateException("Transient frozen into Immutable already");
-            }
-            // TODO if necessary
-            throw new UnsupportedOperationException();
+            return IntStream.range(0, this.array.length).filter(i -> Objects.equals(o, this.array[i])).findFirst()
+                .orElse(-1);
         }
 
         @Override public int lastIndexOf(Object o) {
-            if(frozen) {
-                throw new IllegalStateException("Transient frozen into Immutable already");
-            }
-            // TODO if necessary
-            throw new UnsupportedOperationException();
-        }
-
-        @Override public ListIterator<E> listIterator() {
-            // TODO if necessary
-            throw new UnsupportedOperationException();
-        }
-
-        @Override public ListIterator<E> listIterator(int index) {
-            // TODO if necessary
-            throw new UnsupportedOperationException();
+            return IntStream.iterate(this.array.length - 1, i -> i - 1).limit(this.array.length)
+                .filter(i -> Objects.equals(o, this.array[i])).findFirst().orElse(-1);
         }
 
         @Override public List<E> subList(int fromIndex, int toIndex) {
-            // TODO if necessary
+            if(fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
+                throw new IndexOutOfBoundsException();
+            }
+            // TODO: Create proper SubList class :(
             throw new UnsupportedOperationException();
         }
 
@@ -508,7 +492,7 @@ public abstract class ImList<E> implements List<E> {
             }
 
             for(int i = 0; i < size; i++) {
-                if(!Objects.equals(((Object[]) array)[i++], other.array[i++])) {
+                if(!Objects.equals(((Object[]) array)[i], other.array[i])) {
                     return false;
                 }
             }
@@ -526,6 +510,129 @@ public abstract class ImList<E> implements List<E> {
 
         @Override public String toString() {
             return "ImList.Transient[" + stream().map(Objects::toString).collect(Collectors.joining(", ")) + ']';
+        }
+
+        @Override public boolean remove(Object o) {
+            if(frozen) {
+                throw new IllegalStateException("Transient frozen into Immutable already");
+            }
+            int index = indexOf(o);
+            if(index == -1) {
+                return false;
+            }
+            remove(index);
+            return true;
+        }
+
+        @Override public boolean addAll(int index, Collection<? extends E> c) {
+            if(frozen) {
+                throw new IllegalStateException("Transient frozen into Immutable already");
+            }
+            if(c.isEmpty()) {
+                return false;
+            }
+            @SuppressWarnings("unchecked") E[] cArray = (E[]) c.toArray();
+            final int cSize = cArray.length;
+            if(size + cSize >= array.length) {
+                realloc(size + cSize);
+            }
+            if(size != index) {
+                System.arraycopy(array, index, array, index + cSize, size - index);
+            }
+            System.arraycopy(cArray, 0, array, index, cSize);
+            size += cSize;
+            return true;
+        }
+
+        @Override public boolean retainAll(Collection<?> c) {
+            if(frozen) {
+                throw new IllegalStateException("Transient frozen into Immutable already");
+            }
+            boolean result = false;
+            for(Iterator<E> iterator = this.iterator(); iterator.hasNext(); ) {
+                E e = iterator.next();
+                if(!c.contains(e)) {
+                    iterator.remove();
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        @Override public void add(int index, E element) {
+            if(frozen) {
+                throw new IllegalStateException("Transient frozen into Immutable already");
+            }
+            if(index < 0 || index > size) {
+                throw new IndexOutOfBoundsException();
+            }
+            if(size != index) {
+                System.arraycopy(array, index, array, index + 1, size - index);
+            }
+            array[index] = element;
+            size += 1;
+        }
+
+        @Override public E remove(int index) {
+            if(frozen) {
+                throw new IllegalStateException("Transient frozen into Immutable already");
+            }
+            if(index < 0 || index >= size) {
+                throw new IndexOutOfBoundsException();
+            }
+            E elem = array[index];
+            size -= 1;
+            if(size != index) {
+                System.arraycopy(array, index + 1, array, index, size - index);
+            }
+            array[size] = null;
+            return elem;
+        }
+
+        @Override public ListIterator<E> listIterator() {
+            return new ListIter(0);
+        }
+
+        @Override public ListIterator<E> listIterator(int index) {
+            if(index < 0 || index > size) {
+                throw new IndexOutOfBoundsException();
+            }
+            return new ListIter(index);
+        }
+
+        private class ListIter extends Iter implements ListIterator<E> {
+            ListIter(int index) {
+                cursor = index;
+            }
+
+            public boolean hasPrevious() {
+                return cursor > 0;
+            }
+
+            public E previous() {
+                if (!hasPrevious()) {
+                    throw new NoSuchElementException();
+                }
+                cursor -= 1;
+                return array[cursor];
+            }
+
+            public int nextIndex() {
+                return cursor;
+            }
+
+            public int previousIndex() {
+                return cursor-1;
+            }
+
+            @Override public void set(E e) {
+                Transient.this.set(cursor, e);
+            }
+
+            @Override public void add(E e) {
+                Transient.this.add(cursor, e);
+            }
+
         }
     }
 }
