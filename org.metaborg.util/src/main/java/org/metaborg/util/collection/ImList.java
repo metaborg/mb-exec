@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -15,8 +16,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-import org.metaborg.util.stream.Collectors2;
+import java.util.stream.IntStream;
 
 /**
  * Mutable/Immutable List interface ala capsule.
@@ -113,12 +113,11 @@ public abstract class ImList<E> implements List<E> {
     @Override public abstract List<E> subList(int fromIndex, int toIndex);
 
     public static class Immutable<E> extends ImList<E> {
-        private final List<E> array;
+        private final E[] array;
         private final int size;
 
         Immutable(E[] array, int size) {
-            // TODO: replace with raw array, which can be larger than size and therefore we can't dispatch to List<E>.toArray
-            this.array = Arrays.asList(array);
+            this.array = array;
             this.size = size;
         }
 
@@ -161,54 +160,153 @@ public abstract class ImList<E> implements List<E> {
 
         @Override public boolean contains(Object o) {
             Objects.requireNonNull(o);
-            return array.contains(o);
+            return indexOf(o) >= 0;
         }
 
         @Override public Iterator<E> iterator() {
-            return array.iterator();
+            return new Iter();
+        }
+
+        private class Iter implements Iterator<E>  {
+            int cursor = 0;
+
+            @Override
+            public boolean hasNext() {
+                return cursor < size;
+            }
+
+            @Override
+            public E next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                final E e = array[cursor];
+                cursor += 1;
+                return e;
+            }
         }
 
         @Override public <T> T[] toArray(T[] a) {
-            return array.toArray(a);
+            int size = size();
+            if (a.length < size) {
+                return Arrays.copyOf(this.array, size, (Class<? extends T[]>) a.getClass());
+            }
+            System.arraycopy(this.array, 0, a, 0, size);
+            if (a.length > size) {
+                a[size] = null;
+            }
+            return a;
         }
 
         @Override public boolean containsAll(Collection<?> c) {
             Objects.requireNonNull(c);
-            //noinspection SlowListContainsAll
-            return array.containsAll(c);
+            return c.stream().allMatch(this::contains);
         }
 
         @Override public E get(int index) {
             if(index >= size) {
                 throw new IndexOutOfBoundsException();
             }
-            return array.get(index);
+            return array[index];
         }
 
         @Override public int indexOf(Object o) {
-            Objects.requireNonNull(o);
-            return array.indexOf(o);
+            return IntStream.range(0, this.array.length).filter(i -> Objects.equals(o, this.array[i])).findFirst()
+                .orElse(-1);
         }
 
         @Override public int lastIndexOf(Object o) {
-            Objects.requireNonNull(o);
-            return array.lastIndexOf(o);
+            return IntStream.iterate(this.array.length - 1, i -> i - 1).limit(this.array.length)
+                .filter(i -> Objects.equals(o, this.array[i])).findFirst().orElse(-1);
         }
 
         @Override public ListIterator<E> listIterator() {
-            return array.listIterator();
+            return listIterator(0);
         }
 
         @Override public ListIterator<E> listIterator(int index) {
-            return array.listIterator(index);
+            return new ListIter(index);
+        }
+
+        private class ListIter extends Iter implements ListIterator<E> {
+            ListIter(int index) {
+                cursor = index;
+            }
+
+            public boolean hasPrevious() {
+                return cursor > 0;
+            }
+
+            public E previous() {
+                if (!hasPrevious()) {
+                    throw new NoSuchElementException();
+                }
+                cursor -= 1;
+                final E e = array[cursor];
+                return e;
+            }
+
+            public int nextIndex() {
+                return cursor;
+            }
+
+            public int previousIndex() {
+                return cursor-1;
+            }
+
+            @Override public void remove() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override public void set(E e) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override public void add(E e) {
+                throw new UnsupportedOperationException();
+            }
+
         }
 
         @Override public List<E> subList(int fromIndex, int toIndex) {
-            return Collections.unmodifiableList(array.subList(fromIndex, toIndex));
+            if(fromIndex < 0 || toIndex >= size || fromIndex > toIndex) {
+                throw new IndexOutOfBoundsException();
+            }
+            return new ImList.Immutable<>(Arrays.copyOfRange(this.array, fromIndex, toIndex), toIndex - fromIndex);
         }
 
         @SuppressWarnings("unchecked") public Transient<E> asTransient() {
-            return new Transient<>((E[]) array.toArray());
+            return new Transient<>((E[]) toArray());
+        }
+
+        @Override public boolean equals(Object o) {
+            if(this == o)
+                return true;
+            if(o == null || getClass() != o.getClass())
+                return false;
+            Immutable<?> other = (Immutable<?>) o;
+            if(size != other.size)
+                return false;
+
+            for(int i = 0; i < size; i++) {
+                if(!Objects.equals(((Object[]) array)[i++], other.array[i++])) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        @Override public int hashCode() {
+            int result = 1;
+            for(E elem : this) {
+                result = 31 * result + Objects.hashCode(elem);
+            }
+            return result;
+        }
+
+        @Override public String toString() {
+            return "ImList.Immutable[" + stream().map(Objects::toString).collect(Collectors.joining(", ")) + ']';
         }
     }
 
@@ -397,6 +495,37 @@ public abstract class ImList<E> implements List<E> {
         public Immutable<E> freeze() {
             frozen = true;
             return new Immutable<>(array, size);
+        }
+
+        @Override public boolean equals(Object o) {
+            if(this == o)
+                return true;
+            if(o == null || getClass() != o.getClass())
+                return false;
+            Transient<?> other = (Transient<?>) o;
+            if(size != other.size || frozen != other.frozen) {
+                return false;
+            }
+
+            for(int i = 0; i < size; i++) {
+                if(!Objects.equals(((Object[]) array)[i++], other.array[i++])) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        @Override public int hashCode() {
+            int result = Objects.hash(frozen);
+            for(E elem : this) {
+                result = 31 * result + Objects.hashCode(elem);
+            }
+            return result;
+        }
+
+        @Override public String toString() {
+            return "ImList.Transient[" + stream().map(Objects::toString).collect(Collectors.joining(", ")) + ']';
         }
     }
 }
