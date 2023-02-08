@@ -18,6 +18,8 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.annotation.Nullable;
+
 /**
  * Mutable/Immutable List interface ala capsule.
  * Does not allow null values.
@@ -313,7 +315,7 @@ public abstract class ImList<E> implements List<E> {
     public static class Transient<E> extends ImList<E> {
         private E[] array;
         private int size = 0;
-        private boolean frozen = false;
+        private @Nullable ImList.Immutable<E> frozen = null;
 
         @SuppressWarnings("unchecked") public Transient(int initialCapacity) {
             if (initialCapacity > 0) {
@@ -353,6 +355,7 @@ public abstract class ImList<E> implements List<E> {
 
         private class Iter implements Iterator<E>  {
             int cursor = 0;
+            int lastRet = -1;
 
             @Override
             public boolean hasNext() {
@@ -365,12 +368,18 @@ public abstract class ImList<E> implements List<E> {
                     throw new NoSuchElementException();
                 }
                 final E e = array[cursor];
+                lastRet = cursor;
                 cursor += 1;
                 return e;
             }
 
             @Override public void remove() {
-                Transient.this.remove(cursor);
+                if (lastRet < 0) {
+                    throw new IllegalStateException();
+                }
+                Transient.this.remove(lastRet);
+                cursor = lastRet;
+                lastRet = -1;
             }
         }
 
@@ -386,7 +395,7 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public boolean add(E e) {
-            if(frozen) {
+            if(isFrozen()) {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             if(size == array.length) {
@@ -415,7 +424,7 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public boolean addAll(Collection<? extends E> c) {
-            if(frozen) {
+            if(isFrozen()) {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             //noinspection ConstantValue
@@ -423,14 +432,14 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public boolean removeAll(Collection<?> c) {
-            if(frozen) {
+            if(isFrozen()) {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             return c.stream().map(this::remove).reduce(false, (a, b) -> a || b);
         }
 
         @Override public void clear() {
-            if(frozen) {
+            if(isFrozen()) {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             for(int i = 0; i < size; i++) {
@@ -447,7 +456,7 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public E set(int index, E element) {
-            if(frozen) {
+            if(isFrozen()) {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             if(index >= size) {
@@ -472,13 +481,19 @@ public abstract class ImList<E> implements List<E> {
             if(fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
                 throw new IndexOutOfBoundsException();
             }
-            // TODO: Create proper SubList class :(
+            // TODO: if necessary, we can write a proper sublist class, look at ArrayList's for inspiration
             throw new UnsupportedOperationException();
         }
 
         public Immutable<E> freeze() {
-            frozen = true;
-            return new Immutable<>(array, size);
+            if(frozen == null) {
+                frozen = new Immutable<>(array, size);
+            }
+            return frozen;
+        }
+
+        public boolean isFrozen() {
+            return frozen != null;
         }
 
         @Override public boolean equals(Object o) {
@@ -513,7 +528,7 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public boolean remove(Object o) {
-            if(frozen) {
+            if(isFrozen()) {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             int index = indexOf(o);
@@ -525,7 +540,7 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public boolean addAll(int index, Collection<? extends E> c) {
-            if(frozen) {
+            if(isFrozen()) {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             if(c.isEmpty()) {
@@ -545,7 +560,7 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public boolean retainAll(Collection<?> c) {
-            if(frozen) {
+            if(isFrozen()) {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             boolean result = false;
@@ -560,7 +575,7 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public void add(int index, E element) {
-            if(frozen) {
+            if(isFrozen()) {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             if(index < 0 || index > size) {
@@ -574,7 +589,7 @@ public abstract class ImList<E> implements List<E> {
         }
 
         @Override public E remove(int index) {
-            if(frozen) {
+            if(isFrozen()) {
                 throw new IllegalStateException("Transient frozen into Immutable already");
             }
             if(index < 0 || index >= size) {
@@ -614,6 +629,7 @@ public abstract class ImList<E> implements List<E> {
                     throw new NoSuchElementException();
                 }
                 cursor -= 1;
+                lastRet = cursor;
                 return array[cursor];
             }
 
@@ -626,11 +642,16 @@ public abstract class ImList<E> implements List<E> {
             }
 
             @Override public void set(E e) {
-                Transient.this.set(cursor, e);
+                if (lastRet < 0) {
+                    throw new IllegalStateException();
+                }
+                Transient.this.set(lastRet, e);
             }
 
             @Override public void add(E e) {
                 Transient.this.add(cursor, e);
+                cursor += 1;
+                lastRet = -1;
             }
 
         }
