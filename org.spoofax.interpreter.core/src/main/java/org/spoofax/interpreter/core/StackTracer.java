@@ -63,6 +63,14 @@ public class StackTracer {
         failureDepth = --currentDepth;
     }
     
+
+    public final void popOnFailure(String name) {
+        popOnFailure();
+    }
+
+    public final void popOnSuccess(String name) {
+        popOnSuccess();
+    }
     public void popOnExit(boolean success) {
         currentDepth = 0;
         if (success) failureDepth = 0;
