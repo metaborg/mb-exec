@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -62,6 +63,13 @@ public abstract class Bag<E> implements Collection<E> {
         }).iterator();
     }
 
+    public int count(E i) {
+        return backingMap().getOrDefault(i, 0);
+    }
+
+    public Set<E> elementSet() {
+        return Collections.unmodifiableSet(this.backingMap().keySet());
+    }
 
     public static final class Immutable<E> extends Bag<E> implements ImmutableCollection<E> {
         private Map<E, Integer> backingMap;
@@ -227,6 +235,52 @@ public abstract class Bag<E> implements Collection<E> {
                 frozen = new Immutable<>(Collections.unmodifiableMap(backingMap), size);
             }
             return frozen;
+        }
+
+        public int setCount(E elem, int count) {
+            if(count < 0) {
+                throw new IllegalArgumentException("Count cannot be negative");
+            }
+            final int oldCount = backingMap.getOrDefault(elem, 0);
+            if(count == 0) {
+                backingMap.remove(elem);
+            } else {
+                backingMap.put(elem, count);
+            }
+
+            size += (count - oldCount);
+            return oldCount;
+        }
+
+        public int add(E elem, int count) {
+            if(count < 0) {
+                throw new IllegalArgumentException("Count cannot be negative");
+            }
+            if(count == 0) {
+                return count(elem);
+            }
+            final int oldCount = backingMap.getOrDefault(elem, 0);
+            backingMap.put(elem, oldCount + count);
+            size += count;
+            return oldCount;
+        }
+
+        public int remove(E elem, int count) {
+            if(count < 0) {
+                throw new IllegalArgumentException("Count cannot be negative");
+            }
+            if(count == 0) {
+                return count(elem);
+            }
+            final int oldCount = backingMap.getOrDefault(elem, 0);
+            if(count > oldCount) {
+                backingMap.remove(elem);
+                size -= oldCount;
+            } else {
+                backingMap.put(elem, oldCount - count);
+                size -= count;
+            }
+            return oldCount;
         }
     }
 }
