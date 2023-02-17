@@ -31,6 +31,10 @@ public class StackTracer {
 
     private int failureDepth;
 
+    /**
+     * Set the name of the calling strategy before the actual call, to be recorded in the stacktrace once in the call.
+     * @param callingContext
+     */
     public void setCallingContext(String callingContext) {
         this.callingContext = callingContext;
     }
@@ -55,11 +59,13 @@ public class StackTracer {
     }
 
     public final void popOnFailure() {
+        callingContext = null;
         currentDepth--;
         // failureDepth stays the same and keeps track of this failure
     }
 
     public final void popOnSuccess() {
+        callingContext = null;
         failureDepth = --currentDepth;
     }
 
@@ -73,6 +79,7 @@ public class StackTracer {
     }
 
     public void popOnExit(boolean success) {
+        callingContext = null;
         currentDepth = 0;
         if (success) failureDepth = 0;
     }
