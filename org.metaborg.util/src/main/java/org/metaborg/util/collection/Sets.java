@@ -320,7 +320,7 @@ public class Sets {
      * Returns a capacity that is sufficient to keep the map from being resized as long as it grows no
      * larger than expectedSize and the load factor is ≥ its default (0.75).
      */
-    static int hashCapacity(int expectedSize) {
+    public static int hashCapacity(int expectedSize) {
         if (expectedSize < 3) {
             return Integer.max(expectedSize, 2) + 1;
         }
