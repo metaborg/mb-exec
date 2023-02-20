@@ -1,6 +1,7 @@
 package org.metaborg.util.collection;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public abstract class MultiSet<E> implements Iterable<E> {
         return elements().getOrDefault(e, 0);
     }
 
-    public boolean contains(E e) {
+    public boolean contains(Object e) {
         return elements().containsKey(e);
     }
 
@@ -116,6 +117,16 @@ public abstract class MultiSet<E> implements Iterable<E> {
             this.elements = elements;
         }
 
+        public static <T> Immutable<T> copyOf(MultiSet<T> toCopy) {
+            if(toCopy instanceof Immutable) {
+                return (Immutable<T>) toCopy;
+            } else {
+                final Transient<T> b = Transient.of();
+                b.addAll(toCopy);
+                return b.freeze();
+            }
+        }
+
         @Override protected Map<E, Integer> elements() {
             return elements;
         }
@@ -129,10 +140,6 @@ public abstract class MultiSet<E> implements Iterable<E> {
             } else {
                 return new MultiSet.Immutable<>(elements.__remove(e));
             }
-        }
-
-        public Immutable<E> add(E e) {
-            return add(e, 1);
         }
 
         public Immutable<E> add(E e, int n) {
@@ -151,13 +158,9 @@ public abstract class MultiSet<E> implements Iterable<E> {
         public Immutable<E> addAll(Iterable<E> es) {
             Immutable<E> result = this;
             for(E e : es) {
-                result = result.add(e);
+                result = result.add(e, 1);
             }
             return result;
-        }
-
-        public Immutable<E> remove(E e) {
-            return remove(e, 1);
         }
 
         public Immutable<E> remove(E e, int n) {
@@ -181,7 +184,7 @@ public abstract class MultiSet<E> implements Iterable<E> {
         public Immutable<E> remove(Iterable<E> es) {
             MultiSet.Immutable<E> result = this;
             for(E e : es) {
-                result = result.remove(e);
+                result = result.remove(e, 1);
             }
             return result;
         }
@@ -227,6 +230,17 @@ public abstract class MultiSet<E> implements Iterable<E> {
             }
         }
 
+        public Collection<E> toCollection() {
+            return new ImmutableCollection<E>() {
+                @Override public Iterator iterator() {
+                    return Immutable.this.iterator();
+                }
+
+                @Override public int size() {
+                    return Immutable.this.size();
+                }
+            };
+        }
     }
 
     public static class Transient<E> extends MultiSet<E> {

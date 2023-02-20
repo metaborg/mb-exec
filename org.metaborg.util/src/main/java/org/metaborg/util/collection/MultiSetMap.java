@@ -1,8 +1,12 @@
 package org.metaborg.util.collection;
 
 import java.io.Serializable;
+import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import io.usethesource.capsule.Map;
@@ -18,6 +22,19 @@ public abstract class MultiSetMap<K, V> {
 
     public Set<Entry<K, MultiSet.Immutable<V>>> entrySet() {
         return asMap().entrySet();
+    }
+
+    public Collection<Entry<K, V>> entries() {
+        return asMap().entrySet().stream().flatMap(e -> {
+            K key = e.getKey();
+            return e.getValue().toCollection().stream().map(v -> new AbstractMap.SimpleImmutableEntry<>(key, v));
+        }).collect(Collectors.toList());
+    }
+
+    public void forEach(BiConsumer<? super K, ? super V> action) {
+        for (java.util.Map.Entry<K, V> entry : entries()) {
+            action.accept(entry.getKey(), entry.getValue());
+        }
     }
 
     public boolean isEmpty() {
@@ -62,13 +79,19 @@ public abstract class MultiSetMap<K, V> {
             this.entries = entries;
         }
 
+        public static <K, V> Immutable<K, V> of(K key, V value) {
+            final Immutable<K, V> result = of();
+            result.put(key, value);
+            return result;
+        }
+
         @Override public Map.Immutable<K, MultiSet.Immutable<V>> asMap() {
             return entries;
         }
 
         public Immutable<K, V> put(K key, V value) {
             final MultiSet.Immutable<V> values = entries.getOrDefault(key, MultiSet.Immutable.of());
-            return new Immutable<>(entries.__put(key, values.add(value)));
+            return new Immutable<>(entries.__put(key, values.add(value, 1)));
         }
 
         public Immutable<K, V> put(K key, V value, int n) {
@@ -103,7 +126,7 @@ public abstract class MultiSetMap<K, V> {
             if(values == null) {
                 return this;
             }
-            final MultiSet.Immutable<V> newValues = values.remove(value);
+            final MultiSet.Immutable<V> newValues = values.remove(value, 1);
             final Map.Immutable<K, MultiSet.Immutable<V>> newEntries;
             if(newValues.isEmpty()) {
                 newEntries = entries.__remove(key);
@@ -247,6 +270,18 @@ public abstract class MultiSetMap<K, V> {
             return new Transient<>(Map.Transient.of());
         }
 
+        public Collection<V> removeAll(K key) {
+            final MultiSet.Immutable<V> removed = entries.remove(key);
+            return removed != null ? removed.toCollection() : Collections.emptySet();
+        }
+
+        public boolean removeAll(Collection<K> keys, V value) {
+            boolean changed = false;
+            for(K key : keys) {
+                changed |= remove(key, value) != 0;
+            }
+            return changed;
+        }
     }
 
     @Override public boolean equals(Object obj) {
