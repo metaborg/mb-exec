@@ -271,7 +271,7 @@ public abstract class MultiSetMap<K, V> {
         }
 
         public Collection<V> removeAll(K key) {
-            final MultiSet.Immutable<V> removed = entries.remove(key);
+            final MultiSet.Immutable<V> removed = entries.__remove(key);
             return removed != null ? removed.toCollection() : Collections.emptySet();
         }
 
