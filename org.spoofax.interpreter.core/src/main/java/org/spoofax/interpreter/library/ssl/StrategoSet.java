@@ -48,6 +48,15 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         return r == null ? -1 : r;
     }
 
+    public IStrategoTerm getElem(int index) {
+        for(Map.Entry<IStrategoTerm, Integer> e : map.entrySet()) {
+            if(e.getValue().equals(index)) {
+                return e.getKey();
+            }
+        }
+        return null;
+    }
+
     public boolean containsValue(IStrategoTerm t) {
         return map.containsKey(t);
     }
