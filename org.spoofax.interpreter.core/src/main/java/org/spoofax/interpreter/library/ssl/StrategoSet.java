@@ -1,10 +1,3 @@
-/*
- * Created on 08.aug.2005
- *
- * Copyright (c) 2005, Karl Trygve Kalleberg <karltk near strategoxt.org>
- * 
- * Licensed under the GNU Lesser General Public License, v2.1
- */
 package org.spoofax.interpreter.library.ssl;
 
 import java.io.IOException;
@@ -27,18 +20,18 @@ import org.spoofax.terms.AbstractSimpleTerm;
 import org.spoofax.terms.TermFactory;
 
 public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Serializable {
-        
+
     private static final long serialVersionUID = -4514696890481283123L;
     private int counter;
     private final Map<IStrategoTerm, Integer> map;
-    
+
     public StrategoSet(int initialSize, int maxLoad) {
         map = new HashMap<IStrategoTerm, Integer>(initialSize, 1.0f*maxLoad/100);
         counter = 0;
     }
-    
+
     public int put(IStrategoTerm value) {
-        int idx = counter++; 
+        int idx = counter++;
         map.put(value, idx);
         return idx;
     }
@@ -79,16 +72,18 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         class X implements Comparable<X> {
             IStrategoTerm t;
             Integer i;
+
             X(IStrategoTerm t, Integer i) {
                 this.t = t;
                 this.i = i;
             }
+
             @Override public int compareTo(X o) {
                 return i.compareTo(o.i);
             }
         }
         List<X> xs = new ArrayList<X>();
-        for(Entry<IStrategoTerm,Integer> e : map.entrySet()) { 
+        for(Entry<IStrategoTerm,Integer> e : map.entrySet()) {
             xs.add(new X(e.getKey(), e.getValue()));
         }
         Collections.sort(xs);
@@ -97,7 +92,7 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
             r.add(x.t);
         return r;
     }
-    
+
     public IStrategoTerm any() {
         return map.keySet().iterator().next();
     }
@@ -109,7 +104,7 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
     public int size() {
         return map.size();
     }
-    
+
     public Set<Entry<IStrategoTerm, Integer>> entrySet() {
         return map.entrySet();
     }
@@ -134,8 +129,7 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         return 0;
     }
 
-    @Deprecated
-    @Override public int getTermType() {
+    @Deprecated @Override public int getTermType() {
         return getType().getValue();
     }
 
@@ -146,7 +140,7 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
     @Override public boolean match(IStrategoTerm second) {
         return second == this;
     }
-    
+
     @Override public int hashCode() {
         return System.identityHashCode(this);
     }
@@ -154,7 +148,7 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
     @Override public void prettyPrint(ITermPrinter pp) {
         pp.print(toString());
     }
-    
+
     @Override public String toString() {
         return String.valueOf(hashCode());
     }
@@ -163,8 +157,7 @@ public class StrategoSet extends AbstractSimpleTerm implements IStrategoTerm, Se
         return toString();
     }
 
-    @Override public void writeAsString(Appendable output, int maxDepth)
-            throws IOException {
+    @Override public void writeAsString(Appendable output, int maxDepth) throws IOException {
         output.append(toString());
     }
 
