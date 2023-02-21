@@ -18,7 +18,7 @@ public class SSL_immutable_set_insert_eq extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
-        return insert(env, targs, new StrategyEqualityComparator(env, sargs[0]));
+        return insert(env, targs, new InterpretedStrategyEqualityComparator(env, sargs[0]));
     }
 
     protected boolean insert(IContext env, IStrategoTerm[] targs, EqualityComparator<Object> cmp) {

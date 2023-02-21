@@ -18,7 +18,7 @@ public class SSL_immutable_set_contains_eq extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
-        return contains(env, targs, new StrategyEqualityComparator(env, sargs[0]));
+        return contains(env, targs, new InterpretedStrategyEqualityComparator(env, sargs[0]));
     }
 
     protected boolean contains(IContext env, IStrategoTerm[] targs, EqualityComparator<Object> cmp) {

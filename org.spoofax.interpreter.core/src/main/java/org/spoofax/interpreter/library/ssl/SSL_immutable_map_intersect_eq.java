@@ -21,7 +21,7 @@ public class SSL_immutable_map_intersect_eq extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        return intersect(env, sargs, targs, new StrategyEqualityComparator(env, sargs[1]));
+        return intersect(env, sargs, targs, new InterpretedStrategyEqualityComparator(env, sargs[1]));
     }
 
     protected boolean intersect(IContext env, Strategy[] sargs, IStrategoTerm[] targs, EqualityComparator<Object> cmp)

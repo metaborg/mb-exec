@@ -18,7 +18,7 @@ public class SSL_immutable_set_remove_eq extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
-        return remove(env, targs, new StrategyEqualityComparator(env, sargs[0]));
+        return remove(env, targs, new InterpretedStrategyEqualityComparator(env, sargs[0]));
     }
 
     protected boolean remove(IContext env, IStrategoTerm[] targs, EqualityComparator<Object> cmp) {
