@@ -19,7 +19,7 @@ public class SSL_immutable_map_subtract_set_eq extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
-        return subtract(env, targs, new StrategyEqualityComparator(env, sargs[0]));
+        return subtract(env, targs, new InterpretedStrategyEqualityComparator(env, sargs[0]));
     }
 
     protected boolean subtract(IContext env, IStrategoTerm[] targs, EqualityComparator<Object> cmp) {

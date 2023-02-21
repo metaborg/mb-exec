@@ -28,7 +28,7 @@ public class SSL_immutable_set_subtract_eq extends AbstractPrimitive {
 
         final Set.Immutable<IStrategoTerm> result;
         try {
-            result = one.__removeAllEquivalent(other, new StrategyEqualityComparator(env, comp));
+            result = one.__removeAllEquivalent(other, new InterpretedStrategyEqualityComparator(env, comp));
         } catch(RuntimeException e) {
             if(e.getCause() instanceof InterpreterException) {
                 throw (InterpreterException) e.getCause();

@@ -19,7 +19,7 @@ public class SSL_immutable_set_strict_subset_eq extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
-        return strictSubset(env, targs, new StrategyEqualityComparator(env, sargs[0]));
+        return strictSubset(env, targs, new InterpretedStrategyEqualityComparator(env, sargs[0]));
     }
 
     protected boolean strictSubset(IContext env, IStrategoTerm[] targs, EqualityComparator<Object> cmp) {

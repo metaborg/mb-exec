@@ -18,7 +18,7 @@ public class SSL_immutable_map_put_eq extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) {
-        return put(env, targs, new StrategyEqualityComparator(env, sargs[0]));
+        return put(env, targs, new InterpretedStrategyEqualityComparator(env, sargs[0]));
     }
 
     protected boolean put(IContext env, IStrategoTerm[] targs, EqualityComparator<Object> cmp) {
