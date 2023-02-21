@@ -82,7 +82,7 @@ public class Sets {
                             E e = itr2.next();
                             if (!set1.contains(e)) {
                                 hasNext = true;
-                                return next;
+                                return e;
                             }
                         }
                         hasNext = false;
