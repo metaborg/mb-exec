@@ -1,6 +1,7 @@
 package org.metaborg.util.collection;
 
 import java.util.Map.Entry;
+import java.util.function.BiFunction;
 
 import org.metaborg.util.functions.Function1;
 import org.metaborg.util.functions.Function2;
@@ -14,6 +15,29 @@ public final class CapsuleUtil {
 
     private CapsuleUtil() {
     }
+
+    /**
+     * Transforms a map using a function that returns a map entry,
+     * and returns the resulting immutable map.
+     *
+     * @param map the map to transform
+     * @param f the function to apply to each entry
+     * @return the resulting entries
+     * @param <K1> the type of the keys of the input map
+     * @param <V1> the type of the values of the input map
+     * @param <K2> the type of the keys of the output map
+     * @param <V2> the type of the values of the output map
+     */
+    public static <K1, V1, K2, V2> Map.Immutable<K2, V2> mapEntries(Map<K1, V1> map, BiFunction<K1, V1, Entry<K2, V2>> f) {
+        final Map.Transient<K2, V2> newMap = Map.Transient.of();
+        map.forEach((k, v) ->
+        {
+            final Map.Entry<K2, V2> newEntry = f.apply(k, v);
+            newMap.__put(newEntry.getKey(), newEntry.getValue());
+        });
+        return newMap.freeze();
+    }
+
 
     /**
      * Replace the entry's value, or keep original value if the function returns `null`.

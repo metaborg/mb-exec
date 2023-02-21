@@ -149,6 +149,14 @@ public abstract class ImList<E> implements List<E> {
             return copy.freeze();
         }
 
+        @SuppressWarnings("unchecked") public static <E> Immutable<E> copyOf(E[] array) {
+            final ImList.Transient<E> copy = new ImList.Transient<>(array.length);
+            for(E e : array) {
+                copy.add(e);
+            }
+            return copy.freeze();
+        }
+
         @Override public int size() {
             return size;
         }
@@ -333,8 +341,15 @@ public abstract class ImList<E> implements List<E> {
             size = array.length;
         }
 
-        public static <E> Transient<E> of() {
-            return new Transient<>(0);
+        public static <E> Transient<E> of(E... elements) {
+            final Transient<E> result = new Transient<>(elements.length);
+            if(elements.length == 0) {
+                return result;
+            }
+            for(E element : elements) {
+                result.add(element);
+            }
+            return result;
         }
 
         @Override public int size() {
