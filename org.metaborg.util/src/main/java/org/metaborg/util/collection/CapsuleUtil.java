@@ -287,6 +287,11 @@ public final class CapsuleUtil {
         return result.freeze();
     }
 
+    public static <T, K, V> Map.Immutable<K, V> collectToMap(Stream<T> stream, Function<? super T, ? extends K> keyFunction,
+        Function<? super T, ? extends V> valueFunction) {
+        return collectToMap(stream, keyFunction, valueFunction, (u,v) -> { throw new IllegalStateException("Duplicate key" + u); });
+    }
+
     public static final class MapBuilder<K, V> {
         public final Map.Transient<K, V> map = CapsuleUtil.transientMap();
 
