@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import io.usethesource.capsule.Map;
@@ -187,6 +189,15 @@ public abstract class MultiSet<E> implements Iterable<E> {
                 result = result.remove(e, 1);
             }
             return result;
+        }
+
+        public <T> Immutable<T> filterMap(Function<E, Optional<T>> filter) {
+            boolean changed = false;
+            final Map.Transient<T, Integer> map = CapsuleUtil.transientMap();
+            for(Entry<E, Integer> e : elements.entrySet()) {
+                filter.apply(e.getKey()).ifPresent(t -> map.__put(t,e.getValue()));
+            }
+            return new Immutable<>(map.freeze());
         }
 
         public Map.Immutable<E, Integer> asMap() {
