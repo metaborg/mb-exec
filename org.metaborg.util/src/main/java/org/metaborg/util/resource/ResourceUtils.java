@@ -1,5 +1,10 @@
 package org.metaborg.util.resource;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,6 +17,8 @@ import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.FileTypeSelector;
 import org.metaborg.util.log.ILogger;
 import org.metaborg.util.log.LoggerUtils;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 public class ResourceUtils {
     private static final ILogger logger = LoggerUtils.logger(ResourceUtils.class);
@@ -102,5 +109,36 @@ public class ResourceUtils {
      */
     public static FileObject resolveFile(FileObject baseFile, String name) throws FileSystemException {
         return baseFile.getFileSystem().getFileSystemManager().resolveFile(baseFile, name);
+    }
+
+    /**
+     * Resolve a "resource" in Java, such as from src/main/resources.
+     */
+    public static URL resolveJavaResource(String name) {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        if(loader == null) {
+            loader = ResourceUtils.class.getClassLoader();
+        }
+        return loader.getResource(name);
+    }
+
+    /**
+     * Read a Java "resource" to string.
+     */
+    public static String readJavaResource(String name, Charset charset) throws IOException {
+        return readInputStream(resolveJavaResource(name).openStream(), charset);
+    }
+
+    /**
+     * source: https://stackoverflow.com/a/35446009
+     */
+    public static String readInputStream(InputStream inputStream, Charset charset) throws IOException {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while((length = inputStream.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+        return result.toString(charset.name());
     }
 }

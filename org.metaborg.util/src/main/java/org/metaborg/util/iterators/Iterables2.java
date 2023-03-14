@@ -1,5 +1,7 @@
 package org.metaborg.util.iterators;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.function.BiFunction;
@@ -83,4 +85,25 @@ public final class Iterables2 {
         return new Zip2Iterable<>(iterable1, iterable2, combine);
     }
 
+    public static <E> ArrayList<E> toArrayList(Iterable<E> iterable) {
+        if(iterable instanceof Collection) {
+            return new ArrayList<>((Collection<? extends E>) iterable);
+        }
+        final ArrayList<E> result = new ArrayList<>();
+        for(E e : iterable) {
+            result.add(e);
+        }
+        return result;
+    }
+
+    public static <E> E[] toArray(Iterable<E> iterable) {
+        return (E[]) toArrayList(iterable).toArray();
+    }
+
+    public static <E> boolean isEmpty(Iterable<E> iterable) {
+        if (iterable instanceof Collection) {
+            return ((Collection<?>) iterable).isEmpty();
+        }
+        return !iterable.iterator().hasNext();
+    }
 }
