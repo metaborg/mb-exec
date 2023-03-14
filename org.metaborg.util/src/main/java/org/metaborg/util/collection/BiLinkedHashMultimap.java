@@ -48,11 +48,11 @@ public class BiLinkedHashMultimap<K, V> implements BiSetMultimap<K, V> {
     }
 
     @Override public boolean containsKey(Object key) {
-        return keyToValue.containsKey(key);
+        return keyToValue.containsKey(key) && !get((K) key).isEmpty();
     }
 
     @Override public boolean containsValue(Object value) {
-        return keyToValue.containsValue(value);
+        return keyToValue.containsValue(value) && !getInverse((V) value).isEmpty();
     }
 
     @Override public boolean containsEntry(Object key, Object value) {
@@ -60,11 +60,11 @@ public class BiLinkedHashMultimap<K, V> implements BiSetMultimap<K, V> {
     }
 
     @Override public Set<V> get(K key) {
-        return keyToValue.get(key);
+        return keyToValue.getOrDefault(key, Collections.emptySet());
     }
 
     @Override public Set<K> getInverse(V value) {
-        return valueToKey.get(value);
+        return valueToKey.getOrDefault(value, Collections.emptySet());
     }
 
     @Override public boolean isEmpty() {
@@ -94,21 +94,18 @@ public class BiLinkedHashMultimap<K, V> implements BiSetMultimap<K, V> {
         if(!containsEntry(key, value)) {
             return false;
         }
-        keyToValue.computeIfPresent(key, (k, values) -> {
-            values.remove(value);
-            return values.isEmpty() ? null : values;
-        });
-        valueToKey.computeIfPresent(value, (v, keys) -> {
-            keys.remove(key);
-            return keys.isEmpty() ? null : keys;
-        });
+        removeFromKeyToValue(key, value);
+        removeFromValueToKey(key, value);
         return true;
     }
 
     @Override public Set<V> removeAll(K key) {
         final Set<V> removed = keyToValue.remove(key);
+        if(removed == null) {
+            return Collections.emptySet();
+        }
         for(V r : removed) {
-            valueToKey.remove(r, key);
+            removeFromValueToKey(key, r);
         }
 
         return removed;
@@ -116,10 +113,14 @@ public class BiLinkedHashMultimap<K, V> implements BiSetMultimap<K, V> {
 
     @Override public Set<K> removeAllInverse(V value) {
         final Set<K> removed1 = valueToKey.remove(value);
+        if(removed1 == null) {
+            return Collections.emptySet();
+        }
+        // reconstruct the insertion order of the removed keys
         final Set<K> removed2 = new LinkedHashSet<>();
         for(K k : keyToValue.keySet()) {
             if(removed1.contains(k)) {
-                keyToValue.remove(k, value);
+                removeFromKeyToValue(k, value);
                 removed2.add(k);
             }
         }
@@ -142,5 +143,19 @@ public class BiLinkedHashMultimap<K, V> implements BiSetMultimap<K, V> {
 
     @Override public Map<V, Set<K>> valueToKey() {
         return Collections.unmodifiableMap(valueToKey);
+    }
+
+    private void removeFromKeyToValue(K key, V value) {
+        keyToValue.computeIfPresent(key, (k, values) -> {
+            values.remove(value);
+            return values.isEmpty() ? null : values;
+        });
+    }
+
+    private void removeFromValueToKey(K key, V value) {
+        valueToKey.computeIfPresent(value, (v, keys) -> {
+            keys.remove(key);
+            return keys.isEmpty() ? null : keys;
+        });
     }
 }
