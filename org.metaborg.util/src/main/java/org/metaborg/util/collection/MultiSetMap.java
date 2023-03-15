@@ -87,8 +87,7 @@ public abstract class MultiSetMap<K, V> {
 
         public static <K, V> Immutable<K, V> of(K key, V value) {
             final Immutable<K, V> result = of();
-            result.put(key, value);
-            return result;
+            return result.put(key, value);
         }
 
         @Override public Map.Immutable<K, MultiSet.Immutable<V>> asMap() {
