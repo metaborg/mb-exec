@@ -9,6 +9,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.metaborg.util.tuple.Tuple2;
 
 import io.usethesource.capsule.Map;
 
@@ -26,16 +29,18 @@ public abstract class MultiSetMap<K, V> {
     }
 
     public Collection<Entry<K, V>> entries() {
-        return asMap().entrySet().stream().flatMap(e -> {
-            K key = e.getKey();
-            return e.getValue().toCollection().stream().map(v -> new AbstractMap.SimpleImmutableEntry<>(key, v));
-        }).collect(Collectors.toList());
+        return entryStream().collect(ImList.toImmutableList());
     }
 
     public void forEach(BiConsumer<? super K, ? super V> action) {
-        for (java.util.Map.Entry<K, V> entry : entries()) {
-            action.accept(entry.getKey(), entry.getValue());
-        }
+        entryStream().forEach(e -> action.accept(e.getKey(), e.getValue()));
+    }
+
+    public Stream<Map.Entry<K, V>> entryStream() {
+        return asMap().entrySet().stream().flatMap(e -> {
+            final K key = e.getKey();
+            return e.getValue().toCollection().stream().map(v -> Tuple2.of(key, v));
+        });
     }
 
     public boolean isEmpty() {
