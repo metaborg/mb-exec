@@ -1,5 +1,6 @@
 package org.metaborg.util.iterators;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -96,8 +97,9 @@ public final class Iterables2 {
         return result;
     }
 
-    public static <E> E[] toArray(Iterable<E> iterable) {
-        return (E[]) toArrayList(iterable).toArray();
+    public static <E> E[] toArray(Iterable<E> iterable, Class<E> elementClass) {
+        final ArrayList<E> es = toArrayList(iterable);
+        return es.toArray((E[]) Array.newInstance(elementClass, es.size()));
     }
 
     public static <E> boolean isEmpty(Iterable<E> iterable) {
