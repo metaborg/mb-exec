@@ -1,5 +1,6 @@
 package org.metaborg.util.collection;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,7 +26,9 @@ import javax.annotation.Nullable;
  * Does not allow null values.
  * @param <E>
  */
-public abstract class ImList<E> implements List<E> {
+public abstract class ImList<E> implements List<E>, Serializable {
+    private static final long serialVersionUID = 1L;
+
     public static <E> Collector<E, ImList.Transient<E>, ImList.Immutable<E>> toImmutableList() {
         return new Collector<E, ImList.Transient<E>, Immutable<E>>() {
             @Override public Supplier<ImList.Transient<E>> supplier() {
@@ -115,6 +118,7 @@ public abstract class ImList<E> implements List<E> {
     @Override public abstract List<E> subList(int fromIndex, int toIndex);
 
     public static class Immutable<E> extends ImList<E> {
+        private static final long serialVersionUID = 1L;
         private final E[] array;
         private final int size;
 
@@ -149,7 +153,7 @@ public abstract class ImList<E> implements List<E> {
             return copy.freeze();
         }
 
-        @SuppressWarnings("unchecked") public static <E> Immutable<E> copyOf(E[] array) {
+        public static <E> Immutable<E> copyOf(E[] array) {
             final ImList.Transient<E> copy = new ImList.Transient<>(array.length);
             for(E e : array) {
                 copy.add(e);
@@ -321,6 +325,7 @@ public abstract class ImList<E> implements List<E> {
     }
 
     public static class Transient<E> extends ImList<E> {
+        private static final long serialVersionUID = 1L;
         private E[] array;
         private int size = 0;
         private @Nullable ImList.Immutable<E> frozen = null;

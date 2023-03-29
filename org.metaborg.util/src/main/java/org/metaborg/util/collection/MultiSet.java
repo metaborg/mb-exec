@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import io.usethesource.capsule.Map;
 
-public abstract class MultiSet<E> implements Iterable<E> {
+public abstract class MultiSet<E> implements Iterable<E>, Serializable {
 
     @SuppressWarnings("rawtypes") private static final MultiSet.Immutable EMPTY =
             new MultiSet.Immutable<>(Map.Immutable.of());

@@ -15,7 +15,7 @@ import org.metaborg.util.tuple.Tuple2;
 
 import io.usethesource.capsule.Map;
 
-public abstract class MultiSetMap<K, V> {
+public abstract class MultiSetMap<K, V> implements Serializable {
 
     // INVARIANT toMap()/entries never contains empty MultiSet values
     //           Thus, if there is an entry for a key, there is at least one value as well.
