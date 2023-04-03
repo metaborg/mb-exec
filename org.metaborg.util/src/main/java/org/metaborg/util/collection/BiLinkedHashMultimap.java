@@ -3,9 +3,11 @@ package org.metaborg.util.collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.metaborg.util.stream.Collectors2;
@@ -118,9 +120,16 @@ public class BiLinkedHashMultimap<K, V> implements BiSetMultimap<K, V> {
         }
         // reconstruct the insertion order of the removed keys
         final Set<K> removed2 = new LinkedHashSet<>();
-        for(K k : keyToValue.keySet()) {
+        for(Iterator<Entry<K, Set<V>>> iterator = keyToValue.entrySet().iterator(); iterator.hasNext();) {
+            Entry<K, Set<V>> e = iterator.next();
+            final K k = e.getKey();
             if(removed1.contains(k)) {
-                removeFromKeyToValue(k, value);
+                final Set<V> values = e.getValue();
+                // N.B. cannot use removeFromKeyToValue: leads to ConcurrentModificationException
+                values.remove(value);
+                if(values.isEmpty()) {
+                    iterator.remove();
+                }
                 removed2.add(k);
             }
         }
