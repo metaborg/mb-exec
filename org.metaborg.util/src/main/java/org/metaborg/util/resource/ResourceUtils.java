@@ -18,8 +18,6 @@ import org.apache.commons.vfs2.FileTypeSelector;
 import org.metaborg.util.log.ILogger;
 import org.metaborg.util.log.LoggerUtils;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 public class ResourceUtils {
     private static final ILogger logger = LoggerUtils.logger(ResourceUtils.class);
 
