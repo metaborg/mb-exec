@@ -65,6 +65,32 @@ public abstract class ImList<E> implements List<E>, Serializable {
         return toArray(new Object[0]);
     }
 
+    @Override public boolean equals(Object that) {
+        if (that == this)
+            return true;
+        if (!(that instanceof List))
+            return false;
+
+        final Iterator<E> thisIter = iterator();
+        final Iterator<?> thatIter = ((List<?>) that).iterator();
+        while (thisIter.hasNext() && thatIter.hasNext()) {
+            final E thisElem = thisIter.next();
+            final Object thatElem = thatIter.next();
+            if (!(thisElem == thatElem || thisElem != null && thisElem.equals(thatElem))) {
+                return false;
+            }
+        }
+        return !(thisIter.hasNext() || thatIter.hasNext());
+    }
+
+    @Override public int hashCode() {
+        int hashCode = 1;
+        for (E elem : this) {
+            hashCode = 31 * hashCode + (elem == null ? 0 : elem.hashCode());
+        }
+        return hashCode;
+    }
+
     @Override public abstract <T> T[] toArray(T[] a);
 
     @Override public boolean add(E e) {
@@ -293,32 +319,6 @@ public abstract class ImList<E> implements List<E>, Serializable {
             return new Transient<>((E[]) toArray());
         }
 
-        @Override public boolean equals(Object o) {
-            if(this == o)
-                return true;
-            if(o == null || getClass() != o.getClass())
-                return false;
-            Immutable<?> other = (Immutable<?>) o;
-            if(size != other.size)
-                return false;
-
-            for(int i = 0; i < size; i++) {
-                if(!Objects.equals(((Object[]) array)[i], other.array[i])) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        @Override public int hashCode() {
-            int result = 1;
-            for(E elem : this) {
-                result = 31 * result + Objects.hashCode(elem);
-            }
-            return result;
-        }
-
         @Override public String toString() {
             return "ImList.Immutable[" + stream().map(Objects::toString).collect(Collectors.joining(", ")) + ']';
         }
@@ -514,33 +514,6 @@ public abstract class ImList<E> implements List<E>, Serializable {
 
         public boolean isFrozen() {
             return frozen != null;
-        }
-
-        @Override public boolean equals(Object o) {
-            if(this == o)
-                return true;
-            if(o == null || getClass() != o.getClass())
-                return false;
-            Transient<?> other = (Transient<?>) o;
-            if(size != other.size || frozen != other.frozen) {
-                return false;
-            }
-
-            for(int i = 0; i < size; i++) {
-                if(!Objects.equals(((Object[]) array)[i], other.array[i])) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        @Override public int hashCode() {
-            int result = Objects.hash(frozen);
-            for(E elem : this) {
-                result = 31 * result + Objects.hashCode(elem);
-            }
-            return result;
         }
 
         @Override public String toString() {

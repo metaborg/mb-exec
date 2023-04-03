@@ -212,8 +212,8 @@ public class ImListTest {
         assertThrows(IndexOutOfBoundsException.class, () -> emptyList.subList(0, 1));
         assertThrows(IndexOutOfBoundsException.class, () -> emptyList.subList(-1, 1));
         assertThrows(IndexOutOfBoundsException.class, () -> emptyList.subList(1, 0));
-        assertNotEquals(ImList.Immutable.of(), emptyList);
-        assertNotEquals(ImList.Immutable.of().hashCode(), emptyList.hashCode());
+        assertEquals(ImList.Immutable.of(), emptyList);
+        assertEquals(ImList.Immutable.of().hashCode(), emptyList.hashCode());
         assertEquals(ImList.Transient.of(), emptyList);
         assertEquals(ImList.Transient.of().hashCode(), emptyList.hashCode());
         // ImList.Transient.of() === new ImList.Transient<>(0)
@@ -231,8 +231,7 @@ public class ImListTest {
         final ImList.Immutable<Integer> frozen = emptyList.freeze();
         assertEquals(ImList.Immutable.of(), frozen);
         assertSame(frozen, emptyList.freeze());
-        assertNotEquals("Transient lists are not equal to their frozen counterparts.",
-            ImList.Transient.of(), emptyList);
+        assertEquals(ImList.Transient.of(), emptyList);
         // Frozen transient lists do not allow mutation any more.
         assertThrows(IllegalStateException.class, () -> emptyList.add(1));
         assertThrows(IllegalStateException.class, () -> emptyList.remove(Integer.valueOf(1)));
