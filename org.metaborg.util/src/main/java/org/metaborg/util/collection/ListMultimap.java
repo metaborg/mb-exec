@@ -53,7 +53,7 @@ public class ListMultimap<K, V> {
     }
 
     public boolean put(K key, List<V> values) {
-        values.addAll(values);
+        this.values.addAll(values);
         return backingMap.computeIfAbsent(key, k -> new ArrayList<>()).addAll(values);
     }
 
