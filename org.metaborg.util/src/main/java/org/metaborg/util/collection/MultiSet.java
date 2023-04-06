@@ -340,8 +340,14 @@ public abstract class MultiSet<E> implements Iterable<E>, Serializable {
         }
 
         public void removeAll(Iterable<E> es) {
-            for(E e : es) {
-                remove(e);
+            if(es instanceof MultiSet) {
+                for(Entry<E, Integer> entry : ((MultiSet<E>) es).entrySet()) {
+                    remove(entry.getKey(), entry.getValue());
+                }
+            } else {
+                for(E e : es) {
+                    remove(e);
+                }
             }
         }
 
