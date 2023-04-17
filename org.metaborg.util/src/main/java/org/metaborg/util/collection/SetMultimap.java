@@ -51,6 +51,15 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> {
         return removed;
     }
 
+    public Set<V> remove(K key) {
+        final Set<V> remove = backingMap.remove(key);
+        if(remove != null) {
+            remove.clear();
+            return remove;
+        }
+        return Collections.emptySet();
+    }
+
     public Set<V> replaceValues(K key, Set<V> values) {
         return backingMap.replace(key, values);
     }
