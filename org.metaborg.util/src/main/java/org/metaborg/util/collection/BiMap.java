@@ -108,7 +108,7 @@ public abstract class BiMap<E> {
         }
 
         public static <E> Immutable<E> of() {
-            return new Immutable<>(Map.Immutable.of(), Map.Immutable.of());
+            return new Immutable<>(CapsuleUtil.immutableMap(), Map.Immutable.of());
         }
 
         public static <E> Immutable<E> of(E key, E value) {
@@ -240,7 +240,7 @@ public abstract class BiMap<E> {
         }
 
         public static <E> Transient<E> of() {
-            return new Transient<>(Map.Transient.of(), Map.Transient.of());
+            return new Transient<>(CapsuleUtil.transientMap(), Map.Transient.of());
         }
 
         public static <E> Transient<E> of(E key, E value) {

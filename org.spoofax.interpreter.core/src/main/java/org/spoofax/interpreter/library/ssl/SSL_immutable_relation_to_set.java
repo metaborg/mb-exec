@@ -20,7 +20,7 @@ public class SSL_immutable_relation_to_set extends AbstractPrimitive {
         }
 
         final StrategoImmutableRelation relation = (StrategoImmutableRelation) env.current();
-        final Set.Transient<IStrategoTerm> result = Set.Transient.of();
+        final Set.Transient<IStrategoTerm> result = CapsuleUtil.transientSet();
         for(IStrategoTerm pair : relation) {
             result.__insert(pair);
         }

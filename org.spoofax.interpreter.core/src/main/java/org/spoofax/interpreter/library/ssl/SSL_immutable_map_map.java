@@ -2,6 +2,7 @@ package org.spoofax.interpreter.library.ssl;
 
 import io.usethesource.capsule.Map;
 
+import org.metaborg.util.collection.CapsuleUtil;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -25,7 +26,7 @@ public class SSL_immutable_map_map extends AbstractPrimitive {
         final ITermFactory f = env.getFactory();
 
         final Map.Immutable<IStrategoTerm, IStrategoTerm> map = ((StrategoImmutableMap) env.current()).backingMap;
-        final Map.Transient<IStrategoTerm, IStrategoTerm> resultMap = Map.Transient.of();
+        final Map.Transient<IStrategoTerm, IStrategoTerm> resultMap = CapsuleUtil.transientMap();
         for(java.util.Map.Entry<IStrategoTerm, IStrategoTerm> e : map.entrySet()) {
             env.setCurrent(f.makeTuple(e.getKey(), e.getValue()));
             if(!mapping.evaluate(env)) {

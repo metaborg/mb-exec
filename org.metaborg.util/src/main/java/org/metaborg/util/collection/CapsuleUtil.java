@@ -163,11 +163,11 @@ public final class CapsuleUtil {
         if(map instanceof Map.Immutable) {
             return (Map.Immutable<K, V>) map;
         }
-        return (Map.Immutable<K, V>) Map.Immutable.of().__putAll(map);
+        return (Map.Immutable<K, V>) CapsuleUtil.immutableMap().__putAll(map);
     }
 
     public static <K, V> Map.Immutable<K, V> toMap(Iterable<? extends Entry<? extends K, ? extends V>> entries) {
-        final Map.Transient<K, V> map = Map.Transient.of();
+        final Map.Transient<K, V> map = CapsuleUtil.transientMap();
         for(Entry<? extends K, ? extends V> e : entries) {
             map.__put(e.getKey(), e.getValue());
         }

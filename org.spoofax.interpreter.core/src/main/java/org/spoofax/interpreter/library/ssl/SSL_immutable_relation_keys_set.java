@@ -20,7 +20,7 @@ public class SSL_immutable_relation_keys_set extends AbstractPrimitive {
         }
 
         final StrategoImmutableRelation relation = (StrategoImmutableRelation) env.current();
-        final Set.Transient<IStrategoTerm> set = Set.Transient.of();
+        final Set.Transient<IStrategoTerm> set = CapsuleUtil.transientSet();
         set.__insertAll(relation.backingRelation.keySet());
 
         env.setCurrent(new StrategoImmutableSet(set.freeze()));

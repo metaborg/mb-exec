@@ -79,7 +79,7 @@ public abstract class HashTrieFunction<K, V> implements IFunction<K, V> {
         }
 
         public static <K, V> HashTrieFunction.Immutable<K, V> of() {
-            return new HashTrieFunction.Immutable<>(Map.Immutable.of(), SetMultimap.Immutable.of());
+            return new HashTrieFunction.Immutable<>(CapsuleUtil.immutableMap(), SetMultimap.Immutable.of());
         }
 
         @Override public int hashCode() {
@@ -159,7 +159,7 @@ public abstract class HashTrieFunction<K, V> implements IFunction<K, V> {
         }
 
         public static <K, V> HashTrieFunction.Transient<K, V> of() {
-            return new HashTrieFunction.Transient<>(Map.Transient.of(), SetMultimap.Transient.of());
+            return new HashTrieFunction.Transient<>(CapsuleUtil.transientMap(), SetMultimap.Transient.of());
         }
 
     }

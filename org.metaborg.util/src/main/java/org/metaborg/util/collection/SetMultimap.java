@@ -1,6 +1,7 @@
 package org.metaborg.util.collection;
 
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -86,7 +87,7 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> {
             }
 
             @Override public Set<Characteristics> characteristics() {
-                return Collections.emptySet();
+                return EnumSet.of(Characteristics.IDENTITY_FINISH);
             }
         };
     }
