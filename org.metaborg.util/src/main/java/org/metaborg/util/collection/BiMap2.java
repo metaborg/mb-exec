@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.BiMap;
-
 /**
  * Super basic bidirectional map with two maps. Both keys and values are unique.
  * @param <K>
@@ -154,5 +152,10 @@ public class BiMap2<K, V> {
 
     public BiMap2<V, K> inverse() {
         return new BiMap2<>(bwd, fwd);
+    }
+
+    public void clear() {
+        fwd.clear();
+        bwd.clear();
     }
 }
