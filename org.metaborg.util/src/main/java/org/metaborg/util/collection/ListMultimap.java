@@ -24,8 +24,7 @@ public class ListMultimap<K, V> extends LinkedMultimap<K, V, List<V>> {
         return Collections.unmodifiableList(collection);
     }
 
-    @Override public boolean put(K key, V value) {
-        values.add(value);
-        return backingMap.computeIfAbsent(key, k -> new ArrayList<>()).add(value);
+    @Override protected List<V> copyCollection(List<V> collection) {
+        return new ArrayList<>(collection);
     }
 }

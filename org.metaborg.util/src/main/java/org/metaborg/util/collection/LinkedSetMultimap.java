@@ -24,11 +24,7 @@ public class LinkedSetMultimap<K, V> extends LinkedMultimap<K, V, Set<V>> {
         return Collections.unmodifiableSet(collection);
     }
 
-    public boolean put(K key, V value) {
-        final boolean added = backingMap.computeIfAbsent(key, k -> new HashSet<>()).add(value);
-        if(added) {
-            values.add(value);
-        }
-        return added;
+    @Override protected Set<V> copyCollection(Set<V> collection) {
+        return new HashSet<>(collection);
     }
 }

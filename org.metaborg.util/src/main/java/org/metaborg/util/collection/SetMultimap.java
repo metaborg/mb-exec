@@ -1,5 +1,6 @@
 package org.metaborg.util.collection;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -38,9 +39,8 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> {
         return Collections.unmodifiableSet(collection);
     }
 
-    public boolean put(K key, V value) {
-        final boolean added = backingMap.computeIfAbsent(key, k -> new HashSet<>()).add(value);
-        return added;
+    @Override protected Set<V> copyCollection(Set<V> collection) {
+        return new HashSet<V>(collection);
     }
 
     public boolean remove(K key, V value) {
@@ -52,16 +52,28 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> {
         return removed;
     }
 
+    /**
+     * DANGER: this method *clears* the original set this key pointed to. So if you use the pattern
+     * {@code values = smm.get(key); smm.remove(); } you will have an empty set in the values
+     * variable!
+     * Use the result of this method instead to get the set of values that the key pointed to, it's
+     * a copy of the one that was in this multimap.
+     * (This behaviour is required by org.spoofax.interpreter.library.index.tests.IndexSymbolTableTest)
+     */
     public Set<V> remove(K key) {
         final Set<V> remove = backingMap.remove(key);
         if(remove != null) {
+            final Set<V> copyToReturn = copyCollection(remove);
             remove.clear();
-            return remove;
+            return copyToReturn;
         }
         return Collections.emptySet();
     }
 
     public Set<V> replaceValues(K key, Set<V> values) {
+        if(values.isEmpty()) {
+            return remove(key);
+        }
         return backingMap.replace(key, values);
     }
 

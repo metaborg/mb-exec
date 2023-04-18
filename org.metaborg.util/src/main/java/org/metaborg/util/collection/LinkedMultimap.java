@@ -4,6 +4,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public abstract class LinkedMultimap<K, V, C extends Collection<V>> extends Mult
     }
 
     public LinkedMultimap(LinkedMultimap<K, V, C> toCopy) {
-        this(toCopy.backingMap, toCopy.values);
+        this(toCopy.copyOfBackingMap(), new ArrayList<>(toCopy.values));
     }
 
     @Override public int size() {
@@ -49,12 +50,20 @@ public abstract class LinkedMultimap<K, V, C extends Collection<V>> extends Mult
         return this.values.contains(value);
     }
 
-    public void clear() {
+    @Override public boolean put(K key, V value) {
+        if(super.put(key, value)) {
+            values.add(value);
+            return true;
+        }
+        return false;
+    }
+
+    @Override public void clear() {
         backingMap.clear();
         values.clear();
     }
 
-    public Collection<V> values() {
+    @Override public Collection<V> values() {
         return Collections.unmodifiableList(values);
     }
 

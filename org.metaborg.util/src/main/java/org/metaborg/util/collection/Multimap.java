@@ -30,12 +30,19 @@ public abstract class Multimap<K, V, C extends Collection<V>> {
     }
 
     protected Multimap(Multimap<K, V, C> toCopy) {
-        this(new HashMap<>(toCopy.backingMap));
+        this.backingMap = toCopy.copyOfBackingMap();
+    }
+
+    protected Map<K, C> copyOfBackingMap() {
+        final HashMap<K, C> kcHashMap = new HashMap<>(this.backingMap);
+        kcHashMap.replaceAll((k, c) -> copyCollection(c));
+        return kcHashMap;
     }
 
     protected abstract C newCollection();
     protected abstract C emptyCollection();
     protected abstract C unmodifiableCollection(C collection);
+    protected abstract C copyCollection(C collection);
 
     public int size() {
         return (int) this.backingMap.values().stream().flatMap(Collection::stream).count();
@@ -61,7 +68,9 @@ public abstract class Multimap<K, V, C extends Collection<V>> {
         return unmodifiableCollection(backingMap.getOrDefault(key, emptyCollection()));
     }
 
-    public abstract boolean put(K key, V value);
+    public boolean put(K key, V value) {
+        return backingMap.computeIfAbsent(key, k -> newCollection()).add(value);
+    }
 
     public boolean putAll(K key, C values) {
         boolean allAdded = false;
@@ -128,5 +137,9 @@ public abstract class Multimap<K, V, C extends Collection<V>> {
 
     @Override public int hashCode() {
         return Objects.hash(backingMap);
+    }
+
+    @Override public String toString() {
+        return backingMap.toString();
     }
 }
