@@ -1,7 +1,9 @@
 package org.metaborg.util.collection;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,12 +12,15 @@ import java.util.Set;
  * @param <K>
  * @param <V>
  */
-public class BiMap2<K, V> {
+public class BiMap2<K, V> implements Serializable {
+    public static final long serialVersionUID = 1L;
+
     private final Map<K, V> fwd;
     private final Map<V, K> bwd;
 
+    // N.B. LinkedHashMap for proper serializability that roundtrips into the same map
     public BiMap2() {
-        this(new HashMap<>(), new HashMap<>());
+        this(new LinkedHashMap<>(), new LinkedHashMap<>());
     }
 
     protected BiMap2(Map<K, V> fwd, Map<V, K> bwd) {
@@ -83,9 +88,9 @@ public class BiMap2<K, V> {
         if(!containsKey(key)) {
             return null;
         }
-        final V remove = fwd.remove(key);
-        bwd.remove(remove);
-        return remove;
+        final V removed = fwd.remove(key);
+        bwd.remove(removed);
+        return removed;
     }
 
     public boolean remove(K key, V value) {
@@ -93,12 +98,13 @@ public class BiMap2<K, V> {
         return fwd.remove(key, value) && bwd.remove(value, key);
     }
 
-    public boolean removeValue(V value) {
+    public K removeValue(V value) {
         if(!containsValue(value)) {
-            return false;
+            return null;
         }
-        fwd.remove(bwd.remove(value));
-        return true;
+        final K removed = bwd.remove(value);
+        fwd.remove(removed);
+        return removed;
     }
 
     public boolean canPut(K key, V value) {
@@ -126,28 +132,42 @@ public class BiMap2<K, V> {
         return true;
     }
 
-    public boolean putAll(BiMap2<K, V> other) {
-        return putAll(other.entrySet());
+    public boolean putOrReplace(K key, V value) {
+        if(containsEntry(key, value)) {
+            return false;
+        }
+        remove(key);
+        removeValue(value);
+        put(key, value);
+        return true;
     }
 
-    public boolean putAll(Iterable<Map.Entry<K, V>> entries) {
+    public boolean putOrReplaceAll(BiMap2<K, V> other) {
+        return putOrReplaceAll(other.entrySet());
+    }
+
+    public boolean putOrReplaceAll(Iterable<Map.Entry<K, V>> entries) {
         boolean changed = false;
         for(Map.Entry<K, V> e : entries) {
-            changed |= put(e.getKey(), e.getValue());
+            changed |= putOrReplace(e.getKey(), e.getValue());
         }
         return changed;
     }
 
     /**
-     * Replaces the entry for the specified key only if it is currently mapped to some value.
+     * Replaces the entry for the specified key-value pair either is currently mapped to something.
      */
-    public V replace(K key, V value) {
-        if(!containsKey(key)) {
-            return null;
+    public boolean replace(K key, V value) {
+        if(containsEntry(key, value)) {
+            return false;
         }
-        final V remove = remove(key);
-        put(key, value);
-        return remove;
+        boolean removed = remove(key) != null;
+        removed |= removeValue(value) != null;
+        if(removed) {
+            put(key, value);
+            return true;
+        }
+        return false;
     }
 
     public BiMap2<V, K> inverse() {

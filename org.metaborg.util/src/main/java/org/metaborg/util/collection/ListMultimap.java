@@ -1,5 +1,6 @@
 package org.metaborg.util.collection;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +12,9 @@ import java.util.List;
  * @param <K>
  * @param <V>
  */
-public class ListMultimap<K, V> extends LinkedMultimap<K, V, List<V>> {
+public class ListMultimap<K, V> extends LinkedMultimap<K, V, List<V>> implements Serializable {
+    public static final long serialVersionUID = 1L;
+
     @Override protected List<V> newCollection() {
         return new ArrayList<>();
     }

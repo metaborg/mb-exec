@@ -1,9 +1,11 @@
 package org.metaborg.util.collection;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -18,7 +20,9 @@ import java.util.stream.Collector;
  * @param <K>
  * @param <V>
  */
-public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> {
+public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> implements Serializable {
+    public static final long serialVersionUID = 1L;
+
     public SetMultimap() {
         super();
     }
@@ -27,8 +31,9 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> {
         super(toCopy);
     }
 
+    // N.B. LinkedHashSet for proper serializability that roundtrips into the same set
     @Override protected Set<V> newCollection() {
-        return new HashSet<>();
+        return new LinkedHashSet<>();
     }
 
     @Override protected Set<V> emptyCollection() {
@@ -40,7 +45,7 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> {
     }
 
     @Override protected Set<V> copyCollection(Set<V> collection) {
-        return new HashSet<V>(collection);
+        return new LinkedHashSet<V>(collection);
     }
 
     public boolean remove(K key, V value) {

@@ -2,6 +2,7 @@ package org.spoofax.interpreter.library.ssl;
 
 import io.usethesource.capsule.Set;
 
+import org.metaborg.util.collection.CapsuleUtil;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;

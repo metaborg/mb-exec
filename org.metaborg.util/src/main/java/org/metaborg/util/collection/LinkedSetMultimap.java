@@ -1,7 +1,9 @@
 package org.metaborg.util.collection;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -11,9 +13,12 @@ import java.util.Set;
  * @param <K>
  * @param <V>
  */
-public class LinkedSetMultimap<K, V> extends LinkedMultimap<K, V, Set<V>> {
+public class LinkedSetMultimap<K, V> extends LinkedMultimap<K, V, Set<V>> implements Serializable {
+    public static final long serialVersionUID = 1L;
+
+    // N.B. LinkedHashSet for proper serializability that roundtrips into the same set
     @Override protected Set<V> newCollection() {
-        return new HashSet<>();
+        return new LinkedHashSet<>();
     }
 
     @Override protected Set<V> emptyCollection() {
@@ -25,6 +30,6 @@ public class LinkedSetMultimap<K, V> extends LinkedMultimap<K, V, Set<V>> {
     }
 
     @Override protected Set<V> copyCollection(Set<V> collection) {
-        return new HashSet<>(collection);
+        return new LinkedHashSet<>(collection);
     }
 }
