@@ -92,7 +92,8 @@ public abstract class Multimap<K, V, C extends Collection<V>> {
     public boolean putAll(Multimap<? extends K, V, C> mm) {
         final AtomicBoolean changed = new AtomicBoolean(false);
         mm.forEach((key, values) -> {
-            changed.set(changed.get() || putAll(key, values));
+            final boolean localChanged = putAll(key, values);
+            changed.compareAndSet(false, localChanged);
         });
         return changed.get();
     }

@@ -65,11 +65,11 @@ public class BiMap2<K, V> implements Serializable {
     }
 
     public Set<K> keySet() {
-        return fwd.keySet();
+        return Collections.unmodifiableSet(fwd.keySet());
     }
 
     public Set<V> valueSet() {
-        return bwd.keySet();
+        return Collections.unmodifiableSet(bwd.keySet());
     }
 
     public Set<V> values() {
@@ -77,7 +77,7 @@ public class BiMap2<K, V> implements Serializable {
     }
 
     public Set<Map.Entry<K, V>> entrySet() {
-        return fwd.entrySet();
+        return Collections.unmodifiableSet(fwd.entrySet());
     }
 
     public Map<K, V> asMap() {
@@ -89,13 +89,21 @@ public class BiMap2<K, V> implements Serializable {
             return null;
         }
         final V removed = fwd.remove(key);
-        bwd.remove(removed);
+        final K removedKey = bwd.remove(removed);
+        if(!key.equals(removedKey)) {
+            throw new IllegalStateException("BiMap2 maps got desynchronised.");
+        }
         return removed;
     }
 
     public boolean remove(K key, V value) {
         // using short-circuit logical AND to not even try removing from bwd if it's not in fwd.
-        return fwd.remove(key, value) && bwd.remove(value, key);
+        final boolean fwdRemoval = fwd.remove(key, value);
+        final boolean bwdRemoval = bwd.remove(value, key);
+        if(fwdRemoval != bwdRemoval) {
+            throw new IllegalStateException("BiMap2 maps got desynchronised.");
+        }
+        return fwdRemoval;
     }
 
     public K removeValue(V value) {
@@ -103,71 +111,61 @@ public class BiMap2<K, V> implements Serializable {
             return null;
         }
         final K removed = bwd.remove(value);
-        fwd.remove(removed);
+        final V removedValue = fwd.remove(removed);
+        if(!value.equals(removedValue)) {
+            throw new IllegalStateException("BiMap2 maps got desynchronised.");
+        }
         return removed;
     }
 
-    public boolean canPut(K key, V value) {
-        if(fwd.containsKey(key) && !fwd.get(key).equals(value)) {
-            return false;
-        }
-        if(bwd.containsKey(value) && !bwd.get(value).equals(key)) {
-            return false;
-        }
-        return true;
-    }
-
     /**
-     * @throws IllegalArgumentException when key or value is already set
+     * @throws IllegalArgumentException when value is already set to a different key
      */
     public boolean put(K key, V value) {
         if(containsEntry(key, value)) {
             return false;
         }
-        if(!canPut(key, value)) {
-            throw new IllegalArgumentException("Key or value already set.");
+        if(bwd.containsKey(value)) {
+            throw new IllegalArgumentException("Value already present.");
         }
-        fwd.put(key, value);
+        final V oldValue = fwd.put(key, value);
+        if(oldValue != null && !bwd.remove(oldValue, key)) {
+            throw new IllegalStateException("BiMap2 maps got desynchronised.");
+        }
         bwd.put(value, key);
         return true;
     }
 
-    public boolean putOrReplace(K key, V value) {
-        if(containsEntry(key, value)) {
-            return false;
-        }
-        remove(key);
-        removeValue(value);
-        put(key, value);
-        return true;
+    public boolean putAll(BiMap2<K, V> other) {
+        return putAll(other.entrySet());
     }
 
-    public boolean putOrReplaceAll(BiMap2<K, V> other) {
-        return putOrReplaceAll(other.entrySet());
-    }
-
-    public boolean putOrReplaceAll(Iterable<Map.Entry<K, V>> entries) {
+    public boolean putAll(Iterable<Map.Entry<K, V>> entries) {
         boolean changed = false;
         for(Map.Entry<K, V> e : entries) {
-            changed |= putOrReplace(e.getKey(), e.getValue());
+            changed |= put(e.getKey(), e.getValue());
         }
         return changed;
     }
 
     /**
-     * Replaces the entry for the specified key-value pair either is currently mapped to something.
+     * Replaces the entry for the specified key-value pair if key is currently mapped to something.
+     * @throws IllegalArgumentException when value is already set to a different key
      */
     public boolean replace(K key, V value) {
         if(containsEntry(key, value)) {
             return false;
         }
-        boolean removed = remove(key) != null;
-        removed |= removeValue(value) != null;
-        if(removed) {
-            put(key, value);
-            return true;
+        if(bwd.containsKey(value)) {
+            throw new IllegalArgumentException("Value already present.");
         }
-        return false;
+        final V oldValue = fwd.replace(key, value);
+        // N.B. oldValue != value because containsEntry was false.
+        if(oldValue != null && !bwd.remove(oldValue, key)) {
+            throw new IllegalStateException("BiMap2 maps got desynchronised.");
+        }
+        bwd.put(value, key);
+        return true;
     }
 
     public BiMap2<V, K> inverse() {

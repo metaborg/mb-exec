@@ -79,7 +79,7 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> implements Seriali
         if(values.isEmpty()) {
             return remove(key);
         }
-        return backingMap.replace(key, values);
+        return backingMap.replace(key, copyCollection(values));
     }
 
     public static <K, V> Collector<Map.Entry<K, V>, SetMultimap<K, V>, SetMultimap<K, V>> collector() {
