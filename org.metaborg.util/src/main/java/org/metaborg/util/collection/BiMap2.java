@@ -90,15 +90,18 @@ public class BiMap2<K, V> implements Serializable {
         }
         final V removed = fwd.remove(key);
         final K removedKey = bwd.remove(removed);
-        assert !key.equals(removedKey): "BiMap2 maps got desynchronised.";
+        assert key.equals(removedKey): "BiMap2 maps got desynchronised.";
         return removed;
     }
 
     public boolean remove(K key, V value) {
+//        if(!containsEntry(key, value)) {
+//            return false;
+//        }
         // using short-circuit logical AND to not even try removing from bwd if it's not in fwd.
         final boolean fwdRemoval = fwd.remove(key, value);
         final boolean bwdRemoval = bwd.remove(value, key);
-        assert fwdRemoval != bwdRemoval: "BiMap2 maps got desynchronised.";
+        assert fwdRemoval == bwdRemoval : "BiMap2 maps got desynchronised.";
         return fwdRemoval;
     }
 
@@ -108,7 +111,7 @@ public class BiMap2<K, V> implements Serializable {
         }
         final K removed = bwd.remove(value);
         final V removedValue = fwd.remove(removed);
-        assert !value.equals(removedValue): "BiMap2 maps got desynchronised.";
+        assert value.equals(removedValue): "BiMap2 maps got desynchronised.";
         return removed;
     }
 
@@ -125,7 +128,7 @@ public class BiMap2<K, V> implements Serializable {
         final V oldValue = fwd.put(key, value);
         if(oldValue != null){
             final boolean removed = bwd.remove(oldValue, key);
-            assert !removed: "BiMap2 maps got desynchronised.";
+            assert removed: "BiMap2 maps got desynchronised.";
         }
         bwd.put(value, key);
         return oldValue;
