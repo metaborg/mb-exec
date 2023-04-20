@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 
 /**
  * Super basic bidirectional map with two maps. Both keys and values are unique.
@@ -41,7 +42,7 @@ public class BiMap2<K, V> implements Serializable {
     }
 
     public boolean containsEntry(K key, V value) {
-        return fwd.containsKey(key) && bwd.containsKey(value);
+        return fwd.containsKey(key) && get(key).equals(value);
     }
 
     public int size() {
@@ -95,10 +96,6 @@ public class BiMap2<K, V> implements Serializable {
     }
 
     public boolean remove(K key, V value) {
-//        if(!containsEntry(key, value)) {
-//            return false;
-//        }
-        // using short-circuit logical AND to not even try removing from bwd if it's not in fwd.
         final boolean fwdRemoval = fwd.remove(key, value);
         final boolean bwdRemoval = bwd.remove(value, key);
         assert fwdRemoval == bwdRemoval : "BiMap2 maps got desynchronised.";
@@ -164,5 +161,27 @@ public class BiMap2<K, V> implements Serializable {
     public void clear() {
         fwd.clear();
         bwd.clear();
+    }
+
+    @Override public boolean equals(Object o) {
+        if(this == o)
+            return true;
+        if(o == null || getClass() != o.getClass())
+            return false;
+
+        BiMap2<?, ?> biMap2 = (BiMap2<?, ?>) o;
+
+        if(!fwd.equals(biMap2.fwd))
+            return false;
+
+        return true;
+    }
+
+    @Override public int hashCode() {
+        return fwd.hashCode();
+    }
+
+    @Override public String toString() {
+        return fwd.toString();
     }
 }
