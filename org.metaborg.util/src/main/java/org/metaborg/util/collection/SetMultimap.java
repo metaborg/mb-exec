@@ -49,7 +49,7 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> implements Seriali
     }
 
     public boolean remove(K key, V value) {
-        final Set<V> values = backingMap.get(key);
+        final Set<V> values = backingMap.getOrDefault(key, emptyCollection());
         final boolean removed = values.remove(value);
         if(values.isEmpty()) {
             backingMap.remove(key);
