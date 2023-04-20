@@ -178,7 +178,7 @@ public class ImListTest {
     }
 
     @SuppressWarnings({ "ConstantValue", "RedundantCollectionOperation" }) @Test public void testEmptyTransientList() {
-        final ImList.Transient<Integer> emptyList = ImList.Transient.of();
+        final ImList.Mutable<Integer> emptyList = ImList.Mutable.of();
         assertEquals(0, emptyList.size());
         assertTrue(emptyList.isEmpty());
         assertFalse(emptyList.contains(1));
@@ -214,24 +214,24 @@ public class ImListTest {
         assertThrows(IndexOutOfBoundsException.class, () -> emptyList.subList(1, 0));
         assertEquals(ImList.Immutable.of(), emptyList);
         assertEquals(ImList.Immutable.of().hashCode(), emptyList.hashCode());
-        assertEquals(ImList.Transient.of(), emptyList);
-        assertEquals(ImList.Transient.of().hashCode(), emptyList.hashCode());
+        assertEquals(ImList.Mutable.of(), emptyList);
+        assertEquals(ImList.Mutable.of().hashCode(), emptyList.hashCode());
         // ImList.Transient.of() === new ImList.Transient<>(0)
-        assertEquals(new ImList.Transient<>(0), emptyList);
-        assertEquals(new ImList.Transient<>(0).hashCode(), emptyList.hashCode());
+        assertEquals(new ImList.Mutable<>(0), emptyList);
+        assertEquals(new ImList.Mutable<>(0).hashCode(), emptyList.hashCode());
         // extra capacity does not influence equals/hashcode of lists
-        assertEquals(new ImList.Transient<>(2), emptyList);
-        assertEquals(new ImList.Transient<>(2).hashCode(), emptyList.hashCode());
+        assertEquals(new ImList.Mutable<>(2), emptyList);
+        assertEquals(new ImList.Mutable<>(2).hashCode(), emptyList.hashCode());
         assertEquals("ImList.Transient[]", emptyList.toString());
     }
 
     @Test public void testTransientListMutation() {
-        final ImList.Transient<Integer> emptyList = ImList.Transient.of();
-        assertEquals(ImList.Transient.of(), emptyList);
+        final ImList.Mutable<Integer> emptyList = ImList.Mutable.of();
+        assertEquals(ImList.Mutable.of(), emptyList);
         final ImList.Immutable<Integer> frozen = emptyList.freeze();
         assertEquals(ImList.Immutable.of(), frozen);
         assertSame(frozen, emptyList.freeze());
-        assertEquals(ImList.Transient.of(), emptyList);
+        assertEquals(ImList.Mutable.of(), emptyList);
         // Frozen transient lists do not allow mutation any more.
         assertThrows(IllegalStateException.class, () -> emptyList.add(1));
         assertThrows(IllegalStateException.class, () -> emptyList.remove(Integer.valueOf(1)));
@@ -244,13 +244,13 @@ public class ImListTest {
         assertThrows(IllegalStateException.class, () -> emptyList.add(0, 1));
         assertThrows(IllegalStateException.class, () -> emptyList.remove(0));
 
-        final ImList.Transient<Integer> empty2CapacityList = new ImList.Transient<>(2);
+        final ImList.Mutable<Integer> empty2CapacityList = new ImList.Mutable<>(2);
         final ImList.Immutable<Integer> frozen2Capacity = empty2CapacityList.freeze();
         assertEquals(
             "Unused capacity (due to the transient's unused capacity) of the immutable list does not affect its behaviour.",
             ImList.Immutable.of(), frozen2Capacity);
 
-        final ImList.Transient<Integer> theList = new ImList.Transient<>(0);
+        final ImList.Mutable<Integer> theList = new ImList.Mutable<>(0);
         assertArrayEquals(theList.toArray(), new Object[] {});
         assertTrue(theList.add(1));
         assertArrayEquals(theList.toArray(), new Object[] {1});
