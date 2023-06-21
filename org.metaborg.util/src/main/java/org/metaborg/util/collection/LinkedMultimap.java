@@ -67,23 +67,5 @@ public abstract class LinkedMultimap<K, V, C extends Collection<V>> extends Mult
         return Collections.unmodifiableList(values);
     }
 
-    @Override public boolean equals(Object o) {
-        if(this == o)
-            return true;
-        if(o == null || getClass() != o.getClass())
-            return false;
-
-        LinkedSetMultimap<?, ?> that = (LinkedSetMultimap<?, ?>) o;
-
-        if(!backingMap.equals(that.backingMap))
-            return false;
-        if(!values.equals(that.values))
-            return false;
-
-        return true;
-    }
-
-    @Override public int hashCode() {
-        return Objects.hash(backingMap, values);
-    }
+    // we do not test equality(/hashcode) of values, multimaps are just mappings, ordering is not taken into account
 }

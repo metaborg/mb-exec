@@ -73,7 +73,7 @@ public abstract class Multimap<K, V, C extends Collection<V>> {
         return backingMap.computeIfAbsent(key, k -> newCollection()).add(value);
     }
 
-    public boolean putAll(K key, C values) {
+    public boolean putAll(K key, Collection<? extends V> values) {
         boolean allAdded = false;
         for(V value : values) {
             allAdded |= put(key, value);
@@ -107,6 +107,7 @@ public abstract class Multimap<K, V, C extends Collection<V>> {
     }
 
     public Collection<V> values() {
+        // TODO: make this a view instead of a new collection?
         return backingMap.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 
@@ -129,7 +130,7 @@ public abstract class Multimap<K, V, C extends Collection<V>> {
         if(o == null || getClass() != o.getClass())
             return false;
 
-        LinkedSetMultimap<?, ?> that = (LinkedSetMultimap<?, ?>) o;
+        Multimap<?, ?, ?> that = (Multimap<?, ?, ?>) o;
 
         if(!backingMap.equals(that.backingMap))
             return false;

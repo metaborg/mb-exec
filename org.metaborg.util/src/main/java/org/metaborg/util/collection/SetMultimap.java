@@ -31,9 +31,10 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> implements Seriali
         super(toCopy);
     }
 
-    // N.B. LinkedHashSet for proper serializability that roundtrips into the same set
+    // N.B. We _would_ use LinkedHashSet for proper serializability that roundtrips into the same set, but that breaks JSGLR2 in certain edgecases, see the comments on
+    // org.metaborg.sdf2table.grammar.NormGrammar#symbolProductionsMapping and org.spoofax.jsglr2.integrationtest.features.RejectTest#testBoth
     @Override protected Set<V> newCollection() {
-        return new LinkedHashSet<>();
+        return new HashSet<>();
     }
 
     @Override protected Set<V> emptyCollection() {
@@ -45,7 +46,7 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> implements Seriali
     }
 
     @Override protected Set<V> copyCollection(Set<V> collection) {
-        return new LinkedHashSet<V>(collection);
+        return new HashSet<V>(collection);
     }
 
     public boolean remove(K key, V value) {
