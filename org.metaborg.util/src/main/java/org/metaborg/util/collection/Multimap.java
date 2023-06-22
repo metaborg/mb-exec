@@ -106,11 +106,18 @@ public abstract class Multimap<K, V, C extends Collection<V>> {
         return backingMap.keySet();
     }
 
+    /**
+     * @return NON-VIEW collection of values as they are at the time of the call
+     */
     public Collection<V> values() {
         // TODO: make this a view instead of a new collection?
         return backingMap.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 
+    /**
+     * @return stream of entries
+     * NOTE: will throw concurrent modification exceptions if you edit the multimap while consuming the stream!
+     */
     public Stream<Map.Entry<K, V>> entries() {
         return backingMap.entrySet().stream().flatMap(e -> {
             final K k = e.getKey();
