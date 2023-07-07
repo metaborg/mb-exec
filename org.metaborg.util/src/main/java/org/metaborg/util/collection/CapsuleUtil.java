@@ -166,6 +166,15 @@ public final class CapsuleUtil {
         return (Map.Immutable<K, V>) CapsuleUtil.immutableMap().__putAll(map);
     }
 
+    public static <K, V1, V2> Map.Immutable<K, V2>
+            toMap(java.util.Map<? extends K, V1> map, Function1<V1, V2> valueMapper) {
+        final Map.Transient<K, V2> result = Map.Transient.of();
+        map.forEach((k, v1) -> {
+            result.__put(k, valueMapper.apply(v1));
+        });
+        return result.freeze();
+    }
+
     public static <K, V> Map.Immutable<K, V> toMap(Iterable<? extends Entry<? extends K, ? extends V>> entries) {
         final Map.Transient<K, V> map = CapsuleUtil.transientMap();
         for(Entry<? extends K, ? extends V> e : entries) {
