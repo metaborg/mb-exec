@@ -3,6 +3,7 @@ package org.spoofax.interpreter.library.ssl;
 import io.usethesource.capsule.BinaryRelation;
 import io.usethesource.capsule.Map;
 
+import org.metaborg.util.collection.CapsuleUtil;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -27,7 +28,7 @@ public class SSL_immutable_relation_to_map extends AbstractPrimitive {
 
         final BinaryRelation.Immutable<IStrategoTerm, IStrategoTerm> relation =
             ((StrategoImmutableRelation) env.current()).backingRelation;
-        final Map.Transient<IStrategoTerm, IStrategoTerm> result = Map.Transient.of();
+        final Map.Transient<IStrategoTerm, IStrategoTerm> result = CapsuleUtil.transientMap();
         for(Entry<IStrategoTerm, IStrategoTerm> e : relation.entrySet()) {
             final IStrategoTerm key = e.getKey();
             final IStrategoTerm value = e.getValue();

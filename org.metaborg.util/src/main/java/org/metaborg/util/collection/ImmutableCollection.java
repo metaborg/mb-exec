@@ -7,6 +7,13 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+/**
+ * Collection that overrides mutating methods from Collection with UnsupportedOperationException,
+ * and fills in some defaults for others. This way you only have to implement iterator() and size().
+ *
+ * Do _not_ override mutating methods to actually mutate again! Then it wouldn't be an _immutable_
+ * collection any more.
+ */
 public interface ImmutableCollection<E> extends Collection<E> {
     @Override Iterator<E> iterator();
 

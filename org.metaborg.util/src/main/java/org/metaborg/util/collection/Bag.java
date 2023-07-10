@@ -11,11 +11,13 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 /**
+ * PREFER TO USE {@link MultiSet}. Still here for comparison purposes in both API and performance.
+ *
  * A multiset collection. Like a set, but allowing duplicates. So unordered, but with an efficient contains check.
  * Iterator method is not the most efficient, because internally duplicates are just counted.
  * @param <E>
  */
-public abstract class Bag<E> implements Collection<E> {
+@Deprecated public abstract class Bag<E> implements Collection<E> {
     protected abstract Map<E, Integer> backingMap();
 
     @Override public boolean isEmpty() {
@@ -71,7 +73,7 @@ public abstract class Bag<E> implements Collection<E> {
         return Collections.unmodifiableSet(this.backingMap().keySet());
     }
 
-    public static final class Immutable<E> extends Bag<E> implements ImmutableCollection<E> {
+    @Deprecated public static final class Immutable<E> extends Bag<E> implements ImmutableCollection<E> {
         private Map<E, Integer> backingMap;
         private int size;
 
@@ -98,7 +100,7 @@ public abstract class Bag<E> implements Collection<E> {
         }
     }
 
-    public static final class Transient<E> extends Bag<E> {
+    @Deprecated public static final class Transient<E> extends Bag<E> {
         private Map<E, Integer> backingMap;
         private int size = 0;
         private Immutable<E> frozen;

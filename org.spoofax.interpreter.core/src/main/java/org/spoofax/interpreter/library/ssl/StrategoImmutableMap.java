@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.metaborg.util.collection.CapsuleUtil;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.terms.ITermPrinter;
@@ -87,7 +88,7 @@ public class StrategoImmutableMap extends StrategoTerm implements IStrategoTerm 
     }
 
     public static StrategoImmutableMap fromMap(java.util.Map<? extends IStrategoTerm, ? extends IStrategoTerm> map) {
-        final Map.Transient<IStrategoTerm, IStrategoTerm> mapT = Map.Transient.of();
+        final Map.Transient<IStrategoTerm, IStrategoTerm> mapT = CapsuleUtil.transientMap();
         mapT.__putAll(map);
         return new StrategoImmutableMap(mapT.freeze());
     }

@@ -4,12 +4,11 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
-
-import com.google.common.collect.Lists;
 
 public class FileUtils {
     private static Pattern sanitizePattern = Pattern.compile("[^a-zA-Z0-9.-]");
@@ -22,7 +21,7 @@ public class FileUtils {
     }
 
     public static Iterable<File> toFiles(Iterable<FileObject> fileObjects) {
-        final Collection<File> files = Lists.newLinkedList();
+        final Collection<File> files = new LinkedList<>();
         for(FileObject fileObject : fileObjects) {
             files.add(toFile(fileObject));
         }

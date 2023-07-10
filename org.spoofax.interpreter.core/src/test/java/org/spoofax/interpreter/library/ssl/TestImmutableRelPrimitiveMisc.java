@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.junit.Test;
+import org.metaborg.util.collection.CapsuleUtil;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
@@ -88,7 +89,7 @@ public class TestImmutableRelPrimitiveMisc extends ImmutableCollectionTestSetup 
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
-        assertEquals(Set.Immutable.of(one, two), current.backingSet);
+        assertEquals(CapsuleUtil.immutableSet(one, two), current.backingSet);
     }
 
     @Test
@@ -109,7 +110,7 @@ public class TestImmutableRelPrimitiveMisc extends ImmutableCollectionTestSetup 
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
-        assertEquals(Set.Immutable.of(a, b), current.backingSet);
+        assertEquals(CapsuleUtil.immutableSet(a, b), current.backingSet);
     }
 
     @Test
@@ -142,7 +143,7 @@ public class TestImmutableRelPrimitiveMisc extends ImmutableCollectionTestSetup 
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
-        assertEquals(Set.Immutable.of(f.makeTuple(one, two), f.makeTuple(one, three)), current.backingSet);
+        assertEquals(CapsuleUtil.immutableSet(f.makeTuple(one, two), f.makeTuple(one, three)), current.backingSet);
     }
 
     @Test
@@ -152,7 +153,7 @@ public class TestImmutableRelPrimitiveMisc extends ImmutableCollectionTestSetup 
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
-        assertEquals(Set.Immutable.of(a), current.backingSet);
+        assertEquals(CapsuleUtil.immutableSet(a), current.backingSet);
     }
 
     @Test
@@ -162,6 +163,6 @@ public class TestImmutableRelPrimitiveMisc extends ImmutableCollectionTestSetup 
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
-        assertEquals(Set.Immutable.of(), current.backingSet);
+        assertEquals(CapsuleUtil.immutableSet(), current.backingSet);
     }
 }
