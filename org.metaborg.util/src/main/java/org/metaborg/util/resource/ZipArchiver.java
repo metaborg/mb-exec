@@ -12,12 +12,12 @@ import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileType;
 import org.metaborg.util.file.IFileAccess;
+import org.metaborg.util.stream.Utils;
 
 public class ZipArchiver {
     public static class Entry implements Comparable<Entry> {
@@ -128,7 +128,7 @@ public class ZipArchiver {
                     }
                     zip.putNextEntry(zipEntry);
                     try(final InputStream inputStream = resource.getContent().getInputStream()) {
-                        IOUtils.copy(inputStream, zip);
+                        Utils.copy(inputStream, zip);
                     }
                     zip.closeEntry();
                 } else if(resource.getType() == FileType.FOLDER) {
