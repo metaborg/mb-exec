@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
+import org.metaborg.util.collection.CapsuleUtil;
 import org.metaborg.util.future.CompletableFuture;
 import org.metaborg.util.future.Futures;
 import org.metaborg.util.future.IFuture;
@@ -16,7 +17,7 @@ public class FuturesTest {
 
     @Test public void testReduceEmpty() {
         final AtomicBoolean marker = new AtomicBoolean(false);
-        IFuture<Set.Immutable<Integer>> result = Futures.reduce(Set.Immutable.of(), Arrays.<Integer>asList(),
+        IFuture<Set.Immutable<Integer>> result = Futures.reduce(CapsuleUtil.immutableSet(), Arrays.<Integer>asList(),
                 (u, t) -> CompletableFuture.completedFuture(u.__insert(t)));
         result.whenComplete((r, ex) -> {
             marker.set(r != null && r.isEmpty());
@@ -26,7 +27,7 @@ public class FuturesTest {
 
     @Test public void testReduceSingle() {
         final AtomicBoolean marker = new AtomicBoolean(false);
-        IFuture<Set.Immutable<Integer>> result = Futures.reduce(Set.Immutable.of(), Arrays.asList(1),
+        IFuture<Set.Immutable<Integer>> result = Futures.reduce(CapsuleUtil.immutableSet(), Arrays.asList(1),
                 (u, t) -> CompletableFuture.completedFuture(u.__insert(t)));
         result.whenComplete((r, ex) -> {
             marker.set(r != null && r.size() == 1);
@@ -36,7 +37,7 @@ public class FuturesTest {
 
     @Test public void testReduceMultiple() {
         final AtomicBoolean marker = new AtomicBoolean(false);
-        IFuture<Set.Immutable<Integer>> result = Futures.reduce(Set.Immutable.of(), Arrays.asList(1, 1, 2, 3),
+        IFuture<Set.Immutable<Integer>> result = Futures.reduce(CapsuleUtil.immutableSet(), Arrays.asList(1, 1, 2, 3),
                 (u, t) -> CompletableFuture.completedFuture(u.__insert(t)));
         result.whenComplete((r, ex) -> {
             marker.set(r != null && r.size() == 3);
@@ -46,7 +47,7 @@ public class FuturesTest {
 
     @Test public void testReduceMultiple_Fail() {
         final AtomicBoolean marker = new AtomicBoolean(false);
-        IFuture<Set.Immutable<Integer>> result = Futures.reduce(Set.Immutable.of(), Arrays.asList(1, 1, 2, 3),
+        IFuture<Set.Immutable<Integer>> result = Futures.reduce(CapsuleUtil.immutableSet(), Arrays.asList(1, 1, 2, 3),
                 (u, t) -> t % 2 == 0 ? CompletableFuture.completedExceptionally(new Exception())
                         : CompletableFuture.completedFuture(u.__insert(t)));
         result.whenComplete((r, ex) -> {

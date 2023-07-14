@@ -5,8 +5,6 @@ import java.util.Map;
 import org.metaborg.util.functions.Function3;
 import org.metaborg.util.tuple.Tuple3;
 
-import com.google.common.annotations.Beta;
-
 import io.usethesource.capsule.Set;
 import io.usethesource.capsule.SetMultimap;
 
@@ -30,11 +28,11 @@ public interface IRelation3<K, L, V> {
 
     java.util.Set<V> get(K key, L label);
 
-    @Beta default java.util.stream.Stream<Tuple3<K, L, V>> stream() {
+    default java.util.stream.Stream<Tuple3<K, L, V>> stream() {
         return this.stream(Tuple3::of);
     }
 
-    @Beta default <R> java.util.stream.Stream<R> stream(final Function3<K, L, V, R> converter) {
+    default <R> java.util.stream.Stream<R> stream(final Function3<K, L, V, R> converter) {
         return this.keySet().stream().flatMap(
                 key -> this.get(key).stream().map(entry -> converter.apply(key, entry.getKey(), entry.getValue())));
     }

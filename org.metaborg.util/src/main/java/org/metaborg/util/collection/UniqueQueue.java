@@ -1,12 +1,11 @@
 package org.metaborg.util.collection;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * Queue that cannot hold duplicate values.
@@ -17,8 +16,8 @@ public class UniqueQueue<T> implements Queue<T>, Set<T> {
 
 
     public UniqueQueue() {
-        this.queue = Lists.newLinkedList();
-        this.set = Sets.newHashSet();
+        this.queue = new LinkedList<>();
+        this.set = new HashSet<T>();
     }
 
     public UniqueQueue(Queue<T> queue, Set<T> set) {

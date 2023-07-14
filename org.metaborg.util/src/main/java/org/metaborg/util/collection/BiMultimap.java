@@ -1,21 +1,37 @@
 package org.metaborg.util.collection;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Multimap;
+import java.util.Set;
 
 /**
  * Interface for bidirectional multimaps.
  */
 public interface BiMultimap<K, V> {
-    public abstract Map<V, Collection<K>> asInverseMap();
+    Set<K> getInverse(V value);
 
-    public abstract Collection<K> getInverse(V value);
+    int size();
 
-    public abstract Collection<K> removeAllInverse(Object value);
+    Collection<V> values();
 
-    public abstract Multimap<K, V> keyToValue();
+    boolean containsKey(Object key);
 
-    public abstract Multimap<V, K> valueToKey();
+    boolean containsValue(Object value);
+
+    boolean containsEntry(Object key, Object value);
+
+    Set<V> get(K key);
+
+    boolean isEmpty();
+
+    Set<K> keySet();
+
+    boolean put(K key, V value);
+
+    boolean remove(K key, V value);
+
+    boolean putAll(K key, Iterable<? extends V> values);
+
+    void clear();
 }

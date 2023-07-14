@@ -6,6 +6,7 @@ import io.usethesource.capsule.Set;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.junit.Test;
+import org.metaborg.util.collection.CapsuleUtil;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
@@ -92,7 +93,7 @@ public class TestImmutableMapPrimitiveMisc extends ImmutableCollectionTestSetup 
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
-        assertEquals(current.backingSet, Set.Immutable.of(one, two));
+        assertEquals(current.backingSet, CapsuleUtil.immutableSet(one, two));
     }
 
     @Test

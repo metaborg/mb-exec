@@ -13,12 +13,14 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 /**
+ * PREFER TO USE {@link MultiSetMap}. Still here for comparison purposes in both API and performance.
+ *
  * A multimap collection. Like a map, but allowing duplicate pairs. Unordered, but with an efficient lookup.
  * Size, iterator, and containsValue methods are not the most efficient, because internally duplicates are just counted.
  * @param <K>
  * @param <V>
  */
-public abstract class BagMap<K, V> {
+@Deprecated public abstract class BagMap<K, V> {
     // could be a capsule Map.Immutable instead, if you want to bother with that...
     protected abstract Map<K, ? extends Bag<V>> backingMap();
 
@@ -64,7 +66,7 @@ public abstract class BagMap<K, V> {
         }
     }
 
-    public static class Immutable<K, V> extends BagMap<K, V> {
+    @Deprecated public static class Immutable<K, V> extends BagMap<K, V> {
         private final Map<K, Bag.Transient<V>> backingMap;
 
         private Immutable(Map<K, Bag.Transient<V>> backingMap) {
@@ -92,7 +94,7 @@ public abstract class BagMap<K, V> {
         }
     }
 
-    public static class Transient<K, V> extends BagMap<K, V> {
+    @Deprecated public static class Transient<K, V> extends BagMap<K, V> {
         private final Map<K, Bag.Transient<V>> backingMap;
         private BagMap.Immutable<K, V> frozen = null;
 

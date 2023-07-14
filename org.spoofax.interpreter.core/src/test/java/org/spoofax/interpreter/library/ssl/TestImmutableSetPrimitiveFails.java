@@ -6,6 +6,7 @@ import java.util.Arrays;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.metaborg.util.collection.CapsuleUtil;
 import org.metaborg.util.functions.CheckedFunction0;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -41,7 +42,7 @@ public class TestImmutableSetPrimitiveFails extends ImmutableCollectionTestSetup
 
     @Test
     public void test() throws InterpreterException {
-        context.setCurrent(new StrategoImmutableSet(Set.Immutable.of(one, two)));
+        context.setCurrent(new StrategoImmutableSet(CapsuleUtil.immutableSet(one, two)));
         boolean result = primitiveCall.apply();
         assertFalse(result);
     }

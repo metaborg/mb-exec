@@ -2,7 +2,9 @@ package org.metaborg.util.resource;
 
 import static org.apache.commons.vfs2.FileType.*;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 import org.apache.commons.vfs2.AllFileSelector;
@@ -12,8 +14,6 @@ import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileType;
 import org.metaborg.util.iterators.Iterables2;
-
-import com.google.common.collect.Lists;
 
 public class FileSelectorUtils {
     public static FileSelector all() {
@@ -34,12 +34,12 @@ public class FileSelectorUtils {
         return new EndsWithFileSelector(endsWith);
     }
 
-    public static FileSelector extensions(Iterable<String> extensions) {
+    public static FileSelector extensions(Collection<String> extensions) {
         return new ExtensionFileSelector(extensions);
     }
 
     public static FileSelector extensions(String... extensions) {
-        return new ExtensionFileSelector(Iterables2.from(extensions));
+        return new ExtensionFileSelector(Arrays.asList(extensions));
     }
 
     public static FileSelector extension(String extension) {
@@ -188,7 +188,7 @@ public class FileSelectorUtils {
 
     public static Iterable<FileObject> filter(FileSelector selector, Iterable<FileObject> resources, FileObject base)
         throws FileSystemException {
-        final Collection<FileObject> filteredResources = Lists.newLinkedList();
+        final Collection<FileObject> filteredResources = new LinkedList<>();
         for(FileObject resource : resources) {
             if(include(selector, resource, base)) {
                 filteredResources.add(resource);
