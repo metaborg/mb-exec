@@ -13,7 +13,7 @@ public class PrintlineLogger {
 
     public PrintlineLogger(String name) {
         this.name = truncate(name);
-        enabled = !name.startsWith("mb.nabl2.solver.components");
+        enabled = !name.startsWith("mb.nabl2") && !name.startsWith("mb.scopegraph");
     }
 
     public void debug(String message, Object... args) {
