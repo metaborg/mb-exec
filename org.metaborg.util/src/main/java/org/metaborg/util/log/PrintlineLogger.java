@@ -8,6 +8,8 @@ public class PrintlineLogger {
 
     private static final ILogger log = LoggerUtils.logger(PrintlineLogger.class);
 
+    private static volatile boolean globalEnabled = false;
+
     private final String name;
     private final boolean enabled;
 
@@ -21,8 +23,7 @@ public class PrintlineLogger {
     }
 
     public void debug(String message, Throwable ex, Object... args) {
-        log(format(message, args), "[DEBUG] -");
-        ex.printStackTrace(System.out);
+        log(format(message, args), "[DEBUG] -", ex);
     }
 
     public void info(String message, Object... args) {
@@ -30,8 +31,7 @@ public class PrintlineLogger {
     }
 
     public void info(String message, Throwable ex, Object... args) {
-        log(format(message, args), "[INFO]  -");
-        ex.printStackTrace(System.out);
+        log(format(message, args), "[INFO]  -", ex);
     }
 
     public void warn(String message, Object... args) {
@@ -39,8 +39,7 @@ public class PrintlineLogger {
     }
 
     public void warn(String message, Throwable ex, Object... args) {
-        log(format(message, args), "[WARN]  -");
-        ex.printStackTrace(System.out);
+        log(format(message, args), "[WARN]  -", ex);
     }
 
     public void error(String message, Object... args) {
@@ -48,8 +47,7 @@ public class PrintlineLogger {
     }
 
     public void error(String message, Throwable ex, Object... args) {
-        log(format(message, args), "[ERROR] -");
-        ex.printStackTrace(System.out);
+        log(format(message, args), "[ERROR] -", ex);
     }
 
     private String format(String format, Object... args) {
@@ -57,10 +55,20 @@ public class PrintlineLogger {
     }
 
     private void log(String message, String level) {
-        if(!enabled) {
-            return;
+        if(enabled()) {
+            System.out.printf("%s %-32s | %s%n", level, name, message);
         }
-        System.out.printf("%s %-32s | %s%n", level, name, message);
+    }
+
+    private void log(String message, String level, Throwable ex) {
+        if(enabled()) {
+            System.out.printf("%s %-32s | %s%n", level, name, message);
+            ex.printStackTrace(System.out);
+        }
+    }
+
+    private boolean enabled() {
+        return enabled && globalEnabled;
     }
 
     private String truncate(String name) {
@@ -73,6 +81,14 @@ public class PrintlineLogger {
 
     public static PrintlineLogger logger(Class<?> clz) {
         return new PrintlineLogger(clz.getCanonicalName());
+    }
+
+    public static void enableGlobal() {
+        globalEnabled = true;
+    }
+
+    public static void disableGlobal() {
+        globalEnabled = false;
     }
 
 }
