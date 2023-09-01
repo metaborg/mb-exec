@@ -8,7 +8,7 @@ public class PrintlineLogger {
 
     private static final ILogger log = LoggerUtils.logger(PrintlineLogger.class);
 
-    private static volatile boolean globalEnabled = false;
+    private static boolean globalEnabled = false;
 
     private final String name;
     private final boolean enabled;
