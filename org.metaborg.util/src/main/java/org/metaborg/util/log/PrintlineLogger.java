@@ -18,40 +18,36 @@ public class PrintlineLogger {
         enabled = !name.startsWith("mb.nabl2") && !name.startsWith("mb.scopegraph");
     }
 
-    public void debug(String message, Object... args) {
-        log(format(message, args), "[DEBUG] -");
+    public void debug(String format, Object... args) {
+        log(format, "[DEBUG] -", args);
     }
 
-    public void debug(String message, Throwable ex, Object... args) {
-        log(format(message, args), "[DEBUG] -", ex);
+    public void debug(String format, Throwable ex, Object... args) {
+        log(format, "[DEBUG] -", ex, args);
     }
 
-    public void info(String message, Object... args) {
-        log(format(message, args), "[INFO]  -");
+    public void info(String format, Object... args) {
+        log(format, "[INFO]  -", args);
     }
 
-    public void info(String message, Throwable ex, Object... args) {
-        log(format(message, args), "[INFO]  -", ex);
+    public void info(String format, Throwable ex, Object... args) {
+        log(format, "[INFO]  -", ex, args);
     }
 
-    public void warn(String message, Object... args) {
-        log(format(message, args), "[WARN]  -");
+    public void warn(String format, Object... args) {
+        log(format, "[WARN]  -", args);
     }
 
-    public void warn(String message, Throwable ex, Object... args) {
-        log(format(message, args), "[WARN]  -", ex);
+    public void warn(String format, Throwable ex, Object... args) {
+        log(format, "[WARN]  -", ex, args);
     }
 
-    public void error(String message, Object... args) {
-        log(format(message, args), "[ERROR] -");
+    public void error(String format, Object... args) {
+        log(format, "[ERROR] -", args);
     }
 
-    public void error(String message, Throwable ex, Object... args) {
-        log(format(message, args), "[ERROR] -", ex);
-    }
-
-    private String format(String format, Object... args) {
-        return log.format(format, args);
+    public void error(String format, Throwable ex, Object... args) {
+        log(format, "[ERROR] -", ex, args);
     }
 
     private void log(String message, String level) {
@@ -60,9 +56,15 @@ public class PrintlineLogger {
         }
     }
 
-    private void log(String message, String level, Throwable ex) {
+    private void log(String format, String level, Object... args) {
         if(enabled()) {
-            System.out.printf("%s %-32s | %s%n", level, name, message);
+            System.out.printf("%s %-32s | %s%n", level, name, log.format(format, args));
+        }
+    }
+
+    private void log(String format, String level, Throwable ex, Object... args) {
+        if(enabled()) {
+            System.out.printf("%s %-32s | %s%n", level, name, log.format(format, args));
             ex.printStackTrace(System.out);
         }
     }
