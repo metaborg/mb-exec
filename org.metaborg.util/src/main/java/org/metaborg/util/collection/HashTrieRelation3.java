@@ -5,8 +5,6 @@ import java.util.Map;
 
 import org.metaborg.util.tuple.Tuple2;
 
-import com.google.common.collect.Sets;
-
 import io.usethesource.capsule.Set;
 import io.usethesource.capsule.SetMultimap;
 

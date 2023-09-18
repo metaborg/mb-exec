@@ -6,6 +6,7 @@ import java.util.Arrays;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.metaborg.util.collection.CapsuleUtil;
 import org.metaborg.util.functions.CheckedFunction0;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -81,7 +82,7 @@ public class TestImmutableSetPrimitiveReturnsSet extends ImmutableCollectionTest
             },
             {"intersect", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_set_intersect.call(context, new Strategy[0],
-                    new IStrategoTerm[] { new StrategoImmutableSet(Set.Immutable.of(one, three)) }),
+                    new IStrategoTerm[] { new StrategoImmutableSet(CapsuleUtil.immutableSet(one, three)) }),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one),
             },
@@ -113,13 +114,13 @@ public class TestImmutableSetPrimitiveReturnsSet extends ImmutableCollectionTest
             },
             {"subtractOverlapping", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_set_subtract.call(context, new Strategy[0],
-                    new IStrategoTerm[] { new StrategoImmutableSet(Set.Immutable.of(one, three)) }),
+                    new IStrategoTerm[] { new StrategoImmutableSet(CapsuleUtil.immutableSet(one, three)) }),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(two),
             },
             {"subtractNonOverlapping", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_set_subtract.call(context, new Strategy[0],
-                    new IStrategoTerm[] { new StrategoImmutableSet(Set.Immutable.of(three, four)) }),
+                    new IStrategoTerm[] { new StrategoImmutableSet(CapsuleUtil.immutableSet(three, four)) }),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one, two),
             },
@@ -132,13 +133,13 @@ public class TestImmutableSetPrimitiveReturnsSet extends ImmutableCollectionTest
             {"unionOverlapping", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_set_union.call(context, new Strategy[] { InterpreterStrategy.of(current -> {
                     return current.getSubterm(0); // set pair to first
-                }) }, new IStrategoTerm[] { new StrategoImmutableSet(Set.Immutable.of(one, three)) }),
+                }) }, new IStrategoTerm[] { new StrategoImmutableSet(CapsuleUtil.immutableSet(one, three)) }),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one, two, three),
             },
             {"unionNonOverlapping", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_set_union.call(context, new Strategy[] { null },
-                    new IStrategoTerm[] { new StrategoImmutableSet(Set.Immutable.of(three, four)) }),
+                    new IStrategoTerm[] { new StrategoImmutableSet(CapsuleUtil.immutableSet(three, four)) }),
                 new StrategoImmutableSet(one, two),
                 new StrategoImmutableSet(one, two, three, four),
             },

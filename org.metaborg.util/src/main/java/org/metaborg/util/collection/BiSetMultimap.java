@@ -1,22 +1,21 @@
 package org.metaborg.util.collection;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.SetMultimap;
 
 /**
  * Interface for bidirectional multimaps that cannot hold duplicate key-value pairs.
  */
-public interface BiSetMultimap<K, V> extends BiMultimap<K, V>, SetMultimap<K, V> {
-    @Override public abstract Map<V, Collection<K>> asInverseMap();
+public interface BiSetMultimap<K, V> extends BiMultimap<K, V> {
+    @Override Set<K> getInverse(V value);
 
-    @Override public abstract Set<K> getInverse(V value);
+    @Override Set<V> values();
 
-    @Override public abstract Set<K> removeAllInverse(Object value);
+    Map<K, Set<V>> keyToValue();
 
-    @Override public abstract SetMultimap<K, V> keyToValue();
+    Map<V, Set<K>> valueToKey();
 
-    @Override public abstract SetMultimap<V, K> valueToKey();
+    Set<K> removeAllInverse(V value);
+
+    Set<V> removeAll(K key);
 }

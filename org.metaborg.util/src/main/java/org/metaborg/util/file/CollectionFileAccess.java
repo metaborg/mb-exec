@@ -1,14 +1,13 @@
 package org.metaborg.util.file;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.vfs2.FileObject;
 
-import com.google.common.collect.Lists;
-
 public class CollectionFileAccess implements IFileAccess {
-    private final Collection<FileObject> reads = Lists.newArrayList();
-    private final Collection<FileObject> writes = Lists.newArrayList();
+    private final Collection<FileObject> reads = new ArrayList<>();
+    private final Collection<FileObject> writes = new ArrayList<>();
 
 
     public Iterable<FileObject> reads() {

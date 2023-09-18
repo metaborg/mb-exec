@@ -2,8 +2,7 @@ package org.metaborg.util.iterators;
 
 import java.util.Collection;
 import java.util.Iterator;
-
-import com.google.common.collect.Lists;
+import java.util.LinkedList;
 
 public class CompoundIterable<T> implements Iterable<T> {
     private final Iterable<? extends Iterable<? extends T>> iterables;
@@ -15,7 +14,7 @@ public class CompoundIterable<T> implements Iterable<T> {
 
 
     @Override public Iterator<T> iterator() {
-        final Collection<Iterator<? extends T>> iterators = Lists.newLinkedList();
+        final Collection<Iterator<? extends T>> iterators = new LinkedList<>();
         for(Iterable<? extends T> iterable : iterables) {
             iterators.add(iterable.iterator());
         }

@@ -1,20 +1,22 @@
 package org.metaborg.util.resource;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.FileTypeSelector;
-import org.apache.commons.vfs2.NameScope;
 import org.metaborg.util.log.ILogger;
 import org.metaborg.util.log.LoggerUtils;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 public class ResourceUtils {
     private static final ILogger logger = LoggerUtils.logger(ResourceUtils.class);
@@ -51,8 +53,8 @@ public class ResourceUtils {
      *             When finding files fails.
      */
     public static Collection<FileObject> expand(Iterable<FileObject> locations) {
-        final Set<FileName> names = Sets.newHashSet();
-        final Collection<FileObject> resources = Lists.newArrayList();
+        final Set<FileName> names = new HashSet<FileName>();
+        final Collection<FileObject> resources = new ArrayList<>();
         for(FileObject location : locations) {
             final FileObject[] files = expand(location);
             for(FileObject file : files) {
@@ -105,5 +107,36 @@ public class ResourceUtils {
      */
     public static FileObject resolveFile(FileObject baseFile, String name) throws FileSystemException {
         return baseFile.getFileSystem().getFileSystemManager().resolveFile(baseFile, name);
+    }
+
+    /**
+     * Resolve a "resource" in Java, such as from src/main/resources.
+     */
+    public static URL resolveJavaResource(String name) {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        if(loader == null) {
+            loader = ResourceUtils.class.getClassLoader();
+        }
+        return loader.getResource(name);
+    }
+
+    /**
+     * Read a Java "resource" to string.
+     */
+    public static String readJavaResource(String name, Charset charset) throws IOException {
+        return readInputStream(resolveJavaResource(name).openStream(), charset);
+    }
+
+    /**
+     * source: https://stackoverflow.com/a/35446009
+     */
+    public static String readInputStream(InputStream inputStream, Charset charset) throws IOException {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while((length = inputStream.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+        return result.toString(charset.name());
     }
 }

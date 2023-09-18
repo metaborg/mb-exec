@@ -1,22 +1,24 @@
 package org.metaborg.util.collection;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import com.google.common.collect.Sets;
 
 import io.usethesource.capsule.Map;
 
-public abstract class MultiSet<E> implements Iterable<E> {
+public abstract class MultiSet<E> implements Iterable<E>, Serializable {
 
     @SuppressWarnings("rawtypes") private static final MultiSet.Immutable EMPTY =
             new MultiSet.Immutable<>(Map.Immutable.of());
 
-    protected abstract Map<E, Integer> elements();
+    protected abstract java.util.Map<E, Integer> elements();
 
     public boolean isEmpty() {
         return elements().isEmpty();
@@ -33,7 +35,7 @@ public abstract class MultiSet<E> implements Iterable<E> {
         return elements().getOrDefault(e, 0);
     }
 
-    public boolean contains(E e) {
+    public boolean contains(Object e) {
         return elements().containsKey(e);
     }
 
@@ -59,8 +61,8 @@ public abstract class MultiSet<E> implements Iterable<E> {
     }
 
     public Optional<Integer> compareTo(MultiSet<E> other) {
-        final Map<E, Integer> ours = elements();
-        final Map<E, Integer> theirs = other.elements();
+        final java.util.Map<E, Integer> ours = elements();
+        final java.util.Map<E, Integer> theirs = other.elements();
         boolean oursMissing = false;
         boolean theirsMissing = false;
         boolean oursSmaller = false;
@@ -118,6 +120,16 @@ public abstract class MultiSet<E> implements Iterable<E> {
             this.elements = elements;
         }
 
+        public static <T> Immutable<T> copyOf(MultiSet<T> toCopy) {
+            if(toCopy instanceof Immutable) {
+                return (Immutable<T>) toCopy;
+            } else {
+                final Transient<T> b = Transient.of();
+                b.addAll(toCopy);
+                return b.freeze();
+            }
+        }
+
         @Override protected Map<E, Integer> elements() {
             return elements;
         }
@@ -131,10 +143,6 @@ public abstract class MultiSet<E> implements Iterable<E> {
             } else {
                 return new MultiSet.Immutable<>(elements.__remove(e));
             }
-        }
-
-        public Immutable<E> add(E e) {
-            return add(e, 1);
         }
 
         public Immutable<E> add(E e, int n) {
@@ -153,13 +161,9 @@ public abstract class MultiSet<E> implements Iterable<E> {
         public Immutable<E> addAll(Iterable<E> es) {
             Immutable<E> result = this;
             for(E e : es) {
-                result = result.add(e);
+                result = result.add(e, 1);
             }
             return result;
-        }
-
-        public Immutable<E> remove(E e) {
-            return remove(e, 1);
         }
 
         public Immutable<E> remove(E e, int n) {
@@ -183,9 +187,18 @@ public abstract class MultiSet<E> implements Iterable<E> {
         public Immutable<E> remove(Iterable<E> es) {
             MultiSet.Immutable<E> result = this;
             for(E e : es) {
-                result = result.remove(e);
+                result = result.remove(e, 1);
             }
             return result;
+        }
+
+        public <T> Immutable<T> filterMap(Function<E, Optional<T>> filter) {
+            boolean changed = false;
+            final Map.Transient<T, Integer> map = CapsuleUtil.transientMap();
+            for(Entry<E, Integer> e : elements.entrySet()) {
+                filter.apply(e.getKey()).ifPresent(t -> map.__put(t,e.getValue()));
+            }
+            return new Immutable<>(map.freeze());
         }
 
         public Map.Immutable<E, Integer> asMap() {
@@ -229,6 +242,17 @@ public abstract class MultiSet<E> implements Iterable<E> {
             }
         }
 
+        public Collection<E> toCollection() {
+            return new ImmutableCollection<E>() {
+                @Override public Iterator iterator() {
+                    return Immutable.this.iterator();
+                }
+
+                @Override public int size() {
+                    return Immutable.this.size();
+                }
+            };
+        }
     }
 
     public static class Transient<E> extends MultiSet<E> {
@@ -317,8 +341,14 @@ public abstract class MultiSet<E> implements Iterable<E> {
         }
 
         public void removeAll(Iterable<E> es) {
-            for(E e : es) {
-                remove(e);
+            if(es instanceof MultiSet) {
+                for(Entry<E, Integer> entry : ((MultiSet<E>) es).entrySet()) {
+                    remove(entry.getKey(), entry.getValue());
+                }
+            } else {
+                for(E e : es) {
+                    remove(e);
+                }
             }
         }
 
@@ -367,6 +397,145 @@ public abstract class MultiSet<E> implements Iterable<E> {
 
     }
 
+    public static class Mutable<E> extends MultiSet<E> {
+        private java.util.Map<E, Integer> elements;
+
+        private Mutable(Map.Transient<E, Integer> elements) {
+            this.elements = elements;
+        }
+
+        public Mutable() {
+            this.elements = new HashMap<>();
+        }
+
+        @Override protected java.util.Map<E, Integer> elements() {
+            return elements;
+        }
+
+        /**
+         * Set an element to n.
+         *
+         * @param e
+         *            Element to be set
+         * @param n
+         *            New count
+         * @return Old count for the element
+         */
+        public int set(E e, int n) {
+            if(n < 0) {
+                throw new IllegalArgumentException("count must be positive");
+            }
+            final Integer oldCount;
+            if(n > 0) {
+                oldCount = elements.put(e, n);
+            } else {
+                oldCount = elements.remove(e);
+            }
+            return oldCount != null ? oldCount : 0;
+        }
+
+        /**
+         * Add an element once.
+         *
+         * @param e
+         *            Element to be added
+         * @return New count for the element.
+         */
+        public int add(E e) {
+            return add(e, 1);
+        }
+
+        /**
+         * Add an element n times.
+         *
+         * @param e
+         *            Element to be added
+         * @param n
+         *            Additions, greater or equal to zero
+         * @return Old count for the element
+         */
+        public int add(E e, int n) {
+            if(n < 0) {
+                throw new IllegalArgumentException("count must be positive");
+            }
+            final int oldCount = elements.getOrDefault(e, 0);
+            final int newCount = oldCount + n;
+            if(newCount > 0) {
+                elements.put(e, newCount);
+            } else {
+                elements.remove(e);
+            }
+            return oldCount;
+        }
+
+        public void addAll(Iterable<E> es) {
+            for(E e : es) {
+                add(e);
+            }
+        }
+
+        /**
+         * Remove an element once.
+         *
+         * @param e
+         *            Element to be removed
+         * @return Old count for the element
+         */
+        public int remove(E e) {
+            return remove(e, 1);
+        }
+
+        public void removeAll(Iterable<E> es) {
+            if(es instanceof MultiSet) {
+                for(Entry<E, Integer> entry : ((MultiSet<E>) es).entrySet()) {
+                    remove(entry.getKey(), entry.getValue());
+                }
+            } else {
+                for(E e : es) {
+                    remove(e);
+                }
+            }
+        }
+
+        /**
+         * Remove an element up to n times.
+         *
+         * @param e
+         *            Element to be removed
+         * @param n
+         *            Removals, greater or equal to zero
+         * @return Old count for the element
+         */
+        public int remove(E e, int n) {
+            if(n < 0) {
+                throw new IllegalArgumentException("count must be positive");
+            }
+            final int oldCount = elements.getOrDefault(e, 0);
+            final int newCount = Math.max(0, oldCount - n);
+            if(newCount > 0) {
+                elements.put(e, newCount);
+            } else {
+                elements.remove(e);
+            }
+            return oldCount;
+        }
+
+        /**
+         * Remove an element completely.
+         *
+         * @return Old count for the element
+         */
+        public int removeAll(E e) {
+            final int oldCount = elements.getOrDefault(e, 0);
+            elements.remove(e);
+            return oldCount;
+        }
+
+        public void clear() {
+            elements.clear();
+        }
+    }
+
     @Override public String toString() {
         return elements().entrySet().stream().map(e -> e.getKey() + ": " + e.getValue())
                 .collect(Collectors.joining(", ", "{", "}"));
@@ -374,7 +543,7 @@ public abstract class MultiSet<E> implements Iterable<E> {
 
     private class MultiSetIterator implements Iterator<E> {
 
-        private Iterator<Map.Entry<E, Integer>> it = elements().entryIterator();
+        private Iterator<Map.Entry<E, Integer>> it = elements().entrySet().iterator();
         private E next;
         private int count;
 

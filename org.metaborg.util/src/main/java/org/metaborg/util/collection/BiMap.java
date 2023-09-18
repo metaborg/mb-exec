@@ -108,7 +108,7 @@ public abstract class BiMap<E> {
         }
 
         public static <E> Immutable<E> of() {
-            return new Immutable<>(Map.Immutable.of(), Map.Immutable.of());
+            return new Immutable<>(CapsuleUtil.immutableMap(), Map.Immutable.of());
         }
 
         public static <E> Immutable<E> of(E key, E value) {
@@ -240,7 +240,7 @@ public abstract class BiMap<E> {
         }
 
         public static <E> Transient<E> of() {
-            return new Transient<>(Map.Transient.of(), Map.Transient.of());
+            return new Transient<>(CapsuleUtil.transientMap(), Map.Transient.of());
         }
 
         public static <E> Transient<E> of(E key, E value) {
@@ -263,78 +263,5 @@ public abstract class BiMap<E> {
             return bwd.getOrDefault(value, def);
         }
 
-    }
-
-    public static class AsJavaMap<E> implements java.util.Map<E, E> {
-        private final BiMap<E> map;
-
-        public AsJavaMap(BiMap<E> map) {
-            this.map = map;
-        }
-
-        @Override public boolean containsKey(Object key) {
-            if(key == null) {
-                return false;
-            }
-            return map.containsKey((E) key);
-        }
-
-        @Override public boolean containsValue(Object value) {
-            if(value == null) {
-                return false;
-            }
-            return map.containsValue((E) value);
-        }
-
-        @Override public E get(Object key) {
-            if(key == null) {
-                return null;
-            }
-            return map.getKey((E) key);
-        }
-
-        @Override public E put(E key, E value) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override public E remove(Object key) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override public void putAll(java.util.Map<? extends E, ? extends E> m) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override public void clear() {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean containsEntry(E key, E value) {
-            return map.containsEntry(key, value);
-        }
-
-        @Override public int size() {
-            return map.size();
-        }
-
-        @Override public boolean isEmpty() {
-            return map.isEmpty();
-        }
-
-        @Override public Set<E> keySet() {
-            return map.keySet();
-        }
-
-        @Override public Collection<E> values() {
-            return valueSet();
-        }
-
-        public Set<E> valueSet() {
-            return map.valueSet();
-        }
-
-        @Override public Set<Entry<E, E>> entrySet() {
-            return map.entrySet();
-        }
     }
 }
