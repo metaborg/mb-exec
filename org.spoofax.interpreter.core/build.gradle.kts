@@ -12,11 +12,11 @@ dependencies {
   api(compositeBuild("org.spoofax.jsglr"))
   implementation("commons-io:commons-io")
   api("io.usethesource:capsule")
+  implementation(compositeBuild("org.metaborg.util"))
 
   compileOnly("com.google.code.findbugs:jsr305")
   compileOnly("javax.annotation:javax.annotation-api")
 
-  testImplementation(compositeBuild("org.metaborg.util"))
   testCompileOnly("junit:junit")
   testCompileOnly("com.google.code.findbugs:jsr305")
   testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
