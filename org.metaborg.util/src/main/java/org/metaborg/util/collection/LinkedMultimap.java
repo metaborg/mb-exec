@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 import org.metaborg.util.functions.CheckedAction2;
+import org.metaborg.util.log.PrintlineLogger;
 
 /**
  * Super basic multimap that cannot shrink.
@@ -23,6 +24,9 @@ import org.metaborg.util.functions.CheckedAction2;
  * @param <V>
  */
 public abstract class LinkedMultimap<K, V, C extends Collection<V>> extends Multimap<K, V, C> {
+
+    private static final PrintlineLogger plLogger = PrintlineLogger.logger(LinkedMultimap.class);
+
     protected final List<V> values;
 
     public LinkedMultimap() {
@@ -52,7 +56,10 @@ public abstract class LinkedMultimap<K, V, C extends Collection<V>> extends Mult
 
     @Override public boolean put(K key, V value) {
         if(super.put(key, value)) {
+            plLogger.debug("add value {}", value);
+            plLogger.debug("old values: {}", values);
             values.add(value);
+            plLogger.debug("new values: {}", values);
             return true;
         }
         return false;

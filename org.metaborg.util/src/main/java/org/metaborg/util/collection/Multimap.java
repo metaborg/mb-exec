@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.metaborg.util.functions.CheckedAction2;
+import org.metaborg.util.log.PrintlineLogger;
 
 /**
  * Super basic multimap that cannot shrink.
@@ -20,6 +21,9 @@ import org.metaborg.util.functions.CheckedAction2;
  * @param <V>
  */
 public abstract class Multimap<K, V, C extends Collection<V>> {
+
+    private static final PrintlineLogger plLogger = PrintlineLogger.logger(Multimap.class);
+
     protected final Map<K, C> backingMap;
 
     protected Multimap(Map<K, C> backingMap) {
@@ -54,31 +58,44 @@ public abstract class Multimap<K, V, C extends Collection<V>> {
     }
 
     public boolean containsKey(K key) {
-        return backingMap.containsKey(key);
+        boolean containsKey = backingMap.containsKey(key);
+        plLogger.debug("containsKey({}) = {}; hash = {}; keys = {}", key, containsKey, Objects.hashCode(key), backingMap.keySet());
+        return containsKey;
     }
 
     public boolean containsValue(V value) {
-        return this.backingMap.values().stream().flatMap(Collection::stream).anyMatch(v -> v.equals(value));
+        boolean containsValue = this.backingMap.values().stream().flatMap(Collection::stream).anyMatch(v -> v.equals(value));
+        plLogger.debug("containsValue({}) = {}", value, containsValue);
+        return containsValue;
     }
 
     public boolean containsEntry(K key, V value) {
-        return get(key).contains(value);
+        boolean containsEntry = get(key).contains(value);
+        plLogger.debug("containsEntry({}, {}) = {}; hash = {}", key, value, containsEntry, Objects.hashCode(key));
+        return containsEntry;
     }
 
     public C get(K key) {
-        return unmodifiableCollection(backingMap.getOrDefault(key, emptyCollection()));
+        C values = backingMap.getOrDefault(key, emptyCollection());
+        plLogger.debug("get({}) = {}; hash = {}", key, values, Objects.hashCode(key));
+        return unmodifiableCollection(values);
     }
 
     public boolean put(K key, V value) {
-        return backingMap.computeIfAbsent(key, k -> newCollection()).add(value);
+        plLogger.debug("put({}, {}); hash = {}", key, value, Objects.hashCode(key));
+        C collection = backingMap.computeIfAbsent(key, k -> { plLogger.debug("init new collection for {}; hash = {}", k, Objects.hash(k)); return newCollection(); });
+        plLogger.debug("old: {} |-> {}", key, collection);
+        boolean added = collection.add(value);
+        plLogger.debug("new: {} |-> {}", key, collection);
+        return added;
     }
 
     public boolean putAll(K key, Collection<? extends V> values) {
-        boolean allAdded = false;
+        boolean anyAdded = false;
         for(V value : values) {
-            allAdded |= put(key, value);
+            anyAdded |= put(key, value);
         }
-        return allAdded;
+        return anyAdded;
     }
 
     public boolean putAll(Map<? extends K, ? extends V> m) {
