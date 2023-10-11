@@ -15,7 +15,12 @@ public class PrintlineLogger {
 
     public PrintlineLogger(String name) {
         this.name = truncate(name);
-        enabled = !name.startsWith("mb.nabl2") && !name.startsWith("mb.scopegraph");
+        enabled = name.endsWith("ISolver")
+                || name.endsWith("EqualityComponent")
+                || name.endsWith("SemiIncrementalMultiFileSolver")
+                || name.startsWith("mb.nabl2.spoofax.primitives")
+                || name.startsWith("org.metaborg.spoofax.core.analysis.constraint")
+                || name.startsWith("org.metaborg.spt.core.run.expectations");
     }
 
     public void debug(String format, Object... args) {
@@ -69,7 +74,7 @@ public class PrintlineLogger {
         }
     }
 
-    private boolean enabled() {
+    public boolean enabled() {
         return enabled && globalEnabled;
     }
 
