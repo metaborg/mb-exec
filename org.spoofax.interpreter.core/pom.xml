@@ -25,10 +25,10 @@
 			<artifactId>org.spoofax.jsglr</artifactId>
 			<version>${metaborg-version}</version>
 		</dependency>
-		
 		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
+			<groupId>org.metaborg</groupId>
+			<artifactId>org.metaborg.util</artifactId>
+			<version>${metaborg-version}</version>
 		</dependency>
 
 		<dependency>

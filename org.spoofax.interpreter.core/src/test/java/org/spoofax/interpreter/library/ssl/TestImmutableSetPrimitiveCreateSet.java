@@ -3,6 +3,7 @@ package org.spoofax.interpreter.library.ssl;
 import io.usethesource.capsule.Set;
 
 import org.junit.Test;
+import org.metaborg.util.collection.CapsuleUtil;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.terms.util.TermUtils;
@@ -39,7 +40,7 @@ public class TestImmutableSetPrimitiveCreateSet extends ImmutableCollectionTestS
         assertTrue(result);
         assertThat(context.current(), instanceOf(StrategoImmutableSet.class));
         StrategoImmutableSet current = (StrategoImmutableSet) context.current();
-        assertEquals(current.backingSet, Set.Immutable.of(one, two));
+        assertEquals(current.backingSet, CapsuleUtil.immutableSet(one, two));
     }
 
     @Test
@@ -58,7 +59,7 @@ public class TestImmutableSetPrimitiveCreateSet extends ImmutableCollectionTestS
 
     @Test
     public void setElements() {
-        context.setCurrent(new StrategoImmutableSet(Set.Immutable.of(one, two)));
+        context.setCurrent(new StrategoImmutableSet(CapsuleUtil.immutableSet(one, two)));
         boolean result = SSL_immutable_set_elements.call(context, new Strategy[0], EMPTY_TERM_ARRAY);
         assertTrue(result);
         assertTrue(TermUtils.isList(context.current()));

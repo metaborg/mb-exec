@@ -1,11 +1,12 @@
 package org.metaborg.util.resource;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
-
-import com.google.common.collect.Sets;
 
 
 public class ExtensionFileSelector implements FileSelector {
@@ -13,11 +14,11 @@ public class ExtensionFileSelector implements FileSelector {
 
 
     public ExtensionFileSelector(String extension) {
-        this.extensions = Sets.newHashSet(extension);
+        this.extensions = new HashSet<>(Collections.singleton(extension));
     }
 
-    public ExtensionFileSelector(Iterable<String> extensions) {
-        this.extensions = Sets.newHashSet(extensions);
+    public ExtensionFileSelector(Collection<String> extensions) {
+        this.extensions = new HashSet<>(extensions);
     }
 
 

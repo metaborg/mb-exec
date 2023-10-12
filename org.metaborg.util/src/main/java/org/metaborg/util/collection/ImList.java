@@ -1,5 +1,6 @@
 package org.metaborg.util.collection;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,26 +26,28 @@ import javax.annotation.Nullable;
  * Does not allow null values.
  * @param <E>
  */
-public abstract class ImList<E> implements List<E> {
-    public static <E> Collector<E, ImList.Transient<E>, ImList.Immutable<E>> toImmutableList() {
-        return new Collector<E, ImList.Transient<E>, Immutable<E>>() {
-            @Override public Supplier<ImList.Transient<E>> supplier() {
-                return Transient::of;
+public abstract class ImList<E> implements List<E>, Serializable {
+    private static final long serialVersionUID = 1L;
+
+    public static <E> Collector<E, Mutable<E>, ImList.Immutable<E>> toImmutableList() {
+        return new Collector<E, Mutable<E>, Immutable<E>>() {
+            @Override public Supplier<Mutable<E>> supplier() {
+                return Mutable::of;
             }
 
-            @Override public BiConsumer<ImList.Transient<E>, E> accumulator() {
-                return Transient::add;
+            @Override public BiConsumer<Mutable<E>, E> accumulator() {
+                return Mutable::add;
             }
 
-            @Override public BinaryOperator<ImList.Transient<E>> combiner() {
+            @Override public BinaryOperator<Mutable<E>> combiner() {
                 return (l, r) -> {
                     l.addAll(r);
                     return l;
                 };
             }
 
-            @Override public Function<ImList.Transient<E>, Immutable<E>> finisher() {
-                return Transient::freeze;
+            @Override public Function<Mutable<E>, Immutable<E>> finisher() {
+                return Mutable::freeze;
             }
 
             @Override public Set<Characteristics> characteristics() {
@@ -60,6 +63,32 @@ public abstract class ImList<E> implements List<E> {
 
     @Override public Object[] toArray() {
         return toArray(new Object[0]);
+    }
+
+    @Override public boolean equals(Object that) {
+        if (that == this)
+            return true;
+        if (!(that instanceof List))
+            return false;
+
+        final Iterator<E> thisIter = iterator();
+        final Iterator<?> thatIter = ((List<?>) that).iterator();
+        while (thisIter.hasNext() && thatIter.hasNext()) {
+            final E thisElem = thisIter.next();
+            final Object thatElem = thatIter.next();
+            if (!(thisElem == thatElem || thisElem != null && thisElem.equals(thatElem))) {
+                return false;
+            }
+        }
+        return !(thisIter.hasNext() || thatIter.hasNext());
+    }
+
+    @Override public int hashCode() {
+        int hashCode = 1;
+        for (E elem : this) {
+            hashCode = 31 * hashCode + (elem == null ? 0 : elem.hashCode());
+        }
+        return hashCode;
     }
 
     @Override public abstract <T> T[] toArray(T[] a);
@@ -115,6 +144,7 @@ public abstract class ImList<E> implements List<E> {
     @Override public abstract List<E> subList(int fromIndex, int toIndex);
 
     public static class Immutable<E> extends ImList<E> {
+        private static final long serialVersionUID = 1L;
         private final E[] array;
         private final int size;
 
@@ -142,15 +172,15 @@ public abstract class ImList<E> implements List<E> {
             if(iterable instanceof Collection) {
                 size = ((Collection<? extends E>) iterable).size();
             }
-            final ImList.Transient<E> copy = new ImList.Transient<>(size);
+            final Mutable<E> copy = new Mutable<>(size);
             for(E e : iterable) {
                 copy.add(e);
             }
             return copy.freeze();
         }
 
-        @SuppressWarnings("unchecked") public static <E> Immutable<E> copyOf(E[] array) {
-            final ImList.Transient<E> copy = new ImList.Transient<>(array.length);
+        public static <E> Immutable<E> copyOf(E[] array) {
+            final Mutable<E> copy = new Mutable<>(array.length);
             for(E e : array) {
                 copy.add(e);
             }
@@ -285,34 +315,8 @@ public abstract class ImList<E> implements List<E> {
             return new ImList.Immutable<>(Arrays.copyOfRange(this.array, fromIndex, toIndex), toIndex - fromIndex);
         }
 
-        @SuppressWarnings("unchecked") public Transient<E> asTransient() {
-            return new Transient<>((E[]) toArray());
-        }
-
-        @Override public boolean equals(Object o) {
-            if(this == o)
-                return true;
-            if(o == null || getClass() != o.getClass())
-                return false;
-            Immutable<?> other = (Immutable<?>) o;
-            if(size != other.size)
-                return false;
-
-            for(int i = 0; i < size; i++) {
-                if(!Objects.equals(((Object[]) array)[i], other.array[i])) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        @Override public int hashCode() {
-            int result = 1;
-            for(E elem : this) {
-                result = 31 * result + Objects.hashCode(elem);
-            }
-            return result;
+        @SuppressWarnings("unchecked") public Mutable<E> mutableCopy() {
+            return new Mutable<>((E[]) toArray());
         }
 
         @Override public String toString() {
@@ -320,12 +324,18 @@ public abstract class ImList<E> implements List<E> {
         }
     }
 
-    public static class Transient<E> extends ImList<E> {
+    /**
+     * This is basically a quick reimplementation of java.util.ArrayList so we have access to the
+     *  inner array and can share it with the frozen immutable version. Could be simplified to just
+     *  use ArrayList, if the extra Array copy is acceptable...
+     */
+    public static class Mutable<E> extends ImList<E> {
+        private static final long serialVersionUID = 1L;
         private E[] array;
         private int size = 0;
         private @Nullable ImList.Immutable<E> frozen = null;
 
-        @SuppressWarnings("unchecked") public Transient(int initialCapacity) {
+        @SuppressWarnings("unchecked") public Mutable(int initialCapacity) {
             if (initialCapacity > 0) {
                 this.array = (E[]) new Object[initialCapacity];
             } else if (initialCapacity == 0) {
@@ -336,13 +346,13 @@ public abstract class ImList<E> implements List<E> {
             }
         }
 
-        Transient(E[] array) {
+        Mutable(E[] array) {
             this.array = array;
             size = array.length;
         }
 
-        public static <E> Transient<E> of(E... elements) {
-            final Transient<E> result = new Transient<>(elements.length);
+        public static <E> Mutable<E> of(E... elements) {
+            final Mutable<E> result = new Mutable<>(elements.length);
             if(elements.length == 0) {
                 return result;
             }
@@ -392,7 +402,7 @@ public abstract class ImList<E> implements List<E> {
                 if (lastRet < 0) {
                     throw new IllegalStateException();
                 }
-                Transient.this.remove(lastRet);
+                Mutable.this.remove(lastRet);
                 cursor = lastRet;
                 lastRet = -1;
             }
@@ -509,33 +519,6 @@ public abstract class ImList<E> implements List<E> {
 
         public boolean isFrozen() {
             return frozen != null;
-        }
-
-        @Override public boolean equals(Object o) {
-            if(this == o)
-                return true;
-            if(o == null || getClass() != o.getClass())
-                return false;
-            Transient<?> other = (Transient<?>) o;
-            if(size != other.size || frozen != other.frozen) {
-                return false;
-            }
-
-            for(int i = 0; i < size; i++) {
-                if(!Objects.equals(((Object[]) array)[i], other.array[i])) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        @Override public int hashCode() {
-            int result = Objects.hash(frozen);
-            for(E elem : this) {
-                result = 31 * result + Objects.hashCode(elem);
-            }
-            return result;
         }
 
         @Override public String toString() {
@@ -660,11 +643,11 @@ public abstract class ImList<E> implements List<E> {
                 if (lastRet < 0) {
                     throw new IllegalStateException();
                 }
-                Transient.this.set(lastRet, e);
+                Mutable.this.set(lastRet, e);
             }
 
             @Override public void add(E e) {
-                Transient.this.add(cursor, e);
+                Mutable.this.add(cursor, e);
                 cursor += 1;
                 lastRet = -1;
             }

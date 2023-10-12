@@ -1,13 +1,12 @@
 package org.metaborg.util.resource;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileType;
 import org.metaborg.util.iterators.Iterables2;
-
-import com.google.common.collect.Sets;
 
 /**
  * AntPatternFileSelector is a VFS2 file selector that is configured using Ant patterns. Examples of patterns are:
@@ -27,7 +26,7 @@ import com.google.common.collect.Sets;
 public class AntPatternFileSelector implements FileSelector {
     private static final FileType DEFAULT_FILETYPE = FileType.FILE;
 
-    private final Set<AntPattern> patterns = Sets.newHashSet();
+    private final Set<AntPattern> patterns = new HashSet<>();
     private final FileType fileType;
 
     

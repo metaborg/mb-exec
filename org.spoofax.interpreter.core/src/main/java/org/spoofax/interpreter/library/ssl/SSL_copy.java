@@ -7,8 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.util.Objects;
 
-import org.apache.commons.io.IOUtils;
+import org.metaborg.util.stream.Utils;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -65,7 +66,7 @@ public class SSL_copy extends AbstractPrimitive {
                     final FileChannel outChannel = ((FileOutputStream) out).getChannel();
                     inChannel.transferTo(0, inChannel.size(), outChannel);
                 } else {
-                    IOUtils.copy(in, out);
+                    Utils.copy(in,out);
                 }
             } finally {
                 if(closeOut) {
