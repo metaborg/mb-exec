@@ -17,7 +17,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-public class ImListTest {
+public final class ImListIntegrationTests {
     @SuppressWarnings({ "ConstantValue", "RedundantCollectionOperation" }) @Test public void testEmptyImmutableList() {
         final ImList.Immutable<Integer> emptyList = ImList.Immutable.of();
         // establish emptiness

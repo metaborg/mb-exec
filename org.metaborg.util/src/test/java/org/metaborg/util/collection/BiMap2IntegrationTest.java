@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-public class BiMap2Test {
+public final class BiMap2IntegrationTest {
     @SuppressWarnings({ "ConstantValue", "RedundantCollectionOperation" }) @Test
     public void testEmptyBiMap() {
         final BiMap2<Integer, String> theMap = new BiMap2<>();
