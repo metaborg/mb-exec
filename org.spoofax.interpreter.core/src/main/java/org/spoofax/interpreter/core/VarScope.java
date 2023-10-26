@@ -21,7 +21,7 @@ import org.spoofax.interpreter.stratego.SDefT;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.util.DebugUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class VarScope {
 

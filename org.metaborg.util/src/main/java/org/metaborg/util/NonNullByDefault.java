@@ -1,11 +1,11 @@
 package org.metaborg.util;
 
-import javax.annotation.Nonnull;
-import javax.annotation.meta.TypeQualifierDefault;
+import jakarta.annotation.Nonnull;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 
 /**
@@ -20,8 +20,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Documented
 @Nonnull
-@TypeQualifierDefault(
-{
+@Target({
     ElementType.ANNOTATION_TYPE,
     ElementType.CONSTRUCTOR,
     ElementType.FIELD,

@@ -1,6 +1,6 @@
 package org.metaborg.util.log;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public interface ILogger {
     public void trace(String msg);

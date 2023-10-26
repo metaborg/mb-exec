@@ -13,12 +13,11 @@ dependencies {
   implementation("commons-io:commons-io")
   api("io.usethesource:capsule")
 
-  compileOnly("com.google.code.findbugs:jsr305")
-  compileOnly("javax.annotation:javax.annotation-api")
+  compileOnly("jakarta.annotation:jakarta.annotation-api")
 
   testImplementation(compositeBuild("org.metaborg.util"))
   testCompileOnly("junit:junit")
-  testCompileOnly("com.google.code.findbugs:jsr305")
+  testCompileOnly("jakarta.annotation:jakarta.annotation-api")
   testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }
 

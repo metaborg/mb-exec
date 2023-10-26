@@ -2,7 +2,7 @@ package org.metaborg.util.log;
 
 import org.slf4j.helpers.MessageFormatter;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
