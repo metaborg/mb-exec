@@ -50,11 +50,11 @@ public class BiLinkedHashMultimap<K, V> implements BiSetMultimap<K, V> {
     }
 
     @Override public boolean containsKey(Object key) {
-        return keyToValue.containsKey(key) && !get((K) key).isEmpty();
+        return !get((K) key).isEmpty();
     }
 
     @Override public boolean containsValue(Object value) {
-        return keyToValue.containsValue(value) && !getInverse((V) value).isEmpty();
+        return !getInverse((V) value).isEmpty();
     }
 
     @Override public boolean containsEntry(Object key, Object value) {
