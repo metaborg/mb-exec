@@ -33,7 +33,9 @@ import java.util.stream.Stream;
  * limitations under the License.
  */
 
-public class Sets {
+public final class Sets {
+    private Sets() { /* Prevent instantiation. */ }
+    
     /**
      * Returns an unmodifiable <b>view</b> of the union of two sets. The returned set contains all
      * elements that are contained in either backing set. Iterating over the returned set iterates
