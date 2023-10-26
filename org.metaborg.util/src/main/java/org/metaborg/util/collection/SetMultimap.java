@@ -53,7 +53,9 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> implements Seriali
         final Set<V> values = backingMap.getOrDefault(key, emptyCollection());
         final boolean removed = values.remove(value);
         if(removed && values.isEmpty()) {
-            backingMap.remove(key);
+            final Set<V> removedValues = backingMap.remove(key);
+            if (removedValues == null || removedValues != values || !removedValues.isEmpty())
+                throw new RuntimeException("SetMultimap: removed values from set, but set was not empty!");
         }
         return removed;
     }
