@@ -14,10 +14,10 @@ dependencies {
   api("com.google.inject:guice")
   api("org.slf4j:slf4j-api")
 
-  compileOnly("com.google.code.findbugs:jsr305")
+  compileOnly("jakarta.annotation:jakarta.annotation-api")
 
   testCompileOnly("junit:junit")
-  testCompileOnly("com.google.code.findbugs:jsr305")
+  testCompileOnly("jakarta.annotation:jakarta.annotation-api")
   testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }
 

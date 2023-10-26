@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class Arguments implements Iterable<Object>, Serializable {
     private static final long serialVersionUID = -5031843820289891138L;

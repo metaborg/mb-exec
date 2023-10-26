@@ -1,7 +1,6 @@
 package org.metaborg.util.collection;
 
 import java.io.Serializable;
-import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;

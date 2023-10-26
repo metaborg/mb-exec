@@ -1,6 +1,6 @@
 package org.metaborg.util.log;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Abstract base class for {@link ILogger} implementations.
