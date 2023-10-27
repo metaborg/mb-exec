@@ -62,10 +62,15 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> implements Seriali
 
     public Set<V> remove(K key) {
         final Set<V> remove = backingMap.remove(key);
-        if (remove == null)
-            return Collections.emptySet();
-        else
-            return remove;
+        if(remove == null) return Collections.emptySet();
+
+        // Clear the set, as it has been removed.
+        // But return a copy of the set as it was.
+        // For example, org.spoofax.interpreter.library.index.tests.IndexSymbolTableTest#getEntriesInSourceAndRemoveSource()
+        // relies on this.
+        final Set<V> copyToReturn = copyCollection(remove);
+        remove.clear();
+        return copyToReturn;
     }
 
     public Set<V> replaceValues(K key, Set<V> values) {
