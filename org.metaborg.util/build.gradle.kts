@@ -14,10 +14,9 @@ dependencies {
   api("com.google.inject:guice")
   api("org.slf4j:slf4j-api")
 
-  compileOnly("jakarta.annotation:jakarta.annotation-api")
+  implementation("jakarta.annotation:jakarta.annotation-api")
 
   testCompileOnly("junit:junit")
-  testCompileOnly("jakarta.annotation:jakarta.annotation-api")
   testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }
 
