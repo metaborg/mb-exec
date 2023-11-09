@@ -2,6 +2,7 @@ package org.spoofax.interpreter.library.ssl;
 
 import io.usethesource.capsule.Set;
 
+import org.metaborg.util.collection.CapsuleUtil;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -20,7 +21,7 @@ public class SSL_immutable_set_map extends AbstractPrimitive {
         }
 
         final Set.Immutable<IStrategoTerm> set = ((StrategoImmutableSet) env.current()).backingSet;
-        final Set.Transient<IStrategoTerm> resultSet = Set.Transient.of();
+        final Set.Transient<IStrategoTerm> resultSet = CapsuleUtil.transientSet();
         for(IStrategoTerm value : set) {
             env.setCurrent(value);
             if(!sargs[0].evaluate(env)) {

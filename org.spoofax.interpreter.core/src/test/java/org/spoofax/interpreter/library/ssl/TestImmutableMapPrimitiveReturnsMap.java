@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.metaborg.util.collection.CapsuleUtil;
 import org.metaborg.util.functions.CheckedFunction0;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -68,7 +69,7 @@ public class TestImmutableMapPrimitiveReturnsMap extends ImmutableCollectionTest
             },
             {"mapIntersectSet", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_map_intersect_set
-                    .call(context, new Strategy[0], new IStrategoTerm[] { new StrategoImmutableSet(Set.Immutable.of(one, b)) }),
+                    .call(context, new Strategy[0], new IStrategoTerm[] { new StrategoImmutableSet(CapsuleUtil.immutableSet(one, b)) }),
                 new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)),
                 new StrategoImmutableMap(Map.Immutable.of(one, a)),
             },
@@ -123,7 +124,7 @@ public class TestImmutableMapPrimitiveReturnsMap extends ImmutableCollectionTest
             },
             {"mapSubtractSet", (CheckedFunction0<Boolean, InterpreterException>) () ->
                 SSL_immutable_map_subtract_set
-                    .call(context, new Strategy[0], new IStrategoTerm[] { new StrategoImmutableSet(Set.Immutable.of(one, b)) }),
+                    .call(context, new Strategy[0], new IStrategoTerm[] { new StrategoImmutableSet(CapsuleUtil.immutableSet(one, b)) }),
                 new StrategoImmutableMap(Map.Immutable.of(one, a, two, b)),
                 new StrategoImmutableMap(Map.Immutable.of(two, b)),
             },

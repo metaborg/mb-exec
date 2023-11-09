@@ -11,16 +11,12 @@ dependencies {
   api("commons-io:commons-io")
   api("io.reactivex.rxjava3:rxjava")
   api("io.usethesource:capsule")
-  api("com.google.guava:guava")
-  // Required for Guava >= 27.0:
-  // api("com.google.guava:failureaccess")
   api("com.google.inject:guice")
   api("org.slf4j:slf4j-api")
 
-  compileOnly("com.google.code.findbugs:jsr305")
+  implementation("jakarta.annotation:jakarta.annotation-api")
 
   testCompileOnly("junit:junit")
-  testCompileOnly("com.google.code.findbugs:jsr305")
   testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }
 

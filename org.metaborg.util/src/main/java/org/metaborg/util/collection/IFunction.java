@@ -6,8 +6,6 @@ import java.util.Optional;
 import org.metaborg.util.functions.Function2;
 import org.metaborg.util.tuple.Tuple2;
 
-import com.google.common.annotations.Beta;
-
 public interface IFunction<K, V> {
 
     IInverseFunction<V, K> inverse();
@@ -26,11 +24,11 @@ public interface IFunction<K, V> {
 
     Optional<V> get(K key);
 
-    @Beta default java.util.stream.Stream<Tuple2<K, V>> stream() {
+    default java.util.stream.Stream<Tuple2<K, V>> stream() {
         return this.stream(Tuple2::of);
     }
 
-    @Beta default <R> java.util.stream.Stream<R> stream(final Function2<K, V, R> converter) {
+    default <R> java.util.stream.Stream<R> stream(final Function2<K, V, R> converter) {
         return this.keySet().stream().map(key -> converter.apply(key, this.get(key).get()));
     }
 

@@ -6,8 +6,6 @@ import java.util.Objects;
 
 import org.metaborg.util.functions.Function2;
 
-import com.google.common.base.Preconditions;
-
 public final class Tuple2<T1, T2> implements Map.Entry<T1, T2>, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -16,8 +14,8 @@ public final class Tuple2<T1, T2> implements Map.Entry<T1, T2>, Serializable {
     private final T2 _2;
 
     private Tuple2(T1 _1, T2 _2) {
-        Preconditions.checkNotNull(_1);
-        Preconditions.checkNotNull(_2);
+        Objects.requireNonNull(_1);
+        Objects.requireNonNull(_2);
         this._1 = _1;
         this._2 = _2;
     }

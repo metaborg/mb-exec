@@ -1,10 +1,9 @@
 package org.metaborg.util.iterators;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.google.common.collect.UnmodifiableIterator;
-
-final public class SingletonIterator<T> extends UnmodifiableIterator<T> {
+final public class SingletonIterator<T> implements Iterator<T> {
     private final T value;
     private boolean done;
 

@@ -26,7 +26,7 @@ public class SSL_immutable_set_union_eq extends AbstractPrimitive {
         final Set.Immutable<IStrategoTerm> other = ((StrategoImmutableSet) targs[0]).backingSet;
 
         env.setCurrent(
-            new StrategoImmutableSet(one.__insertAllEquivalent(other, new StrategyEqualityComparator(env, comp))));
+            new StrategoImmutableSet(one.__insertAllEquivalent(other, new InterpretedStrategyEqualityComparator(env, comp))));
         return true;
     }
 }

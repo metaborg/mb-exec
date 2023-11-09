@@ -2,6 +2,7 @@ package org.metaborg.util.future;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,9 +17,6 @@ import org.metaborg.util.log.LoggerUtils;
 import org.metaborg.util.tuple.Tuple2;
 import org.metaborg.util.tuple.Tuple3;
 import org.metaborg.util.tuple.Tuple4;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 public class AggregateFuture<T, R> implements IFuture<R> {
 
@@ -35,11 +33,6 @@ public class AggregateFuture<T, R> implements IFuture<R> {
     @SafeVarargs private AggregateFuture(Function1<List<T>, R> reducer,
             IFuture<SC<T, R>>... futures) {
         this(reducer, Arrays.asList(futures));
-    }
-
-    private AggregateFuture(Function1<List<T>, R> reducer,
-            Iterable<IFuture<SC<T, R>>> futures) {
-        this(reducer, Lists.newArrayList(futures));
     }
 
     @SuppressWarnings("unchecked") private AggregateFuture(Function1<List<T>, R> reducer,
@@ -152,11 +145,11 @@ public class AggregateFuture<T, R> implements IFuture<R> {
 
     @SafeVarargs public static <T, R> IFuture<R> ofShortCircuitable(Function1<List<T>, R> reduce,
             IFuture<SC<T, R>>... futures) {
-        return ofShortCircuitable(reduce, Arrays.asList(futures));
+        return new AggregateFuture<T, R>(reduce, Arrays.asList(futures));
     }
 
     public static <T, R> IFuture<R> ofShortCircuitable(Function1<List<T>, R> reduce,
-            Iterable<IFuture<SC<T, R>>> futures) {
+            List<IFuture<SC<T, R>>> futures) {
         return new AggregateFuture<T, R>(reduce, futures);
     }
 
@@ -176,8 +169,8 @@ public class AggregateFuture<T, R> implements IFuture<R> {
                 .thenApply(rs -> Tuple4.of((T1) rs.get(0), (T2) rs.get(1), (T3) rs.get(2), (T4) rs.get(3)));
     }
 
-    public static <T, U> IFuture<List<U>> forAll(Iterable<T> items, Function1<T, IFuture<U>> toFuture) {
-        if(Iterables.isEmpty(items)) {
+    public static <T, U> IFuture<List<U>> forAll(Collection<T> items, Function1<T, IFuture<U>> toFuture) {
+        if(items.isEmpty()) {
             return CompletableFuture.completedFuture(Collections.emptyList());
         }
 

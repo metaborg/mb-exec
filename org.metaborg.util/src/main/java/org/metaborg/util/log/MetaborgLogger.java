@@ -3,7 +3,7 @@ package org.metaborg.util.log;
 import org.slf4j.Logger;
 import org.slf4j.helpers.MessageFormatter;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class MetaborgLogger extends AbstractLogger {
     private final Logger logger;

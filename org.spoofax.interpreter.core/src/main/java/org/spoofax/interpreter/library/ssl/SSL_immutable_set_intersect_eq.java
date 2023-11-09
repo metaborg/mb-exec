@@ -26,7 +26,7 @@ public class SSL_immutable_set_intersect_eq extends AbstractPrimitive {
         final Set.Transient<IStrategoTerm> other = ((StrategoImmutableSet) targs[0]).backingSet.asTransient();
 
         env.setCurrent(
-            new StrategoImmutableSet(one.__retainAllEquivalent(other, new StrategyEqualityComparator(env, comp))));
+            new StrategoImmutableSet(one.__retainAllEquivalent(other, new InterpretedStrategyEqualityComparator(env, comp))));
         return true;
     }
 }

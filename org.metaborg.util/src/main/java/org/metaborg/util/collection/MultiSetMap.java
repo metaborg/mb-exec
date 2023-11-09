@@ -1,23 +1,45 @@
 package org.metaborg.util.collection;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.metaborg.util.tuple.Tuple2;
 
 import io.usethesource.capsule.Map;
 
-public abstract class MultiSetMap<K, V> {
+public abstract class MultiSetMap<K, V> implements Serializable {
 
     // INVARIANT toMap()/entries never contains empty MultiSet values
     //           Thus, if there is an entry for a key, there is at least one value as well.
 
     @SuppressWarnings("rawtypes") private static final Immutable EMPTY = new Immutable<>(Map.Immutable.of());
 
-    protected abstract Map<K, MultiSet.Immutable<V>> asMap();
+    protected abstract java.util.Map<K, MultiSet.Immutable<V>> asMap();
 
     public Set<Entry<K, MultiSet.Immutable<V>>> entrySet() {
         return asMap().entrySet();
+    }
+
+    public Collection<Entry<K, V>> entries() {
+        return entryStream().collect(ImList.toImmutableList());
+    }
+
+    public void forEach(BiConsumer<? super K, ? super V> action) {
+        entryStream().forEach(e -> action.accept(e.getKey(), e.getValue()));
+    }
+
+    public Stream<Map.Entry<K, V>> entryStream() {
+        return asMap().entrySet().stream().flatMap(e -> {
+            final K key = e.getKey();
+            return e.getValue().toCollection().stream().map(v -> Tuple2.of(key, v));
+        });
     }
 
     public boolean isEmpty() {
@@ -62,13 +84,18 @@ public abstract class MultiSetMap<K, V> {
             this.entries = entries;
         }
 
+        public static <K, V> Immutable<K, V> of(K key, V value) {
+            final Immutable<K, V> result = of();
+            return result.put(key, value);
+        }
+
         @Override public Map.Immutable<K, MultiSet.Immutable<V>> asMap() {
             return entries;
         }
 
         public Immutable<K, V> put(K key, V value) {
             final MultiSet.Immutable<V> values = entries.getOrDefault(key, MultiSet.Immutable.of());
-            return new Immutable<>(entries.__put(key, values.add(value)));
+            return new Immutable<>(entries.__put(key, values.add(value, 1)));
         }
 
         public Immutable<K, V> put(K key, V value, int n) {
@@ -103,7 +130,7 @@ public abstract class MultiSetMap<K, V> {
             if(values == null) {
                 return this;
             }
-            final MultiSet.Immutable<V> newValues = values.remove(value);
+            final MultiSet.Immutable<V> newValues = values.remove(value, 1);
             final Map.Immutable<K, MultiSet.Immutable<V>> newEntries;
             if(newValues.isEmpty()) {
                 newEntries = entries.__remove(key);
@@ -135,7 +162,7 @@ public abstract class MultiSetMap<K, V> {
 
     }
 
-    public static class Transient<K, V> extends MultiSetMap<K, V> {
+    public static class Transient<K, V> extends MultiSetMap.Mutable<K, V> {
 
         private final Map.Transient<K, MultiSet.Immutable<V>> entries;
 
@@ -146,6 +173,51 @@ public abstract class MultiSetMap<K, V> {
         @Override public Map.Transient<K, MultiSet.Immutable<V>> asMap() {
             return entries;
         }
+
+        @Override protected MultiSet.Immutable<V> remove(K key) {
+            return entries.__remove(key);
+        }
+
+        @Override protected MultiSet.Immutable<V> put(K key, MultiSet.Immutable<V> value) {
+            return entries.__put(key, value);
+        }
+
+        @SuppressWarnings("unchecked") public Immutable<K, V> freeze() {
+            return entries.isEmpty() ? EMPTY : new Immutable<>(entries.freeze());
+        }
+
+        public static <K, V> MultiSetMap.Transient<K, V> of() {
+            return new Transient<>(Map.Transient.of());
+        }
+    }
+
+    public static class Ordered<K, V> extends MultiSetMap.Mutable<K, V> {
+        private final LinkedHashMap<K, MultiSet.Immutable<V>> entries;
+
+        private Ordered(LinkedHashMap<K, MultiSet.Immutable<V>> entries) {
+            this.entries = entries;
+        }
+
+        @Override public java.util.Map<K, MultiSet.Immutable<V>> asMap() {
+            return entries;
+        }
+
+        @Override protected MultiSet.Immutable<V> remove(K key) {
+            return entries.remove(key);
+        }
+
+        @Override protected MultiSet.Immutable<V> put(K key, MultiSet.Immutable<V> value) {
+            return entries.put(key, value);
+        }
+    }
+
+    public static abstract class Mutable<K, V> extends MultiSetMap<K, V> {
+        @Override public abstract java.util.Map<K, MultiSet.Immutable<V>> asMap();
+
+        protected abstract MultiSet.Immutable<V> remove(K key);
+
+        protected abstract MultiSet.Immutable<V> put(K key, MultiSet.Immutable<V> value);
+
 
         /**
          * Add an entry to the map, return the old count.
@@ -158,7 +230,7 @@ public abstract class MultiSetMap<K, V> {
             if(n < 0) {
                 throw new IllegalArgumentException("Negative count");
             }
-            final MultiSet.Immutable<V> oldValues = entries.__remove(key);
+            final MultiSet.Immutable<V> oldValues = remove(key);
             final MultiSet.Immutable<V> newValues;
             final int oldCount;
             if(oldValues != null) {
@@ -170,7 +242,7 @@ public abstract class MultiSetMap<K, V> {
                 newValues = MultiSet.Immutable.of(value, n);
             }
             if(!newValues.isEmpty()) {
-                entries.__put(key, newValues);
+                put(key, newValues);
             }
             return oldCount;
         }
@@ -182,7 +254,7 @@ public abstract class MultiSetMap<K, V> {
         }
 
         public void putAll(K key, MultiSet.Immutable<V> values) {
-            final MultiSet.Immutable<V> oldValues = entries.__remove(key);
+            final MultiSet.Immutable<V> oldValues = remove(key);
             final MultiSet.Immutable<V> newValues;
             if(oldValues != null) {
                 newValues = MultiSet.Immutable.union(oldValues, values);
@@ -190,13 +262,13 @@ public abstract class MultiSetMap<K, V> {
                 newValues = values;
             }
             if(!newValues.isEmpty()) {
-                entries.__put(key, newValues);
+                put(key, newValues);
             }
         }
 
         public MultiSet.Immutable<V> removeKey(K key) {
-            if(entries.containsKey(key)) {
-                return entries.__remove(key);
+            if(asMap().containsKey(key)) {
+                return remove(key);
             } else {
                 return MultiSet.Immutable.of();
             }
@@ -213,7 +285,7 @@ public abstract class MultiSetMap<K, V> {
             if(n < 0) {
                 throw new IllegalArgumentException("Negative count");
             }
-            final MultiSet.Immutable<V> oldValues = entries.__remove(key);
+            final MultiSet.Immutable<V> oldValues = remove(key);
             final MultiSet.Immutable<V> newValues;
             final int oldCount;
             if(oldValues != null) {
@@ -225,28 +297,32 @@ public abstract class MultiSetMap<K, V> {
                 newValues = MultiSet.Immutable.of();
             }
             if(!newValues.isEmpty()) {
-                entries.__put(key, newValues);
+                put(key, newValues);
             }
             return oldCount;
         }
 
         public Immutable<K, V> clear() {
             final Immutable<K, V> cleared =
-                    new Immutable<>(Map.Immutable.<K, MultiSet.Immutable<V>>of().__putAll(entries));
-            for(K k : entries.keySet()) {
-                entries.__remove(k);
+                new Immutable<>(Map.Immutable.<K, MultiSet.Immutable<V>>of().__putAll(asMap()));
+            for(K k : asMap().keySet()) {
+                remove(k);
             }
             return cleared;
         }
 
-        @SuppressWarnings("unchecked") public Immutable<K, V> freeze() {
-            return entries.isEmpty() ? EMPTY : new Immutable<>(entries.freeze());
+        public Collection<V> removeAll(K key) {
+            final MultiSet.Immutable<V> removed = remove(key);
+            return removed != null ? removed.toCollection() : Collections.emptySet();
         }
 
-        public static <K, V> MultiSetMap.Transient<K, V> of() {
-            return new Transient<>(Map.Transient.of());
+        public boolean removeAll(Collection<K> keys, V value) {
+            boolean changed = false;
+            for(K key : keys) {
+                changed |= remove(key, value) != 0;
+            }
+            return changed;
         }
-
     }
 
     @Override public boolean equals(Object obj) {
@@ -265,5 +341,7 @@ public abstract class MultiSetMap<K, V> {
                 .collect(Collectors.joining(", ", "{", "}"));
 
     }
+
+
 
 }

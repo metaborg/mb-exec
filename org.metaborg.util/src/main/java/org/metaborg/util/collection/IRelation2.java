@@ -4,8 +4,6 @@ import java.util.Map;
 
 import org.metaborg.util.tuple.Tuple2;
 
-import com.google.common.annotations.Beta;
-
 public interface IRelation2<K, V> {
 
     IRelation2<V, K> inverse();
@@ -28,7 +26,7 @@ public interface IRelation2<K, V> {
 
     java.util.Set<Map.Entry<K, V>> entrySet();
 
-    @Beta default java.util.stream.Stream<Tuple2<K, V>> stream() {
+    default java.util.stream.Stream<Tuple2<K, V>> stream() {
         return this.entrySet().stream().map(Tuple2::of);
     }
 

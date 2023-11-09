@@ -20,7 +20,7 @@ public class SSL_immutable_map_union_eq extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        return union(env, sargs, targs, new StrategyEqualityComparator(env, sargs[1]));
+        return union(env, sargs, targs, new InterpretedStrategyEqualityComparator(env, sargs[1]));
     }
 
     protected boolean union(IContext env, Strategy[] sargs, IStrategoTerm[] targs, EqualityComparator<Object> cmp)

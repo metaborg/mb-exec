@@ -2,6 +2,7 @@ package org.spoofax.interpreter.library.ssl;
 
 import io.usethesource.capsule.Set;
 
+import org.metaborg.util.collection.CapsuleUtil;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.stratego.Strategy;
@@ -21,7 +22,7 @@ public class SSL_immutable_set_from_list extends AbstractPrimitive {
         }
 
         final IStrategoList list = (IStrategoList) env.current();
-        final Set.Transient<IStrategoTerm> map = Set.Transient.of();
+        final Set.Transient<IStrategoTerm> map = CapsuleUtil.transientSet();
         for(IStrategoTerm t : list) {
             if(!map.contains(t)) {
                 map.__insert(t);

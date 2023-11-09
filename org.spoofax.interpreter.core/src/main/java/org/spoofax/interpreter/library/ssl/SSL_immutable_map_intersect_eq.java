@@ -3,6 +3,7 @@ package org.spoofax.interpreter.library.ssl;
 import io.usethesource.capsule.Map;
 import io.usethesource.capsule.util.EqualityComparator;
 
+import org.metaborg.util.collection.CapsuleUtil;
 import org.spoofax.interpreter.core.IContext;
 import org.spoofax.interpreter.core.InterpreterException;
 import org.spoofax.interpreter.library.AbstractPrimitive;
@@ -21,7 +22,7 @@ public class SSL_immutable_map_intersect_eq extends AbstractPrimitive {
     }
 
     @Override public boolean call(IContext env, Strategy[] sargs, IStrategoTerm[] targs) throws InterpreterException {
-        return intersect(env, sargs, targs, new StrategyEqualityComparator(env, sargs[1]));
+        return intersect(env, sargs, targs, new InterpretedStrategyEqualityComparator(env, sargs[1]));
     }
 
     protected boolean intersect(IContext env, Strategy[] sargs, IStrategoTerm[] targs, EqualityComparator<Object> cmp)
@@ -33,7 +34,7 @@ public class SSL_immutable_map_intersect_eq extends AbstractPrimitive {
             return false;
         }
 
-        final Map.Transient<IStrategoTerm, IStrategoTerm> intersection = Map.Transient.of();
+        final Map.Transient<IStrategoTerm, IStrategoTerm> intersection = CapsuleUtil.transientMap();
         final Map.Immutable<IStrategoTerm, IStrategoTerm> one = ((StrategoImmutableMap) env.current()).backingMap;
         final Map.Immutable<IStrategoTerm, IStrategoTerm> other = ((StrategoImmutableMap) targs[0]).backingMap;
         for(java.util.Map.Entry<IStrategoTerm, IStrategoTerm> e : other.entrySet()) {

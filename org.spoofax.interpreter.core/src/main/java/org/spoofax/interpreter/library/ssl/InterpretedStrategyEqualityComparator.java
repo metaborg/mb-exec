@@ -8,12 +8,12 @@ import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTermBuilder;
 
-class StrategyEqualityComparator implements EqualityComparator<Object> {
+class InterpretedStrategyEqualityComparator implements EqualityComparator<Object> {
     private final IContext env;
     private final Strategy comp;
     private final IStrategoTermBuilder f;
 
-    StrategyEqualityComparator(IContext env, Strategy comp) {
+    InterpretedStrategyEqualityComparator(IContext env, Strategy comp) {
         this.env = env;
         this.comp = comp;
         this.f = env.getFactory();

@@ -2,9 +2,7 @@ package org.metaborg.util.iterators;
 
 import java.util.Iterator;
 
-import com.google.common.collect.UnmodifiableIterator;
-
-final public class ConsIterator<T> extends UnmodifiableIterator<T> {
+final public class ConsIterator<T> implements Iterator<T> {
 
     private final T head;
     private final Iterator<T> tail;

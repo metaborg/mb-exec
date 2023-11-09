@@ -28,7 +28,7 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.interpreter.util.DebugUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 
 public class Context implements IContext {

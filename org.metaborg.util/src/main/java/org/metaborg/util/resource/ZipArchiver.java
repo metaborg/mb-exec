@@ -3,21 +3,21 @@ package org.metaborg.util.resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileType;
 import org.metaborg.util.file.IFileAccess;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import org.metaborg.util.stream.Utils;
 
 public class ZipArchiver {
     public static class Entry implements Comparable<Entry> {
@@ -61,13 +61,13 @@ public class ZipArchiver {
     private final Set<Entry> entries;
 
 
-    public ZipArchiver(Iterable<Entry> entries) {
+    public ZipArchiver(Collection<Entry> entries) {
         // Using TreeSet for alphabetical sorting of entries.
-        this.entries = Sets.newTreeSet(entries);
+        this.entries = new TreeSet<>(entries);
     }
 
     public ZipArchiver() {
-        this(Lists.<Entry>newArrayList());
+        this(new ArrayList<>());
     }
 
 
@@ -128,7 +128,7 @@ public class ZipArchiver {
                     }
                     zip.putNextEntry(zipEntry);
                     try(final InputStream inputStream = resource.getContent().getInputStream()) {
-                        IOUtils.copy(inputStream, zip);
+                        Utils.copy(inputStream, zip);
                     }
                     zip.closeEntry();
                 } else if(resource.getType() == FileType.FOLDER) {

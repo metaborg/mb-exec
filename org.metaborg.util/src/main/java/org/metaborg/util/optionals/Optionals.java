@@ -1,5 +1,6 @@
 package org.metaborg.util.optionals;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -13,8 +14,6 @@ import org.metaborg.util.functions.Function4;
 import org.metaborg.util.functions.Function5;
 import org.metaborg.util.functions.Function6;
 import org.metaborg.util.unit.Unit;
-
-import com.google.common.collect.Lists;
 
 public class Optionals {
 
@@ -51,7 +50,7 @@ public class Optionals {
     }
 
     public static <T> Optional<List<T>> sequence(Iterable<Optional<T>> os) {
-        List<T> ts = Lists.newArrayList();
+        List<T> ts = new ArrayList<>();
         for(Optional<? extends T> o : os) {
             if(!o.isPresent()) {
                 return Optional.empty();
@@ -62,7 +61,7 @@ public class Optionals {
     }
 
     public static <T> List<T> filter(Iterable<Optional<T>> os) {
-        List<T> ts = Lists.newArrayList();
+        List<T> ts = new ArrayList<>();
         for(Optional<? extends T> o : os) {
             o.ifPresent(ts::add);
         }

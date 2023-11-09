@@ -2,16 +2,16 @@ package org.metaborg.util.collection;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Streams;
-
-public class ConsList<E> implements Iterable<E>, Serializable {
+public class ConsList<E> implements Collection<E>, Serializable {
     private static final long serialVersionUID = 1L;
 
     private final E head;
@@ -55,7 +55,7 @@ public class ConsList<E> implements Iterable<E>, Serializable {
     }
 
     public ConsList<E> prepend(ConsList<E> init) {
-        final Deque<E> elems = Lists.newLinkedList();
+        final Deque<E> elems = new LinkedList<>();
         for(E e : init) {
             elems.push(e);
         }
@@ -102,7 +102,77 @@ public class ConsList<E> implements Iterable<E>, Serializable {
     }
 
     @Override public String toString() {
-        return Streams.stream(this).map(Object::toString).collect(Collectors.joining(", ", "[", "]"));
+        return StreamSupport.stream(spliterator(), false).map(Object::toString).collect(Collectors.joining(", ", "[", "]"));
     }
 
+
+    @Override public int size() {
+        return isNil() ? 0 : 1 + tail.size();
+    }
+
+    @Override public boolean isEmpty() {
+        return isNil();
+    }
+
+    @Override public boolean contains(Object o) {
+        return !isNil() && head.equals(o) || tail.contains(o);
+    }
+
+    @Override public Object[] toArray() {
+        return toArray(new Object[0]);
+    }
+
+    @Override public <T> T[] toArray(T[] a) {
+        final Object[] objects;
+        if(a.length < size()) {
+            objects = (T[]) new Object[size()];
+        } else {
+            objects = a;
+        }
+        int i = 0;
+        for(E e : this) {
+            objects[i] = (T) e;
+            i++;
+        }
+        return (T[]) objects;
+    }
+
+    @Deprecated
+    @Override public boolean add(E e) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Deprecated
+    @Override public boolean remove(Object o) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override public boolean containsAll(Collection<?> c) {
+        for(Object o : c) {
+            if(!contains(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Deprecated
+    @Override public boolean addAll(Collection<? extends E> c) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Deprecated
+    @Override public boolean removeAll(Collection<?> c) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Deprecated
+    @Override public boolean retainAll(Collection<?> c) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Deprecated
+    @Override public void clear() {
+        throw new UnsupportedOperationException();
+    }
 }
