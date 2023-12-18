@@ -69,7 +69,7 @@ public class PrintlineLogger {
         }
     }
 
-    private boolean enabled() {
+    public boolean enabled() {
         return enabled && globalEnabled;
     }
 
