@@ -1,15 +1,6 @@
 package org.metaborg.util.collection;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
@@ -40,6 +31,13 @@ public abstract class LinkedMultimap<K, V, C extends Collection<V>> extends Mult
 
     public LinkedMultimap(LinkedMultimap<K, V, C> toCopy) {
         this(toCopy.copyOfBackingMap(), new ArrayList<>(toCopy.values));
+    }
+
+    @Override
+    protected Map<K, C> copyOfBackingMap() {
+        final HashMap<K, C> kcHashMap = new LinkedHashMap<>(this.backingMap);
+        kcHashMap.replaceAll((k, c) -> copyCollection(c));
+        return kcHashMap;
     }
 
     @Override public int size() {

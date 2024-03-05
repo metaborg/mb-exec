@@ -7,7 +7,8 @@ import java.util.Set;
 
 import io.usethesource.capsule.Map;
 
-public abstract class BiMap<E> {
+public abstract class BiMap<E> implements Serializable {
+    public static final long serialVersionUID = 1L;
 
     public abstract boolean containsKey(E key);
 

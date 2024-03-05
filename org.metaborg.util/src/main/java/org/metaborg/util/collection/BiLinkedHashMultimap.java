@@ -1,5 +1,6 @@
 package org.metaborg.util.collection;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,7 +20,8 @@ import org.metaborg.util.stream.Collectors2;
  * {@code LinkedHashMap<K, LinkedHashSet<V>>} for the forward map; which is used for the order of
  * the results every method.
  */
-public class BiLinkedHashMultimap<K, V> implements BiSetMultimap<K, V> {
+public class BiLinkedHashMultimap<K, V> implements BiSetMultimap<K, V>, Serializable {
+    public static final long serialVersionUID = 1L;
     private final Map<K, Set<V>> keyToValue;
     private final Map<V, Set<K>> valueToKey;
 

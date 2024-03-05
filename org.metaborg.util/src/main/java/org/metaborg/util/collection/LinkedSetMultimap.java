@@ -16,6 +16,13 @@ import java.util.Set;
 public class LinkedSetMultimap<K, V> extends LinkedMultimap<K, V, Set<V>> implements Serializable {
     public static final long serialVersionUID = 1L;
 
+    public LinkedSetMultimap() {
+    }
+
+    public LinkedSetMultimap(LinkedMultimap<K, V, Set<V>> toCopy) {
+        super(toCopy);
+    }
+
     // N.B. LinkedHashSet for proper serializability that roundtrips into the same set
     @Override protected Set<V> newCollection() {
         return new LinkedHashSet<>();

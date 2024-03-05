@@ -30,7 +30,7 @@ public class BiMap2<K, V> implements Serializable {
     }
 
     public BiMap2(BiMap2<K, V> toCopy) {
-        this(new HashMap<>(toCopy.fwd), new HashMap<>(toCopy.bwd));
+        this(new LinkedHashMap<>(toCopy.fwd), new LinkedHashMap<>(toCopy.bwd));
     }
 
     public boolean containsKey(K key) {
