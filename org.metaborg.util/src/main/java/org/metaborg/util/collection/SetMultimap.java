@@ -22,7 +22,6 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> implements Seriali
     public static final long serialVersionUID = 1L;
 
     public SetMultimap() {
-        super();
     }
 
     public SetMultimap(SetMultimap<K, V> toCopy) {

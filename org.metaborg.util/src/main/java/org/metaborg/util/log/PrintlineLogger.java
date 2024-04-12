@@ -91,8 +91,7 @@ public class PrintlineLogger {
     }
 
     public static void enableGlobal() {
-	// disabled for the release
-	// globalEnabled = true;
+        globalEnabled = true;
     }
 
     public static void disableGlobal() {

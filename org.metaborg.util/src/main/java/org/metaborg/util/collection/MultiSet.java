@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import io.usethesource.capsule.Map;
 
 public abstract class MultiSet<E> implements Iterable<E>, Serializable {
+    public static final long serialVersionUID = 1L;
 
     @SuppressWarnings("rawtypes") private static final MultiSet.Immutable EMPTY =
             new MultiSet.Immutable<>(Map.Immutable.of());
