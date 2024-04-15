@@ -15,6 +15,13 @@ import java.util.List;
 public class ListMultimap<K, V> extends LinkedMultimap<K, V, List<V>> implements Serializable {
     public static final long serialVersionUID = 1L;
 
+    public ListMultimap() {
+    }
+
+    public ListMultimap(LinkedMultimap<K, V, List<V>> toCopy) {
+        super(toCopy);
+    }
+
     @Override protected List<V> newCollection() {
         return new ArrayList<>();
     }

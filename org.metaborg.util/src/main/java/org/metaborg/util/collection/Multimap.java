@@ -19,7 +19,8 @@ import org.metaborg.util.log.PrintlineLogger;
  * @param <K>
  * @param <V>
  */
-public abstract class Multimap<K, V, C extends Collection<V>> {
+public abstract class Multimap<K, V, C extends Collection<V>> implements Serializable {
+    public static final long serialVersionUID = 1L;
 
     private static final PrintlineLogger plLogger = PrintlineLogger.logger(Multimap.class);
 
