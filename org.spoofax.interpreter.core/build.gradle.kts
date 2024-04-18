@@ -10,12 +10,13 @@ dependencies {
 
   api(compositeBuild("org.spoofax.terms"))
   api(compositeBuild("org.spoofax.jsglr"))
+  implementation(compositeBuild("org.metaborg.util"))
   implementation("commons-io:commons-io")
   api("io.usethesource:capsule")
+  implementation(compositeBuild("org.metaborg.util"))
 
   implementation("jakarta.annotation:jakarta.annotation-api")
 
-  testImplementation(compositeBuild("org.metaborg.util"))
   testCompileOnly("junit:junit")
   testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }
