@@ -1,4 +1,4 @@
-package org.metaborg.util.resource;
+package mb.util.vfs2.resource;
 
 import java.util.Arrays;
 
