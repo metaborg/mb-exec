@@ -1,4 +1,4 @@
-package org.metaborg.util.resource;
+package mb.util.vfs2.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +16,7 @@ import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileType;
-import org.metaborg.util.file.IFileAccess;
+import mb.util.vfs2.file.IFileAccess;
 import org.metaborg.util.stream.Utils;
 
 public class ZipArchiver {

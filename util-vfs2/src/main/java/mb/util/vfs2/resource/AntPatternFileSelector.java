@@ -1,4 +1,4 @@
-package org.metaborg.util.resource;
+package mb.util.vfs2.resource;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +21,7 @@ import org.metaborg.util.iterators.Iterables2;
  * changed by passing a FileType argument to the constructor.
  * <p>
  * The file selector is inclusive. To create an exclusive selector, or to build more complicated selectors, see the
- * combinators in the {@link org.metaborg.util.resource.FileSelectorUtils} class.
+ * combinators in the {@link FileSelectorUtils} class.
  */
 public class AntPatternFileSelector implements FileSelector {
     private static final FileType DEFAULT_FILETYPE = FileType.FILE;

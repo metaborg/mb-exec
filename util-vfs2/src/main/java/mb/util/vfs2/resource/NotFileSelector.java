@@ -1,4 +1,4 @@
-package org.metaborg.util.resource;
+package mb.util.vfs2.resource;
 
 import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
