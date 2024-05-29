@@ -11,6 +11,8 @@ dependencies {
 
   implementation("jakarta.annotation:jakarta.annotation-api")
 
+  api("org.metaborg:org.metaborg.util:$spoofax2Version")
+
   testCompileOnly("junit:junit")
   testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }
