@@ -5,22 +5,20 @@ plugins {
     id("org.metaborg.convention.maven-publish")
 }
 
-fun compositeBuild(name: String) = "$group:$name:$version"
-val spoofax2Version: String by ext
 dependencies {
     api(platform(libs.metaborg.platform)) { version { require("latest.integration") } }
 
-    api(compositeBuild("org.spoofax.terms"))
-    api(compositeBuild("org.spoofax.jsglr"))
-    implementation(compositeBuild("org.metaborg.util"))
-    implementation("commons-io:commons-io")
-    api("io.usethesource:capsule")
-    implementation(compositeBuild("org.metaborg.util"))
+    api(libs.spoofax.terms)
+    api(libs.jsglr)
+    implementation(libs.metaborg.util)
+    implementation(libs.commons.io)
+    api(libs.capsule)
 
-    implementation("jakarta.annotation:jakarta.annotation-api")
+    implementation(libs.jakarta.annotation)
 
-    testCompileOnly("junit:junit")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
+    testImplementation(libs.junit)
+    testCompileOnly(libs.junit4)
+    testRuntimeOnly(libs.junit.vintage)
 }
 
 // Copy test resources into classes directory, to make them accessible as classloader resources at runtime.

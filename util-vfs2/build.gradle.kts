@@ -5,18 +5,18 @@ plugins {
     id("org.metaborg.convention.maven-publish")
 }
 
-val spoofax2Version: String by ext
 dependencies {
   api(platform(libs.metaborg.platform)) { version { require("latest.integration") } }
 
-  api("org.apache.commons:commons-vfs2")
+  api(libs.commons.vfs2)
 
-  implementation("jakarta.annotation:jakarta.annotation-api")
+  implementation(libs.jakarta.annotation)
 
-  api("org.metaborg:org.metaborg.util:$spoofax2Version")
+  api(libs.metaborg.util)
 
-  testCompileOnly("junit:junit")
-  testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
+  testImplementation(libs.junit)
+  testCompileOnly(libs.junit4)
+  testRuntimeOnly(libs.junit.vintage)
 }
 
 // Copy test resources into classes directory, to make them accessible as classloader resources at runtime.

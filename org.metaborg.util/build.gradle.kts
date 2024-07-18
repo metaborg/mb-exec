@@ -8,17 +8,18 @@ plugins {
 dependencies {
     api(platform(libs.metaborg.platform)) { version { require("latest.integration") } }
 
-    api("org.apache.commons:commons-vfs2")
-    api("commons-io:commons-io")
-    api("io.reactivex.rxjava3:rxjava")
-    api("io.usethesource:capsule")
-    api("com.google.inject:guice")
-    api("org.slf4j:slf4j-api")
+    api(libs.commons.vfs2)
+    api(libs.commons.io)
+    api(libs.rxjava)
+    api(libs.capsule)
+    api(libs.guice)
+    api(libs.slf4j.api)
 
-    implementation("jakarta.annotation:jakarta.annotation-api")
+    implementation(libs.jakarta.annotation)
 
-    testCompileOnly("junit:junit")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
+    testImplementation(libs.junit)
+    testCompileOnly(libs.junit4)
+    testRuntimeOnly(libs.junit.vintage)
 }
 
 // Copy test resources into classes directory, to make them accessible as classloader resources at runtime.
