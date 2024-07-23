@@ -115,7 +115,7 @@ public class ConsList<E> implements Collection<E>, Serializable {
     }
 
     @Override public boolean contains(Object o) {
-        return !isNil() && head.equals(o) || tail.contains(o);
+        return !isNil() && (head.equals(o) || tail.contains(o));
     }
 
     @Override public Object[] toArray() {
