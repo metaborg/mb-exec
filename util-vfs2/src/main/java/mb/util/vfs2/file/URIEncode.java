@@ -1,4 +1,4 @@
-package org.metaborg.util.file;
+package mb.util.vfs2.file;
 
 import java.io.UnsupportedEncodingException;
 import java.util.BitSet;

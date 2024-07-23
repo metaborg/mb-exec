@@ -1,20 +1,20 @@
-package org.metaborg.util.resource;
+package mb.util.vfs2.resource;
 
 import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
 
 
-public class EndsWithFileSelector implements FileSelector {
-    private final String endsWith;
+public class ContainsFileSelector implements FileSelector {
+    private final String contains;
 
 
-    public EndsWithFileSelector(String endsWith) {
-        this.endsWith = endsWith;
+    public ContainsFileSelector(String contains) {
+        this.contains = contains;
     }
 
 
     @Override public boolean includeFile(FileSelectInfo fileInfo) throws Exception {
-        return fileInfo.getFile().getName().getBaseName().endsWith(endsWith);
+        return fileInfo.getFile().getName().getBaseName().contains(contains);
     }
 
     @Override public boolean traverseDescendents(FileSelectInfo fileInfo) throws Exception {
