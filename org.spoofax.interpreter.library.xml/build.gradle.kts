@@ -18,3 +18,11 @@ dependencies {
     api(libs.spoofax.terms)
     api(project(":org.spoofax.interpreter.core"))
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
+    }
+}
