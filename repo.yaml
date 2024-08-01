@@ -1,0 +1,69 @@
+---
+repoOwner: "metaborg"
+repoName: "mb-exec"
+mainBranch: "master"
+mavenGroup: "org.metaborg.devenv"
+releaseTagPrefix: "devenv-release/"
+
+title: "MB Exec"
+description: |
+  The Metaborg Exec libraries.
+inceptionYear: "2006"
+
+spoofax3Libraries:
+  - group: "org.metaborg.devenv"
+    name: "org.metaborg.util"
+  - group: "org.metaborg.devenv"
+    name: "org.spoofax.interpreter.core"
+  - group: "org.metaborg.devenv"
+    name: "org.spoofax.interpreter.library.java"
+  - group: "org.metaborg.devenv"
+    name: "org.spoofax.interpreter.library.xml"
+  - group: "org.metaborg.devenv"
+    name: "util-vfs2"
+
+spoofax2Libraries:
+  - group: "org.metaborg"
+    name: "org.metaborg.util"
+  - group: "org.metaborg"
+    name: "org.spoofax.interpreter.core"
+  - group: "org.metaborg"
+    name: "org.spoofax.interpreter.library.java"
+  - group: "org.metaborg"
+    name: "org.spoofax.interpreter.library.xml"
+  - group: "org.metaborg"
+    name: "util-vfs2"
+
+contributors:
+  - id: "karltk"
+    name: "Karl Trygve Kalleberg"
+  - id: "lennartcl"
+    name: "Lennart Kats"
+  - id: "Gohla"
+    name: "Gabriel Konat"
+  - id: "Apanatshka"
+    name: "Jeff Smits"
+  - id: "hendrikvanantwerpen"
+    name: "Hendrik van Antwerpen"
+  - id: "tvo"
+    name: "Tobi Vollebregt"
+  - id: "valentindavid"
+    name: "Valentin David"
+
+developers:
+  - id: "Apanatshka"
+    name: "Jeff Smits"
+
+files:
+  githubWorkflows:
+    publishRelease: true
+    publishSnapshot: true
+  gradleRootProject:
+    generate: true
+    rootProjectName: "mb-exec-project"
+    includedProjects:
+      - name: ":org.metaborg.util"
+      - name: ":org.spoofax.interpreter.core"
+      - name: ":org.spoofax.interpreter.library.java"
+      - name: ":org.spoofax.interpreter.library.xml"
+      - name: ":util-vfs2"

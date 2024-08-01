@@ -1,4 +1,6 @@
-rootProject.name = "mb-exec-project"
+// !! THIS FILE WAS GENERATED USING repoman !!
+// Modify `repo.yaml` instead and use `repoman` to update this file
+// See: https://github.com/metaborg/metaborg-gradle/
 
 dependencyResolutionManagement {
     repositories {
@@ -18,9 +20,9 @@ plugins {
     id("org.metaborg.convention.settings") version "latest.integration"
 }
 
-include("org.metaborg.util")
-include("org.metaborg.interpreter.core")
-include("org.metaborg.interpreter.library.java")
-include("org.metaborg.interpreter.library.xml")
-include("util-vfs2")
-
+rootProject.name = "mb-exec-project"
+include(":org.metaborg.util")
+include(":org.spoofax.interpreter.core")
+include(":org.spoofax.interpreter.library.java")
+include(":org.spoofax.interpreter.library.xml")
+include(":util-vfs2")
