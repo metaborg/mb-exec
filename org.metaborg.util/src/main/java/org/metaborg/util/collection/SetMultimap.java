@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -28,10 +29,8 @@ public class SetMultimap<K, V> extends Multimap<K, V, Set<V>> implements Seriali
         super(toCopy);
     }
 
-    // N.B. We _would_ use LinkedHashSet for proper serializability that roundtrips into the same set, but that breaks JSGLR2 in certain edgecases, see the comments on
-    // org.metaborg.sdf2table.grammar.NormGrammar#symbolProductionsMapping and org.spoofax.jsglr2.integrationtest.features.RejectTest#testBoth
     @Override protected Set<V> newCollection() {
-        return new HashSet<>();
+        return new LinkedHashSet<>();
     }
 
     @Override protected Set<V> emptyCollection() {
